@@ -96,4 +96,9 @@ public class Coord3D extends Coord {
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + "," + z + ")";
+    }
 }

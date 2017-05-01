@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.SortedSet;
 
 /**
@@ -24,14 +25,12 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public final Arrangement<T> table;
     /**
-     * The set of items that can be produced indirectly from {@link #random()} (looking up values from inside
-     * the nested tables). Uses identity equality and hashes values by identity, which allows the nested tables to be
-     * modified but makes looking them up more of a challenge at times (you need to pass the same object to
-     * {@link #weight(ProbabilityTable)} as you did to {@link #add(ProbabilityTable, int)}, though it may have changed).
+     * The list of items that can be produced indirectly from {@link #random()} (looking up values from inside
+     * the nested tables).
      */
-    public final Arrangement<ProbabilityTable<? extends T>> extraTable;
+    public final ArrayList<ProbabilityTable<T>> extraTable;
     public final IntVLA weights;
-    protected RNG rng;
+    public RNG rng;
     protected int total, normalTotal;
 
     /**
@@ -50,7 +49,7 @@ public class ProbabilityTable<T> implements Serializable {
     public ProbabilityTable(RNG rng) {
         this.rng = rng;
         table = new Arrangement<>(64, 0.75f);
-        extraTable = new Arrangement<>(16, 0.75f, CrossHash.identityHasher);
+        extraTable = new ArrayList<>(16);
         weights = new IntVLA(64);
         total = 0;
         normalTotal = 0;
@@ -64,7 +63,7 @@ public class ProbabilityTable<T> implements Serializable {
     public ProbabilityTable(long seed) {
         this.rng = new StatefulRNG(seed);
         table = new Arrangement<>(64, 0.75f);
-        extraTable = new Arrangement<>(16, 0.75f, CrossHash.identityHasher);
+        extraTable = new ArrayList<>(16);
         weights = new IntVLA(64);
         total = 0;
         normalTotal = 0;
@@ -76,7 +75,7 @@ public class ProbabilityTable<T> implements Serializable {
      * @param seed the RNG seed as a String
      */
     public ProbabilityTable(String seed) {
-        this(CrossHash.Lightning.hash64(seed));
+        this(CrossHash.Wisp.hash64(seed));
     }
 
     /**
@@ -99,7 +98,7 @@ public class ProbabilityTable<T> implements Serializable {
         for (int i = 0; i < extraTable.size(); i++) {
             index -= weights.get(sz + i);
             if(index < 0)
-                return extraTable.keyAt(i).random();
+                return extraTable.get(i).random();
         }
         return null;//something went wrong, shouldn't have been able to get all the way through without finding an item
     }
@@ -118,7 +117,7 @@ public class ProbabilityTable<T> implements Serializable {
             return this;
         int i = table.getInt(item);
         if (i < 0) {
-            weights.insert(table.size(), Math.max(0, weight));
+            weights.insert(table.size, Math.max(0, weight));
             table.add(item);
             int w = Math.max(0, weight);
             total += w;
@@ -147,26 +146,18 @@ public class ProbabilityTable<T> implements Serializable {
      * @param weight the weight to be given to the added table
      * @return this for chaining
      */
-    public ProbabilityTable<T> add(ProbabilityTable<? extends T> table, int weight) {
+    public ProbabilityTable<T> add(ProbabilityTable<T> table, int weight) {
         if(weight <= 0 || table == null || contentEquals(table) || table.total <= 0)
             return this;
-        int i = extraTable.getInt(table);
-        if (i < 0) {
-            weights.add(Math.max(0, weight));
-            extraTable.add(table);
-            total += Math.max(0, weight);
-        } else {
-            int i2 = weights.get(i);
-            int w = Math.max(0, i2 + weight);
-            weights.set(i, w);
-            total += w - i2;
-        }
+        weights.add(Math.max(0, weight));
+        extraTable.add(table);
+        total += Math.max(0, weight);
         return this;
     }
 
     /**
      * Returns the weight of the item if the item is in the table. Returns zero
-     * of the item is not in the table.
+     * if the item is not in the table.
      *
      * @param item the item searched for
      * @return the weight of the item, or zero
@@ -177,24 +168,43 @@ public class ProbabilityTable<T> implements Serializable {
     }
 
     /**
-     * Returns the weight of the item if the item is in the table. Returns zero
-     * of the item is not in the table.
+     * Returns the weight of the extra table if present. Returns zero
+     * if the extra table is not present.
      *
-     * @param item the item searched for
-     * @return the weight of the item, or zero
+     * @param item the extra ProbabilityTable to search for
+     * @return the weight of the ProbabilityTable, or zero
      */
-    public int weight(ProbabilityTable<? extends T> item) {
-        int i = extraTable.getInt(item);
+    public int weight(ProbabilityTable<T> item) {
+        int i = extraTable.indexOf(item);
         return i < 0 ? 0 : weights.get(i + table.size());
     }
 
     /**
      * Provides a set of the items in this table, without reference to their
-     * weight. Does not include nested ProbabilityTable values; for that, use tables().
+     * weight. Includes nested ProbabilityTable values, but as is the case throughout
+     * this class, cyclical references to ProbabilityTable values that reference this
+     * table will result in significant issues (such as a {@link StackOverflowError}
+     * crashing your program).
      *
-     * @return a "sorted" set of all items stored, really sorted in insertion order
+     * @return an OrderedSet of all items stored; iteration order should be predictable
      */
-    public SortedSet<T> items() {
+    public OrderedSet<T> items() {
+        OrderedSet<T> os = table.keysAsOrderedSet();
+        for (int i = 0; i < extraTable.size(); i++) {
+            os.addAll(extraTable.get(i).items());
+        }
+        return os;
+    }
+
+    /**
+     * Provides a set of the items in this table that are not in nested tables, without
+     * reference to their weight. These are the items that are simple to access, hence
+     * the name. If you want the items that are in both the top-level and nested tables,
+     * you can use {@link #items()}.
+     * @return a predictably-ordered set of the items in the top-level table
+     */
+    public SortedSet<T> simpleItems()
+    {
         return table.keySet();
     }
 
@@ -204,8 +214,8 @@ public class ProbabilityTable<T> implements Serializable {
      *
      * @return a "sorted" set of all nested tables stored, really sorted in insertion order
      */
-    public SortedSet<ProbabilityTable<? extends T>> tables() {
-        return extraTable.keySet();
+    public ArrayList<ProbabilityTable<T>> tables() {
+        return extraTable;
     }
 
     /**
@@ -216,7 +226,17 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public void setRandom(RNG random)
     {
-        rng = random;
+        if(random != null)
+            rng = random;
+    }
+
+    /**
+     * Gets the RNG this uses.
+     * @return the RNG used by this class, which is often (but not always) a StatefulRNG
+     */
+    public RNG getRandom()
+    {
+        return rng;
     }
 
     @Override
@@ -232,7 +252,7 @@ public class ProbabilityTable<T> implements Serializable {
         return rng != null ? rng.equals(that.rng) : that.rng == null;
     }
 
-    public boolean contentEquals(ProbabilityTable<? extends T> o) {
+    public boolean contentEquals(ProbabilityTable<T> o) {
         if (this == o) return true;
         if (o == null) return false;
 

@@ -1,8 +1,8 @@
 package squidpony.examples;
 
-import squidpony.squidmath.IntDoubleOrderedMap;
+import squidpony.StringKit;
+import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.VanDerCorputQRNG;
 
 /**
  * This class is a scratchpad area to test things out.
@@ -26,33 +26,10 @@ public class Playground {
     }
 
     private void go() {
-        IntDoubleOrderedMap map = new IntDoubleOrderedMap(256);
-        double d;
-        for (int i = 0; i < 4096; i++) {
-            System.out.println(d = VanDerCorputQRNG.determineMixed(i));
-            if(map.put((int) (d * 4096 * 64), 1.0) != 0.0)
-                System.out.println(i + ": " + d);
-        }
+        for (byte i = 0; i < 64; i++) {
+            System.out.printf("%02d (%s): %s\n", i, StringKit.bin(i), CoordPacker.mortonDecode3D(i).toString());
 
-        System.out.println("\nCollisions: " + (4096 - map.size()));
-        map.clear();
-        for (int i = 0; i < 4096; i++) {
-            //System.out.println(d = NumberTools.randomFloat((i ^ 0xD0E89D2D) >>> 19 | (i ^ 0xD0E89D2D) << 13));
-            System.out.println(d = VanDerCorputQRNG.weakDetermine(i));
-            if(map.put((int) (d * 4096 * 64), 1.0) != 0.0)
-                System.out.println(i + ": " + d);
         }
-
-        System.out.println("\nCollisions: " + (4096 - map.size()));
-
-        /*
-        for (int i = 0, n = 0; i <128; i++, n+=0x800000) {
-            if((n & 0x1000000) != 0)
-                n += 0x1000000;
-            if(floatPart(n) != multipliers[i])
-                System.out.println("!!! " + i + " !!!");
-        }
-        */
     }
 
 }

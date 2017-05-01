@@ -1181,58 +1181,19 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
             newDistOrder = new int[]{-1, 0, 0, 0, 0, 0, 0},
             intLoc = {0, 0, 0, 0, 0, 0};
     public static double noise(final double x, final double y, final int seed) {
-        return noiseInt(fastFloor(x * 32), fastFloor(y * 32), seed) * 0x1.000001000001p-23 - 1.0;
+        return noise((float)x, (float)y, seed);
     }
     public static double noise(final float x, final float y, final int seed) {
-        return noiseInt(fastFloor(x * 32), fastFloor(y * 32), seed) * 0x1.000001000001p-23 - 1.0;
-    }
-    public static int noiseInt(final int xIn, final int yIn, final int seed) {
-        final int x = xIn * 19, y = yIn * 19;
-        final int s = (x + y) * F2;
-        final int[] gradient2DLUT = MasonNoise.gradientLUT;
-        final int i = (x + s) & -32,
-                  j = (y + s) & -32;
-        final int t = (i + j) * G2,
-                X0 = i - t,
-                Y0 = j - t,
-                x0 = x - X0,
-                y0 = y - Y0;
-        int i1, j1;
-        if (x0 > y0) {
-            i1 = 1;
-            j1 = 0;
-        } else {
-            i1 = 0;
-            j1 = 1;
-        }
         final int
-                x1 = x0 - i1 + G2,
-                y1 = y0 - j1 + G2,
-                x2 = x0 - 1 + 2 * G2,
-                y2 = y0 - 1 + 2 * G2;
-        final int h0 = hash(i, j, seed),
-                h1 = hash(i + i1, j + j1, seed),
-                h2 = hash(i + 1, j + 1, seed);
-        int n0, n1, n2;
-        int t0 = 0xffffff - x0 - y0;
-        if (t0 < 0x3fffff)
-            n0 = 0;
-        else {
-            n0 = t0 * (x0 * gradient2DLUT[h0] + y0 * gradient2DLUT[h0 + 1]);
-        }
-        int t1 = 0xffffff - x1 - y1;
-        if (t1 < 0x3fffff)
-            n1 = 0;
-        else {
-            n1 = t1 * (x1 * gradient2DLUT[h1] + y1 * gradient2DLUT[h1 + 1]);
-        }
-        int t2 = 0xffffff - x2 - y2;
-        if (t2 < 0x3fffff)
-            n2 = 0;
-        else {
-            n2 = t2 * (x2 * gradient2DLUT[h2] + y2 * gradient2DLUT[h2 + 1]);
-        }
-        return (1174405050 * (n0 + n1 + n2)) * 23855303 + 17691 >>> 8;
+                x0 = fastFloor(x),
+                y0 = fastFloor(y),
+                x1 = x0 + 1,
+                y2 = y0 + 1,
+                pos0 = CoordPacker.posToHilbert(x0 & 255, y0 & 255),
+                pos1 = CoordPacker.posToHilbert(x1 & 255, y0 & 255),
+                pos2 = CoordPacker.posToHilbert(x0 & 255, y2 & 255);
+        final float d1 = (x - x0), d2 = (y - y0);//, d2 = Math.max(x - x2, y - y2);
+        return (Math.sin(pos0) * (2f - d1 - d2) + Math.sin(pos1) * d1 + Math.sin(pos2) * d2) * 0.5f;//+ (dx + dy + dx2 + dy2) * Math.PI);
     }
 
     public static double noise(final double x, final double y, final double z, final int seed) {

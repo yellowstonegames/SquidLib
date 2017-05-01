@@ -18,6 +18,12 @@
     catch(err) {
     }
 //-->
+var methods = {"i0":9,"i1":9,"i2":9};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -71,13 +77,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.java.lang.Object">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -103,7 +109,8 @@
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.17">BonusConverters</a>
+<pre>@Beta
+public class <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.19">BonusConverters</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Created by Tommy Ettinger on 4/22/2017.</div>
 </li>
@@ -178,6 +185,25 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>static &lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/BonusConverters.html#convertProbabilityTable-java.lang.CharSequence-">convertProbabilityTable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;type)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>static &lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/BonusConverters.html#convertProbabilityTable-java.lang.Class-">convertProbabilityTable</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;K&gt;&nbsp;type)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static &lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/BonusConverters.html#convertProbabilityTable-squidpony.StringConvert-">convertProbabilityTable</a></span>(squidpony.StringConvert&lt;K&gt;&nbsp;convert)</code>&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -205,7 +231,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>convertMapCharString</h4>
-<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.18">convertMapCharString</a></pre>
+<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.20">convertMapCharString</a></pre>
 </li>
 </ul>
 <a name="convertListLanguage">
@@ -214,7 +240,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>convertListLanguage</h4>
-<pre>public static final&nbsp;squidpony.StringConvert&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.FakeLanguageGen&gt;&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.20">convertListLanguage</a></pre>
+<pre>public static final&nbsp;squidpony.StringConvert&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.FakeLanguageGen&gt;&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.22">convertListLanguage</a></pre>
 </li>
 </ul>
 <a name="convertMapCharListLanguage">
@@ -223,7 +249,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>convertMapCharListLanguage</h4>
-<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.FakeLanguageGen&gt;&gt;&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.21">convertMapCharListLanguage</a></pre>
+<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.FakeLanguageGen&gt;&gt;&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.23">convertMapCharListLanguage</a></pre>
 </li>
 </ul>
 <a name="convertStatefulRNG">
@@ -232,7 +258,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>convertStatefulRNG</h4>
-<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.StatefulRNG&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.23">convertStatefulRNG</a></pre>
+<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.StatefulRNG&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.25">convertStatefulRNG</a></pre>
 </li>
 </ul>
 <a name="convertRNG">
@@ -241,7 +267,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>convertRNG</h4>
-<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.RNG&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.43">convertRNG</a></pre>
+<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.RNG&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.45">convertRNG</a></pre>
 </li>
 </ul>
 <a name="convertSpillWorldMap">
@@ -250,7 +276,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>convertSpillWorldMap</h4>
-<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidgrid.mapping.SpillWorldMap&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.61">convertSpillWorldMap</a></pre>
+<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidgrid.mapping.SpillWorldMap&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.117">convertSpillWorldMap</a></pre>
 </li>
 </ul>
 <a name="convertPoliticalMapper">
@@ -259,7 +285,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>convertPoliticalMapper</h4>
-<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidgrid.mapping.PoliticalMapper&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.92">convertPoliticalMapper</a></pre>
+<pre>public static final&nbsp;squidpony.StringConvert&lt;squidpony.squidgrid.mapping.PoliticalMapper&gt; <a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.148">convertPoliticalMapper</a></pre>
 </li>
 </ul>
 </li>
@@ -276,7 +302,42 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BonusConverters</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.17">BonusConverters</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.19">BonusConverters</a>()</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="convertProbabilityTable-squidpony.StringConvert-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertProbabilityTable</h4>
+<pre>public static&nbsp;&lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;&nbsp;<a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.62">convertProbabilityTable</a>(squidpony.StringConvert&lt;K&gt;&nbsp;convert)</pre>
+</li>
+</ul>
+<a name="convertProbabilityTable-java.lang.CharSequence-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>convertProbabilityTable</h4>
+<pre>public static&nbsp;&lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;&nbsp;<a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.109">convertProbabilityTable</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;type)</pre>
+</li>
+</ul>
+<a name="convertProbabilityTable-java.lang.Class-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>convertProbabilityTable</h4>
+<pre>public static&nbsp;&lt;K&gt;&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.ProbabilityTable&lt;K&gt;&gt;&nbsp;<a href="../../../src-html/squidpony/store/text/BonusConverters.html#line.113">convertProbabilityTable</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;K&gt;&nbsp;type)</pre>
 </li>
 </ul>
 </li>
@@ -335,13 +396,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.java.lang.Object">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">

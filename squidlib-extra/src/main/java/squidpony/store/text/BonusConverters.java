@@ -1,19 +1,21 @@
 package squidpony.store.text;
 
 import com.badlogic.gdx.utils.reflect.ClassReflection;
-import squidpony.Converters;
-import squidpony.FakeLanguageGen;
-import squidpony.StringConvert;
-import squidpony.StringKit;
+import squidpony.*;
+import squidpony.annotation.Beta;
 import squidpony.squidgrid.mapping.PoliticalMapper;
 import squidpony.squidgrid.mapping.SpillWorldMap;
 import squidpony.squidmath.*;
 
 import java.util.List;
 
+import static squidpony.Converters.*;
+
 /**
  * Created by Tommy Ettinger on 4/22/2017.
  */
+@Beta
+@SuppressWarnings("unchecked")
 public class BonusConverters {
     public static final StringConvert<OrderedMap<Character, String>> convertMapCharString =
             Converters.convertOrderedMap(Converters.convertChar, Converters.convertString);
@@ -57,6 +59,60 @@ public class BonusConverters {
             }
         }
     };
+    public static <K> StringConvert<ProbabilityTable<K>> convertProbabilityTable(final StringConvert<K> convert) {
+        CharSequence[] types = StringConvert.asArray("ProbabilityTable", convert.name);
+        StringConvert found = StringConvert.lookup(types);
+        if (found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+        final StringConvert<Arrangement<K>> convertArrange = Converters.convertArrangement(convert);
+        return new StringConvert<ProbabilityTable<K>>(types) {
+            @Override
+            public String stringify(ProbabilityTable<K> item) {
+                StringBuilder sb = new StringBuilder(256);
+                appendQuoted(sb, convertRNG.stringify(item.getRandom()));
+                sb.append(' ');
+                appendQuoted(sb, convertIntVLA.stringify(item.weights));
+                sb.append(' ');
+                appendQuoted(sb, convertArrange.stringify(item.table));
+                for (int i = 0; i < item.extraTable.size(); i++) {
+                    sb.append(' ');
+                    appendQuoted(sb, stringify(item.extraTable.get(i)));
+                }
+                return sb.toString();
+            }
+
+            @Override
+            public ProbabilityTable<K> restore(String text) {
+                ObText.ContentMatcher m = makeMatcher(text);
+                if(!m.find() || !m.hasMatch())
+                    return null;
+                ProbabilityTable<K> pt = new ProbabilityTable<>(convertRNG.restore(m.getMatch()));
+                if(!m.find() || !m.hasMatch())
+                    return pt;
+                pt.weights.addAll(convertIntVLA.restore(m.getMatch()));
+                if(!m.find() || !m.hasMatch())
+                {
+                    pt.weights.clear();
+                    return pt;
+                }
+                pt.table.putAll(convertArrange.restore(m.getMatch()));
+                while (m.find()) {
+                    if (m.hasMatch()) {
+                        pt.extraTable.add(restore(m.getMatch()));
+                    }
+                }
+                return pt;
+            }
+        };
+    }
+
+    public static <K> StringConvert<ProbabilityTable<K>> convertProbabilityTable(final CharSequence type) {
+        return convertProbabilityTable((StringConvert<K>) StringConvert.get(type));
+    }
+
+    public static <K> StringConvert<ProbabilityTable<K>> convertProbabilityTable(final Class<K> type) {
+        return convertProbabilityTable((StringConvert<K>) StringConvert.get(type.getSimpleName()));
+    }
 
     public static final StringConvert<SpillWorldMap> convertSpillWorldMap = new StringConvert<SpillWorldMap>("SpillWorldMap") {
         @Override
