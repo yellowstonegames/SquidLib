@@ -405,17 +405,17 @@ public class StringKit {
     }
 
     public static String bin(short number) {
-        String h = Integer.toHexString(number & 0xffff);
+        String h = Integer.toBinaryString(number & 0xffff);
         return mask16.substring(0, 16 - h.length()) + h;
     }
 
     public static String bin(char number) {
-        String h = Integer.toHexString(number & 0xffff);
+        String h = Integer.toBinaryString(number & 0xffff);
         return mask16.substring(0, 16 - h.length()) + h;
     }
 
     public static String bin(byte number) {
-        String h = Integer.toHexString(number & 0xff);
+        String h = Integer.toBinaryString(number & 0xff);
         return mask8.substring(0, 8 - h.length()) + h;
     }
     private static final int[] hexCodes = new int[]

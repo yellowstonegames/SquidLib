@@ -94,7 +94,7 @@ public class Converters {
                         return "";
                     appendQuoted(sb, convertV.stringify(v));
                     if (++i < item.size())
-                        sb.append('\n');
+                        sb.append(' ');
                 }
                 return sb.toString();
             }
@@ -200,7 +200,7 @@ public class Converters {
                         return "";
                     appendQuoted(sb, convertV.stringify(v));
                     if (kit.hasNext())
-                        sb.append('\n');
+                        sb.append(' ');
                 }
                 return sb.toString();
             }

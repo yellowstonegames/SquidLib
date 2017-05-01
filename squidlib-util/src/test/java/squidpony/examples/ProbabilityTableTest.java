@@ -11,7 +11,7 @@ public class ProbabilityTableTest {
         ProbabilityTable<String> wood = new ProbabilityTable<>("wood"),
                 carpenter = new ProbabilityTable<>("carpenter");
         wood.add("splinter", 10).add("twig", 4).add("branch", 2).add("plank", 1).add("twig", 3);
-        carpenter.add("table", 3).add("shelf", 3).add(wood, 5).add("chair", 3).add("chair", 1);
+        carpenter.add("table", 3).add("shelf", 7).add(wood, 5).add("chair", 3).add("chair", 2);
 
         OrderedMap<String, Integer> woodCounts = new OrderedMap<>(
                 new String[]{"splinter", "twig", "branch", "plank"}, new Integer[]{0, 0, 0, 0}),

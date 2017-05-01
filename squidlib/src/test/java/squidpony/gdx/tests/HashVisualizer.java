@@ -2917,10 +2917,11 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
-                                        floatGetI(
-                                                MasonNoise.noiseInt(x + 20 + ctr, y + 30 + ctr, 1234)    >>> 16,
-                                                MasonNoise.noiseInt(x + 30 + ctr, y + 10 + ctr, 54321)   >>> 16,
-                                                MasonNoise.noiseInt(x + 10 + ctr, y + 20 + ctr, 1234321) >>> 16)
+                                        floatGet(
+                                                (float) MasonNoise.noise(x * 0.03125f + 20 + ctr, y * 0.03125f + 30 + ctr, 1234) * 0.5f + 0.5f,
+                                                (float) MasonNoise.noise(x * 0.03125f + 30 + ctr, y * 0.03125f + 10 + ctr, 54321) * 0.5f + 0.5f,
+                                                (float) MasonNoise.noise(x * 0.03125f + 10 + ctr, y * 0.03125f + 20 + ctr, 1234321) * 0.5f + 0.5f,
+                                                1f)
                                         );
                             }
                         }
@@ -2929,12 +2930,12 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Mason 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = /*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
+                                bright = /*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
                                         20.0, 20.0, 20.0, 12) * 0.5
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
-                                        + */MasonNoise.noiseInt(x + 10 + ctr, y + 20 + ctr, 123456) >>> 16;
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                        + */(float)MasonNoise.noise(x * 0.03125f + 10 + ctr, y * 0.03125f + 20 + ctr, 123456) * 0.5f + 0.5f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
