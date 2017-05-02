@@ -1,7 +1,5 @@
 package squidpony.examples;
 
-import squidpony.StringKit;
-import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.NumberTools;
 
 /**
@@ -25,10 +23,14 @@ public class Playground {
 
     }
 
-    private void go() {
-        for (byte i = 0; i < 64; i++) {
-            System.out.printf("%02d (%s): %s\n", i, StringKit.bin(i), CoordPacker.mortonDecode3D(i).toString());
+    private static float carp(final float x)
+    {
+        return x * (x * (x - 1) + (1 - x) * (1 - x));
+    }
 
+    private void go() {
+        for (float i = 0f; i <= 1f; i += 0.01) {
+            System.out.println(i + " " + carp(i));
         }
     }
 

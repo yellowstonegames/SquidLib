@@ -1183,17 +1183,45 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     public static double noise(final double x, final double y, final int seed) {
         return noise((float)x, (float)y, seed);
     }
-    public static double noise(final float x, final float y, final int seed) {
+
+    public static float randomize(int state, final int jump)
+    {
+        return NumberTools.intBitsToFloat(((((state *= jump) >> (state >>> 28)) * 0xC6BC278D) >>> 9) | 0x40000000) - 3f;
+    }
+
+    /**
+     * Quintic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve
+     * @param x a float from 0 to 1
+     * @return a float from 0 to 1, easing in to the endpoints on a curve
+     */
+    private static float querp( final float x ) { return x * x * x * (x * (x * 6f - 15f) + 10f); }
+    /**
+     * Pair of Cubic (Hermite) Flat Interpolations; for x from 0 to 1, returns results from 0 to 0 on an S-curve, with
+     * crests and valleys no more than 0.097f above or below 0.
+     * @param x a float from 0 to 1
+     * @return a float from 0 to 0.097f, easing in to 0 at the endpoints on a curve
+     */
+    private static float carp(final float x) { return x * (x * (x - 1) + (1 - x) * (1 - x)); }
+
+    private static final int xJump = 0x9E3779B9, yJump = 0xBFD867F9;
+    public static float noise(final float x, final float y, final int seed) {
+        final float ax = x * 2.2131f - y, ay = y * 2.2131f - x;
         final int
                 x0 = fastFloor(x),
                 y0 = fastFloor(y),
-                x1 = x0 + 1,
-                y2 = y0 + 1,
-                pos0 = CoordPacker.posToHilbert(x0 & 255, y0 & 255),
-                pos1 = CoordPacker.posToHilbert(x1 & 255, y0 & 255),
-                pos2 = CoordPacker.posToHilbert(x0 & 255, y2 & 255);
-        final float d1 = (x - x0), d2 = (y - y0);//, d2 = Math.max(x - x2, y - y2);
-        return (Math.sin(pos0) * (2f - d1 - d2) + Math.sin(pos1) * d1 + Math.sin(pos2) * d2) * 0.5f;//+ (dx + dy + dx2 + dy2) * Math.PI);
+                x2 = fastFloor(ax),
+                y2 = fastFloor(ay);
+        final float dx = querp(x - x0), dy = querp(y - y0),
+                adx = querp(ax - x2), ady = querp(ay - y2),
+                x0y0 = randomize(hash(x0, y0, seed), xJump) * (1f - dx) * (1f - dy),
+                x0y1 = randomize(hash(x0, y0+1, seed), xJump) * (1f - dx) * dy,
+                x1y0 = randomize(hash(x0+1, y0, seed), xJump) * dx * (1f - dy),
+                x1y1 = randomize(hash(x0+1, y0+1, seed), xJump) * dx * dy,
+                ax0y0 = randomize(hash(x2, y2, seed), yJump) * (1f - adx) * (1f - ady),
+                ax0y1 = randomize(hash(x2, y2+1, seed), yJump) * (1f - adx) * ady,
+                ax1y0 = randomize(hash(x2+1, y2, seed), yJump) * adx * (1f - ady),
+                ax1y1 = randomize(hash(x2+1, y2+1, seed), yJump) * adx * ady;
+        return (x0y0 + x1y0 + x0y1 + x1y1) * 0.625f + (ax0y0 + ax1y0 + ax0y1 + ax1y1) * 0.375f;
     }
 
     public static double noise(final double x, final double y, final double z, final int seed) {

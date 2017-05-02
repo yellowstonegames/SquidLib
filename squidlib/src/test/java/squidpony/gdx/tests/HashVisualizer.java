@@ -2918,9 +2918,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         floatGet(
-                                                (float) MasonNoise.noise(x * 0.03125f + 20 + ctr, y * 0.03125f + 30 + ctr, 1234) * 0.5f + 0.5f,
-                                                (float) MasonNoise.noise(x * 0.03125f + 30 + ctr, y * 0.03125f + 10 + ctr, 54321) * 0.5f + 0.5f,
-                                                (float) MasonNoise.noise(x * 0.03125f + 10 + ctr, y * 0.03125f + 20 + ctr, 1234321) * 0.5f + 0.5f,
+                                                (float) MasonNoise.noise(x * 0.03125f + 20 + ctr * 0.05125f, y * 0.03125f + 30 + ctr * 0.05125f, 1234) * 0.5f + 0.5f,
+                                                (float) MasonNoise.noise(x * 0.03125f + 30 + ctr * 0.05125f, y * 0.03125f + 10 + ctr * 0.05125f, 54321) * 0.5f + 0.5f,
+                                                (float) MasonNoise.noise(x * 0.03125f + 10 + ctr * 0.05125f, y * 0.03125f + 20 + ctr * 0.05125f, 1234321) * 0.5f + 0.5f,
                                                 1f)
                                         );
                             }
@@ -2934,7 +2934,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                         20.0, 20.0, 20.0, 12) * 0.5
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
-                                        + */(float)MasonNoise.noise(x * 0.03125f + 10 + ctr, y * 0.03125f + 20 + ctr, 123456) * 0.5f + 0.5f;
+                                        + */(float)MasonNoise.noise(x * 0.03125f + 10 + ctr * 0.05125f, y * 0.03125f + 20 + ctr * 0.05125f, 123456) * 0.5f + 0.5f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
