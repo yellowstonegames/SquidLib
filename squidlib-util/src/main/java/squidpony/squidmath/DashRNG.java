@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import squidpony.StringKit;
+
 import java.io.Serializable;
 
 /**
@@ -17,6 +19,7 @@ import java.io.Serializable;
  * is allowed), but the distribution is also likely to cover much less than the full range of all longs.
  * <br>
  * Created by Tommy Ettinger on 4/30/2017.
+ * @see FlapRNG FlapRNG is a variant on this class that uses primarily 32-bit math (good for use on GWT)
  */
 public class DashRNG implements StatefulRandomness, Serializable {
     private static final long serialVersionUID = 1L;
@@ -127,5 +130,24 @@ public class DashRNG implements StatefulRandomness, Serializable {
     {
         return (state >> (state >>> 59)) * 0xC6BC279692B5CC83L;
 
+    }
+    @Override
+    public String toString() {
+        return "DashRNG with state 0x" + StringKit.hex(state);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0x632BE5AB * (int)(state ^ state >>> 32);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DashRNG dashRNG = (DashRNG) o;
+
+        return state == dashRNG.state;
     }
 }
