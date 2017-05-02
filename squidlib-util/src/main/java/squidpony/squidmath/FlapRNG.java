@@ -133,8 +133,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      */
     public static float randomSignedFloat(int state)
     {
-        return (NumberTools.intBitsToFloat(((((state *= 0x9E3779B9) >> (state >>> 28)) * 0xC6BC278D) >>> 9) | 0x40000000)
-                - 3f);
+        return NumberTools.intBitsToFloat(((((state *= 0x9E3779B9) >> (state >>> 28)) * 0xC6BC278D) >>> 9) | 0x40000000) - 3f;
     }
 
     @Override
