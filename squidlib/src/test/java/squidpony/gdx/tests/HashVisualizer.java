@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 68;
+    private int hashMode = 43, rngMode = 0, noiseMode = 70;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -116,6 +116,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private final double[] turing = TuringPattern.initialize(width, height);
     private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4),
             turingInhibit = TuringPattern.offsetsCircle(width, height, 8);
+
+    private final float[][][] fillField = new float[3][width][height];
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
@@ -2914,30 +2916,42 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 70:
                         Gdx.graphics.setTitle("Mason 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        ArrayTools.fill(fillField[0], 0f);
+                        ArrayTools.fill(fillField[1], 0f);
+                        ArrayTools.fill(fillField[2], 0f);
+                        MasonNoise.addNoiseField(fillField[0], 20f + ctr * 0.03125f, 30f + ctr * 0.05125f, 512f * 0.03125f + 20f + ctr * 0.05125f, 512f * 0.03125f + 30f + ctr * 0.05125f, -1234, 1f);
+                        MasonNoise.addNoiseField(fillField[1], 30f + ctr * 0.03125f, 10f + ctr * 0.05125f, 512f * 0.03125f + 30f + ctr * 0.05125f, 512f * 0.03125f + 10f + ctr * 0.05125f, 54321, 1f);
+                        MasonNoise.addNoiseField(fillField[2], 10f + ctr * 0.03125f, 20f + ctr * 0.05125f, 512f * 0.03125f + 10f + ctr * 0.05125f, 512f * 0.03125f + 20f + ctr * 0.05125f, 15951, 1f);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
-                                        floatGet(
-                                                (float) MasonNoise.noise(x * 0.03125f + 20 + ctr * 0.05125f, y * 0.03125f + 30 + ctr * 0.05125f, 1234) * 0.5f + 0.5f,
-                                                (float) MasonNoise.noise(x * 0.03125f + 30 + ctr * 0.05125f, y * 0.03125f + 10 + ctr * 0.05125f, 54321) * 0.5f + 0.5f,
-                                                (float) MasonNoise.noise(x * 0.03125f + 10 + ctr * 0.05125f, y * 0.03125f + 20 + ctr * 0.05125f, 1234321) * 0.5f + 0.5f,
-                                                1f)
+                                        floatGet(fillField[0][x][y] * 0.5f + 0.5f, fillField[1][x][y] * 0.5f + 0.5f, fillField[2][x][y] * 0.5f + 0.5f, 1f)
                                         );
                             }
                         }
                         break;
                     case 71:
                         Gdx.graphics.setTitle("Mason 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
+                        /*for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = /*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
-                                        20.0, 20.0, 20.0, 12) * 0.5
-                                        + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
-                                        40.0, 40.0, 20.0, 1234)
-                                        + */(float)MasonNoise.noise(x * 0.03125f + 10 + ctr * 0.05125f, y * 0.03125f + 20 + ctr * 0.05125f, 123456) * 0.5f + 0.5f;
+                                bright = (float)MasonNoise.noise(x * 0.03125f + 10 + ctr * 0.05125f, y * 0.03125f + 20 + ctr * 0.05125f, 123456) * 0.5f + 0.5f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
+                        }*/
+                        ArrayTools.fill(fillField[0], 0f);
+                        MasonNoise.addNoiseField(fillField[0], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, 12345, 1.5f);
+                        MasonNoise.addNoiseField(fillField[0], (10f + ctr * 0.05125f) * 1.38f, (20f + ctr * 0.05125f) * 1.38f, (512f * 0.0625f + 10f + ctr * 0.05125f) * 1.38f, (512f * 0.0625f + 20f + ctr * 0.05125f) * 1.38f, 123456, 1f);
+                        MasonNoise.addNoiseField(fillField[0], (10f + ctr * 0.05125f) * 1.91f, (20f + ctr * 0.05125f) * 1.91f, (512f * 0.0625f + 10f + ctr * 0.05125f) * 1.91f, (512f * 0.0625f + 20f + ctr * 0.05125f) * 1.91f, 1234567, 0.5f);
+                        MasonNoise.addNoiseField(fillField[0], (10f + ctr * 0.05125f) * 2.43f, (20f + ctr * 0.05125f) * 2.43f, (512f * 0.0625f + 10f + ctr * 0.05125f) * 2.43f, (512f * 0.0625f + 20f + ctr * 0.05125f) * 2.43f, 12345678, 0.25f);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = fillField[0][x][y] / 6.5f + 0.5f;
+                                display.put(x, y,
+                                        floatGet(bright, bright, bright, 1f)
+                                );
+                            }
                         }
+
                         break;
 
                     /*

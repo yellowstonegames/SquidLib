@@ -88,6 +88,20 @@ public class NumberTools {
         return Double.longBitsToDouble(((s ^ -((s & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
                 | 0x4010000000000000L) - 5.0;
     }
+
+    /**
+     * Very limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+     * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
+     * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value.
+     * @param value any double
+     * @return a double from -1.0 (inclusive) to 1.0 (exclusive)
+     */
+    public static float bounce(final float value)
+    {
+        int s = Float.floatToIntBits(value) & 0x007fffff;
+        return Float.intBitsToFloat(((s ^ -((s & 0x00400000)>>22)) & 0x007fffff)
+                | 0x40800000) - 5f;
+    }
     /**
      * Very limited-use. Takes the significand bits of a double, represented as a long of which this uses 52 bits, and
      * produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and
