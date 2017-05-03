@@ -229,7 +229,7 @@ public enum Radius {
         return Math.min(Math.max(min, n), max - 1);
     }
 
-    public Set<Coord> perimeter(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
+    public OrderedSet<Coord> perimeter(Coord center, int radiusLength, boolean surpassEdges, int width, int height)
     {
         OrderedSet<Coord> rim = new OrderedSet<>(4 * radiusLength);
         if(!surpassEdges && (center.x < 0 || center.x >= width || center.y < 0 || center.y > height))
@@ -296,14 +296,15 @@ public enum Radius {
                     for (int i = 1; i <= denom; i+=2)
                     {
                         theta = i * (PI2 / denom);
-                        x = (int) Math.round(Math.cos(theta) * radiusLength) + center.x;
-                        y = (int) Math.round(Math.sin(theta) * radiusLength) + center.y;
+                        x = (int) (Math.cos(theta) * (radiusLength + 0.25)) + center.x;
+                        y = (int) (Math.sin(theta) * (radiusLength + 0.25)) + center.y;
+                        
                         if (!surpassEdges) {
                             x = clamp(x, 0, width);
                             y = clamp(y, 0, height);
                         }
                         Coord p = Coord.get(x, y);
-                        boolean test = rim.contains(p);
+                        boolean test = !rim.contains(p);
 
                         rim.add(p);
                         anySuccesses = test || anySuccesses;
