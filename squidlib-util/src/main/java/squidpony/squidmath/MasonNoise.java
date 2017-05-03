@@ -993,11 +993,11 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
             7, 3, 0, 1, 7, 3, 1, 0};
 
     /**
-     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
+     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 24 bits.
      * @param x an int to incorporate into the hash
      * @param y an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+     * @return a pseudo-random-like int with 24 bits used
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
     /*
@@ -1012,7 +1012,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         return  (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
                 + (a ^= 0x85157AF5 * x + y)
-                + (a ^= 0x85157AF5 * y + seed)) * a >>> 24;
+                + (a ^= 0x85157AF5 * y + seed)) * a >>> 8;
     }
 
     /**
@@ -1186,42 +1186,106 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 
     public static float randomize(int state, final int jump)
     {
-        return NumberTools.intBitsToFloat(((((state *= jump) >> (state >>> 28)) * 0xC6BC278D) >>> 9) | 0x40000000) - 3f;
+        return NumberTools.intBitsToFloat(((((state = (state - jump) * jump) >> (state >>> 28)) * 0xC6BC278D) >>> 9) | 0x40000000) - 3f;
     }
 
+    public static int randomInt(int state, final int jump) {
+        return ((state = (state - jump) * jump) >> (state >>> 28)) * 0xC6BC278D;
+    }
     /**
      * Quintic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve
      * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in to the endpoints on a curve
+     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
      */
     private static float querp( final float x ) { return x * x * x * (x * (x * 6f - 15f) + 10f); }
     /**
      * Pair of Cubic (Hermite) Flat Interpolations; for x from 0 to 1, returns results from 0 to 0 on an S-curve, with
      * crests and valleys no more than 0.097f above or below 0.
      * @param x a float from 0 to 1
-     * @return a float from 0 to 0.097f, easing in to 0 at the endpoints on a curve
+     * @return a float from 0 to 1, easing in to 0 at those endpoints on a curve
      */
     private static float carp(final float x) { return x * (x * (x - 1) + (1 - x) * (1 - x)); }
 
     private static final int xJump = 0x9E3779B9, yJump = 0xBFD867F9;
     public static float noise(final float x, final float y, final int seed) {
-        final float ax = x * 2.2131f - y, ay = y * 2.2131f - x;
-        final int
-                x0 = fastFloor(x),
-                y0 = fastFloor(y),
-                x2 = fastFloor(ax),
-                y2 = fastFloor(ay);
-        final float dx = querp(x - x0), dy = querp(y - y0),
-                adx = querp(ax - x2), ady = querp(ay - y2),
-                x0y0 = randomize(hash(x0, y0, seed), xJump) * (1f - dx) * (1f - dy),
-                x0y1 = randomize(hash(x0, y0+1, seed), xJump) * (1f - dx) * dy,
-                x1y0 = randomize(hash(x0+1, y0, seed), xJump) * dx * (1f - dy),
-                x1y1 = randomize(hash(x0+1, y0+1, seed), xJump) * dx * dy,
-                ax0y0 = randomize(hash(x2, y2, seed), yJump) * (1f - adx) * (1f - ady),
-                ax0y1 = randomize(hash(x2, y2+1, seed), yJump) * (1f - adx) * ady,
-                ax1y0 = randomize(hash(x2+1, y2, seed), yJump) * adx * (1f - ady),
-                ax1y1 = randomize(hash(x2+1, y2+1, seed), yJump) * adx * ady;
-        return (x0y0 + x1y0 + x0y1 + x1y1) * 0.625f + (ax0y0 + ax1y0 + ax0y1 + ax1y1) * 0.375f;
+        //final float xy = x * 2.2731f - y, yx = y * 2.3417f - x;
+        /*final float ra = randomize(seed, xJump),
+                angle = (ra + 2.3f) * Math.signum(ra),
+                xx = x * angle + y * angle * -0.3157f,
+                yy = y * angle + x * angle * -0.3157f;
+        */final int
+                xx0 = fastFloor(x), yy0 = fastFloor(y),
+                //xy0 = fastFloor(xy), yx0 = fastFloor(yx),
+                rxx0 = randomInt(xx0, xJump + seed), ryy0 = randomInt(yy0, xJump + seed),
+                rxx1 = randomInt(xx0 + 1, xJump + seed), ryy1 = randomInt(yy0 + 1, xJump + seed);
+        //rxy0 = randomInt(xy0, xJump), ryx0 = randomInt(yx0, yJump),
+        //rxy1 = randomInt(xy0 + 1, xJump), ryx1 = randomInt(yx0 + 1, yJump);
+        final float dx = querp(x - xx0), dy = querp(y - yy0),
+                //dxy = querp(xy - xy0), dyx = querp(yx - yx0),
+                rx0y0 = (rxx0 * ryy0 >> 16) * (1f - dx) * (1f - dy),
+                rx0y1 = (rxx0 * ryy1 >> 16) * (1f - dx) * dy,
+                rx1y0 = (rxx1 * ryy0 >> 16) * dx * (1f - dy),
+                rx1y1 = (rxx1 * ryy1 >> 16) * dx * dy/*,
+                rax0y0 = (rxy0 + ryx0 >> 16) * (1f - dxy) * (1f - dyx),
+                rax0y1 = (rxy0 + ryx1 >> 16) * (1f - dxy) * dyx,
+                rax1y0 = (rxy1 + ryx0 >> 16) * dxy * (1f - dyx),
+                rax1y1 = (rxy1 + ryx1 >> 16) * dxy * dyx*/;
+        return NumberTools.bounce((rx0y0 + rx1y0 + rx0y1 + rx1y1) /* * 0.625f + (rax0y0 + rax1y0 + rax0y1 + rax1y1) * 0.375f*/ + 163840f);
+    }
+
+    private static final IntVLA columns = new IntVLA(128), rows = new IntVLA(128);
+    public static void addNoiseField(final float[][] target, final float startX, final float startY,
+                                     final float endX, final float endY, final int seed, final float multiplier) {
+        int callWidth = target.length, callHeight = target[0].length,
+                alter = xJump * seed, alter2 = yJump * seed,
+                xx0, yy0, rxx0, ryy0, rxx1, ryy1, cx, cy;
+        final float
+                stretchX = (1f + randomize(alter, yJump) * 0.25f),// * (alter2 >> 31 | 1),
+                stretchY = (1f + randomize(alter2, xJump) * 0.25f),// * (alter >> 31 | 1);
+                adjX = startX,// * stretchX + startY * stretchX * 0.3125f,
+                adjY = startY,// * stretchY + startX * stretchY * 0.3125f,
+                adjEndX = endX,// * stretchX + endY * stretchX * 0.3125f,
+                adjEndY = endY,// * stretchY + endX * stretchY * 0.3125f,
+                stepX = (adjEndX - adjX) / callWidth, stepY = (adjEndY - adjY) / callHeight;
+        float dx, dy, rx0y0, rx0y1, rx1y0, rx1y1, ax, ay;
+        final int startFloorX = fastFloor(adjX),
+                startFloorY = fastFloor(adjY),
+                //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,
+                bonusWidth = callWidth + 3, bonusHeight = callHeight + 3,
+                spaceWidth = 3 * bonusWidth, spaceHeight = 3 * bonusHeight;
+
+        columns.clear();
+        rows.clear();
+        columns.ensureCapacity(spaceWidth);
+        rows.ensureCapacity(spaceHeight);
+        for (int x = startFloorX; x < spaceWidth + startFloorX; x++) {
+            columns.add(randomInt(x, alter));
+        }
+        for (int y = startFloorY; y < spaceHeight + startFloorY; y++) {
+            rows.add(randomInt(y, alter2));
+        }
+        cx = 0;
+        for (float x = startX; cx < callWidth; x += stepX, cx++) {
+            cy = 0;
+            for (float y = startY; cy < callHeight; y += stepY, cy++) {
+                ax = x * stretchX + y * stretchX * 0.3125f;
+                ay = y * stretchY + x * stretchY * 0.3125f;
+                xx0 = fastFloor(ax);
+                yy0 = fastFloor(ay);
+                rxx0 = columns.get(xx0 - startFloorX + bonusWidth);
+                ryy0 = rows.get(yy0 - startFloorY + bonusHeight);
+                rxx1 = columns.get(xx0 + 1 - startFloorX + bonusWidth);
+                ryy1 = rows.get(yy0 + 1 - startFloorY + bonusHeight);
+                dx = querp(ax - xx0);
+                dy = querp(ay - yy0);
+                rx0y0 = (rxx0 * ryy0 >> 16) * (1f - dx) * (1f - dy);
+                rx0y1 = (rxx0 * ryy1 >> 16) * (1f - dx) * dy;
+                rx1y0 = (rxx1 * ryy0 >> 16) * dx * (1f - dy);
+                rx1y1 = (rxx1 * ryy1 >> 16) * dx * dy;
+
+                target[cx][cy] += NumberTools.bounce((rx0y0 + rx1y0 + rx0y1 + rx1y1) + 163840f) * multiplier;
+            }
+        }
     }
 
     public static double noise(final double x, final double y, final double z, final int seed) {

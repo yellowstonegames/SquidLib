@@ -29,8 +29,8 @@ public class Playground {
     }
 
     private void go() {
-        for (float i = 0f; i <= 1f; i += 0.01) {
-            System.out.println(i + " " + carp(i));
+        for (float i = 0f; i <= 1f; i += 0.0625f * 0.0625f) {
+            System.out.println(i + " " + (carp(i) * 2f + i));
         }
     }
 
