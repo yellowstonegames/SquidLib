@@ -1001,11 +1001,11 @@
 <span class="sourceLineNo">993</span>            7, 3, 0, 1, 7, 3, 1, 0};<a name="line.993"></a>
 <span class="sourceLineNo">994</span><a name="line.994"></a>
 <span class="sourceLineNo">995</span>    /**<a name="line.995"></a>
-<span class="sourceLineNo">996</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.<a name="line.996"></a>
+<span class="sourceLineNo">996</span>     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 24 bits.<a name="line.996"></a>
 <span class="sourceLineNo">997</span>     * @param x an int to incorporate into the hash<a name="line.997"></a>
 <span class="sourceLineNo">998</span>     * @param y an int to incorporate into the hash<a name="line.998"></a>
 <span class="sourceLineNo">999</span>     * @param seed an int to incorporate into the hash<a name="line.999"></a>
-<span class="sourceLineNo">1000</span>     * @return a pseudo-random-like int between 0 and 255, inclusive on both<a name="line.1000"></a>
+<span class="sourceLineNo">1000</span>     * @return a pseudo-random-like int with 24 bits used<a name="line.1000"></a>
 <span class="sourceLineNo">1001</span>     */<a name="line.1001"></a>
 <span class="sourceLineNo">1002</span>    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3<a name="line.1002"></a>
 <span class="sourceLineNo">1003</span>    /*<a name="line.1003"></a>
@@ -1020,7 +1020,7 @@
 <span class="sourceLineNo">1012</span>        return  (0x9E3779B9<a name="line.1012"></a>
 <span class="sourceLineNo">1013</span>                + (a ^= 0x85157AF5 * seed + x)<a name="line.1013"></a>
 <span class="sourceLineNo">1014</span>                + (a ^= 0x85157AF5 * x + y)<a name="line.1014"></a>
-<span class="sourceLineNo">1015</span>                + (a ^= 0x85157AF5 * y + seed)) * a &gt;&gt;&gt; 24;<a name="line.1015"></a>
+<span class="sourceLineNo">1015</span>                + (a ^= 0x85157AF5 * y + seed)) * a &gt;&gt;&gt; 8;<a name="line.1015"></a>
 <span class="sourceLineNo">1016</span>    }<a name="line.1016"></a>
 <span class="sourceLineNo">1017</span><a name="line.1017"></a>
 <span class="sourceLineNo">1018</span>    /**<a name="line.1018"></a>
@@ -1191,293 +1191,565 @@
 <span class="sourceLineNo">1183</span>    public static double noise(final double x, final double y, final int seed) {<a name="line.1183"></a>
 <span class="sourceLineNo">1184</span>        return noise((float)x, (float)y, seed);<a name="line.1184"></a>
 <span class="sourceLineNo">1185</span>    }<a name="line.1185"></a>
-<span class="sourceLineNo">1186</span>    public static double noise(final float x, final float y, final int seed) {<a name="line.1186"></a>
-<span class="sourceLineNo">1187</span>        final int<a name="line.1187"></a>
-<span class="sourceLineNo">1188</span>                x0 = fastFloor(x),<a name="line.1188"></a>
-<span class="sourceLineNo">1189</span>                y0 = fastFloor(y),<a name="line.1189"></a>
-<span class="sourceLineNo">1190</span>                x1 = x0 + 1,<a name="line.1190"></a>
-<span class="sourceLineNo">1191</span>                y2 = y0 + 1,<a name="line.1191"></a>
-<span class="sourceLineNo">1192</span>                pos0 = CoordPacker.posToHilbert(x0 &amp; 255, y0 &amp; 255),<a name="line.1192"></a>
-<span class="sourceLineNo">1193</span>                pos1 = CoordPacker.posToHilbert(x1 &amp; 255, y0 &amp; 255),<a name="line.1193"></a>
-<span class="sourceLineNo">1194</span>                pos2 = CoordPacker.posToHilbert(x0 &amp; 255, y2 &amp; 255);<a name="line.1194"></a>
-<span class="sourceLineNo">1195</span>        final float d1 = (x - x0), d2 = (y - y0);//, d2 = Math.max(x - x2, y - y2);<a name="line.1195"></a>
-<span class="sourceLineNo">1196</span>        return (Math.sin(pos0) * (2f - d1 - d2) + Math.sin(pos1) * d1 + Math.sin(pos2) * d2) * 0.5f;//+ (dx + dy + dx2 + dy2) * Math.PI);<a name="line.1196"></a>
+<span class="sourceLineNo">1186</span><a name="line.1186"></a>
+<span class="sourceLineNo">1187</span>    public static float randomize(int state, final int jump)<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span>    {<a name="line.1188"></a>
+<span class="sourceLineNo">1189</span>        return NumberTools.intBitsToFloat(((((state = (state - jump) * jump) &gt;&gt; (state &gt;&gt;&gt; 28)) * 0xC6BC278D) &gt;&gt;&gt; 9) | 0x40000000) - 3f;<a name="line.1189"></a>
+<span class="sourceLineNo">1190</span>    }<a name="line.1190"></a>
+<span class="sourceLineNo">1191</span><a name="line.1191"></a>
+<span class="sourceLineNo">1192</span>    public static int randomInt(int state, final int jump) {<a name="line.1192"></a>
+<span class="sourceLineNo">1193</span>        return ((state = (state - jump) * jump) &gt;&gt; (state &gt;&gt;&gt; 28)) * 0xC6BC278D;<a name="line.1193"></a>
+<span class="sourceLineNo">1194</span>    }<a name="line.1194"></a>
+<span class="sourceLineNo">1195</span>    public static int randomInt(int state) {<a name="line.1195"></a>
+<span class="sourceLineNo">1196</span>        return (state &gt;&gt; (state &gt;&gt;&gt; 28)) * 0xC6BC278D;<a name="line.1196"></a>
 <span class="sourceLineNo">1197</span>    }<a name="line.1197"></a>
-<span class="sourceLineNo">1198</span><a name="line.1198"></a>
-<span class="sourceLineNo">1199</span>    public static double noise(final double x, final double y, final double z, final int seed) {<a name="line.1199"></a>
-<span class="sourceLineNo">1200</span>        return noise((float)x, (float)y, (float)z, seed);<a name="line.1200"></a>
-<span class="sourceLineNo">1201</span>    }<a name="line.1201"></a>
-<span class="sourceLineNo">1202</span>    public static double noise(final float x, final float y, final float z, final int seed) {<a name="line.1202"></a>
-<span class="sourceLineNo">1203</span>        double n0, n1, n2, n3;<a name="line.1203"></a>
-<span class="sourceLineNo">1204</span>        final float[] gradient3DLUT = SeededNoise.gradient3DLUT;<a name="line.1204"></a>
-<span class="sourceLineNo">1205</span>        final float s = (x + y + z) * F3;<a name="line.1205"></a>
-<span class="sourceLineNo">1206</span>        final int i = fastFloor(x + s),<a name="line.1206"></a>
-<span class="sourceLineNo">1207</span>                j = fastFloor(y + s),<a name="line.1207"></a>
-<span class="sourceLineNo">1208</span>                k = fastFloor(z + s);<a name="line.1208"></a>
-<span class="sourceLineNo">1209</span><a name="line.1209"></a>
-<span class="sourceLineNo">1210</span>        final float t = (i + j + k) * G3;<a name="line.1210"></a>
-<span class="sourceLineNo">1211</span>        final float X0 = i - t, Y0 = j - t, Z0 = k - t,<a name="line.1211"></a>
-<span class="sourceLineNo">1212</span>                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;<a name="line.1212"></a>
-<span class="sourceLineNo">1213</span><a name="line.1213"></a>
-<span class="sourceLineNo">1214</span>        int i1, j1, k1;<a name="line.1214"></a>
-<span class="sourceLineNo">1215</span>        int i2, j2, k2;<a name="line.1215"></a>
-<span class="sourceLineNo">1216</span><a name="line.1216"></a>
-<span class="sourceLineNo">1217</span>        if (x0 &gt;= y0) {<a name="line.1217"></a>
-<span class="sourceLineNo">1218</span>            if (y0 &gt;= z0) {<a name="line.1218"></a>
-<span class="sourceLineNo">1219</span>                i1 = 1;<a name="line.1219"></a>
-<span class="sourceLineNo">1220</span>                j1 = 0;<a name="line.1220"></a>
-<span class="sourceLineNo">1221</span>                k1 = 0;<a name="line.1221"></a>
-<span class="sourceLineNo">1222</span>                i2 = 1;<a name="line.1222"></a>
-<span class="sourceLineNo">1223</span>                j2 = 1;<a name="line.1223"></a>
-<span class="sourceLineNo">1224</span>                k2 = 0;<a name="line.1224"></a>
-<span class="sourceLineNo">1225</span>            } else if (x0 &gt;= z0) {<a name="line.1225"></a>
-<span class="sourceLineNo">1226</span>                i1 = 1;<a name="line.1226"></a>
-<span class="sourceLineNo">1227</span>                j1 = 0;<a name="line.1227"></a>
-<span class="sourceLineNo">1228</span>                k1 = 0;<a name="line.1228"></a>
-<span class="sourceLineNo">1229</span>                i2 = 1;<a name="line.1229"></a>
-<span class="sourceLineNo">1230</span>                j2 = 0;<a name="line.1230"></a>
-<span class="sourceLineNo">1231</span>                k2 = 1;<a name="line.1231"></a>
-<span class="sourceLineNo">1232</span>            } else {<a name="line.1232"></a>
-<span class="sourceLineNo">1233</span>                i1 = 0;<a name="line.1233"></a>
-<span class="sourceLineNo">1234</span>                j1 = 0;<a name="line.1234"></a>
-<span class="sourceLineNo">1235</span>                k1 = 1;<a name="line.1235"></a>
-<span class="sourceLineNo">1236</span>                i2 = 1;<a name="line.1236"></a>
-<span class="sourceLineNo">1237</span>                j2 = 0;<a name="line.1237"></a>
-<span class="sourceLineNo">1238</span>                k2 = 1;<a name="line.1238"></a>
-<span class="sourceLineNo">1239</span>            }<a name="line.1239"></a>
-<span class="sourceLineNo">1240</span>        } else {<a name="line.1240"></a>
-<span class="sourceLineNo">1241</span>            if (y0 &lt; z0) {<a name="line.1241"></a>
-<span class="sourceLineNo">1242</span>                i1 = 0;<a name="line.1242"></a>
-<span class="sourceLineNo">1243</span>                j1 = 0;<a name="line.1243"></a>
-<span class="sourceLineNo">1244</span>                k1 = 1;<a name="line.1244"></a>
-<span class="sourceLineNo">1245</span>                i2 = 0;<a name="line.1245"></a>
-<span class="sourceLineNo">1246</span>                j2 = 1;<a name="line.1246"></a>
-<span class="sourceLineNo">1247</span>                k2 = 1;<a name="line.1247"></a>
-<span class="sourceLineNo">1248</span>            } else if (x0 &lt; z0) {<a name="line.1248"></a>
-<span class="sourceLineNo">1249</span>                i1 = 0;<a name="line.1249"></a>
-<span class="sourceLineNo">1250</span>                j1 = 1;<a name="line.1250"></a>
-<span class="sourceLineNo">1251</span>                k1 = 0;<a name="line.1251"></a>
-<span class="sourceLineNo">1252</span>                i2 = 0;<a name="line.1252"></a>
-<span class="sourceLineNo">1253</span>                j2 = 1;<a name="line.1253"></a>
-<span class="sourceLineNo">1254</span>                k2 = 1;<a name="line.1254"></a>
-<span class="sourceLineNo">1255</span>            } else {<a name="line.1255"></a>
-<span class="sourceLineNo">1256</span>                i1 = 0;<a name="line.1256"></a>
-<span class="sourceLineNo">1257</span>                j1 = 1;<a name="line.1257"></a>
-<span class="sourceLineNo">1258</span>                k1 = 0;<a name="line.1258"></a>
-<span class="sourceLineNo">1259</span>                i2 = 1;<a name="line.1259"></a>
-<span class="sourceLineNo">1260</span>                j2 = 1;<a name="line.1260"></a>
-<span class="sourceLineNo">1261</span>                k2 = 0;<a name="line.1261"></a>
-<span class="sourceLineNo">1262</span>            }<a name="line.1262"></a>
-<span class="sourceLineNo">1263</span>        }<a name="line.1263"></a>
-<span class="sourceLineNo">1264</span><a name="line.1264"></a>
-<span class="sourceLineNo">1265</span>        float x1 = x0 - i1 + G3,<a name="line.1265"></a>
-<span class="sourceLineNo">1266</span>                y1 = y0 - j1 + G3,<a name="line.1266"></a>
-<span class="sourceLineNo">1267</span>                z1 = z0 - k1 + G3,<a name="line.1267"></a>
-<span class="sourceLineNo">1268</span>                x2 = x0 - i2 + 2f * G3,<a name="line.1268"></a>
-<span class="sourceLineNo">1269</span>                y2 = y0 - j2 + 2f * G3,<a name="line.1269"></a>
-<span class="sourceLineNo">1270</span>                z2 = z0 - k2 + 2f * G3,<a name="line.1270"></a>
-<span class="sourceLineNo">1271</span>                x3 = x0 - 1f + 3f * G3,<a name="line.1271"></a>
-<span class="sourceLineNo">1272</span>                y3 = y0 - 1f + 3f * G3,<a name="line.1272"></a>
-<span class="sourceLineNo">1273</span>                z3 = z0 - 1f + 3f * G3;<a name="line.1273"></a>
-<span class="sourceLineNo">1274</span><a name="line.1274"></a>
-<span class="sourceLineNo">1275</span>        final int h0 = hash(i, j, k, seed) * 3,<a name="line.1275"></a>
-<span class="sourceLineNo">1276</span>                h1 = hash(i + i1, j + j1, k + k1, seed) * 3,<a name="line.1276"></a>
-<span class="sourceLineNo">1277</span>                h2 = hash(i + i2, j + j2, k + k2, seed) * 3,<a name="line.1277"></a>
-<span class="sourceLineNo">1278</span>                h3 = hash(i + 1, j + 1, k + 1, seed) * 3;<a name="line.1278"></a>
-<span class="sourceLineNo">1279</span><a name="line.1279"></a>
-<span class="sourceLineNo">1280</span>        float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;<a name="line.1280"></a>
-<span class="sourceLineNo">1281</span>        if (t0 &lt; 0.0)<a name="line.1281"></a>
-<span class="sourceLineNo">1282</span>            n0 = 0.0;<a name="line.1282"></a>
-<span class="sourceLineNo">1283</span>        else {<a name="line.1283"></a>
-<span class="sourceLineNo">1284</span>            t0 *= t0;<a name="line.1284"></a>
-<span class="sourceLineNo">1285</span>            n0 = t0 * t0 * (x0 * gradient3DLUT[h0] + y0 * gradient3DLUT[h0 + 1] + z0 * gradient3DLUT[h0 + 2]);<a name="line.1285"></a>
-<span class="sourceLineNo">1286</span>        }<a name="line.1286"></a>
-<span class="sourceLineNo">1287</span><a name="line.1287"></a>
-<span class="sourceLineNo">1288</span>        float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;<a name="line.1288"></a>
-<span class="sourceLineNo">1289</span>        if (t1 &lt; 0.0)<a name="line.1289"></a>
-<span class="sourceLineNo">1290</span>            n1 = 0.0;<a name="line.1290"></a>
-<span class="sourceLineNo">1291</span>        else {<a name="line.1291"></a>
-<span class="sourceLineNo">1292</span>            t1 *= t1;<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span>            n1 = t1 * t1 * (x1 * gradient3DLUT[h1] + y1 * gradient3DLUT[h1 + 1] + z1 * gradient3DLUT[h1 + 2]);<a name="line.1293"></a>
-<span class="sourceLineNo">1294</span>        }<a name="line.1294"></a>
-<span class="sourceLineNo">1295</span><a name="line.1295"></a>
-<span class="sourceLineNo">1296</span>        float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;<a name="line.1296"></a>
-<span class="sourceLineNo">1297</span>        if (t2 &lt; 0)<a name="line.1297"></a>
-<span class="sourceLineNo">1298</span>            n2 = 0.0;<a name="line.1298"></a>
-<span class="sourceLineNo">1299</span>        else {<a name="line.1299"></a>
-<span class="sourceLineNo">1300</span>            t2 *= t2;<a name="line.1300"></a>
-<span class="sourceLineNo">1301</span>            n2 = t2 * t2 * (x2 * gradient3DLUT[h2] + y2 * gradient3DLUT[h2 + 1] + z2 * gradient3DLUT[h2 + 2]);<a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>        }<a name="line.1302"></a>
-<span class="sourceLineNo">1303</span><a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>        float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span>        if (t3 &lt; 0)<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>            n3 = 0.0;<a name="line.1306"></a>
-<span class="sourceLineNo">1307</span>        else {<a name="line.1307"></a>
-<span class="sourceLineNo">1308</span>            t3 *= t3;<a name="line.1308"></a>
-<span class="sourceLineNo">1309</span>            n3 = t3 * t3 * (x3 * gradient3DLUT[h3] + y3 * gradient3DLUT[h3 + 1] + z3 * gradient3DLUT[h3 + 2]);<a name="line.1309"></a>
-<span class="sourceLineNo">1310</span>        }<a name="line.1310"></a>
-<span class="sourceLineNo">1311</span><a name="line.1311"></a>
-<span class="sourceLineNo">1312</span>        return (32f * (n0 + n1 + n2 + n3)) * 1.25086885 + 0.0003194984;<a name="line.1312"></a>
-<span class="sourceLineNo">1313</span>    }<a name="line.1313"></a>
-<span class="sourceLineNo">1314</span><a name="line.1314"></a>
-<span class="sourceLineNo">1315</span>    public static double noise(final double x, final double y, final double z, final double w, final int seed) {<a name="line.1315"></a>
-<span class="sourceLineNo">1316</span>        return noise((float)x, (float)y, (float)z, (float)w, seed);<a name="line.1316"></a>
-<span class="sourceLineNo">1317</span>    }<a name="line.1317"></a>
-<span class="sourceLineNo">1318</span>    public static double noise(final float x, final float y, final float z, final float w, final int seed) {<a name="line.1318"></a>
-<span class="sourceLineNo">1319</span>        float n = 0.0f;<a name="line.1319"></a>
-<span class="sourceLineNo">1320</span>        final float s = (x + y + z + w) * F4;<a name="line.1320"></a>
-<span class="sourceLineNo">1321</span>        final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);<a name="line.1321"></a>
-<span class="sourceLineNo">1322</span>        final float[] gradient4DLUT = MasonNoise.gradient4DLUT;<a name="line.1322"></a>
-<span class="sourceLineNo">1323</span>        final float t = (i + j + k + l) * G4,<a name="line.1323"></a>
-<span class="sourceLineNo">1324</span>                X0 = i - t,<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>                Y0 = j - t,<a name="line.1325"></a>
-<span class="sourceLineNo">1326</span>                Z0 = k - t,<a name="line.1326"></a>
-<span class="sourceLineNo">1327</span>                W0 = l - t,<a name="line.1327"></a>
-<span class="sourceLineNo">1328</span>                x0 = x - X0,<a name="line.1328"></a>
-<span class="sourceLineNo">1329</span>                y0 = y - Y0,<a name="line.1329"></a>
-<span class="sourceLineNo">1330</span>                z0 = z - Z0,<a name="line.1330"></a>
-<span class="sourceLineNo">1331</span>                w0 = w - W0;<a name="line.1331"></a>
-<span class="sourceLineNo">1332</span>        final int c = (x0 &gt; y0 ? 128 : 0) | (x0 &gt; z0 ? 64 : 0) | (y0 &gt; z0 ? 32 : 0) | (x0 &gt; w0 ? 16 : 0) | (y0 &gt; w0 ? 8 : 0) | (z0 &gt; w0 ? 4 : 0);<a name="line.1332"></a>
-<span class="sourceLineNo">1333</span>        final int i1 = SIMPLEX[c] &gt;&gt;&gt; 2,<a name="line.1333"></a>
-<span class="sourceLineNo">1334</span>                j1 = SIMPLEX[c | 1] &gt;&gt;&gt; 2,<a name="line.1334"></a>
-<span class="sourceLineNo">1335</span>                k1 = SIMPLEX[c | 2] &gt;&gt;&gt; 2,<a name="line.1335"></a>
-<span class="sourceLineNo">1336</span>                l1 = SIMPLEX[c | 3] &gt;&gt;&gt; 2,<a name="line.1336"></a>
-<span class="sourceLineNo">1337</span>                i2 = SIMPLEX[c] &gt;&gt;&gt; 1 &amp; 1,<a name="line.1337"></a>
-<span class="sourceLineNo">1338</span>                j2 = SIMPLEX[c | 1] &gt;&gt;&gt; 1 &amp; 1,<a name="line.1338"></a>
-<span class="sourceLineNo">1339</span>                k2 = SIMPLEX[c | 2] &gt;&gt;&gt; 1 &amp; 1,<a name="line.1339"></a>
-<span class="sourceLineNo">1340</span>                l2 = SIMPLEX[c | 3] &gt;&gt;&gt; 1 &amp; 1,<a name="line.1340"></a>
-<span class="sourceLineNo">1341</span>                i3 = SIMPLEX[c] &amp; 1,<a name="line.1341"></a>
-<span class="sourceLineNo">1342</span>                j3 = SIMPLEX[c | 1] &amp; 1,<a name="line.1342"></a>
-<span class="sourceLineNo">1343</span>                k3 = SIMPLEX[c | 2] &amp; 1,<a name="line.1343"></a>
-<span class="sourceLineNo">1344</span>                l3 = SIMPLEX[c | 3] &amp; 1;<a name="line.1344"></a>
-<span class="sourceLineNo">1345</span>        final float x1 = x0 - i1 + G4,<a name="line.1345"></a>
-<span class="sourceLineNo">1346</span>                y1 = y0 - j1 + G4,<a name="line.1346"></a>
-<span class="sourceLineNo">1347</span>                z1 = z0 - k1 + G4,<a name="line.1347"></a>
-<span class="sourceLineNo">1348</span>                w1 = w0 - l1 + G4,<a name="line.1348"></a>
-<span class="sourceLineNo">1349</span>                x2 = x0 - i2 + 2f * G4,<a name="line.1349"></a>
-<span class="sourceLineNo">1350</span>                y2 = y0 - j2 + 2f * G4,<a name="line.1350"></a>
-<span class="sourceLineNo">1351</span>                z2 = z0 - k2 + 2f * G4,<a name="line.1351"></a>
-<span class="sourceLineNo">1352</span>                w2 = w0 - l2 + 2f * G4,<a name="line.1352"></a>
-<span class="sourceLineNo">1353</span>                x3 = x0 - i3 + 3f * G4,<a name="line.1353"></a>
-<span class="sourceLineNo">1354</span>                y3 = y0 - j3 + 3f * G4,<a name="line.1354"></a>
-<span class="sourceLineNo">1355</span>                z3 = z0 - k3 + 3f * G4,<a name="line.1355"></a>
-<span class="sourceLineNo">1356</span>                w3 = w0 - l3 + 3f * G4,<a name="line.1356"></a>
-<span class="sourceLineNo">1357</span>                x4 = x0 - 1f + 4f * G4,<a name="line.1357"></a>
-<span class="sourceLineNo">1358</span>                y4 = y0 - 1f + 4f * G4,<a name="line.1358"></a>
-<span class="sourceLineNo">1359</span>                z4 = z0 - 1f + 4f * G4,<a name="line.1359"></a>
-<span class="sourceLineNo">1360</span>                w4 = w0 - 1f + 4f * G4;<a name="line.1360"></a>
-<span class="sourceLineNo">1361</span>        final int h0 = hash(i, j, k, l, seed) &lt;&lt; 2,<a name="line.1361"></a>
-<span class="sourceLineNo">1362</span>                h1 = hash(i + i1, j + j1, k + k1, l + l1, seed) &lt;&lt; 2,<a name="line.1362"></a>
-<span class="sourceLineNo">1363</span>                h2 = hash(i + i2, j + j2, k + k2, l + l2, seed) &lt;&lt; 2,<a name="line.1363"></a>
-<span class="sourceLineNo">1364</span>                h3 = hash(i + i3, j + j3, k + k3, l + l3, seed) &lt;&lt; 2,<a name="line.1364"></a>
-<span class="sourceLineNo">1365</span>                h4 = hash(i + 1, j + 1, k + 1, l + 1, seed) &lt;&lt; 2;<a name="line.1365"></a>
-<span class="sourceLineNo">1366</span>        float t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;<a name="line.1366"></a>
-<span class="sourceLineNo">1367</span>        if(t0 &gt; 0) {<a name="line.1367"></a>
-<span class="sourceLineNo">1368</span>            t0 *= t0;<a name="line.1368"></a>
-<span class="sourceLineNo">1369</span>            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);<a name="line.1369"></a>
-<span class="sourceLineNo">1370</span>        }<a name="line.1370"></a>
-<span class="sourceLineNo">1371</span>        float t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;<a name="line.1371"></a>
-<span class="sourceLineNo">1372</span>        if (t1 &gt; 0) {<a name="line.1372"></a>
-<span class="sourceLineNo">1373</span>            t1 *= t1;<a name="line.1373"></a>
-<span class="sourceLineNo">1374</span>            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);<a name="line.1374"></a>
-<span class="sourceLineNo">1375</span>        }<a name="line.1375"></a>
-<span class="sourceLineNo">1376</span>        float t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;<a name="line.1376"></a>
-<span class="sourceLineNo">1377</span>        if (t2 &gt; 0) {<a name="line.1377"></a>
-<span class="sourceLineNo">1378</span>            t2 *= t2;<a name="line.1378"></a>
-<span class="sourceLineNo">1379</span>            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);<a name="line.1379"></a>
-<span class="sourceLineNo">1380</span>        }<a name="line.1380"></a>
-<span class="sourceLineNo">1381</span>        float t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;<a name="line.1381"></a>
-<span class="sourceLineNo">1382</span>        if (t3 &gt; 0) {<a name="line.1382"></a>
-<span class="sourceLineNo">1383</span>            t3 *= t3;<a name="line.1383"></a>
-<span class="sourceLineNo">1384</span>            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);<a name="line.1384"></a>
-<span class="sourceLineNo">1385</span>        }<a name="line.1385"></a>
-<span class="sourceLineNo">1386</span>        float t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;<a name="line.1386"></a>
-<span class="sourceLineNo">1387</span>        if (t4 &gt; 0) {<a name="line.1387"></a>
-<span class="sourceLineNo">1388</span>            t4 *= t4;<a name="line.1388"></a>
-<span class="sourceLineNo">1389</span>            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);<a name="line.1389"></a>
-<span class="sourceLineNo">1390</span>        }<a name="line.1390"></a>
-<span class="sourceLineNo">1391</span>        return NumberTools.bounce(5.0 + 41.0 * n);<a name="line.1391"></a>
-<span class="sourceLineNo">1392</span>    }<a name="line.1392"></a>
-<span class="sourceLineNo">1393</span><a name="line.1393"></a>
-<span class="sourceLineNo">1394</span><a name="line.1394"></a>
-<span class="sourceLineNo">1395</span>    public static double noise(final double x, final double y, final double z,<a name="line.1395"></a>
-<span class="sourceLineNo">1396</span>                               final double w, final double u, final double v, final int seed) {<a name="line.1396"></a>
-<span class="sourceLineNo">1397</span>        return noise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v, seed);<a name="line.1397"></a>
-<span class="sourceLineNo">1398</span>    }<a name="line.1398"></a>
-<span class="sourceLineNo">1399</span><a name="line.1399"></a>
-<span class="sourceLineNo">1400</span>    public static double noise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {<a name="line.1400"></a>
-<span class="sourceLineNo">1401</span><a name="line.1401"></a>
-<span class="sourceLineNo">1402</span>        final float s = (x + y + z + w + u + v) * F6;<a name="line.1402"></a>
-<span class="sourceLineNo">1403</span><a name="line.1403"></a>
-<span class="sourceLineNo">1404</span>        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),<a name="line.1404"></a>
-<span class="sourceLineNo">1405</span>                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);<a name="line.1405"></a>
-<span class="sourceLineNo">1406</span>        final int[] intLoc = MasonNoise.intLoc, distOrder = MasonNoise.distOrder;<a name="line.1406"></a>
-<span class="sourceLineNo">1407</span>        intLoc[0] = skewX;<a name="line.1407"></a>
-<span class="sourceLineNo">1408</span>        intLoc[1] = skewY;<a name="line.1408"></a>
-<span class="sourceLineNo">1409</span>        intLoc[2] = skewZ;<a name="line.1409"></a>
-<span class="sourceLineNo">1410</span>        intLoc[3] = skewW;<a name="line.1410"></a>
-<span class="sourceLineNo">1411</span>        intLoc[4] = skewU;<a name="line.1411"></a>
-<span class="sourceLineNo">1412</span>        intLoc[5] = skewV;<a name="line.1412"></a>
-<span class="sourceLineNo">1413</span><a name="line.1413"></a>
-<span class="sourceLineNo">1414</span>        final float unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;<a name="line.1414"></a>
-<span class="sourceLineNo">1415</span>        final float[] cellDist = MasonNoise.cellDist, gradient6DLUT = MasonNoise.gradient6DLUT;<a name="line.1415"></a>
-<span class="sourceLineNo">1416</span>        cellDist[0] = x - skewX + unskew;<a name="line.1416"></a>
-<span class="sourceLineNo">1417</span>        cellDist[1] = y - skewY + unskew;<a name="line.1417"></a>
-<span class="sourceLineNo">1418</span>        cellDist[2] = z - skewZ + unskew;<a name="line.1418"></a>
-<span class="sourceLineNo">1419</span>        cellDist[3] = w - skewW + unskew;<a name="line.1419"></a>
-<span class="sourceLineNo">1420</span>        cellDist[4] = u - skewU + unskew;<a name="line.1420"></a>
-<span class="sourceLineNo">1421</span>        cellDist[5] = v - skewV + unskew;<a name="line.1421"></a>
-<span class="sourceLineNo">1422</span><a name="line.1422"></a>
-<span class="sourceLineNo">1423</span>        int o0 = (cellDist[0]&lt;cellDist[1]?1:0)+(cellDist[0]&lt;cellDist[2]?1:0)+(cellDist[0]&lt;cellDist[3]?1:0)+(cellDist[0]&lt;cellDist[4]?1:0)+(cellDist[0]&lt;cellDist[5]?1:0);<a name="line.1423"></a>
-<span class="sourceLineNo">1424</span>        int o1 = (cellDist[1]&lt;=cellDist[0]?1:0)+(cellDist[1]&lt;cellDist[2]?1:0)+(cellDist[1]&lt;cellDist[3]?1:0)+(cellDist[1]&lt;cellDist[4]?1:0)+(cellDist[1]&lt;cellDist[5]?1:0);<a name="line.1424"></a>
-<span class="sourceLineNo">1425</span>        int o2 = (cellDist[2]&lt;=cellDist[0]?1:0)+(cellDist[2]&lt;=cellDist[1]?1:0)+(cellDist[2]&lt;cellDist[3]?1:0)+(cellDist[2]&lt;cellDist[4]?1:0)+(cellDist[2]&lt;cellDist[5]?1:0);<a name="line.1425"></a>
-<span class="sourceLineNo">1426</span>        int o3 = (cellDist[3]&lt;=cellDist[0]?1:0)+(cellDist[3]&lt;=cellDist[1]?1:0)+(cellDist[3]&lt;=cellDist[2]?1:0)+(cellDist[3]&lt;cellDist[4]?1:0)+(cellDist[3]&lt;cellDist[5]?1:0);<a name="line.1426"></a>
-<span class="sourceLineNo">1427</span>        int o4 = (cellDist[4]&lt;=cellDist[0]?1:0)+(cellDist[4]&lt;=cellDist[1]?1:0)+(cellDist[4]&lt;=cellDist[2]?1:0)+(cellDist[4]&lt;=cellDist[3]?1:0)+(cellDist[4]&lt;cellDist[5]?1:0);<a name="line.1427"></a>
-<span class="sourceLineNo">1428</span>        int o5 = 15-(o0+o1+o2+o3+o4);<a name="line.1428"></a>
-<span class="sourceLineNo">1429</span><a name="line.1429"></a>
-<span class="sourceLineNo">1430</span>        distOrder[o0]=0;<a name="line.1430"></a>
-<span class="sourceLineNo">1431</span>        distOrder[o1]=1;<a name="line.1431"></a>
-<span class="sourceLineNo">1432</span>        distOrder[o2]=2;<a name="line.1432"></a>
-<span class="sourceLineNo">1433</span>        distOrder[o3]=3;<a name="line.1433"></a>
-<span class="sourceLineNo">1434</span>        distOrder[o4]=4;<a name="line.1434"></a>
-<span class="sourceLineNo">1435</span>        distOrder[o5]=5;<a name="line.1435"></a>
-<span class="sourceLineNo">1436</span><a name="line.1436"></a>
-<span class="sourceLineNo">1437</span>        float n = 0f;<a name="line.1437"></a>
-<span class="sourceLineNo">1438</span>        float skewOffset = 0f;<a name="line.1438"></a>
-<span class="sourceLineNo">1439</span><a name="line.1439"></a>
-<span class="sourceLineNo">1440</span>        for (int c = -1; c &lt; 6; c++) {<a name="line.1440"></a>
-<span class="sourceLineNo">1441</span>            if (c != -1) intLoc[distOrder[c]]++;<a name="line.1441"></a>
-<span class="sourceLineNo">1442</span><a name="line.1442"></a>
-<span class="sourceLineNo">1443</span>            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;<a name="line.1443"></a>
-<span class="sourceLineNo">1444</span>            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;<a name="line.1444"></a>
-<span class="sourceLineNo">1445</span>            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;<a name="line.1445"></a>
-<span class="sourceLineNo">1446</span>            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;<a name="line.1446"></a>
-<span class="sourceLineNo">1447</span>            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;<a name="line.1447"></a>
-<span class="sourceLineNo">1448</span>            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;<a name="line.1448"></a>
-<span class="sourceLineNo">1449</span><a name="line.1449"></a>
-<span class="sourceLineNo">1450</span>            float tc = LIMIT6;<a name="line.1450"></a>
-<span class="sourceLineNo">1451</span><a name="line.1451"></a>
-<span class="sourceLineNo">1452</span>            for (int d = 0; d &lt; 6; d++) {<a name="line.1452"></a>
-<span class="sourceLineNo">1453</span>                tc -= m[d] * m[d];<a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>            }<a name="line.1454"></a>
-<span class="sourceLineNo">1455</span><a name="line.1455"></a>
-<span class="sourceLineNo">1456</span>            if (tc &gt; 0f) {<a name="line.1456"></a>
-<span class="sourceLineNo">1457</span>                final int h = hash(intLoc[0], intLoc[1], intLoc[2], intLoc[3],<a name="line.1457"></a>
-<span class="sourceLineNo">1458</span>                        intLoc[4], intLoc[5], seed) * 6;<a name="line.1458"></a>
-<span class="sourceLineNo">1459</span>                float gr = 0f;<a name="line.1459"></a>
-<span class="sourceLineNo">1460</span>                for (int d = 0; d &lt; 6; d++) {<a name="line.1460"></a>
-<span class="sourceLineNo">1461</span>                    gr += gradient6DLUT[h + d] * m[d];<a name="line.1461"></a>
-<span class="sourceLineNo">1462</span>                }<a name="line.1462"></a>
-<span class="sourceLineNo">1463</span><a name="line.1463"></a>
-<span class="sourceLineNo">1464</span>                n += gr * tc * tc * tc * tc;<a name="line.1464"></a>
-<span class="sourceLineNo">1465</span>            }<a name="line.1465"></a>
-<span class="sourceLineNo">1466</span>            skewOffset += G6;<a name="line.1466"></a>
-<span class="sourceLineNo">1467</span>        }<a name="line.1467"></a>
-<span class="sourceLineNo">1468</span>        //return NumberTools.bounce(5.0 + 13.5 * n);<a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>        return NumberTools.bounce(10.0 + 16.25 * n);<a name="line.1469"></a>
-<span class="sourceLineNo">1470</span>    }<a name="line.1470"></a>
-<span class="sourceLineNo">1471</span><a name="line.1471"></a>
-<span class="sourceLineNo">1472</span>}<a name="line.1472"></a>
+<span class="sourceLineNo">1198</span>    /**<a name="line.1198"></a>
+<span class="sourceLineNo">1199</span>     * Quintic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve<a name="line.1199"></a>
+<span class="sourceLineNo">1200</span>     * @param x a float from 0 to 1<a name="line.1200"></a>
+<span class="sourceLineNo">1201</span>     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve<a name="line.1201"></a>
+<span class="sourceLineNo">1202</span>     */<a name="line.1202"></a>
+<span class="sourceLineNo">1203</span>    private static float querp( final float x ) { return x * x * x * (x * (x * 6f - 15f) + 10f); }<a name="line.1203"></a>
+<span class="sourceLineNo">1204</span>    /**<a name="line.1204"></a>
+<span class="sourceLineNo">1205</span>     * Pair of Cubic (Hermite) Flat Interpolations; for x from 0 to 1, returns results from 0 to 0 on an S-curve, with<a name="line.1205"></a>
+<span class="sourceLineNo">1206</span>     * crests and valleys no more than 0.097f above or below 0.<a name="line.1206"></a>
+<span class="sourceLineNo">1207</span>     * @param x a float from 0 to 1<a name="line.1207"></a>
+<span class="sourceLineNo">1208</span>     * @return a float from 0 to 0.97, easing in to 0 at the endpoints on a curve<a name="line.1208"></a>
+<span class="sourceLineNo">1209</span>     */<a name="line.1209"></a>
+<span class="sourceLineNo">1210</span>    private static float carp(final float x) { return x * (x * (x - 1) + (1 - x) * (1 - x)); }<a name="line.1210"></a>
+<span class="sourceLineNo">1211</span>    /**<a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>     * Pair of Cubic (Hermite) Flat Interpolations plus linear interpolation; for x from 0 to 1, returns results from 0<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>     * to 1 on an S-curve.<a name="line.1213"></a>
+<span class="sourceLineNo">1214</span>     * @param x a float from 0 to 1<a name="line.1214"></a>
+<span class="sourceLineNo">1215</span>     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve<a name="line.1215"></a>
+<span class="sourceLineNo">1216</span>     */<a name="line.1216"></a>
+<span class="sourceLineNo">1217</span>    private static float carp2(final float x) { return x - x * (x * (x - 1) + (1 - x) * (1 - x)); }<a name="line.1217"></a>
+<span class="sourceLineNo">1218</span><a name="line.1218"></a>
+<span class="sourceLineNo">1219</span>    /**<a name="line.1219"></a>
+<span class="sourceLineNo">1220</span>     * Simple Cubic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve, with more<a name="line.1220"></a>
+<span class="sourceLineNo">1221</span>     * distinct curving but less smooth of a "takeoff and landing" as it reaches endpoints, relative to<a name="line.1221"></a>
+<span class="sourceLineNo">1222</span>     * {@link #querp(float)}. In practice, this looks more like a middle ground between linear interpolation and querp.<a name="line.1222"></a>
+<span class="sourceLineNo">1223</span>     * @param x a float from 0 to 1<a name="line.1223"></a>
+<span class="sourceLineNo">1224</span>     * @return a float from 0 to 1, easing in somewhat to 0 or 1 at those endpoints on a curve<a name="line.1224"></a>
+<span class="sourceLineNo">1225</span>     */<a name="line.1225"></a>
+<span class="sourceLineNo">1226</span>    private static float cerp(final float x) {<a name="line.1226"></a>
+<span class="sourceLineNo">1227</span>        return x * x * (3f - 2f * x);<a name="line.1227"></a>
+<span class="sourceLineNo">1228</span>    }<a name="line.1228"></a>
+<span class="sourceLineNo">1229</span><a name="line.1229"></a>
+<span class="sourceLineNo">1230</span>    /**<a name="line.1230"></a>
+<span class="sourceLineNo">1231</span>     * Slightly faster verson of {@link #querp(float)} for quintic hermite interpolation, but this doesn't distribute<a name="line.1231"></a>
+<span class="sourceLineNo">1232</span>     * as evenly as proper quintic interpolation, and may offset the average value when used for noise.<a name="line.1232"></a>
+<span class="sourceLineNo">1233</span>     * @param x a float from 0 to 1<a name="line.1233"></a>
+<span class="sourceLineNo">1234</span>     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve<a name="line.1234"></a>
+<span class="sourceLineNo">1235</span>     */<a name="line.1235"></a>
+<span class="sourceLineNo">1236</span>    private static float querp2(final float x)<a name="line.1236"></a>
+<span class="sourceLineNo">1237</span>    {<a name="line.1237"></a>
+<span class="sourceLineNo">1238</span>        final float x3 = x*x*x;<a name="line.1238"></a>
+<span class="sourceLineNo">1239</span>        return ( 7f + ( x3 - 7f ) * x ) * x3;<a name="line.1239"></a>
+<span class="sourceLineNo">1240</span>    }<a name="line.1240"></a>
+<span class="sourceLineNo">1241</span><a name="line.1241"></a>
+<span class="sourceLineNo">1242</span>    private static final int xJump = 0x9E3779B9, yJump = 0xBFDAE4F7, zJump = 0xF35692B5;<a name="line.1242"></a>
+<span class="sourceLineNo">1243</span>    public static float noise(final float x, final float y, final int seed) {<a name="line.1243"></a>
+<span class="sourceLineNo">1244</span>        //final float xy = x * 2.2731f - y, yx = y * 2.3417f - x;<a name="line.1244"></a>
+<span class="sourceLineNo">1245</span>        /*final float ra = randomize(seed, xJump),<a name="line.1245"></a>
+<span class="sourceLineNo">1246</span>                angle = (ra + 2.3f) * Math.signum(ra),<a name="line.1246"></a>
+<span class="sourceLineNo">1247</span>                xx = x * angle + y * angle * -0.3157f,<a name="line.1247"></a>
+<span class="sourceLineNo">1248</span>                yy = y * angle + x * angle * -0.3157f;<a name="line.1248"></a>
+<span class="sourceLineNo">1249</span>        */final int<a name="line.1249"></a>
+<span class="sourceLineNo">1250</span>                xx0 = fastFloor(x), yy0 = fastFloor(y),<a name="line.1250"></a>
+<span class="sourceLineNo">1251</span>                //xy0 = fastFloor(xy), yx0 = fastFloor(yx),<a name="line.1251"></a>
+<span class="sourceLineNo">1252</span>                rxx0 = randomInt(xx0, xJump + seed), ryy0 = randomInt(yy0, xJump + seed),<a name="line.1252"></a>
+<span class="sourceLineNo">1253</span>                rxx1 = randomInt(xx0 + 1, xJump + seed), ryy1 = randomInt(yy0 + 1, xJump + seed);<a name="line.1253"></a>
+<span class="sourceLineNo">1254</span>        //rxy0 = randomInt(xy0, xJump), ryx0 = randomInt(yx0, yJump),<a name="line.1254"></a>
+<span class="sourceLineNo">1255</span>        //rxy1 = randomInt(xy0 + 1, xJump), ryx1 = randomInt(yx0 + 1, yJump);<a name="line.1255"></a>
+<span class="sourceLineNo">1256</span>        final float dx = querp(x - xx0), dy = querp(y - yy0),<a name="line.1256"></a>
+<span class="sourceLineNo">1257</span>                //dxy = querp(xy - xy0), dyx = querp(yx - yx0),<a name="line.1257"></a>
+<span class="sourceLineNo">1258</span>                rx0y0 = (rxx0 * ryy0 &gt;&gt; 16) * (1f - dx) * (1f - dy),<a name="line.1258"></a>
+<span class="sourceLineNo">1259</span>                rx0y1 = (rxx0 * ryy1 &gt;&gt; 16) * (1f - dx) * dy,<a name="line.1259"></a>
+<span class="sourceLineNo">1260</span>                rx1y0 = (rxx1 * ryy0 &gt;&gt; 16) * dx * (1f - dy),<a name="line.1260"></a>
+<span class="sourceLineNo">1261</span>                rx1y1 = (rxx1 * ryy1 &gt;&gt; 16) * dx * dy/*,<a name="line.1261"></a>
+<span class="sourceLineNo">1262</span>                rax0y0 = (rxy0 + ryx0 &gt;&gt; 16) * (1f - dxy) * (1f - dyx),<a name="line.1262"></a>
+<span class="sourceLineNo">1263</span>                rax0y1 = (rxy0 + ryx1 &gt;&gt; 16) * (1f - dxy) * dyx,<a name="line.1263"></a>
+<span class="sourceLineNo">1264</span>                rax1y0 = (rxy1 + ryx0 &gt;&gt; 16) * dxy * (1f - dyx),<a name="line.1264"></a>
+<span class="sourceLineNo">1265</span>                rax1y1 = (rxy1 + ryx1 &gt;&gt; 16) * dxy * dyx*/;<a name="line.1265"></a>
+<span class="sourceLineNo">1266</span>        return NumberTools.bounce((rx0y0 + rx1y0 + rx0y1 + rx1y1) /* * 0.625f + (rax0y0 + rax1y0 + rax0y1 + rax1y1) * 0.375f*/ + 163840f);<a name="line.1266"></a>
+<span class="sourceLineNo">1267</span>    }<a name="line.1267"></a>
+<span class="sourceLineNo">1268</span><a name="line.1268"></a>
+<span class="sourceLineNo">1269</span>    private static final IntVLA columns = new IntVLA(128), // x<a name="line.1269"></a>
+<span class="sourceLineNo">1270</span>            rows = new IntVLA(128), // y<a name="line.1270"></a>
+<span class="sourceLineNo">1271</span>            layers = new IntVLA(128), // z<a name="line.1271"></a>
+<span class="sourceLineNo">1272</span>            wos = new IntVLA(128), // w<a name="line.1272"></a>
+<span class="sourceLineNo">1273</span>            ubs = new IntVLA(128), // u<a name="line.1273"></a>
+<span class="sourceLineNo">1274</span>            vys = new IntVLA(128); // v<a name="line.1274"></a>
+<span class="sourceLineNo">1275</span>    public static void addNoiseField(final float[][] target, final float startX, final float startY,<a name="line.1275"></a>
+<span class="sourceLineNo">1276</span>                                     final float endX, final float endY, final int seed, final float multiplier, final float shrink) {<a name="line.1276"></a>
+<span class="sourceLineNo">1277</span>        int callWidth = target.length, callHeight = target[0].length,<a name="line.1277"></a>
+<span class="sourceLineNo">1278</span>                alter = randomInt(seed, xJump), alter2 = randomInt(~seed, yJump),<a name="line.1278"></a>
+<span class="sourceLineNo">1279</span>                xx0, yy0, rxx0, ryy0, rxx1, ryy1, cx, cy;<a name="line.1279"></a>
+<span class="sourceLineNo">1280</span>        final float startX2 = startX * shrink, startY2 = startY * shrink, endX2 = endX * shrink, endY2 = endY * shrink,<a name="line.1280"></a>
+<span class="sourceLineNo">1281</span>                stretchX = (1f + randomize(alter, yJump) * 0.25f) * (alter2 &gt;&gt; 31 | 1),<a name="line.1281"></a>
+<span class="sourceLineNo">1282</span>                stretchY = (1f + randomize(alter2, xJump) * 0.25f) * (alter &gt;&gt; 31 | 1),<a name="line.1282"></a>
+<span class="sourceLineNo">1283</span>                stepX = (endX2 - startX2) / callWidth, stepY = (endY2 - startY2) / callHeight,<a name="line.1283"></a>
+<span class="sourceLineNo">1284</span>                minimumX = Math.min(startX2 * stretchX - startY2 * stretchY * 0.25f,<a name="line.1284"></a>
+<span class="sourceLineNo">1285</span>                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.25f,<a name="line.1285"></a>
+<span class="sourceLineNo">1286</span>                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.25f, endX2 * stretchX - endY2 * stretchY * 0.25f))),<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span>                maximumX = Math.max(startX2 * stretchX - startY2 * stretchY * 0.25f,<a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.25f,<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span>                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.25f, endX2 * stretchX - endY2 * stretchY * 0.25f))),<a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>                minimumY = Math.min(startY2 * stretchX - startX2 * stretchY * 0.25f,<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span>                        Math.min(startY2 * stretchX - endX2 * stretchY * 0.25f,<a name="line.1291"></a>
+<span class="sourceLineNo">1292</span>                                Math.min(endY2 * stretchX - startX2 * stretchY * 0.25f, endY2 * stretchX - endX2 * stretchY * 0.25f))),<a name="line.1292"></a>
+<span class="sourceLineNo">1293</span>                maximumY = Math.max(startY2 * stretchX - startX2 * stretchY * 0.25f,<a name="line.1293"></a>
+<span class="sourceLineNo">1294</span>                        Math.max(startY2 * stretchX - endX2 * stretchY * 0.25f,<a name="line.1294"></a>
+<span class="sourceLineNo">1295</span>                                Math.max(endY2 * stretchX - startX2 * stretchY * 0.25f, endY2 * stretchX - endX2 * stretchY * 0.25f)));<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>        float dx, dy, ax, ay;<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>        final int startFloorX = fastFloor(minimumX),<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>                startFloorY = fastFloor(minimumY),<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>                //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>                spaceWidth = fastFloor(maximumX - minimumX) + 4, spaceHeight = fastFloor(maximumY - minimumY) + 4<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>                ;//bonusWidth = Math.abs(startFloorX - fastFloor(minimumX)), bonusHeight = Math.abs(startFloorY - fastFloor(minimumY));<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span><a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>        columns.clear();<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span>        rows.clear();<a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>        columns.ensureCapacity(spaceWidth);<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>        rows.ensureCapacity(spaceHeight);<a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>        for (int x = 0, r = startFloorX * alter; x &lt; spaceWidth; x++, r += alter) {<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span>            columns.add(randomInt(r));<a name="line.1308"></a>
+<span class="sourceLineNo">1309</span>        }<a name="line.1309"></a>
+<span class="sourceLineNo">1310</span>        for (int y = 0, r = startFloorY * alter2; y &lt; spaceHeight; y++, r += alter2) {<a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>            rows.add(randomInt(r));<a name="line.1311"></a>
+<span class="sourceLineNo">1312</span>        }<a name="line.1312"></a>
+<span class="sourceLineNo">1313</span>        cx = 0;<a name="line.1313"></a>
+<span class="sourceLineNo">1314</span>        for (float x = startX2; cx &lt; callWidth; x += stepX, cx++) {<a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>            cy = 0;<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>            for (float y = startY2; cy &lt; callHeight; y += stepY, cy++) {<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span>                ax = x * stretchX - y * stretchY * 0.25f;<a name="line.1317"></a>
+<span class="sourceLineNo">1318</span>                ay = y * stretchX - x * stretchY * 0.25f;<a name="line.1318"></a>
+<span class="sourceLineNo">1319</span>                xx0 = fastFloor(ax);<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>                yy0 = fastFloor(ay);<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>                rxx0 = columns.get(xx0 - startFloorX+1);<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>                ryy0 = rows.get(yy0 - startFloorY+1);<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>                rxx1 = columns.get(xx0 + 1 - startFloorX+1);<a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>                ryy1 = rows.get(yy0 + 1 - startFloorY+1);<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>                dx = carp2(ax - xx0);<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>                dy = carp2(ay - yy0);<a name="line.1326"></a>
+<span class="sourceLineNo">1327</span>                target[cx][cy] += NumberTools.bounce(<a name="line.1327"></a>
+<span class="sourceLineNo">1328</span>                        (rxx0 * ryy0 &gt;&gt; 16) * (1f - dx) * (1f - dy)<a name="line.1328"></a>
+<span class="sourceLineNo">1329</span>                                + (rxx0 * ryy1 &gt;&gt; 16) * (1f - dx) * dy<a name="line.1329"></a>
+<span class="sourceLineNo">1330</span>                                + (rxx1 * ryy0 &gt;&gt; 16) * dx * (1f - dy)<a name="line.1330"></a>
+<span class="sourceLineNo">1331</span>                                + (rxx1 * ryy1 &gt;&gt; 16) * dx * dy<a name="line.1331"></a>
+<span class="sourceLineNo">1332</span>                                + 163840f) * multiplier;<a name="line.1332"></a>
+<span class="sourceLineNo">1333</span>            }<a name="line.1333"></a>
+<span class="sourceLineNo">1334</span>        }<a name="line.1334"></a>
+<span class="sourceLineNo">1335</span>    }<a name="line.1335"></a>
+<span class="sourceLineNo">1336</span>    public static void addNoiseField(final float[][][] target,<a name="line.1336"></a>
+<span class="sourceLineNo">1337</span>                                     final float startX, final float startY, final float startZ,<a name="line.1337"></a>
+<span class="sourceLineNo">1338</span>                                     final float endX, final float endY, final float endZ,<a name="line.1338"></a>
+<span class="sourceLineNo">1339</span>                                     final int seed, final float multiplier, final float shrink) {<a name="line.1339"></a>
+<span class="sourceLineNo">1340</span>        int callWidth = target[0].length, callHeight = target[0][0].length, callDepth = target.length,<a name="line.1340"></a>
+<span class="sourceLineNo">1341</span>                alter = randomInt(seed, xJump), alter2 = randomInt(~seed, yJump), alter3 = randomInt(alter + alter2, zJump),<a name="line.1341"></a>
+<span class="sourceLineNo">1342</span>                xx0, yy0, zz0, rxx0, ryy0, rzz0, rxx1, ryy1, rzz1, cx, cy, cz, vx0y0, vx1y0, vx0y1, vx1y1;<a name="line.1342"></a>
+<span class="sourceLineNo">1343</span>        final float startX2 = startX * shrink, startY2 = startY * shrink, startZ2 = startZ * shrink,<a name="line.1343"></a>
+<span class="sourceLineNo">1344</span>                endX2 = endX * shrink, endY2 = endY * shrink, endZ2 = endZ * shrink,<a name="line.1344"></a>
+<span class="sourceLineNo">1345</span>                stretchX = (1f + randomize(alter, yJump) * 0.25f) * (alter3 &gt;&gt; 31 | 1),<a name="line.1345"></a>
+<span class="sourceLineNo">1346</span>                stretchY = (1f + randomize(alter2, zJump) * 0.25f) * (alter &gt;&gt; 31 | 1),<a name="line.1346"></a>
+<span class="sourceLineNo">1347</span>                stretchZ = (1f + randomize(alter3, xJump) * 0.25f) * (alter2 &gt;&gt; 31 | 1),<a name="line.1347"></a>
+<span class="sourceLineNo">1348</span>                stepX = (endX2 - startX2) / callWidth, stepY = (endY2 - startY2) / callHeight, stepZ = (endZ2 - startZ2) / callDepth,<a name="line.1348"></a>
+<span class="sourceLineNo">1349</span>                minimumX = Math.min(startX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.1349"></a>
+<span class="sourceLineNo">1350</span>                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.1350"></a>
+<span class="sourceLineNo">1351</span>                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 *stretchZ * 0.09375f,<a name="line.1351"></a>
+<span class="sourceLineNo">1352</span>                                        Math.min(endX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.1352"></a>
+<span class="sourceLineNo">1353</span>                                                Math.min(startX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,<a name="line.1353"></a>
+<span class="sourceLineNo">1354</span>                                                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,<a name="line.1354"></a>
+<span class="sourceLineNo">1355</span>                                                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 *stretchZ * 0.09375f,<a name="line.1355"></a>
+<span class="sourceLineNo">1356</span>                                                                        endX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f))))))),<a name="line.1356"></a>
+<span class="sourceLineNo">1357</span>                maximumX = Math.max(startX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.1357"></a>
+<span class="sourceLineNo">1358</span>                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.1358"></a>
+<span class="sourceLineNo">1359</span>                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 *stretchZ * 0.09375f,<a name="line.1359"></a>
+<span class="sourceLineNo">1360</span>                                        Math.max(endX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.1360"></a>
+<span class="sourceLineNo">1361</span>                                                Math.max(startX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,<a name="line.1361"></a>
+<span class="sourceLineNo">1362</span>                                                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,<a name="line.1362"></a>
+<span class="sourceLineNo">1363</span>                                                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 *stretchZ * 0.09375f,<a name="line.1363"></a>
+<span class="sourceLineNo">1364</span>                                                                        endX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f))))))),<a name="line.1364"></a>
+<span class="sourceLineNo">1365</span>                minimumY = Math.min(startY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.1365"></a>
+<span class="sourceLineNo">1366</span>                        Math.min(startY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.1366"></a>
+<span class="sourceLineNo">1367</span>                                Math.min(endY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 *stretchZ * 0.09375f,<a name="line.1367"></a>
+<span class="sourceLineNo">1368</span>                                        Math.min(endY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.1368"></a>
+<span class="sourceLineNo">1369</span>                                                Math.min(startY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,<a name="line.1369"></a>
+<span class="sourceLineNo">1370</span>                                                        Math.min(startY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,<a name="line.1370"></a>
+<span class="sourceLineNo">1371</span>                                                                Math.min(endY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 *stretchZ * 0.09375f,<a name="line.1371"></a>
+<span class="sourceLineNo">1372</span>                                                                        endY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f))))))),<a name="line.1372"></a>
+<span class="sourceLineNo">1373</span>                maximumY = Math.max(startY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.1373"></a>
+<span class="sourceLineNo">1374</span>                        Math.max(startY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.1374"></a>
+<span class="sourceLineNo">1375</span>                                Math.max(endY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 *stretchZ * 0.09375f,<a name="line.1375"></a>
+<span class="sourceLineNo">1376</span>                                        Math.max(endY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.1376"></a>
+<span class="sourceLineNo">1377</span>                                                Math.max(startY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,<a name="line.1377"></a>
+<span class="sourceLineNo">1378</span>                                                        Math.max(startY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,<a name="line.1378"></a>
+<span class="sourceLineNo">1379</span>                                                                Math.max(endY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 *stretchZ * 0.09375f,<a name="line.1379"></a>
+<span class="sourceLineNo">1380</span>                                                                        endY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f))))))),<a name="line.1380"></a>
+<span class="sourceLineNo">1381</span>                minimumZ = Math.min(startZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.1381"></a>
+<span class="sourceLineNo">1382</span>                        Math.min(startZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.1382"></a>
+<span class="sourceLineNo">1383</span>                                Math.min(endZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 *stretchZ * 0.09375f,<a name="line.1383"></a>
+<span class="sourceLineNo">1384</span>                                        Math.min(endZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.1384"></a>
+<span class="sourceLineNo">1385</span>                                                Math.min(startZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,<a name="line.1385"></a>
+<span class="sourceLineNo">1386</span>                                                        Math.min(startZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,<a name="line.1386"></a>
+<span class="sourceLineNo">1387</span>                                                                Math.min(endZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 *stretchZ * 0.09375f,<a name="line.1387"></a>
+<span class="sourceLineNo">1388</span>                                                                        endZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f))))))),<a name="line.1388"></a>
+<span class="sourceLineNo">1389</span>                maximumZ = Math.max(startZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.1389"></a>
+<span class="sourceLineNo">1390</span>                        Math.max(startZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.1390"></a>
+<span class="sourceLineNo">1391</span>                                Math.max(endZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 *stretchZ * 0.09375f,<a name="line.1391"></a>
+<span class="sourceLineNo">1392</span>                                        Math.max(endZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.1392"></a>
+<span class="sourceLineNo">1393</span>                                                Math.max(startZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,<a name="line.1393"></a>
+<span class="sourceLineNo">1394</span>                                                        Math.max(startZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,<a name="line.1394"></a>
+<span class="sourceLineNo">1395</span>                                                                Math.max(endZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 *stretchZ * 0.09375f,<a name="line.1395"></a>
+<span class="sourceLineNo">1396</span>                                                                        endZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f)))))));<a name="line.1396"></a>
+<span class="sourceLineNo">1397</span><a name="line.1397"></a>
+<span class="sourceLineNo">1398</span><a name="line.1398"></a>
+<span class="sourceLineNo">1399</span>        float dx, dy, dz, ax, ay, az, mx0y0, mx1y0, mx0y1, mx1y1;<a name="line.1399"></a>
+<span class="sourceLineNo">1400</span>        final int startFloorX = fastFloor(minimumX),<a name="line.1400"></a>
+<span class="sourceLineNo">1401</span>                startFloorY = fastFloor(minimumY),<a name="line.1401"></a>
+<span class="sourceLineNo">1402</span>                startFloorZ = fastFloor(minimumZ),<a name="line.1402"></a>
+<span class="sourceLineNo">1403</span>                //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,<a name="line.1403"></a>
+<span class="sourceLineNo">1404</span>                spaceWidth = fastFloor(maximumX - minimumX) + 4,<a name="line.1404"></a>
+<span class="sourceLineNo">1405</span>                spaceHeight = fastFloor(maximumY - minimumY) + 4,<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>                spaceDepth = fastFloor(maximumZ - minimumZ) + 4;//bonusWidth = Math.abs(startFloorX - fastFloor(minimumX)), bonusHeight = Math.abs(startFloorY - fastFloor(minimumY));<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span><a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>        columns.clear();<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>        rows.clear();<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>        layers.clear();<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span>        columns.ensureCapacity(spaceWidth);<a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>        rows.ensureCapacity(spaceHeight);<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span>        layers.ensureCapacity(spaceDepth);<a name="line.1413"></a>
+<span class="sourceLineNo">1414</span>        for (int x = 0, r = startFloorX * alter; x &lt; spaceWidth; x++, r += alter) {<a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>            columns.add(randomInt(r));<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>        }<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>        for (int y = 0, r = startFloorY * alter2; y &lt; spaceHeight; y++, r += alter2) {<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span>            rows.add(randomInt(r));<a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>        }<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>        for (int z = 0, r = startFloorZ * alter3; z &lt; spaceDepth; z++, r += alter3) {<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span>            layers.add(randomInt(r));<a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>        }<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span>        cz = 0;<a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>        float[][] tt;<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span>        float[] t;<a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>        for (float z = startZ2; cz &lt; callDepth; z+= stepZ, cz++) {<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>            tt = target[cz];<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span>            cx = 0;<a name="line.1428"></a>
+<span class="sourceLineNo">1429</span>            for (float x = startX2; cx &lt; callWidth; x += stepX, cx++) {<a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>                cy = 0;<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>                t = tt[cx];<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>                for (float y = startY2; cy &lt; callHeight; y += stepY, cy++) {<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>                    ax = x * stretchX - y * stretchY * 0.15625f + z * stretchZ * 0.09375f;<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>                    ay = y * stretchX - z * stretchY * 0.15625f + x * stretchZ * 0.09375f;<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>                    az = z * stretchX - x * stretchY * 0.15625f + y * stretchZ * 0.09375f;<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>                    xx0 = fastFloor(ax);<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span>                    yy0 = fastFloor(ay);<a name="line.1437"></a>
+<span class="sourceLineNo">1438</span>                    zz0 = fastFloor(az);<a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>                    rxx0 = columns.get(xx0 - startFloorX + 1);<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>                    ryy0 = rows.get(yy0 - startFloorY + 1);<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>                    rzz0 = layers.get(zz0 - startFloorZ + 1);<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span>                    rxx1 = columns.get(xx0 + 1 - startFloorX + 1);<a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>                    ryy1 = rows.get(yy0 + 1 - startFloorY + 1);<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>                    rzz1 = layers.get(zz0 + 1 - startFloorZ + 1);<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>                    dx = carp2(ax - xx0);<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span>                    dy = carp2(ay - yy0);<a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>                    dz = carp2(az - zz0);<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>                    vx0y0 = rxx0 * ryy0;<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>                    vx0y1 = rxx0 * ryy1;<a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>                    vx1y0 = rxx1 * ryy0;<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>                    vx1y1 = rxx1 * ryy1;<a name="line.1451"></a>
+<span class="sourceLineNo">1452</span>                    mx0y0 = (1f - dx) * (1f - dy);<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>                    mx0y1 = (1f - dx) * dy;<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>                    mx1y0 = dx * (1f - dy);<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>                    mx1y1 = dx * dy;<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>                    t[cy] += NumberTools.bounce(<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>                            (vx0y0 * rzz0 &gt;&gt; 16) * mx0y0 * (1f - dz)<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>                                    + (vx0y0 * rzz1 &gt;&gt; 16) * mx0y0 * dz<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>                                    + (vx0y1 * rzz0 &gt;&gt; 16) * mx0y1 * (1f - dz)<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>                                    + (vx0y1 * rzz1 &gt;&gt; 16) * mx0y1 * dz<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>                                    + (vx1y0 * rzz0 &gt;&gt; 16) * mx1y0 * (1f - dz)<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span>                                    + (vx1y0 * rzz1 &gt;&gt; 16) * mx1y0 * dz<a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>                                    + (vx1y1 * rzz0 &gt;&gt; 16) * mx1y1 * (1f - dz)<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>                                    + (vx1y1 * rzz1 &gt;&gt; 16) * mx1y1 * dz<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>                                    + 163840f) * multiplier;<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>                }<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>            }<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>        }<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>    }<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span><a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>    public static double noise(final double x, final double y, final double z, final int seed) {<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>        return noise((float)x, (float)y, (float)z, seed);<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>    }<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>    public static double noise(final float x, final float y, final float z, final int seed) {<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>        double n0, n1, n2, n3;<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>        final float[] gradient3DLUT = SeededNoise.gradient3DLUT;<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>        final float s = (x + y + z) * F3;<a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>        final int i = fastFloor(x + s),<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>                j = fastFloor(y + s),<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>                k = fastFloor(z + s);<a name="line.1480"></a>
+<span class="sourceLineNo">1481</span><a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>        final float t = (i + j + k) * G3;<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span>        final float X0 = i - t, Y0 = j - t, Z0 = k - t,<a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span><a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>        int i1, j1, k1;<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span>        int i2, j2, k2;<a name="line.1487"></a>
+<span class="sourceLineNo">1488</span><a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>        if (x0 &gt;= y0) {<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>            if (y0 &gt;= z0) {<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span>                i1 = 1;<a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>                j1 = 0;<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span>                k1 = 0;<a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>                i2 = 1;<a name="line.1494"></a>
+<span class="sourceLineNo">1495</span>                j2 = 1;<a name="line.1495"></a>
+<span class="sourceLineNo">1496</span>                k2 = 0;<a name="line.1496"></a>
+<span class="sourceLineNo">1497</span>            } else if (x0 &gt;= z0) {<a name="line.1497"></a>
+<span class="sourceLineNo">1498</span>                i1 = 1;<a name="line.1498"></a>
+<span class="sourceLineNo">1499</span>                j1 = 0;<a name="line.1499"></a>
+<span class="sourceLineNo">1500</span>                k1 = 0;<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>                i2 = 1;<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>                j2 = 0;<a name="line.1502"></a>
+<span class="sourceLineNo">1503</span>                k2 = 1;<a name="line.1503"></a>
+<span class="sourceLineNo">1504</span>            } else {<a name="line.1504"></a>
+<span class="sourceLineNo">1505</span>                i1 = 0;<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>                j1 = 0;<a name="line.1506"></a>
+<span class="sourceLineNo">1507</span>                k1 = 1;<a name="line.1507"></a>
+<span class="sourceLineNo">1508</span>                i2 = 1;<a name="line.1508"></a>
+<span class="sourceLineNo">1509</span>                j2 = 0;<a name="line.1509"></a>
+<span class="sourceLineNo">1510</span>                k2 = 1;<a name="line.1510"></a>
+<span class="sourceLineNo">1511</span>            }<a name="line.1511"></a>
+<span class="sourceLineNo">1512</span>        } else {<a name="line.1512"></a>
+<span class="sourceLineNo">1513</span>            if (y0 &lt; z0) {<a name="line.1513"></a>
+<span class="sourceLineNo">1514</span>                i1 = 0;<a name="line.1514"></a>
+<span class="sourceLineNo">1515</span>                j1 = 0;<a name="line.1515"></a>
+<span class="sourceLineNo">1516</span>                k1 = 1;<a name="line.1516"></a>
+<span class="sourceLineNo">1517</span>                i2 = 0;<a name="line.1517"></a>
+<span class="sourceLineNo">1518</span>                j2 = 1;<a name="line.1518"></a>
+<span class="sourceLineNo">1519</span>                k2 = 1;<a name="line.1519"></a>
+<span class="sourceLineNo">1520</span>            } else if (x0 &lt; z0) {<a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>                i1 = 0;<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>                j1 = 1;<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>                k1 = 0;<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>                i2 = 0;<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>                j2 = 1;<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>                k2 = 1;<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span>            } else {<a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>                i1 = 0;<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>                j1 = 1;<a name="line.1529"></a>
+<span class="sourceLineNo">1530</span>                k1 = 0;<a name="line.1530"></a>
+<span class="sourceLineNo">1531</span>                i2 = 1;<a name="line.1531"></a>
+<span class="sourceLineNo">1532</span>                j2 = 1;<a name="line.1532"></a>
+<span class="sourceLineNo">1533</span>                k2 = 0;<a name="line.1533"></a>
+<span class="sourceLineNo">1534</span>            }<a name="line.1534"></a>
+<span class="sourceLineNo">1535</span>        }<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span><a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>        float x1 = x0 - i1 + G3,<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span>                y1 = y0 - j1 + G3,<a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>                z1 = z0 - k1 + G3,<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>                x2 = x0 - i2 + 2f * G3,<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>                y2 = y0 - j2 + 2f * G3,<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>                z2 = z0 - k2 + 2f * G3,<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>                x3 = x0 - 1f + 3f * G3,<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span>                y3 = y0 - 1f + 3f * G3,<a name="line.1544"></a>
+<span class="sourceLineNo">1545</span>                z3 = z0 - 1f + 3f * G3;<a name="line.1545"></a>
+<span class="sourceLineNo">1546</span><a name="line.1546"></a>
+<span class="sourceLineNo">1547</span>        final int h0 = hash(i, j, k, seed) * 3,<a name="line.1547"></a>
+<span class="sourceLineNo">1548</span>                h1 = hash(i + i1, j + j1, k + k1, seed) * 3,<a name="line.1548"></a>
+<span class="sourceLineNo">1549</span>                h2 = hash(i + i2, j + j2, k + k2, seed) * 3,<a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>                h3 = hash(i + 1, j + 1, k + 1, seed) * 3;<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span><a name="line.1551"></a>
+<span class="sourceLineNo">1552</span>        float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;<a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>        if (t0 &lt; 0.0)<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span>            n0 = 0.0;<a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>        else {<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span>            t0 *= t0;<a name="line.1556"></a>
+<span class="sourceLineNo">1557</span>            n0 = t0 * t0 * (x0 * gradient3DLUT[h0] + y0 * gradient3DLUT[h0 + 1] + z0 * gradient3DLUT[h0 + 2]);<a name="line.1557"></a>
+<span class="sourceLineNo">1558</span>        }<a name="line.1558"></a>
+<span class="sourceLineNo">1559</span><a name="line.1559"></a>
+<span class="sourceLineNo">1560</span>        float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;<a name="line.1560"></a>
+<span class="sourceLineNo">1561</span>        if (t1 &lt; 0.0)<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span>            n1 = 0.0;<a name="line.1562"></a>
+<span class="sourceLineNo">1563</span>        else {<a name="line.1563"></a>
+<span class="sourceLineNo">1564</span>            t1 *= t1;<a name="line.1564"></a>
+<span class="sourceLineNo">1565</span>            n1 = t1 * t1 * (x1 * gradient3DLUT[h1] + y1 * gradient3DLUT[h1 + 1] + z1 * gradient3DLUT[h1 + 2]);<a name="line.1565"></a>
+<span class="sourceLineNo">1566</span>        }<a name="line.1566"></a>
+<span class="sourceLineNo">1567</span><a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>        float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>        if (t2 &lt; 0)<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span>            n2 = 0.0;<a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>        else {<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>            t2 *= t2;<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>            n2 = t2 * t2 * (x2 * gradient3DLUT[h2] + y2 * gradient3DLUT[h2 + 1] + z2 * gradient3DLUT[h2 + 2]);<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span>        }<a name="line.1574"></a>
+<span class="sourceLineNo">1575</span><a name="line.1575"></a>
+<span class="sourceLineNo">1576</span>        float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;<a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>        if (t3 &lt; 0)<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span>            n3 = 0.0;<a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>        else {<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>            t3 *= t3;<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span>            n3 = t3 * t3 * (x3 * gradient3DLUT[h3] + y3 * gradient3DLUT[h3 + 1] + z3 * gradient3DLUT[h3 + 2]);<a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>        }<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span><a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>        return (32f * (n0 + n1 + n2 + n3)) * 1.25086885 + 0.0003194984;<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>    }<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span><a name="line.1586"></a>
+<span class="sourceLineNo">1587</span>    public static double noise(final double x, final double y, final double z, final double w, final int seed) {<a name="line.1587"></a>
+<span class="sourceLineNo">1588</span>        return noise((float)x, (float)y, (float)z, (float)w, seed);<a name="line.1588"></a>
+<span class="sourceLineNo">1589</span>    }<a name="line.1589"></a>
+<span class="sourceLineNo">1590</span>    public static double noise(final float x, final float y, final float z, final float w, final int seed) {<a name="line.1590"></a>
+<span class="sourceLineNo">1591</span>        float n = 0.0f;<a name="line.1591"></a>
+<span class="sourceLineNo">1592</span>        final float s = (x + y + z + w) * F4;<a name="line.1592"></a>
+<span class="sourceLineNo">1593</span>        final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);<a name="line.1593"></a>
+<span class="sourceLineNo">1594</span>        final float[] gradient4DLUT = MasonNoise.gradient4DLUT;<a name="line.1594"></a>
+<span class="sourceLineNo">1595</span>        final float t = (i + j + k + l) * G4,<a name="line.1595"></a>
+<span class="sourceLineNo">1596</span>                X0 = i - t,<a name="line.1596"></a>
+<span class="sourceLineNo">1597</span>                Y0 = j - t,<a name="line.1597"></a>
+<span class="sourceLineNo">1598</span>                Z0 = k - t,<a name="line.1598"></a>
+<span class="sourceLineNo">1599</span>                W0 = l - t,<a name="line.1599"></a>
+<span class="sourceLineNo">1600</span>                x0 = x - X0,<a name="line.1600"></a>
+<span class="sourceLineNo">1601</span>                y0 = y - Y0,<a name="line.1601"></a>
+<span class="sourceLineNo">1602</span>                z0 = z - Z0,<a name="line.1602"></a>
+<span class="sourceLineNo">1603</span>                w0 = w - W0;<a name="line.1603"></a>
+<span class="sourceLineNo">1604</span>        final int c = (x0 &gt; y0 ? 128 : 0) | (x0 &gt; z0 ? 64 : 0) | (y0 &gt; z0 ? 32 : 0) | (x0 &gt; w0 ? 16 : 0) | (y0 &gt; w0 ? 8 : 0) | (z0 &gt; w0 ? 4 : 0);<a name="line.1604"></a>
+<span class="sourceLineNo">1605</span>        final int i1 = SIMPLEX[c] &gt;&gt;&gt; 2,<a name="line.1605"></a>
+<span class="sourceLineNo">1606</span>                j1 = SIMPLEX[c | 1] &gt;&gt;&gt; 2,<a name="line.1606"></a>
+<span class="sourceLineNo">1607</span>                k1 = SIMPLEX[c | 2] &gt;&gt;&gt; 2,<a name="line.1607"></a>
+<span class="sourceLineNo">1608</span>                l1 = SIMPLEX[c | 3] &gt;&gt;&gt; 2,<a name="line.1608"></a>
+<span class="sourceLineNo">1609</span>                i2 = SIMPLEX[c] &gt;&gt;&gt; 1 &amp; 1,<a name="line.1609"></a>
+<span class="sourceLineNo">1610</span>                j2 = SIMPLEX[c | 1] &gt;&gt;&gt; 1 &amp; 1,<a name="line.1610"></a>
+<span class="sourceLineNo">1611</span>                k2 = SIMPLEX[c | 2] &gt;&gt;&gt; 1 &amp; 1,<a name="line.1611"></a>
+<span class="sourceLineNo">1612</span>                l2 = SIMPLEX[c | 3] &gt;&gt;&gt; 1 &amp; 1,<a name="line.1612"></a>
+<span class="sourceLineNo">1613</span>                i3 = SIMPLEX[c] &amp; 1,<a name="line.1613"></a>
+<span class="sourceLineNo">1614</span>                j3 = SIMPLEX[c | 1] &amp; 1,<a name="line.1614"></a>
+<span class="sourceLineNo">1615</span>                k3 = SIMPLEX[c | 2] &amp; 1,<a name="line.1615"></a>
+<span class="sourceLineNo">1616</span>                l3 = SIMPLEX[c | 3] &amp; 1;<a name="line.1616"></a>
+<span class="sourceLineNo">1617</span>        final float x1 = x0 - i1 + G4,<a name="line.1617"></a>
+<span class="sourceLineNo">1618</span>                y1 = y0 - j1 + G4,<a name="line.1618"></a>
+<span class="sourceLineNo">1619</span>                z1 = z0 - k1 + G4,<a name="line.1619"></a>
+<span class="sourceLineNo">1620</span>                w1 = w0 - l1 + G4,<a name="line.1620"></a>
+<span class="sourceLineNo">1621</span>                x2 = x0 - i2 + 2f * G4,<a name="line.1621"></a>
+<span class="sourceLineNo">1622</span>                y2 = y0 - j2 + 2f * G4,<a name="line.1622"></a>
+<span class="sourceLineNo">1623</span>                z2 = z0 - k2 + 2f * G4,<a name="line.1623"></a>
+<span class="sourceLineNo">1624</span>                w2 = w0 - l2 + 2f * G4,<a name="line.1624"></a>
+<span class="sourceLineNo">1625</span>                x3 = x0 - i3 + 3f * G4,<a name="line.1625"></a>
+<span class="sourceLineNo">1626</span>                y3 = y0 - j3 + 3f * G4,<a name="line.1626"></a>
+<span class="sourceLineNo">1627</span>                z3 = z0 - k3 + 3f * G4,<a name="line.1627"></a>
+<span class="sourceLineNo">1628</span>                w3 = w0 - l3 + 3f * G4,<a name="line.1628"></a>
+<span class="sourceLineNo">1629</span>                x4 = x0 - 1f + 4f * G4,<a name="line.1629"></a>
+<span class="sourceLineNo">1630</span>                y4 = y0 - 1f + 4f * G4,<a name="line.1630"></a>
+<span class="sourceLineNo">1631</span>                z4 = z0 - 1f + 4f * G4,<a name="line.1631"></a>
+<span class="sourceLineNo">1632</span>                w4 = w0 - 1f + 4f * G4;<a name="line.1632"></a>
+<span class="sourceLineNo">1633</span>        final int h0 = hash(i, j, k, l, seed) &lt;&lt; 2,<a name="line.1633"></a>
+<span class="sourceLineNo">1634</span>                h1 = hash(i + i1, j + j1, k + k1, l + l1, seed) &lt;&lt; 2,<a name="line.1634"></a>
+<span class="sourceLineNo">1635</span>                h2 = hash(i + i2, j + j2, k + k2, l + l2, seed) &lt;&lt; 2,<a name="line.1635"></a>
+<span class="sourceLineNo">1636</span>                h3 = hash(i + i3, j + j3, k + k3, l + l3, seed) &lt;&lt; 2,<a name="line.1636"></a>
+<span class="sourceLineNo">1637</span>                h4 = hash(i + 1, j + 1, k + 1, l + 1, seed) &lt;&lt; 2;<a name="line.1637"></a>
+<span class="sourceLineNo">1638</span>        float t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;<a name="line.1638"></a>
+<span class="sourceLineNo">1639</span>        if(t0 &gt; 0) {<a name="line.1639"></a>
+<span class="sourceLineNo">1640</span>            t0 *= t0;<a name="line.1640"></a>
+<span class="sourceLineNo">1641</span>            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);<a name="line.1641"></a>
+<span class="sourceLineNo">1642</span>        }<a name="line.1642"></a>
+<span class="sourceLineNo">1643</span>        float t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;<a name="line.1643"></a>
+<span class="sourceLineNo">1644</span>        if (t1 &gt; 0) {<a name="line.1644"></a>
+<span class="sourceLineNo">1645</span>            t1 *= t1;<a name="line.1645"></a>
+<span class="sourceLineNo">1646</span>            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);<a name="line.1646"></a>
+<span class="sourceLineNo">1647</span>        }<a name="line.1647"></a>
+<span class="sourceLineNo">1648</span>        float t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;<a name="line.1648"></a>
+<span class="sourceLineNo">1649</span>        if (t2 &gt; 0) {<a name="line.1649"></a>
+<span class="sourceLineNo">1650</span>            t2 *= t2;<a name="line.1650"></a>
+<span class="sourceLineNo">1651</span>            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);<a name="line.1651"></a>
+<span class="sourceLineNo">1652</span>        }<a name="line.1652"></a>
+<span class="sourceLineNo">1653</span>        float t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;<a name="line.1653"></a>
+<span class="sourceLineNo">1654</span>        if (t3 &gt; 0) {<a name="line.1654"></a>
+<span class="sourceLineNo">1655</span>            t3 *= t3;<a name="line.1655"></a>
+<span class="sourceLineNo">1656</span>            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);<a name="line.1656"></a>
+<span class="sourceLineNo">1657</span>        }<a name="line.1657"></a>
+<span class="sourceLineNo">1658</span>        float t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;<a name="line.1658"></a>
+<span class="sourceLineNo">1659</span>        if (t4 &gt; 0) {<a name="line.1659"></a>
+<span class="sourceLineNo">1660</span>            t4 *= t4;<a name="line.1660"></a>
+<span class="sourceLineNo">1661</span>            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);<a name="line.1661"></a>
+<span class="sourceLineNo">1662</span>        }<a name="line.1662"></a>
+<span class="sourceLineNo">1663</span>        return NumberTools.bounce(5.0 + 41.0 * n);<a name="line.1663"></a>
+<span class="sourceLineNo">1664</span>    }<a name="line.1664"></a>
+<span class="sourceLineNo">1665</span><a name="line.1665"></a>
+<span class="sourceLineNo">1666</span><a name="line.1666"></a>
+<span class="sourceLineNo">1667</span>    public static double noise(final double x, final double y, final double z,<a name="line.1667"></a>
+<span class="sourceLineNo">1668</span>                               final double w, final double u, final double v, final int seed) {<a name="line.1668"></a>
+<span class="sourceLineNo">1669</span>        return noise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v, seed);<a name="line.1669"></a>
+<span class="sourceLineNo">1670</span>    }<a name="line.1670"></a>
+<span class="sourceLineNo">1671</span><a name="line.1671"></a>
+<span class="sourceLineNo">1672</span>    public static double noise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {<a name="line.1672"></a>
+<span class="sourceLineNo">1673</span><a name="line.1673"></a>
+<span class="sourceLineNo">1674</span>        final float s = (x + y + z + w + u + v) * F6;<a name="line.1674"></a>
+<span class="sourceLineNo">1675</span><a name="line.1675"></a>
+<span class="sourceLineNo">1676</span>        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),<a name="line.1676"></a>
+<span class="sourceLineNo">1677</span>                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);<a name="line.1677"></a>
+<span class="sourceLineNo">1678</span>        final int[] intLoc = MasonNoise.intLoc, distOrder = MasonNoise.distOrder;<a name="line.1678"></a>
+<span class="sourceLineNo">1679</span>        intLoc[0] = skewX;<a name="line.1679"></a>
+<span class="sourceLineNo">1680</span>        intLoc[1] = skewY;<a name="line.1680"></a>
+<span class="sourceLineNo">1681</span>        intLoc[2] = skewZ;<a name="line.1681"></a>
+<span class="sourceLineNo">1682</span>        intLoc[3] = skewW;<a name="line.1682"></a>
+<span class="sourceLineNo">1683</span>        intLoc[4] = skewU;<a name="line.1683"></a>
+<span class="sourceLineNo">1684</span>        intLoc[5] = skewV;<a name="line.1684"></a>
+<span class="sourceLineNo">1685</span><a name="line.1685"></a>
+<span class="sourceLineNo">1686</span>        final float unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;<a name="line.1686"></a>
+<span class="sourceLineNo">1687</span>        final float[] cellDist = MasonNoise.cellDist, gradient6DLUT = MasonNoise.gradient6DLUT;<a name="line.1687"></a>
+<span class="sourceLineNo">1688</span>        cellDist[0] = x - skewX + unskew;<a name="line.1688"></a>
+<span class="sourceLineNo">1689</span>        cellDist[1] = y - skewY + unskew;<a name="line.1689"></a>
+<span class="sourceLineNo">1690</span>        cellDist[2] = z - skewZ + unskew;<a name="line.1690"></a>
+<span class="sourceLineNo">1691</span>        cellDist[3] = w - skewW + unskew;<a name="line.1691"></a>
+<span class="sourceLineNo">1692</span>        cellDist[4] = u - skewU + unskew;<a name="line.1692"></a>
+<span class="sourceLineNo">1693</span>        cellDist[5] = v - skewV + unskew;<a name="line.1693"></a>
+<span class="sourceLineNo">1694</span><a name="line.1694"></a>
+<span class="sourceLineNo">1695</span>        int o0 = (cellDist[0]&lt;cellDist[1]?1:0)+(cellDist[0]&lt;cellDist[2]?1:0)+(cellDist[0]&lt;cellDist[3]?1:0)+(cellDist[0]&lt;cellDist[4]?1:0)+(cellDist[0]&lt;cellDist[5]?1:0);<a name="line.1695"></a>
+<span class="sourceLineNo">1696</span>        int o1 = (cellDist[1]&lt;=cellDist[0]?1:0)+(cellDist[1]&lt;cellDist[2]?1:0)+(cellDist[1]&lt;cellDist[3]?1:0)+(cellDist[1]&lt;cellDist[4]?1:0)+(cellDist[1]&lt;cellDist[5]?1:0);<a name="line.1696"></a>
+<span class="sourceLineNo">1697</span>        int o2 = (cellDist[2]&lt;=cellDist[0]?1:0)+(cellDist[2]&lt;=cellDist[1]?1:0)+(cellDist[2]&lt;cellDist[3]?1:0)+(cellDist[2]&lt;cellDist[4]?1:0)+(cellDist[2]&lt;cellDist[5]?1:0);<a name="line.1697"></a>
+<span class="sourceLineNo">1698</span>        int o3 = (cellDist[3]&lt;=cellDist[0]?1:0)+(cellDist[3]&lt;=cellDist[1]?1:0)+(cellDist[3]&lt;=cellDist[2]?1:0)+(cellDist[3]&lt;cellDist[4]?1:0)+(cellDist[3]&lt;cellDist[5]?1:0);<a name="line.1698"></a>
+<span class="sourceLineNo">1699</span>        int o4 = (cellDist[4]&lt;=cellDist[0]?1:0)+(cellDist[4]&lt;=cellDist[1]?1:0)+(cellDist[4]&lt;=cellDist[2]?1:0)+(cellDist[4]&lt;=cellDist[3]?1:0)+(cellDist[4]&lt;cellDist[5]?1:0);<a name="line.1699"></a>
+<span class="sourceLineNo">1700</span>        int o5 = 15-(o0+o1+o2+o3+o4);<a name="line.1700"></a>
+<span class="sourceLineNo">1701</span><a name="line.1701"></a>
+<span class="sourceLineNo">1702</span>        distOrder[o0]=0;<a name="line.1702"></a>
+<span class="sourceLineNo">1703</span>        distOrder[o1]=1;<a name="line.1703"></a>
+<span class="sourceLineNo">1704</span>        distOrder[o2]=2;<a name="line.1704"></a>
+<span class="sourceLineNo">1705</span>        distOrder[o3]=3;<a name="line.1705"></a>
+<span class="sourceLineNo">1706</span>        distOrder[o4]=4;<a name="line.1706"></a>
+<span class="sourceLineNo">1707</span>        distOrder[o5]=5;<a name="line.1707"></a>
+<span class="sourceLineNo">1708</span><a name="line.1708"></a>
+<span class="sourceLineNo">1709</span>        float n = 0f;<a name="line.1709"></a>
+<span class="sourceLineNo">1710</span>        float skewOffset = 0f;<a name="line.1710"></a>
+<span class="sourceLineNo">1711</span><a name="line.1711"></a>
+<span class="sourceLineNo">1712</span>        for (int c = -1; c &lt; 6; c++) {<a name="line.1712"></a>
+<span class="sourceLineNo">1713</span>            if (c != -1) intLoc[distOrder[c]]++;<a name="line.1713"></a>
+<span class="sourceLineNo">1714</span><a name="line.1714"></a>
+<span class="sourceLineNo">1715</span>            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;<a name="line.1715"></a>
+<span class="sourceLineNo">1716</span>            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;<a name="line.1716"></a>
+<span class="sourceLineNo">1717</span>            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;<a name="line.1717"></a>
+<span class="sourceLineNo">1718</span>            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;<a name="line.1718"></a>
+<span class="sourceLineNo">1719</span>            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;<a name="line.1719"></a>
+<span class="sourceLineNo">1720</span>            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;<a name="line.1720"></a>
+<span class="sourceLineNo">1721</span><a name="line.1721"></a>
+<span class="sourceLineNo">1722</span>            float tc = LIMIT6;<a name="line.1722"></a>
+<span class="sourceLineNo">1723</span><a name="line.1723"></a>
+<span class="sourceLineNo">1724</span>            for (int d = 0; d &lt; 6; d++) {<a name="line.1724"></a>
+<span class="sourceLineNo">1725</span>                tc -= m[d] * m[d];<a name="line.1725"></a>
+<span class="sourceLineNo">1726</span>            }<a name="line.1726"></a>
+<span class="sourceLineNo">1727</span><a name="line.1727"></a>
+<span class="sourceLineNo">1728</span>            if (tc &gt; 0f) {<a name="line.1728"></a>
+<span class="sourceLineNo">1729</span>                final int h = hash(intLoc[0], intLoc[1], intLoc[2], intLoc[3],<a name="line.1729"></a>
+<span class="sourceLineNo">1730</span>                        intLoc[4], intLoc[5], seed) * 6;<a name="line.1730"></a>
+<span class="sourceLineNo">1731</span>                float gr = 0f;<a name="line.1731"></a>
+<span class="sourceLineNo">1732</span>                for (int d = 0; d &lt; 6; d++) {<a name="line.1732"></a>
+<span class="sourceLineNo">1733</span>                    gr += gradient6DLUT[h + d] * m[d];<a name="line.1733"></a>
+<span class="sourceLineNo">1734</span>                }<a name="line.1734"></a>
+<span class="sourceLineNo">1735</span><a name="line.1735"></a>
+<span class="sourceLineNo">1736</span>                n += gr * tc * tc * tc * tc;<a name="line.1736"></a>
+<span class="sourceLineNo">1737</span>            }<a name="line.1737"></a>
+<span class="sourceLineNo">1738</span>            skewOffset += G6;<a name="line.1738"></a>
+<span class="sourceLineNo">1739</span>        }<a name="line.1739"></a>
+<span class="sourceLineNo">1740</span>        //return NumberTools.bounce(5.0 + 13.5 * n);<a name="line.1740"></a>
+<span class="sourceLineNo">1741</span>        return NumberTools.bounce(10.0 + 16.25 * n);<a name="line.1741"></a>
+<span class="sourceLineNo">1742</span>    }<a name="line.1742"></a>
+<span class="sourceLineNo">1743</span><a name="line.1743"></a>
+<span class="sourceLineNo">1744</span>}<a name="line.1744"></a>
 
 
 

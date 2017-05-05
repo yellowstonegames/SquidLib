@@ -259,6 +259,12 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidMouse.html#setCellWidth-float-">setCellWidth(float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setColorCenter-squidpony.IColorCenter-">setColorCenter(IColorCenter&lt;Color&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>
+<div class="block">Use this method if you use your own <code>IColorCenter</code> and want this
+ panel not to allocate its own colors (or fill
+ <a href="../squidpony/squidgrid/gui/gdx/DefaultResources.html#getSCC--"><code>DefaultResources.getSCC()</code></a> but instead to the provided center.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#setColorCenter-squidpony.IColorCenter-">setColorCenter(IColorCenter&lt;Color&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>
 <div class="block">Use this method if you use your own <code>IColorCenter</code> and want this
@@ -283,6 +289,8 @@
 <dd>
 <div class="block">Sets the list of colors this uses to choose what color it draws with.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setDefaultForeground-com.badlogic.gdx.graphics.Color-">setDefaultForeground(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#setDefaultForeground-com.badlogic.gdx.graphics.Color-">setDefaultForeground(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanelBuilder.html#setDefaultForegroundColor-com.badlogic.gdx.graphics.Color-">setDefaultForegroundColor(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanelBuilder.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanelBuilder</a></dt>
@@ -305,6 +313,40 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextPanel.html#setFont-com.badlogic.gdx.graphics.g2d.BitmapFont-">setFont(BitmapFont)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx">TextPanel</a></dt>
 <dd>
 <div class="block">Sets the font to use.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setFromSnapshot-java.lang.StringBuilder-">setFromSnapshot(StringBuilder)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>
+<div class="block">Given a "snapshot" from <a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#getSnapshot-int-int-int-int-"><code>ImageSquidPanel.getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ ImageSquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setFromSnapshot-java.lang.StringBuilder-int-int-">setFromSnapshot(StringBuilder, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>
+<div class="block">Given a "snapshot" from <a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#getSnapshot-int-int-int-int-"><code>ImageSquidPanel.getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ ImageSquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot
+ (considering putX and putY as offsets) so they have the values stored in the snapshot.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setFromSnapshot-java.lang.StringBuilder-int-int-int-int-">setFromSnapshot(StringBuilder, int, int, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>
+<div class="block">Given a "snapshot" from <a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#getSnapshot-int-int-int-int-"><code>ImageSquidPanel.getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ ImageSquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive)
+ so they have the values stored in the snapshot.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setFromSnapshot-java.lang.String-">setFromSnapshot(String)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>
+<div class="block">Given a "snapshot" from <a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#getSnapshot-int-int-int-int-"><code>ImageSquidPanel.getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ ImageSquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setFromSnapshot-java.lang.String-int-int-">setFromSnapshot(String, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>
+<div class="block">Given a "snapshot" from <a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#getSnapshot-int-int-int-int-"><code>ImageSquidPanel.getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ ImageSquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot
+ (considering putX and putY as offsets) so they have the values stored in the snapshot.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setFromSnapshot-java.lang.String-int-int-int-int-">setFromSnapshot(String, int, int, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>
+<div class="block">Given a "snapshot" from <a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#getSnapshot-int-int-int-int-"><code>ImageSquidPanel.getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ ImageSquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive)
+ so they have the values stored in the snapshot.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#setFromSnapshot-java.lang.StringBuilder-">setFromSnapshot(StringBuilder)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></dt>
 <dd>
@@ -371,6 +413,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidKey.html#setIgnoreInput-boolean-">setIgnoreInput(boolean)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidKey.html" title="class in squidpony.squidgrid.gui.gdx">SquidKey</a></dt>
 <dd>
 <div class="block">Set the status for whether this should ignore input right now or not.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#setImageSwap-char-com.badlogic.gdx.graphics.g2d.TextureRegion-">setImageSwap(char, TextureRegion)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
+<dd>
+<div class="block">Makes it so when the char swapOut would be drawn, the TextureRegion swapIn is drawn instead.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidInput.html#setKeyHandler-squidpony.squidgrid.gui.gdx.SquidInput.KeyHandler-">setKeyHandler(SquidInput.KeyHandler)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></dt>
 <dd>&nbsp;</dd>

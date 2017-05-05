@@ -1214,7 +1214,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @param x a float from 0 to 1
      * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
      */
-    private static float carp2(final float x) { return x * -(x * (x - 1) + (1 - x) * (1 - x)) + x; }
+    private static float carp2(final float x) { return x - x * (x * (x - 1) + (1 - x) * (1 - x)); }
 
     /**
      * Simple Cubic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve, with more

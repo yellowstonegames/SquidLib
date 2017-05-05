@@ -737,7 +737,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, char c, Color color)
     {
-        return animateActor(x, y, false, String.valueOf(c), color);
+        return animateActor(x, y, false, c, color);
         /*
         Actor a = textFactory.makeActor("" + c, color);
         a.setName("" + c);
@@ -761,7 +761,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, char c, Color color)
     {
-        return animateActor(x, y, doubleWidth, String.valueOf(c), color);
+        return animateActor(x, y, doubleWidth, c, color);
         /*
         Actor a = textFactory.makeActor("" + c, color);
         a.setName("" + c);
@@ -787,15 +787,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     public AnimatedEntity animateActor(int x, int y, String s, Color color)
     {
         return animateActor(x, y, false, s, color);
-        /*
-        Actor a = textFactory.makeActor(s, color);
-        a.setName(s);
-        a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
-
-        AnimatedEntity ae = new AnimatedEntity(a, x, y);
-        animatedEntities.add(ae);
-        return ae;
-        */
     }
 
     /**
@@ -813,12 +804,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         Actor a = textFactory.makeActor(s, color);
         a.setName(s);
         a.setPosition(adjustX(x, doubleWidth), adjustY(y));
-        /*
-        if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
-        else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
-        */
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
@@ -835,18 +820,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, String s, Collection<Color> colors)
     {
-        Actor a = textFactory.makeActor(s, colors);
-        a.setName(s);
-        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
-        /*
-        if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
-        else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
-        */
-        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
-        animatedEntities.add(ae);
-        return ae;
+        return animateActor(x, y, doubleWidth, s, colors, 2f);
     }
     /**
      * Create an AnimatedEntity at position x, y, using the String s in the given color. If doubleWidth is true, treats
@@ -864,12 +838,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         Actor a = textFactory.makeActor(s, colors, loopTime, doubleWidth);
         a.setName(s);
         a.setPosition(adjustX(x, doubleWidth), adjustY(y));
-        /*
-        if(doubleWidth)
-            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
-        else
-            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
-        */
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
@@ -1029,6 +997,44 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     }
 
     /**
+     * Create an AnimatedEntity at position x, y, using a TextureRegion with the given color, which will be
+     * stretched to fit one cell, or two cells if doubleWidth is true.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param texture
+     * @param colors
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, Collection<Color> colors){
+        return animateActor(x, y, doubleWidth, texture, colors, 2f);
+    }
+    /**
+     * Create an AnimatedEntity at position x, y, using a TextureRegion with the given color, which will be
+     * stretched to fit one cell, or two cells if doubleWidth is true.
+     * @param x
+     * @param y
+     * @param doubleWidth
+     * @param texture
+     * @param colors
+     * @return
+     */
+    public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, TextureRegion texture, Collection<Color> colors, float loopTime) {
+        Actor a = textFactory.makeActor(texture, colors, loopTime, doubleWidth, (doubleWidth ? 2 : 1) * cellWidth, cellHeight);
+        a.setName("");
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        /*
+        if (doubleWidth)
+            a.setPosition(x * 2 * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
+        else
+            a.setPosition(x * cellWidth + getX(), (gridHeight - y - 1) * cellHeight - textFactory.getDescent() + getY());
+        */
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+    }
+
+    /**
      * Create an AnimatedEntity at position x, y, using a TextureRegion with no color modifications, which, if and only
      * if stretch is true, will be stretched to fit one cell, or two cells if doubleWidth is true. If stretch is false,
      * this will preserve the existing size of texture.
@@ -1112,18 +1118,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     	return createActor(x, y, contents[x][y], colors[x][y], doubleWidth);
     }
 
-    protected /* @Nullable */ Actor createActor(int x, int y, String name, Color color, boolean doubleWidth) {
-        if (name == null || name.isEmpty())
-            return null;
-        else {
-            final Actor a = textFactory.makeActor(name, scc.filter(color));
-            a.setName(name);
-            a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
-            autoActors.add(a);
-            return a;
-        }
-    }
-
     protected /* @Nullable */ Actor createActor(int x, int y, char name, Color color, boolean doubleWidth) {
         final Actor a = textFactory.makeActor(name, scc.filter(color));
         a.setName(String.valueOf(name));
@@ -1138,10 +1132,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
         autoActors.add(a);
         return a;
-    }
-
-    protected /* @Nullable */ Actor createActor(int x, int y, String name, float encodedColor, boolean doubleWidth) {
-        return createActor(x, y, name, SColor.colorFromFloat(tmpColor, encodedColor), doubleWidth);
     }
 
     public float adjustX(float x, boolean doubleWidth)

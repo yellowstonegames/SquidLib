@@ -309,7 +309,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html?is
              <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Radius.html#perimeter-squidpony.squidmath.Coord-int-boolean-int-int-">perimeter</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
          int&nbsp;radiusLength,
          boolean&nbsp;surpassEdges,
@@ -748,11 +748,11 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>perimeter</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.232">perimeter</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
-                            int&nbsp;radiusLength,
-                            boolean&nbsp;surpassEdges,
-                            int&nbsp;width,
-                            int&nbsp;height)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.232">perimeter</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
+                                   int&nbsp;radiusLength,
+                                   boolean&nbsp;surpassEdges,
+                                   int&nbsp;width,
+                                   int&nbsp;height)</pre>
 </li>
 </ul>
 <a name="extend-squidpony.squidmath.Coord-squidpony.squidmath.Coord-int-boolean-int-int-">
@@ -761,7 +761,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>extend</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.320">extend</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.321">extend</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
                     <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;middle,
                     int&nbsp;radiusLength,
                     boolean&nbsp;surpassEdges,
@@ -775,7 +775,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>equals2D</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.407">equals2D</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.408">equals2D</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;other)</pre>
 <div class="block">Compares two Radius enums as if they are both in a 2D plane; that is, Radius.SPHERE is treated as equal to
  Radius.CIRCLE, Radius.CUBE is equal to Radius.SQUARE, and Radius.OCTAHEDRON is equal to Radius.DIAMOND.</div>
 <dl>
@@ -792,7 +792,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>inRange</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.421">inRange</a>(int&nbsp;startx,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.422">inRange</a>(int&nbsp;startx,
                        int&nbsp;starty,
                        int&nbsp;endx,
                        int&nbsp;endy,
@@ -806,7 +806,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>roughDistance</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.427">roughDistance</a>(int&nbsp;xPos,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.428">roughDistance</a>(int&nbsp;xPos,
                          int&nbsp;yPos)</pre>
 </li>
 </ul>
@@ -816,7 +816,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>pointsInside</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.448">pointsInside</a>(int&nbsp;centerX,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.449">pointsInside</a>(int&nbsp;centerX,
                                 int&nbsp;centerY,
                                 int&nbsp;radiusLength,
                                 boolean&nbsp;surpassEdges,
@@ -830,7 +830,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>pointsInside</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.452">pointsInside</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.453">pointsInside</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
                                 int&nbsp;radiusLength,
                                 boolean&nbsp;surpassEdges,
                                 int&nbsp;width,
@@ -843,7 +843,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>pointsInside</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.458">pointsInside</a>(int&nbsp;centerX,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.459">pointsInside</a>(int&nbsp;centerX,
                                 int&nbsp;centerY,
                                 int&nbsp;radiusLength,
                                 boolean&nbsp;surpassEdges,
@@ -858,7 +858,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>inSquare</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.524">inSquare</a>(int&nbsp;centerX,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.525">inSquare</a>(int&nbsp;centerX,
                                    int&nbsp;centerY,
                                    int&nbsp;radiusLength,
                                    boolean&nbsp;surpassEdges,
@@ -888,7 +888,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>inDiamond</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.542">inDiamond</a>(int&nbsp;centerX,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.543">inDiamond</a>(int&nbsp;centerX,
                                     int&nbsp;centerY,
                                     int&nbsp;radiusLength,
                                     boolean&nbsp;surpassEdges,
@@ -918,7 +918,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>inCircle</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.560">inCircle</a>(int&nbsp;centerX,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.561">inCircle</a>(int&nbsp;centerX,
                                    int&nbsp;centerY,
                                    int&nbsp;radiusLength,
                                    boolean&nbsp;surpassEdges,
@@ -948,7 +948,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>inSquare</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.580">inSquare</a>(int&nbsp;centerX,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.581">inSquare</a>(int&nbsp;centerX,
                                    int&nbsp;centerY,
                                    int&nbsp;radiusLength,
                                    boolean&nbsp;surpassEdges,
@@ -980,7 +980,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>inDiamond</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.599">inDiamond</a>(int&nbsp;centerX,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.600">inDiamond</a>(int&nbsp;centerX,
                                     int&nbsp;centerY,
                                     int&nbsp;radiusLength,
                                     boolean&nbsp;surpassEdges,
@@ -1012,7 +1012,7 @@ not permitted.)</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>inCircle</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.618">inCircle</a>(int&nbsp;centerX,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.619">inCircle</a>(int&nbsp;centerX,
                                    int&nbsp;centerY,
                                    int&nbsp;radiusLength,
                                    boolean&nbsp;surpassEdges,
@@ -1044,7 +1044,7 @@ not permitted.)</div>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>expand</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.636">expand</a>(int&nbsp;distance,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Radius.html#line.637">expand</a>(int&nbsp;distance,
                          int&nbsp;width,
                          int&nbsp;height,
                          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</pre>
