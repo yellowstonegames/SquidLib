@@ -1,9 +1,5 @@
 package squidpony.examples;
 
-import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.NumberTools;
 
 /**
@@ -31,10 +27,11 @@ public class Playground {
     {
         return x * (x * (x - 1) + (1 - x) * (1 - x));
     }
-
+    private static float carp2(final float x) { return x * -(x * (x - 1) + (1 - x) * (1 - x)) + x; }
     private void go() {
-        DungeonUtility.debugPrint(new GreasedRegion(20, 20).insertSeveral(
-                Radius.CIRCLE.perimeter(Coord.get(10, 10), 6, false, 20, 20)).toChars());
+        for (float x = 0; x <= 1f; x += 0.0625f * 0.0625f) {
+            System.out.println(x + ": " + carp2(x));
+        }
     }
 
 }

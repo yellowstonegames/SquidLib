@@ -68,6 +68,14 @@ public class NumberTools {
         return wda.get(0) - 5.0;
     }
 
+    public static float bounce(final float value)
+    {
+        wfa.set(0, value);
+        int s = wia.get(0) & 0x007fffff, flip = -((s & 0x00400000)>>22);
+        wia.set(0, ((s ^ flip) & 0x007fffff) | 0x40800000);
+        return wfa.get(0) - 5f;
+    }
+
     public static double bounce(final long value)
     {
         int s = (int)(value>>>32&0xfffff), flip = -((s & 0x80000)>>19);

@@ -117,7 +117,10 @@ public class HashVisualizer extends ApplicationAdapter {
     private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4),
             turingInhibit = TuringPattern.offsetsCircle(width, height, 8);
 
-    private final float[][][] fillField = new float[3][width][height];
+    private final float[][][] fillField = new float[3][width][height],
+            fillField3DR = new float[1][width][height],
+            fillField3DG = new float[1][width][height],
+            fillField3DB = new float[1][width][height];
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
@@ -433,7 +436,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 72;
+                                    noiseMode %= 74;
                                 }
                                 switch (noiseMode)
                                 {
@@ -2919,39 +2922,86 @@ public class HashVisualizer extends ApplicationAdapter {
                         ArrayTools.fill(fillField[0], 0f);
                         ArrayTools.fill(fillField[1], 0f);
                         ArrayTools.fill(fillField[2], 0f);
-                        MasonNoise.addNoiseField(fillField[0], 20f + ctr * 0.03125f, 30f + ctr * 0.05125f, 512f * 0.03125f + 20f + ctr * 0.05125f, 512f * 0.03125f + 30f + ctr * 0.05125f, -1234, 1f);
-                        MasonNoise.addNoiseField(fillField[1], 30f + ctr * 0.03125f, 10f + ctr * 0.05125f, 512f * 0.03125f + 30f + ctr * 0.05125f, 512f * 0.03125f + 10f + ctr * 0.05125f, 54321, 1f);
-                        MasonNoise.addNoiseField(fillField[2], 10f + ctr * 0.03125f, 20f + ctr * 0.05125f, 512f * 0.03125f + 10f + ctr * 0.05125f, 512f * 0.03125f + 20f + ctr * 0.05125f, 15951, 1f);
+                        MasonNoise.addNoiseField(fillField[0], 20f + ctr * 0.05125f, 30f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, 512f * 0.0625f + 30f + ctr * 0.05125f, -1234, 1f, 1.375f);
+                        MasonNoise.addNoiseField(fillField[1], 30f + ctr * 0.05125f, 10f + ctr * 0.05125f, 512f * 0.0625f + 30f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 54321, 1f, 1.375f);
+                        MasonNoise.addNoiseField(fillField[2], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, 15951, 1f, 1.375f);
+
+                        MasonNoise.addNoiseField(fillField[0], 20f + ctr * 0.05125f, 30f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, 512f * 0.0625f + 30f + ctr * 0.05125f, 1234, 1f, 0.625f);
+                        MasonNoise.addNoiseField(fillField[1], 30f + ctr * 0.05125f, 10f + ctr * 0.05125f, 512f * 0.0625f + 30f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, -321, 1f, 0.625f);
+                        MasonNoise.addNoiseField(fillField[2], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, -951, 1f, 0.625f);
+
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
-                                        floatGet(fillField[0][x][y] * 0.5f + 0.5f, fillField[1][x][y] * 0.5f + 0.5f, fillField[2][x][y] * 0.5f + 0.5f, 1f)
-                                        );
+                                        floatGet(fillField[0][x][y] * 0.25f + 0.5f, fillField[1][x][y] * 0.25f + 0.5f, fillField[2][x][y] * 0.25f + 0.5f, 1f)
+                                );
                             }
                         }
                         break;
                     case 71:
                         Gdx.graphics.setTitle("Mason 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        /*for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float)MasonNoise.noise(x * 0.03125f + 10 + ctr * 0.05125f, y * 0.03125f + 20 + ctr * 0.05125f, 123456) * 0.5f + 0.5f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }*/
                         ArrayTools.fill(fillField[0], 0f);
-                        MasonNoise.addNoiseField(fillField[0], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, 12345, 1.5f);
-                        MasonNoise.addNoiseField(fillField[0], (10f + ctr * 0.05125f) * 1.38f, (20f + ctr * 0.05125f) * 1.38f, (512f * 0.0625f + 10f + ctr * 0.05125f) * 1.38f, (512f * 0.0625f + 20f + ctr * 0.05125f) * 1.38f, 123456, 1f);
-                        MasonNoise.addNoiseField(fillField[0], (10f + ctr * 0.05125f) * 1.91f, (20f + ctr * 0.05125f) * 1.91f, (512f * 0.0625f + 10f + ctr * 0.05125f) * 1.91f, (512f * 0.0625f + 20f + ctr * 0.05125f) * 1.91f, 1234567, 0.5f);
-                        MasonNoise.addNoiseField(fillField[0], (10f + ctr * 0.05125f) * 2.43f, (20f + ctr * 0.05125f) * 2.43f, (512f * 0.0625f + 10f + ctr * 0.05125f) * 2.43f, (512f * 0.0625f + 20f + ctr * 0.05125f) * 2.43f, 12345678, 0.25f);
+                        MasonNoise.addNoiseField(fillField[0], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, -12345,  3.5f, 1.08f);
+                        MasonNoise.addNoiseField(fillField[0], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, 123456, 2.625f, 1.44f);
+                        MasonNoise.addNoiseField(fillField[0], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, -54321, 1.25f, 1.87f);
+                        MasonNoise.addNoiseField(fillField[0], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, 654321, 0.625f, 2.19f);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = fillField[0][x][y] / 6.5f + 0.5f;
+                                bright = fillField[0][x][y] * 0.0625f + 0.5f;
                                 display.put(x, y,
                                         floatGet(bright, bright, bright, 1f)
                                 );
                             }
                         }
+                        break;
+                    case 72:
+                        Gdx.graphics.setTitle("Mason 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        ArrayTools.fill(fillField3DR[0], 0f);
+                        ArrayTools.fill(fillField3DG[0], 0f);
+                        ArrayTools.fill(fillField3DB[0], 0f);
+                        MasonNoise.addNoiseField(fillField3DR,20f, 30f, 10f + ctr * 0.05125f,
+                                512f * 0.0625f + 20f, 512f * 0.0625f + 30f, 10f + ctr * 0.05125f,
+                                -1234, 1f, 1.375f);
+                        MasonNoise.addNoiseField(fillField3DG, 30f, 10f, 20f + ctr * 0.05125f,
+                                512f * 0.0625f + 30f, 512f * 0.0625f + 10f, 20f + ctr * 0.05125f,
+                                54321, 1f, 1.375f);
+                        MasonNoise.addNoiseField(fillField3DB,10f, 20f, 30f + ctr * 0.05125f,
+                                512f * 0.0625f + 10f, 512f * 0.0625f + 20f, 30f + ctr * 0.05125f,
+                                15951, 1f, 1.375f);
 
+                        MasonNoise.addNoiseField(fillField3DR, 20f, 30f, 10f + ctr * 0.05125f,
+                                512f * 0.0625f + 20f, 512f * 0.0625f + 30f, 10f + ctr * 0.05125f,
+                                7123, 1f, 0.625f);
+                        MasonNoise.addNoiseField(fillField3DG,30f, 10f, 20f + ctr * 0.05125f,
+                                512f * 0.0625f + 30f, 512f * 0.0625f + 10f, 20f + ctr * 0.05125f,
+                                -321, 1f, 0.625f);
+                        MasonNoise.addNoiseField(fillField3DB, 10f, 20f, 30f + ctr * 0.05125f,
+                                512f * 0.0625f + 10f, 512f * 0.0625f + 20f, 30f + ctr * 0.05125f,
+                                -951, 1f, 0.625f);
+
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(fillField3DR[0][x][y] * 0.25f + 0.5f, fillField3DG[0][x][y] * 0.25f + 0.5f, fillField3DB[0][x][y] * 0.25f + 0.5f, 1f)
+                                );
+                            }
+                        }
+                        break;
+                    case 73:
+                        Gdx.graphics.setTitle("Mason 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        ArrayTools.fill(fillField3DG[0], 0f);
+                        MasonNoise.addNoiseField(fillField3DG, 10f, 20f, 30f + ctr * 0.05125f, 512f * 0.0625f + 10f, 512f * 0.0625f + 20f, 30f + ctr * 0.05125f, -12345,  3.5f, 1.08f);
+                        MasonNoise.addNoiseField(fillField3DG, 10f, 20f, 30f + ctr * 0.05125f, 512f * 0.0625f + 10f, 512f * 0.0625f + 20f, 30f + ctr * 0.05125f, 123456, 2.625f, 1.44f);
+                        MasonNoise.addNoiseField(fillField3DG, 10f, 20f, 30f + ctr * 0.05125f, 512f * 0.0625f + 10f, 512f * 0.0625f + 20f, 30f + ctr * 0.05125f, -54321, 1.25f, 1.87f);
+                        MasonNoise.addNoiseField(fillField3DG, 10f, 20f, 30f + ctr * 0.05125f, 512f * 0.0625f + 10f, 512f * 0.0625f + 20f, 30f + ctr * 0.05125f, 654321, 0.625f, 2.19f);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = fillField3DG[0][x][y] * 0.0625f + 0.5f;
+                                display.put(x, y,
+                                        floatGet(bright, bright, bright, 1f)
+                                );
+                            }
+                        }
                         break;
 
                     /*
