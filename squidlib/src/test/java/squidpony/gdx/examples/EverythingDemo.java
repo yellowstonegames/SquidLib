@@ -204,7 +204,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Coord.expandPoolTo(totalWidth, totalHeight);
         dungeonGen = new DungeonGenerator(totalWidth, totalHeight, rng);
         dungeonGen.addWater(16, 6);
-        dungeonGen.addGrass(8);
+        dungeonGen.addGrass(15);
         dungeonGen.addBoulders(5);
         dungeonGen.addDoors(12, true);
         //SerpentMapGenerator mix = new SerpentMapGenerator(totalWidth, totalHeight, rng, 0.35);
@@ -437,6 +437,24 @@ public class EverythingDemo extends ApplicationAdapter {
                         changingColors = currentCenter == 3;
                         fgCenter = colorCenters[currentCenter * 2];
                         bgCenter = colorCenters[currentCenter * 2 + 1];
+                        display.setFGColorCenter(fgCenter);
+                        display.setBGColorCenter(bgCenter);
+                        break;
+                    }
+                    case 'r': // red green color blindness mode on
+                    {
+                        changingColors = false;
+                        fgCenter = colorCenters[18];
+                        bgCenter = colorCenters[19];
+                        display.setFGColorCenter(fgCenter);
+                        display.setBGColorCenter(bgCenter);
+                        break;
+                    }
+                    case 'R': // red green color blindness mode off
+                    {
+                        changingColors = false;
+                        fgCenter = colorCenters[16];
+                        bgCenter = colorCenters[17];
                         display.setFGColorCenter(fgCenter);
                         display.setBGColorCenter(bgCenter);
                         break;

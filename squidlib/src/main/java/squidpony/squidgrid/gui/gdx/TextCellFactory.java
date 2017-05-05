@@ -1030,6 +1030,38 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         }
     }
+    /**
+     * Use the specified Batch to draw a TextureRegion tinted with the specified encoded color as a float, with x and y
+     * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
+     * if its size does not match what this TextCellFactory uses for width and height. Colors can be converted to and
+     * from floats using methods in SColor such as {@link SColor#floatGet(float, float, float, float)},
+     * {@link SColor#toFloatBits()}, {@link SColor#colorFromFloat(Color, float)}, and
+     * {@link SColor#lerpFloatColors(float, float, float)}.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
+     * @param encodedColor the float encoding a color (as ABGR8888; SColor can produce these) to draw the image with
+     * @param x x of the upper-left corner of the image in world coordinates.
+     * @param y y of the upper-left corner of the image in world coordinates.
+     */
+    public void draw(Batch batch, TextureRegion tr, float encodedColor, float x, float y)
+    {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+
+        if (tr == null) {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
+            batch.setColor(orig);
+        } else {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(tr, x, y - height, width, height);
+            batch.setColor(orig);
+        }
+    }
 
     /**
      * Use the specified Batch to draw a TextureRegion with the default tint color (white, so un-tinted), with x and y
@@ -1095,9 +1127,9 @@ public class TextCellFactory implements Disposable {
      *
      * @param batch the LibGDX Batch to do the drawing
      * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
-     * @param color the LibGDX Color to draw the char(s) with, all the same color
-     * @param x x of the upper-left corner of the region of text in world coordinates.
-     * @param y y of the upper-left corner of the region of text in world coordinates.
+     * @param color the LibGDX Color to draw the image with, all the same color
+     * @param x x of the upper-left corner of the image in world coordinates.
+     * @param y y of the upper-left corner of the image in world coordinates.
      * @param width the width of the TextureRegion or solid block in pixels.
      * @param height the height of the TextureRegion or solid block in pixels.
      */
@@ -1114,6 +1146,37 @@ public class TextCellFactory implements Disposable {
         } else {
             Color orig = batch.getColor();
             batch.setColor(scc.filter(color));
+            batch.draw(tr, x, y - height, width, height);
+            batch.setColor(orig);
+        }
+    }
+
+    /**
+     * Use the specified Batch to draw a TextureRegion tinted with the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner. The TextureRegion will be stretched
+     * only if the supplied width and height do not match what its own dimensions are.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param tr the TextureRegion to draw. Can be null to draw a solid block instead.
+     * @param encodedColor the float encoding a color (as ABGR8888; SColor can produce these) to draw the image with
+     * @param x x of the upper-left corner of the image in world coordinates.
+     * @param y y of the upper-left corner of the image in world coordinates.
+     * @param width the width of the TextureRegion or solid block in pixels.
+     * @param height the height of the TextureRegion or solid block in pixels.
+     */
+    public void draw(Batch batch, TextureRegion tr, float encodedColor, float x, float y, float width, float height) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+
+        if (tr == null) {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
+            batch.draw(block, x, y - height, width, height);
+            batch.setColor(orig);
+        } else {
+            float orig = batch.getPackedColor();
+            batch.setColor(encodedColor);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
         }
@@ -1247,13 +1310,6 @@ public class TextCellFactory implements Disposable {
         }
     }
 
-
-
-
-
-
-
-
     /**
      * Converts a char into a Label, or if the argument c is '\0', creates an Image of a solid block. Can be used
      * for preparing glyphs for animation effects, and is used internally for this purpose.
@@ -1378,6 +1434,62 @@ public class TextCellFactory implements Disposable {
             lb.setSize(width, height - descent); //+ lineTweak * 1f
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
+        }
+    }
+    public Actor makeActor(TextureRegion tr, Collection<Color> colors)
+    {
+        return makeActor(tr, colors, 2f, false);
+    }
+    public Actor makeActor(TextureRegion tr, Collection<Color> colors, float loopTime)
+    {
+        return makeActor(tr, colors, loopTime, false);
+    }
+    /**
+     * Converts a TextureRegion into a ColorChangeImage that will cycle through the given colors.
+     * ColorChange classes will rotate between all colors given in the List each loopTime, and are not affected by
+     * setColor, though they are affected by their setColors methods. Their color change is not considered an animation
+     * for the purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param tr a TextureRegion to make into an Actor, which can be null for a solid block.
+     * @param colors a List of Color to tint c with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(TextureRegion tr, Collection<Color> colors, float loopTime, boolean doubleWidth){
+        return makeActor(tr, colors, loopTime, doubleWidth,
+                actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0));
+    }
+
+    /**
+     * Converts a TextureRegion into a ColorChangeImage that will cycle through the given colors.
+     * ColorChange classes will rotate between all colors given in the List each loopTime, and are not affected by
+     * setColor, though they are affected by their setColors methods. Their color change is not considered an animation
+     * for the purposes of things like SquidPanel.hasActiveAnimations() .
+     * @param tr a TextureRegion to make into an Actor, which can be null for a solid block.
+     * @param colors a List of Color to tint c with, looping through all elements in the list each second
+     * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
+     * @return the Actor, with no position set.
+     */
+    public Actor makeActor(TextureRegion tr, Collection<Color> colors, float loopTime, boolean doubleWidth,
+                           float width, float height){
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        ArrayList<Color> colors2 = null;
+        if(colors != null && !colors.isEmpty())
+        {
+            colors2 = new ArrayList<>(colors.size());
+            for (Color color : colors) {
+                colors2.add(scc.filter(color));
+            }
+        }
+        if (tr == null) {
+            ColorChangeImage im = new ColorChangeImage(block, loopTime, doubleWidth, colors2);
+            im.setSize(width, height);
+            return im;
+        } else {
+            ColorChangeImage im = new ColorChangeImage(tr, loopTime, doubleWidth, colors2);
+            im.setSize(width, height);
+            return im;
         }
     }
 
