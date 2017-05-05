@@ -1517,9 +1517,82 @@ public class SquidLayers extends Group {
     {
         return foregroundPanel;
     }
+
+    /**
+     * Sets the foreground panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
+     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and
+     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}
+     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.
+     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have
+     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it
+     * affect {@code panel} here.
+     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size
+     */
+    public void setForegroundLayer(SquidPanel panel)
+    {
+        if(panel != null)
+        {
+            removeActor(foregroundPanel);
+            foregroundPanel = panel;
+            addActorAt(2, panel);
+
+        }
+    }
     public SquidPanel getBackgroundLayer()
     {
         return backgroundPanel;
+    }
+    /**
+     * Sets the background panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
+     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and
+     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}
+     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.
+     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have
+     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it
+     * affect {@code panel} here.
+     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size
+     */
+    public void setBackgroundLayer(SquidPanel panel)
+    {
+
+        if(panel != null)
+        {
+            removeActor(backgroundPanel);
+            backgroundPanel = panel;
+            addActorAt(0, panel);
+        }
+    }
+    /**
+     * Sets an extra panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
+     * This tries to find the SquidPanel at the given index in the extra panels that may have been added to this with
+     * {@link #addExtraLayer()}; if index is invalid because it is negative, this does nothing. If index is higher
+     * than the highest index for a layer, this will simply add {@code panel} to the extra panels, possibly at an
+     * earlier index (it will use the next available index, which could easily be 0 or 1). If index is valid, this sets
+     * the extra panel at that index to {@code panel}, without changes.
+     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and
+     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}
+     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.
+     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have
+     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it
+     * affect {@code panel} here.
+     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size
+     * @param index the 0-based index into the extra panels list to try to assign panel to, or to append panel to
+     */
+
+    public void setExtraPanel(SquidPanel panel, int index)
+    {
+        if(index < 0 || panel == null || extraPanels == null)
+            return;
+        if(index - 3 >= extraPanels.size()) {
+            extraPanels.add(panel);
+            addActor(panel);
+        }
+        else
+        {
+            removeActor(extraPanels.get(index - 3));
+            extraPanels.set(index - 3, panel);
+            addActorAt(index, panel);
+        }
     }
 
 
