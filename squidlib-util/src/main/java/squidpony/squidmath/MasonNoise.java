@@ -1192,6 +1192,9 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     public static int randomInt(int state, final int jump) {
         return ((state = (state - jump) * jump) >> (state >>> 28)) * 0xC6BC278D;
     }
+    public static int randomInt(int state) {
+        return (state >> (state >>> 28)) * 0xC6BC278D;
+    }
     /**
      * Quintic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve
      * @param x a float from 0 to 1
@@ -1202,11 +1205,41 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * Pair of Cubic (Hermite) Flat Interpolations; for x from 0 to 1, returns results from 0 to 0 on an S-curve, with
      * crests and valleys no more than 0.097f above or below 0.
      * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in to 0 at those endpoints on a curve
+     * @return a float from 0 to 0.97, easing in to 0 at the endpoints on a curve
      */
     private static float carp(final float x) { return x * (x * (x - 1) + (1 - x) * (1 - x)); }
+    /**
+     * Pair of Cubic (Hermite) Flat Interpolations plus linear interpolation; for x from 0 to 1, returns results from 0
+     * to 1 on an S-curve.
+     * @param x a float from 0 to 1
+     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
+     */
+    private static float carp2(final float x) { return x * -(x * (x - 1) + (1 - x) * (1 - x)) + x; }
 
-    private static final int xJump = 0x9E3779B9, yJump = 0xBFD867F9;
+    /**
+     * Simple Cubic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve, with more
+     * distinct curving but less smooth of a "takeoff and landing" as it reaches endpoints, relative to
+     * {@link #querp(float)}. In practice, this looks more like a middle ground between linear interpolation and querp.
+     * @param x a float from 0 to 1
+     * @return a float from 0 to 1, easing in somewhat to 0 or 1 at those endpoints on a curve
+     */
+    private static float cerp(final float x) {
+        return x * x * (3f - 2f * x);
+    }
+
+    /**
+     * Slightly faster verson of {@link #querp(float)} for quintic hermite interpolation, but this doesn't distribute
+     * as evenly as proper quintic interpolation, and may offset the average value when used for noise.
+     * @param x a float from 0 to 1
+     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
+     */
+    private static float querp2(final float x)
+    {
+        final float x3 = x*x*x;
+        return ( 7f + ( x3 - 7f ) * x ) * x3;
+    }
+
+    private static final int xJump = 0x9E3779B9, yJump = 0xBFDAE4F7, zJump = 0xF35692B5;
     public static float noise(final float x, final float y, final int seed) {
         //final float xy = x * 2.2731f - y, yx = y * 2.3417f - x;
         /*final float ra = randomize(seed, xJump),
@@ -1233,57 +1266,204 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         return NumberTools.bounce((rx0y0 + rx1y0 + rx0y1 + rx1y1) /* * 0.625f + (rax0y0 + rax1y0 + rax0y1 + rax1y1) * 0.375f*/ + 163840f);
     }
 
-    private static final IntVLA columns = new IntVLA(128), rows = new IntVLA(128);
+    private static final IntVLA columns = new IntVLA(128), // x
+            rows = new IntVLA(128), // y
+            layers = new IntVLA(128), // z
+            wos = new IntVLA(128), // w
+            ubs = new IntVLA(128), // u
+            vys = new IntVLA(128); // v
     public static void addNoiseField(final float[][] target, final float startX, final float startY,
-                                     final float endX, final float endY, final int seed, final float multiplier) {
+                                     final float endX, final float endY, final int seed, final float multiplier, final float shrink) {
         int callWidth = target.length, callHeight = target[0].length,
-                alter = xJump * seed, alter2 = yJump * seed,
+                alter = randomInt(seed, xJump), alter2 = randomInt(~seed, yJump),
                 xx0, yy0, rxx0, ryy0, rxx1, ryy1, cx, cy;
-        final float
-                stretchX = (1f + randomize(alter, yJump) * 0.25f),// * (alter2 >> 31 | 1),
-                stretchY = (1f + randomize(alter2, xJump) * 0.25f),// * (alter >> 31 | 1);
-                adjX = startX,// * stretchX + startY * stretchX * 0.3125f,
-                adjY = startY,// * stretchY + startX * stretchY * 0.3125f,
-                adjEndX = endX,// * stretchX + endY * stretchX * 0.3125f,
-                adjEndY = endY,// * stretchY + endX * stretchY * 0.3125f,
-                stepX = (adjEndX - adjX) / callWidth, stepY = (adjEndY - adjY) / callHeight;
-        float dx, dy, rx0y0, rx0y1, rx1y0, rx1y1, ax, ay;
-        final int startFloorX = fastFloor(adjX),
-                startFloorY = fastFloor(adjY),
+        final float startX2 = startX * shrink, startY2 = startY * shrink, endX2 = endX * shrink, endY2 = endY * shrink,
+                stretchX = (1f + randomize(alter, yJump) * 0.25f) * (alter2 >> 31 | 1),
+                stretchY = (1f + randomize(alter2, xJump) * 0.25f) * (alter >> 31 | 1),
+                stepX = (endX2 - startX2) / callWidth, stepY = (endY2 - startY2) / callHeight,
+                minimumX = Math.min(startX2 * stretchX - startY2 * stretchY * 0.25f,
+                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.25f,
+                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.25f, endX2 * stretchX - endY2 * stretchY * 0.25f))),
+                maximumX = Math.max(startX2 * stretchX - startY2 * stretchY * 0.25f,
+                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.25f,
+                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.25f, endX2 * stretchX - endY2 * stretchY * 0.25f))),
+                minimumY = Math.min(startY2 * stretchX - startX2 * stretchY * 0.25f,
+                        Math.min(startY2 * stretchX - endX2 * stretchY * 0.25f,
+                                Math.min(endY2 * stretchX - startX2 * stretchY * 0.25f, endY2 * stretchX - endX2 * stretchY * 0.25f))),
+                maximumY = Math.max(startY2 * stretchX - startX2 * stretchY * 0.25f,
+                        Math.max(startY2 * stretchX - endX2 * stretchY * 0.25f,
+                                Math.max(endY2 * stretchX - startX2 * stretchY * 0.25f, endY2 * stretchX - endX2 * stretchY * 0.25f)));
+        float dx, dy, ax, ay;
+        final int startFloorX = fastFloor(minimumX),
+                startFloorY = fastFloor(minimumY),
                 //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,
-                bonusWidth = callWidth + 3, bonusHeight = callHeight + 3,
-                spaceWidth = 3 * bonusWidth, spaceHeight = 3 * bonusHeight;
+                spaceWidth = fastFloor(maximumX - minimumX) + 4, spaceHeight = fastFloor(maximumY - minimumY) + 4
+                ;//bonusWidth = Math.abs(startFloorX - fastFloor(minimumX)), bonusHeight = Math.abs(startFloorY - fastFloor(minimumY));
 
         columns.clear();
         rows.clear();
         columns.ensureCapacity(spaceWidth);
         rows.ensureCapacity(spaceHeight);
-        for (int x = startFloorX; x < spaceWidth + startFloorX; x++) {
-            columns.add(randomInt(x, alter));
+        for (int x = 0, r = startFloorX * alter; x < spaceWidth; x++, r += alter) {
+            columns.add(randomInt(r));
         }
-        for (int y = startFloorY; y < spaceHeight + startFloorY; y++) {
-            rows.add(randomInt(y, alter2));
+        for (int y = 0, r = startFloorY * alter2; y < spaceHeight; y++, r += alter2) {
+            rows.add(randomInt(r));
         }
         cx = 0;
-        for (float x = startX; cx < callWidth; x += stepX, cx++) {
+        for (float x = startX2; cx < callWidth; x += stepX, cx++) {
             cy = 0;
-            for (float y = startY; cy < callHeight; y += stepY, cy++) {
-                ax = x * stretchX + y * stretchX * 0.3125f;
-                ay = y * stretchY + x * stretchY * 0.3125f;
+            for (float y = startY2; cy < callHeight; y += stepY, cy++) {
+                ax = x * stretchX - y * stretchY * 0.25f;
+                ay = y * stretchX - x * stretchY * 0.25f;
                 xx0 = fastFloor(ax);
                 yy0 = fastFloor(ay);
-                rxx0 = columns.get(xx0 - startFloorX + bonusWidth);
-                ryy0 = rows.get(yy0 - startFloorY + bonusHeight);
-                rxx1 = columns.get(xx0 + 1 - startFloorX + bonusWidth);
-                ryy1 = rows.get(yy0 + 1 - startFloorY + bonusHeight);
-                dx = querp(ax - xx0);
-                dy = querp(ay - yy0);
-                rx0y0 = (rxx0 * ryy0 >> 16) * (1f - dx) * (1f - dy);
-                rx0y1 = (rxx0 * ryy1 >> 16) * (1f - dx) * dy;
-                rx1y0 = (rxx1 * ryy0 >> 16) * dx * (1f - dy);
-                rx1y1 = (rxx1 * ryy1 >> 16) * dx * dy;
+                rxx0 = columns.get(xx0 - startFloorX+1);
+                ryy0 = rows.get(yy0 - startFloorY+1);
+                rxx1 = columns.get(xx0 + 1 - startFloorX+1);
+                ryy1 = rows.get(yy0 + 1 - startFloorY+1);
+                dx = carp2(ax - xx0);
+                dy = carp2(ay - yy0);
+                target[cx][cy] += NumberTools.bounce(
+                        (rxx0 * ryy0 >> 16) * (1f - dx) * (1f - dy)
+                                + (rxx0 * ryy1 >> 16) * (1f - dx) * dy
+                                + (rxx1 * ryy0 >> 16) * dx * (1f - dy)
+                                + (rxx1 * ryy1 >> 16) * dx * dy
+                                + 163840f) * multiplier;
+            }
+        }
+    }
+    public static void addNoiseField(final float[][][] target,
+                                     final float startX, final float startY, final float startZ,
+                                     final float endX, final float endY, final float endZ,
+                                     final int seed, final float multiplier, final float shrink) {
+        int callWidth = target[0].length, callHeight = target[0][0].length, callDepth = target.length,
+                alter = randomInt(seed, xJump), alter2 = randomInt(~seed, yJump), alter3 = randomInt(alter + alter2, zJump),
+                xx0, yy0, zz0, rxx0, ryy0, rzz0, rxx1, ryy1, rzz1, cx, cy, cz, vx0y0, vx1y0, vx0y1, vx1y1;
+        final float startX2 = startX * shrink, startY2 = startY * shrink, startZ2 = startZ * shrink,
+                endX2 = endX * shrink, endY2 = endY * shrink, endZ2 = endZ * shrink,
+                stretchX = (1f + randomize(alter, yJump) * 0.25f) * (alter3 >> 31 | 1),
+                stretchY = (1f + randomize(alter2, zJump) * 0.25f) * (alter >> 31 | 1),
+                stretchZ = (1f + randomize(alter3, xJump) * 0.25f) * (alter2 >> 31 | 1),
+                stepX = (endX2 - startX2) / callWidth, stepY = (endY2 - startY2) / callHeight, stepZ = (endZ2 - startZ2) / callDepth,
+                minimumX = Math.min(startX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
+                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
+                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 *stretchZ * 0.09375f,
+                                        Math.min(endX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
+                                                Math.min(startX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
+                                                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
+                                                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 *stretchZ * 0.09375f,
+                                                                        endX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f))))))),
+                maximumX = Math.max(startX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
+                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
+                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 *stretchZ * 0.09375f,
+                                        Math.max(endX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
+                                                Math.max(startX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
+                                                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
+                                                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 *stretchZ * 0.09375f,
+                                                                        endX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f))))))),
+                minimumY = Math.min(startY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
+                        Math.min(startY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
+                                Math.min(endY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 *stretchZ * 0.09375f,
+                                        Math.min(endY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
+                                                Math.min(startY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
+                                                        Math.min(startY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
+                                                                Math.min(endY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 *stretchZ * 0.09375f,
+                                                                        endY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f))))))),
+                maximumY = Math.max(startY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
+                        Math.max(startY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
+                                Math.max(endY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 *stretchZ * 0.09375f,
+                                        Math.max(endY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
+                                                Math.max(startY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
+                                                        Math.max(startY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
+                                                                Math.max(endY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 *stretchZ * 0.09375f,
+                                                                        endY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f))))))),
+                minimumZ = Math.min(startZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
+                        Math.min(startZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
+                                Math.min(endZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 *stretchZ * 0.09375f,
+                                        Math.min(endZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
+                                                Math.min(startZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
+                                                        Math.min(startZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
+                                                                Math.min(endZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 *stretchZ * 0.09375f,
+                                                                        endZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f))))))),
+                maximumZ = Math.max(startZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
+                        Math.max(startZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
+                                Math.max(endZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 *stretchZ * 0.09375f,
+                                        Math.max(endZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
+                                                Math.max(startZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
+                                                        Math.max(startZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
+                                                                Math.max(endZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 *stretchZ * 0.09375f,
+                                                                        endZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f)))))));
 
-                target[cx][cy] += NumberTools.bounce((rx0y0 + rx1y0 + rx0y1 + rx1y1) + 163840f) * multiplier;
+
+        float dx, dy, dz, ax, ay, az, mx0y0, mx1y0, mx0y1, mx1y1;
+        final int startFloorX = fastFloor(minimumX),
+                startFloorY = fastFloor(minimumY),
+                startFloorZ = fastFloor(minimumZ),
+                //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,
+                spaceWidth = fastFloor(maximumX - minimumX) + 4,
+                spaceHeight = fastFloor(maximumY - minimumY) + 4,
+                spaceDepth = fastFloor(maximumZ - minimumZ) + 4;//bonusWidth = Math.abs(startFloorX - fastFloor(minimumX)), bonusHeight = Math.abs(startFloorY - fastFloor(minimumY));
+
+        columns.clear();
+        rows.clear();
+        layers.clear();
+        columns.ensureCapacity(spaceWidth);
+        rows.ensureCapacity(spaceHeight);
+        layers.ensureCapacity(spaceDepth);
+        for (int x = 0, r = startFloorX * alter; x < spaceWidth; x++, r += alter) {
+            columns.add(randomInt(r));
+        }
+        for (int y = 0, r = startFloorY * alter2; y < spaceHeight; y++, r += alter2) {
+            rows.add(randomInt(r));
+        }
+        for (int z = 0, r = startFloorZ * alter3; z < spaceDepth; z++, r += alter3) {
+            layers.add(randomInt(r));
+        }
+        cz = 0;
+        float[][] tt;
+        float[] t;
+        for (float z = startZ2; cz < callDepth; z+= stepZ, cz++) {
+            tt = target[cz];
+            cx = 0;
+            for (float x = startX2; cx < callWidth; x += stepX, cx++) {
+                cy = 0;
+                t = tt[cx];
+                for (float y = startY2; cy < callHeight; y += stepY, cy++) {
+                    ax = x * stretchX - y * stretchY * 0.15625f + z * stretchZ * 0.09375f;
+                    ay = y * stretchX - z * stretchY * 0.15625f + x * stretchZ * 0.09375f;
+                    az = z * stretchX - x * stretchY * 0.15625f + y * stretchZ * 0.09375f;
+                    xx0 = fastFloor(ax);
+                    yy0 = fastFloor(ay);
+                    zz0 = fastFloor(az);
+                    rxx0 = columns.get(xx0 - startFloorX + 1);
+                    ryy0 = rows.get(yy0 - startFloorY + 1);
+                    rzz0 = layers.get(zz0 - startFloorZ + 1);
+                    rxx1 = columns.get(xx0 + 1 - startFloorX + 1);
+                    ryy1 = rows.get(yy0 + 1 - startFloorY + 1);
+                    rzz1 = layers.get(zz0 + 1 - startFloorZ + 1);
+                    dx = carp2(ax - xx0);
+                    dy = carp2(ay - yy0);
+                    dz = carp2(az - zz0);
+                    vx0y0 = rxx0 * ryy0;
+                    vx0y1 = rxx0 * ryy1;
+                    vx1y0 = rxx1 * ryy0;
+                    vx1y1 = rxx1 * ryy1;
+                    mx0y0 = (1f - dx) * (1f - dy);
+                    mx0y1 = (1f - dx) * dy;
+                    mx1y0 = dx * (1f - dy);
+                    mx1y1 = dx * dy;
+                    t[cy] += NumberTools.bounce(
+                            (vx0y0 * rzz0 >> 16) * mx0y0 * (1f - dz)
+                                    + (vx0y0 * rzz1 >> 16) * mx0y0 * dz
+                                    + (vx0y1 * rzz0 >> 16) * mx0y1 * (1f - dz)
+                                    + (vx0y1 * rzz1 >> 16) * mx0y1 * dz
+                                    + (vx1y0 * rzz0 >> 16) * mx1y0 * (1f - dz)
+                                    + (vx1y0 * rzz1 >> 16) * mx1y0 * dz
+                                    + (vx1y1 * rzz0 >> 16) * mx1y1 * (1f - dz)
+                                    + (vx1y1 * rzz1 >> 16) * mx1y1 * dz
+                                    + 163840f) * multiplier;
+                }
             }
         }
     }
