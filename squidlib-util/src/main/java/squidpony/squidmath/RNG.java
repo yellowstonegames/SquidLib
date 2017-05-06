@@ -7,11 +7,39 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * A wrapper class for working with random number generators in a more friendly
- * way.
+ * A wrapper class for working with random number generators in a more friendly way.
  * <p>
  * Includes methods for getting values between two numbers and for getting
- * random elements from a collection or array.
+ * random elements from a collection or array. There are methods to shuffle
+ * a collection and to get a random ordering that can be applied as one shuffle
+ * across multiple collections, such as via {@link OrderedMap#reorder(int...)},
+ * {@link ArrayTools#reorder(ArrayList, int...)}, and so on. You can construct
+ * an RNG with all sorts of RandomnessSource implementations, and choosing them
+ * is usually not a big concern because the default works very well.
+ * <br>
+ * But if you do want advice on what RandomnessSource to use... LightRNG is the
+ * default, and is very fast, but relative to many of the others it has a
+ * significantly shorter period (the amount of random  numbers it will go through
+ * before repeating the sequence), at {@code pow(2, 64)} as opposed to XorRNG and
+ * XoRoRNG's {@code pow(2, 128)}. LightRNG also allows the current RNG state
+ * to be retrieved and altered with {@code getState()} and {@code setState()}. For
+ * most cases, you should decide between LightRNG, XoRoRNG, and other
+ * RandomnessSource implementations based on your needs for period length and state
+ * manipulation (LightRNG is also used internally by almost all {@link StatefulRNG}
+ * objects). You might want significantly less predictable random results, which
+ * {@link IsaacRNG} and {@link Isaac32RNG} can provide, along with a large period.
+ * You may want a very long period of random numbers, which would suggest
+ * {@link LongPeriodRNG} as the best choice. You may want better performance on
+ * 32-bit machines or especially on GWT (which has to emulate Java's behavior with
+ * 64-bit longs), which would mean {@link PintRNG} (for generating only ints via
+ * {@link PintRNG#next(int)}, since its {@link PintRNG#nextLong()} method is very
+ * slow) or {@link FlapRNG} (for generating ints and longs at relatively good speed
+ * using mainly int math; also capable of the state changing that LightRNG can do).
+ * {@link ThunderRNG} is the fastest generator we have, and has a decent period when
+ * considering all bits, but if you only consider the less-significant bits then it
+ * has a very poor period. This bad behavior is similar to how linear congruential
+ * generators act, such as {@link java.util.Random}, which simply truncates off the
+ * lower bits.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger

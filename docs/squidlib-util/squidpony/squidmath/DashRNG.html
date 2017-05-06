@@ -113,27 +113,17 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/DashRNG.html#line.24">DashRNG</a>
+<pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
+public class <a href="../../src-html/squidpony/squidmath/DashRNG.html#line.15">DashRNG</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
-<div class="block">Similar to ThunderRNG (emphasizes speed over quality), but unlike ThunderRNG this is a StatefulRandomness.
- Being a StatefulRandomness means you can pass a DashRNG to the <a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-squidpony.squidmath.RandomnessSource-"><code>StatefulRNG.StatefulRNG(RandomnessSource)</code></a>
- constructor and have expected results, and also that you can get and set the state on a DashRNG directly. If a
- DashRNG is stored in some variable that is then passed to <a href="../../squidpony/squidmath/RNG.html#RNG-squidpony.squidmath.RandomnessSource-"><code>RNG.RNG(RandomnessSource)</code></a>, you can call
- <a href="../../squidpony/squidmath/DashRNG.html#setState-long-"><code>setState(long)</code></a> on the DashRNG variable to set the state used by the RNG, which can be very useful.
- <br>
- The <a href="../../squidpony/squidmath/DashRNG.html#nextLong--"><code>nextLong()</code></a> method on this class can produce 64-bit data in somewhere between 3/4 and 2/3 the time needed
- by LightRNG, and only slightly more than ThunderRNG. This class fails many more statistical tests than ThunderRNG or
- especially LightRNG; this probably doesn't matter for games. If you need something closer to a cryptographic RNG, you
- can use IsaacRNG (though it won't be as fast). The speed of DashRNG probably makes breaking it easier, especially in
- conjunction with its poor statistical quality. It's likely that the period of DashRNG is a full 2 to the 64 (0 seed
- is allowed), but the distribution is also likely to cover much less than the full range of all longs.
+<div class="block">A work in progress as I try to generate numbers as quickly as possible without completely giving up decent quality.
+ So far, not much luck.
  <br>
  Created by Tommy Ettinger on 4/30/2017.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath"><code>FlapRNG is a variant on this class that uses primarily 32-bit math (good for use on GWT)</code></a>, 
-<a href="../../serialized-form.html#squidpony.squidmath.DashRNG">Serialized Form</a></dd>
+<dd><a href="../../serialized-form.html#squidpony.squidmath.DashRNG">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -280,7 +270,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>state</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/DashRNG.html#line.52">state</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/DashRNG.html#line.43">state</a></pre>
 </li>
 </ul>
 </li>
@@ -297,7 +287,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>DashRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.30">DashRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.21">DashRNG</a>()</pre>
 <div class="block">Constructs a DashRNG using two calls to <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a> to make a 64-bit mostly-random seed.</div>
 </li>
 </ul>
@@ -307,7 +297,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>DashRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.38">DashRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.29">DashRNG</a>(long&nbsp;seed)</pre>
 <div class="block">Constructs a DashRNG using the given seed without changes.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -321,7 +311,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DashRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.47">DashRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.38">DashRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
 <div class="block">Constructs a DashRNG using the 64-bit hash of the given CharSequence (such as a String) as its seed.
  Uses <a href="../../squidpony/squidmath/CrossHash.Wisp.html#hash64-java.lang.CharSequence-"><code>CrossHash.Wisp.hash64(CharSequence)</code></a> to get a 64-bit long seed from the CharSequence given.</div>
 <dl>
@@ -344,7 +334,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.59">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.50">getState</a>()</pre>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -360,7 +350,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.69">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.60">setState</a>(long&nbsp;state)</pre>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -376,7 +366,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.81">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.72">next</a>(int&nbsp;bits)</pre>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 <dl>
@@ -395,7 +385,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.94">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.85">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  <p>
@@ -414,7 +404,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.116">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.120">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -432,7 +422,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.129">determine</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.133">determine</a>(long&nbsp;state)</pre>
 <div class="block">A simple "output stage" applied to state, this method does not update state on its own. If you expect to call
  this method more than once, you should add a large long that is an odd number to state as part of the call, such
  as with <code>DashRNG.determine(state += 0x9E3779B97F4A7C15L)</code>. Here, "large long" means at least two of the
@@ -452,7 +442,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.135">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.139">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -465,7 +455,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.140">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.144">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -478,7 +468,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.145">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/DashRNG.html#line.149">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

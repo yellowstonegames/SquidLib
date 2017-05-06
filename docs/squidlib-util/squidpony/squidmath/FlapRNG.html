@@ -113,18 +113,15 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.20">FlapRNG</a>
+<pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
+public class <a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.18">FlapRNG</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
-<div class="block">Similar to DashRNG (emphasizes speed over quality), but like PintRNG this only uses 32-bit int math (good for GWT).
- It's likely that the period of FlapRNG is a full 2 to the 32 (0 seed is allowed), but the distribution for 32-bit
- values is also likely to cover much less than the full range of all ints. The quality of the random numbers this
- produces is probably rather bad, but the speed is on par with ThunderRNG (our current best generator for longs) when
- this generates ints and ThunderRNG generates longs. FlapRNG generates ints at a higher speed than ThunderRNG
- generates ints, but because FlapRNG needs to generate and mix two ints to make a long, it takes over twice the time
- as ThunderRNG to generate longs. Long story short, FlapRNG is a good choice if you need a StatefulRandomness that
- uses int math, you don't need great quality, and you do want great speed. If you want a much-higher-quality int-math
- StatefulRandomness generator, use PintRNG.
+<div class="block">Similar to XoRoRNG, but like PintRNG this only uses 32-bit int math (good for GWT).
+ It's likely that the period of FlapRNG is a full 2 to the 64 (0 seed is allowed), since this uses a pair of ints for
+ its state, and acts like XoRoRNG modified to handle all initial states (hopefully, at least... there may be one seed
+ pair that corresponds to the original "bad seed" of 0) and, of course, use only int math where possible. This is
+ slightly faster than XoRoRNG at producing ints, and as you would expect, twice as slow when generating longs.
  <br>
  Created by Tommy Ettinger on 5/1/2017.</div>
 <dl>
@@ -151,7 +148,11 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FlapRNG.html#state">state</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FlapRNG.html#state0">state0</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FlapRNG.html#state1">state1</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -177,6 +178,10 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FlapRNG.html#FlapRNG-int-">FlapRNG</a></span>(int&nbsp;seed)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FlapRNG.html#FlapRNG-int-int-">FlapRNG</a></span>(int&nbsp;seed0,
+       int&nbsp;seed1)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/FlapRNG.html#FlapRNG-long-">FlapRNG</a></span>(long&nbsp;seed)</code>&nbsp;</td>
 </tr>
 </table>
@@ -283,13 +288,22 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="state">
+<a name="state0">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>state0</h4>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.42">state0</a></pre>
+</li>
+</ul>
+<a name="state1">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>state</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.36">state</a></pre>
+<h4>state1</h4>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.42">state1</a></pre>
 </li>
 </ul>
 </li>
@@ -306,7 +320,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>FlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.22">FlapRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.20">FlapRNG</a>()</pre>
 </li>
 </ul>
 <a name="FlapRNG-int-">
@@ -315,7 +329,17 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>FlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.25">FlapRNG</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.23">FlapRNG</a>(int&nbsp;seed)</pre>
+</li>
+</ul>
+<a name="FlapRNG-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>FlapRNG</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.29">FlapRNG</a>(int&nbsp;seed0,
+               int&nbsp;seed1)</pre>
 </li>
 </ul>
 <a name="FlapRNG-long-">
@@ -324,7 +348,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>FlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.28">FlapRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.33">FlapRNG</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="FlapRNG-java.lang.CharSequence-">
@@ -333,7 +357,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.31">FlapRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.37">FlapRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -350,7 +374,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.43">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.49">getState</a>()</pre>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -366,7 +390,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.53">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.59">setState</a>(long&nbsp;state)</pre>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -382,7 +406,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.65">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.72">next</a>(int&nbsp;bits)</pre>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 <dl>
@@ -401,7 +425,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.69">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.76">nextInt</a>()</pre>
 </li>
 </ul>
 <a name="nextLong--">
@@ -410,11 +434,14 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.85">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.110">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
- This particular implementation is not much more efficient than calling
- <a href="../../squidpony/squidmath/FlapRNG.html#nextInt--"><code>nextInt()</code></a> twice.
+ This implementation produces a different result than calling <a href="../../squidpony/squidmath/FlapRNG.html#nextInt--"><code>nextInt()</code></a> twice and shifting the bits
+ to make a long from the two ints. It really just multiplies each int of the state by a different large prime
+ before adding them together (the adding is just like in nextInt(), but the multiplying is just here).
+ The end result is a long that should take only slightly longer to produce than an int, from a primarily-int
+ generator! Hooray.
  <p>
  Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).</div>
 <dl>
@@ -431,7 +458,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.100">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.135">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -449,7 +476,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.113">determine</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.148">determine</a>(int&nbsp;state)</pre>
 <div class="block">A simple "output stage" applied to state, this method does not update state on its own. If you expect to call
  this method more than once, you should add a large int that is an odd number to state as part of the call, such
  as with <code>FlapRNG.determine(state += 0x9E3779B9)</code>. Here, "large long" means at least two of the
@@ -469,7 +496,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>randomFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.123">randomFloat</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.158">randomFloat</a>(int&nbsp;state)</pre>
 <div class="block">Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given state. Calling this
  repeatedly won't have correlation problems if you give it sequential ints.</div>
 <dl>
@@ -486,7 +513,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSignedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.134">randomSignedFloat</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.169">randomSignedFloat</a>(int&nbsp;state)</pre>
 <div class="block">Gets a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given state. Calling this
  repeatedly won't have correlation problems if you give it sequential ints.</div>
 <dl>
@@ -503,7 +530,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.140">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.175">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -516,7 +543,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.145">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.180">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -529,7 +556,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.150">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/FlapRNG.html#line.185">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

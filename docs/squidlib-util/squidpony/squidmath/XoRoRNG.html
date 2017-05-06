@@ -113,21 +113,27 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.35">XoRoRNG</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.42">XoRoRNG</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A port of Blackman and Vigna's xoroshiro 128+ generator; should be very fast and produce high-quality output.
  Testing shows it is within 5% the speed of LightRNG, sometimes faster and sometimes slower, and has a larger period.
  It's called XoRo because it involves Xor as well as Rotate operations on the 128-bit pseudo-random state.
  <br>
- Machines without access to efficient bitwise rotation (such as all desktop JREs and some JDKs run specifying the
- <code>-client</code> flag or that default to the client VM, which includes practically all 32-bit Windows JREs but almost
- no 64-bit JREs or JDKs) may benefit from using XorRNG over XoRoRNG. LightRNG should continue to be very fast, but has
- a significantly shorter period (the amount of random numbers it will go through before repeating), at
- <code>pow(2, 64)</code> as opposed to XorRNG and XoRoRNG's <code>pow(2, 128)</code>, but LightRNG also allows the current RNG
- state to be retrieved and altered with <code>getState()</code> and <code>setState()</code>. For most cases, you should decide
- between LightRNG and XoRoRNG based on your needs for period length and state manipulation (LightRNG is also used
- internally by almost all StatefulRNG objects).
+ LightRNG is also very fast, but relative to XoRoRNG it has a significantly shorter period (the amount of random
+ numbers it will go through before repeating), at <code>pow(2, 64)</code> as opposed to XorRNG and XoRoRNG's
+ <code>pow(2, 128)</code>, but LightRNG also allows the current RNG state to be retrieved and altered with
+ <code>getState()</code> and <code>setState()</code>. For most cases, you should decide between LightRNG, XoRoRNG, and other
+ RandomnessSource implementations based on your needs for period length and state manipulation (LightRNG is also used
+ internally by almost all StatefulRNG objects). You might want significantly less predictable random results, which
+ <a href="../../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath"><code>IsaacRNG</code></a> and <a href="../../squidpony/squidmath/Isaac32RNG.html" title="class in squidpony.squidmath"><code>Isaac32RNG</code></a> can provide, along with a large period. You may want a very long period of
+ random numbers, which would suggest <a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath"><code>LongPeriodRNG</code></a> as the best choice. You may want better performance on
+ 32-bit machines or especially on GWT (which has to emulate Java's behavior with 64-bit longs), which would mean
+ <a href="../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a> (for generating only ints via <a href="../../squidpony/squidmath/PintRNG.html#next-int-"><code>PintRNG.next(int)</code></a>, since its <a href="../../squidpony/squidmath/PintRNG.html#nextLong--"><code>PintRNG.nextLong()</code></a> method
+ is very slow) or <a href="../../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath"><code>FlapRNG</code></a> (for generating ints and longs at relatively good speed using mainly int math).
+ <a href="../../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath"><code>ThunderRNG</code></a> is the fastest generator we have, and has a decent period when considering all bits, but if you
+ only consider the less-significant bits then it has a rather poor period. This bad behavior is similar to how linear
+ congruential generators act, such as <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util"><code>Random</code></a>, which simply truncates off the lower bits.
  <br>
  Original version at http://xoroshiro.di.unimi.it/xoroshiro128plus.c
  Written in 2016 by David Blackman and Sebastiano Vigna (vigna@acm.org)</div>
@@ -135,7 +141,8 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <dt><span class="simpleTagLabel">Author:</span></dt>
 <dd>Sebastiano Vigna, David Blackman, Tommy Ettinger</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../serialized-form.html#squidpony.squidmath.XoRoRNG">Serialized Form</a></dd>
+<dd><a href="../../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath"><code>FlapRNG is a variant on XoRoRNG that uses primarily 32-bit math (good for use on GWT)</code></a>, 
+<a href="../../serialized-form.html#squidpony.squidmath.XoRoRNG">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -285,7 +292,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>XoRoRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.49">XoRoRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.56">XoRoRNG</a>()</pre>
 <div class="block">Creates a new generator seeded using Math.random.</div>
 </li>
 </ul>
@@ -295,7 +302,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>XoRoRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.53">XoRoRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.60">XoRoRNG</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -312,7 +319,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.58">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.65">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -332,7 +339,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.63">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.70">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -352,7 +359,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.83">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.93">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -370,7 +377,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.95">nextInt</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.105">nextInt</a>()</pre>
 <div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -384,7 +391,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.104">nextInt</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.114">nextInt</a>(int&nbsp;bound)</pre>
 <div class="block">Exclusive on the upper bound.  The lower bound is 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -400,7 +407,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.119">nextInt</a>(int&nbsp;lower,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.129">nextInt</a>(int&nbsp;lower,
                    int&nbsp;upper)</pre>
 <div class="block">Inclusive lower, exclusive upper.</div>
 <dl>
@@ -418,7 +425,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.129">nextLong</a>(long&nbsp;bound)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.139">nextLong</a>(long&nbsp;bound)</pre>
 <div class="block">Exclusive on the upper bound. The lower bound is 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -434,7 +441,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.139">nextDouble</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.149">nextDouble</a>()</pre>
 </li>
 </ul>
 <a name="nextFloat--">
@@ -443,7 +450,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextFloat</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.143">nextFloat</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.153">nextFloat</a>()</pre>
 </li>
 </ul>
 <a name="nextBoolean--">
@@ -452,7 +459,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBoolean</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.147">nextBoolean</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.157">nextBoolean</a>()</pre>
 </li>
 </ul>
 <a name="nextBytes-byte:A-">
@@ -461,7 +468,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBytes</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.151">nextBytes</a>(byte[]&nbsp;bytes)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.161">nextBytes</a>(byte[]&nbsp;bytes)</pre>
 </li>
 </ul>
 <a name="setSeed-long-">
@@ -470,7 +477,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.165">setSeed</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.175">setSeed</a>(long&nbsp;seed)</pre>
 <div class="block">Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -484,7 +491,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.180">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.190">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -497,7 +504,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.185">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.195">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -510,7 +517,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.196">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/XoRoRNG.html#line.206">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

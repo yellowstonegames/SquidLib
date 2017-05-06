@@ -1525,67 +1525,140 @@
 <span class="sourceLineNo">1517</span>    {<a name="line.1517"></a>
 <span class="sourceLineNo">1518</span>        return foregroundPanel;<a name="line.1518"></a>
 <span class="sourceLineNo">1519</span>    }<a name="line.1519"></a>
-<span class="sourceLineNo">1520</span>    public SquidPanel getBackgroundLayer()<a name="line.1520"></a>
-<span class="sourceLineNo">1521</span>    {<a name="line.1521"></a>
-<span class="sourceLineNo">1522</span>        return backgroundPanel;<a name="line.1522"></a>
-<span class="sourceLineNo">1523</span>    }<a name="line.1523"></a>
-<span class="sourceLineNo">1524</span><a name="line.1524"></a>
-<span class="sourceLineNo">1525</span><a name="line.1525"></a>
-<span class="sourceLineNo">1526</span>    /**<a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>     * Sets the IColorCenter used by the foreground layer.<a name="line.1527"></a>
-<span class="sourceLineNo">1528</span>     *<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>     * @param scc an IColorCenter&lt;Color&gt;; commonly a SquidColorCenter with an optional filter<a name="line.1529"></a>
+<span class="sourceLineNo">1520</span><a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>    /**<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>     * Sets the foreground panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span>     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it<a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>     * affect {@code panel} here.<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size<a name="line.1529"></a>
 <span class="sourceLineNo">1530</span>     */<a name="line.1530"></a>
-<span class="sourceLineNo">1531</span>    public void setFGColorCenter(IColorCenter&lt;Color&gt; scc) {<a name="line.1531"></a>
-<span class="sourceLineNo">1532</span>        foregroundPanel.setColorCenter(scc);<a name="line.1532"></a>
-<span class="sourceLineNo">1533</span>    }<a name="line.1533"></a>
-<span class="sourceLineNo">1534</span>    /**<a name="line.1534"></a>
-<span class="sourceLineNo">1535</span>     * Sets the IColorCenter used by the background layer.<a name="line.1535"></a>
-<span class="sourceLineNo">1536</span>     *<a name="line.1536"></a>
-<span class="sourceLineNo">1537</span>     * @param scc an IColorCenter&lt;Color&gt;; commonly a SquidColorCenter with an optional filter<a name="line.1537"></a>
-<span class="sourceLineNo">1538</span>     */<a name="line.1538"></a>
-<span class="sourceLineNo">1539</span>    public void setBGColorCenter(IColorCenter&lt;Color&gt; scc) {<a name="line.1539"></a>
-<span class="sourceLineNo">1540</span>        backgroundPanel.setColorCenter(scc);<a name="line.1540"></a>
-<span class="sourceLineNo">1541</span>    }<a name="line.1541"></a>
-<span class="sourceLineNo">1542</span>    public void setOffsets(float x, float y)<a name="line.1542"></a>
-<span class="sourceLineNo">1543</span>    {<a name="line.1543"></a>
-<span class="sourceLineNo">1544</span>        foregroundPanel.setOffsets(x, y);<a name="line.1544"></a>
-<span class="sourceLineNo">1545</span>        backgroundPanel.setOffsets(x, y);<a name="line.1545"></a>
-<span class="sourceLineNo">1546</span>        for(SquidPanel p : extraPanels)<a name="line.1546"></a>
-<span class="sourceLineNo">1547</span>            p.setOffsets(x, y);<a name="line.1547"></a>
-<span class="sourceLineNo">1548</span>    }<a name="line.1548"></a>
-<span class="sourceLineNo">1549</span>    public int getGridOffsetX()<a name="line.1549"></a>
-<span class="sourceLineNo">1550</span>    {<a name="line.1550"></a>
-<span class="sourceLineNo">1551</span>        return foregroundPanel.getGridOffsetX();<a name="line.1551"></a>
-<span class="sourceLineNo">1552</span>    }<a name="line.1552"></a>
-<span class="sourceLineNo">1553</span>    public int getGridOffsetY()<a name="line.1553"></a>
-<span class="sourceLineNo">1554</span>    {<a name="line.1554"></a>
-<span class="sourceLineNo">1555</span>        return foregroundPanel.getGridOffsetY();<a name="line.1555"></a>
-<span class="sourceLineNo">1556</span>    }<a name="line.1556"></a>
-<span class="sourceLineNo">1557</span>    public void setGridOffsetX (int offset)<a name="line.1557"></a>
-<span class="sourceLineNo">1558</span>    {<a name="line.1558"></a>
-<span class="sourceLineNo">1559</span>        foregroundPanel.setGridOffsetX(offset);<a name="line.1559"></a>
-<span class="sourceLineNo">1560</span>        backgroundPanel.setGridOffsetX(offset);<a name="line.1560"></a>
-<span class="sourceLineNo">1561</span>        for(SquidPanel sp : extraPanels)<a name="line.1561"></a>
-<span class="sourceLineNo">1562</span>            sp.setGridOffsetX(offset);<a name="line.1562"></a>
-<span class="sourceLineNo">1563</span>    }<a name="line.1563"></a>
-<span class="sourceLineNo">1564</span>    public void setGridOffsetY (int offset)<a name="line.1564"></a>
-<span class="sourceLineNo">1565</span>    {<a name="line.1565"></a>
-<span class="sourceLineNo">1566</span>        foregroundPanel.setGridOffsetY(offset);<a name="line.1566"></a>
-<span class="sourceLineNo">1567</span>        backgroundPanel.setGridOffsetY(offset);<a name="line.1567"></a>
-<span class="sourceLineNo">1568</span>        for(SquidPanel sp : extraPanels)<a name="line.1568"></a>
-<span class="sourceLineNo">1569</span>            sp.setGridOffsetY(offset);<a name="line.1569"></a>
-<span class="sourceLineNo">1570</span>    }<a name="line.1570"></a>
-<span class="sourceLineNo">1571</span><a name="line.1571"></a>
-<span class="sourceLineNo">1572</span>    public int getTotalWidth()<a name="line.1572"></a>
-<span class="sourceLineNo">1573</span>    {<a name="line.1573"></a>
-<span class="sourceLineNo">1574</span>        return foregroundPanel.getTotalWidth();<a name="line.1574"></a>
-<span class="sourceLineNo">1575</span>    }<a name="line.1575"></a>
-<span class="sourceLineNo">1576</span>    public int getTotalHeight()<a name="line.1576"></a>
-<span class="sourceLineNo">1577</span>    {<a name="line.1577"></a>
-<span class="sourceLineNo">1578</span>        return foregroundPanel.getTotalHeight();<a name="line.1578"></a>
-<span class="sourceLineNo">1579</span>    }<a name="line.1579"></a>
-<span class="sourceLineNo">1580</span>}<a name="line.1580"></a>
+<span class="sourceLineNo">1531</span>    public void setForegroundLayer(SquidPanel panel)<a name="line.1531"></a>
+<span class="sourceLineNo">1532</span>    {<a name="line.1532"></a>
+<span class="sourceLineNo">1533</span>        if(panel != null)<a name="line.1533"></a>
+<span class="sourceLineNo">1534</span>        {<a name="line.1534"></a>
+<span class="sourceLineNo">1535</span>            removeActor(foregroundPanel);<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span>            foregroundPanel = panel;<a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>            addActorAt(2, panel);<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span><a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>        }<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>    }<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>    public SquidPanel getBackgroundLayer()<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>    {<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>        return backgroundPanel;<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span>    }<a name="line.1544"></a>
+<span class="sourceLineNo">1545</span>    /**<a name="line.1545"></a>
+<span class="sourceLineNo">1546</span>     * Sets the background panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).<a name="line.1546"></a>
+<span class="sourceLineNo">1547</span>     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and<a name="line.1547"></a>
+<span class="sourceLineNo">1548</span>     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}<a name="line.1548"></a>
+<span class="sourceLineNo">1549</span>     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.<a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span>     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it<a name="line.1551"></a>
+<span class="sourceLineNo">1552</span>     * affect {@code panel} here.<a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span>     */<a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>    public void setBackgroundLayer(SquidPanel panel)<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span>    {<a name="line.1556"></a>
+<span class="sourceLineNo">1557</span><a name="line.1557"></a>
+<span class="sourceLineNo">1558</span>        if(panel != null)<a name="line.1558"></a>
+<span class="sourceLineNo">1559</span>        {<a name="line.1559"></a>
+<span class="sourceLineNo">1560</span>            removeActor(backgroundPanel);<a name="line.1560"></a>
+<span class="sourceLineNo">1561</span>            backgroundPanel = panel;<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span>            addActorAt(0, panel);<a name="line.1562"></a>
+<span class="sourceLineNo">1563</span>        }<a name="line.1563"></a>
+<span class="sourceLineNo">1564</span>    }<a name="line.1564"></a>
+<span class="sourceLineNo">1565</span>    /**<a name="line.1565"></a>
+<span class="sourceLineNo">1566</span>     * Sets an extra panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).<a name="line.1566"></a>
+<span class="sourceLineNo">1567</span>     * This tries to find the SquidPanel at the given index in the extra panels that may have been added to this with<a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>     * {@link #addExtraLayer()}; if index is invalid because it is negative, this does nothing. If index is higher<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>     * than the highest index for a layer, this will simply add {@code panel} to the extra panels, possibly at an<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span>     * earlier index (it will use the next available index, which could easily be 0 or 1). If index is valid, this sets<a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>     * the extra panel at that index to {@code panel}, without changes.<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span>     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.<a name="line.1574"></a>
+<span class="sourceLineNo">1575</span>     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have<a name="line.1575"></a>
+<span class="sourceLineNo">1576</span>     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it<a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>     * affect {@code panel} here.<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span>     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size<a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>     * @param index the 0-based index into the extra panels list to try to assign panel to, or to append panel to<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>     */<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span><a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>    public void setExtraPanel(SquidPanel panel, int index)<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span>    {<a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>        if(index &lt; 0 || panel == null || extraPanels == null)<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>            return;<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span>        if(index - 3 &gt;= extraPanels.size()) {<a name="line.1586"></a>
+<span class="sourceLineNo">1587</span>            extraPanels.add(panel);<a name="line.1587"></a>
+<span class="sourceLineNo">1588</span>            addActor(panel);<a name="line.1588"></a>
+<span class="sourceLineNo">1589</span>        }<a name="line.1589"></a>
+<span class="sourceLineNo">1590</span>        else<a name="line.1590"></a>
+<span class="sourceLineNo">1591</span>        {<a name="line.1591"></a>
+<span class="sourceLineNo">1592</span>            removeActor(extraPanels.get(index - 3));<a name="line.1592"></a>
+<span class="sourceLineNo">1593</span>            extraPanels.set(index - 3, panel);<a name="line.1593"></a>
+<span class="sourceLineNo">1594</span>            addActorAt(index, panel);<a name="line.1594"></a>
+<span class="sourceLineNo">1595</span>        }<a name="line.1595"></a>
+<span class="sourceLineNo">1596</span>    }<a name="line.1596"></a>
+<span class="sourceLineNo">1597</span><a name="line.1597"></a>
+<span class="sourceLineNo">1598</span><a name="line.1598"></a>
+<span class="sourceLineNo">1599</span>    /**<a name="line.1599"></a>
+<span class="sourceLineNo">1600</span>     * Sets the IColorCenter used by the foreground layer.<a name="line.1600"></a>
+<span class="sourceLineNo">1601</span>     *<a name="line.1601"></a>
+<span class="sourceLineNo">1602</span>     * @param scc an IColorCenter&lt;Color&gt;; commonly a SquidColorCenter with an optional filter<a name="line.1602"></a>
+<span class="sourceLineNo">1603</span>     */<a name="line.1603"></a>
+<span class="sourceLineNo">1604</span>    public void setFGColorCenter(IColorCenter&lt;Color&gt; scc) {<a name="line.1604"></a>
+<span class="sourceLineNo">1605</span>        foregroundPanel.setColorCenter(scc);<a name="line.1605"></a>
+<span class="sourceLineNo">1606</span>    }<a name="line.1606"></a>
+<span class="sourceLineNo">1607</span>    /**<a name="line.1607"></a>
+<span class="sourceLineNo">1608</span>     * Sets the IColorCenter used by the background layer.<a name="line.1608"></a>
+<span class="sourceLineNo">1609</span>     *<a name="line.1609"></a>
+<span class="sourceLineNo">1610</span>     * @param scc an IColorCenter&lt;Color&gt;; commonly a SquidColorCenter with an optional filter<a name="line.1610"></a>
+<span class="sourceLineNo">1611</span>     */<a name="line.1611"></a>
+<span class="sourceLineNo">1612</span>    public void setBGColorCenter(IColorCenter&lt;Color&gt; scc) {<a name="line.1612"></a>
+<span class="sourceLineNo">1613</span>        backgroundPanel.setColorCenter(scc);<a name="line.1613"></a>
+<span class="sourceLineNo">1614</span>    }<a name="line.1614"></a>
+<span class="sourceLineNo">1615</span>    public void setOffsets(float x, float y)<a name="line.1615"></a>
+<span class="sourceLineNo">1616</span>    {<a name="line.1616"></a>
+<span class="sourceLineNo">1617</span>        foregroundPanel.setOffsets(x, y);<a name="line.1617"></a>
+<span class="sourceLineNo">1618</span>        backgroundPanel.setOffsets(x, y);<a name="line.1618"></a>
+<span class="sourceLineNo">1619</span>        for(SquidPanel p : extraPanels)<a name="line.1619"></a>
+<span class="sourceLineNo">1620</span>            p.setOffsets(x, y);<a name="line.1620"></a>
+<span class="sourceLineNo">1621</span>    }<a name="line.1621"></a>
+<span class="sourceLineNo">1622</span>    public int getGridOffsetX()<a name="line.1622"></a>
+<span class="sourceLineNo">1623</span>    {<a name="line.1623"></a>
+<span class="sourceLineNo">1624</span>        return foregroundPanel.getGridOffsetX();<a name="line.1624"></a>
+<span class="sourceLineNo">1625</span>    }<a name="line.1625"></a>
+<span class="sourceLineNo">1626</span>    public int getGridOffsetY()<a name="line.1626"></a>
+<span class="sourceLineNo">1627</span>    {<a name="line.1627"></a>
+<span class="sourceLineNo">1628</span>        return foregroundPanel.getGridOffsetY();<a name="line.1628"></a>
+<span class="sourceLineNo">1629</span>    }<a name="line.1629"></a>
+<span class="sourceLineNo">1630</span>    public void setGridOffsetX (int offset)<a name="line.1630"></a>
+<span class="sourceLineNo">1631</span>    {<a name="line.1631"></a>
+<span class="sourceLineNo">1632</span>        foregroundPanel.setGridOffsetX(offset);<a name="line.1632"></a>
+<span class="sourceLineNo">1633</span>        backgroundPanel.setGridOffsetX(offset);<a name="line.1633"></a>
+<span class="sourceLineNo">1634</span>        for(SquidPanel sp : extraPanels)<a name="line.1634"></a>
+<span class="sourceLineNo">1635</span>            sp.setGridOffsetX(offset);<a name="line.1635"></a>
+<span class="sourceLineNo">1636</span>    }<a name="line.1636"></a>
+<span class="sourceLineNo">1637</span>    public void setGridOffsetY (int offset)<a name="line.1637"></a>
+<span class="sourceLineNo">1638</span>    {<a name="line.1638"></a>
+<span class="sourceLineNo">1639</span>        foregroundPanel.setGridOffsetY(offset);<a name="line.1639"></a>
+<span class="sourceLineNo">1640</span>        backgroundPanel.setGridOffsetY(offset);<a name="line.1640"></a>
+<span class="sourceLineNo">1641</span>        for(SquidPanel sp : extraPanels)<a name="line.1641"></a>
+<span class="sourceLineNo">1642</span>            sp.setGridOffsetY(offset);<a name="line.1642"></a>
+<span class="sourceLineNo">1643</span>    }<a name="line.1643"></a>
+<span class="sourceLineNo">1644</span><a name="line.1644"></a>
+<span class="sourceLineNo">1645</span>    public int getTotalWidth()<a name="line.1645"></a>
+<span class="sourceLineNo">1646</span>    {<a name="line.1646"></a>
+<span class="sourceLineNo">1647</span>        return foregroundPanel.getTotalWidth();<a name="line.1647"></a>
+<span class="sourceLineNo">1648</span>    }<a name="line.1648"></a>
+<span class="sourceLineNo">1649</span>    public int getTotalHeight()<a name="line.1649"></a>
+<span class="sourceLineNo">1650</span>    {<a name="line.1650"></a>
+<span class="sourceLineNo">1651</span>        return foregroundPanel.getTotalHeight();<a name="line.1651"></a>
+<span class="sourceLineNo">1652</span>    }<a name="line.1652"></a>
+<span class="sourceLineNo">1653</span>}<a name="line.1653"></a>
 
 
 
