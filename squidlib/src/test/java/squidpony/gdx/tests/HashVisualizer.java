@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 0, noiseMode = 70;
+    private int hashMode = 43, rngMode = 18, noiseMode = 70;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -587,7 +587,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 break;
                             case 5:
                                 rngMode++;
-                                rngMode %= 20;
+                                rngMode %= 24;
                                 break;
                             case 0:
                                 hashMode++;
@@ -3281,6 +3281,46 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 20:
+                        random = new DashRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("DashRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 21:
+                        random = new DashRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        Gdx.graphics.setTitle("DashRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 22:
+                        random = new FlapRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 23:
+                        random = new FlapRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = toFloat(random.next(32));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                 }
             }

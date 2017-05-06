@@ -1186,14 +1186,19 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 
     public static float randomize(int state, final int jump)
     {
-        return NumberTools.intBitsToFloat(((((state = (state - jump) * jump) >> (state >>> 28)) * 0xC6BC278D) >>> 9) | 0x40000000) - 3f;
+        state = (state - jump) * jump;
+        state ^= state >>> (4 + (state >>> 28));
+        return NumberTools.intBitsToFloat(((((state *= 277803737) >>> 22) ^ state) >>> 9) | 0x40000000) - 3f;
     }
 
     public static int randomInt(int state, final int jump) {
-        return ((state = (state - jump) * jump) >> (state >>> 28)) * 0xC6BC278D;
+        state = (state - jump) * jump;
+        state ^= state >>> (4 + (state >>> 28));
+        return ((state *= 277803737) >>> 22) ^ state;
     }
     public static int randomInt(int state) {
-        return (state >> (state >>> 28)) * 0xC6BC278D;
+        state ^= state >>> (4 + (state >>> 28));
+        return ((state *= 277803737) >>> 22) ^ state;
     }
     /**
      * Quintic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve

@@ -16,14 +16,20 @@ import java.io.Serializable;
  * Testing shows it is within 5% the speed of LightRNG, sometimes faster and sometimes slower, and has a larger period.
  * It's called XoRo because it involves Xor as well as Rotate operations on the 128-bit pseudo-random state.
  * <br>
- * Machines without access to efficient bitwise rotation (such as all desktop JREs and some JDKs run specifying the
- * {@code -client} flag or that default to the client VM, which includes practically all 32-bit Windows JREs but almost
- * no 64-bit JREs or JDKs) may benefit from using XorRNG over XoRoRNG. LightRNG should continue to be very fast, but has
- * a significantly shorter period (the amount of random numbers it will go through before repeating), at
- * {@code pow(2, 64)} as opposed to XorRNG and XoRoRNG's {@code pow(2, 128)}, but LightRNG also allows the current RNG
- * state to be retrieved and altered with {@code getState()} and {@code setState()}. For most cases, you should decide
- * between LightRNG and XoRoRNG based on your needs for period length and state manipulation (LightRNG is also used
- * internally by almost all StatefulRNG objects).
+ * LightRNG is also very fast, but relative to XoRoRNG it has a significantly shorter period (the amount of random
+ * numbers it will go through before repeating), at {@code pow(2, 64)} as opposed to XorRNG and XoRoRNG's
+ * {@code pow(2, 128)}, but LightRNG also allows the current RNG state to be retrieved and altered with
+ * {@code getState()} and {@code setState()}. For most cases, you should decide between LightRNG, XoRoRNG, and other
+ * RandomnessSource implementations based on your needs for period length and state manipulation (LightRNG is also used
+ * internally by almost all StatefulRNG objects). You might want significantly less predictable random results, which
+ * {@link IsaacRNG} and {@link Isaac32RNG} can provide, along with a large period. You may want a very long period of
+ * random numbers, which would suggest {@link LongPeriodRNG} as the best choice. You may want better performance on
+ * 32-bit machines or especially on GWT (which has to emulate Java's behavior with 64-bit longs), which would mean
+ * {@link PintRNG} (for generating only ints via {@link PintRNG#next(int)}, since its {@link PintRNG#nextLong()} method
+ * is very slow) or {@link FlapRNG} (for generating ints and longs at relatively good speed using mainly int math).
+ * {@link ThunderRNG} is the fastest generator we have, and has a decent period when considering all bits, but if you
+ * only consider the less-significant bits then it has a rather poor period. This bad behavior is similar to how linear
+ * congruential generators act, such as {@link java.util.Random}, which simply truncates off the lower bits.
  * <br>
  * Original version at http://xoroshiro.di.unimi.it/xoroshiro128plus.c
  * Written in 2016 by David Blackman and Sebastiano Vigna (vigna@acm.org)
@@ -31,6 +37,7 @@ import java.io.Serializable;
  * @author Sebastiano Vigna
  * @author David Blackman
  * @author Tommy Ettinger
+ * @see FlapRNG FlapRNG is a variant on XoRoRNG that uses primarily 32-bit math (good for use on GWT)
  */
 public class XoRoRNG implements RandomnessSource, Serializable {
 
@@ -66,9 +73,12 @@ public class XoRoRNG implements RandomnessSource, Serializable {
         final long result = s0 + s1;
 
         s1 ^= s0;
+        state0 = (s0 << 55 | s0 >>> 9) ^ s1 ^ (s1 << 14); // a, b
+        state1 = (s1 << 36 | s1 >>> 28); // c
+        /*
         state0 = Long.rotateLeft(s0, 55) ^ s1 ^ (s1 << 14); // a, b
         state1 = Long.rotateLeft(s1, 36); // c
-
+        */
         return result;
     }
 

@@ -1,26 +1,17 @@
 package squidpony.squidmath;
 
 import squidpony.StringKit;
+import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
 /**
- * Similar to ThunderRNG (emphasizes speed over quality), but unlike ThunderRNG this is a StatefulRandomness.
- * Being a StatefulRandomness means you can pass a DashRNG to the {@link StatefulRNG#StatefulRNG(RandomnessSource)}
- * constructor and have expected results, and also that you can get and set the state on a DashRNG directly. If a
- * DashRNG is stored in some variable that is then passed to {@link RNG#RNG(RandomnessSource)}, you can call
- * {@link #setState(long)} on the DashRNG variable to set the state used by the RNG, which can be very useful.
- * <br>
- * The {@link #nextLong()} method on this class can produce 64-bit data in somewhere between 3/4 and 2/3 the time needed
- * by LightRNG, and only slightly more than ThunderRNG. This class fails many more statistical tests than ThunderRNG or
- * especially LightRNG; this probably doesn't matter for games. If you need something closer to a cryptographic RNG, you
- * can use IsaacRNG (though it won't be as fast). The speed of DashRNG probably makes breaking it easier, especially in
- * conjunction with its poor statistical quality. It's likely that the period of DashRNG is a full 2 to the 64 (0 seed
- * is allowed), but the distribution is also likely to cover much less than the full range of all longs.
+ * A work in progress as I try to generate numbers as quickly as possible without completely giving up decent quality.
+ * So far, not much luck.
  * <br>
  * Created by Tommy Ettinger on 4/30/2017.
- * @see FlapRNG FlapRNG is a variant on this class that uses primarily 32-bit math (good for use on GWT)
  */
+@Beta
 public class DashRNG implements StatefulRandomness, Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -96,10 +87,23 @@ public class DashRNG implements StatefulRandomness, Serializable {
 //        final long z = (state += 0x9E3779B97F4A7C15L);
 //        final int r = (int)(z >>> 58);
 //        return (z >>> r) | (z << (64 - r));
-        final long z = (state += 0x9E3779B97F4A7C15L);
-        return (z >> (z >>> 59)) * 0xC6BC279692B5CC83L;
-//        return (z >>> (z >>> 58)) | (z << (64L - (z >>> 58)));
 
+        // current best quality
+        final long z = state;
+        return state += ~(z << 1) * 0x9E3779B97F4A7C15L;//0xC6BC279692B5CC83L;
+
+        //trying to enhance optimize-ability
+        //return state += 0x9E3779B97F4A7C15L + (state >> (state & 31L)) * 0xC6BC279692B5CC83L;
+        //return state += (state >> 5) * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L;
+
+        // good quality, pretty bad speed (2000 ms per billion)
+        //return state += ((state + 0x9E3779B97F4A7C15L) >> 5) * 0xC6BC279692B5CC83L;
+
+        //final long z = (state + 0x9E3779B97F4A7C15L);
+        //final int r = (int) ((state & 15L) + (z >>> 60));
+        //return (state += (state * 0x9E3779B97F4A7C15L) >> (state >>> 59)) * 0xC6BC279692B5CC83L;
+        //return state += ((++state) >> (state >>> 59)) * 0xC6BC279692B5CC83L;
+//        return (z >>> (z >>> 58)) | (z << (64L - (z >>> 58)));
 //        final long z = state + 0x9E3779B97F4A7C15L;
 //        return state = (z ^ (z >> 8)) * 0x8329C6EB9E6AD3E3L;
 
