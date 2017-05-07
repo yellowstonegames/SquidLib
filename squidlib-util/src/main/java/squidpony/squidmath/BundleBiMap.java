@@ -179,11 +179,17 @@ public class BundleBiMap<E, S>
     public boolean put(E[] e, S s)
     {
         if(e == null) return false;
+        int len = elements.size;
+        elements.addAllIfAbsent(e);
+        for (int i = len; i < elements.size; i++) {
+            mm.add(new IntVLA(4));
+        }
+
         elements.addAllIfAbsent(e);
         int[][] bundle = new int[][]{elements.getArray(e)};
         if(!bm.put(bundle, s))
             return false;
-        int len = e.length;
+        len = e.length;
         for (int i = 0; i < len; i++) {
             mm.get(bundle[0][i]).add(bm.size()-1);
         }
@@ -201,11 +207,16 @@ public class BundleBiMap<E, S>
     public boolean put(E[] e, int[] variation, S s)
     {
         if(e == null || variation == null) return false;
+        int len = elements.size;
         elements.addAllIfAbsent(e);
+        for (int i = len; i < elements.size; i++) {
+            mm.add(new IntVLA(4));
+        }
+
         int[][] bundle = new int[][]{elements.getArray(e), variation};
         if(!bm.put(bundle, s))
             return false;
-        int len = e.length;
+        len = e.length;
         for (int i = 0; i < len; i++) {
             mm.get(bundle[0][i]).add(bm.size()-1);
         }
@@ -221,11 +232,15 @@ public class BundleBiMap<E, S>
     public boolean put(Collection<? extends E> e, S s)
     {
         if(e == null) return false;
+        int len = elements.size;
         elements.addAllIfAbsent(e);
+        for (int i = len; i < elements.size; i++) {
+            mm.add(new IntVLA(4));
+        }
         int[][] bundle = new int[][]{elements.getArray(e)};
         if(!bm.put(bundle, s))
             return false;
-        int len = bundle[0].length;
+        len = bundle[0].length;
         for (int i = 0; i < len; i++) {
             mm.get(bundle[0][i]).add(bm.size()-1);
         }
@@ -243,11 +258,15 @@ public class BundleBiMap<E, S>
     public boolean put(Collection<? extends E> e, int[] variation, S s)
     {
         if(e == null || variation == null) return false;
+        int len = elements.size;
         elements.addAllIfAbsent(e);
+        for (int i = len; i < elements.size; i++) {
+            mm.add(new IntVLA(4));
+        }
         int[][] bundle = new int[][]{elements.getArray(e), variation};
         if(!bm.put(bundle, s))
             return false;
-        int len = bundle[0].length;
+        len = bundle[0].length;
         for (int i = 0; i < len; i++) {
             mm.get(bundle[0][i]).add(bm.size()-1);
         }
