@@ -45,6 +45,13 @@ public class ListZone extends Skeleton {
 		return coords;
 	}
 
+	/**
+	 * @return The list that backs up {@code this}. Use at your own risks.
+	 */
+	public List<Coord> getState() {
+		return coords;
+	}
+
 	@Override
 	public String toString() {
 		return coords.toString();
