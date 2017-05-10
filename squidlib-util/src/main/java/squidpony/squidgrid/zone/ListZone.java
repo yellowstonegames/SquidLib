@@ -57,34 +57,12 @@ public class ListZone extends Skeleton {
 		return coords;
 	}
 
-	/*
-	public ListZone expand(int distance)
-	{
-		if(distance <= 0)
-			return new ListZone(coords);
-		OrderedSet<Coord> distinct = new OrderedSet<>(coords);
-		for (Coord c : coords) {
-			distinct.add(c.translate(1, 0));
-			distinct.add(c.translate(-1, 0));
-			distinct.add(c.translate(0, 1));
-			distinct.add(c.translate(0, -1));
-		}
-		ArrayList<Coord> next = new ArrayList<>(distinct);
-		for (int i = 1; i < distance; i++) {
-			distinct.clear();
-			distinct.addAll(next);
-			for (Coord c : next) {
-				distinct.add(c.translate(1, 0));
-				distinct.add(c.translate(-1, 0));
-				distinct.add(c.translate(0, 1));
-				distinct.add(c.translate(0, -1));
-			}
-			next.clear();
-			next.addAll(distinct);
-		}
-		return new ListZone(next);
+	/**
+	 * @return The list that backs up {@code this}. Use at your own risks.
+	 */
+	public List<Coord> getState() {
+		return coords;
 	}
-	*/
 
 	@Override
 	public String toString() {

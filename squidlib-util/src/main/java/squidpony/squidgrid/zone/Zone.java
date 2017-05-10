@@ -94,6 +94,12 @@ public interface Zone extends Serializable, Iterable<Coord> {
 	int getHeight();
 
 	/**
+	 * @return The approximation of the zone's diagonal, using
+	 *         {@link #getWidth()} and {@link #getHeight()}.
+	 */
+	double getDiagonal();
+
+	/**
 	 * @param smallestOrBiggest
 	 * @return The x-coordinate of the Coord within {@code this} that has the
 	 *         smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
@@ -179,6 +185,13 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			if (height == -2)
 				height = isEmpty() ? -1 : y(false) - y(true);
 			return height;
+		}
+
+		@Override
+		public double getDiagonal() {
+			final int w = getWidth();
+			final int h = getHeight();
+			return Math.sqrt((w * w) + (h * h));
 		}
 
 		@Override
