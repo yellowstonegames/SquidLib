@@ -538,6 +538,17 @@ the order they are declared.</div>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
+<td class="colLast"><span class="typeNameLabel">BevelFOV.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/BevelFOV.html#calculateFOV-double:A:A-int-int-double-squidpony.squidgrid.Radius-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
+            int&nbsp;startX,
+            int&nbsp;startY,
+            double&nbsp;radius,
+            <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusTechnique)</code>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">FOVCache.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/FOVCache.html#calculateFOV-double:A:A-int-int-double-squidpony.squidgrid.Radius-double-double-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
             int&nbsp;startX,
             int&nbsp;startY,
@@ -549,9 +560,22 @@ the order they are declared.</div>
  x, y coordinates.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">FOV.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/FOV.html#calculateFOV-double:A:A-int-int-double-squidpony.squidgrid.Radius-double-double-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
+            int&nbsp;startX,
+            int&nbsp;startY,
+            double&nbsp;radius,
+            <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusTechnique,
+            double&nbsp;angle,
+            double&nbsp;span)</code>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double[][]</code></td>
+<td class="colLast"><span class="typeNameLabel">BevelFOV.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/BevelFOV.html#calculateFOV-double:A:A-int-int-double-squidpony.squidgrid.Radius-double-double-">calculateFOV</a></span>(double[][]&nbsp;resistanceMap,
             int&nbsp;startX,
             int&nbsp;startY,
             double&nbsp;radius,
@@ -616,12 +640,24 @@ the order they are declared.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><span class="typeNameLabel">FOV.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/FOV.html#reuseFOV-double:A:A-double:A:A-int-int-double-squidpony.squidgrid.Radius-">reuseFOV</a></span>(double[][]&nbsp;resistanceMap,
+        double[][]&nbsp;light,
+        int&nbsp;startX,
+        int&nbsp;startY,
+        double&nbsp;radius,
+        <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusTechnique)</code>
+<div class="block">Calculates the Field Of View for the provided map from the given x, y
+ coordinates.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">LOS.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/LOS.html#setRadiusStrategy-squidpony.squidgrid.Radius-">setRadiusStrategy</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy)</code>
 <div class="block">Set the radius strategy to the given Radius; the default is CIRCLE if this is not called.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">LOS.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/LOS.html#spreadReachable-char:A:A-int-int-int-int-squidpony.squidgrid.Radius-int-">spreadReachable</a></span>(char[][]&nbsp;walls,
                int&nbsp;startx,
@@ -635,7 +671,7 @@ the order they are declared.</div>
  intervening obstructions.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">LOS.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/LOS.html#spreadReachable-double:A:A-int-int-int-int-squidpony.squidgrid.Radius-int-">spreadReachable</a></span>(double[][]&nbsp;resistanceMap,
                int&nbsp;startx,
@@ -787,6 +823,6 @@ the order they are declared.</div>
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

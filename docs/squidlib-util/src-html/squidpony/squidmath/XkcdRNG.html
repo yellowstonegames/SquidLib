@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.io.Serializable;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>/**<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * This implements the random number function from the "Random Number" XKCD comic, with minor compatibility changes.<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * https://xkcd.com/221/ See explanation here: https://www.explainxkcd.com/wiki/index.php/221:_Random_Number<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * The period of this generator is optimal for its state size. Its state size is 0 bits. Thus, its period is 1.<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * &lt;br&gt;<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Perhaps this is a good time to point out that none of our RandomnessSource implementations are truly random, but some<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * may be closer to random than others... or further from it.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * &lt;br&gt;<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * Primarily useful for benchmarking, when you want to test the absolute minimum work a RandomnessSource can do as a<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * control group in a larger benchmark.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> */<a name="line.15"></a>
+<span class="sourceLineNo">016</span>public class XkcdRNG implements RandomnessSource, Serializable {<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    private static final long serialVersionUID = 4L;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    /**<a name="line.18"></a>
+<span class="sourceLineNo">019</span>     * Constructs an XkcdRNG with the default state (0 bits) and corresponding qualities of randomness (period of 1).<a name="line.19"></a>
+<span class="sourceLineNo">020</span>     */<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    public XkcdRNG() {<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    }<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>    /**<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     * This takes a seed for some reason, but doesn't use it. I mean, why should XkcdRNG have to concern itself with<a name="line.25"></a>
+<span class="sourceLineNo">026</span>     * deterministic seeding using a user input, when it already has determinism down pat?<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     * @param seed whatever you want it to be<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     */<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    public XkcdRNG(final long seed) {<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    }<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>    /**<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     * Gets a random value that fits in the given number of bits. It doesn't actually use the bits parameter, so<a name="line.33"></a>
+<span class="sourceLineNo">034</span>     * technically you could request a negative bit count, or zero bits, and it will still give you "the loneliest<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     * number" every time.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * @param bits the number of bits to be returned; should usually be between 1 and 32 but I've stopped caring<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * @return Ein, uno, un, whatever you want to call it<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    @Override<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    public int next(int bits) {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        return 1;   // chosen by fair dice roll.<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        // guaranteed to be random.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * Gets a random long. A, singular. The number returned will always be coprime to all of:<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * &lt;ul&gt;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     *     &lt;li&gt;the number of fingers the user has, regardless of user (note: this includes non-human users),&lt;/li&gt;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     *     &lt;li&gt;the number of Twitter followers the developer writing the code has,&lt;/li&gt;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     *     &lt;li&gt;the number of protons in this universe,&lt;/li&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     *     &lt;li&gt;420,&lt;/li&gt;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     *     &lt;li&gt;the additive identity of the set of all integers,&lt;/li&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     *     &lt;li&gt;the answer to the question of life, the universe, and everything,&lt;/li&gt;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     *     &lt;li&gt;and all integers in the set of all integers, why not.&lt;/li&gt;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * &lt;/ul&gt;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * @return the loneliest number, as a long<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    @Override<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    public long nextLong() {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        return 1L;   // chosen by fair dice roll.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        // guaranteed to be random.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    }<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    /**<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * State? What state? This returns itself as a copy because it can.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * @return this XkcdRNG<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    @Override<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    public RandomnessSource copy() {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        return this;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    }<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>    /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * Gets a random int. A, singular. The number returned will always be coprime to all of:<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * &lt;ul&gt;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     *     &lt;li&gt;the number of fingers the user has, regardless of user (note: this includes non-human users),&lt;/li&gt;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     *     &lt;li&gt;the number of Twitter followers the developer writing the code has,&lt;/li&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     *     &lt;li&gt;the number of protons in this universe,&lt;/li&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     *     &lt;li&gt;420,&lt;/li&gt;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     *     &lt;li&gt;the additive identity of the set of all integers,&lt;/li&gt;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     *     &lt;li&gt;the answer to the question of life, the universe, and everything,&lt;/li&gt;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     *     &lt;li&gt;and all integers in the set of all integers, why not.&lt;/li&gt;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * &lt;/ul&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * @return the loneliest number, as an int<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    public int nextInt() {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        return 1;   // chosen by fair dice roll.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        // guaranteed to be random.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    }<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>    /**<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * Normally this would return a random number between lower and upper, but because actually generating a random<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * number seems kinda like it would require the computer to do extra work, this just returns lower. That's easier.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     *<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @param lower the lower bound, inclusive, can be positive or negative<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * @param upper the upper bound, exclusive, discarded, unused, we don't care what it wants to restrict us to<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * @return lower, as-is<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     */<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    public int nextInt(final int lower, final int upper) {<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        return lower;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    }<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span>    /**<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * Returns the probability of three independent, fair coin flips of the same coin all resulting in the same outcome.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * @return A quarter, as a double.<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     */<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    public double nextDouble() {<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        return 0x4p-4;   // chosen by fair "dice" roll.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        // guaranteed to be random.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    }<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>    /**<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * Returns outer times the probability of three independent, fair coin flips of the same coin all resulting in the<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * same outcome.<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * @return A quarter of outer, as a double.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     */<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    public double nextDouble(final double outer) {<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        return 0x4p-4 * outer;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    }<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>    /**<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * Returns the probability of three independent, fair coin flips of the same coin all resulting in the same outcome.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * @return A quarter, as a float.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     */<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    public float nextFloat() {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        return 0x4p-4f;   // chosen by fair "dice" roll.<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        // guaranteed to be random.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>    /**<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * Gets a boolean answer to this question, when I ask it of my dog: "Do you want to go for a WALK!?!?"<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     *<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * @return a highly uncertain boolean value. I mean, cosmic rays could hit your computer as you run this.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     */<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    public boolean nextBoolean() {<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        return true;   // chosen by fair coin flip.<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        // guaranteed to be random.<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>    @Override<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    public String toString() {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        return "XKCD Random Number Generator";<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>    @Override<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    public boolean equals(Object o) {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        if (this == o) return true;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        return  (o != null &amp;&amp; getClass() == o.getClass());<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    }<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>    @Override<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public int hashCode() {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        return 4;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
+<span class="sourceLineNo">155</span>}<a name="line.155"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

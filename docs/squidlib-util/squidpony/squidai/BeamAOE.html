@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidai/BeamAOE.html#line.42">BeamAOE</a>
+<pre>public class <a href="../../src-html/squidpony/squidai/BeamAOE.html#line.39">BeamAOE</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></pre>
 <div class="block">Beam Area of Effect that affects an slightly expanded (Elias) line from a given origin Coord out to a given length,
@@ -263,8 +263,8 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BeamAOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BeamAOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
 <div class="block">Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
  hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value
  is the collection of targets that will be hit if the associated key is used.</div>
@@ -272,9 +272,9 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BeamAOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BeamAOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+              <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</code>
 <div class="block">A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
  priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations
  that do not affect a Coord in requiredExclusions.</div>
@@ -282,7 +282,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BeamAOE.html#mayContainTarget-java.util.Set-">mayContainTarget</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/BeamAOE.html#mayContainTarget-java.util.Collection-">mayContainTarget</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</code>
 <div class="block">Given a Set of Points that the producer of the AOE wants to include in the region of this AOE, this method does
  a quick approximation to see if there is any possibility that the AOE as currently configured might include one
  of those Points within itself.</div>
@@ -395,7 +395,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>BeamAOE</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.53">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.50">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
                <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</pre>
 </li>
 </ul>
@@ -405,7 +405,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>BeamAOE</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.65">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.62">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
                <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
                int&nbsp;radius)</pre>
 </li>
@@ -416,7 +416,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>BeamAOE</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.77">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.74">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
                <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end,
                int&nbsp;radius,
                <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</pre>
@@ -428,7 +428,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>BeamAOE</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.103">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.100">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
                double&nbsp;angle,
                int&nbsp;length)</pre>
 </li>
@@ -439,7 +439,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>BeamAOE</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.117">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.114">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
                double&nbsp;angle,
                int&nbsp;length,
                int&nbsp;radius)</pre>
@@ -451,7 +451,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BeamAOE</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.131">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.128">BeamAOE</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin,
                double&nbsp;angle,
                int&nbsp;length,
                int&nbsp;radius,
@@ -472,7 +472,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getOrigin</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.174">getOrigin</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.171">getOrigin</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#getOrigin--">AOE</a></code></span></div>
 <div class="block">Get the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
  lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen
@@ -490,7 +490,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setOrigin</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.179">setOrigin</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.176">setOrigin</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;origin)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#setOrigin-squidpony.squidmath.Coord-">AOE</a></code></span></div>
 <div class="block">Set the position from which the AOE originates, which may be related to the location of the AOE's effect, as for
  lines, cones, and other emitted effects, or may be unrelated except for determining which enemies can be seen
@@ -508,7 +508,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getLimitType</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.186">getLimitType</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidai/AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.183">getLimitType</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#getLimitType--">AOE</a></code></span></div>
 <div class="block">Gets the AimLimit enum that can be used to restrict points this checks (defaults to null if not set).
  You can use limitType to restrict any Points that might be processed based on the given origin (which will be
@@ -539,7 +539,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getMinRange</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.191">getMinRange</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.188">getMinRange</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#getMinRange--">AOE</a></code></span></div>
 <div class="block">The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 <dl>
@@ -554,7 +554,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getMaxRange</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.196">getMaxRange</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.193">getMaxRange</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#getMaxRange--">AOE</a></code></span></div>
 <div class="block">The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 <dl>
@@ -569,7 +569,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getMetric</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.201">getMetric</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.198">getMetric</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#getMetric--">AOE</a></code></span></div>
 <div class="block">Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
  of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE
@@ -588,7 +588,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getReach</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidai/Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.212">getReach</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidai/Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.209">getReach</a>()</pre>
 <div class="block">Gets the same values returned by getLimitType(), getMinRange(), getMaxRange(), and getMetric() bundled into one
  Reach object.</div>
 <dl>
@@ -605,7 +605,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setLimitType</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.217">setLimitType</a>(<a href="../../squidpony/squidai/AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;limitType)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.214">setLimitType</a>(<a href="../../squidpony/squidai/AimLimit.html" title="enum in squidpony.squidai">AimLimit</a>&nbsp;limitType)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#setLimitType-squidpony.squidai.AimLimit-">AOE</a></code></span></div>
 <div class="block">You can use limitType to restrict any Points that might be processed based on the given origin (which will be
  used as the geometric origin for any calculations this makes) with AimLimit values having the following meanings:
@@ -638,7 +638,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setMinRange</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.223">setMinRange</a>(int&nbsp;minRange)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.220">setMinRange</a>(int&nbsp;minRange)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#setMinRange-int-">AOE</a></code></span></div>
 <div class="block">The minimum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 <dl>
@@ -653,7 +653,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setMaxRange</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.228">setMaxRange</a>(int&nbsp;maxRange)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.225">setMaxRange</a>(int&nbsp;maxRange)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#setMaxRange-int-">AOE</a></code></span></div>
 <div class="block">The maximum inclusive range that the AOE can be shift()-ed to using the distance measurement from radiusType.</div>
 <dl>
@@ -668,7 +668,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setMetric</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.235">setMetric</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.232">setMetric</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#setMetric-squidpony.squidgrid.Radius-">AOE</a></code></span></div>
 <div class="block">Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
  of minRange and maxRange. Not necessarily used for the implementation of the AOE (randomized-floodfill-based AOE
@@ -687,7 +687,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setReach</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.245">setReach</a>(<a href="../../squidpony/squidai/Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;reach)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.242">setReach</a>(<a href="../../squidpony/squidai/Reach.html" title="class in squidpony.squidai">Reach</a>&nbsp;reach)</pre>
 <div class="block">Sets the same values as setLimitType(), setMinRange(), setMaxRange(), and setMetric() using one Reach object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -703,7 +703,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getEnd</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.250">getEnd</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.247">getEnd</a>()</pre>
 </li>
 </ul>
 <a name="setEnd-squidpony.squidmath.Coord-">
@@ -712,7 +712,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setEnd</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.254">setEnd</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.251">setEnd</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</pre>
 </li>
 </ul>
 <a name="getRadius--">
@@ -721,7 +721,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getRadius</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.262">getRadius</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.259">getRadius</a>()</pre>
 </li>
 </ul>
 <a name="setRadius-int-">
@@ -730,7 +730,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setRadius</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.266">setRadius</a>(int&nbsp;radius)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.263">setRadius</a>(int&nbsp;radius)</pre>
 </li>
 </ul>
 <a name="getRadiusType--">
@@ -739,7 +739,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>getRadiusType</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.270">getRadiusType</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.267">getRadiusType</a>()</pre>
 </li>
 </ul>
 <a name="setRadiusType-squidpony.squidgrid.Radius-">
@@ -748,7 +748,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setRadiusType</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.274">setRadiusType</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.271">setRadiusType</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</pre>
 </li>
 </ul>
 <a name="shift-squidpony.squidmath.Coord-">
@@ -757,7 +757,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>shift</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.294">shift</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.291">shift</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;aim)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#shift-squidpony.squidmath.Coord-">AOE</a></code></span></div>
 <div class="block">After an AOE has been constructed, it may need to have the affected area shifted over to a different position
  without changing any other properties of the AOE. Some AOE implementations may have an origin where the AOE
@@ -771,14 +771,14 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </dl>
 </li>
 </ul>
-<a name="mayContainTarget-java.util.Set-">
+<a name="mayContainTarget-java.util.Collection-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>mayContainTarget</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.299">mayContainTarget</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#mayContainTarget-java.util.Set-">AOE</a></code></span></div>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.296">mayContainTarget</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#mayContainTarget-java.util.Collection-">AOE</a></code></span></div>
 <div class="block">Given a Set of Points that the producer of the AOE wants to include in the region of this AOE, this method does
  a quick approximation to see if there is any possibility that the AOE as currently configured might include one
  of those Points within itself. It does not do a full, detailed scan, nor does it count how many opponents might
@@ -788,23 +788,23 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
  FOV radius) because it prevents checking enemies on the other side of the map and through multiple walls.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidai/AOE.html#mayContainTarget-java.util.Set-">mayContainTarget</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
+<dd><code><a href="../../squidpony/squidai/AOE.html#mayContainTarget-java.util.Collection-">mayContainTarget</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>targets</code> - a Set of Points that are desirable targets to include in this AOE</dd>
+<dd><code>targets</code> - a Collection (usually a Set) of Points that are desirable targets to include in this AOE</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if there could be at least one target within the AOE, false otherwise. Very approximate.</dd>
 </dl>
 </li>
 </ul>
-<a name="idealLocations-java.util.Set-java.util.Set-">
+<a name="idealLocations-java.util.Collection-java.util.Collection-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>idealLocations</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.310">idealLocations</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
-                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-">AOE</a></code></span></div>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.307">idealLocations</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;targets,
+                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-">AOE</a></code></span></div>
 <div class="block">Returns a OrderedMap of Coord keys and ArrayList of Coord values, where each Coord key is an ideal location to
  hit as many of the Points in targets as possible without hitting any Points in requiredExclusions, and each value
  is the collection of targets that will be hit if the associated key is used. The length of any ArrayList in the
@@ -822,7 +822,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
  shift(Coord) with the location of some enemy (probably the closest) as its argument.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-">idealLocations</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
+<dd><code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-">idealLocations</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>targets</code> - a Set of Points that are desirable targets to include in this AOE</dd>
 <dd><code>requiredExclusions</code> - a Set of Points that this tries strongly to avoid including in this AOE</dd>
@@ -831,16 +831,16 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 </dl>
 </li>
 </ul>
-<a name="idealLocations-java.util.Set-java.util.Set-java.util.Set-">
+<a name="idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>idealLocations</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.455">idealLocations</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
-                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
-                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">AOE</a></code></span></div>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.452">idealLocations</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;priorityTargets,
+                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;lesserTargets,
+                                                         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;requiredExclusions)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">AOE</a></code></span></div>
 <div class="block">A variant of idealLocations that takes two groups of desirable targets, and will rate locations by how many
  priorityTargets are in the AOE, then by how many lesserTargets are in the AOE, and will only consider locations
  that do not affect a Coord in requiredExclusions. Unlike the variant of idealLocations that only takes one group
@@ -850,7 +850,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
  priorityTarget is worth four times what a lesserTarget is worth in the calculation this uses).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Set-java.util.Set-java.util.Set-">idealLocations</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
+<dd><code><a href="../../squidpony/squidai/AOE.html#idealLocations-java.util.Collection-java.util.Collection-java.util.Collection-">idealLocations</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>priorityTargets</code> - A Set of Points that are the most-wanted targets to include in this AOE</dd>
 <dd><code>lesserTargets</code> - A Set of Points that are the less-wanted targets to include in this AOE, should not overlap with priorityTargets</dd>
@@ -866,7 +866,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>setMap</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.742">setMap</a>(char[][]&nbsp;map)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.739">setMap</a>(char[][]&nbsp;map)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#setMap-char:A:A-">AOE</a></code></span></div>
 <div class="block">This must be called before any other methods, and takes a char[][] with '#' for walls, anything else for floors.
  It must be bounded with walls, which DungeonGenerator does automatically.</div>
@@ -884,7 +884,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockList">
 <li class="blockList">
 <h4>findArea</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.750">findArea</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.747">findArea</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidai/AOE.html#findArea--">AOE</a></code></span></div>
 <div class="block">This is how an AOE interacts with anything that uses it. It expects a map to have already been set with setMap,
  with '#' for walls, '.' for floors and potentially other chars that implementors can use if they are present in
@@ -908,7 +908,7 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setCache</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.771">setCache</a>(<a href="../../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a>&nbsp;cache)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidai/BeamAOE.html#line.768">setCache</a>(<a href="../../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a>&nbsp;cache)</pre>
 <div class="block">If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with
  some AOE implementations that rely on FOV. Not all implementations need to actually make use of the cache, but
  those that use FOV for calculations should benefit. The cache parameter this receives should have completed its
@@ -992,6 +992,6 @@ implements <a href="../../squidpony/squidai/AOE.html" title="interface in squidp
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

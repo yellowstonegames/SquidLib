@@ -17,7 +17,7 @@
 <span class="sourceLineNo">009</span>import java.util.List;<a name="line.9"></a>
 <span class="sourceLineNo">010</span><a name="line.10"></a>
 <span class="sourceLineNo">011</span>/**<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * A map generation factory using perlin noise to make island chain style maps.<a name="line.12"></a>
+<span class="sourceLineNo">012</span> * A map generation factory using Perlin noise to make island chain style maps.<a name="line.12"></a>
 <span class="sourceLineNo">013</span> *<a name="line.13"></a>
 <span class="sourceLineNo">014</span> * Based largely on work done by Metsa from #rgrd<a name="line.14"></a>
 <span class="sourceLineNo">015</span> *<a name="line.15"></a>
@@ -184,8 +184,8 @@
 <span class="sourceLineNo">176</span>        for (int x = 0; x &lt; width; x++) {<a name="line.176"></a>
 <span class="sourceLineNo">177</span>            for (int y = 0; y &lt; height; y++) {<a name="line.177"></a>
 <span class="sourceLineNo">178</span>                biomeMap[x][y] = 0;<a name="line.178"></a>
-<span class="sourceLineNo">179</span>                double distanceFromEquator = Math.abs(y - height / 2.0) / (height / 2.0);<a name="line.179"></a>
-<span class="sourceLineNo">180</span>                distanceFromEquator += PerlinNoise.noise(x / 32, y / 32) / 8 + map[x][y] / 32;<a name="line.180"></a>
+<span class="sourceLineNo">179</span>                double distanceFromEquator = Math.abs(y - height * 0.5) / (height * 0.5);<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                distanceFromEquator += PerlinNoise.noise(x * 0.0625, y * 0.0625) / 8 + map[x][y] / 32;<a name="line.180"></a>
 <span class="sourceLineNo">181</span>                if (distanceFromEquator &gt; POLAR_LIMIT) {<a name="line.181"></a>
 <span class="sourceLineNo">182</span>                    biomeMap[x][y] = 1;<a name="line.182"></a>
 <span class="sourceLineNo">183</span>                }<a name="line.183"></a>

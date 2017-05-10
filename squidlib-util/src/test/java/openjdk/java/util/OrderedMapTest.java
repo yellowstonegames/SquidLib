@@ -27,6 +27,7 @@ package openjdk.java.util;/*
  * @summary Basic test for OrderedMap.  (Based on OrderedMap, which is based on MapBash)
  */
 
+import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.OrderedMap;
 
 import java.io.ByteArrayInputStream;
@@ -121,6 +122,49 @@ public class OrderedMapTest {
                 throw new Exception("Weird ordered maps didn't respond correctly to removeAt(), keys");
             if(weird1.containsValue(weirdVal1) || weird2.containsValue(weirdVal2))
                 throw new Exception("Weird ordered maps didn't respond correctly to removeAt(), values");
+        }
+
+        int[] nil2 = new int[0];
+        for (int i=0; i<numItr; i++) {
+            OrderedMap<int[], int[]> m = new OrderedMap<>(CrossHash.generalHasher);
+            int[] head = nil2;
+
+            for (int j = 0; j < mapSize; j++) {
+                int[] newHead = new int[2];
+                do {
+                    newHead[0] = rnd.nextInt();
+                    newHead[1] = rnd.nextInt();
+                } while (m.containsKey(newHead));
+                m.put(newHead, head);
+                head = newHead;
+            }
+            if (m.size() != mapSize)
+                throw new Exception("Size not as expected.");
+
+            if (new OrderedMap(m).hashCode() != m.hashCode())
+                throw new Exception("Incorrect hashCode computation.");
+
+            Map<int[], int[]> m2 = new OrderedMap<>();
+            m2.putAll(m);
+            m2.values().removeAll(m.keySet());
+            if (m2.size() != 1 || !m2.containsValue(nil2))
+                throw new Exception("Collection views test failed.");
+
+            int j = 0;
+            while (head != nil2) {
+                if (!m.containsKey(head))
+                    throw new Exception("Linked list doesn't contain a link.");
+                int[] newHead = m.get(head);
+                if (newHead == null)
+                    throw new Exception("Could not retrieve a link.");
+                m.remove(head);
+                head = newHead;
+                j++;
+            }
+            if (!m.isEmpty())
+                throw new Exception("Map nonempty after removing all links.");
+            if (j != mapSize)
+                throw new Exception("Linked list size not as expected.");
         }
 
         Map m = new OrderedMap();
@@ -254,6 +298,7 @@ public class OrderedMapTest {
             throw new Exception("Clone: order not properly altered by read.");
 
          */
+
         System.err.println("Success.");
     }
 

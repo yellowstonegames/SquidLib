@@ -88,6 +88,12 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></span></code>
+<div class="block">Displays text and images in a grid pattern, like SquidPanel, but will automatically render certain chars as images.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidMessageBox.html" title="class in squidpony.squidgrid.gui.gdx">SquidMessageBox</a></span></code>
 <div class="block">A specialized SquidPanel that is meant for displaying messages in a scrolling pane.</div>
 </td>
@@ -216,10 +222,96 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setTextSize-int-int-">setTextSize</a></span>(int&nbsp;wide,
-           int&nbsp;high)</code>
+<td class="colLast"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setFromSnapshot-java.lang.String-">setFromSnapshot</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot)</code>
+<div class="block">Given a "snapshot" from <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setFromSnapshot-java.lang.StringBuilder-">setFromSnapshot</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot)</code>
+<div class="block">Given a "snapshot" from <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setFromSnapshot-java.lang.StringBuilder-int-int-">setFromSnapshot</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot,
+               int&nbsp;putX,
+               int&nbsp;putY)</code>
+<div class="block">Given a "snapshot" from <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ SquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot
+ (considering putX and putY as offsets) so they have the values stored in the snapshot.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setFromSnapshot-java.lang.StringBuilder-int-int-int-int-">setFromSnapshot</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot,
+               int&nbsp;putX,
+               int&nbsp;putY,
+               int&nbsp;limitWidth,
+               int&nbsp;limitHeight)</code>
+<div class="block">Given a "snapshot" from <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ SquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive) so
+ they have the values stored in the snapshot.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setFromSnapshot-java.lang.String-int-int-">setFromSnapshot</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot,
+               int&nbsp;putX,
+               int&nbsp;putY)</code>
+<div class="block">Given a "snapshot" from <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ SquidPanel from the position given by putX,putY (inclusive) up to the dimensions stored in the snapshot
+ (considering putX and putY as offsets) so they have the values stored in the snapshot.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setFromSnapshot-java.lang.String-int-int-int-int-">setFromSnapshot</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot,
+               int&nbsp;putX,
+               int&nbsp;putY,
+               int&nbsp;limitWidth,
+               int&nbsp;limitHeight)</code>
+<div class="block">Given a "snapshot" from <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
+ SquidPanel from the position given by putX,putY (inclusive) to putX+limitWidth,putY+limitHeight (exclusive) so
+ they have the values stored in the snapshot.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidPanel.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setTextSize-float-float-">setTextSize</a></span>(float&nbsp;wide,
+           float&nbsp;high)</code>
 <div class="block">Sets the size of the text in this SquidPanel (but not the size of the cells) to the given width and height in
  pixels (which may be stretched by viewports later on, if your program uses them).</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a> with parameters of type <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#setBackgroundLayer-squidpony.squidgrid.gui.gdx.SquidPanel-">setBackgroundLayer</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel)</code>
+<div class="block">Sets the background panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#setExtraPanel-squidpony.squidgrid.gui.gdx.SquidPanel-int-">setExtraPanel</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel,
+             int&nbsp;index)</code>
+<div class="block">Sets an extra panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#setForegroundLayer-squidpony.squidgrid.gui.gdx.SquidPanel-">setForegroundLayer</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel)</code>
+<div class="block">Sets the foreground panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).</div>
 </td>
 </tr>
 </tbody>
@@ -275,6 +367,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

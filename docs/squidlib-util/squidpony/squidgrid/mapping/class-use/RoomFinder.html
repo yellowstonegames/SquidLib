@@ -106,12 +106,31 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SectionDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#finder">finder</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">SectionDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#finder">finder</a></span></code>
+<div class="block">Potentially important if you need to identify specific rooms, corridors, or cave areas in a map.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Placement.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Placement.html#finder">finder</a></span></code>
 <div class="block">The RoomFinder this uses internally to find placement areas only where they are appropriate.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a> with parameters of type <a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SectionMap.</span><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/SectionMap.html#reinitialize-squidpony.squidgrid.mapping.RoomFinder-">reinitialize</a></span>(<a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</code>
+<div class="block">If this SectionMap hasn't been initialized or the map has completely changed (such as if the player went to a
+ different floor of a dungeon), then you can call this method to avoid discarding some of the state from an
+ earlier SectionMap.</div>
 </td>
 </tr>
 </tbody>
@@ -125,6 +144,13 @@
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/Placement.html#Placement-squidpony.squidgrid.mapping.RoomFinder-">Placement</a></span>(<a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;finder)</code>
 <div class="block">Constructs a Placement using the given RoomFinder, which will have collections of rooms, corridors, and caves.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/SectionMap.html#SectionMap-squidpony.squidgrid.mapping.RoomFinder-">SectionMap</a></span>(<a href="../../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping">RoomFinder</a>&nbsp;rf)</code>
+<div class="block">The preferred constructor; takes a RoomFinder (often one already created in dungeon generation and available via
+ <a href="../../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#finder"><code>SectionDungeonGenerator.finder</code></a>) and uses it to give unique String names and identifying numbers to each
+ room, corridor, and cave area that had been identified by that RoomFinder.</div>
 </td>
 </tr>
 </tbody>
@@ -181,6 +207,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

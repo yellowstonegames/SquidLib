@@ -9,7 +9,7 @@ import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * An AOE type that has a center Coord only and only affects that single Coord. Useful if you need an AOE implementation
@@ -55,7 +55,7 @@ public class PointAOE implements AOE {
     }
 
     @Override
-    public boolean mayContainTarget(Set<Coord> targets) {
+    public boolean mayContainTarget(Collection<Coord> targets) {
         for (Coord p : targets)
         {
             if(center.x == p.x && center.y == p.y)
@@ -65,7 +65,7 @@ public class PointAOE implements AOE {
     }
 
     @Override
-    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> targets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> targets, Collection<Coord> requiredExclusions) {
         if(targets == null)
             return new OrderedMap<>();
 
@@ -93,7 +93,7 @@ public class PointAOE implements AOE {
 
 
     @Override
-    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Set<Coord> priorityTargets, Set<Coord> lesserTargets, Set<Coord> requiredExclusions) {
+    public OrderedMap<Coord, ArrayList<Coord>> idealLocations(Collection<Coord> priorityTargets, Collection<Coord> lesserTargets, Collection<Coord> requiredExclusions) {
         if(priorityTargets == null)
             return idealLocations(lesserTargets, requiredExclusions);
         if(requiredExclusions == null) requiredExclusions = new OrderedSet<>();

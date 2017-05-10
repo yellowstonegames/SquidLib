@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":9,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,10 +117,39 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/Coord.html#line.12">Coord</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/Coord.html#line.41">Coord</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
-<div class="block">A 2D coordinate.
+<div class="block">A 2D coordinate with (constant) x and y fields. Coord objects are immutable; a single pool of Coord values, with
+ x and y each ranging from -3 to 255, is shared by all users of Coord. This pool helps reduce pressure on the
+ garbage collector when many Coord values would have been created for some purpose and quickly discarded; instead
+ of creating a new Coord with a constructor, you use the static method <a href="../../squidpony/squidmath/Coord.html#get-int-int-"><code>get(int, int)</code></a>, which retrieves an
+ already-existing Coord from the pool if possible, and always returns a usable Coord.
+ <br>
+ The Coord class is a fundamental part of SquidLib; any class that uses positions on a grid makes use of it here.
+ It finds usage naturally in classes throughout <a href="../../squidpony/squidgrid/package-summary.html"><code>squidpony.squidgrid</code></a>, with <a href="../../squidpony/squidgrid/zone/package-summary.html"><code>squidpony.squidgrid.zone</code></a>
+ providing an abstraction around groups of Coord and <a href="../../squidpony/squidgrid/iterator/package-summary.html"><code>squidpony.squidgrid.iterator</code></a> providing various ways to
+ iterate through the Coords that make up a larger shape. In this package, <a href="../../squidpony/squidmath/package-summary.html"><code>squidpony.squidmath</code></a>, a few classes
+ should be pointed out. <a href="../../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath"><code>CoordPacker</code></a> is a class with all static methods that provides various ways to compress
+ the memory usage of regions made of many Coord values (and can be constructed in other ways but still provide Coords
+ later), but since Coords don't use much memory anyway, the real use of the class is for manipulating the shapes and
+ sizes of the regions those Coords are part of. <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a> has similar functionality to CoordPacker, but
+ where CoordPacker is purely static, taking and returning regions as encoded, usually-low-memory-cost arrays of
+ <code>short</code> that it considers immutable, a GreasedRegion is a mutable object that allows the same region-altering
+ techniques to be applied in-place in a way that is relatively (very) low-time-cost. If deciding between the two,
+ GreasedRegion should usually be preferred, and CoordPacker cannot actually be used when storing regions in larger
+ than a 256x256 space (usually when the Coord pool has been expanded; see below); GreasedRegion can store potentially
+ large positions.
+ <br>
+ More on the Coord pool used by this class:  Coords can't always be retrieved from the pool; Coord.get constructs a
+ new Coord if one of x or y is unusually large (greater than 255) or too negative (below -3). The upper limit of 255
+ is not a hard rule; you can increase the limit on the pool by calling <a href="../../squidpony/squidmath/Coord.html#expandPoolTo-int-int-"><code>expandPoolTo(int, int)</code></a> or
+ <a href="../../squidpony/squidmath/Coord.html#expandPool-int-int-"><code>expandPool(int, int)</code></a>, which cause more memory to be spent initially on storing Coords but can save memory
+ or ease GC pressure over the long term by preventing duplicate Coords from being created many times. The pool can
+ never shrink because allowing that would cause completely unpredictable results if existing Coords were in use, or
+ could easily cause crashes on Android after resuming an application that had previously shrunken the pool due to
+ platform quirks. Long story short, you should only expand the pool size when your game needs a larger set of 2D
+ points it will commonly use, and in most cases you shouldn't need to change it at all.
  
  Created by Tommy Ettinger on 8/12/2015.</div>
 <dl>
@@ -342,7 +371,11 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr id="i24" class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#hashCode--">hashCode</a></span>()</code>
+<div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+ generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+ XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.</div>
+</td>
 </tr>
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -368,93 +401,105 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#makeEven--">makeEven</a></span>()</code>
+<div class="block">Gets a Coord based off this instance but with odd values for x and/or y decreased to the nearest even number.</div>
+</td>
+</tr>
+<tr id="i29" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#makeOdd--">makeOdd</a></span>()</code>
+<div class="block">Gets a Coord based off this instance but with even values for x and/or y increased to the nearest odd number.</div>
+</td>
+</tr>
+<tr id="i30" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#multiply-squidpony.squidmath.Coord-">multiply</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code>
 <div class="block">Separately multiplies the x and y positions of other from this Coord, producing a different Coord as their
  "product."</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#multiply-double-">multiply</a></span>(double&nbsp;operand)</code>
 <div class="block">Separately multiplies the x and y positions of this Coord by operand, rounding to the nearest int for each of x
  and y and producing a different Coord as their "product."</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#multiply-int-">multiply</a></span>(int&nbsp;operand)</code>
 <div class="block">Separately multiplies the x and y positions of this Coord by operand, producing a different Coord as their
  "product."</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#pureEncode-int-int-">pureEncode</a></span>(int&nbsp;x,
           int&nbsp;y)</code>
 <div class="block">An alternative to getting a Coord with Coord.get() only to encode() it as the next step.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#scale-int-">scale</a></span>(int&nbsp;i)</code>&nbsp;</td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#scale-int-int-">scale</a></span>(int&nbsp;i,
      int&nbsp;j)</code>&nbsp;</td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#setX-int-">setX</a></span>(int&nbsp;x)</code>&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#setY-int-">setY</a></span>(int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#subtract-squidpony.squidmath.Coord-">subtract</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code>
 <div class="block">Separately subtracts the x and y positions of other from this Coord, producing a different Coord as their
  "difference."</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#subtract-double-">subtract</a></span>(double&nbsp;operand)</code>
 <div class="block">Separately subtracts operand from the x and y positions of this Coord, rounding to the nearest int for each of x
  and y and producing a different Coord as their "difference."</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#subtract-int-">subtract</a></span>(int&nbsp;operand)</code>
 <div class="block">Separately subtracts operand from the x and y positions of this Coord, producing a different Coord as their
  "difference."</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#toGoTo-squidpony.squidmath.Coord-">toGoTo</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;adjacent)</code>
 <div class="block">Precondition: <code>this</code> is <a href="../../squidpony/squidmath/Coord.html#isAdjacent-squidpony.squidmath.Coord-"><code>adjacent</code></a> to
  <code>adjacent</code>.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#translate-squidpony.squidgrid.Direction-">translate</a></span>(<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</code>&nbsp;</td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#translate-int-int-">translate</a></span>(int&nbsp;x,
          int&nbsp;y)</code>
 <div class="block">Takes this Coord, adds x to its x and y to its y, and returns the Coord at that position.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#translateCapped-int-int-int-int-">translateCapped</a></span>(int&nbsp;x,
                int&nbsp;y,
@@ -492,7 +537,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>x</h4>
-<pre>public final&nbsp;int <a href="../../src-html/squidpony/squidmath/Coord.html#line.16">x</a></pre>
+<pre>public final&nbsp;int <a href="../../src-html/squidpony/squidmath/Coord.html#line.45">x</a></pre>
 <div class="block">The x-coordinate.</div>
 </li>
 </ul>
@@ -502,7 +547,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>y</h4>
-<pre>public final&nbsp;int <a href="../../src-html/squidpony/squidmath/Coord.html#line.19">y</a></pre>
+<pre>public final&nbsp;int <a href="../../src-html/squidpony/squidmath/Coord.html#line.48">y</a></pre>
 <div class="block">The y-coordinate (the ordinate)</div>
 </li>
 </ul>
@@ -520,7 +565,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Coord</h4>
-<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.21">Coord</a>()</pre>
+<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.50">Coord</a>()</pre>
 </li>
 </ul>
 <a name="Coord-int-int-">
@@ -529,7 +574,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Coord</h4>
-<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.25">Coord</a>(int&nbsp;x,
+<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.54">Coord</a>(int&nbsp;x,
                 int&nbsp;y)</pre>
 </li>
 </ul>
@@ -547,7 +592,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.30">get</a>(int&nbsp;x,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.59">get</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 </li>
 </ul>
@@ -557,7 +602,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>degrees</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.43">degrees</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;from,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.72">degrees</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;from,
                              <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;to)</pre>
 <div class="block">Gets the angle in degrees to go between two Coords; 0 is up.</div>
 <dl>
@@ -575,7 +620,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getLocation</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.57">getLocation</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.86">getLocation</a>()</pre>
 <div class="block">Provided for compatibility with earlier code that used the AWT Point API.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -589,7 +634,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.68">translate</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.97">translate</a>(int&nbsp;x,
                        int&nbsp;y)</pre>
 <div class="block">Takes this Coord, adds x to its x and y to its y, and returns the Coord at that position.</div>
 <dl>
@@ -607,7 +652,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>translateCapped</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.81">translateCapped</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.110">translateCapped</a>(int&nbsp;x,
                              int&nbsp;y,
                              int&nbsp;width,
                              int&nbsp;height)</pre>
@@ -630,7 +675,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.91">add</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.120">add</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
 <div class="block">Separately combines the x and y positions of this Coord and other, producing a different Coord as their "sum."</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -646,7 +691,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.102">add</a>(int&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.131">add</a>(int&nbsp;operand)</pre>
 <div class="block">Separately adds the x and y positions of this Coord to operand, producing a different Coord as their
  "sum."</div>
 <dl>
@@ -663,7 +708,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.114">add</a>(double&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.143">add</a>(double&nbsp;operand)</pre>
 <div class="block">Separately adds the x and y positions of this Coord to operand, rounding to the nearest int for each of x
  and y and producing a different Coord as their "sum."</div>
 <dl>
@@ -681,7 +726,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>subtract</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.125">subtract</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.154">subtract</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
 <div class="block">Separately subtracts the x and y positions of other from this Coord, producing a different Coord as their
  "difference."</div>
 <dl>
@@ -698,7 +743,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>subtract</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.136">subtract</a>(int&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.165">subtract</a>(int&nbsp;operand)</pre>
 <div class="block">Separately subtracts operand from the x and y positions of this Coord, producing a different Coord as their
  "difference."</div>
 <dl>
@@ -715,7 +760,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>subtract</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.148">subtract</a>(double&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.177">subtract</a>(double&nbsp;operand)</pre>
 <div class="block">Separately subtracts operand from the x and y positions of this Coord, rounding to the nearest int for each of x
  and y and producing a different Coord as their "difference."</div>
 <dl>
@@ -733,7 +778,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>multiply</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.158">multiply</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.187">multiply</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
 <div class="block">Separately multiplies the x and y positions of other from this Coord, producing a different Coord as their
  "product."</div>
 <dl>
@@ -750,7 +795,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>multiply</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.168">multiply</a>(int&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.197">multiply</a>(int&nbsp;operand)</pre>
 <div class="block">Separately multiplies the x and y positions of this Coord by operand, producing a different Coord as their
  "product."</div>
 <dl>
@@ -767,7 +812,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>multiply</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.180">multiply</a>(double&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.209">multiply</a>(double&nbsp;operand)</pre>
 <div class="block">Separately multiplies the x and y positions of this Coord by operand, rounding to the nearest int for each of x
  and y and producing a different Coord as their "product."</div>
 <dl>
@@ -785,7 +830,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>divide</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.191">divide</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.220">divide</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
 <div class="block">Separately divides the x and y positions of this Coord by other, producing a different Coord as their
  "quotient." If other has 0 for x or y, this will throw an exception, as dividing by 0 is expected to do.</div>
 <dl>
@@ -802,7 +847,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>divide</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.201">divide</a>(int&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.230">divide</a>(int&nbsp;operand)</pre>
 <div class="block">Separately divides the x and y positions of this Coord by operand, producing a different Coord as their
  "quotient." If operand is 0, this will throw an exception, as dividing by 0 is expected to do.</div>
 <dl>
@@ -819,7 +864,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>divide</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.214">divide</a>(double&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.243">divide</a>(double&nbsp;operand)</pre>
 <div class="block">Separately divides the x and y positions of this Coord by operand, flooring to a lower int for each of x and
  y and producing a different Coord as their "quotient." If operand is 0.0, expect strange results (infinity and
  NaN are both possibilities).</div>
@@ -838,7 +883,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>divideRounding</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.227">divideRounding</a>(double&nbsp;operand)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.256">divideRounding</a>(double&nbsp;operand)</pre>
 <div class="block">Separately divides the x and y positions of this Coord by operand, rounding to the nearest int for each of x and
  y and producing a different Coord as their "quotient." If operand is 0.0, expect strange results (infinity and
  NaN are both possibilities).</div>
@@ -857,7 +902,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>average</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.238">average</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.267">average</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
 <div class="block">Separately averages the x and y positions of this Coord with other, producing a different Coord as their
  "midpoint."</div>
 <dl>
@@ -874,7 +919,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.247">translate</a>(<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.276">translate</a>(<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>d</code> - A non-<code>null</code> direction.</dd>
@@ -889,7 +934,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scale</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.255">scale</a>(int&nbsp;i)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.284">scale</a>(int&nbsp;i)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>i</code> - </dd>
@@ -904,7 +949,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>scale</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.263">scale</a>(int&nbsp;i,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.292">scale</a>(int&nbsp;i,
                    int&nbsp;j)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -920,7 +965,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>distance</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.267">distance</a>(double&nbsp;x2,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.296">distance</a>(double&nbsp;x2,
                        double&nbsp;y2)</pre>
 </li>
 </ul>
@@ -930,7 +975,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>distance</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.271">distance</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;co)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.300">distance</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;co)</pre>
 </li>
 </ul>
 <a name="distanceSq-double-double-">
@@ -939,7 +984,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>distanceSq</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.275">distanceSq</a>(double&nbsp;x2,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.304">distanceSq</a>(double&nbsp;x2,
                          double&nbsp;y2)</pre>
 </li>
 </ul>
@@ -949,7 +994,39 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>distanceSq</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.279">distanceSq</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;co)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.308">distanceSq</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;co)</pre>
+</li>
+</ul>
+<a name="makeEven--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeEven</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.316">makeEven</a>()</pre>
+<div class="block">Gets a Coord based off this instance but with odd values for x and/or y decreased to the nearest even number.
+ May be useful for thin-wall maps as produced by <a href="../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>ThinDungeonGenerator</code></a> and used
+ with <a href="../../squidpony/squidgrid/Adjacency.ThinWallAdjacency.html" title="class in squidpony.squidgrid"><code>Adjacency.ThinWallAdjacency</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Coord (probably from the pool) with even x and even y, changing (decrementing) only if they are odd</dd>
+</dl>
+</li>
+</ul>
+<a name="makeOdd--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>makeOdd</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.327">makeOdd</a>()</pre>
+<div class="block">Gets a Coord based off this instance but with even values for x and/or y increased to the nearest odd number.
+ May be useful for thin-wall maps as produced by <a href="../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><code>ThinDungeonGenerator</code></a> and used
+ with <a href="../../squidpony/squidgrid/Adjacency.ThinWallAdjacency.html" title="class in squidpony.squidgrid"><code>Adjacency.ThinWallAdjacency</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Coord (probably from the pool) with odd x and odd y, changing (incrementing) only if they are even</dd>
+</dl>
 </li>
 </ul>
 <a name="isAdjacent-squidpony.squidmath.Coord-">
@@ -958,7 +1035,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>isAdjacent</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.289">isAdjacent</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.336">isAdjacent</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>c</code> - </dd>
@@ -974,7 +1051,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toGoTo</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.314">toGoTo</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;adjacent)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.361">toGoTo</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;adjacent)</pre>
 <div class="block">Precondition: <code>this</code> is <a href="../../squidpony/squidmath/Coord.html#isAdjacent-squidpony.squidmath.Coord-"><code>adjacent</code></a> to
  <code>adjacent</code>.</div>
 <dl>
@@ -996,7 +1073,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>isWithin</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.331">isWithin</a>(int&nbsp;width,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.401">isWithin</a>(int&nbsp;width,
                         int&nbsp;height)</pre>
 <div class="block">Returns true if x is between 0 (inclusive) and width (exclusive) and y is between 0 (inclusive) and height
  (exclusive), false otherwise.</div>
@@ -1015,7 +1092,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>isWithinRectangle</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.344">isWithinRectangle</a>(int&nbsp;minX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.414">isWithinRectangle</a>(int&nbsp;minX,
                                  int&nbsp;minY,
                                  int&nbsp;maxX,
                                  int&nbsp;maxY)</pre>
@@ -1038,7 +1115,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getX</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.348">getX</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.418">getX</a>()</pre>
 </li>
 </ul>
 <a name="setX-int-">
@@ -1047,7 +1124,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setX</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.352">setX</a>(int&nbsp;x)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.422">setX</a>(int&nbsp;x)</pre>
 </li>
 </ul>
 <a name="getY--">
@@ -1056,7 +1133,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getY</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.356">getY</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.426">getY</a>()</pre>
 </li>
 </ul>
 <a name="setY-int-">
@@ -1065,7 +1142,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setY</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.360">setY</a>(int&nbsp;y)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.430">setY</a>(int&nbsp;y)</pre>
 </li>
 </ul>
 <a name="toString--">
@@ -1074,7 +1151,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.365">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.435">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1087,10 +1164,22 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.371">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.454">hashCode</a>()</pre>
+<div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+ generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+ XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
+ <br>
+ This changed at least twice in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the same
+ across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
+ unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
+ <a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> and <a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>; if you use the ordered kinds, then the only things that matter about
+ this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
+ accurate than in the last version of this method).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int that should, for most different Coord values, be significantly different from the other hash codes</dd>
 </dl>
 </li>
 </ul>
@@ -1100,7 +1189,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>encode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.384">encode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.465">encode</a>()</pre>
 <div class="block">Something like hashCode(), but reversible with <code>Coord.decode()</code>. Works for Coords between roughly -256 and
  32000 in each of x and y, but will probably only decode to pooled Coords if x and y are both between -3 and 255
  (inclusive for both).</div>
@@ -1116,7 +1205,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>pureEncode</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.396">pureEncode</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.477">pureEncode</a>(int&nbsp;x,
                              int&nbsp;y)</pre>
 <div class="block">An alternative to getting a Coord with Coord.get() only to encode() it as the next step. This doesn't create a
  Coord in the middle step. Can be decoded with Coord.decode() to get the (x,y) Coord.</div>
@@ -1135,7 +1224,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>decode</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.409">decode</a>(int&nbsp;code)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.490">decode</a>(int&nbsp;code)</pre>
 <div class="block">This can take an int produced by <code>someCoord.encode()</code> and get the original Coord back out of it. It
  works for all pooled Coords where the pool hasn't been expanded past about 32,000 in either dimension. It even
  works for Coords with negative x or y as well, if they are no lower than -256 in either dimension. This will
@@ -1155,7 +1244,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.415">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.496">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1168,7 +1257,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getCacheWidth</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.442">getCacheWidth</a>()</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.523">getCacheWidth</a>()</pre>
 <div class="block">Gets the width of the pool used as a cache for Coords, not including negative Coords.
  Unless expandPool() has been called, this should be 256.
  Useful for finding the upper (exclusive) bound for x values that can be used efficiently in Coords.
@@ -1187,7 +1276,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getCacheHeight</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.456">getCacheHeight</a>()</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.537">getCacheHeight</a>()</pre>
 <div class="block">Gets the height of the pool used as a cache for Coords, not including negative Coords.
  Unless expandPool() has been called, this should be 256.
  Useful for finding the upper (exclusive) bound for y values that can be used efficiently in Coords.
@@ -1206,7 +1295,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>expandPoolTo</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.474">expandPoolTo</a>(int&nbsp;width,
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.555">expandPoolTo</a>(int&nbsp;width,
                                 int&nbsp;height)</pre>
 <div class="block">Enlarges the pool of cached Coords to the given width and height, and doesn't change
  a dimension if it would be reduced in size.
@@ -1230,7 +1319,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>expandPool</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.489">expandPool</a>(int&nbsp;xIncrease,
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.570">expandPool</a>(int&nbsp;xIncrease,
                               int&nbsp;yIncrease)</pre>
 <div class="block">Enlarges the pool of cached Coords by the given amount of expansion for x and y.
  Cached Coord values will be reused by Coord.get instead of re-allocated each time.
@@ -1314,6 +1403,6 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

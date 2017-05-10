@@ -1,9 +1,12 @@
 package squidpony.squidgrid.zone;
 
-import java.util.List;
-
 import squidpony.squidgrid.zone.Zone.Skeleton;
 import squidpony.squidmath.Coord;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A zone defined by a {@link List}.
@@ -20,6 +23,15 @@ public class ListZone extends Skeleton {
 		this.coords = coords;
 	}
 
+	public ListZone(Coord[] coords) {
+		this.coords = new ArrayList<Coord>(coords.length);
+		Collections.addAll(this.coords, coords);
+	}
+
+	public ListZone(Collection<Coord> coordCollection)
+	{
+		this.coords = new ArrayList<>(coordCollection);
+	}
 	@Override
 	public boolean isEmpty() {
 		return coords.isEmpty();

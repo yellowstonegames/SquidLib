@@ -52,8 +52,8 @@ public interface Rectangle extends Zone {
 		};
 
 		/**
-         * @param r a Rectangle
-         * @param c a Coord to check against r for presence
+     * @param r a Rectangle
+     * @param c a Coord to check against r for presence
 		 * @return Whether {@code r} contains {@code c}.
 		 */
 		public static boolean contains(Rectangle r, Coord c) {
@@ -223,7 +223,7 @@ public interface Rectangle extends Zone {
 		 *            An array of (at least) size 4, to hold the 4 corners. It
 		 *            is returned, except if {@code null} or too small, in which
 		 *            case a fresh array is returned.
-		 * @return
+		 * @return buf, if it had length of at least 4, or a new 4-element array; it contains this Rectangle's 4 corners
 		 */
 		public static Coord[] getAll4Corners(Rectangle r, Coord[] buf) {
 			final Coord[] result = buf == null || buf.length < 4 ? new Coord[4] : buf;
@@ -312,6 +312,10 @@ public interface Rectangle extends Zone {
 			this.bottomLeft = bottomLeft;
 			this.width = width;
 			this.height = height;
+		}
+
+		public Impl expand8way(int distance) {
+			return new Impl(bottomLeft.translate(-1,-1), width+2,height+2);
 		}
 
 		@Override

@@ -5,6 +5,10 @@ squidpony.squidai
 squidpony.squidgrid
 squidpony.squidgrid.iterator
 squidpony.squidgrid.mapping
+squidpony.squidgrid.mapping.locks
+squidpony.squidgrid.mapping.locks.constraints
+squidpony.squidgrid.mapping.locks.generators
+squidpony.squidgrid.mapping.locks.util
 squidpony.squidgrid.mapping.styled
 squidpony.squidgrid.zone
 squidpony.squidmath

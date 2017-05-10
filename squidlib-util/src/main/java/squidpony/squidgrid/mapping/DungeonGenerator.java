@@ -3,13 +3,16 @@ package squidpony.squidgrid.mapping;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.PoissonDisk;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumMap;
-
-import static squidpony.squidmath.CoordPacker.*;
 
 /**
  * The primary way to create a more-complete dungeon, layering different effects and modifications on top of
@@ -40,11 +43,9 @@ import static squidpony.squidmath.CoordPacker.*;
  * As of March 6, 2016, the algorithm this uses to place water and grass was swapped for a more precise version. You no
  * longer need to give this 150% in addWater or addGrass to effectively produce 100% water or grass, and this should be
  * no more than 1.1% different from the percentage you request for any effects. If you need to reproduce dungeons with
- * the same seed and get the same (imprecise) results as before this change, you can use a subclass of this,
- * LegacyDungeonGenerator, which needs the same "150% means 100%, 75% means 50%" adjustments as before. The API should
- * be identical, and both will return DungeonGenerator values when they return something for chaining.
+ * the same seed and get the same (imprecise) results as before this change, it's probably not possible unless you save
+ * the previously-generated char[][] dungeons, since several other things may have changed as well.
  * @see squidpony.squidgrid.mapping.DungeonUtility this class exposes a DungeonUtility member; DungeonUtility also has many useful static methods
- * @see squidpony.squidgrid.mapping.LegacyDungeonGenerator for the less-precise behavior; at least it's consistent
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - https://github.com/tommyettinger
@@ -163,7 +164,10 @@ public class DungeonGenerator {
 
     /**
      * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
-     * adding features will be a LightRNG using a random seed.
+     * adding features will be a LightRNG using a random seed. If width or height is greater than 256, then this will
+     * expand the Coord pool from its 256x256 default so it stores a reference to each Coord that might be used in the
+     * creation of the dungeon (if width and height are 300 and 300, the Coord pool will be 300x300; if width and height
+     * are 500 and 100, the Coord pool will be 500x256 because it won't shrink below the default size of 256x256).
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      */
@@ -173,7 +177,11 @@ public class DungeonGenerator {
     }
 
     /**
-     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.
+     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG. If width or
+     * height is greater than 256, then this will expand the Coord pool from its 256x256 default so it stores a
+     * reference to each Coord that might be used in the creation of the dungeon (if width and height are 300 and 300,
+     * the Coord pool will be 300x300; if width and height are 500 and 100, the Coord pool will be 500x256 because it
+     * won't shrink below the default size of 256x256).
      * @param width The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      * @param rng The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
@@ -181,6 +189,7 @@ public class DungeonGenerator {
      */
     public DungeonGenerator(int width, int height, RNG rng)
     {
+        Coord.expandPoolTo(width, height);
         this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
         gen = new DungeonBoneGen(this.rng);
         utility = new DungeonUtility(this.rng);
@@ -202,6 +211,7 @@ public class DungeonGenerator {
         rebuildSeed = rng.getState();
         height = copying.height;
         width = copying.width;
+        Coord.expandPoolTo(width, height);
         fx = new EnumMap<>(copying.fx);
         dungeon = copying.dungeon;
     }
@@ -687,8 +697,8 @@ public class DungeonGenerator {
                 }
             }
         }
-        short[] floors = pack(map, '.'), working;
-        floorCount = count(floors);
+        GreasedRegion floors = new GreasedRegion(map, '.'), working = new GreasedRegion(width, height);
+        floorCount = floors.size();
         float waterRate = waterFill / 100.0f, grassRate = grassFill / 100.0f;
         if(waterRate + grassRate > 1.0f)
         {
@@ -703,20 +713,19 @@ public class DungeonGenerator {
         Coord[] scatter;
         int remainingWater = targetWater, remainingGrass = targetGrass;
         if(targetWater > 0) {
-            scatter = fractionPacked(floors, 7);
-            scatter = rng.shuffle(scatter, new Coord[scatter.length]);
-            ArrayList<Coord> allWater = new ArrayList<>(targetWater);
+            scatter = floors.quasiRandomSeparated(1.0 / 7.0);
+            rng.shuffleInPlace(scatter);
+            GreasedRegion allWater = new GreasedRegion(width, height);
             for (int i = 0; i < scatter.length; i++) {
-                if (remainingWater > 5) //remainingWater >= targetWater * 0.02 &&
+                if (remainingWater > 5)
                 {
-                    if(!queryPacked(floors, scatter[i].x, scatter[i].y))
+                    if(!floors.contains(scatter[i]))
                         continue;
-                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingWater, sizeWaterPools)), rng);
+                    working.empty().insert(scatter[i]).spill(floors, rng.between(4, Math.min(remainingWater, sizeWaterPools)), rng);
 
-                    floors = differencePacked(floors, working);
-                    Coord[] pts = allPacked(working);
-                    remainingWater -= pts.length;
-                    Collections.addAll(allWater, pts);
+                    floors.andNot(working);
+                    remainingWater -= working.size();
+                    allWater.addAll(working);
                 } else
                     break;
             }
@@ -735,22 +744,17 @@ public class DungeonGenerator {
             }
         }
         if(targetGrass > 0) {
-            scatter = fractionPacked(floors, 7);
-            scatter = rng.shuffle(scatter, new Coord[scatter.length]);
-            Coord p;
+            scatter = floors.quasiRandomSeparated(1.03/6.7);
+            rng.shuffleInPlace(scatter);
             for (int i = 0; i < scatter.length; i++) {
                 if (remainingGrass > 5) //remainingGrass >= targetGrass * 0.02 &&
                 {
-                    working = spill(floors, packOne(scatter[i]), rng.between(4, Math.min(remainingGrass, sizeGrassPools)), rng);
-                    if (working.length == 0)
+                    working.empty().insert(scatter[i]).spill(floors, rng.between(4, Math.min(remainingGrass, sizeGrassPools)), rng);
+                    if (working.isEmpty())
                         continue;
-                    floors = differencePacked(floors, working);
-                    Coord[] pts = allPacked(working);
-                    remainingGrass -= pts.length;
-                    for (int c = 0; c < pts.length; c++) {
-                        p = pts[c];
-                        map[p.x][p.y] = '"';
-                    }
+                    floors.andNot(working);
+                    remainingGrass -= working.size();
+                    map = working.inverseMask(map, '"');
                 } else
                     break;
             }

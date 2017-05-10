@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -212,7 +212,11 @@ extends <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord3D.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord3D.html#hashCode--">hashCode</a></span>()</code>
+<div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+ generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+ XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -233,13 +237,17 @@ extends <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony
  and the provided one.</div>
 </td>
 </tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord3D.html#toString--">toString</a></span>()</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.squidpony.squidmath.Coord">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></h3>
-<code><a href="../../squidpony/squidmath/Coord.html#add-squidpony.squidmath.Coord-">add</a>, <a href="../../squidpony/squidmath/Coord.html#add-double-">add</a>, <a href="../../squidpony/squidmath/Coord.html#add-int-">add</a>, <a href="../../squidpony/squidmath/Coord.html#average-squidpony.squidmath.Coord-">average</a>, <a href="../../squidpony/squidmath/Coord.html#decode-int-">decode</a>, <a href="../../squidpony/squidmath/Coord.html#degrees-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">degrees</a>, <a href="../../squidpony/squidmath/Coord.html#distance-squidpony.squidmath.Coord-">distance</a>, <a href="../../squidpony/squidmath/Coord.html#distance-double-double-">distance</a>, <a href="../../squidpony/squidmath/Coord.html#distanceSq-squidpony.squidmath.Coord-">distanceSq</a>, <a href="../../squidpony/squidmath/Coord.html#distanceSq-double-double-">distanceSq</a>, <a href="../../squidpony/squidmath/Coord.html#divide-squidpony.squidmath.Coord-">divide</a>, <a href="../../squidpony/squidmath/Coord.html#divide-double-">divide</a>, <a href="../../squidpony/squidmath/Coord.html#divide-int-">divide</a>, <a href="../../squidpony/squidmath/Coord.html#divideRounding-double-">divideRounding</a>, <a href="../../squidpony/squidmath/Coord.html#encode--">encode</a>, <a href="../../squidpony/squidmath/Coord.html#expandPool-int-int-">expandPool</a>, <a href="../../squidpony/squidmath/Coord.html#expandPoolTo-int-int-">expandPoolTo</a>, <a href="../../squidpony/squidmath/Coord.html#get-int-int-">get</a>, <a href="../../squidpony/squidmath/Coord.html#getCacheHeight--">getCacheHeight</a>, <a href="../../squidpony/squidmath/Coord.html#getCacheWidth--">getCacheWidth</a>, <a href="../../squidpony/squidmath/Coord.html#getLocation--">getLocation</a>, <a href="../../squidpony/squidmath/Coord.html#getX--">getX</a>, <a href="../../squidpony/squidmath/Coord.html#getY--">getY</a>, <a href="../../squidpony/squidmath/Coord.html#isAdjacent-squidpony.squidmath.Coord-">isAdjacent</a>, <a href="../../squidpony/squidmath/Coord.html#isWithin-int-int-">isWithin</a>, <a href="../../squidpony/squidmath/Coord.html#isWithinRectangle-int-int-int-int-">isWithinRectangle</a>, <a href="../../squidpony/squidmath/Coord.html#multiply-squidpony.squidmath.Coord-">multiply</a>, <a href="../../squidpony/squidmath/Coord.html#multiply-double-">multiply</a>, <a href="../../squidpony/squidmath/Coord.html#multiply-int-">multiply</a>, <a href="../../squidpony/squidmath/Coord.html#pureEncode-int-int-">pureEncode</a>, <a href="../../squidpony/squidmath/Coord.html#scale-int-">scale</a>, <a href="../../squidpony/squidmath/Coord.html#scale-int-int-">scale</a>, <a href="../../squidpony/squidmath/Coord.html#setX-int-">setX</a>, <a href="../../squidpony/squidmath/Coord.html#setY-int-">setY</a>, <a href="../../squidpony/squidmath/Coord.html#subtract-squidpony.squidmath.Coord-">subtract</a>, <a href="../../squidpony/squidmath/Coord.html#subtract-double-">subtract</a>, <a href="../../squidpony/squidmath/Coord.html#subtract-int-">subtract</a>, <a href="../../squidpony/squidmath/Coord.html#toGoTo-squidpony.squidmath.Coord-">toGoTo</a>, <a href="../../squidpony/squidmath/Coord.html#toString--">toString</a>, <a href="../../squidpony/squidmath/Coord.html#translate-squidpony.squidgrid.Direction-">translate</a>, <a href="../../squidpony/squidmath/Coord.html#translate-int-int-">translate</a>, <a href="../../squidpony/squidmath/Coord.html#translateCapped-int-int-int-int-">translateCapped</a></code></li>
+<code><a href="../../squidpony/squidmath/Coord.html#add-squidpony.squidmath.Coord-">add</a>, <a href="../../squidpony/squidmath/Coord.html#add-double-">add</a>, <a href="../../squidpony/squidmath/Coord.html#add-int-">add</a>, <a href="../../squidpony/squidmath/Coord.html#average-squidpony.squidmath.Coord-">average</a>, <a href="../../squidpony/squidmath/Coord.html#decode-int-">decode</a>, <a href="../../squidpony/squidmath/Coord.html#degrees-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">degrees</a>, <a href="../../squidpony/squidmath/Coord.html#distance-squidpony.squidmath.Coord-">distance</a>, <a href="../../squidpony/squidmath/Coord.html#distance-double-double-">distance</a>, <a href="../../squidpony/squidmath/Coord.html#distanceSq-squidpony.squidmath.Coord-">distanceSq</a>, <a href="../../squidpony/squidmath/Coord.html#distanceSq-double-double-">distanceSq</a>, <a href="../../squidpony/squidmath/Coord.html#divide-squidpony.squidmath.Coord-">divide</a>, <a href="../../squidpony/squidmath/Coord.html#divide-double-">divide</a>, <a href="../../squidpony/squidmath/Coord.html#divide-int-">divide</a>, <a href="../../squidpony/squidmath/Coord.html#divideRounding-double-">divideRounding</a>, <a href="../../squidpony/squidmath/Coord.html#encode--">encode</a>, <a href="../../squidpony/squidmath/Coord.html#expandPool-int-int-">expandPool</a>, <a href="../../squidpony/squidmath/Coord.html#expandPoolTo-int-int-">expandPoolTo</a>, <a href="../../squidpony/squidmath/Coord.html#get-int-int-">get</a>, <a href="../../squidpony/squidmath/Coord.html#getCacheHeight--">getCacheHeight</a>, <a href="../../squidpony/squidmath/Coord.html#getCacheWidth--">getCacheWidth</a>, <a href="../../squidpony/squidmath/Coord.html#getLocation--">getLocation</a>, <a href="../../squidpony/squidmath/Coord.html#getX--">getX</a>, <a href="../../squidpony/squidmath/Coord.html#getY--">getY</a>, <a href="../../squidpony/squidmath/Coord.html#isAdjacent-squidpony.squidmath.Coord-">isAdjacent</a>, <a href="../../squidpony/squidmath/Coord.html#isWithin-int-int-">isWithin</a>, <a href="../../squidpony/squidmath/Coord.html#isWithinRectangle-int-int-int-int-">isWithinRectangle</a>, <a href="../../squidpony/squidmath/Coord.html#makeEven--">makeEven</a>, <a href="../../squidpony/squidmath/Coord.html#makeOdd--">makeOdd</a>, <a href="../../squidpony/squidmath/Coord.html#multiply-squidpony.squidmath.Coord-">multiply</a>, <a href="../../squidpony/squidmath/Coord.html#multiply-double-">multiply</a>, <a href="../../squidpony/squidmath/Coord.html#multiply-int-">multiply</a>, <a href="../../squidpony/squidmath/Coord.html#pureEncode-int-int-">pureEncode</a>, <a href="../../squidpony/squidmath/Coord.html#scale-int-">scale</a>, <a href="../../squidpony/squidmath/Coord.html#scale-int-int-">scale</a>, <a href="../../squidpony/squidmath/Coord.html#setX-int-">setX</a>, <a href="../../squidpony/squidmath/Coord.html#setY-int-">setY</a>, <a href="../../squidpony/squidmath/Coord.html#subtract-squidpony.squidmath.Coord-">subtract</a>, <a href="../../squidpony/squidmath/Coord.html#subtract-double-">subtract</a>, <a href="../../squidpony/squidmath/Coord.html#subtract-int-">subtract</a>, <a href="../../squidpony/squidmath/Coord.html#toGoTo-squidpony.squidmath.Coord-">toGoTo</a>, <a href="../../squidpony/squidmath/Coord.html#translate-squidpony.squidgrid.Direction-">translate</a>, <a href="../../squidpony/squidmath/Coord.html#translate-int-int-">translate</a>, <a href="../../squidpony/squidmath/Coord.html#translateCapped-int-int-int-int-">translateCapped</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -387,22 +395,48 @@ extends <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony
 <li class="blockList">
 <h4>hashCode</h4>
 <pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord3D.html#line.82">hashCode</a>()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../squidpony/squidmath/Coord.html#hashCode--">Coord</a></code></span></div>
+<div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
+ generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
+ XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
+ <br>
+ This changed at least twice in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the same
+ across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
+ unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
+ <a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> and <a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>; if you use the ordered kinds, then the only things that matter about
+ this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
+ accurate than in the last version of this method).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/Coord.html#hashCode--">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int that should, for most different Coord values, be significantly different from the other hash codes</dd>
 </dl>
 </li>
 </ul>
 <a name="equals-java.lang.Object-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
 <pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord3D.html#line.91">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/Coord.html#equals-java.lang.Object-">equals</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="toString--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>toString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord3D.html#line.101">toString</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/Coord.html#toString--">toString</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -475,6 +509,6 @@ extends <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

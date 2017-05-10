@@ -5,11 +5,16 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.OrderedSet;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+import static com.badlogic.gdx.math.MathUtils.clamp;
 
 /**
  * A helper class to make using multiple SquidPanels easier.
@@ -28,10 +33,9 @@ public class SquidLayers extends Group {
     protected ArrayList<SquidPanel> extraPanels;
     protected TextCellFactory textFactory;
     protected ArrayList<Color> palette;
-    protected boolean[][] values;
     protected float animationDuration;
 
-    public static final char EMPTY_CELL = '\0';
+    public static final char EMPTY_CELL = ' ';
     /**
      * The pixel width of the entire map.
      *
@@ -199,9 +203,16 @@ public class SquidLayers extends Group {
     }
 
     /**
-     * Create a new SquidLayers widget with a default font (it will be square if cellWidth and cellHeight are equal, or
-     * narrow otherwise), the given number of cells for gridWidth
-     * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     * Create a new SquidLayers widget with a default stretchable font (it will adapt to the cellWidth and cellHeight
+     * you give it), the given number of cells for gridWidth and gridHeight, and the size in pixels for each cell
+     * given by cellWidth and cellHeight.
+     * <br>
+     * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
+     * does not render correctly:
+     * <ul>
+     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
+     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * </ul>
      *
      * @param gridWidth  in grid cells
      * @param gridHeight in grid cells
@@ -255,9 +266,16 @@ public class SquidLayers extends Group {
                 DefaultResources.getSCC(), DefaultResources.getSCC());
     }
     /**
-     * Create a new SquidLayers widget with a default font (it will be square if cellWidth and cellHeight are equal, or
-     * narrow otherwise), the given number of cells for gridWidth
-     * and gridHeight, and the size in pixels for each cell given by cellWidth and cellHeight.
+     * Create a new SquidLayers widget with a default stretchable font (it will adapt to the cellWidth and cellHeight
+     * you give it), the given number of cells for gridWidth and gridHeight, the size in pixels for each cell
+     * given by cellWidth and cellHeight, and the given SquidColorCenter instances to affect colors.
+     * <br>
+     * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
+     * does not render correctly:
+     * <ul>
+     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.fnt</li>
+     * <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Inconsolata-LGC-Custom-distance.png</li>
+     * </ul>
      *
      * @param gridWidth  in grid cells
      * @param gridHeight in grid cells
@@ -268,39 +286,8 @@ public class SquidLayers extends Group {
      */
     public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight,
                        SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter) {
-        initPalettes();
-        width = gridWidth;
-        height = gridHeight;
-
-        this.cellWidth = cellWidth;
-        this.cellHeight = cellHeight;
-
-        lightnesses = new int[width][height];
-        values = new boolean[width][height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                lightnesses[x][y] = 256;
-            }
-        }
-
-        textFactory = new TextCellFactory();
-        if (cellHeight == cellWidth) {
-            textFactory = textFactory.defaultSquareFont();
-        } else {
-            textFactory = textFactory.defaultNarrowFont();
-        }
-        textFactory = textFactory.width(cellWidth).height(cellHeight).initBySize();
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
-
-        animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
-
-        extraPanels = new ArrayList<>();
-
-        addActorAt(0, backgroundPanel);
-        addActorAt(2, foregroundPanel);
-
-        setSize(backgroundPanel.getWidth(), backgroundPanel.getHeight());
+        this(gridWidth, gridHeight, cellWidth, cellHeight, DefaultResources.getStretchableFont(),
+                bgColorCenter, fgColorCenter);
     }
 
     /**
@@ -351,6 +338,24 @@ public class SquidLayers extends Group {
      */
     public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, TextCellFactory tcf,
                        SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter) {
+        this(gridWidth, gridHeight, cellWidth, cellHeight, tcf, bgColorCenter, fgColorCenter, null);
+    }
+    /**
+     * Create a new SquidLayers widget with the given TextCellFactory, the given number of cells for gridWidth
+     * and gridHeight, the size in pixels for each cell given by cellWidth and cellHeight, and the given
+     * SquidColorCenters for background and foreground. Consider using the overloads that take either a path
+     * to a .fnt font file or a BitmapFont for simplicity.
+     *
+     * @param gridWidth  in grid cells
+     * @param gridHeight in grid cells
+     * @param cellWidth  in pixels
+     * @param cellHeight in pixels
+     * @param tcf   A TextCellFactory that will be (re-)initialized here with the given cellHeight and cellWidth.
+     * @param bgColorCenter a SquidColorCenter (possibly with a filter) to use for the background
+     * @param fgColorCenter a SquidColorCenter (possibly with a filter) to use for the foreground
+     */
+    public SquidLayers(int gridWidth, int gridHeight, int cellWidth, int cellHeight, TextCellFactory tcf,
+                       SquidColorCenter bgColorCenter, SquidColorCenter fgColorCenter, char[][] actualMap) {
         initPalettes();
 
         width = gridWidth;
@@ -359,19 +364,20 @@ public class SquidLayers extends Group {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
 
-        lightnesses = new int[width][height];
-        values = new boolean[width][height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                lightnesses[x][y] = 256;
-            }
-        }
-
         textFactory = tcf.width(cellWidth).height(cellHeight).initBySize();
 
-        backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
-        foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
-
+        if(actualMap == null || actualMap.length <= 0)
+        {
+            backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
+            foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
+            lightnesses = ArrayTools.fill(256, width, height);
+        }
+        else
+        {
+            backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter, 0, 0, ArrayTools.fill(' ', actualMap.length, actualMap[0].length));
+            foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter, 0, 0, actualMap);
+            lightnesses = ArrayTools.fill(256, actualMap.length, actualMap[0].length);
+        }
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
         extraPanels = new ArrayList<>();
@@ -448,7 +454,12 @@ public class SquidLayers extends Group {
      * @return this for chaining
      */
     public SquidLayers addExtraLayer() {
-        SquidPanel sp = new SquidPanel(width, height, textFactory);
+        SquidPanel sp;
+        if(width != foregroundPanel.getTotalWidth() || height != foregroundPanel.getTotalHeight())
+            sp = new SquidPanel(width, height, textFactory, foregroundPanel.getColorCenter(), 0, 0,
+                    ArrayTools.fill(' ', foregroundPanel.getTotalWidth(), foregroundPanel.getTotalHeight()));
+        else
+            sp = new SquidPanel(width, height, textFactory);
         addActor(sp);
         extraPanels.add(sp);
         return this;
@@ -493,7 +504,7 @@ public class SquidLayers extends Group {
      * @param high the height of a glyph in pixels
      * @return this for chaining
      */
-    public SquidLayers setTextSize(int layer, int wide, int high)
+    public SquidLayers setTextSize(int layer, float wide, float high)
     {
         SquidPanel p = backgroundPanel;
         switch (layer) {
@@ -518,7 +529,7 @@ public class SquidLayers extends Group {
      * @param high the height of a glyph in pixels
      * @return this for chaining
      */
-    public SquidLayers setTextSize(int wide, int high)
+    public SquidLayers setTextSize(float wide, float high)
     {
         textFactory.tweakHeight(high).tweakWidth(wide).initBySize();
         setTextSize(0, wide, high);
@@ -539,7 +550,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char c) {
         foregroundPanel.put(x, y, c);
-        values[x][y] = true;
         return this;
     }
 
@@ -553,21 +563,32 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char c, int foregroundIndex) {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
-        values[x][y] = true;
         return this;
     }
 
     /**
-     * Place a char c into the foreground, with a foreground color specified by an index into the default palette.
+     * Place a char c into the foreground, with a foreground color as a libGDX Color (or SColor).
      *
      * @param x               in grid cells.
      * @param y               in grid cells.
      * @param c               a character to be drawn in the foreground
-     * @param foreground    Color for the char being drawn
+     * @param foreground      Color for the char being drawn
      */
     public SquidLayers put(int x, int y, char c, Color foreground) {
         foregroundPanel.put(x, y, c, foreground);
-        values[x][y] = true;
+        return this;
+    }
+
+    /**
+     * Place a char c into the foreground, with a foreground color as a packed float.
+     *
+     * @param x                  in grid cells.
+     * @param y                  in grid cells.
+     * @param c                  a character to be drawn in the foreground
+     * @param encodedForeground  float encoding the color for the char being drawn
+     */
+    public SquidLayers put(int x, int y, char c, float encodedForeground) {
+        foregroundPanel.put(x, y, c, encodedForeground);
         return this;
     }
 
@@ -584,7 +605,6 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, int foregroundIndex, int backgroundIndex) {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
         backgroundPanel.put(x, y, backgroundIndex, palette);
-        values[x][y] = true;
         return this;
     }
     /**
@@ -600,14 +620,14 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, Color foreground, Color background) {
         foregroundPanel.put(x, y, c, foreground);
         backgroundPanel.put(x, y, background);
-        values[x][y] = true;
         return this;
     }
 
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into the default palette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -617,11 +637,8 @@ public class SquidLayers extends Group {
      * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
     public SquidLayers put(int x, int y, char c, int foregroundIndex, int backgroundIndex, int backgroundLightness) {
-        backgroundLightness = clamp(backgroundLightness, -255, 255);
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
-        values[x][y] = true;
-        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
-        backgroundPanel.put(x, y, palette.get(backgroundIndex), lightnesses[x][y] / 512f);
+        backgroundPanel.put(x, y, palette.get(backgroundIndex), (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
         return this;
     }
     /**
@@ -639,38 +656,116 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char c, ArrayList<Color> alternatePalette, int foregroundIndex, int backgroundIndex, int backgroundLightness) {
         foregroundPanel.put(x, y, c, foregroundIndex, alternatePalette);
-        values[x][y] = true;
-        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
-
-        backgroundPanel.put(x, y, alternatePalette.get(backgroundIndex), lightnesses[x][y] / 512f);
+        backgroundPanel.put(x, y, alternatePalette.get(backgroundIndex), (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
         return this;
     }
 
     /**
      * Place a char c into the foreground, with a foreground and background libGDX Color and a lightness variation for
-     * the background (0 is no change, 255 will nearly double the brightness (capping at white), -255 will reduce the
-     * color to nearly black (for most colors, all the way to black), and values in between will be proportional..
+     * the background (255 will make the background equal the background panel's
+     * {@link SquidPanel#getLightingColor()}, -255 will use the background as-is, and values in between will be
+     * linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
      * @param c                   a character to be drawn in the foreground
      * @param foreground            Color for the char being drawn
      * @param background            Color for the background
-     * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
+     * @param backgroundLightness int between -255 and 255 , lower numbers are changed less, higher changed closer to the lighting color
      */
     public SquidLayers put(int x, int y, char c, Color foreground, Color background, int backgroundLightness) {
         foregroundPanel.put(x, y, c, foreground);
-        values[x][y] = true;
-        lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
+        backgroundPanel.put(x, y, background, (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
+        return this;
+    }
 
-        backgroundPanel.put(x, y, background, lightnesses[x][y] / 512f);
+    /**
+     * Place a char c into the foreground, with a foreground and background libGDX Color and a lightness variation for
+     * the background (255 will make the background equal the background panel's
+     * {@link SquidPanel#getLightingColor()}, -255 will use the background as-is, and values in between will be
+     * linearly interpolated between those two extremes).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param foreground          Color for the char being drawn
+     * @param background          Color for the background
+     * @param mixAmount           int between -255 and 255 , lower numbers are changed less, higher changed closer to mixBackground
+     * @param mixBackground       Color to mix with the background, dependent on mixAmount
+     */
+    public SquidLayers put(int x, int y, char c, Color foreground, Color background, int mixAmount, Color mixBackground) {
+        foregroundPanel.put(x, y, c, foreground);
+        backgroundPanel.put(x, y, background,
+                (lightnesses[x][y] = 256 + clamp(mixAmount, -255, 255)) * 0.001953125f,
+                mixBackground);
+        return this;
+    }
+    /**
+     * Place a char c into the foreground, with a foreground and background color each encoded as a packed float and a
+     * lightness variation for the background (255 will make the background equal the background panel's
+     * {@link SquidPanel#getLightingColor()}, -255 will use encodedBackground as-is, and values in between will be
+     * linearly interpolated between those two extremes).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param encodedForeground   float encoding the color for the char being drawn
+     * @param encodedBackground   float encoding the color for the background
+     * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
+     */
+    public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, int backgroundLightness) {
+        foregroundPanel.put(x, y, c, encodedForeground);
+        backgroundPanel.put(x, y, encodedBackground,
+                (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
+        return this;
+    }
+    /**
+     * Place a char c into the foreground, with a foreground, background, and mix color (which affects the background)
+     * each encoded as a packed float and a lightness variation for the background (255 will make the background equal
+     * mixColor, -255 will use encodedBackground as-is, and values in between will be linearly interpolated between
+     * those two extremes).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param encodedForeground   float encoding the color for the char being drawn
+     * @param encodedBackground   float encoding the color for the background
+     * @param backgroundLightness int between -255 and 255 , lower numbers are darker, higher lighter.
+     * @param mixBackground       float encoding a color to mix with the background instead of the normal lighting color
+     */
+    public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, int backgroundLightness, float mixBackground) {
+        foregroundPanel.put(x, y, c, encodedForeground);
+        backgroundPanel.put(x, y, encodedBackground,
+                (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f, mixBackground);
+        return this;
+    }
+    /**
+     * Place a char c into the foreground, with a foreground, background, and mix color (which affects the background)
+     * each encoded as a packed float and a lightness variation for the background (using the style that SquidPanel
+     * does, with the "lightness" a float between 0.0f and 1.0f inclusive, encodedBackground used on its own for 0
+     * lightness, mixBackground used on its own for 1 lightness, and values in between mixing the two).
+     *
+     * @param x                   in grid cells.
+     * @param y                   in grid cells.
+     * @param c                   a character to be drawn in the foreground
+     * @param encodedForeground   float encoding the color for the char being drawn
+     * @param encodedBackground   float encoding the color for the background
+     * @param backgroundLightness float between 0.0f and 1.0f (both inclusive); higher means closer to mixBackground
+     * @param mixBackground       float encoding a color to mix with the background instead of the normal lighting color
+     */
+    public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, float backgroundLightness, float mixBackground) {
+        foregroundPanel.put(x, y, c, encodedForeground);
+        lightnesses[x][y] = (int)(backgroundLightness * 512);
+        backgroundPanel.put(x, y, encodedBackground,
+                backgroundLightness, mixBackground);
         return this;
     }
 
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -685,49 +780,34 @@ public class SquidLayers extends Group {
         if (fgPalette == null) fgPalette = palette;
         if (bgPalette == null) bgPalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, fgPalette);
-        values[x][y] = true;
         lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255);
 
-        backgroundPanel.put(x, y, bgPalette.get(backgroundIndex), lightnesses[x][y] / 512f);
+        backgroundPanel.put(x, y, bgPalette.get(backgroundIndex), lightnesses[x][y] * 0.001953125f);
         return this;
     }
 
 
     public SquidLayers put(int x, int y, char[][] c) {
         foregroundPanel.put(x, y, c);
-        for (int i = x; i < c.length && i < width; i++) {
-            for (int j = y; j < c[i].length && j < height; j++) {
-                values[i][j] = true;
-            }
-        }
         return this;
     }
 
     public SquidLayers put(int x, int y, char[][] c, int[][] foregroundIndex) {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
-        for (int i = x; i < c.length && i < width; i++) {
-            for (int j = y; j < c[i].length && j < height; j++) {
-                values[i][j] = true;
-            }
-        }
         return this;
     }
 
     public SquidLayers put(int x, int y, char c[][], int[][] foregroundIndex, int[][] backgroundIndex) {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
-        for (int i = x; i < c.length && i < width; i++) {
-            for (int j = y; j < c[i].length && j < height; j++) {
-                values[i][j] = true;
-            }
-        }
         backgroundPanel.put(x, y, backgroundIndex, palette);
         return this;
     }
 
     /**
      * Place a char[][] c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -738,11 +818,10 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char[][] c, int[][] foregroundIndex, int[][] backgroundIndex, int[][] backgroundLightness) {
         foregroundPanel.put(x, y, c, foregroundIndex, palette);
-        for (int i = x; i < width && i-x < backgroundLightness.length; i++) {
-            for (int j = y; j < height && j - y < backgroundLightness[i].length; j++) {
+        for (int i = x; i < getTotalWidth() && i-x < backgroundLightness.length; i++) {
+            for (int j = y; j < getTotalHeight() && j - y < backgroundLightness[i].length; j++) {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i-x][j-y], -255, 255);
-                values[i][j] = true;
-                backgroundPanel.put(i, j, palette.get(backgroundIndex[i-x][j-y]), lightnesses[i][j] / 512f);
+                backgroundPanel.put(i, j, palette.get(backgroundIndex[i-x][j-y]), lightnesses[i][j] * 0.001953125f);
 
             }
         }
@@ -751,8 +830,9 @@ public class SquidLayers extends Group {
 
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -766,11 +846,10 @@ public class SquidLayers extends Group {
 
         if (alternatePalette == null) alternatePalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, alternatePalette);
-        for (int i = x; i < width && i - x < backgroundLightness.length; i++) {
-            for (int j = y; j < height && j - y < backgroundLightness[i].length; j++) {
+        for (int i = x; i < getTotalWidth() && i - x < backgroundLightness.length; i++) {
+            for (int j = y; j < getTotalHeight() && j - y < backgroundLightness[i].length; j++) {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i-x][j-y], -255, 255);
-                values[i][j] = true;
-                backgroundPanel.put(i, j, alternatePalette.get(backgroundIndex[i-x][j-y]), lightnesses[i][j] / 512f);
+                backgroundPanel.put(i, j, alternatePalette.get(backgroundIndex[i-x][j-y]), lightnesses[i][j] * 0.001953125f);
 
             }
         }
@@ -778,8 +857,9 @@ public class SquidLayers extends Group {
     }
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -791,11 +871,10 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char[][] c, Color[][] foregrounds, Color[][] backgrounds, int[][] backgroundLightness) {
 
         foregroundPanel.put(x, y, c, foregrounds);
-        for (int i = x; i < width && i - x < backgroundLightness.length; i++) {
-            for (int j = y; j < height && j - y < backgroundLightness[i].length; j++) {
+        for (int i = x; i < getTotalWidth() && i - x < backgroundLightness.length; i++) {
+            for (int j = y; j < getTotalHeight() && j - y < backgroundLightness[i].length; j++) {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i-x][j-y], -255, 255);
-                values[i][j] = true;
-                backgroundPanel.put(i, j, backgrounds[i-x][j-y], lightnesses[i][j] / 512f);
+                backgroundPanel.put(i, j, backgrounds[i-x][j-y], lightnesses[i][j] * 0.001953125f);
             }
         }
         return this;
@@ -803,8 +882,9 @@ public class SquidLayers extends Group {
 
     /**
      * Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
-     * background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
-     * very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).
+     * background color specified in the same way, and a lightness variation for the background (255 will make the
+     * background equal the background panel's {@link SquidPanel#getLightingColor()}, -255 will use the background
+     * as-is, and values in between will be linearly interpolated between those two extremes).
      *
      * @param x                   in grid cells.
      * @param y                   in grid cells.
@@ -819,11 +899,10 @@ public class SquidLayers extends Group {
         if (fgPalette == null) fgPalette = palette;
         if (bgPalette == null) bgPalette = palette;
         foregroundPanel.put(x, y, c, foregroundIndex, fgPalette);
-        for (int i = x; i < width && i - x < backgroundLightness.length; i++) {
-            for (int j = y; j < height && j - y < backgroundLightness[i].length; j++) {
+        for (int i = x; i < getTotalWidth() && i - x < backgroundLightness.length; i++) {
+            for (int j = y; j < getTotalHeight() && j - y < backgroundLightness[i].length; j++) {
                 lightnesses[i][j] = 256 + clamp(backgroundLightness[i-x][j-y], -255, 255);
-                values[i][j] = true;
-                backgroundPanel.put(i, j, bgPalette.get(backgroundIndex[i-x][j-y]), lightnesses[i-x][j-y] / 512f);
+                backgroundPanel.put(i, j, bgPalette.get(backgroundIndex[i-x][j-y]), lightnesses[i-x][j-y] * 0.001953125f);
 
             }
         }
@@ -840,7 +919,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putInto(int layer, int x, int y, char c) {
         getLayer(layer).put(x, y, c);
-        values[x][y] = true;
         return this;
     }
 
@@ -855,7 +933,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putInto(int layer, int x, int y, char c, int colorIndex) {
         getLayer(layer).put(x, y, c, colorIndex, palette);
-        values[x][y] = true;
         return this;
     }
 
@@ -872,7 +949,6 @@ public class SquidLayers extends Group {
     public SquidLayers putInto(int layer, int x, int y, char c, ArrayList<Color> alternatePalette, int colorIndex) {
         if (alternatePalette == null) alternatePalette = palette;
         getLayer(layer).put(x, y, c, colorIndex, alternatePalette);
-        values[x][y] = true;
         return this;
     }
 
@@ -887,7 +963,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putInto(int layer, int x, int y, char c, Color color) {
         getLayer(layer).put(x, y, c, color);
-        values[x][y] = true;
         return this;
     }
     /**
@@ -900,11 +975,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putInto(int layer, int x, int y, char[][] c) {
         getLayer(layer).put(x, y, c);
-        for (int i = x; i < c.length && i < width; i++) {
-            for (int j = y; j < c[i].length && j < height; j++) {
-                values[i][j] = true;
-            }
-        }
         return this;
     }
 
@@ -919,11 +989,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putInto(int layer, int x, int y, char[][] c, int[][] colorIndex) {
         getLayer(layer).put(x, y, c, colorIndex, palette);
-        for (int i = x; i < c.length && i < width; i++) {
-            for (int j = y; j < c[i].length && j < height; j++) {
-                values[i][j] = true;
-            }
-        }
         return this;
     }
 
@@ -940,11 +1005,6 @@ public class SquidLayers extends Group {
     public SquidLayers putInto(int layer, int x, int y, char[][] c, ArrayList<Color> alternatePalette, int[][] colorIndex) {
         if (alternatePalette == null) alternatePalette = palette;
         getLayer(layer).put(x, y, c, colorIndex, alternatePalette);
-        for (int i = x; i < c.length && i < width; i++) {
-            for (int j = y; j < c[i].length && j < height; j++) {
-                values[i][j] = true;
-            }
-        }
         return this;
     }
 
@@ -959,11 +1019,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putInto(int layer, int x, int y, char[][] c, Color[][] colors) {
         getLayer(layer).put(x, y, c, colors);
-        for (int i = x; i < c.length && i < width; i++) {
-            for (int j = y; j < c[i].length && j < height; j++) {
-                values[i][j] = true;
-            }
-        }
         return this;
     }
 
@@ -1008,7 +1063,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putString(int x, int y, String s, int foregroundIndex, int backgroundIndex) {
         foregroundPanel.put(x, y, s, palette.get(foregroundIndex));
-        for (int i = x; i < s.length() && i < width; i++) {
+        for (int i = x; i < s.length() && i < getTotalWidth(); i++) {
             backgroundPanel.put(i, y, palette.get(backgroundIndex));
         }
         return this;
@@ -1028,7 +1083,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putString(int x, int y, String s, ArrayList<Color> alternatePalette, int foregroundIndex, int backgroundIndex) {
         foregroundPanel.put(x, y, s, alternatePalette.get(foregroundIndex));
-        for (int i = x; i < s.length() && i < width; i++) {
+        for (int i = x; i < s.length() && i < getTotalWidth(); i++) {
             backgroundPanel.put(i, y, alternatePalette.get(backgroundIndex));
         }
         return this;
@@ -1046,7 +1101,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putString(int x, int y, String s, Color foreground, Color background) {
         foregroundPanel.put(x, y, s, foreground);
-        for (int i = x; i < s.length() && i < width; i++) {
+        for (int i = x; i < s.length() && i < getTotalWidth(); i++) {
             backgroundPanel.put(i, y, background);
         }
         return this;
@@ -1062,14 +1117,14 @@ public class SquidLayers extends Group {
      * @return this, for chaining
      */
     public SquidLayers putBoxedString(int x, int y, String s) {
-        if (y > 0 && y + 1 < height && x > 0 && x + 1 < width) {
-            for (int j = y - 1; j < y + 2 && j < height; j++) {
-                for (int i = x - 1; i < s.length() + x + 2 && i < width; i++) {
+        if (y > 0 && y + 1 < getTotalHeight() && x > 0 && x + 1 < getTotalWidth()) {
+            for (int j = y - 1; j < y + 2 && j < getTotalHeight(); j++) {
+                for (int i = x - 1; i < s.length() + x + 2 && i < getTotalWidth(); i++) {
                     foregroundPanel.put(i, j, ' ');
                     lightnesses[i][j] = -255;
 
                     backgroundPanel.put(i, j, backgroundPanel.getAt(i, j),
-                            palette.get(9), 0f / 512f);
+                            palette.get(9), 0f * 0.001953125f);
                 }
             }
         }
@@ -1090,7 +1145,7 @@ public class SquidLayers extends Group {
         lightnesses[x][y] = 256 + clamp(lightness, -255, 255);
 
         backgroundPanel.put(x, y, backgroundPanel.getAt(x, y),
-                backgroundPanel.getColorAt(x, y), lightnesses[x][y] / 512f);
+                backgroundPanel.getColorAt(x, y), lightnesses[x][y] * 0.001953125f);
         return this;
     }
     /**
@@ -1102,25 +1157,26 @@ public class SquidLayers extends Group {
      * @param lightness int[][] with elements between -255 and 255 , lower numbers are darker, higher lighter.
      */
     public SquidLayers highlight(int x, int y, int[][] lightness) {
-        for (int i = 0; i < lightness.length && x + i < width; i++) {
-            for (int j = 0; j < lightness[i].length && y + j < height; j++) {
+        for (int i = 0; i < lightness.length && x + i < getTotalWidth(); i++) {
+            for (int j = 0; j < lightness[i].length && y + j < getTotalHeight(); j++) {
                 lightnesses[x+i][y+j] = 256 + clamp(lightness[i][j], -255, 255);;
                 backgroundPanel.put(x, y, backgroundPanel.getAt(x, y),
-                        backgroundPanel.getColorAt(x, y), lightnesses[i][j] / 512f);
+                        backgroundPanel.getColorAt(x, y), lightnesses[i][j] * 0.001953125f);
             }
         }
         return this;
     }
     /**
-     * Very basic check to see if something was rendered at the x,y cell requested. (usually this only checks the
-     * foreground) If blank, false, otherwise true.
+     * Very basic check to see if something was rendered at the x,y cell requested; this only checks the
+     * foreground. If the foreground contains the character {@code ' '} at the given position or has not
+     * been assigned a value at that position, then this returns false, otherwise it returns true.
      *
      * @param x in grid cells.
      * @param y in grid cells.
      * @return true if something was rendered in the foreground at the given x,y position
      */
     public boolean hasValue(int x, int y) {
-        return values[x][y];
+        return foregroundPanel.getAt(x, y) != ' ';
     }
 
     /**
@@ -1134,7 +1190,6 @@ public class SquidLayers extends Group {
      */
     public SquidLayers clear(int x, int y) {
         foregroundPanel.clear(x, y);
-        values[x][y] = false;
         return this;
     }
 
@@ -1154,11 +1209,6 @@ public class SquidLayers extends Group {
         backgroundPanel.erase();
         for (SquidPanel sp : extraPanels) {
             sp.erase();
-        }
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                values[i][j] = false;
-            }
         }
         return this;
     }
@@ -1202,7 +1252,6 @@ public class SquidLayers extends Group {
     public SquidLayers slide(AnimatedEntity ae, int endX, int endY) {
         return slide(ae, endX, endY, 2, -1);
     }
-
     public SquidLayers wiggle(int x, int y, int layer, float duration) {
         if (duration < 0)
             duration = animationDuration;
@@ -1430,11 +1479,6 @@ public class SquidLayers extends Group {
         return backgroundPanel.getLightingColor();
     }
 
-    private int clamp(int x, int min, int max)
-    {
-        return Math.min(Math.max(min, x), max);
-    }
-
 
     /**
      * Sets the position of the actor's bottom left corner.
@@ -1473,9 +1517,82 @@ public class SquidLayers extends Group {
     {
         return foregroundPanel;
     }
+
+    /**
+     * Sets the foreground panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
+     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and
+     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}
+     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.
+     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have
+     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it
+     * affect {@code panel} here.
+     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size
+     */
+    public void setForegroundLayer(SquidPanel panel)
+    {
+        if(panel != null)
+        {
+            removeActor(foregroundPanel);
+            foregroundPanel = panel;
+            addActorAt(2, panel);
+
+        }
+    }
     public SquidPanel getBackgroundLayer()
     {
         return backgroundPanel;
+    }
+    /**
+     * Sets the background panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
+     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and
+     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}
+     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.
+     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have
+     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it
+     * affect {@code panel} here.
+     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size
+     */
+    public void setBackgroundLayer(SquidPanel panel)
+    {
+
+        if(panel != null)
+        {
+            removeActor(backgroundPanel);
+            backgroundPanel = panel;
+            addActorAt(0, panel);
+        }
+    }
+    /**
+     * Sets an extra panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).
+     * This tries to find the SquidPanel at the given index in the extra panels that may have been added to this with
+     * {@link #addExtraLayer()}; if index is invalid because it is negative, this does nothing. If index is higher
+     * than the highest index for a layer, this will simply add {@code panel} to the extra panels, possibly at an
+     * earlier index (it will use the next available index, which could easily be 0 or 1). If index is valid, this sets
+     * the extra panel at that index to {@code panel}, without changes.
+     * This does not do any validation of size, but the {@link SquidPanel#getTotalWidth()} and
+     * {@link SquidPanel#getTotalHeight()} of panel should almost always match this object's {@link #getTotalWidth()}
+     * and {@link #getTotalHeight()}, though there are good reasons why the cell sizes or text sizes might not match.
+     * This method is probably most useful when you want a system of {@link ImageSquidPanel} layers; as long as you have
+     * the reference to an ImageSquidPanel outside this class, you can call its additional methods there and have it
+     * affect {@code panel} here.
+     * @param panel a SquidPanel, ImageSquidPanel, or other subclass of SquidPanel that should have identical size
+     * @param index the 0-based index into the extra panels list to try to assign panel to, or to append panel to
+     */
+
+    public void setExtraPanel(SquidPanel panel, int index)
+    {
+        if(index < 0 || panel == null || extraPanels == null)
+            return;
+        if(index - 3 >= extraPanels.size()) {
+            extraPanels.add(panel);
+            addActor(panel);
+        }
+        else
+        {
+            removeActor(extraPanels.get(index - 3));
+            extraPanels.set(index - 3, panel);
+            addActorAt(index, panel);
+        }
     }
 
 
@@ -1501,5 +1618,36 @@ public class SquidLayers extends Group {
         backgroundPanel.setOffsets(x, y);
         for(SquidPanel p : extraPanels)
             p.setOffsets(x, y);
+    }
+    public int getGridOffsetX()
+    {
+        return foregroundPanel.getGridOffsetX();
+    }
+    public int getGridOffsetY()
+    {
+        return foregroundPanel.getGridOffsetY();
+    }
+    public void setGridOffsetX (int offset)
+    {
+        foregroundPanel.setGridOffsetX(offset);
+        backgroundPanel.setGridOffsetX(offset);
+        for(SquidPanel sp : extraPanels)
+            sp.setGridOffsetX(offset);
+    }
+    public void setGridOffsetY (int offset)
+    {
+        foregroundPanel.setGridOffsetY(offset);
+        backgroundPanel.setGridOffsetY(offset);
+        for(SquidPanel sp : extraPanels)
+            sp.setGridOffsetY(offset);
+    }
+
+    public int getTotalWidth()
+    {
+        return foregroundPanel.getTotalWidth();
+    }
+    public int getTotalHeight()
+    {
+        return foregroundPanel.getTotalHeight();
     }
 }

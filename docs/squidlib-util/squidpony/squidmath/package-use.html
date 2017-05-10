@@ -113,6 +113,24 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks">squidpony.squidgrid.mapping.locks</a></td>
+<td class="colLast">
+<div class="block">Lock-and-key puzzle generation from MetaZelda, https://github.com/tcoxon/metazelda (BSD-licensed).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.constraints">squidpony.squidgrid.mapping.locks.constraints</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.generators">squidpony.squidgrid.mapping.locks.generators</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.locks.util">squidpony.squidgrid.mapping.locks.util</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidgrid.mapping.styled">squidpony.squidgrid.mapping.styled</a></td>
 <td class="colLast">
 <div class="block">Support code for working with tiled dungeon generation; normally only TilesetType is used outside SquidLib.</div>
@@ -141,8 +159,19 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Arrangement.html#squidpony">Arrangement</a>
+<div class="block">A bi-directional mapping of objects to positions in an ordering (which this generates), and vice versa.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony">Coord</a>
-<div class="block">A 2D coordinate.</div>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/CrossHash.IHasher.html#squidpony">CrossHash.IHasher</a>
+<div class="block">An interface that can be used to move the logic for the hashCode() and equals() methods from a class' methods to
+ an implementation of IHasher that certain collections in SquidLib can use.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -152,27 +181,46 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/GreasedRegion.html#squidpony">GreasedRegion</a>
+<div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.html#squidpony">IntDoubleOrderedMap</a>
 <div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntVLA.html#squidpony">IntVLA</a>
+<div class="block">A resizable, ordered or unordered variable-length int array.</div>
+</td>
+</tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/K2.html#squidpony">K2</a>
+<div class="block">An ordered bidirectional map-like data structure, with unique A keys and unique B keys updated together like a map
+ that can be queried by A keys, B keys, or int indices.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.html#squidpony">OrderedMap</a>
-<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap but modified to support indexed access.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony">OrderedSet</a>
-<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but modified to support indexed access.</div>
+<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap
+ but modified to support indexed access of keys, values, and entries, reordering, and optional hash strategies for
+ array keys (which fastutil does differently).</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony">RNG</a>
-<div class="block">A wrapper class for working with random number generators in a more friendly
- way.</div>
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony">OrderedSet</a>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony">RNG</a>
+<div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/StatefulRNG.html#squidpony">StatefulRNG</a>
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
@@ -192,33 +240,41 @@
 <tbody>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidai">Coord</a>
-<div class="block">A 2D coordinate.</div>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/GreasedRegion.html#squidpony.squidai">GreasedRegion</a>
+<div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.html#squidpony.squidai">IntDoubleOrderedMap</a>
 <div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntVLA.html#squidpony.squidai">IntVLA</a>
 <div class="block">A resizable, ordered or unordered variable-length int array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.html#squidpony.squidai">OrderedMap</a>
-<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap but modified to support indexed access.</div>
+<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap
+ but modified to support indexed access of keys, values, and entries, reordering, and optional hash strategies for
+ array keys (which fastutil does differently).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony.squidai">OrderedSet</a>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony.squidai">OrderedSet</a>
-<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but modified to support indexed access.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony.squidai">RNG</a>
-<div class="block">A wrapper class for working with random number generators in a more friendly
- way.</div>
+<div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
 </td>
 </tr>
 </tbody>
@@ -234,23 +290,33 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid">Coord</a>
-<div class="block">A 2D coordinate.</div>
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Arrangement.html#squidpony.squidgrid">Arrangement</a>
+<div class="block">A bi-directional mapping of objects to positions in an ordering (which this generates), and vice versa.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid">Coord</a>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord3D.html#squidpony.squidgrid">Coord3D</a>
 <div class="block">Generic three dimensional coordinate class.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/GreasedRegion.html#squidpony.squidgrid">GreasedRegion</a>
-<div class="block">Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).</div>
+<div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.html#squidpony.squidgrid">IntDoubleOrderedMap</a>
+<div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.html#squidpony.squidgrid">IntDoubleOrderedMap</a>
-<div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.</div>
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntVLA.html#squidpony.squidgrid">IntVLA</a>
+<div class="block">A resizable, ordered or unordered variable-length int array.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -261,18 +327,21 @@
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.html#squidpony.squidgrid">OrderedMap</a>
-<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap but modified to support indexed access.</div>
+<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap
+ but modified to support indexed access of keys, values, and entries, reordering, and optional hash strategies for
+ array keys (which fastutil does differently).</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony.squidgrid">OrderedSet</a>
-<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but modified to support indexed access.</div>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony.squidgrid">RNG</a>
-<div class="block">A wrapper class for working with random number generators in a more friendly
- way.</div>
+<div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -295,7 +364,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid.iterator">Coord</a>
-<div class="block">A 2D coordinate.</div>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
 </td>
 </tr>
 </tbody>
@@ -311,41 +380,157 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid.mapping">Coord</a>
-<div class="block">A 2D coordinate.</div>
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Arrangement.html#squidpony.squidgrid.mapping">Arrangement</a>
+<div class="block">A bi-directional mapping of objects to positions in an ordering (which this generates), and vice versa.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/GreasedRegion.html#squidpony.squidgrid.mapping">GreasedRegion</a>
-<div class="block">Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).</div>
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid.mapping">Coord</a>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/GreasedRegion.html#squidpony.squidgrid.mapping">GreasedRegion</a>
+<div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntVLA.html#squidpony.squidgrid.mapping">IntVLA</a>
+<div class="block">A resizable, ordered or unordered variable-length int array.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise3D.html#squidpony.squidgrid.mapping">Noise.Noise3D</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise4D.html#squidpony.squidgrid.mapping">Noise.Noise4D</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.html#squidpony.squidgrid.mapping">OrderedMap</a>
-<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap but modified to support indexed access.</div>
+<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap
+ but modified to support indexed access of keys, values, and entries, reordering, and optional hash strategies for
+ array keys (which fastutil does differently).</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony.squidgrid.mapping">OrderedSet</a>
-<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but modified to support indexed access.</div>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RegionMap.html#squidpony.squidgrid.mapping">RegionMap</a>
-<div class="block">An unordered map of regions (specifically, packed data from CoordPacker or something that uses it, like FOVCache or
- ZOI, as short arrays) to values of a generic type.</div>
+<div class="block">A small extension of OrderedMap that specifically handles <code>short[]</code> regions as produced by <a href="../../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath"><code>CoordPacker</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony.squidgrid.mapping">RNG</a>
-<div class="block">A wrapper class for working with random number generators in a more friendly
- way.</div>
+<div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/StatefulRNG.html#squidpony.squidgrid.mapping">StatefulRNG</a>
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> used by <a href="../../squidpony/squidgrid/mapping/locks/package-summary.html">squidpony.squidgrid.mapping.locks</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid.mapping.locks">Coord</a>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/K2.html#squidpony.squidgrid.mapping.locks">K2</a>
+<div class="block">An ordered bidirectional map-like data structure, with unique A keys and unique B keys updated together like a map
+ that can be queried by A keys, B keys, or int indices.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.constraints">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> used by <a href="../../squidpony/squidgrid/mapping/locks/constraints/package-summary.html">squidpony.squidgrid.mapping.locks.constraints</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Arrangement.html#squidpony.squidgrid.mapping.locks.constraints">Arrangement</a>
+<div class="block">A bi-directional mapping of objects to positions in an ordering (which this generates), and vice versa.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid.mapping.locks.constraints">Coord</a>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntVLA.html#squidpony.squidgrid.mapping.locks.constraints">IntVLA</a>
+<div class="block">A resizable, ordered or unordered variable-length int array.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.html#squidpony.squidgrid.mapping.locks.constraints">OrderedMap</a>
+<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap
+ but modified to support indexed access of keys, values, and entries, reordering, and optional hash strategies for
+ array keys (which fastutil does differently).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony.squidgrid.mapping.locks.constraints">OrderedSet</a>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.generators">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> used by <a href="../../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony.squidgrid.mapping.locks.generators">RNG</a>
+<div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.util">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> used by <a href="../../squidpony/squidgrid/mapping/locks/util/package-summary.html">squidpony.squidgrid.mapping.locks.util</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid.mapping.locks.util">Coord</a>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
 </td>
 </tr>
 </tbody>
@@ -362,8 +547,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony.squidgrid.mapping.styled">RNG</a>
-<div class="block">A wrapper class for working with random number generators in a more friendly
- way.</div>
+<div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
 </td>
 </tr>
 </tbody>
@@ -380,7 +564,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidgrid.zone">Coord</a>
-<div class="block">A 2D coordinate.</div>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
 </td>
 </tr>
 </tbody>
@@ -419,32 +603,60 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidmath">Coord</a>
-<div class="block">A 2D coordinate.</div>
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/BundleBiMap.html#squidpony.squidmath">BundleBiMap</a>
+<div class="block">An ordered bidirectional map-like data structure, with "bundles" of unique E (for Element) keys and unique S (for
+ Single) keys updated together like a map that can be queried by E key bundles, S keys, or int indices, as well as
+ like a multimap that can be queried by lone E keys.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord.html#squidpony.squidmath">Coord</a>
+<div class="block">A 2D coordinate with (constant) x and y fields.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Coord3D.html#squidpony.squidmath">Coord3D</a>
 <div class="block">Generic three dimensional coordinate class.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/CoordDouble.html#squidpony.squidmath">CoordDouble</a>
 <div class="block">Coord using double values for x and y instead of int.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/CrossHash.Chariot.html#squidpony.squidmath">CrossHash.Chariot</a>
+<div class="block">Strongly universal hashing based loosely on Daniel Lemire's (Apache-licensed) code and paper, available at
+ https://github.com/lemire/StronglyUniversalStringHashing .</div>
+</td>
+</tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/CrossHash.IHasher.html#squidpony.squidmath">CrossHash.IHasher</a>&nbsp;</td>
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/CrossHash.IHasher.html#squidpony.squidmath">CrossHash.IHasher</a>
+<div class="block">An interface that can be used to move the logic for the hashCode() and equals() methods from a class' methods to
+ an implementation of IHasher that certain collections in SquidLib can use.</div>
+</td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/CrossHash.Mist.html#squidpony.squidmath">CrossHash.Mist</a>
+<div class="block">A whole cluster of Wisp-like hash functions that sacrifice a small degree of speed, but can be built with up
+ to 128 bits of salt values that help to obscure what hashing function is actually being used.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/CrossHash.Storm.html#squidpony.squidmath">CrossHash.Storm</a>
 <div class="block">A whole cluster of Lightning-like hash functions that sacrifice a small degree of speed, but can be
  constructed with a salt value that helps obscure what hashing function is actually being used.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/GlitchNoise.html#squidpony.squidmath">GlitchNoise</a>
+<div class="block">A noise generator for 1D, 2D, 3D, 4D, or 6D noise that should look "glitchy", with waves of changing values moving
+ through triangular shapes.</div>
+</td>
+</tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/GreasedRegion.html#squidpony.squidmath">GreasedRegion</a>
-<div class="block">Region encoding of 64x64 areas as a number of long arrays; uncompressed (fatty), but fast (greased lightning).</div>
+<div class="block">Region encoding of on/off information about areas using bitsets; uncompressed (fatty), but fast (greased lightning).</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -473,7 +685,8 @@
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.MapEntry.html#squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>
-<div class="block">The entry class for a hash map does not record key and value, but rather the position in the hash table of the corresponding entry.</div>
+<div class="block">The entry class for a hash map does not record key and value, but rather the position in the hash table of the
+ corresponding entry.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -502,15 +715,65 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/MasonNoise.html#squidpony.squidmath">MasonNoise</a>
+<div class="block">Noise functions that try to conceal undesirable patterns, in 2D, 3D, 4D, and 6D, using 32-bit int math wherever
+ possible and only yielding floats or doubles if requested.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/MeadNoise.html#squidpony.squidmath">MeadNoise</a>
+<div class="block">Experiments with noise functions that use an alternate "honeycomb" or tiling pattern of cells in higher dimensions,
+ but defaults to the simplex honeycomb used by SeededNoise if this can't make an attempt to change it.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/MultiArrangement.html#squidpony.squidmath">MultiArrangement</a>
+<div class="block">A bi-directional mapping of non-unique objects to positions in an ordering (which this generates), and vice versa.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/MultiArrangement.KeyIterator.html#squidpony.squidmath">MultiArrangement.KeyIterator</a>
+<div class="block">An iterator on keys.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/MultiArrangement.KeyList.html#squidpony.squidmath">MultiArrangement.KeyList</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/MultiArrangement.ValueIterator.html#squidpony.squidmath">MultiArrangement.ValueIterator</a>
+<div class="block">An iterator on values.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/MultiKey.html#squidpony.squidmath">MultiKey</a>
 <div class="block">An ordered multi-directional "map" that keeps 1 or more keysets organized so you can look up one key given a key in
  another keyset, and do the same for the indices of keys.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise1D.html#squidpony.squidmath">Noise.Noise1D</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise2D.html#squidpony.squidmath">Noise.Noise2D</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise3D.html#squidpony.squidmath">Noise.Noise3D</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise4D.html#squidpony.squidmath">Noise.Noise4D</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise6D.html#squidpony.squidmath">Noise.Noise6D</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.html#squidpony.squidmath">OrderedMap</a>
-<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap but modified to support indexed access.</div>
+<div class="block">A generic linked hash map with with a fast implementation, originally from fastutil as Object2ObjectLinkedOpenHashMap
+ but modified to support indexed access of keys, values, and entries, reordering, and optional hash strategies for
+ array keys (which fastutil does differently).</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.FastEntryIterator.html#squidpony.squidmath">OrderedMap.FastEntryIterator</a>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.KeyIterator.html#squidpony.squidmath">OrderedMap.KeyIterator</a>
@@ -521,83 +784,110 @@
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.KeySet.html#squidpony.squidmath">OrderedMap.KeySet</a>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.MapEntrySet.html#squidpony.squidmath">OrderedMap.MapEntrySet</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.ValueIterator.html#squidpony.squidmath">OrderedMap.ValueIterator</a>
 <div class="block">An iterator on values.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony.squidmath">OrderedSet</a>
-<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but modified to support indexed access.</div>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/PerlinNoise.html#squidpony.squidmath">PerlinNoise</a>
+<div class="block">This is Ken Perlin's third revision of his noise function.</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/ProbabilityTable.html#squidpony.squidmath">ProbabilityTable</a>
+<div class="block">A generic method of holding a probability table to determine weighted random
+ outcomes.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RandomBias.html#squidpony.squidmath">RandomBias</a>
 <div class="block">A class that wraps an RNG and allows different String keys to be associated with biases toward low or high results
  when a method is called that gets a number from the wrapped RNG.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RandomnessSource.html#squidpony.squidmath">RandomnessSource</a>
 <div class="block">This interface defines the interactions required of a random number
  generator.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Region.html#squidpony.squidmath">Region</a>
-<div class="block">Represents an area or series of areas as one logical unit, and allows iterating over or altering that unit.</div>
+<div class="block"><b>NOTE</b>: You should consider <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a> before using this class, unless you know Region does exactly
+ what you want.</div>
 </td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/RegionMap.html#squidpony.squidmath">RegionMap</a>
-<div class="block">An unordered map of regions (specifically, packed data from CoordPacker or something that uses it, like FOVCache or
- ZOI, as short arrays) to values of a generic type.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/RegionMap.Entries.html#squidpony.squidmath">RegionMap.Entries</a>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/RegionMap.Entry.html#squidpony.squidmath">RegionMap.Entry</a>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/RegionMap.Keys.html#squidpony.squidmath">RegionMap.Keys</a>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/RegionMap.Values.html#squidpony.squidmath">RegionMap.Values</a>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony.squidmath">RNG</a>
-<div class="block">A wrapper class for working with random number generators in a more friendly
- way.</div>
+<div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
 </td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/SeededNoise.html#squidpony.squidmath">SeededNoise</a>
+<div class="block">More advanced noise functions, in 2D, 3D, 4D, and 6D, with the last two as options for generating seamlessly-tiling
+ noise using <a href="../../squidpony/squidmath/Noise.html#seamless2D-double:A:A-int-int-squidpony.squidmath.Noise.Noise4D-"><code>Noise.seamless2D(double[][], int, int, Noise.Noise4D)</code></a> and/or
+ <a href="../../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-int-int-squidpony.squidmath.Noise.Noise6D-"><code>Noise.seamless3D(double[][][], int, int, Noise.Noise6D)</code></a>.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ShortSet.html#squidpony.squidmath">ShortSet</a>
 <div class="block">An unordered set that uses short keys.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ShortSet.ShortSetIterator.html#squidpony.squidmath">ShortSet.ShortSetIterator</a>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ShortVLA.html#squidpony.squidmath">ShortVLA</a>
 <div class="block">A resizable, ordered or unordered short variable-length array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/SquidID.html#squidpony.squidmath">SquidID</a>
 <div class="block">A UUID-like identifier; not compatible with Java's standard UUID but will work on GWT.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/StatefulRandomness.html#squidpony.squidmath">StatefulRandomness</a>
 <div class="block">A simple interface for RandomnessSources that have the additional property of a state that can be re-set.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/StatefulRNG.html#squidpony.squidmath">StatefulRNG</a>
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/TableSet.html#squidpony.squidmath">TableSet</a>
+<div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
+ modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
+ does differently).</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/ValueNoise.html#squidpony.squidmath">ValueNoise</a>
+<div class="block">Performance-oriented "white noise" generator for 1D, 2D, 3D, 4D, and 6D.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/VanDerCorputQRNG.html#squidpony.squidmath">VanDerCorputQRNG</a>
+<div class="block">A quasi-random number generator that goes through one of many sub-random sequences found by J.G.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/WhirlingNoise.html#squidpony.squidmath">WhirlingNoise</a>
+<div class="block">Another experimental noise class.</div>
 </td>
 </tr>
 </tbody>
@@ -652,6 +942,6 @@
 <!--   -->
 </a></div>
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
-<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2016. All rights reserved.</small></p>
+<p class="legalCopy"><small>Copyright &#169; 2012&#x2013;2017. All rights reserved.</small></p>
 </body>
 </html>

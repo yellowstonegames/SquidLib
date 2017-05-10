@@ -10,8 +10,7 @@ The software is provided "as is", without warranty of any kind, express or impli
 */
 package squidpony.squidgrid;
 
-import squidpony.GwtCompatibility;
-import squidpony.squidgrid.mapping.AestheticDifference;
+import squidpony.ArrayTools;
 import squidpony.squidmath.IntDoubleOrderedMap;
 import squidpony.squidmath.IntVLA;
 import squidpony.squidmath.OrderedSet;
@@ -35,14 +34,40 @@ import squidpony.squidmath.RNG;
  */
 public class DetailedMimic {
 
-    private DetailedMimic()
+    /**
+     * Constructor that uses an unseeded RNG and, without any instruction otherwise, assumes the ints this is asked to
+     * compare are colors in RGBA8888 format. You can specify your own implementation of the AestheticDifference
+     * interface (one function) and pass it to other constructors, as well.
+     */
+    public DetailedMimic()
     {
+        this(AestheticDifference.rgba8888);
     }
 
+    /**
+     * Constructor that uses an unseeded RNG (effectively a random seed) and the given AestheticDifference. An example
+     * piece of code that implements an AestheticDifference is available in the docs for
+     * {@link AestheticDifference#difference(int, int)}; it is also considered a functional interface if you use Java 8
+     * or newer. You can also use the ready-made implementation {@link AestheticDifference#rgba8888} if you have int
+     * data that represents RGBA8888 colors, which can be obtained from libGDX Colors or SColors in the display module.
+     * @param diff an implementation of the AestheticDifference interface, such as {@link AestheticDifference#rgba8888};
+     *             may be null, but that forces all calls to processing methods to treat discrete as true
+     */
     public DetailedMimic(AestheticDifference diff)
     {
         this(diff, new RNG());
     }
+
+    /**
+     * Constructor that uses the given RNG and the given AestheticDifference. An example
+     * piece of code that implements an AestheticDifference is available in the docs for
+     * {@link AestheticDifference#difference(int, int)}; it is also considered a functional interface if you use Java 8
+     * or newer. You can also use the ready-made implementation {@link AestheticDifference#rgba8888} if you have int
+     * data that represents RGBA8888 colors, which can be obtained from libGDX Colors or SColors in the display module.
+     * @param diff an implementation of the AestheticDifference interface, such as {@link AestheticDifference#rgba8888};
+     *             may be null, but that forces all calls to processing methods to treat discrete as true
+     * @param rng an RNG to generate random factors; may be seeded to produce reliable output
+     */
     public DetailedMimic(AestheticDifference diff, RNG rng)
     {
         random = rng;
@@ -50,15 +75,50 @@ public class DetailedMimic {
         analyzed = null;
     }
 
+    /**
+     * DISCOURAGED; use {@link #neoProcess(int[], int, int, int, int, int, int, boolean)} instead, which doesn't need a
+     * separate analysis step.
+     * Analyzes a sample as a 1D int array and stores the needed info to call
+     * {@link #process(int[], int, int, int, int, int, int, double, boolean)} any number of times later on without
+     * recalculating some heavy-weight information.
+     * @param sample a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if
+     *               discrete is true)
+     * @param width the width of the area in sample this should use (sample can be interpreted as different shapes)
+     * @param height the height of the area in sample this should use (sample can be interpreted as different shapes)
+     * @param detailLevel how much detail to try for; if 0 or less this does nothing, 2 works well in general
+     * @param proximity how far away to consider cells as affecting another; 3 works well
+     * @param discrete false if this can produce ints other than those in the input; true if it uses a fixed set
+     */
     public void analyze(int[] sample, int width, int height, int detailLevel, int proximity, boolean discrete)
     {
+        discrete |= (difference == null);
         if(detailLevel > 0)
             analysis(sample, width, height, detailLevel, proximity, discrete);
     }
-
+    /**
+     * DISCOURAGED; use {@link #neoProcess(int[], int, int, int, int, int, int, boolean)} instead, which doesn't need a
+     * separate analysis step.
+     * Processes a sample as a 1D int array and returns a different 1D int array that mimics the input. If the last time
+     * this was called used the same sample, sampleWidth, and sampleHeight parameters, or if
+     * {@link #analyze(int[], int, int, int, int, boolean)} was called with its width equal to sampleWidth and its
+     * height equal to sampleHeight, then this doesn't need to perform as many expensive calculations.
+     * @param sample a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if
+     *               discrete is true)
+     * @param sampleWidth the width of the area in sample this should use (sample can be interpreted as different shapes)
+     * @param sampleHeight the height of the area in sample this should use (sample can be interpreted as different shapes)
+     * @param targetWidth the desired width of the output
+     * @param targetHeight the desired height of the output
+     * @param detailLevel how much detail to try for; if 0 or less this doesn't perform analysis and has somewhat lower
+     *                    quality, but 2 works well in general
+     * @param proximity how far away to consider cells as affecting another; 3 works well
+     * @param temperature a level of unpredictability in the output relative to the input; must be greater than 0
+     * @param discrete false if this can produce ints other than those in the input; true if it uses a fixed set
+     * @return a new 1D int array that can be interpreted as having targetWidth and targetHeight, and mimics sample
+     */
     public int[] process(int[] sample, int sampleWidth, int sampleHeight, int targetWidth, int targetHeight,
                          int detailLevel, int proximity, double temperature, boolean discrete)
     {
+        discrete |= (difference == null);
         if(detailLevel > 0)
         {
             if(analyzed == null || analyzed.length != sampleWidth || analyzed.length == 0 ||
@@ -73,11 +133,26 @@ public class DetailedMimic {
         }
     }
 
+    /**
+     * Processes a 1D int array representing 2D storage of values that can be compared by this object's
+     * AestheticDifference (or any values if that is null or discrete is true), and returns a 1D array representing data
+     * with potentially different dimensions but similar appearance to sample.
+     * @param sample a 1D array of ints that can be compared by the AestheticDifference this uses (or any ints if
+     *               discrete is true)
+     * @param sampleWidth the width of the area in sample this should use (sample can be interpreted as different shapes)
+     * @param sampleHeight the height of the area in sample this should use (sample can be interpreted as different shapes)
+     * @param targetWidth the desired width of the output
+     * @param targetHeight the desired height of the output
+     * @param detailLevel how much detail to try for; here this will always be treated as at least 1
+     * @param proximity how far away to consider cells as affecting another; 3 works well
+     * @param discrete false if this can produce ints other than those in the input; true if it uses a fixed set
+     * @return a new 1D int array that can be interpreted as having targetWidth and targetHeight, and mimics sample
+     */
     public int[] neoProcess(int[] sample, int sampleWidth, int sampleHeight, int targetWidth, int targetHeight,
                          int detailLevel, int proximity, boolean discrete)
     {
             return reSynthesis(sample, sampleWidth, sampleHeight, proximity, 20,
-                    Math.max(1, detailLevel), discrete, targetWidth, targetHeight);
+                    Math.max(1, detailLevel), discrete || (difference == null), targetWidth, targetHeight);
     }
 
     public RNG random;
@@ -135,7 +210,7 @@ public class DetailedMimic {
         {
             int x = i % OW, y = i / OW;
             IntDoubleOrderedMap candidates = new IntDoubleOrderedMap();
-            GwtCompatibility.insert2D(cleanMask, mask, 0, 0);
+            ArrayTools.insert(cleanMask, mask, 0, 0);
 
             for (int dy = -1; dy <= 1; dy++){
                 for (int dx = -1; dx <= 1; dx++)
@@ -402,7 +477,7 @@ public class DetailedMimic {
         return sum;
     }
 
-    private static int weightedRandom(double[] array, double r)
+    static int weightedRandom(double[] array, double r)
     {
         double sum = 0;
         for (int j = 0; j < array.length; j++)
@@ -424,11 +499,51 @@ public class DetailedMimic {
         return 0;
     }
 
-    private static int weightedRandom(IntDoubleOrderedMap dic, double r) {
-        int[] ints = new int[dic.size()];
-        double[] doubles = new double[dic.size()];
-        dic.keySet().toArray(ints);
-        dic.values().toArray(doubles);
+    static int weightedRandom(IntDoubleOrderedMap dic, double r) {
+        int[] ints = dic.keySet().toIntArray();
+        double[] doubles =  dic.values().toDoubleArray();
         return ints[weightedRandom(doubles, r)];
+    }
+
+    /**
+     * Utility method to produce 1D int arrays this can process when discrete is true or difference is null.
+     * @param map a 2D char array
+     * @return an int array that can be used as a sample
+     */
+    public static int[] convertCharToInt(char[][] map)
+    {
+        int w = map.length, h = map[0].length;
+        int[] result = new int[w * h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                result[x * h + y] = map[x][y];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Utility method that takes a 1D int array that represents chars (such as a sample produced by
+     * {@link #convertCharToInt(char[][])} or, more likely, the result of processing such a sample with this class) and
+     * returns a 2D char array with the requested width and height (which should match the targetWidth and targetHeight
+     * given during processing).
+     * @param arr a 1D int array that represents char values
+     * @param w the width that arr can be interpreted as; should probably match the targetWidth given in processing
+     * @param h the height that arr can be interpreted as; should probably match the targetHeight given in processing
+     * @return a 2D char array with the given width and height, probably filled with the data from arr
+     */
+    public static char[][] convertIntToChar(int[] arr, int w, int h)
+    {
+        char[][] result = new char[w][h];
+        if(arr == null)
+            return result;
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                if(x * h + y >= arr.length)
+                    return result;
+                result[x][y] = (char) arr[x * h + y];
+            }
+        }
+        return result;
     }
 }
