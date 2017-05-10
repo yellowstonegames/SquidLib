@@ -54,7 +54,7 @@ public class ZoneDemo extends ApplicationAdapter {
 
         cellWidth = 16 * INTERNAL_ZOOM;
         cellHeight = 16 * INTERNAL_ZOOM;
-        TextCellFactory tcf = DefaultResources.getStretchableFont().addSwap('.', ' ');
+        TextCellFactory tcf = DefaultResources.getStretchableSquareFont().addSwap('.', ' ');
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
         //tcf.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f));
         screenWidth = width * cellWidth;

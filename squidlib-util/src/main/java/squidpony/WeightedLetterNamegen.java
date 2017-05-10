@@ -452,7 +452,7 @@ public class WeightedLetterNamegen {
                 }
                 ProbabilityTable<Character> weightedLetterGroup = wl.get(letterBefore);
                 if (weightedLetterGroup != null) {
-                    Integer letterCounter = weightedLetterGroup.weight(letterAfter);
+                    int letterCounter = weightedLetterGroup.weight(letterAfter);
                     if (letterCounter > bestFitScore) {
                         bestFitLetter = letter;
                         bestFitScore = letterCounter;

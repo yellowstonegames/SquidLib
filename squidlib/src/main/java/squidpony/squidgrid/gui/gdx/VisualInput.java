@@ -63,8 +63,8 @@ public class VisualInput extends SquidInput {
         {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                if(screenX < 3 && screenY >= 5 && screenY <= 7 && left.contents[screenX][screenY + 2] != null &&
-                        !left.contents[screenX][screenY + 2].equals(" "))
+                if(screenX < 3 && screenY >= 5 && screenY <= 7 && left.contents[screenX][screenY + 2] != 0 &&
+                        left.contents[screenX][screenY + 2] != ' ')
                 {
                     switch ((screenY - 5) * 3 + screenX)
                     {

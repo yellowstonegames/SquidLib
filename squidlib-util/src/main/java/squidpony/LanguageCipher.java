@@ -33,8 +33,9 @@ import java.util.Map;
  * to different runs of the program, they may have different generated results if cacheLevel is 2. One way to handle
  * this is to use cacheLevel 2 and cipher the whole game script, or just the unique words in it (maybe just a large word
  * list, such as http://wordlist.aspell.net/12dicts/ ), then serialize the LanguageCipher for later usage.
- * @author Tommy Ettinger
  * Created by Tommy Ettinger on 5/1/2016.
+ * @author Tommy Ettinger
+ * @see NaturalLanguageCipher NaturalLanguageCipher offers similar features but handles common prefixes and suffixes.
  */
 public class LanguageCipher implements Serializable{
     private static final long serialVersionUID = 1287835632461186341L;
