@@ -1,5 +1,7 @@
 package squidpony.examples;
 
+import squidpony.StringKit;
+import squidpony.squidmath.FlapRNG;
 import squidpony.squidmath.NumberTools;
 
 /**
@@ -29,8 +31,9 @@ public class Playground {
     }
     private static float carp2(final float x) { return x * -(x * (x - 1) + (1 - x) * (1 - x)) + x; }
     private void go() {
-        for (float x = 0; x <= 1f; x += 0.0625f * 0.0625f) {
-            System.out.println(x + ": " + carp2(x));
+        int state = 0x1337BEEF;
+        for (int i = 0; i < 100; i++) {
+            System.out.println(StringKit.hex(FlapRNG.determine(state += 0x9E3779B9)));
         }
     }
 

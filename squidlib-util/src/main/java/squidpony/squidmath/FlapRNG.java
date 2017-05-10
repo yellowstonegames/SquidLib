@@ -6,11 +6,14 @@ import squidpony.annotation.Beta;
 import java.io.Serializable;
 
 /**
- * Similar to XoRoRNG, but like PintRNG this only uses 32-bit int math (good for GWT).
+ * Like PintRNG (only uses 32-bit int math, good for GWT), but much faster at the expense of quality.
+ * This generator is faster than ThunderRNG at generating ints, while also implementing StatefulRandomness. It is slower
+ * but not especially slow at generating longs, and takes between 5% and 10% more time than LightRNG to generate longs
+ * (it takes about 40% less time than LightRNG to generate ints). Quality is unclear, since this relies on some very
+ * particular values for constants and shows various flaws visually when the constants are even slightly off. There are
+ * probably better choices for constants out there that we may be able to find, but it doesn't seem easy.
  * It's likely that the period of FlapRNG is a full 2 to the 64 (0 seed is allowed), since this uses a pair of ints for
- * its state, and acts like XoRoRNG modified to handle all initial states (hopefully, at least... there may be one seed
- * pair that corresponds to the original "bad seed" of 0) and, of course, use only int math where possible. This is
- * slightly faster than XoRoRNG at producing ints, and as you would expect, twice as slow when generating longs.
+ * its state, though it may be less (2 to the 32 is absolutely the minimum possible period).
  * <br>
  * Created by Tommy Ettinger on 5/1/2017.
  */
@@ -70,11 +73,20 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public final int next( final int bits ) {
-        return nextInt() >>> (32 - bits);
+        return (state0 += ((state1 += 0xC6BC278D) >> 28) * 0x632DB5AB) * 0x9E3779B9 >>> (32 - bits);
     }
 
+    /**
+     * Gets a pseudo-random int, which can be positive or negative but is likely to be drawn from less possible options
+     * than the full range of {@link Integer#MIN_VALUE} to {@link Integer#MAX_VALUE}. Very fast, though.
+     * @return a pseudo-random 32-bit int
+     */
     public final int nextInt()
     {
+        return (state0 += ((state1 += 0xC6BC278D) >> 28) * 0x632DB5AB) * 0x9E3779B9;
+        //return (state0 += (state1 += 0x9E3779B9) ^ 0x632BE5AB);
+        //return (state0 += (0x632BE5AB ^ (state1 += 0x9E3779B9)) >> 1) * 0xC6BC278D;
+        /*
         final int s0 = state0;
         int s1 = state1;
         final int result = s0 + s1;
@@ -82,7 +94,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
         state0 = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 7); // a, b
         state1 = (s1 << 18 | s1 >>> 14); // c
         return result;
-
+        */
         //0x632BE5AB
         //final int z = (state += 0x9E3779B9);
         //return (z >> (z & 15)) * 0xC6BC278D;
@@ -97,17 +109,30 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * Using this method, any algorithm that needs to efficiently generate more
      * than 32 bits of random data can interface with this randomness source.
      * This implementation produces a different result than calling {@link #nextInt()} twice and shifting the bits
-     * to make a long from the two ints. It really just multiplies each int of the state by a different large prime
-     * before adding them together (the adding is just like in nextInt(), but the multiplying is just here).
-     * The end result is a long that should take only slightly longer to produce than an int, from a primarily-int
-     * generator! Hooray.
+     * to make a long from the two ints. It uses mostly the same steps as nextInt(), but instead of multiplying a
+     * 32-bit int by a large constant, it generates a similar 32-bit int (but multiplies by a larger 64-bit constant to
+     * get a long) and XORs two modifications of it (multiplying by a very large long, and left-shifting by 32). The end
+     * result is a long that should take only slightly longer to produce than an int, from a primarily-int generator!
+     * Hooray. The downside is that only 2 to the 32 longs can be produced by this method (not the full 2 to the 64
+     * range that would be ideal), though the period should be significantly higher than that.
      * <p>
-     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
+     * Pseudo-random results may be between between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
      *
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     @Override
     public final long nextLong() {
+
+        //0x9E3779B97F4A7C15L
+        final long r = (state0 += ((state1 += 0xC6BC278D) >> 28) * 0x632DB5AB) * 0x9E3779B97F4A7C15L;
+        return r * 0x85157AF5L ^ r << 32;
+        // return ((state += 0x9E3779B97F4A7C15L ^ state << 1) >> 16) * 0xC6BC279692B5CC83L;
+
+        /*
+        final int s0 = state0;
+        final int s1 = state1;
+        return (s0 + s1) ^ (((state0 = s0 + 0x632BE5AB ^ (state1 = s1 + 0x9E3779B9)) >> 13) * 0xC6BC279692B5CC83L) << 32;
+        *//*
         final int s0 = state0;
         int s1 = state1;
         final long result = s0 * 0xD0E89D2D311E289FL + s1 * 0xC6BC279692B5CC83L;
@@ -115,7 +140,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
         state0 = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 7); // a, b
         state1 = (s1 << 18 | s1 >>> 14); // c
         return result;
-
+        */
         /*
         int z = state + 0x9E3779B9;
         state += (z >> (z >>> 28)) * 0xC6BC279692B5CC83L;
@@ -123,6 +148,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
         return (state) ^ (long)(state += ((z >> (z >>> 28)) * 0xC6BC279692B5CC83L)) << 32;
         */
     }
+
 
     /**
      * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
@@ -137,38 +163,48 @@ public class FlapRNG implements StatefulRandomness, Serializable {
     }
 
     /**
-     * A simple "output stage" applied to state, this method does not update state on its own. If you expect to call
-     * this method more than once, you should add a large int that is an odd number to state as part of the call, such
-     * as with {@code FlapRNG.determine(state += 0x9E3779B9)}. Here, "large long" means at least two of the
-     * upper 5 bits should be set to be safe. The golden-ratio-derived constant 0x9E3779B9 should be fine.
+     * A simple "output stage" applied to state; this method does not update state on its own. If you expect to call
+     * this method more than once, you should perform some extra changes to state as part of the call. The way that
+     * seems to work rather well is to add a large constant, XORed with state left-shifted by 1, to state, and assign
+     * when you make the call. This is clearer with code: {@code FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))}.
+     * Here, the "large constant" should have at least two of the upper 5 bits set to be safe, and must be odd.
+     * The golden-ratio-derived constant 0x9E3779B9 should be fine, as would 0xF0000001.
      * This method doesn't offer particularly good quality assurances, but should be very fast.
-     * @param state should be changed when you call this by adding some large odd number, e.g. 0x9E3779B9
+     * @param state should be changed when you call this (see above), e.g. {@code state += 0x9E3779B9 ^ (state << 1)}
      * @return an altered version of state that should be very fast to compute but doesn't promise great quality
      */
     public static int determine(final int state)
     {
-        return (state >> (state >>> 28)) * 0xC6BC278D;
+        return (state >> 13) * 0xC6BC278D;
     }
     /**
-     * Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given state. Calling this
-     * repeatedly won't have correlation problems if you give it sequential ints.
+     * Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given state. If you expect to call
+     * this method more than once, you should perform some extra changes to state as part of the call. The way that
+     * seems to work rather well is to add a large constant, XORed with state left-shifted by 1, to state, and assign
+     * when you make the call. In code: {@code FlapRNG.randomFloat(state += 0x9E3779B9 ^ (state << 1))}.
+     * Here, the "large constant" should have at least two of the upper 5 bits set to be safe, and must be odd.
+     * The golden-ratio-derived constant 0x9E3779B9 should be fine, as would 0xF0000001.
      * @param state any int
      * @return a pseudo-random float from -0f (inclusive) to 1f (exclusive)
      */
     public static float randomFloat(int state)
     {
-        return NumberTools.intBitsToFloat(((((state *= 0x9E3779B9) >> (state >>> 28)) * 0xC6BC278D) >>> 9) | 0x3f800000) - 1f;
+        return NumberTools.intBitsToFloat((((state >> 13) * 0xC6BC278D) >>> 9) | 0x3f800000) - 1f;
     }
 
     /**
-     * Gets a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given state. Calling this
-     * repeatedly won't have correlation problems if you give it sequential ints.
+     * Gets a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given state. If you expect to
+     * call this method more than once, you should perform some extra changes to state as part of the call. The way that
+     * seems to work rather well is to add a large constant, XORed with state left-shifted by 1, to state, and assign
+     * when you make the call. In code: {@code FlapRNG.randomFloat(state += 0x9E3779B9 ^ (state << 1))}.
+     * Here, the "large constant" should have at least two of the upper 5 bits set to be safe, and must be odd.
+     * The golden-ratio-derived constant 0x9E3779B9 should be fine, as would 0xF0000001.
      * @param state any int
      * @return a pseudo-random float from -1f (inclusive) to 1f (exclusive)
      */
     public static float randomSignedFloat(int state)
     {
-        return NumberTools.intBitsToFloat(((((state *= 0x9E3779B9) >> (state >>> 28)) * 0xC6BC278D) >>> 9) | 0x40000000) - 3f;
+        return NumberTools.intBitsToFloat((((state >> 13) * 0xC6BC278D) >>> 9) | 0x40000000) - 3f;
     }
 
     @Override

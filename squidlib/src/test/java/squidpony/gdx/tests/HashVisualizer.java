@@ -127,7 +127,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -670,6 +670,7 @@ public class HashVisualizer extends ApplicationAdapter {
         float bright;
         int iBright;
         int xx, yy;
+        int state;
         switch (testType) {
             case 1: {
                 switch (hashMode) {
@@ -3283,30 +3284,33 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 20:
-                        random = new DashRNG(ctr);
+                        //random = new DashRNG(ctr);
+                        state = ctr;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1) * 421) * 64123) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("DashRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Old FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 21:
-                        random = new DashRNG(ctr);
+                        //random = new DashRNG(ctr);
+                        state = ctr;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1) * 421) * 64123 >>> 24;
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("DashRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Old FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 22:
                         random = new FlapRNG(ctr);
+                        //state = ctr;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -3314,10 +3318,11 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 23:
                         random = new FlapRNG(ctr);
+                        //state = ctr;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = random.next(32) & 255;//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
