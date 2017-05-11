@@ -73,7 +73,10 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public final int next( final int bits ) {
-        return (state0 += ((state1 += 0xC6BC278D) >> 28) * 0x632DB5AB) * 0x9E3779B9 >>> (32 - bits);
+
+        return (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> (32 - bits);
+        //return (state0 += ~(((state1 += 0xC6BC278D) >>> 28) * 0x632D978F)) >>> (32 - bits);
+        //return (state0 += ((state1 += 0xC6BC278D) >> 28) * 0x632DB5AB) * 0x9E3779B9 >>> (32 - bits);
     }
 
     /**
@@ -83,7 +86,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      */
     public final int nextInt()
     {
-        return (state0 += ((state1 += 0xC6BC278D) >> 28) * 0x632DB5AB) * 0x9E3779B9;
+        return (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
         //return (state0 += (state1 += 0x9E3779B9) ^ 0x632BE5AB);
         //return (state0 += (0x632BE5AB ^ (state1 += 0x9E3779B9)) >> 1) * 0xC6BC278D;
         /*
@@ -124,8 +127,8 @@ public class FlapRNG implements StatefulRandomness, Serializable {
     public final long nextLong() {
 
         //0x9E3779B97F4A7C15L
-        final long r = (state0 += ((state1 += 0xC6BC278D) >> 28) * 0x632DB5AB) * 0x9E3779B97F4A7C15L;
-        return r * 0x85157AF5L ^ r << 32;
+        final long r = (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+        return r * 0x9E3779B97FL ^ r << 32;
         // return ((state += 0x9E3779B97F4A7C15L ^ state << 1) >> 16) * 0xC6BC279692B5CC83L;
 
         /*
