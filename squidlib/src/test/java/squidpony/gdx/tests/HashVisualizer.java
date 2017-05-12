@@ -83,7 +83,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
     private final double[][][][] seamless = new double[3][64][64][64];
     private final SeededNoise seeded = new SeededNoise(0xDEADD00D);
-    private final Noise.Noise4D mead = new MeadNoise(); //new Noise.Layered4D(new MeadNoise(0xDEADD00D), 1, 4.55);
+    private final MeadNoise mead = new MeadNoise(); //new Noise.Layered4D(new MeadNoise(0xDEADD00D), 1, 4.55);
     private final Noise.Noise2D layered2D = new Noise.Layered2D(SeededNoise.instance, 2, 1.75);
     private final Noise.Noise3D layered3D = new Noise.Layered3D(SeededNoise.instance, 2, 1.75);
     private final Noise.Noise4D layered4D = new Noise.Layered4D(SeededNoise.instance, 2, 1.75);
@@ -436,7 +436,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 74;
+                                    noiseMode %= 78;
                                 }
                                 switch (noiseMode)
                                 {
@@ -3001,6 +3001,56 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y,
                                         floatGet(bright, bright, bright, 1f)
                                 );
+                            }
+                        }
+                        break;
+                    case 74:
+                        Gdx.graphics.setTitle("Mead 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)(mead.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
+                                                (float)(mead.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
+                                                (float)(mead.getNoiseWithSeed(x * 0.03125 + 10 + ctr * 0.05125, y * 0.03125 + 20 + ctr * 0.05125, 1234321) * 0.5 + 0.5),
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 75:
+                        Gdx.graphics.setTitle("Mead 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
+                                        20.0, 20.0, 20.0, 12) * 0.5
+                                        + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
+                                        40.0, 40.0, 20.0, 1234)
+                                        + */mead.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
+                                        123456) * 0.5 + 0.5);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 76:
+                        Gdx.graphics.setTitle("Mead 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                MeadNoise.noise(x * 0.03125f + 20f, y * 0.03125f + 30f, ctr * 0.05125f, 1234) * 0.5f + 0.5f,
+                                                MeadNoise.noise(x * 0.03125f + 30f, y * 0.03125f + 10f, ctr * 0.05125f, 54321) * 0.5f + 0.5f,
+                                                MeadNoise.noise(x * 0.03125f + 10f, y * 0.03125f + 20f, ctr * 0.05125f, 1234321) * 0.5f + 0.5f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 77:
+                        Gdx.graphics.setTitle("Mead 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = MeadNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.05125f, 123456) * 0.5f + 0.5f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;

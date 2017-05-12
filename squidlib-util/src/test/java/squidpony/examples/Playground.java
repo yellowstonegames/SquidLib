@@ -1,7 +1,5 @@
 package squidpony.examples;
 
-import squidpony.StringKit;
-import squidpony.squidmath.FlapRNG;
 import squidpony.squidmath.NumberTools;
 
 /**
@@ -29,11 +27,11 @@ public class Playground {
     {
         return x * (x * (x - 1) + (1 - x) * (1 - x));
     }
-    private static float carp2(final float x) { return x * -(x * (x - 1) + (1 - x) * (1 - x)) + x; }
+    private static float carp2(final float x) { return x - x * (x * (x - 1) + (1 - x) * (1 - x)); }
+    private static float carpMid(final float x) { return carp2(x * 0.5f + 0.5f) * 2f - 1f; }
     private void go() {
-        int state = 0x1337BEEF;
-        for (int i = 0; i < 100; i++) {
-            System.out.println(StringKit.hex(FlapRNG.determine(state += 0x9E3779B9)));
+        for (float i = -1f; i < 1f; i+= 0.0625f) {
+            System.out.println(i + ": " + carpMid(i));
         }
     }
 
