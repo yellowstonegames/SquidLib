@@ -916,6 +916,22 @@ public class RNG implements Serializable {
     }
 
     /**
+     * Generates random bytes and places them into the given byte array, modifying it in-place.
+     * The number of random bytes produced is equal to the length of the byte array. Unlike the
+     * method in java.util.Random, this generates 8 bytes at a time, which can be more efficient
+     * with many RandomnessSource types than the JDK's method that generates 4 bytes at a time.
+     * <br>
+     * Adapted from code in the JavaDocs of {@link Random#nextBytes(byte[])}.
+     * <br>
+     * @param  bytes the byte array to fill with random bytes; cannot be null, will be modified
+     * @throws NullPointerException if the byte array is null
+     */
+    public void nextBytes(final byte[] bytes) {
+        for (int i = 0; i < bytes.length; )
+            for (long r = random.nextLong(), n = Math.min(bytes.length - i, 8); n-- > 0; r >>>= 8)
+                bytes[i++] = (byte) r;
+    }
+    /**
      * Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)
      * and height (exclusive). This makes one call to randomLong to generate (more than) 31 random bits for
      * each axis, and should be very fast. Remember that Coord values are cached in a pool that starts able to

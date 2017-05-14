@@ -1530,38 +1530,61 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     public static float noise(final float x, final float y, final float z, final int seed) {
         final int
                 xx0 = fastFloor(x), yy0 = fastFloor(y), zz0 = fastFloor(z),
-                num2 =  (seed - (((seed * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                num3 =  (num2 - (((num2 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx0g0 = (seed + (((xx0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx0g1 = (rxx0g0 + ((((xx0 + xJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx0g2 = (rxx0g1 + ((((xx0 + xJump + yJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                num1 =  (seed - (((seed * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                num2 =  (num1 - (((num1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rx0 = (num2 - (((xx0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                ry0 = (seed - (((yy0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rz0 = (num1 - (((zz0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rx1 = (num2 - ((((xx0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                ry1 = (seed - ((((yy0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rz1 = (num1 - ((((zz0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rxx0g0 = (num1 + (((xx0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rxx0g1 = (rxx0g0 + ((((xx0 + xJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
+                rxx0g2 = (rxx0g1 + ((((xx0 + xJump + num1) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F),//rxx0g0 + rxx0g1 + xJump,//
                 ryy0g0 = (num2 + (((yy0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ryy0g1 = (ryy0g0 + ((((yy0 + yJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ryy0g2 = (ryy0g1 + ((((yy0 + yJump + zJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rzz0g0 = (num3 + (((zz0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rzz0g1 = (rzz0g0 + ((((zz0 + zJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rzz0g2 = (rzz0g1 + ((((zz0 + zJump + xJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx1g0 = (seed + ((((xx0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx1g1 = (rxx1g0 + ((((xx0 + 1 + xJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx1g2 = (rxx1g1 + ((((xx0 + 1 + xJump + yJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                ryy0g1 = (ryy0g0 + ((((yy0 + yJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
+                ryy0g2 = (ryy0g1 + ((((yy0 + yJump + num2) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F),//ryy0g0 + ryy0g1 * yJump,//
+                rzz0g0 = (seed + (((zz0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rzz0g1 = (rzz0g0 + ((((zz0 + zJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
+                rzz0g2 = (rzz0g1 + ((((zz0 + zJump + seed) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F),//rzz0g0 + rzz0g1 + zJump,//
+                rxx1g0 = (num1 + ((((xx0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rxx1g1 = (rxx1g0 + ((((xx0 + 1 + xJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
+                rxx1g2 = (rxx1g1 + ((((xx0 + 1 + xJump + num1) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F), //rxx1g0 + rxx1g1 + xJump,//
                 ryy1g0 = (num2 + ((((yy0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ryy1g1 = (ryy1g0 + ((((yy0 + 1 + yJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ryy1g2 = (ryy1g1 + ((((yy0 + 1 + yJump + zJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rzz1g0 = (num3 + ((((zz0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rzz1g1 = (rzz1g0 + ((((zz0 + 1 + zJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rzz1g2 = (rzz1g1 + ((((zz0 + 1 + zJump + xJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+                ryy1g1 = (ryy1g0 + ((((yy0 + 1 + yJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
+                ryy1g2 = (ryy1g1 + ((((yy0 + 1 + yJump + num2) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F),//ryy1g0 + ryy1g1 + yJump,//
+                rzz1g0 = (seed + ((((zz0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
+                rzz1g1 = (rzz1g0 + ((((zz0 + 1 + zJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
+                rzz1g2 = (rzz1g1 + ((((zz0 + 1 + zJump + seed) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F);//rzz1g0 + rzz1g1 + zJump;//
         final float
                 dx = (x - xx0), dy = (y - yy0), dz = (z - zz0),
+                ex = dx - 1f, ey = dy - 1f, ez = dz - 1f,
                 cx = querp(dx), cy = querp(dy), cz = querp(dz),
-                rx0y0z0 = ((rxx0g0 * ryy0g0 * rzz0g0 >> 16) * dx        + (rxx0g1 * ryy0g1 * rzz0g1 >> 16) * dy        + (rxx0g2 * ryy0g2 * rzz0g2 >> 16) * dz       ) * 1.4f,
-                rx0y1z0 = ((rxx0g0 * ryy1g0 * rzz0g0 >> 16) * dx        + (rxx0g1 * ryy1g1 * rzz0g1 >> 16) * (dy - 1f) + (rxx0g2 * ryy1g2 * rzz0g2 >> 16) * dz       ) * 1.4f,
-                rx1y0z0 = ((rxx1g0 * ryy0g0 * rzz0g0 >> 16) * (dx - 1f) + (rxx1g1 * ryy0g1 * rzz0g1 >> 16) * dy        + (rxx1g2 * ryy0g2 * rzz0g2 >> 16) * dz       ) * 1.4f,
-                rx1y1z0 = ((rxx1g0 * ryy1g0 * rzz0g0 >> 16) * (dx - 1f) + (rxx1g1 * ryy1g1 * rzz0g1 >> 16) * (dy - 1f) + (rxx1g2 * ryy1g2 * rzz0g2 >> 16) * dz       ) * 1.4f,
-                rx0y0z1 = ((rxx0g0 * ryy0g0 * rzz1g0 >> 16) * dx        + (rxx0g1 * ryy0g1 * rzz1g1 >> 16) * dy        + (rxx0g2 * ryy0g2 * rzz1g2 >> 16) * (dz - 1f)) * 1.4f,
-                rx0y1z1 = ((rxx0g0 * ryy1g0 * rzz1g0 >> 16) * dx        + (rxx0g1 * ryy1g1 * rzz1g1 >> 16) * (dy - 1f) + (rxx0g2 * ryy1g2 * rzz1g2 >> 16) * (dz - 1f)) * 1.4f,
-                rx1y0z1 = ((rxx1g0 * ryy0g0 * rzz1g0 >> 16) * (dx - 1f) + (rxx1g1 * ryy0g1 * rzz1g1 >> 16) * dy        + (rxx1g2 * ryy0g2 * rzz1g2 >> 16) * (dz - 1f)) * 1.4f,
-                rx1y1z1 = ((rxx1g0 * ryy1g0 * rzz1g0 >> 16) * (dx - 1f) + (rxx1g1 * ryy1g1 * rzz1g1 >> 16) * (dy - 1f) + (rxx1g2 * ryy1g2 * rzz1g2 >> 16) * (dz - 1f)) * 1.4f;
+//                rx0 = (rxx0g0 * dx + ryy0g0 * dy + rzz0g0 * dz) * 0x3p-17f,
+//                rx1 = (rxx1g0 * ex + ryy1g0 * ey + rzz1g0 * ez) * 0x3p-17f,
+//                ry0 = (rxx0g1 * dx + ryy0g1 * dy + rzz0g1 * dz) * 0x3p-17f,
+//                ry1 = (rxx1g1 * ex + ryy1g1 * ey + rzz1g1 * ez) * 0x3p-17f,
+//                rz0 = (rxx0g2 * dx + ryy0g2 * dy + rzz0g2 * dz) * 0x3p-17f,
+//                rz1 = (rxx1g2 * ex + ryy1g2 * ey + rzz1g2 * ez) * 0x3p-17f,
+                rx0y0z0 = (rx0 * rxx0g0 * ryy0g0 * rzz0g0 * dx + ry0 * rxx0g1 * ryy0g1 * rzz0g1 * dy + rz0 * rxx0g2 * ryy0g2 * rzz0g2 * dz) * 0x2.87p-17f,
+                rx0y1z0 = (rx0 * rxx0g0 * ryy1g0 * rzz0g0 * dx + ry1 * rxx0g1 * ryy1g1 * rzz0g1 * ey + rz0 * rxx0g2 * ryy1g2 * rzz0g2 * dz) * 0x2.87p-17f,
+                rx1y0z0 = (rx1 * rxx1g0 * ryy0g0 * rzz0g0 * ex + ry0 * rxx1g1 * ryy0g1 * rzz0g1 * dy + rz0 * rxx1g2 * ryy0g2 * rzz0g2 * dz) * 0x2.87p-17f,
+                rx1y1z0 = (rx1 * rxx1g0 * ryy1g0 * rzz0g0 * ex + ry1 * rxx1g1 * ryy1g1 * rzz0g1 * ey + rz0 * rxx1g2 * ryy1g2 * rzz0g2 * dz) * 0x2.87p-17f,
+                rx0y0z1 = (rx0 * rxx0g0 * ryy0g0 * rzz1g0 * dx + ry0 * rxx0g1 * ryy0g1 * rzz1g1 * dy + rz1 * rxx0g2 * ryy0g2 * rzz1g2 * ez) * 0x2.87p-17f,
+                rx0y1z1 = (rx0 * rxx0g0 * ryy1g0 * rzz1g0 * dx + ry1 * rxx0g1 * ryy1g1 * rzz1g1 * ey + rz1 * rxx0g2 * ryy1g2 * rzz1g2 * ez) * 0x2.87p-17f,
+                rx1y0z1 = (rx1 * rxx1g0 * ryy0g0 * rzz1g0 * ex + ry0 * rxx1g1 * ryy0g1 * rzz1g1 * dy + rz1 * rxx1g2 * ryy0g2 * rzz1g2 * ez) * 0x2.87p-17f,
+                rx1y1z1 = (rx1 * rxx1g0 * ryy1g0 * rzz1g0 * ex + ry1 * rxx1g1 * ryy1g1 * rzz1g1 * ey + rz1 * rxx1g2 * ryy1g2 * rzz1g2 * ez) * 0x2.87p-17f;
 
+//                rx0y0z0 = ((rxx0g0 * ryy0g0 * rzz0g0 >> 14) * dx        + (rxx0g1 * ryy0g1 * rzz0g1 >> 14) * dy        + (rxx0g2 * ryy0g2 * rzz0g2 >> 14) * dz       ) * 0.355f,
+//                rx0y1z0 = ((rxx0g0 * ryy1g0 * rzz0g0 >> 14) * dx        + (rxx0g1 * ryy1g1 * rzz0g1 >> 14) * (dy - 1f) + (rxx0g2 * ryy1g2 * rzz0g2 >> 14) * dz       ) * 0.355f,
+//                rx1y0z0 = ((rxx1g0 * ryy0g0 * rzz0g0 >> 14) * (dx - 1f) + (rxx1g1 * ryy0g1 * rzz0g1 >> 14) * dy        + (rxx1g2 * ryy0g2 * rzz0g2 >> 14) * dz       ) * 0.355f,
+//                rx1y1z0 = ((rxx1g0 * ryy1g0 * rzz0g0 >> 14) * (dx - 1f) + (rxx1g1 * ryy1g1 * rzz0g1 >> 14) * (dy - 1f) + (rxx1g2 * ryy1g2 * rzz0g2 >> 14) * dz       ) * 0.355f,
+//                rx0y0z1 = ((rxx0g0 * ryy0g0 * rzz1g0 >> 14) * dx        + (rxx0g1 * ryy0g1 * rzz1g1 >> 14) * dy        + (rxx0g2 * ryy0g2 * rzz1g2 >> 14) * (dz - 1f)) * 0.355f,
+//                rx0y1z1 = ((rxx0g0 * ryy1g0 * rzz1g0 >> 14) * dx        + (rxx0g1 * ryy1g1 * rzz1g1 >> 14) * (dy - 1f) + (rxx0g2 * ryy1g2 * rzz1g2 >> 14) * (dz - 1f)) * 0.355f,
+//                rx1y0z1 = ((rxx1g0 * ryy0g0 * rzz1g0 >> 14) * (dx - 1f) + (rxx1g1 * ryy0g1 * rzz1g1 >> 14) * dy        + (rxx1g2 * ryy0g2 * rzz1g2 >> 14) * (dz - 1f)) * 0.355f,
+//                rx1y1z1 = ((rxx1g0 * ryy1g0 * rzz1g0 >> 14) * (dx - 1f) + (rxx1g1 * ryy1g1 * rzz1g1 >> 14) * (dy - 1f) + (rxx1g2 * ryy1g2 * rzz1g2 >> 14) * (dz - 1f)) * 0.355f;
+
+//        return NumberTools.bounce(interpolate(rx0, rx1, cx) + interpolate(ry0, ry1, cy) + interpolate(rz0, rz1, cz) + 163840f);
         return NumberTools.bounce(
                 interpolate(
                         interpolate(interpolate(rx0y0z0, rx1y0z0, cx), interpolate(rx0y1z0, rx1y1z0, cx), cy),
@@ -1577,7 +1600,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         float n = 0.0f;
         final float s = (x + y + z + w) * F4;
         final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
-        final float[] gradient4DLUT = MasonNoise.gradient4DLUT;
+        final float[] gradient4DLUT = MeadNoise.gradient4DLUT;
         final float t = (i + j + k + l) * G4,
                 X0 = i - t,
                 Y0 = j - t,

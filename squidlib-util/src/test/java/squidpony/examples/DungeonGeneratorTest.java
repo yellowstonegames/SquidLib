@@ -80,8 +80,8 @@ import java.io.IOException;
  */
 public class DungeonGeneratorTest {
     public static int width = 70, height = 70, depth = 16;
-    public static void main(String[] args )
-    {
+
+    public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
         StatefulRNG rng = new StatefulRNG(2252637788195L);
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
@@ -171,31 +171,25 @@ public class DungeonGeneratorTest {
         }
         */
 
-        for(OrderedSet<Coord> lhs : sdg.placement.getAlongStraightWalls())
-        {
-            for(Coord c : lhs)
-            {
+        for (OrderedSet<Coord> lhs : sdg.placement.getAlongStraightWalls()) {
+            for (Coord c : lhs) {
                 sdungeon[c.x][c.y] = '}';
             }
         }
 
-        for(OrderedSet<Coord> lhs : sdg.placement.getCorners())
-        {
-            for(Coord c : lhs)
-            {
+        for (OrderedSet<Coord> lhs : sdg.placement.getCorners()) {
+            for (Coord c : lhs) {
                 sdungeon[c.x][c.y] = 'º';
             }
         }
 
-        for(OrderedSet<Coord> lhs : sdg.placement.getCenters())
-        {
-            for(Coord c : lhs)
-            {
+        for (OrderedSet<Coord> lhs : sdg.placement.getCenters()) {
+            for (Coord c : lhs) {
                 sdungeon[c.x][c.y] = '$';
             }
         }
 
-        for(Coord c : sdg.placement.getHidingPlaces(Radius.CIRCLE, 8)) {
+        for (Coord c : sdg.placement.getHidingPlaces(Radius.CIRCLE, 8)) {
             sdungeon[c.x][c.y] = 'h';
         }
         // Just a little fun with Java that uses no alphanumerics other than keywords to express "Hello, World!"
@@ -466,6 +460,7 @@ public class DungeonGeneratorTest {
         System.out.println(sdg);
         */
     }
+
     // Generates a preview webpage when given the right images.
     // See the following for generated images with different parameters (scroll down and right to see the map)
     // http://tommyettinger.github.io/home/PixVoxel/dungeon/dungeon.html   (DungeonGenerator)
@@ -473,159 +468,271 @@ public class DungeonGeneratorTest {
     // http://tommyettinger.github.io/home/PixVoxel/dungeon/occupied.html  (SectionDungeonGenerator with people)
     // The assets are CC0 licensed (effectively public domain), made by me (Tommy Ettinger). If you intend to use
     // them in a project, maybe ask to see if there's a newer version already made or in progress.
-    public static void mainAlt(String[] args ) {
+    public static void mainAlt(String[] args) {
         RNG rng = new RNG(2252637788195L);
         SectionDungeonGenerator dungeonGenerator = new SectionDungeonGenerator(width, width, rng);
         dungeonGenerator.addDoors(15, true);
-        //dungeonGenerator.addWater(SectionDungeonGenerator.CAVE, 15);
-        dungeonGenerator.addGrass(SectionDungeonGenerator.CAVE, 15);
-        dungeonGenerator.addBoulders(SectionDungeonGenerator.ALL, 6);
-        dungeonGenerator.addMaze(4);
+        dungeonGenerator.addWater(SectionDungeonGenerator.ALL, 12);
+        dungeonGenerator.addGrass(SectionDungeonGenerator.ALL, 8);
+        dungeonGenerator.addBoulders(SectionDungeonGenerator.ALL, 4);
+        //dungeonGenerator.addMaze(4);
         dungeonGenerator.addLake(15);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(width, width, rng, 0.12);
+        /*SerpentMapGenerator serpent = new SerpentMapGenerator(width, width, rng, 0.12);
         serpent.putWalledBoxRoomCarvers(4);
         serpent.putWalledRoundRoomCarvers(2);
         serpent.putCaveCarvers(5);
-        //dungeonGenerator.generate(serpent.generate(), serpent.getEnvironment());
-        dungeonGenerator.generate();
+        */
+        // /dungeonGenerator.generate(serpent.generate(), serpent.getEnvironment());
 
-        dungeonGenerator.setDungeon(
-                DungeonUtility.hashesToLines(dungeonGenerator.getDungeon(), true));
-        char[][] iso = dungeonGenerator.getDungeon();
+        char[][] iso = DungeonUtility.hashesToLines(dungeonGenerator.generate(), true);
         int[][] water = new int[width][width];
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < width; j++) {
                 water[i][j] = -1;
             }
         }
         boolean even = true;
         StringBuilder sb = new StringBuilder(64000);
         String[] people = new String[]{
-                "palette0_Hero_Chain_Bow_Iso.gif",
-                "palette0_Hero_Chain_Dagger_Iso.gif",
-                "palette0_Hero_Chain_Mace_Iso.gif",
-                "palette0_Hero_Chain_Staff_Iso.gif",
-                "palette0_Hero_Chain_Sword_Iso.gif",
-                "palette0_Hero_Leather_Bow_Iso.gif",
-                "palette0_Hero_Leather_Dagger_Iso.gif",
-                "palette0_Hero_Leather_Mace_Iso.gif",
-                "palette0_Hero_Leather_Staff_Iso.gif",
-                "palette0_Hero_Leather_Sword_Iso.gif",
-                "palette0_Hero_Plate_Bow_Iso.gif",
-                "palette0_Hero_Plate_Dagger_Iso.gif",
-                "palette0_Hero_Plate_Mace_Iso.gif",
-                "palette0_Hero_Plate_Staff_Iso.gif",
-                "palette0_Hero_Plate_Sword_Iso.gif",
-                "palette0_Hero_Robe_Bow_Iso.gif",
-                "palette0_Hero_Robe_Dagger_Iso.gif",
-                "palette0_Hero_Robe_Mace_Iso.gif",
-                "palette0_Hero_Robe_Staff_Iso.gif",
-                "palette0_Hero_Robe_Sword_Iso.gif"
+                "palette0_Hero_Chain_Bow_Attack.gif",
+                "palette0_Hero_Chain_Crossbow_Attack.gif",
+                "palette0_Hero_Chain_Dagger_Attack.gif",
+                "palette0_Hero_Chain_Mace_Attack.gif",
+                "palette0_Hero_Chain_Staff_Attack.gif",
+                "palette0_Hero_Chain_Sword_Attack.gif",
+                "palette0_Hero_Leather_Bow_Attack.gif",
+                "palette0_Hero_Leather_Crossbow_Attack.gif",
+                "palette0_Hero_Leather_Dagger_Attack.gif",
+                "palette0_Hero_Leather_Mace_Attack.gif",
+                "palette0_Hero_Leather_Staff_Attack.gif",
+                "palette0_Hero_Leather_Sword_Attack.gif",
+                "palette0_Hero_Plate_Bow_Attack.gif",
+                "palette0_Hero_Plate_Crossbow_Attack.gif",
+                "palette0_Hero_Plate_Dagger_Attack.gif",
+                "palette0_Hero_Plate_Mace_Attack.gif",
+                "palette0_Hero_Plate_Staff_Attack.gif",
+                "palette0_Hero_Plate_Sword_Attack.gif",
+                "palette0_Hero_Robe_Bow_Attack.gif",
+                "palette0_Hero_Robe_Crossbow_Attack.gif",
+                "palette0_Hero_Robe_Dagger_Attack.gif",
+                "palette0_Hero_Robe_Mace_Attack.gif",
+                "palette0_Hero_Robe_Staff_Attack.gif",
+                "palette0_Hero_Robe_Sword_Attack.gif",
+                "palette6_Heroine_Chain_Bow_Attack.gif",
+                "palette6_Heroine_Chain_Crossbow_Attack.gif",
+                "palette6_Heroine_Chain_Dagger_Attack.gif",
+                "palette6_Heroine_Chain_Mace_Attack.gif",
+                "palette6_Heroine_Chain_Staff_Attack.gif",
+                "palette6_Heroine_Chain_Sword_Attack.gif",
+                "palette6_Heroine_Leather_Bow_Attack.gif",
+                "palette6_Heroine_Leather_Crossbow_Attack.gif",
+                "palette6_Heroine_Leather_Dagger_Attack.gif",
+                "palette6_Heroine_Leather_Mace_Attack.gif",
+                "palette6_Heroine_Leather_Staff_Attack.gif",
+                "palette6_Heroine_Leather_Sword_Attack.gif",
+                "palette6_Heroine_Plate_Bow_Attack.gif",
+                "palette6_Heroine_Plate_Crossbow_Attack.gif",
+                "palette6_Heroine_Plate_Dagger_Attack.gif",
+                "palette6_Heroine_Plate_Mace_Attack.gif",
+                "palette6_Heroine_Plate_Staff_Attack.gif",
+                "palette6_Heroine_Plate_Sword_Attack.gif",
+                "palette6_Heroine_Robe_Bow_Attack.gif",
+                "palette6_Heroine_Robe_Crossbow_Attack.gif",
+                "palette6_Heroine_Robe_Dagger_Attack.gif",
+                "palette6_Heroine_Robe_Mace_Attack.gif",
+                "palette6_Heroine_Robe_Staff_Attack.gif",
+                "palette6_Heroine_Robe_Sword_Attack.gif"
         };
-        for(int row = 0, sx = 1 - (width>>1), sy = (width>>1) - 1; row < (width<<1); ++row, even = (row % 2 == 0), sx += (even) ? 1 : 0, sy += (!even) ? 1 : 0)
-        {
+        for (int y = 0; y < width; y++) {
             sb.append("<div class=\"row\">\n");
-            for(int col = 0; col < width; col++)
-            {
-                int x = sx + col;
-                int y = sy - col;
-                if(x < 0 || y < 0 || x >= width || y >= width)
-                {
-                    sb.append("<div class=\"isotile\"></div>\n");
+            for (int x = 0; x < width; x++) {
+                sb.append("<div class=\"orthotile\">");
+                switch (iso[x][y]) {
+                    case '.':
+                        sb.append("<img src=\"dungeon/palette13_Floor_Ortho_face").append(rng.nextInt(4)).append("_0.png\" />");
+                        if (rng.nextInt(15) == 0) {
+                            sb.append("<img class=\"ppl\" src=\"dungeon/");
+                            sb.append(rng.getRandomElement(people));
+                            sb.append("\" />");
+                        }
+                        break;
+                    case '"':
+                    case ':':
+                        sb.append("<img src=\"dungeon/palette14_Grass_Ortho_face").append(rng.nextInt(4)).append("_0.png\" />");
+                        break;
+                    case '#':
+                        sb.append("<img src=\"dungeon/palette13_Boulder_Ortho_face").append(rng.nextInt(4)).append("_0.png\" />");
+                        break;
+                    case '~':
+                    case ',':
+                        water[x][y] = rng.nextInt(16);
+                        if (water[x][y - 1] > -1) water[x][y] = (water[x][y] & 14) | ((water[x][y - 1] & 4) >> 2);
+                        if (water[x][y + 1] > -1) water[x][y] = (water[x][y] & 11) | ((water[x][y + 1] & 1) << 2);
+                        if (water[x - 1][y] > -1) water[x][y] = (water[x][y] & 7) | ((water[x - 1][y] & 2) << 2);
+                        if (water[x + 1][y] > -1) water[x][y] = (water[x][y] & 13) | ((water[x + 1][y] & 8) >> 2);
+
+                        sb.append("<img src=\"dungeon/palette15_Water_Ortho_face0_").append(Integer.toHexString(water[x][y])).append(".png\" />");
+                        break;
+                    case '│':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Straight_Ortho_face").append(rng.nextInt(2) * 2 + 1).append("_0.png\" />");
+                        break;
+                    case '─':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Straight_Ortho_face").append(rng.nextInt(2) * 2).append("_0.png\" />");
+                        break;
+
+                    case '┌':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Corner_Ortho_face1_0.png\" />");
+                        break;
+                    case '┐':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Corner_Ortho_face2_0.png\" />");
+                        break;
+                    case '└':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Corner_Ortho_face0_0.png\" />");
+                        break;
+                    case '┘':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Corner_Ortho_face3_0.png\" />");
+                        break;
+
+                    case '┤':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Tee_Ortho_face3_0.png\" />");
+                        break;
+                    case '┴':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Tee_Ortho_face0_0.png\" />");
+                        break;
+                    case '├':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Tee_Ortho_face1_0.png\" />");
+                        break;
+                    case '┬':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Tee_Ortho_face2_0.png\" />");
+                        break;
+
+                    case '┼':
+                        sb.append("<img src=\"dungeon/palette13_Wall_Cross_Ortho_face").append(rng.nextInt(4)).append("_0.png\" />");
+                        break;
+
+                    case '+':
+                        sb.append("<img src=\"dungeon/palette13_Door_Closed_Ortho_face").append(rng.nextInt(2) * 2 + 1).append("_0.png\" />");
+                        break;
+                    case '/':
+                        sb.append("<img src=\"dungeon/palette13_Door_Closed_Ortho_face").append(rng.nextInt(2) * 2).append("_0.png\" />");
+                        break;
                 }
-                else
-                {
-                    switch (iso[x][y])
-                    {
-                        case '.':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" />");
-                            /*if(rng.nextInt(120) == 0) {
-                                sb.append("<img class=\"ppl\" src=\"dungeon/");
-                                sb.append(rng.getRandomElement(people));
-                                sb.append("\" />");
-                            }*/
-                            sb.append("</div>\n");
-                            break;
-                        case '"':
-                        case ':':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette47_Grass_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
-                            break;
-                        case '#':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Boulder_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
-                            break;
-                        case '~':
-                        case ',':
-                            water[x][y] = rng.nextInt(16);
-                            if(water[x][y-1] > -1) water[x][y] = (water[x][y] & 14) | ((water[x][y-1] & 4) >> 2);
-                            if(water[x][y+1] > -1) water[x][y] = (water[x][y] & 11) | ((water[x][y+1] & 1) << 2);
-                            if(water[x-1][y] > -1) water[x][y] = (water[x][y] & 7)  | ((water[x-1][y] & 2) << 2);
-                            if(water[x+1][y] > -1) water[x][y] = (water[x][y] & 13) | ((water[x+1][y] & 8) >> 2);
 
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette0_Water_Huge_face0_" + (Integer.toHexString(water[x][y])) + ".png\" /></div>\n");
-                            break;
-                        case '│':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face" + (rng.nextInt(2) * 2) + "_0.png\" /></div>\n");
-                            break;
-                        case '─':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face" + (rng.nextInt(2) * 2 + 1) + "_0.png\" /></div>\n");
-                            break;
-
-                        case '┌':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face2_0.png\" /></div>\n");
-                            break;
-                        case '┐':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face3_0.png\" /></div>\n");
-                            break;
-                        case '└':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face1_0.png\" /></div>\n");
-                            break;
-                        case '┘':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face0_0.png\" /></div>\n");
-                            break;
-
-                        case '┤':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face0_0.png\" /></div>\n");
-                            break;
-                        case '┴':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face1_0.png\" /></div>\n");
-                            break;
-                        case '├':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face2_0.png\" /></div>\n");
-                            break;
-                        case '┬':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face3_0.png\" /></div>\n");
-                            break;
-
-                        case '┼':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Cross_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
-                            break;
-
-                        case '+':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face" + (rng.nextInt(2) * 2) + "_0.png\" /></div>\n");
-                            break;
-                        case '/':
-                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face" + (rng.nextInt(2) * 2 + 1) + "_0.png\" /></div>\n");
-                            break;
-
-                        case ' ':
-                            sb.append("<div class=\"isotile\"></div>\n");
-                            break;
-                        default:
-                            System.out.println("BAD GLYPH: " + iso[x][y] + " AT X: " + x + ", Y: " + y);
-                    }
-                }
+                sb.append("</div>\n");
             }
             sb.append("</div>\n");
         }
         try {
-            FileWriter fw = new FileWriter("Unoccupied.html");
+            FileWriter fw = new FileWriter("index.html");
             fw.write(sb.toString());
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }
+
+//        for(int row = 0, sx = 1 - (width>>1), sy = (width>>1) - 1; row < (width<<1); ++row, even = (row % 2 == 0), sx += (even) ? 1 : 0, sy += (!even) ? 1 : 0)
+//        {
+//            sb.append("<div class=\"row\">\n");
+//            for(int col = 0; col < width; col++)
+//            {
+//                int x = sx + col;
+//                int y = sy - col;
+//                if(x < 0 || y < 0 || x >= width || y >= width)
+//                {
+//                    sb.append("<div class=\"isotile\"></div>\n");
+//                }
+//                else
+//                {
+//                    switch (iso[x][y])
+//                    {
+//                        case '.':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" />");
+//                            if(rng.nextInt(40) == 0) {
+//                                sb.append("<img class=\"ppl\" src=\"dungeon/");
+//                                sb.append(rng.getRandomElement(people));
+//                                sb.append("\" />");
+//                            }
+//                            sb.append("</div>\n");
+//                            break;
+//                        case '"':
+//                        case ':':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette47_Grass_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+//                            break;
+//                        case '#':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Boulder_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+//                            break;
+//                        case '~':
+//                        case ',':
+//                            water[x][y] = rng.nextInt(16);
+//                            if(water[x][y-1] > -1) water[x][y] = (water[x][y] & 14) | ((water[x][y-1] & 4) >> 2);
+//                            if(water[x][y+1] > -1) water[x][y] = (water[x][y] & 11) | ((water[x][y+1] & 1) << 2);
+//                            if(water[x-1][y] > -1) water[x][y] = (water[x][y] & 7)  | ((water[x-1][y] & 2) << 2);
+//                            if(water[x+1][y] > -1) water[x][y] = (water[x][y] & 13) | ((water[x+1][y] & 8) >> 2);
+//
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette0_Water_Huge_face0_" + (Integer.toHexString(water[x][y])) + ".png\" /></div>\n");
+//                            break;
+//                        case '│':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face" + (rng.nextInt(2) * 2) + "_0.png\" /></div>\n");
+//                            break;
+//                        case '─':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Straight_Huge_face" + (rng.nextInt(2) * 2 + 1) + "_0.png\" /></div>\n");
+//                            break;
+//
+//                        case '┌':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face2_0.png\" /></div>\n");
+//                            break;
+//                        case '┐':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face3_0.png\" /></div>\n");
+//                            break;
+//                        case '└':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face1_0.png\" /></div>\n");
+//                            break;
+//                        case '┘':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Corner_Huge_face0_0.png\" /></div>\n");
+//                            break;
+//
+//                        case '┤':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face0_0.png\" /></div>\n");
+//                            break;
+//                        case '┴':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face1_0.png\" /></div>\n");
+//                            break;
+//                        case '├':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face2_0.png\" /></div>\n");
+//                            break;
+//                        case '┬':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Tee_Huge_face3_0.png\" /></div>\n");
+//                            break;
+//
+//                        case '┼':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Wall_Cross_Huge_face" + rng.nextInt(4) + "_0.png\" /></div>\n");
+//                            break;
+//
+//                        case '+':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face" + (rng.nextInt(2) * 2) + "_0.png\" /></div>\n");
+//                            break;
+//                        case '/':
+//                            sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Door_Closed_Huge_face" + (rng.nextInt(2) * 2 + 1) + "_0.png\" /></div>\n");
+//                            break;
+//
+//                        case ' ':
+//                            sb.append("<div class=\"isotile\"></div>\n");
+//                            break;
+//                        default:
+//                            System.out.println("BAD GLYPH: " + iso[x][y] + " AT X: " + x + ", Y: " + y);
+//                    }
+//                }
+//            }
+//            sb.append("</div>\n");
+//        }
+//        try {
+//            FileWriter fw = new FileWriter("index.html");
+//            fw.write(sb.toString());
+//            fw.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//}
