@@ -2733,6 +2733,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     private int alterEntry(final int pos, final K replacement) {
         final int[] value = this.value;
         final int v = value[pos], op = order.indexOf(pos);
+        final boolean isFirst = op == 0, isLast = op == order.size - 1;
         shiftKeysValues(pos);
 
         int rep;
@@ -2757,9 +2758,9 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             value[rep] = v;
         }
         order.set(op, rep);
-        if(first == op)
+        if(isFirst)
             first = rep;
-        if(last == op)
+        if(isLast)
             last = rep;
         return v;
     }

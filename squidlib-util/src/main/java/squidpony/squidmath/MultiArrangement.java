@@ -1907,6 +1907,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         final IntVLA[] value = this.value;
         final IntVLA v = value[pos];
         final int op = order.indexOf(pos);
+        final boolean isFirst = op == 0, isLast = op == order.size - 1;
         shiftKeysValues(pos);
 
         int rep;
@@ -1942,9 +1943,9 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
             value[rep] = v;
         }
         order.set(op, rep);
-        if(first == op)
+        if(isFirst)
             first = rep;
-        if(last == op)
+        if(isLast)
             last = rep;
         return false;
     }
