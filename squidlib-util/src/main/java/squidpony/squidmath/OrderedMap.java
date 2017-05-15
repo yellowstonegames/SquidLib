@@ -2662,8 +2662,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         return this;
     }
     private V alterEntry(final int pos, final K replacement) {
-        key[pos] = null;
-
+        shiftKeys(pos);
         final V[] value = this.value;
         V v = value[pos];
         value[pos] = null;
@@ -2821,4 +2820,17 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
         return vals;
     }
+    /**
+     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.
+     *
+     * @param index       an index to replace the K key at
+     * @param replacement another K key that will replace the original at the remembered index
+     * @return the value associated with the possibly-altered key
+     */
+    public V alterAt(int index, K replacement)
+    {
+        return alter(keyAt(index), replacement);
+    }
+
+
 }

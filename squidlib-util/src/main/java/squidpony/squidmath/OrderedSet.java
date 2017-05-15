@@ -1941,7 +1941,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         } else {
             K curr;
             final K[] key = this.key;
-            key[pos] = null;
+            shiftKeys(pos);
             // The starting point.
             if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
                 if (hasher.areEqual(curr, replacement))
@@ -2069,6 +2069,18 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                 return true;
             }
         }
+    }
+
+    /**
+     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.
+     *
+     * @param index       an index to replace the K item at
+     * @param replacement another K value that will replace the original at the remembered index
+     * @return true if the Set changed, or false if it didn't (such as if the replacement was already present at the given index)
+     */
+    public boolean alterAt(int index, K replacement)
+    {
+        return alter(getAt(index), replacement);
     }
 
 }
