@@ -2693,10 +2693,10 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         return this;
     }
     private int alterEntry(final int pos, final K replacement) {
-        key[pos] = null;
+        shiftKeys(pos);
 
         final int[] value = this.value;
-        int v = value[pos];
+        final int v = value[pos];
         value[pos] = -1;
 
         int rep;
@@ -2720,6 +2720,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             key[rep] = replacement;
             value[rep] = v;
         }
+
         fixOrder(pos, rep);
         return v;
     }
@@ -2920,5 +2921,17 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         value[posR] = left;
         order.swap(left, right);
         return true;
+    }
+
+    /**
+     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.
+     *
+     * @param index       an index to replace the K key at
+     * @param replacement another K key that will replace the original at the remembered index
+     * @return the int associated with the possibly-altered key; should be equal to index
+     */
+    public int alterAt(int index, K replacement)
+    {
+        return alter(keyAt(index), replacement);
     }
 }

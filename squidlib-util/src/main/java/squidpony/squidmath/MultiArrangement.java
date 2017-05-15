@@ -1868,8 +1868,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         return this;
     }
     private boolean alterEntry(final int pos, final K replacement) {
-        key[pos] = null;
-
+        shiftKeys(pos);
         final IntVLA[] value = this.value;
         final IntVLA v = value[pos];
         value[pos] = null;

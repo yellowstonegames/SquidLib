@@ -3718,7 +3718,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     w = Long.lowestOneBit(t);
                     while (w != 0) {
                         if (run++ == order[idx]) {
-                            if (++idx >= limit) break ALL;
+                            if (++idx >= limit) {
+                                data[x * ySections + s] &= (w<<1)-1;
+                                for (int rx = x+1; rx < width; rx++) {
+                                    data[rx * ySections + s] = 0;
+                                }
+                                for (int rs = s+1; rs < ySections; rs++) {
+                                    for (int rx = 0; rx < width; rx++) {
+                                        data[rx * ySections + rs] = 0;
+                                    }
+                                }
+                                break ALL;
+                            }
                         } else {
                             data[x * ySections + s] ^= w;
                         }
@@ -4271,7 +4282,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         result += (a ^= 0x8329C6EB9E6AD3E3L * height);
         result += (a ^= 0x8329C6EB9E6AD3E3L * width);
-        return (int)((result *= (a | 1L)) ^ (result >>> 32));
+        return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
     }
 
     public String serializeToString()
