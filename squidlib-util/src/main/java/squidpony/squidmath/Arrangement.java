@@ -607,6 +607,42 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             fixOrder(pos, last);
         }
     }
+
+    /**
+     * Shifts left entries with the specified hash code, starting at the
+     * specified position, and empties the resulting free entry.
+     *
+     * @param pos
+     *            a starting position.
+     */
+    protected final void shiftKeysValues(int pos) {
+        // Shift entries with the same hash.
+        int last, slot;
+        K curr;
+        int v;
+        final K[] key = this.key;
+        final int[] val = this.value;
+        for (;;) {
+            pos = ((last = pos) + 1) & mask;
+            for (;;) {
+                if ((curr = key[pos]) == null) {
+                    key[last] = null;
+                    val[last] = -1;
+                    return;
+                }
+                v = val[pos];
+                slot = HashCommon.mix(hasher.hash(curr))
+                        & mask;
+                if (last <= pos ? last >= slot || slot > pos : last >= slot
+                        && slot > pos)
+                    break;
+                pos = (pos + 1) & mask;
+            }
+            key[last] = curr;
+            val[last] = v;
+            fixOrder(pos, last);
+        }
+    }
     @SuppressWarnings("unchecked")
     protected Integer rem(final Object k) {
         if ((K) k == null) {
@@ -1184,7 +1220,9 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         }
         else
         {
-            order.set(order.indexOf(s), d);
+            int idx = order.indexOf(s);
+            order.set(idx, d);
+            //value[s] = idx;
         }
         /*
         final long links = link[s];
@@ -2693,11 +2731,9 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         return this;
     }
     private int alterEntry(final int pos, final K replacement) {
-        shiftKeys(pos);
-
         final int[] value = this.value;
-        final int v = value[pos];
-        value[pos] = -1;
+        final int v = value[pos], op = order.indexOf(pos);
+        shiftKeysValues(pos);
 
         int rep;
         if (replacement == null) {
@@ -2720,8 +2756,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             key[rep] = replacement;
             value[rep] = v;
         }
-
-        fixOrder(pos, rep);
+        order.set(op, rep);
+        if(first == op)
+            first = rep;
+        if(last == op)
+            last = rep;
         return v;
     }
     private int alterNullEntry(final K replacement) {

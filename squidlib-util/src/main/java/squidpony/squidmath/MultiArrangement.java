@@ -502,6 +502,42 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
             fixOrder(pos, last);
         }
     }
+    /**
+     * Shifts left entries with the specified hash code, starting at the
+     * specified position, and empties the resulting free entry.
+     *
+     * @param pos
+     *            a starting position.
+     */
+    protected final void shiftKeysValues(int pos) {
+        // Shift entries with the same hash.
+        int last, slot;
+        K curr;
+        IntVLA v;
+        final K[] key = this.key;
+        final IntVLA[] val = this.value;
+        for (;;) {
+            pos = ((last = pos) + 1) & mask;
+            for (;;) {
+                if ((curr = key[pos]) == null) {
+                    key[last] = null;
+                    val[last] = null;
+                    return;
+                }
+                v = val[pos];
+                slot = HashCommon.mix(hasher.hash(curr))
+                        & mask;
+                if (last <= pos ? last >= slot || slot > pos : last >= slot
+                        && slot > pos)
+                    break;
+                pos = (pos + 1) & mask;
+            }
+            key[last] = curr;
+            val[last] = v;
+            fixOrder(pos, last);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     protected int rem(final Object k) {
         if ((K) k == null) {
@@ -1868,10 +1904,10 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         return this;
     }
     private boolean alterEntry(final int pos, final K replacement) {
-        shiftKeys(pos);
         final IntVLA[] value = this.value;
         final IntVLA v = value[pos];
-        value[pos] = null;
+        final int op = order.indexOf(pos);
+        shiftKeysValues(pos);
 
         int rep;
         if (replacement == null) {
@@ -1905,7 +1941,11 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
             key[rep] = replacement;
             value[rep] = v;
         }
-        fixOrder(pos, rep);
+        order.set(op, rep);
+        if(first == op)
+            first = rep;
+        if(last == op)
+            last = rep;
         return false;
     }
     private boolean alterNullEntry(final K replacement) {
