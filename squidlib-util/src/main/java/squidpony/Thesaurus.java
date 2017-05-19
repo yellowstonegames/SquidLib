@@ -311,6 +311,19 @@ public class Thesaurus implements Serializable{
         }
     }
 
+    private class KnownLanguageSubstitution implements Substitution
+    {
+        public FakeLanguageGen language;
+        public KnownLanguageSubstitution(FakeLanguageGen lang)
+        {
+            language = lang;
+        }
+        @Override
+        public void appendSubstitution(MatchResult match, TextBuffer dest) {
+            dest.append(language.word(rng, true, Math.min(rng.between(2, 5), rng.between(1, 6))));
+        }
+    }
+
     /**
      * Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth".
      * Needs {@link #addKnownCategories()} to be called on this Thesaurus first. May use accented characters, as in
@@ -335,6 +348,34 @@ public class Thesaurus implements Serializable{
             working = process(rng.getRandomElement(nationTerms));
         randomLanguages.clear();
         RandomLanguageSubstitution sub = new RandomLanguageSubstitution();
+        Replacer replacer = Pattern.compile("@").replacer(sub);
+        return replacer.replace(working);
+    }
+    /**
+     * Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth",
+     * with the FakeLanguageGen already available instead of randomly created. Needs {@link #addKnownCategories()} to be
+     * called on this Thesaurus first. May use accented characters, as in "Thùdshù Hegemony" or "The Glorious Chô
+     * Empire", if the given language can produce them; if you want to strip these out and replace accented chars
+     * with their un-accented counterparts, you can use {@link FakeLanguageGen#removeAccents(CharSequence)}, which
+     * returns a CharSequence that can be converted to String if needed, or simply get an accent-less language by
+     * calling {@link FakeLanguageGen#removeAccents()} on the FakeLanguageGen you would give this.
+     * <br>
+     * Some nation names use a hyphenated pairing of what would normally be names in two different languages; if one of
+     * those names is produced by this it will produce two names in the same linguistic style. The randomLanguages field
+     * is not populated by this method; it is assumed that since you are passing this a FakeLanguageGen, you already
+     * have the one you want to use anyway.
+     *
+     * @param language a FakeLanguageGen that will be used to construct any non-English names
+     * @return a random name for a nation or a loose equivalent to a nation, as a String
+     */
+    public String makeNationName(FakeLanguageGen language)
+    {
+        String working = process(rng.getRandomElement(nationTerms));
+        int frustration = 0;
+        while (frustration++ < 8 && similarFinder.matches(working))
+            working = process(rng.getRandomElement(nationTerms));
+        randomLanguages.clear();
+        KnownLanguageSubstitution sub = new KnownLanguageSubstitution(language);
         Replacer replacer = Pattern.compile("@").replacer(sub);
         return replacer.replace(working);
     }
@@ -401,12 +442,12 @@ public class Thesaurus implements Serializable{
             makeList("shadowy", "silent", "lethal", "deadly", "fatal", "venomous", "cutthroat", "murderous", "bloodstained", "stalking"),
             "sinister`noun`",
             makeList("shadow", "silence", "assassin", "ninja", "venom", "poison", "snake", "murder", "blood", "razor", "tiger"),
-            "blade`noun`",
+            "blade`noun`", // really any melee weapon
             makeList("blade", "knife", "sword", "axe", "stiletto", "katana", "scimitar", "hatchet", "spear", "glaive", "halberd",
                     "hammer", "maul", "flail", "mace", "sickle", "scythe", "whip", "lance", "nunchaku", "saber", "cutlass", "trident"),
-            "bow`noun`",
+            "bow`noun`", // really any medieval or earlier ranged weapon
             makeList("bow", "longbow", "shortbow", "crossbow", "sling", "atlatl", "bolas", "javelin", "net", "shuriken", "dagger"),
-            "weapon`noun`",
+            "weapon`noun`", // any medieval or earlier weapon (not including firearms or newer)
             makeList("blade", "knife", "sword", "axe", "stiletto", "katana", "scimitar", "hatchet", "spear", "glaive", "halberd",
                     "hammer", "maul", "flail", "mace", "sickle", "scythe", "whip", "lance", "nunchaku", "saber", "cutlass", "trident",
                     "bow", "longbow", "shortbow", "crossbow", "sling", "atlatl", "bolas", "javelin", "net", "shuriken", "dagger"),
@@ -492,6 +533,16 @@ public class Thesaurus implements Serializable{
             FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
             "na`gen`",
             FakeLanguageGen.NAHUATL,
+            "mn`gen`",
+            FakeLanguageGen.MONGOLIAN,
+            "el`gen`",
+            FakeLanguageGen.ELF,
+            "gb`gen`",
+            FakeLanguageGen.GOBLIN,
+            "if`gen`",
+            FakeLanguageGen.INFERNAL,
+            "dm`gen`",
+            FakeLanguageGen.DEMONIC,
             "ru`so`gen`",
             FakeLanguageGen.mixAll(FakeLanguageGen.RUSSIAN_ROMANIZED, 3, FakeLanguageGen.SOMALI, 2),
             "gr`hi`gen`",
@@ -564,6 +615,24 @@ public class Thesaurus implements Serializable{
             "nr`in`gen`",
             FakeLanguageGen.mixAll(
                     FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE), 3,
-                    FakeLanguageGen.INUKTITUT, 2)
+                    FakeLanguageGen.INUKTITUT, 2),
+            "mn`so`gen`",
+            FakeLanguageGen.mixAll(
+                    FakeLanguageGen.MONGOLIAN, 3,
+                    FakeLanguageGen.SOMALI, 2),
+            "dm`gr`gen`",
+            FakeLanguageGen.mixAll(
+                    FakeLanguageGen.DEMONIC, 3,
+                    FakeLanguageGen.GREEK_ROMANIZED, 2),
+            "if`na`gen`",
+            FakeLanguageGen.mixAll(
+                    FakeLanguageGen.INFERNAL, 3,
+                    FakeLanguageGen.NAHUATL, 2
+            ),
+            "el`in`gen`",
+            FakeLanguageGen.mixAll(
+                    FakeLanguageGen.ELF, 3,
+                    FakeLanguageGen.INUKTITUT, 2
+            )
     );
 }

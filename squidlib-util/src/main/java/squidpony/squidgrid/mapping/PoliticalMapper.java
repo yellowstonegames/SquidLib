@@ -124,7 +124,7 @@ public class PoliticalMapper {
         atlas.put('~', "Ocean");
         spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.ELF));
         atlas.put('%', "Wilderness");
-        spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.DEMONIC));
+        spokenLanguages.put('%', Collections.singletonList(FakeLanguageGen.DEMONIC));
 
         if (factionCount > 0) {
             Thesaurus th = new Thesaurus(rng.nextLong());
@@ -184,7 +184,108 @@ public class PoliticalMapper {
             atlas.putAndMoveToFirst('%', "Wilderness");
         if(atlas.getAndMoveToFirst('~') == null)
             atlas.putAndMoveToFirst('~', "Ocean");
-        int factionCount = existingAtlas.size() - 2;
+        int factionCount = atlas.size() - 2;
+        width = land.width;
+        height = land.height;
+        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
+        Coord.expandPoolTo(width, height);
+        GreasedRegion map = land.copy();
+        Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
+        int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
+
+        spreader.initialize(land.toChars());
+        OrderedMap<Coord, Double> entries = new OrderedMap<>();
+        entries.put(Coord.get(-1, -1), 0.0);
+        for (int i = 0; i < factionCount; i++) {
+            entries.put(centers[i], rng.between(0.5, 1.0));
+        }
+        spreader.start(entries, controlled, null);
+        short[][] sm = spreader.spillMap;
+        politicalMap = new char[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : atlas.keyAt((sm[x][y] + 1));
+            }
+        }
+        return politicalMap;
+    }
+    /**
+     * Produces a political map for the land stored in the given WorldMapGenerator, with the given number
+     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
+     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
+     * wilderness. This version uses a "recipe for an atlas" instead of a complete atlas; this is an OrderedMap of
+     * Character keys to FakeLanguageGen values, where each key represents a faction and each value is the language to
+     * use to generate names for that faction. This does assign to {@link #spokenLanguages}, but it doesn't change the
+     * actual FakeLanguageGen objects, since they are immutable. It may add some "factions" if not present to represent
+     * oceans and unclaimed land. The atlas field will always contain '~' as the first key in its ordering (with value
+     * "Ocean" if no value was already assigned in existingAtlas to that key, or a random nation name in the language
+     * that was mapped if there is one), and '%' as the second key (with value "Wilderness" if not already assigned, or
+     * a similar random nation name if there is one); later entries will be taken from existingAtlas (not duplicating
+     * '~' or '%', but using the rest).
+     * @param wmg a WorldMapGenerator that has produced a map; this gets the land parts of the map to assign claims to,
+     *            including rivers and lakes as part of nations but not oceans
+     * @param atlasLanguages an OrderedMap of Character keys to be used in the 2D array, to FakeLanguageGen objects that
+     *                       will be used to generate names; should not have size greater than 255
+     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
+     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
+     */
+    public char[][] generate(WorldMapGenerator wmg, OrderedMap<Character, FakeLanguageGen> atlasLanguages, double controlledFraction) {
+        return generate(new GreasedRegion(wmg.heightCodeData, 4, 999), atlasLanguages, controlledFraction);
+    }
+    /**
+     * Produces a political map for the land stored in the "on" cells of the given GreasedRegion, with the given number
+     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
+     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
+     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
+     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
+     * wilderness. This version uses a "recipe for an atlas" instead of a complete atlas; this is an OrderedMap of
+     * Character keys to FakeLanguageGen values, where each key represents a faction and each value is the language to
+     * use to generate names for that faction. This does assign to {@link #spokenLanguages}, but it doesn't change the
+     * actual FakeLanguageGen objects, since they are immutable. It may add some "factions" if not present to represent
+     * oceans and unclaimed land. The atlas field will always contain '~' as the first key in its ordering (with value
+     * "Ocean" if no value was already assigned in existingAtlas to that key, or a random nation name in the language
+     * that was mapped if there is one), and '%' as the second key (with value "Wilderness" if not already assigned, or
+     * a similar random nation name if there is one); later entries will be taken from existingAtlas (not duplicating
+     * '~' or '%', but using the rest).
+     * @param land a GreasedRegion that stores "on" cells for land and "off" cells for anything un-claimable, like ocean
+     * @param atlasLanguages an OrderedMap of Character keys to be used in the 2D array, to FakeLanguageGen objects that
+     *                       will be used to generate names; should not have size greater than 255
+     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
+     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
+     */
+    public char[][] generate(GreasedRegion land, OrderedMap<Character, FakeLanguageGen> atlasLanguages, double controlledFraction) {
+        atlas.clear();
+        spokenLanguages.clear();
+
+        Thesaurus th = new Thesaurus(rng.nextLong());
+        th.addKnownCategories();
+        FakeLanguageGen flg;
+        if((flg = atlasLanguages.get('~')) == null) {
+            atlas.put('~', "Ocean");
+            spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.ELF));
+        }
+        else {
+            atlas.put('~', th.makeNationName(flg));
+            spokenLanguages.put('~', Collections.singletonList(flg));
+        }
+        if((flg = atlasLanguages.get('%')) == null) {
+            atlas.put('%', "Wilderness");
+            spokenLanguages.put('%', Collections.singletonList(FakeLanguageGen.DEMONIC));
+        }
+        else {
+            atlas.put('~', th.makeNationName(flg));
+            spokenLanguages.put('~', Collections.singletonList(flg));
+        }
+
+        for (int i = 0; i < atlasLanguages.size() && i < 256; i++) {
+            Character c = atlasLanguages.keyAt(i);
+            flg = atlasLanguages.getAt(i);
+            atlas.put(c, th.makeNationName(flg));
+            spokenLanguages.put(c, Collections.singletonList(flg));
+        }
+        int factionCount = atlas.size() - 2;
         width = land.width;
         height = land.height;
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);

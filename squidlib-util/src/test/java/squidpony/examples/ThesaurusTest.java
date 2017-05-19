@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import squidpony.FakeLanguageGen;
 import squidpony.Thesaurus;
 
 import static squidpony.Maker.makeList;
@@ -35,6 +36,14 @@ public class ThesaurusTest {
                             "New Bandit`nouns` of So`mod`gen`\n"+
                             "Light`noun` of Smart`noun`")
             );
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.JAPANESE_ROMANIZED));
+            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.FRENCH)            );
+            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.NAHUATL)           );
+            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.INUKTITUT)         );
+            System.out.println(thesaurus2.makeNationName(FakeLanguageGen.MONGOLIAN)         );
         }
     }
 }
