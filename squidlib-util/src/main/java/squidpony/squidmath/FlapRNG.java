@@ -132,7 +132,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
     @Override
     public final long nextLong() {
         final long r = (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
-        return r * 0xC6BC279692B5CC53L ^ r << 32;
+        return r * 0xC6AC279692B5CC53L ^ r << 32;
         // return ((state += 0x9E3779B97F4A7C15L ^ state << 1) >> 16) * 0xC6BC279692B5CC83L;
 
         /*

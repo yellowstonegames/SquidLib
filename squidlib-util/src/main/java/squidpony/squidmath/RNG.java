@@ -797,7 +797,7 @@ public class RNG implements Serializable {
     /**
      * @return a value from the gaussian distribution
      */
-    public synchronized double nextGaussian() {
+    public double nextGaussian() {
         if (haveNextNextGaussian) {
             haveNextNextGaussian = false;
             return nextNextGaussian;
