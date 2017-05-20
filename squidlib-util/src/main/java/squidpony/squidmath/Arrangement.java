@@ -518,14 +518,18 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         key[pos] = k;
         if (size == 0) {
             first = last = pos;
-        } else {
+        } else if(at == 0)
+        {
+            first = pos;
+        }
+        else if(at == size) {
             last = pos;
         }
         order.insert(at, pos);
         value[pos] = at;
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
-        return -1;
+        return pos;
     }
 
     /**
