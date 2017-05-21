@@ -761,7 +761,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      */
     public AnimatedEntity animateActor(int x, int y, boolean doubleWidth, char c, Color color)
     {
-        return animateActor(x, y, doubleWidth, c, color);
+        Actor a = textFactory.makeActor(c, color);
+        a.setName(String.valueOf(c));
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+        AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
+        animatedEntities.add(ae);
+        return ae;
+
         /*
         Actor a = textFactory.makeActor("" + c, color);
         a.setName("" + c);

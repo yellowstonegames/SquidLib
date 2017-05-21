@@ -143,7 +143,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all. We also add a swap here to replace '#', which is used for boulders and pillars,
         // with a small Unicode box shape that looks better when it lies on the corner between walkable cells.
-        textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        textFactory = DefaultResources.getStretchableSlabFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize().addSwap('#', '▫'); //.setDirectionGlyph('ˆ')
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters. We use the bitwise right shift operator instead of division by 2 because I want more
@@ -160,7 +160,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM);
+        messages.setTextSize(cellWidth + INTERNAL_ZOOM * 2, cellHeight + INTERNAL_ZOOM * 3);
         display.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
@@ -533,7 +533,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                 }
                 tmp = path.first();
                 if (tmp == player.pos) {
-                    display.tint(player.entity.gridX, player.entity.gridY-1, SColor.PURE_CRIMSON, 0, 0.415f);
+                    display.tint(player.entity.gridX, player.entity.gridY, SColor.PURE_CRIMSON, 0, 0.415f);
                     health--;
                     //player.setText("" + health);
                     mon.change(1);
