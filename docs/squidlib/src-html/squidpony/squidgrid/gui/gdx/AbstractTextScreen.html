@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.gui.gdx;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.badlogic.gdx.graphics.Color;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.panel.IColoredString;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.util.ArrayList;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.util.Collection;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.util.Iterator;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import java.util.List;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>/**<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * A screen designed to write some text in full screen. This class supports text<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * alignment (left, center, right) and text wrapping (see {@link #wrap(int)}).<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * &lt;p&gt;<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * You may prefer using {@link TextPanel} or sometimes {@link LinesPanel} where<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * you want to display more than a few words of legible wrapped text.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * &lt;/p&gt;<a name="line.17"></a>
+<span class="sourceLineNo">018</span> *<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * @author smelC<a name="line.19"></a>
+<span class="sourceLineNo">020</span> */<a name="line.20"></a>
+<span class="sourceLineNo">021</span>public abstract class AbstractTextScreen&lt;T extends Color&gt; extends AbstractSquidScreen&lt;T&gt; {<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>    /**<a name="line.23"></a>
+<span class="sourceLineNo">024</span>     * Can contain null members (denoting empty lines)<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     */<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    protected List&lt;IColoredString&lt;T&gt;&gt; text;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    protected /* @Nullable */ int[] alignment;<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>    /**<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     * @param ssi       See super class<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * @param text      The text to display. From top to bottom. Use {@code null}<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     *                  members to jump lines.<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     *                  &lt;p&gt;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>     *                  Give {@code null} if you want to set it later (using<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     *                  {@link #init(List, int[])}).<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     *                  &lt;/p&gt;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * @param alignment How to alignment members of {@code text}. -1 for left, 0 for<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     *                  center, 1 for right. The default is to align left<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     *                  &lt;p&gt;<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     *                  Give {@code null} if you want to set it later (using<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     *                  {@link #init(List, int[])}).<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     *                  &lt;/p&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     */<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    public AbstractTextScreen(SquidScreenInput&lt;T&gt; ssi, /* @Nullable */ List&lt;IColoredString&lt;T&gt;&gt; text,<a name="line.44"></a>
+<span class="sourceLineNo">045</span>            /* @Nullable */ int[] alignment) {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        super(ssi);<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        this.text = text;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        this.alignment = alignment;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    }<a name="line.49"></a>
+<span class="sourceLineNo">050</span><a name="line.50"></a>
+<span class="sourceLineNo">051</span>    /**<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * You should call this method at most once. You should call this method<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * only before rendering this screen.<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     *<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * @param text      The text to display. From top to bottom. Use {@code null}<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     *                  members to jump lines.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * @param alignment How to alignment members of {@code text}. -1 for left, 0 for<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     *                  center, 1 for right. The default is to align left<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    public void init(List&lt;IColoredString&lt;T&gt;&gt; text, /* @Nullable */ int[] alignment) {<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        this.text = text;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        this.alignment = alignment;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    }<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * Wraps the text inside {@code this} according to {@code width}. This<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * screen's text must have been set already. This, of course, preserves the<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * text alignment (if any).<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     *<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * @param width<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * @throws IllegalStateException If {@code this}'s text hasn't been initialized yet.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     */<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    public void wrap(int width) {<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        if (text == null)<a name="line.74"></a>
+<span class="sourceLineNo">075</span>            throw new IllegalStateException("Cannot wrap an unitialized " + getClass().getSimpleName());<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span>        final List&lt;IColoredString&lt;T&gt;&gt; tsave = text;<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        text = new ArrayList&lt;&gt;(tsave.size() * 2);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        final int[] asave = alignment;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        final /* @Nullable */ List&lt;Integer&gt; newAlignments = asave == null ? null<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                : new ArrayList&lt;Integer&gt;(asave.length * 2);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        int i = 0;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        for (IColoredString&lt;T&gt; t : tsave) {<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                        /* Wrap line */<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            if (t == null) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                                /* An empty line */<a name="line.86"></a>
+<span class="sourceLineNo">087</span>                text.add(null);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>                if (newAlignments != null)<a name="line.88"></a>
+<span class="sourceLineNo">089</span>                    newAlignments.add(/* doesn't matter */ 0);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            } else {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                final List&lt;IColoredString&lt;T&gt;&gt; wrapped = t.wrap(width);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                final /* @Nullable */ Integer alignment = asave == null || asave.length &lt;= i ? null : asave[i];<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                for (IColoredString&lt;T&gt; line : wrapped) {<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                                        /* Add wrapped */<a name="line.94"></a>
+<span class="sourceLineNo">095</span>                    text.add(line);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                    if (newAlignments != null &amp;&amp; alignment != null)<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                                                /* Keep alignment */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                        newAlignments.add(alignment);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                }<a name="line.99"></a>
+<span class="sourceLineNo">100</span>            }<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            i++;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        }<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        alignment = newAlignments == null ? null : toIntArray(newAlignments);<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    }<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>    protected int[] toIntArray(Collection&lt;Integer&gt; l) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        final int[] result = new int[l.size()];<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        int j = 0;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        for (int i : l)<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            result[j++] = i;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        return result;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    }<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>    @Override<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    public String toString() {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        final StringBuilder buf = new StringBuilder();<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        buf.append(getClass().getSimpleName());<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        if (text != null) {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                        /* Show text */<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            final Iterator&lt;? extends IColoredString&lt;?&gt;&gt; it = text.iterator();<a name="line.120"></a>
+<span class="sourceLineNo">121</span>            final String eol = System.getProperty("line.separator");<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            buf.append(eol);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>            while (it.hasNext()) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                final IColoredString&lt;?&gt; ics = it.next();<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                buf.append(ics == null ? "" : ics.present());<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                if (it.hasNext())<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                    buf.append(eol);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>            }<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        }<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        return buf.toString();<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    }<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>}<a name="line.133"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
