@@ -40,21 +40,45 @@ public class CosmicNumbering implements Serializable {
 
     /**
      * Gets a double determined by the current values in the connections, accessible via {@link #getConnections()}.
-     * Returns a value between 0.0 and 1.0 (exclusive on 1.0, but likely to only return results in the middle).
+     * Returns a value between -1.0 and 1.0 (exclusive on 1.0). Used as the basis for other methods in this class.
+     * @return a double between -1.0 and 1.0; will be the same value until/unless connections change
+     */
+    public double getDoubleBase()
+    {
+        double[] connections = this.connections;
+        final int len = connections.length;
+        long floor;
+        double diff, conn, result = 0.0;
+        for (int i = 0; i < len; i++) {
+            diff = (conn = connections[i]) - (floor = fastFloor(conn));
+            result += NumberTools.bounce(floor * 0x8329C6EB9E6AD3E3L) * (1.0 - diff);
+            result += NumberTools.bounce((floor + 1L) * 0x8329C6EB9E6AD3E3L) * diff;
+        }
+        return NumberTools.bounce(result / (len) + 2.55);
+    }
+
+    /**
+     * Gets a double determined by the current values in the connections, accessible via {@link #getConnections()}.
+     * Returns a value between 0.0 and 1.0 (exclusive on 1.0).
      * @return a double between 0.0 and 1.0; will be the same value until/unless connections change
      */
     public double getDouble()
     {
-        double v = 0.0, diff;
-        double[] connections = this.connections;
-        final int len = connections.length;
-        int floor;
-        for (int i = 0; i < len; i++) {
-            diff = connections[i] - (floor = fastFloor(connections[i]));
-            v += NumberTools.randomDouble(floor * 0x8E37C9B9) * (1.0 - diff) + NumberTools.randomDouble((floor + 1) * 0x8E37C9B9) * diff;
-        }
-        return v / len;
+        return getDoubleBase() * 0.5 + 0.5;
     }
+
+//    public double getDouble()
+//    {
+//        double v = 0.0, diff;
+//        double[] connections = this.connections;
+//        final int len = connections.length;
+//        long floor;
+//        for (int i = 0; i < len; i++) {
+//            diff = connections[i] - (floor = fastFloor(connections[i]));
+//            v += randomDouble(floor) * (1.0 - diff) + randomDouble(floor + 1L) * diff;
+//        }
+//        return v / len;
+//    }
     /**
      * Gets an int determined by the current values in the connections, accessible via {@link #getConnections()}.
      * Returns a value in the full range of ints, but is less likely to produce ints close to {@link Integer#MAX_VALUE}
@@ -63,15 +87,7 @@ public class CosmicNumbering implements Serializable {
      */
     public int getInt()
     {
-        double v = 0.0, diff;
-        double[] connections = this.connections;
-        final int len = connections.length;
-        int floor;
-        for (int i = 0; i < len; i++) {
-            diff = connections[i] - (floor = fastFloor(connections[i]));
-            v += NumberTools.randomDouble(floor * 0x8E37C9B9) * (1.0 - diff) + NumberTools.randomDouble((floor + 1) * 0x8E37C9B9) * diff;
-        }
-        return (int)(0x80000000 * (v * 2.0 / len - 1.0));
+        return (int)(0x80000000 * -getDoubleBase());
     }
 
     /**
@@ -80,8 +96,8 @@ public class CosmicNumbering implements Serializable {
      * @param t the double to find the floor for
      * @return the floor of t, as an int
      */
-    public static int fastFloor(double t) {
-        return t >= 0 ? (int) t : (int) t - 1;
+    public static long fastFloor(double t) {
+        return t >= 0 ? (long) t : (long) t - 1L;
     }
     /*
      * Linearly interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).

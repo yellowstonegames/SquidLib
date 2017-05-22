@@ -263,7 +263,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
 
     public static long determine(long state)
     {
-        state = (((state += 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (((state *= 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
         state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
         return state ^ (state >>> 31);
     }
@@ -278,7 +278,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
 
     public static int determineBounded(long state, final int bound)
     {
-        state = (((state += 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (((state *= 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
         state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
         return (int)((bound * ((state ^ (state >>> 31)) & 0x7FFFFFFFL)) >>> 31);
     }

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -187,7 +187,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static int</code></td>
+<td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#fastFloor-double-">fastFloor</a></span>(double&nbsp;t)</code>
 <div class="block">Like <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but returns an int.</div>
 </td>
@@ -203,12 +203,18 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#getDoubleBase--">getDoubleBase</a></span>()</code>
+<div class="block">Gets a double determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#getInt--">getInt</a></span>()</code>
 <div class="block">Gets an int determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#setConnections-double:A-">setConnections</a></span>(double[]&nbsp;connections)</code>&nbsp;</td>
 </tr>
@@ -295,15 +301,30 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.34">setConnections</a>(double[]&nbsp;connections)</pre>
 </li>
 </ul>
+<a name="getDoubleBase--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDoubleBase</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.46">getDoubleBase</a>()</pre>
+<div class="block">Gets a double determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.
+ Returns a value between -1.0 and 1.0 (exclusive on 1.0). Used as the basis for other methods in this class.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a double between -1.0 and 1.0; will be the same value until/unless connections change</dd>
+</dl>
+</li>
+</ul>
 <a name="getDouble--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.46">getDouble</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.65">getDouble</a>()</pre>
 <div class="block">Gets a double determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.
- Returns a value between 0.0 and 1.0 (exclusive on 1.0, but likely to only return results in the middle).</div>
+ Returns a value between 0.0 and 1.0 (exclusive on 1.0).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a double between 0.0 and 1.0; will be the same value until/unless connections change</dd>
@@ -316,7 +337,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.64">getInt</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.88">getInt</a>()</pre>
 <div class="block">Gets an int determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.
  Returns a value in the full range of ints, but is less likely to produce ints close to <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>
  or <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> (expect very few values in the bottom and top quarters of the range).</div>
@@ -332,7 +353,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>fastFloor</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.83">fastFloor</a>(double&nbsp;t)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.99">fastFloor</a>(double&nbsp;t)</pre>
 <div class="block">Like <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but returns an int. Doesn't consider weird doubles like INFINITY and NaN.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
