@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.gui.gdx.*;
@@ -16,6 +17,7 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.OrthoLine;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class BasicDemo extends ApplicationAdapter {
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
-    private int[][] colorIndices, bgColorIndices;
+    private int[][] colorIndices, bgColorIndices, baseLightness;
     /** In number of cells */
     private int gridWidth;
     /** In number of cells */
@@ -49,6 +51,7 @@ public class BasicDemo extends ApplicationAdapter {
     private String[] lang;
     private FakeLanguageGen.SentenceForm[] forms;
     private int langIndex = 0;
+    private char[] line;
     @Override
     public void create () {
         //These variables, corresponding to the screen's width and height in cells and a cell's width and height in
@@ -161,6 +164,7 @@ public class BasicDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         colorIndices = DungeonUtility.generatePaletteIndices(decoDungeon);
         bgColorIndices = DungeonUtility.generateBGPaletteIndices(decoDungeon);
+        baseLightness = ArrayTools.fill(40, gridWidth, gridHeight);
         // this creates an array of sentence builders, where each imitates one or more languages or linguistic styles.
         // this serves to demonstrate the large amount of glyphs SquidLib supports.
         // there's no need to put much effort into understanding this section yet, and many games won't use the language
@@ -318,7 +322,10 @@ public class BasicDemo extends ApplicationAdapter {
                         // Getting a sublist avoids potential performance issues with removing from the start of an
                         // ArrayList, since it keeps the original list around and only gets a "view" of it.
                         if(!toCursor.isEmpty())
+                        {
+                            line = OrthoLine.lineChars(toCursor);
                             toCursor = toCursor.subList(1, toCursor.size());
+                        }
                     }
                     awaitedMoves.addAll(toCursor);
                 }
@@ -354,7 +361,10 @@ public class BasicDemo extends ApplicationAdapter {
                 // Getting a sublist avoids potential performance issues with removing from the start of an
                 // ArrayList, since it keeps the original list around and only gets a "view" of it.
                 if(!toCursor.isEmpty())
+                {
+                    line = OrthoLine.lineChars(toCursor);
                     toCursor = toCursor.subList(1, toCursor.size());
+                }
                 return false;
             }
         }));
@@ -392,15 +402,20 @@ public class BasicDemo extends ApplicationAdapter {
      */
     public void putMap()
     {
+        /*
         for (int i = 0; i < gridWidth; i++) {
             for (int j = 0; j < gridHeight; j++) {
                 display.put(i, j, lineDungeon[i][j], colorIndices[i][j], bgColorIndices[i][j], 40);
             }
-        }
-        for (Coord pt : toCursor)
-        {
+        }*/
+        // bulk put, placing a 2D array of chars with corresponding color indices for foreground and background, plus
+        // lightness (which is always 40 at this step, and was set earlier)
+        display.put(0, 0, lineDungeon, colorIndices, bgColorIndices, baseLightness);
+        Coord pt;
+        for (int i = 0; i < toCursor.size(); i++) {
+            pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.highlight(pt.x, pt.y, 100);
+            display.put(pt.x, pt.y, line[i+1], 23, bgColorIndices[pt.x][pt.y], 100);
         }
         //places the player as an '@' at his position in orange (6 is an index into SColor.LIMITED_PALETTE).
         display.put(player.x, player.y, '@', 6);
@@ -430,6 +445,7 @@ public class BasicDemo extends ApplicationAdapter {
             if (secondsWithoutMoves >= 0.1) {
                 secondsWithoutMoves = 0;
                 Coord m = awaitedMoves.remove(0);
+                line = OrthoLine.lineChars(toCursor);
                 toCursor.remove(0);
                 move(m.x - player.x, m.y - player.y);
             }

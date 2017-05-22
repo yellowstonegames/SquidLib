@@ -307,6 +307,15 @@ public class LanguageGenTest {
                         FakeLanguageGen.modifier("([^aeiou])\\1", "$1sh", 0.5),
                         FakeLanguageGen.modifier("([^aeiou])\\1", "$1", 0.9)),
                 FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_VOWELS),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Kittenish")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Puppyspeak")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbitese")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbit Language")),
+                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("The Roar Of That Slumbering Shadow That Mankind Wills Itself To Forget")),
+                FakeLanguageGen.INUKTITUT,
+                FakeLanguageGen.NORSE,
+                FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
+                FakeLanguageGen.NAHUATL,
                 FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
                         FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
                         FakeLanguageGen.modifier("ii", "ai"),
@@ -334,16 +343,7 @@ public class LanguageGenTest {
                         FakeLanguageGen.modifier("cc", "ch"),
                         FakeLanguageGen.modifier("[^aeiou]([^aeiou][^aeiou])", "$1"),
                         FakeLanguageGen.Modifier.NO_DOUBLES
-                ),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Kittenish")),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Puppyspeak")),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbitese")),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbit Language")),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("The Roar Of That Slumbering Shadow That Mankind Wills Itself To Forget")),
-                FakeLanguageGen.INUKTITUT,
-                FakeLanguageGen.NORSE,
-                FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
-                FakeLanguageGen.NAHUATL
+                )
                 //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
                 //FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
                 //FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),
@@ -430,6 +430,13 @@ public class LanguageGenTest {
             System.out.println();
             */
         }
+        /*
+        rng.setState(0xF00DF00L);
+        flg = FakeLanguageGen.randomLanguage(CrossHash.Mist.kappa.hash64("Space Speak")).removeAccents();
+        for (int i = 0; i < 100; i++) {
+            System.out.print(flg.word(rng, true, Math.min(rng.between(1, 6), rng.between(2, 4))) + " ");
+        }
+        */
         /*
         StatefulRNG nrng = new StatefulRNG("SquidLib!");
 
