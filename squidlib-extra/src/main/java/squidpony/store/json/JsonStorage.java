@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.JsonWriter;
 import squidpony.StringStringMap;
 import squidpony.annotation.Beta;
+import squidpony.store.util.Garbler;
 
 import java.util.Map;
 
@@ -20,6 +21,7 @@ public class JsonStorage {
     public final JsonConverter json;
     protected StringStringMap contents;
     public boolean compress = true;
+    public String garbleKey = null;
 
     /**
      * Please don't use this constructor if possible; it simply calls {@link #JsonStorage(String)} with the constant
@@ -29,7 +31,7 @@ public class JsonStorage {
      */
     public JsonStorage()
     {
-        this("nameless");
+        this("nameless", null);
     }
 
     /**
@@ -53,11 +55,38 @@ public class JsonStorage {
      */
     public JsonStorage(final String fileName)
     {
+        this(fileName, null);
+    }
+
+    /**
+     * Creates a JsonStorage with the given fileName to save using Preferences from libGDX. The name should generally
+     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,
+     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
+     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly
+     * to games or applications other than your own; you should avoid values for fileName that might overlap with
+     * another game's Preferences values. This constructor also allows you to specify a "garble" String; if this is
+     * non-null, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic
+     * methods. If garble is null, it is ignored.
+     * <br>
+     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a
+     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when
+     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.
+     * <br>
+     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,
+     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller
+     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in
+     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.
+     * The custom char[][] representation is about half the normal size by omitting commas after each char.
+     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.
+     * @param garble a String that will be used as a key to obfuscate the saved output if non-null
+     */
+    public JsonStorage(final String fileName, final String garble)
+    {
         storageName = fileName;
         preferences = Gdx.app.getPreferences(storageName);
         json = new JsonConverter(JsonWriter.OutputType.minimal);
-
         contents = new StringStringMap(16, 0.2f);
+        garbleKey = garble;
     }
 
     /**
@@ -86,10 +115,19 @@ public class JsonStorage {
      */
     public JsonStorage store(String outerName)
     {
-        if(compress)
-            preferences.putString(outerName, LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)));
+        if(garbleKey == null) {
+            if (compress)
+                preferences.putString(outerName, LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)));
+            else
+                preferences.putString(outerName, json.toJson(contents, StringStringMap.class));
+        }
         else
-            preferences.putString(outerName, json.toJson(contents, StringStringMap.class));
+        {
+            if (compress)
+                preferences.putString(outerName, Garbler.garble(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey));
+            else
+                preferences.putString(outerName, Garbler.garble(json.toJson(contents, StringStringMap.class), garbleKey));
+        }
         preferences.flush();
         return this;
     }
@@ -99,12 +137,21 @@ public class JsonStorage {
      * useful for finding particularly problematic objects that require unnecessary space when serialized.
      * @return a String that previews what would be stored permanently when {@link #store(String)} is called
      */
-    public String show()
-    {
-        if(compress)
-            return LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class));
+    public String show() {
+        if (garbleKey == null) {
+            if (compress)
+                return LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class));
+            else
+                return json.toJson(contents, StringStringMap.class);
+        }
         else
-            return json.toJson(contents, StringStringMap.class);
+        {
+            if (compress)
+                return Garbler.garble(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey);
+            else
+                return Garbler.garble(json.toJson(contents, StringStringMap.class), garbleKey);
+
+        }
     }
 
     /**
@@ -146,10 +193,19 @@ public class JsonStorage {
     {
         StringStringMap om;
         String got;
-        if(compress)
-            got = LZSEncoding.decompressFromUTF16(preferences.getString(outerName));
+        if(garbleKey == null) {
+            if (compress)
+                got = LZSEncoding.decompressFromUTF16(preferences.getString(outerName));
+            else
+                got = preferences.getString(outerName);
+        }
         else
-            got = preferences.getString(outerName);
+        {
+            if (compress)
+                got = LZSEncoding.decompressFromUTF16(Garbler.degarble(preferences.getString(outerName), garbleKey));
+            else
+                got = Garbler.degarble(preferences.getString(outerName), garbleKey);
+        }
         if(got == null) return null;
         om = json.fromJson(StringStringMap.class, got);
         if(om == null) return null;

@@ -80,11 +80,11 @@ public class DataDemo extends ApplicationAdapter {
                 .writeString(convert.toJson(empty2, StringStringMap.class), false, "UTF-8");
 
 
-        Garbler g = new Garbler();
-        String ugh = g.garble("Hello, World!");
-        System.out.println(ugh);
-        ugh = g.degarble(ugh);
-        System.out.println(ugh);
+        String mess = Garbler.garble("I call our world Flatland, not because we call it so, but to make its nature " +
+                "clearer to you, my happy readers, who are privileged to live in Space.");
+        System.out.println(mess);
+        mess = Garbler.degarble(mess);
+        System.out.println(mess);
         Gdx.app.exit();
     }
 
