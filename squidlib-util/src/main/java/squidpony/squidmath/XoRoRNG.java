@@ -26,7 +26,7 @@ import java.io.Serializable;
  * random numbers, which would suggest {@link LongPeriodRNG} as the best choice. You may want better performance on
  * 32-bit machines or especially on GWT (which has to emulate Java's behavior with 64-bit longs), which would mean
  * {@link PintRNG} (for generating only ints via {@link PintRNG#next(int)}, since its {@link PintRNG#nextLong()} method
- * is very slow) or {@link FlapRNG} (for generating ints and longs at relatively good speed using mainly int math).
+ * is very slow) or {@link FlapRNG} (for generating ints and longs at very good speed using mainly int math).
  * {@link ThunderRNG} is the fastest generator we have, and has a decent period when considering all bits, but if you
  * only consider the less-significant bits then it has a rather poor period. This bad behavior is similar to how linear
  * congruential generators act, such as {@link java.util.Random}, which simply truncates off the lower bits.
@@ -37,7 +37,6 @@ import java.io.Serializable;
  * @author Sebastiano Vigna
  * @author David Blackman
  * @author Tommy Ettinger
- * @see FlapRNG FlapRNG is a variant on XoRoRNG that uses primarily 32-bit math (good for use on GWT)
  */
 public class XoRoRNG implements RandomnessSource, Serializable {
 

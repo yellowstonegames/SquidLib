@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.JsonWriter;
 import squidpony.squidmath.OrderedMap;
+import squidpony.store.util.Garbler;
 
 import java.util.Scanner;
 
@@ -78,6 +79,12 @@ public class DataDemo extends ApplicationAdapter {
         Gdx.files.local(ROOT_DIR + "src/test/resources/generated/EmptyStringStringMap.js")
                 .writeString(convert.toJson(empty2, StringStringMap.class), false, "UTF-8");
 
+
+        Garbler g = new Garbler();
+        String ugh = g.garble("Hello, World!");
+        System.out.println(ugh);
+        ugh = g.degarble(ugh);
+        System.out.println(ugh);
         Gdx.app.exit();
     }
 
