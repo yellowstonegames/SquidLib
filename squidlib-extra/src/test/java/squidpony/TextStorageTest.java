@@ -25,7 +25,7 @@ public class TextStorageTest extends ApplicationAdapter {
     public void create() {
         super.create();
         if(true) {
-            TextStorage store = new TextStorage("TextStorage");
+            TextStorage store = new TextStorage("TextStorage", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             store.compress = true;
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
@@ -39,8 +39,8 @@ public class TextStorageTest extends ApplicationAdapter {
             store.put("world", world, BonusConverters.convertSpillWorldMap);
             store.put("grease", grease, Converters.convertGreasedRegion);
 
-            System.out.println(store.show());
             store.store("Test");
+            System.out.println(store.show());
 
             System.out.println("Stored preference bytes: " + store.preferencesSize());
             r2 = store.get("Test", "rng", BonusConverters.convertStatefulRNG, StatefulRNG.class);

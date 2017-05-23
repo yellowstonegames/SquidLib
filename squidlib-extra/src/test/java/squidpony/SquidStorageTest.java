@@ -23,7 +23,7 @@ public class SquidStorageTest extends ApplicationAdapter {
     public void create() {
         super.create();
         if(true) {
-            SquidStorage store = new SquidStorage("StorageTest");
+            SquidStorage store = new SquidStorage("StorageTest", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             store.compress = true;
             System.out.println(store.preferences.get().values());
             StatefulRNG srng = new StatefulRNG("Hello, Storage!"), r2;
@@ -37,8 +37,8 @@ public class SquidStorageTest extends ApplicationAdapter {
             store.put("world", world);
             store.put("grease", grease);
 
-            System.out.println(store.show());
             store.store("Test");
+            System.out.println(store.show());
 
             System.out.println("Stored preference bytes: " + store.preferencesSize());
             r2 = store.get("Test", "rng", StatefulRNG.class);
