@@ -1,6 +1,12 @@
 package squidpony.examples;
 
+import squidpony.ArrayTools;
+import squidpony.Maker;
+import squidpony.StringKit;
 import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.RNG;
+
+import java.util.ArrayList;
 
 /**
  * This class is a scratchpad area to test things out.
@@ -30,9 +36,16 @@ public class Playground {
     private static float carp2(final float x) { return x - x * (x * (x - 1) + (1 - x) * (1 - x)); }
     private static float carpMid(final float x) { return carp2(x * 0.5f + 0.5f) * 2f - 1f; }
     private void go() {
-        for (float i = -1f; i < 1f; i+= 0.0625f) {
-            System.out.println(i + ": " + carpMid(i));
-        }
+//        for (float i = -1f; i < 1f; i+= 0.0625f) {
+//            System.out.println(i + ": " + carpMid(i));
+//        }
+        ArrayList<String> al = Maker.makeList("Hey", "how", "are", "you", "doing", "today", "?");
+        RNG rng = new RNG(0x137BEEF);
+        int[] ord = rng.randomOrdering(al.size()), inv = ArrayTools.invertOrdering(ord);
+        al = ArrayTools.reorder(al, ord);
+        System.out.println(StringKit.join(",", al) + "   " + StringKit.join(",", ord));
+        al = ArrayTools.reorder(al, inv);
+        System.out.println(StringKit.join(",", al) + "   " + StringKit.join(",", inv));
     }
 
 }
