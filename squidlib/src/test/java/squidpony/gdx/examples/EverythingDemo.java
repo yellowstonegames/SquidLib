@@ -116,6 +116,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private SquidColorCenter fgCenter, bgCenter;
     private Color bgColor;
     private SpatialMap<Integer, Monster> monsters;
+    private GreasedRegion floors;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage, messageStage;
     private int framesWithoutAnimation = 0;
@@ -290,13 +291,14 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // it's more efficient to get random floors from a set containing only tightly-stored floor positions.
         GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
+        floors = placement.copy();
         Coord pl = placement.singleRandom(rng);
         display.setGridOffsetX(pl.x - (width >> 1));
         display.setGridOffsetY(pl.y - (height >> 1));
 
         fg = display.getForegroundLayer();
         placement.remove(pl);
-        int numMonsters = 50;
+        int numMonsters = 200;
         monsters = new SpatialMap<>(numMonsters);
         for (int i = 0; i < numMonsters; i++) {
             Coord monPos = placement.singleRandom(rng);
@@ -572,7 +574,12 @@ public class EverythingDemo extends ApplicationAdapter {
                 fovmap = fov.calculateFOV(res, newX, newY, 8, Radius.SQUARE);
                 //player.gridX = newX;
                 //player.gridY = newY;
-                monsters.remove(Coord.get(newX, newY));
+
+                if(monsters.remove(Coord.get(newX, newY)) != null)
+                {
+                    PanelEffect.ExplosionEffect explode = new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 1f, floors.refill(res, 0.99), Coord.get(newX, newY), 7);
+                    display.addAction(explode);
+                }
                 //display.setGridOffsetX(newX - (width >> 1));
                 //display.setGridOffsetY(newY - (height >> 1));
                 //display.slideWorld(xmod, ymod, -1);

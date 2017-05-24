@@ -81,9 +81,9 @@ public class DataDemo extends ApplicationAdapter {
 
 
         String mess = Garbler.garble("I call our world Flatland, not because we call it so, but to make its nature " +
-                "clearer to you, my happy readers, who are privileged to live in Space.");
+                "clearer to you, my happy readers, who are privileged to live in Space.", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         System.out.println(mess);
-        mess = Garbler.degarble(mess);
+        mess = Garbler.degarble(mess, "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         System.out.println(mess);
         Gdx.app.exit();
     }
