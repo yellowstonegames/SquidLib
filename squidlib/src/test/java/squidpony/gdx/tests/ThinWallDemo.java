@@ -113,6 +113,7 @@ public class ThinWallDemo extends ApplicationAdapter {
     private Color bgColor;
     private ArrayList<Color> playerMarkColors, monsterMarkColors;
     private OrderedMap<Integer, Creature> monsters;
+    private GreasedRegion floors;
     private CustomDijkstraMap getToPlayer, playerToCursor;
     private Stage stage;
     private int framesWithoutAnimation = 0;
@@ -216,6 +217,7 @@ public class ThinWallDemo extends ApplicationAdapter {
 
         // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
         final GreasedRegion placement = new GreasedRegion(decoDungeon, '.');
+        floors = placement.copy();
         final Coord pl = placement.singleRandom(rng).makeEven();
         placement.remove(pl);
         int numMonsters = 25;
@@ -456,6 +458,8 @@ public class ThinWallDemo extends ApplicationAdapter {
                 player.move(pos);
                 if(monsters.remove(pos) != null)
                 {
+                    PanelEffect.ExplosionEffect explode = new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 1f, floors.refill(res, 0.99), Coord.get(newX, newY), 9);
+                    display.addAction(explode);
                     display.getForegroundLayer().burst(newX, newY, 1, true, '\'',
                             SColor.BLOOD, SColor.BLOOD.cpy().sub(0,0,0,1), false, 1f, 1f);
                     // the last statement is effectively equivalent to:
@@ -753,8 +757,8 @@ public class ThinWallDemo extends ApplicationAdapter {
         input.show();
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.getViewport().apply(true);
-        stage.draw();
         stage.act();
+        stage.draw();
 
         if (help == null) {
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.

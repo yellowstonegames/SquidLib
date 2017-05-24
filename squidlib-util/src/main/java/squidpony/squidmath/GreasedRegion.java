@@ -1772,6 +1772,48 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return map;
     }
+    /**
+     * "Inverse mask for doubles;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
+     * the value in map intact, and where a cell is "on", it instead writes the double toWrite.
+     * @param map a 2D double array that will not be modified
+     * @param toWrite the double to use where this GreasedRegion stores an "on" cell
+     * @return an altered copy of map
+     */
+    public double[][] writeDoubles(double[][] map, double toWrite)
+    {
+        if(map == null || map.length == 0)
+            return new double[0][0];
+        int width2 = Math.min(width, map.length), height2 = Math.min(height, map[0].length);
+        double[][] doubles = new double[width2][height2];
+        for (int x = 0; x < width2; x++) {
+            for (int y = 0; y < height2; y++) {
+                doubles[x][y] = (data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0 ? toWrite : map[x][y];
+            }
+        }
+        return doubles;
+    }
+
+    /**
+     * "Inverse mask for doubles;" returns a copy of map where if a cell is "off" in this GreasedRegion, this keeps
+     * the value in map intact, and where a cell is "on", it instead writes the double toWrite. Modifies map in-place,
+     * unlike {@link #writeDoubles(double[][], double)}.
+     * @param map a 2D double array that <b>will</b> be modified
+     * @param toWrite the double to use where this GreasedRegion stores an "on" cell
+     * @return map, with the changes applied; not a copy
+     */
+    public double[][] writeDoublesInto(double[][] map, double toWrite)
+    {
+        if(map == null || map.length == 0)
+            return map;
+        int width2 = Math.min(width, map.length), height2 = Math.min(height, map[0].length);
+        for (int x = 0; x < width2; x++) {
+            for (int y = 0; y < height2; y++) {
+                if((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0)
+                    map[x][y] = toWrite;
+            }
+        }
+        return map;
+    }
 
     /**
      * Union of two GreasedRegions, assigning the result into this GreasedRegion. Any cell that is "on" in either
