@@ -291,7 +291,6 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // it's more efficient to get random floors from a set containing only tightly-stored floor positions.
         GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
-        floors = placement.copy();
         Coord pl = placement.singleRandom(rng);
         display.setGridOffsetX(pl.x - (width >> 1));
         display.setGridOffsetY(pl.y - (height >> 1));
@@ -309,6 +308,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // your choice of FOV matters here.
         fov = new FOV(FOV.RIPPLE_TIGHT);
         res = DungeonUtility.generateResistances(decoDungeon);
+        floors = new GreasedRegion(res, 0.99);
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
         getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
@@ -566,6 +566,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 lineDungeon[newX][newY] = '/';
                 // changes to the map mean the resistances for FOV need to be regenerated.
                 res = DungeonUtility.generateResistances(decoDungeon);
+                floors.refill(res, 0.99);
                 // recalculate FOV, store it in fovmap for the render to use.
                 fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
 
@@ -577,8 +578,8 @@ public class EverythingDemo extends ApplicationAdapter {
 
                 if(monsters.remove(Coord.get(newX, newY)) != null)
                 {
-                    PanelEffect.ExplosionEffect explode = new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 1f, floors.refill(res, 0.99), Coord.get(newX, newY), 7);
-                    display.addAction(explode);
+                    display.addAction(new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 1f,
+                            floors, Coord.get(newX, newY), 5));
                 }
                 //display.setGridOffsetX(newX - (width >> 1));
                 //display.setGridOffsetY(newY - (height >> 1));
