@@ -13,7 +13,6 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
             CORRIDOR_WALL_RETRACT = 16, CORRIDOR_WALL_NORMAL = 32, CORRIDOR_WALL_EXPAND = 64, CORRIDOR_WALL_CHAOTIC = 128,
             CAVE_WALL_RETRACT = 256, CAVE_WALL_NORMAL = 512, CAVE_WALL_EXPAND = 1024, CAVE_WALL_CHAOTIC = 2048;
     public int wallShapes = ROOM_WALL_EXPAND | CORRIDOR_WALL_EXPAND | CAVE_WALL_CHAOTIC;
-
     /**
      * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.
      */
@@ -70,7 +69,6 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
             wallShapes = ROOM_WALL_EXPAND | CORRIDOR_WALL_EXPAND | CAVE_WALL_CHAOTIC;
     }
 
-
     /**
      * Make a DungeonGenerator with the given height, width, and RNG for generating random features. You can
      * give the static fields of this class as arguments to roomShape, corridorShape and caveShape. For
@@ -98,6 +96,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                 || Integer.bitCount(wallShapes) != 3)
             wallShapes = ROOM_WALL_EXPAND | CORRIDOR_WALL_EXPAND | CAVE_WALL_CHAOTIC;
     }
+
 
     /**
      * Copies all fields from copying and makes a new DungeonGenerator.
@@ -129,6 +128,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
     }
 
     public char[][] makeThin() {
+
         int nw = (width << 1) - 1, nh = (height << 1) - 1;
         char[][] d2 = new char[nw][nh];
         int[][] e2 = new int[nw][nh];
@@ -575,7 +575,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                 }
             }
         }
-        int currentEnv, env2, offset;
+        int currentEnv, offset;
         char currentDun;
         int[][] eArchive = ArrayTools.copy(e2);
         if ((wallShapes & 0x111) != 0) // any environments are retracting
@@ -696,7 +696,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
             eArchive = ArrayTools.copy(e2);
             for (int x = 0; x < nw - 2; x++) {
                 for (int y = 2; y < nh - 2; y += 2) {
-                    offset = (d2[x][y-1] == '+') ? 1 : 2;
+                    offset = (d2[x][y - 1] == '+') ? 1 : 2;
                     if ((eArchive[x][y] & 1) == 0 && ((currentEnv = eArchive[x][y - offset]) & 1) != 0) {
                         currentDun = d2[x][y - offset];
                         if (currentDun == '+' || currentDun == '/') {
@@ -825,7 +825,6 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                 }
             }
         }
-
         dungeon = d2;
         width = nw;
         height = nh;
@@ -845,6 +844,27 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
         super.innerGenerate();
         makeThin();
         return dungeon;
+    }
+
+    /**
+     * Modifies this ThinDungeonGenerator to remove corners between thin walls (truncating the corners, effectively).
+     * Regenerates the RoomFinder and Placement objects this uses.
+     */
+    public void removeHardCorners()
+    {
+        final int[][] environment = finder.environment;
+        final int width = dungeon.length, height = dungeon[0].length;
+        for (int x = 1; x < width - 1; x += 2) {
+            for (int y = 1; y < height - 1; y += 2) {
+                if((environment[x+1][y] & 1) != (environment[x-1][y] & 1) &&
+                        (environment[x][y+1] & 1) != (environment[x][y-1] & 1)) {
+                    dungeon[x][y] = 6;
+                }
+            }
+        }
+        finder = new RoomFinder(dungeon, environment);
+        placement = new Placement(finder);
+
     }
 
     /**

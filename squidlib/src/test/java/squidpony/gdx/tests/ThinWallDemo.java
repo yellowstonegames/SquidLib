@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.CustomDijkstraMap;
@@ -78,9 +79,9 @@ public class ThinWallDemo extends ApplicationAdapter {
     private double[][] res;
     private int[][] lights;
     private Color[][] colors, bgColors;
-    private double[][] fovmap;
+    private double[][] fovmap, monfovmap;
     private Creature player;
-    private FOV fov;
+    private FOV fov, monfov;
     public static final int INTERNAL_ZOOM = 1;
 
     /**
@@ -145,7 +146,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         // cases but probably not all. We also add a swap here to replace '#', which is used for boulders and pillars,
         // with a small Unicode box shape that looks better when it lies on the corner between walkable cells.
         textFactory = DefaultResources.getStretchableSlabFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-                .width(cellWidth).height(cellHeight).initBySize().addSwap('#', '▫'); //.setDirectionGlyph('ˆ')
+                .width(cellWidth).height(cellHeight).initBySize().addSwap('#', '■'); //.setDirectionGlyph('ˆ')
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters. We use the bitwise right shift operator instead of division by 2 because I want more
         // people to know how to use bitwise operators; you can replace ">>1" with "/2" with no change in meaning.
@@ -188,9 +189,11 @@ public class ThinWallDemo extends ApplicationAdapter {
         serpent.putWalledRoundRoomCarvers(2);
         //char[][] mg = serpent.generate();
         //decoDungeon = dungeonGen.generate(mg, serpent.getEnvironment());
-        decoDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
-        bareDungeon = dungeonGen.getBareDungeon();
+        dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
         lineDungeon = DungeonUtility.hashesToLines(dungeonGen.getDungeon(), true);
+        bareDungeon = dungeonGen.getBareDungeon();
+        dungeonGen.removeHardCorners();
+        decoDungeon = ArrayTools.copy(dungeonGen.getDungeon());
         //lineDungeon = dungeonGen.getDungeon();
         /*
         decoDungeon = new char[][]{
@@ -234,8 +237,9 @@ public class ThinWallDemo extends ApplicationAdapter {
                     0));
         }
         // your choice of FOV matters here.
-        fov = new FOV(FOV.RIPPLE_TIGHT);
-        res = DungeonUtility.generateResistances(decoDungeon);
+        fov = new FOV(FOV.SHADOW);
+        monfov = new FOV(FOV.SHADOW);
+        res = DungeonUtility.generateResistances(lineDungeon);
         fovmap = fov.calculateFOV(res, pl.x, pl.y, 12, Radius.SQUARE);
         getToPlayer = new CustomDijkstraMap(decoDungeon, adjacency, rng);
         getToPlayer.setGoal(adjacency.composite(pl.x, pl.y, 0, 0));
@@ -252,8 +256,8 @@ public class ThinWallDemo extends ApplicationAdapter {
         awaitedMoves = new IntVLA(10);
         playerToCursor = new CustomDijkstraMap(decoDungeon, adjacency, rng);
 
-        final int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
-                initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
+        final int[][] initialColors = DungeonUtility.generatePaletteIndices(lineDungeon),
+                initialBGColors = DungeonUtility.generateBGPaletteIndices(lineDungeon);
         colors = new Color[overlapWidth][overlapHeight];
         bgColors = new Color[overlapWidth][overlapHeight];
         ArrayList<Color> palette = display.getPalette();
@@ -264,7 +268,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                 bgColors[i][j] = palette.get(initialBGColors[i][j]);
             }
         }
-        lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
+        lights = DungeonUtility.generateLightnessModifiers(lineDungeon, counter);
         seen = new boolean[overlapWidth][overlapHeight];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -458,8 +462,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                 player.move(pos);
                 if(monsters.remove(pos) != null)
                 {
-                    PanelEffect.ExplosionEffect explode = new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 1f, floors.refill(res, 0.99), Coord.get(newX, newY), 9);
-                    display.addAction(explode);
+                    //display.addAction(new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 1f, floors.refill(res, 0.99), Coord.get(newX, newY), 9));
                     display.getForegroundLayer().burst(newX, newY, 1, true, '\'',
                             SColor.BLOOD, SColor.BLOOD.cpy().sub(0,0,0,1), false, 1f, 1f);
                     // the last statement is effectively equivalent to:
@@ -508,8 +511,8 @@ public class ThinWallDemo extends ApplicationAdapter {
 
         //pathMap = getToPlayer.scan(monplaces);
 
-        // recalculate FOV, store it in fovmap for the render to use.
-        fovmap = fov.calculateFOV(res, player.entity.gridX & -2, player.entity.gridY & -2, 12, Radius.SQUARE);
+        // recalculate FOV, store it in monster fovmap for the monster to use.
+        monfovmap = monfov.calculateFOV(res, player.entity.gridX & -2, player.entity.gridY & -2, 12, Radius.SQUARE);
         // handle monster turns
         Creature mon;
         int ms = monsters.size(), tmp;
@@ -523,7 +526,7 @@ public class ThinWallDemo extends ApplicationAdapter {
             if(mon == null)
                 continue;
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
-            if (mon.state > 0 || fovmap[adjacency.extractX(pos)][adjacency.extractY(pos)] > 0.1) {
+            if (mon.state > 0 || monfovmap[adjacency.extractX(pos)][adjacency.extractY(pos)] > 0.1) {
                 if (mon.state == 0) {
                     messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
@@ -548,6 +551,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                     monsters.alter(pos, tmp);
                     display.slide(mon.entity, adjacency.extractX(tmp), adjacency.extractY(tmp));
                     mon.move(tmp);
+                    impassable.add(tmp);
                 }
 
                 // this block is used to ensure that the monster picks the best path, or a random choice if there
@@ -757,8 +761,8 @@ public class ThinWallDemo extends ApplicationAdapter {
         input.show();
         // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.getViewport().apply(true);
-        stage.act();
         stage.draw();
+        stage.act();
 
         if (help == null) {
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.

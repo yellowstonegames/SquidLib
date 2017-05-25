@@ -915,10 +915,7 @@ public class SectionDungeonGenerator {
 
 
     protected char[][] innerGenerate() {
-        dungeon = new char[width][height];
-        for (int x = 0; x < width; x++) {
-            Arrays.fill(dungeon[x], '#');
-        }
+        dungeon = ArrayTools.fill('#', width, height);
         ArrayList<char[][]> rm = finder.findRooms(),
                 cr = finder.findCorridors(),
                 cv = finder.findCaves();
