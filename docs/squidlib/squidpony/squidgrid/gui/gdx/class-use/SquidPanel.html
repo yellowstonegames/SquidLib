@@ -123,6 +123,10 @@
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
 <td class="colLast"><span class="typeNameLabel">VisualInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#right">right</a></span></code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
+<td class="colLast"><span class="typeNameLabel">PanelEffect.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#target">target</a></span></code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
@@ -313,6 +317,61 @@
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#setForegroundLayer-squidpony.squidgrid.gui.gdx.SquidPanel-">setForegroundLayer</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;panel)</code>
 <div class="block">Sets the foreground panel to match the given SquidPanel (it can also be a subclass of SquidPanel, a likely use).</div>
 </td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a> with parameters of type <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.SquidPanel-squidpony.squidmath.Coord-int-">ExplosionEffect</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+               squidpony.squidmath.Coord&nbsp;center,
+               int&nbsp;radius)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for some fields.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-squidpony.squidmath.Coord-int-">ExplosionEffect</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               squidpony.squidmath.Coord&nbsp;center,
+               int&nbsp;radius)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for some fields.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-">ExplosionEffect</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               squidpony.squidmath.GreasedRegion&nbsp;valid,
+               squidpony.squidmath.Coord&nbsp;center,
+               int&nbsp;radius)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-java.util.List-">ExplosionEffect</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               squidpony.squidmath.GreasedRegion&nbsp;valid,
+               squidpony.squidmath.Coord&nbsp;center,
+               int&nbsp;radius,
+               <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-">PanelEffect</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-">PanelEffect</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+           float&nbsp;duration)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-squidpony.squidmath.GreasedRegion-">PanelEffect</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+           float&nbsp;duration,
+           squidpony.squidmath.GreasedRegion&nbsp;valid)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

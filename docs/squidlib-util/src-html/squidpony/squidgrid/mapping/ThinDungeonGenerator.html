@@ -21,122 +21,122 @@
 <span class="sourceLineNo">013</span>            CORRIDOR_WALL_RETRACT = 16, CORRIDOR_WALL_NORMAL = 32, CORRIDOR_WALL_EXPAND = 64, CORRIDOR_WALL_CHAOTIC = 128,<a name="line.13"></a>
 <span class="sourceLineNo">014</span>            CAVE_WALL_RETRACT = 256, CAVE_WALL_NORMAL = 512, CAVE_WALL_EXPAND = 1024, CAVE_WALL_CHAOTIC = 2048;<a name="line.14"></a>
 <span class="sourceLineNo">015</span>    public int wallShapes = ROOM_WALL_EXPAND | CORRIDOR_WALL_EXPAND | CAVE_WALL_CHAOTIC;<a name="line.15"></a>
-<span class="sourceLineNo">016</span><a name="line.16"></a>
-<span class="sourceLineNo">017</span>    /**<a name="line.17"></a>
-<span class="sourceLineNo">018</span>     * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.<a name="line.18"></a>
-<span class="sourceLineNo">019</span>     */<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    public ThinDungeonGenerator() {<a name="line.20"></a>
-<span class="sourceLineNo">021</span>    }<a name="line.21"></a>
-<span class="sourceLineNo">022</span><a name="line.22"></a>
-<span class="sourceLineNo">023</span>    /**<a name="line.23"></a>
-<span class="sourceLineNo">024</span>     * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and<a name="line.24"></a>
-<span class="sourceLineNo">025</span>     * adding features will be a LightRNG using a random seed.<a name="line.25"></a>
-<span class="sourceLineNo">026</span>     *<a name="line.26"></a>
-<span class="sourceLineNo">027</span>     * @param width  The width of the dungeon in cells<a name="line.27"></a>
-<span class="sourceLineNo">028</span>     * @param height The height of the dungeon in cells<a name="line.28"></a>
-<span class="sourceLineNo">029</span>     */<a name="line.29"></a>
-<span class="sourceLineNo">030</span>    public ThinDungeonGenerator(int width, int height) {<a name="line.30"></a>
-<span class="sourceLineNo">031</span>        super(width, height);<a name="line.31"></a>
-<span class="sourceLineNo">032</span>    }<a name="line.32"></a>
-<span class="sourceLineNo">033</span><a name="line.33"></a>
-<span class="sourceLineNo">034</span>    /**<a name="line.34"></a>
-<span class="sourceLineNo">035</span>     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.<a name="line.35"></a>
-<span class="sourceLineNo">036</span>     *<a name="line.36"></a>
-<span class="sourceLineNo">037</span>     * @param width  The width of the dungeon in cells<a name="line.37"></a>
-<span class="sourceLineNo">038</span>     * @param height The height of the dungeon in cells<a name="line.38"></a>
-<span class="sourceLineNo">039</span>     * @param rng    The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,<a name="line.39"></a>
-<span class="sourceLineNo">040</span>     */<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    public ThinDungeonGenerator(int width, int height, RNG rng) {<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        super(width, height, rng);<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
-<span class="sourceLineNo">044</span><a name="line.44"></a>
-<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
-<span class="sourceLineNo">046</span>     * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     * adding features will be a LightRNG using a random seed. You can give the static fields of this class<a name="line.47"></a>
-<span class="sourceLineNo">048</span>     * as arguments to roomShape, corridorShape and caveShape. For clarity, the 3 fields should each be given<a name="line.48"></a>
-<span class="sourceLineNo">049</span>     * a constant corresponding to the same kind of area, e.g. ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be<a name="line.49"></a>
-<span class="sourceLineNo">050</span>     * given to roomShape but preferably would not be given to the others. If the combination of arguments is<a name="line.50"></a>
-<span class="sourceLineNo">051</span>     * invalid, such as if they are all 0, this uses the default shapes: expanded room and corridor walls, and<a name="line.51"></a>
-<span class="sourceLineNo">052</span>     * chaotic cave walls controlled by Perlin noise.<a name="line.52"></a>
-<span class="sourceLineNo">053</span>     * &lt;br&gt;<a name="line.53"></a>
-<span class="sourceLineNo">054</span>     * Though there's no constructor that takes a single int which merges roomShape, corridorShape, and<a name="line.54"></a>
-<span class="sourceLineNo">055</span>     * caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you<a name="line.55"></a>
-<span class="sourceLineNo">056</span>     * made one yourself (such as with bitwise OR on three different constants), you can pass it to any of the<a name="line.56"></a>
-<span class="sourceLineNo">057</span>     * three shape arguments and 0 to the other two shapes; it will be processed in the same way.<a name="line.57"></a>
-<span class="sourceLineNo">058</span>     *<a name="line.58"></a>
-<span class="sourceLineNo">059</span>     * @param width         The width of the dungeon in cells<a name="line.59"></a>
-<span class="sourceLineNo">060</span>     * @param height        The height of the dungeon in cells<a name="line.60"></a>
-<span class="sourceLineNo">061</span>     * @param roomShape     expected to be an int constant: ROOM_WALL_EXPAND, ROOM_WALL_RETRACT, or ROOM_WALL_CHAOTIC<a name="line.61"></a>
-<span class="sourceLineNo">062</span>     * @param corridorShape expected to be an int constant: CORRIDOR_WALL_EXPAND, CORRIDOR_WALL_RETRACT, or CORRIDOR_WALL_CHAOTIC<a name="line.62"></a>
-<span class="sourceLineNo">063</span>     * @param caveShape     expected to be an int constant: CAVE_WALL_EXPAND, CAVE_WALL_RETRACT, or CAVE_WALL_CHAOTIC<a name="line.63"></a>
-<span class="sourceLineNo">064</span>     */<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    public ThinDungeonGenerator(int width, int height, int roomShape, int corridorShape, int caveShape) {<a name="line.65"></a>
-<span class="sourceLineNo">066</span>        super(width, height);<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        wallShapes = roomShape | corridorShape | caveShape;<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        if ((wallShapes &amp; 0xF) == 0 || (wallShapes &amp; 0xF0) == 0 || (wallShapes &amp; 0xF00) == 0<a name="line.68"></a>
-<span class="sourceLineNo">069</span>                || Integer.bitCount(wallShapes) != 3)<a name="line.69"></a>
-<span class="sourceLineNo">070</span>            wallShapes = ROOM_WALL_EXPAND | CORRIDOR_WALL_EXPAND | CAVE_WALL_CHAOTIC;<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    }<a name="line.71"></a>
-<span class="sourceLineNo">072</span><a name="line.72"></a>
-<span class="sourceLineNo">073</span><a name="line.73"></a>
-<span class="sourceLineNo">074</span>    /**<a name="line.74"></a>
-<span class="sourceLineNo">075</span>     * Make a DungeonGenerator with the given height, width, and RNG for generating random features. You can<a name="line.75"></a>
-<span class="sourceLineNo">076</span>     * give the static fields of this class as arguments to roomShape, corridorShape and caveShape. For<a name="line.76"></a>
-<span class="sourceLineNo">077</span>     * clarity, the 3 fields should each be given a constant corresponding to the same kind of area, e.g.<a name="line.77"></a>
-<span class="sourceLineNo">078</span>     * ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be given to roomShape but preferably would not be given to<a name="line.78"></a>
-<span class="sourceLineNo">079</span>     * the others. If the combination of arguments is invalid, such as if they are all 0, this uses the default<a name="line.79"></a>
-<span class="sourceLineNo">080</span>     * shapes: expanded room and corridor walls, and chaotic cave walls controlled by Perlin noise.<a name="line.80"></a>
-<span class="sourceLineNo">081</span>     * &lt;br&gt;<a name="line.81"></a>
-<span class="sourceLineNo">082</span>     * Though there's no constructor that takes a single int which merges roomShape, corridorShape, and<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     * caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you<a name="line.83"></a>
-<span class="sourceLineNo">084</span>     * made one yourself (such as with bitwise OR on three different constants), you can pass it to any of the<a name="line.84"></a>
-<span class="sourceLineNo">085</span>     * three shape arguments and 0 to the other two shapes; it will be processed in the same way.<a name="line.85"></a>
-<span class="sourceLineNo">086</span>     *<a name="line.86"></a>
-<span class="sourceLineNo">087</span>     * @param width         The width of the dungeon in cells<a name="line.87"></a>
-<span class="sourceLineNo">088</span>     * @param height        The height of the dungeon in cells<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     * @param roomShape     expected to be an int constant: ROOM_WALL_EXPAND, ROOM_WALL_RETRACT, or ROOM_WALL_CHAOTIC<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * @param corridorShape expected to be an int constant: CORRIDOR_WALL_EXPAND, CORRIDOR_WALL_RETRACT, or CORRIDOR_WALL_CHAOTIC<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * @param caveShape     expected to be an int constant: CAVE_WALL_EXPAND, CAVE_WALL_RETRACT, or CAVE_WALL_CHAOTIC<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * @param rng           The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     */<a name="line.93"></a>
-<span class="sourceLineNo">094</span>    public ThinDungeonGenerator(int width, int height, RNG rng, int roomShape, int corridorShape, int caveShape) {<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        super(width, height, rng);<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        wallShapes = roomShape | corridorShape | caveShape;<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        if ((wallShapes &amp; 0xF) == 0 || (wallShapes &amp; 0xF0) == 0 || (wallShapes &amp; 0xF00) == 0<a name="line.97"></a>
-<span class="sourceLineNo">098</span>                || Integer.bitCount(wallShapes) != 3)<a name="line.98"></a>
-<span class="sourceLineNo">099</span>            wallShapes = ROOM_WALL_EXPAND | CORRIDOR_WALL_EXPAND | CAVE_WALL_CHAOTIC;<a name="line.99"></a>
-<span class="sourceLineNo">100</span>    }<a name="line.100"></a>
-<span class="sourceLineNo">101</span><a name="line.101"></a>
-<span class="sourceLineNo">102</span>    /**<a name="line.102"></a>
-<span class="sourceLineNo">103</span>     * Copies all fields from copying and makes a new DungeonGenerator.<a name="line.103"></a>
-<span class="sourceLineNo">104</span>     *<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     * @param copying the DungeonGenerator to copy<a name="line.105"></a>
-<span class="sourceLineNo">106</span>     */<a name="line.106"></a>
-<span class="sourceLineNo">107</span>    public ThinDungeonGenerator(ThinDungeonGenerator copying) {<a name="line.107"></a>
-<span class="sourceLineNo">108</span>        super(copying);<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        wallShapes = copying.wallShapes;<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    }<a name="line.110"></a>
-<span class="sourceLineNo">111</span><a name="line.111"></a>
-<span class="sourceLineNo">112</span>    /**<a name="line.112"></a>
-<span class="sourceLineNo">113</span>     * Doors are not supported by this class. There's a lot of confusing and ambiguous situations that can easily<a name="line.113"></a>
-<span class="sourceLineNo">114</span>     * result from trying to automatically place doors when any given map could need doors on walkable cells, prefer<a name="line.114"></a>
-<span class="sourceLineNo">115</span>     * doors between walkable cells aligned to walls, have mixes of "expanded", "retracted", and "normal" wall change<a name="line.115"></a>
-<span class="sourceLineNo">116</span>     * modes, or any number of other issues. There are also some very confusing cases where automatically-placed doors,<a name="line.116"></a>
-<span class="sourceLineNo">117</span>     * if this class tries to reposition them in retracted-wall mode (or in any case where rooms and corridors don't<a name="line.117"></a>
-<span class="sourceLineNo">118</span>     * have the same change mode), wind up hanging in the middle of a room or with partial connecting walls but not any<a name="line.118"></a>
-<span class="sourceLineNo">119</span>     * sensible layout. If you want doors here, you should assign them yourself how you see fit.<a name="line.119"></a>
-<span class="sourceLineNo">120</span>     * @param percentage ignored.<a name="line.120"></a>
-<span class="sourceLineNo">121</span>     * @param doubleDoors ignored.<a name="line.121"></a>
-<span class="sourceLineNo">122</span>     * @return this for chaining.<a name="line.122"></a>
-<span class="sourceLineNo">123</span>     */<a name="line.123"></a>
-<span class="sourceLineNo">124</span>    @Override<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    public SectionDungeonGenerator addDoors(int percentage, boolean doubleDoors)<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    {<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        doorFX = 0;<a name="line.127"></a>
-<span class="sourceLineNo">128</span>        return this;<a name="line.128"></a>
-<span class="sourceLineNo">129</span>    }<a name="line.129"></a>
-<span class="sourceLineNo">130</span><a name="line.130"></a>
-<span class="sourceLineNo">131</span>    public char[][] makeThin() {<a name="line.131"></a>
+<span class="sourceLineNo">016</span>    /**<a name="line.16"></a>
+<span class="sourceLineNo">017</span>     * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.<a name="line.17"></a>
+<span class="sourceLineNo">018</span>     */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    public ThinDungeonGenerator() {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    }<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span>    /**<a name="line.22"></a>
+<span class="sourceLineNo">023</span>     * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and<a name="line.23"></a>
+<span class="sourceLineNo">024</span>     * adding features will be a LightRNG using a random seed.<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     *<a name="line.25"></a>
+<span class="sourceLineNo">026</span>     * @param width  The width of the dungeon in cells<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     * @param height The height of the dungeon in cells<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     */<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    public ThinDungeonGenerator(int width, int height) {<a name="line.29"></a>
+<span class="sourceLineNo">030</span>        super(width, height);<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    }<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>    /**<a name="line.33"></a>
+<span class="sourceLineNo">034</span>     * Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     *<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * @param width  The width of the dungeon in cells<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * @param height The height of the dungeon in cells<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * @param rng    The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    public ThinDungeonGenerator(int width, int height, RNG rng) {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        super(width, height, rng);<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    }<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>    /**<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * adding features will be a LightRNG using a random seed. You can give the static fields of this class<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * as arguments to roomShape, corridorShape and caveShape. For clarity, the 3 fields should each be given<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * a constant corresponding to the same kind of area, e.g. ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * given to roomShape but preferably would not be given to the others. If the combination of arguments is<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * invalid, such as if they are all 0, this uses the default shapes: expanded room and corridor walls, and<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * chaotic cave walls controlled by Perlin noise.<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * &lt;br&gt;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * Though there's no constructor that takes a single int which merges roomShape, corridorShape, and<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * made one yourself (such as with bitwise OR on three different constants), you can pass it to any of the<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * three shape arguments and 0 to the other two shapes; it will be processed in the same way.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     *<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * @param width         The width of the dungeon in cells<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * @param height        The height of the dungeon in cells<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * @param roomShape     expected to be an int constant: ROOM_WALL_EXPAND, ROOM_WALL_RETRACT, or ROOM_WALL_CHAOTIC<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * @param corridorShape expected to be an int constant: CORRIDOR_WALL_EXPAND, CORRIDOR_WALL_RETRACT, or CORRIDOR_WALL_CHAOTIC<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * @param caveShape     expected to be an int constant: CAVE_WALL_EXPAND, CAVE_WALL_RETRACT, or CAVE_WALL_CHAOTIC<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    public ThinDungeonGenerator(int width, int height, int roomShape, int corridorShape, int caveShape) {<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        super(width, height);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        wallShapes = roomShape | corridorShape | caveShape;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        if ((wallShapes &amp; 0xF) == 0 || (wallShapes &amp; 0xF0) == 0 || (wallShapes &amp; 0xF00) == 0<a name="line.67"></a>
+<span class="sourceLineNo">068</span>                || Integer.bitCount(wallShapes) != 3)<a name="line.68"></a>
+<span class="sourceLineNo">069</span>            wallShapes = ROOM_WALL_EXPAND | CORRIDOR_WALL_EXPAND | CAVE_WALL_CHAOTIC;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    }<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>    /**<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * Make a DungeonGenerator with the given height, width, and RNG for generating random features. You can<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * give the static fields of this class as arguments to roomShape, corridorShape and caveShape. For<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * clarity, the 3 fields should each be given a constant corresponding to the same kind of area, e.g.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * ROOM_WALL_EXPAND or ROOM_WALL_RETRACT could be given to roomShape but preferably would not be given to<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * the others. If the combination of arguments is invalid, such as if they are all 0, this uses the default<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * shapes: expanded room and corridor walls, and chaotic cave walls controlled by Perlin noise.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * &lt;br&gt;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * Though there's no constructor that takes a single int which merges roomShape, corridorShape, and<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * caveShape, the internal representation of those shapes is one int. If you have one of those ints, or you<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * made one yourself (such as with bitwise OR on three different constants), you can pass it to any of the<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * three shape arguments and 0 to the other two shapes; it will be processed in the same way.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     *<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * @param width         The width of the dungeon in cells<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * @param height        The height of the dungeon in cells<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * @param roomShape     expected to be an int constant: ROOM_WALL_EXPAND, ROOM_WALL_RETRACT, or ROOM_WALL_CHAOTIC<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * @param corridorShape expected to be an int constant: CORRIDOR_WALL_EXPAND, CORRIDOR_WALL_RETRACT, or CORRIDOR_WALL_CHAOTIC<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * @param caveShape     expected to be an int constant: CAVE_WALL_EXPAND, CAVE_WALL_RETRACT, or CAVE_WALL_CHAOTIC<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * @param rng           The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    public ThinDungeonGenerator(int width, int height, RNG rng, int roomShape, int corridorShape, int caveShape) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        super(width, height, rng);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        wallShapes = roomShape | corridorShape | caveShape;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        if ((wallShapes &amp; 0xF) == 0 || (wallShapes &amp; 0xF0) == 0 || (wallShapes &amp; 0xF00) == 0<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                || Integer.bitCount(wallShapes) != 3)<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            wallShapes = ROOM_WALL_EXPAND | CORRIDOR_WALL_EXPAND | CAVE_WALL_CHAOTIC;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    }<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>    /**<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * Copies all fields from copying and makes a new DungeonGenerator.<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     *<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * @param copying the DungeonGenerator to copy<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     */<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    public ThinDungeonGenerator(ThinDungeonGenerator copying) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        super(copying);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        wallShapes = copying.wallShapes;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    }<a name="line.109"></a>
+<span class="sourceLineNo">110</span><a name="line.110"></a>
+<span class="sourceLineNo">111</span>    /**<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * Doors are not supported by this class. There's a lot of confusing and ambiguous situations that can easily<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * result from trying to automatically place doors when any given map could need doors on walkable cells, prefer<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * doors between walkable cells aligned to walls, have mixes of "expanded", "retracted", and "normal" wall change<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * modes, or any number of other issues. There are also some very confusing cases where automatically-placed doors,<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * if this class tries to reposition them in retracted-wall mode (or in any case where rooms and corridors don't<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     * have the same change mode), wind up hanging in the middle of a room or with partial connecting walls but not any<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     * sensible layout. If you want doors here, you should assign them yourself how you see fit.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * @param percentage ignored.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * @param doubleDoors ignored.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * @return this for chaining.<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     */<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    @Override<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    public SectionDungeonGenerator addDoors(int percentage, boolean doubleDoors)<a name="line.124"></a>
+<span class="sourceLineNo">125</span>    {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        doorFX = 0;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        return this;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>    public char[][] makeThin() {<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
 <span class="sourceLineNo">132</span>        int nw = (width &lt;&lt; 1) - 1, nh = (height &lt;&lt; 1) - 1;<a name="line.132"></a>
 <span class="sourceLineNo">133</span>        char[][] d2 = new char[nw][nh];<a name="line.133"></a>
 <span class="sourceLineNo">134</span>        int[][] e2 = new int[nw][nh];<a name="line.134"></a>
@@ -583,7 +583,7 @@
 <span class="sourceLineNo">575</span>                }<a name="line.575"></a>
 <span class="sourceLineNo">576</span>            }<a name="line.576"></a>
 <span class="sourceLineNo">577</span>        }<a name="line.577"></a>
-<span class="sourceLineNo">578</span>        int currentEnv, env2, offset;<a name="line.578"></a>
+<span class="sourceLineNo">578</span>        int currentEnv, offset;<a name="line.578"></a>
 <span class="sourceLineNo">579</span>        char currentDun;<a name="line.579"></a>
 <span class="sourceLineNo">580</span>        int[][] eArchive = ArrayTools.copy(e2);<a name="line.580"></a>
 <span class="sourceLineNo">581</span>        if ((wallShapes &amp; 0x111) != 0) // any environments are retracting<a name="line.581"></a>
@@ -704,7 +704,7 @@
 <span class="sourceLineNo">696</span>            eArchive = ArrayTools.copy(e2);<a name="line.696"></a>
 <span class="sourceLineNo">697</span>            for (int x = 0; x &lt; nw - 2; x++) {<a name="line.697"></a>
 <span class="sourceLineNo">698</span>                for (int y = 2; y &lt; nh - 2; y += 2) {<a name="line.698"></a>
-<span class="sourceLineNo">699</span>                    offset = (d2[x][y-1] == '+') ? 1 : 2;<a name="line.699"></a>
+<span class="sourceLineNo">699</span>                    offset = (d2[x][y - 1] == '+') ? 1 : 2;<a name="line.699"></a>
 <span class="sourceLineNo">700</span>                    if ((eArchive[x][y] &amp; 1) == 0 &amp;&amp; ((currentEnv = eArchive[x][y - offset]) &amp; 1) != 0) {<a name="line.700"></a>
 <span class="sourceLineNo">701</span>                        currentDun = d2[x][y - offset];<a name="line.701"></a>
 <span class="sourceLineNo">702</span>                        if (currentDun == '+' || currentDun == '/') {<a name="line.702"></a>
@@ -833,43 +833,63 @@
 <span class="sourceLineNo">825</span>                }<a name="line.825"></a>
 <span class="sourceLineNo">826</span>            }<a name="line.826"></a>
 <span class="sourceLineNo">827</span>        }<a name="line.827"></a>
-<span class="sourceLineNo">828</span><a name="line.828"></a>
-<span class="sourceLineNo">829</span>        dungeon = d2;<a name="line.829"></a>
-<span class="sourceLineNo">830</span>        width = nw;<a name="line.830"></a>
-<span class="sourceLineNo">831</span>        height = nh;<a name="line.831"></a>
-<span class="sourceLineNo">832</span>        if (stairsUp != null) {<a name="line.832"></a>
-<span class="sourceLineNo">833</span>            stairsUp = stairsUp.multiply(2);<a name="line.833"></a>
-<span class="sourceLineNo">834</span>        }<a name="line.834"></a>
-<span class="sourceLineNo">835</span>        if (stairsDown != null) {<a name="line.835"></a>
-<span class="sourceLineNo">836</span>            stairsDown = stairsDown.multiply(2);<a name="line.836"></a>
-<span class="sourceLineNo">837</span>        }<a name="line.837"></a>
-<span class="sourceLineNo">838</span>        finder = new RoomFinder(dungeon, e2);<a name="line.838"></a>
-<span class="sourceLineNo">839</span>        placement = new Placement(finder);<a name="line.839"></a>
-<span class="sourceLineNo">840</span>        return dungeon;<a name="line.840"></a>
-<span class="sourceLineNo">841</span>    }<a name="line.841"></a>
-<span class="sourceLineNo">842</span><a name="line.842"></a>
-<span class="sourceLineNo">843</span>    @Override<a name="line.843"></a>
-<span class="sourceLineNo">844</span>    protected char[][] innerGenerate() {<a name="line.844"></a>
-<span class="sourceLineNo">845</span>        super.innerGenerate();<a name="line.845"></a>
-<span class="sourceLineNo">846</span>        makeThin();<a name="line.846"></a>
-<span class="sourceLineNo">847</span>        return dungeon;<a name="line.847"></a>
-<span class="sourceLineNo">848</span>    }<a name="line.848"></a>
-<span class="sourceLineNo">849</span><a name="line.849"></a>
-<span class="sourceLineNo">850</span>    /**<a name="line.850"></a>
-<span class="sourceLineNo">851</span>     * Provides a string representation of the latest generated dungeon.<a name="line.851"></a>
-<span class="sourceLineNo">852</span>     * Because the spaces between occupy-able cells, when walkable, use the control character U+0006<a name="line.852"></a>
-<span class="sourceLineNo">853</span>     * to indicate that they're not meant to be displayed, this replaces any instances of that character<a name="line.853"></a>
-<span class="sourceLineNo">854</span>     * in the printable output with ordinary space characters, while keeping the internal representation<a name="line.854"></a>
-<span class="sourceLineNo">855</span>     * as the control character.<a name="line.855"></a>
-<span class="sourceLineNo">856</span>     *<a name="line.856"></a>
-<span class="sourceLineNo">857</span>     * @return a printable string version of the latest generated dungeon.<a name="line.857"></a>
-<span class="sourceLineNo">858</span>     */<a name="line.858"></a>
-<span class="sourceLineNo">859</span>    @Override<a name="line.859"></a>
-<span class="sourceLineNo">860</span>    public String toString() {<a name="line.860"></a>
-<span class="sourceLineNo">861</span>        return super.toString().replace('\u0006', ' ');<a name="line.861"></a>
-<span class="sourceLineNo">862</span>    }<a name="line.862"></a>
-<span class="sourceLineNo">863</span><a name="line.863"></a>
-<span class="sourceLineNo">864</span>}<a name="line.864"></a>
+<span class="sourceLineNo">828</span>        dungeon = d2;<a name="line.828"></a>
+<span class="sourceLineNo">829</span>        width = nw;<a name="line.829"></a>
+<span class="sourceLineNo">830</span>        height = nh;<a name="line.830"></a>
+<span class="sourceLineNo">831</span>        if (stairsUp != null) {<a name="line.831"></a>
+<span class="sourceLineNo">832</span>            stairsUp = stairsUp.multiply(2);<a name="line.832"></a>
+<span class="sourceLineNo">833</span>        }<a name="line.833"></a>
+<span class="sourceLineNo">834</span>        if (stairsDown != null) {<a name="line.834"></a>
+<span class="sourceLineNo">835</span>            stairsDown = stairsDown.multiply(2);<a name="line.835"></a>
+<span class="sourceLineNo">836</span>        }<a name="line.836"></a>
+<span class="sourceLineNo">837</span>        finder = new RoomFinder(dungeon, e2);<a name="line.837"></a>
+<span class="sourceLineNo">838</span>        placement = new Placement(finder);<a name="line.838"></a>
+<span class="sourceLineNo">839</span>        return dungeon;<a name="line.839"></a>
+<span class="sourceLineNo">840</span>    }<a name="line.840"></a>
+<span class="sourceLineNo">841</span><a name="line.841"></a>
+<span class="sourceLineNo">842</span>    @Override<a name="line.842"></a>
+<span class="sourceLineNo">843</span>    protected char[][] innerGenerate() {<a name="line.843"></a>
+<span class="sourceLineNo">844</span>        super.innerGenerate();<a name="line.844"></a>
+<span class="sourceLineNo">845</span>        makeThin();<a name="line.845"></a>
+<span class="sourceLineNo">846</span>        return dungeon;<a name="line.846"></a>
+<span class="sourceLineNo">847</span>    }<a name="line.847"></a>
+<span class="sourceLineNo">848</span><a name="line.848"></a>
+<span class="sourceLineNo">849</span>    /**<a name="line.849"></a>
+<span class="sourceLineNo">850</span>     * Modifies this ThinDungeonGenerator to remove corners between thin walls (truncating the corners, effectively).<a name="line.850"></a>
+<span class="sourceLineNo">851</span>     * Regenerates the RoomFinder and Placement objects this uses.<a name="line.851"></a>
+<span class="sourceLineNo">852</span>     */<a name="line.852"></a>
+<span class="sourceLineNo">853</span>    public void removeHardCorners()<a name="line.853"></a>
+<span class="sourceLineNo">854</span>    {<a name="line.854"></a>
+<span class="sourceLineNo">855</span>        final int[][] environment = finder.environment;<a name="line.855"></a>
+<span class="sourceLineNo">856</span>        final int width = dungeon.length, height = dungeon[0].length;<a name="line.856"></a>
+<span class="sourceLineNo">857</span>        for (int x = 1; x &lt; width - 1; x += 2) {<a name="line.857"></a>
+<span class="sourceLineNo">858</span>            for (int y = 1; y &lt; height - 1; y += 2) {<a name="line.858"></a>
+<span class="sourceLineNo">859</span>                if((environment[x+1][y] &amp; 1) != (environment[x-1][y] &amp; 1) &amp;&amp;<a name="line.859"></a>
+<span class="sourceLineNo">860</span>                        (environment[x][y+1] &amp; 1) != (environment[x][y-1] &amp; 1)) {<a name="line.860"></a>
+<span class="sourceLineNo">861</span>                    dungeon[x][y] = 6;<a name="line.861"></a>
+<span class="sourceLineNo">862</span>                }<a name="line.862"></a>
+<span class="sourceLineNo">863</span>            }<a name="line.863"></a>
+<span class="sourceLineNo">864</span>        }<a name="line.864"></a>
+<span class="sourceLineNo">865</span>        finder = new RoomFinder(dungeon, environment);<a name="line.865"></a>
+<span class="sourceLineNo">866</span>        placement = new Placement(finder);<a name="line.866"></a>
+<span class="sourceLineNo">867</span><a name="line.867"></a>
+<span class="sourceLineNo">868</span>    }<a name="line.868"></a>
+<span class="sourceLineNo">869</span><a name="line.869"></a>
+<span class="sourceLineNo">870</span>    /**<a name="line.870"></a>
+<span class="sourceLineNo">871</span>     * Provides a string representation of the latest generated dungeon.<a name="line.871"></a>
+<span class="sourceLineNo">872</span>     * Because the spaces between occupy-able cells, when walkable, use the control character U+0006<a name="line.872"></a>
+<span class="sourceLineNo">873</span>     * to indicate that they're not meant to be displayed, this replaces any instances of that character<a name="line.873"></a>
+<span class="sourceLineNo">874</span>     * in the printable output with ordinary space characters, while keeping the internal representation<a name="line.874"></a>
+<span class="sourceLineNo">875</span>     * as the control character.<a name="line.875"></a>
+<span class="sourceLineNo">876</span>     *<a name="line.876"></a>
+<span class="sourceLineNo">877</span>     * @return a printable string version of the latest generated dungeon.<a name="line.877"></a>
+<span class="sourceLineNo">878</span>     */<a name="line.878"></a>
+<span class="sourceLineNo">879</span>    @Override<a name="line.879"></a>
+<span class="sourceLineNo">880</span>    public String toString() {<a name="line.880"></a>
+<span class="sourceLineNo">881</span>        return super.toString().replace('\u0006', ' ');<a name="line.881"></a>
+<span class="sourceLineNo">882</span>    }<a name="line.882"></a>
+<span class="sourceLineNo">883</span><a name="line.883"></a>
+<span class="sourceLineNo">884</span>}<a name="line.884"></a>
 
 
 

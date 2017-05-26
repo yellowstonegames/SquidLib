@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 21, noiseMode = 70;
+    private int hashMode = 43, rngMode = 18, noiseMode = 70;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -3334,26 +3334,24 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 20:
-                        //random = new DashRNG(ctr);
-                        state = ctr;
+                        random = new LapRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1) * 421) * 64123) << 8 | 255L;
+                                code = random.next(24) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Old FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 21:
-                        //random = new DashRNG(ctr);
-                        state = ctr;
+                        random = new LapRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1) * 421) * 64123 >>> 24;
+                                iBright = random.next(24) & 255;
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("Old FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 22:
                         random = new FlapRNG(ctr);

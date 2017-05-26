@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -298,6 +298,12 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#makeThin--">makeThin</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#removeHardCorners--">removeHardCorners</a></span>()</code>
+<div class="block">Modifies this ThinDungeonGenerator to remove corners between thin walls (truncating the corners, effectively).</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#toString--">toString</a></span>()</code>
 <div class="block">Provides a string representation of the latest generated dungeon.</div>
@@ -511,7 +517,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.20">ThinDungeonGenerator</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.19">ThinDungeonGenerator</a>()</pre>
 <div class="block">Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.</div>
 </li>
 </ul>
@@ -521,7 +527,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.30">ThinDungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.29">ThinDungeonGenerator</a>(int&nbsp;width,
                             int&nbsp;height)</pre>
 <div class="block">Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
  adding features will be a LightRNG using a random seed.</div>
@@ -538,7 +544,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.41">ThinDungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.40">ThinDungeonGenerator</a>(int&nbsp;width,
                             int&nbsp;height,
                             <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Make a DungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.</div>
@@ -556,7 +562,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.65">ThinDungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.64">ThinDungeonGenerator</a>(int&nbsp;width,
                             int&nbsp;height,
                             int&nbsp;roomShape,
                             int&nbsp;corridorShape,
@@ -589,7 +595,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.94">ThinDungeonGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.92">ThinDungeonGenerator</a>(int&nbsp;width,
                             int&nbsp;height,
                             <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                             int&nbsp;roomShape,
@@ -623,7 +629,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ThinDungeonGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.107">ThinDungeonGenerator</a>(<a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">ThinDungeonGenerator</a>&nbsp;copying)</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.106">ThinDungeonGenerator</a>(<a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">ThinDungeonGenerator</a>&nbsp;copying)</pre>
 <div class="block">Copies all fields from copying and makes a new DungeonGenerator.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -645,7 +651,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>addDoors</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.125">addDoors</a>(int&nbsp;percentage,
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.124">addDoors</a>(int&nbsp;percentage,
                                         boolean&nbsp;doubleDoors)</pre>
 <div class="block">Doors are not supported by this class. There's a lot of confusing and ambiguous situations that can easily
  result from trying to automatically place doors when any given map could need doors on walkable cells, prefer
@@ -671,7 +677,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>makeThin</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.131">makeThin</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.130">makeThin</a>()</pre>
 </li>
 </ul>
 <a name="innerGenerate--">
@@ -680,11 +686,22 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockList">
 <li class="blockList">
 <h4>innerGenerate</h4>
-<pre>protected&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.844">innerGenerate</a>()</pre>
+<pre>protected&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.843">innerGenerate</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#innerGenerate--">innerGenerate</a></code>&nbsp;in class&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="removeHardCorners--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeHardCorners</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.853">removeHardCorners</a>()</pre>
+<div class="block">Modifies this ThinDungeonGenerator to remove corners between thin walls (truncating the corners, effectively).
+ Regenerates the RoomFinder and Placement objects this uses.</div>
 </li>
 </ul>
 <a name="toString--">
@@ -693,7 +710,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.ht
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.860">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/ThinDungeonGenerator.html#line.880">toString</a>()</pre>
 <div class="block">Provides a string representation of the latest generated dungeon.
  Because the spaces between occupy-able cells, when walkable, use the control character U+0006
  to indicate that they're not meant to be displayed, this replaces any instances of that character

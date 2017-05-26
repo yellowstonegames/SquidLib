@@ -8,7 +8,7 @@
 <div class="sourceContainer">
 <pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
-<span class="sourceLineNo">003</span>import java.util.LinkedList;<a name="line.3"></a>
+<span class="sourceLineNo">003</span>import java.util.ArrayList;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import java.util.List;<a name="line.4"></a>
 <span class="sourceLineNo">005</span><a name="line.5"></a>
 <span class="sourceLineNo">006</span>/**<a name="line.6"></a>
@@ -27,10 +27,10 @@
 <span class="sourceLineNo">019</span>     * @param endY   y of ending point<a name="line.19"></a>
 <span class="sourceLineNo">020</span>     * @return List of Coord, including (startX, startY) and (endX, endY) and all points walked between<a name="line.20"></a>
 <span class="sourceLineNo">021</span>     */<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    public static List&lt;Coord&gt; line(int startX, int startY, int endX, int endY) {<a name="line.22"></a>
+<span class="sourceLineNo">022</span>    public static ArrayList&lt;Coord&gt; line(int startX, int startY, int endX, int endY) {<a name="line.22"></a>
 <span class="sourceLineNo">023</span>        int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy);<a name="line.23"></a>
 <span class="sourceLineNo">024</span>        int signX = (dx &gt; 0) ? 1 : -1, signY = (dy &gt; 0) ? 1 : -1, workX = startX, workY = startY;<a name="line.24"></a>
-<span class="sourceLineNo">025</span>        LinkedList&lt;Coord&gt; drawn = new LinkedList&lt;&gt;();<a name="line.25"></a>
+<span class="sourceLineNo">025</span>        ArrayList&lt;Coord&gt; drawn = new ArrayList&lt;&gt;(1 + nx + ny);<a name="line.25"></a>
 <span class="sourceLineNo">026</span>        drawn.add(Coord.get(startX, startY));<a name="line.26"></a>
 <span class="sourceLineNo">027</span>        for (int ix = 0, iy = 0; ix &lt; nx || iy &lt; ny; ) {<a name="line.27"></a>
 <span class="sourceLineNo">028</span>            if ((0.5f + ix) / nx &lt; (0.5 + iy) / ny) {<a name="line.28"></a>
@@ -51,7 +51,7 @@
 <span class="sourceLineNo">043</span>     * @param end ending point<a name="line.43"></a>
 <span class="sourceLineNo">044</span>     * @return List of Coord, including start and end and all points walked between<a name="line.44"></a>
 <span class="sourceLineNo">045</span>     */<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    public static List&lt;Coord&gt; line(Coord start, Coord end)<a name="line.46"></a>
+<span class="sourceLineNo">046</span>    public static ArrayList&lt;Coord&gt; line(Coord start, Coord end)<a name="line.46"></a>
 <span class="sourceLineNo">047</span>    {<a name="line.47"></a>
 <span class="sourceLineNo">048</span>        return line(start.x, start.y, end.x, end.y);<a name="line.48"></a>
 <span class="sourceLineNo">049</span>    }<a name="line.49"></a>
@@ -92,7 +92,164 @@
 <span class="sourceLineNo">084</span>    {<a name="line.84"></a>
 <span class="sourceLineNo">085</span>        return line_(start.x, start.y, end.x, end.y);<a name="line.85"></a>
 <span class="sourceLineNo">086</span>    }<a name="line.86"></a>
-<span class="sourceLineNo">087</span>}<a name="line.87"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>    /**<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * Given an array of Coord as produced by {@link #line_(Coord, Coord)} or {@link #line_(int, int, int, int)}, this<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * gets a char array of box-drawing characters that connect when drawn at the corresponding Coord positions in the<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * given line. This can be useful for drawing highlight lines or showing what path something will take, as long as<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * it only uses 4-way orthogonal connections between Coords. Any connections that require a diagonal will not be<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * handled by this method (returning a straight line without much accuracy), and any Coords that aren't adjacent<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * will cause an {@link IllegalStateException} if this has to draw a line between them. If this method is called on<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * the result of this class' line_() method, then it should always return a valid result; if it is called on a path<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * made with some other method, such as from {@link Bresenham#line2D_(Coord, Coord)}, then it shouldn't throw an<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * exception but may produce a low-quality (disconnected visually) line.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * @param line a Coord array where each Coord is orthogonally adjacent to its neighbor(s) in the array; usually<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     *             produced via {@link #line_(Coord, Coord)} or {@link #line_(int, int, int, int)}<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * @return a char array of box-drawing chars that will connect when drawn at the same points as in line<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     */<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    public static char[] lineChars(Coord[] line)<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    {<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        // ─│┌┐└┘├┤┬┴┼<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        if(line == null) return null;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        int len = line.length;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        if(len == 0) return new char[0];<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        if(len == 1) return new char[]{'─'};<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        char[] cs = new char[len];<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        cs[0] = line[0].x == line[1].x ? '│' : '─';<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        cs[len - 1] = line[len - 1].x == line[len - 2].x ? '│' : '─';<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        Coord before, current, next;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        for (int i = 1; i &lt; len - 1; i++) {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            before = line[i-1];<a name="line.114"></a>
+<span class="sourceLineNo">115</span>            current = line[i];<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            next = line[i+1];<a name="line.116"></a>
+<span class="sourceLineNo">117</span>            switch (before.toGoTo(current))<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                case RIGHT:<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                    switch (current.toGoTo(next))<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                    {<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                        case UP: cs[i] = '┘';<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                            break;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                        case DOWN: cs[i] = '┐';<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                            break;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                        default: cs[i] = '─';<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                            break;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                    }<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                    break;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                case LEFT:<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                    switch (current.toGoTo(next))<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                    {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                        case UP: cs[i] = '└';<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                            break;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                        case DOWN: cs[i] = '┌';<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                            break;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                        default: cs[i] = '─';<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                            break;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                    }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                    break;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                case UP:<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                    switch (current.toGoTo(next))<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                    {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                        case LEFT: cs[i] = '┐';<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                            break;<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                        case RIGHT: cs[i] = '┌';<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                            break;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                        default: cs[i] = '│';<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                            break;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                    }<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                    break;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                default:<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                    switch (current.toGoTo(next))<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                    {<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                        case LEFT: cs[i] = '┘';<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                            break;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                        case RIGHT: cs[i] = '└';<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                            break;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                        default: cs[i] = '│';<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                            break;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                    }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>            }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        }<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        return cs;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    }<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    /**<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * Given a List of Coord as produced by {@link #line(Coord, Coord)} or {@link #line(int, int, int, int)}, this<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * gets a char array of box-drawing characters that connect when drawn at the corresponding Coord positions in the<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     * given line. This can be useful for drawing highlight lines or showing what path something will take, as long as<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * it only uses 4-way orthogonal connections between Coords. Any connections that require a diagonal will not be<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * handled by this method (returning a straight line without much accuracy), and any Coords that aren't adjacent<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * will cause an {@link IllegalStateException} if this has to draw a line between them. If this method is called on<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * the result of this class' line() method, then it should always return a valid result; if it is called on a path<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * made with some other method, such as from {@link Bresenham#line2D(Coord, Coord)}, then it shouldn't throw an<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * exception but may produce a low-quality (disconnected visually) line.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param line a List of Coord where each Coord is orthogonally adjacent to its neighbor(s) in the List; usually<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     *             produced via {@link #line(Coord, Coord)} or {@link #line(int, int, int, int)}<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @return a char array of box-drawing chars that will connect when drawn at the same points as in line<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    public static char[] lineChars(List&lt;Coord&gt; line)<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        // ─│┌┐└┘├┤┬┴┼<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        if(line == null) return null;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        int len = line.size();<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        if(len == 0) return new char[0];<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        if(len == 1) return new char[]{'─'};<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        char[] cs = new char[len];<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        cs[0] = line.get(0).x == line.get(1).x ? '│' : '─';<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        cs[len - 1] = line.get(len - 1).x == line.get(len - 2).x ? '│' : '─';<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        Coord before, current, next;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        for (int i = 1; i &lt; len - 1; i++) {<a name="line.191"></a>
+<span class="sourceLineNo">192</span>            before = line.get(i-1);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>            current = line.get(i);<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            next = line.get(i+1);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            switch (before.toGoTo(current))<a name="line.195"></a>
+<span class="sourceLineNo">196</span>            {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                case RIGHT:<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                    switch (current.toGoTo(next))<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                    {<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                        case UP: cs[i] = '┘';<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                            break;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>                        case DOWN: cs[i] = '┐';<a name="line.202"></a>
+<span class="sourceLineNo">203</span>                            break;<a name="line.203"></a>
+<span class="sourceLineNo">204</span>                        default: cs[i] = '─';<a name="line.204"></a>
+<span class="sourceLineNo">205</span>                            break;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                    }<a name="line.206"></a>
+<span class="sourceLineNo">207</span>                    break;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>                case LEFT:<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                    switch (current.toGoTo(next))<a name="line.209"></a>
+<span class="sourceLineNo">210</span>                    {<a name="line.210"></a>
+<span class="sourceLineNo">211</span>                        case UP: cs[i] = '└';<a name="line.211"></a>
+<span class="sourceLineNo">212</span>                            break;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>                        case DOWN: cs[i] = '┌';<a name="line.213"></a>
+<span class="sourceLineNo">214</span>                            break;<a name="line.214"></a>
+<span class="sourceLineNo">215</span>                        default: cs[i] = '─';<a name="line.215"></a>
+<span class="sourceLineNo">216</span>                            break;<a name="line.216"></a>
+<span class="sourceLineNo">217</span>                    }<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                    break;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                case UP:<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                    switch (current.toGoTo(next))<a name="line.220"></a>
+<span class="sourceLineNo">221</span>                    {<a name="line.221"></a>
+<span class="sourceLineNo">222</span>                        case LEFT: cs[i] = '┐';<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                            break;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>                        case RIGHT: cs[i] = '┌';<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                            break;<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                        default: cs[i] = '│';<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                            break;<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                    }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                    break;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                default:<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                    switch (current.toGoTo(next))<a name="line.231"></a>
+<span class="sourceLineNo">232</span>                    {<a name="line.232"></a>
+<span class="sourceLineNo">233</span>                        case LEFT: cs[i] = '┘';<a name="line.233"></a>
+<span class="sourceLineNo">234</span>                            break;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>                        case RIGHT: cs[i] = '└';<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                            break;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                        default: cs[i] = '│';<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                            break;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                    }<a name="line.239"></a>
+<span class="sourceLineNo">240</span>            }<a name="line.240"></a>
+<span class="sourceLineNo">241</span>        }<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        return cs;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    }<a name="line.243"></a>
+<span class="sourceLineNo">244</span>}<a name="line.244"></a>
 
 
 

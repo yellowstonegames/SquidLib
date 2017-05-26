@@ -9,14 +9,15 @@ import java.io.Serializable;
  * Like LightRNG, but shares a lot in common with one of CrossHash's hashing algorithms. The name comes from its
  * similarity to that particular hash, Lightning, but also to how the current version acts like LightRNG,
  * sort-of, but involves a thunder-like "echo" where the earlier results are used as additional state for the
- * next result. Why should you consider it? It appears to be the fastest RandomnessSource we have available,
- * and is the only RNG in the library that can generate 1 billion random long values in under 1 second (or
- * rather, under 900 ms) on an Intel i7-4700MQ laptop processor (second-fastest RandomnessSource depends on
- * other factors, but is effectively a tie between LightRNG and XoRoRNG at roughly 1200 ms on the same laptop).
+ * next result. Why should you consider it? It appears to be the fastest RandomnessSource we have available that still
+ * has relatively strong quality, and is one of a few RNGs in the library that can generate 1 billion random long values
+ * in under 1 second on an Intel i7-6700HQ laptop processor (LapRNG is faster than ThunderRNG at producing longs and
+ * {@link FlapRNG} is faster than ThunderRNG at producing ints; behind ThunderRNG in the RandomnessSource race would
+ * be a tie between {@link LightRNG} and {@link XoRoRNG} at roughly 1400 ms on the same laptop).
  * Any layer on top of generating long values slows this down, which is the case for most of the
  * RandomnessSource implementations, but ThunderRNG's {@link #nextInt()} method, which gets the most
- * significant 32 bits of a random long and returns them as an int, is also the fastest way we have to generate
- * int values. This does not implement StatefulRandomness because it stores state in two parts, each a long;
+ * significant 32 bits of a random long and returns them as an int, is a reliable and fast way to generate quality
+ * int values. This does not implement {@link StatefulRandomness} because it stores state in two parts, each a long;
  * each is incremented by a different addend with each number generated. Part B is always odd, and is
  * incremented by a large, empirically-chosen number that is even; because odd + even = odd, always, part B
  * never becomes even. Part A is always incremented by an irregular selection of the bits in Part B, but the
@@ -46,7 +47,9 @@ import java.io.Serializable;
  * the other generators I tried, there were no or nearly-no statistical failures it could find, and as of the (second)
  * commit on August 31, ThunderRNG also has no statistical failures or even anomalies. Earlier versions were
  * slightly faster (at best speed, 600-700ms) but had multiple outright failures (the fastest ones failed the
- * majority of tests).
+ * majority of tests). This best speed is matched today by {@link LapRNG}, but that is almost certain to have worse
+ * statistical quality and period than ThunderRNG. If speed is what matters first, you should try LapRNG, since it is
+ * about 25-35% faster than ThunderRNG.
  * <br>
  * Created by Tommy Ettinger on 8/23/2016.
  */

@@ -5043,7 +5043,7 @@
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#line-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code>
 <div class="block">Draws a line from start to end using only N/S/E/W movement.</div>
@@ -5096,7 +5096,7 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#line-int-int-int-int-">line</a></span>(int&nbsp;startX,
     int&nbsp;startY,
     int&nbsp;endX,
@@ -5403,7 +5403,7 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#line-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">line</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;end)</code>
 <div class="block">Draws a line from start to end using only N/S/E/W movement.</div>
@@ -5451,32 +5451,40 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static char[]</code></td>
+<td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#lineChars-squidpony.squidmath.Coord:A-">lineChars</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]&nbsp;line)</code>
+<div class="block">Given an array of Coord as produced by <a href="../../../squidpony/squidmath/OrthoLine.html#line_-squidpony.squidmath.Coord-squidpony.squidmath.Coord-"><code>OrthoLine.line_(Coord, Coord)</code></a> or <a href="../../../squidpony/squidmath/OrthoLine.html#line_-int-int-int-int-"><code>OrthoLine.line_(int, int, int, int)</code></a>, this
+ gets a char array of box-drawing characters that connect when drawn at the corresponding Coord positions in the
+ given line.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#multiply-squidpony.squidmath.Coord-">multiply</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code>
 <div class="block">Separately multiplies the x and y positions of other from this Coord, producing a different Coord as their
  "product."</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static short[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#packOne-squidpony.squidmath.Coord-">packOne</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code>
 <div class="block">Returns a new packed short[] containing the Coord point as "on", and all other cells "off".</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static short[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#packSeveral-squidpony.squidmath.Coord...-">packSeveral</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code>
 <div class="block">Returns a new packed short[] containing the Coords in points as "on" cells, and all other cells "off"</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/AStarSearch.html#path-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">path</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code>
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#randomUnblockedTile-squidpony.squidmath.Coord-squidpony.squidmath.Coord-char:A:A-squidpony.squidmath.RNG-java.util.HashSet-">randomUnblockedTile</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
                    <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -5486,20 +5494,20 @@
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has any value not in blocking.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#remove-squidpony.squidmath.Coord-">remove</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeCircle-squidpony.squidmath.Coord-int-">removeCircle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
             int&nbsp;radius)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeSeveral-squidpony.squidmath.Coord...-">removeSeveral</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static short[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#removeSeveralPacked-short:A-squidpony.squidmath.Coord...-">removeSeveralPacked</a></span>(short[]&nbsp;original,
                    <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code>
@@ -5508,7 +5516,7 @@
  in points, and encodes "off" for cells that were "off" in original and are a cell points refers to.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleCircle-squidpony.squidmath.Coord-float-float-int-int-">sampleCircle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
             float&nbsp;radius,
@@ -5519,7 +5527,7 @@
  Euclidean distance, so a true circle), but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleCircle-squidpony.squidmath.Coord-float-float-int-int-int-squidpony.squidmath.RNG-">sampleCircle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;center,
             float&nbsp;radius,
@@ -5532,7 +5540,7 @@
  Euclidean distance, so a true circle), but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleMap-squidpony.squidmath.Coord-squidpony.squidmath.Coord-char:A:A-float-squidpony.squidmath.RNG-java.lang.Character...-">sampleMap</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
          <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -5541,7 +5549,7 @@
          <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>...&nbsp;blocking)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleRectangle-squidpony.squidmath.Coord-squidpony.squidmath.Coord-float-int-int-">sampleRectangle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
                <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -5552,7 +5560,7 @@
  maxPosition, but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#sampleRectangle-squidpony.squidmath.Coord-squidpony.squidmath.Coord-float-int-int-int-squidpony.squidmath.RNG-">sampleRectangle</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
                <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -5565,27 +5573,27 @@
  maxPosition, but with the given minimum distance from any other Coord in the list.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#set-boolean-squidpony.squidmath.Coord-">set</a></span>(boolean&nbsp;value,
    <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;point)</code>
 <div class="block">Sets the cell at point to on if value is true or off if value is false.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">Region.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Region.html#setCoords-squidpony.squidmath.Coord...-">setCoords</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;coords)</code>
 <div class="block">Changes this Region to include the given Coords and disregard its previous contents.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#subtract-squidpony.squidmath.Coord-">subtract</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code>
 <div class="block">Separately subtracts the x and y positions of other from this Coord, producing a different Coord as their
  "difference."</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#toGoTo-squidpony.squidmath.Coord-">toGoTo</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;adjacent)</code>
 <div class="block">Precondition: <code>this</code> is <a href="../../../squidpony/squidmath/Coord.html#isAdjacent-squidpony.squidmath.Coord-"><code>adjacent</code></a> to
@@ -5620,16 +5628,24 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static char[]</code></td>
+<td class="colLast"><span class="typeNameLabel">OrthoLine.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/OrthoLine.html#lineChars-java.util.List-">lineChars</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;line)</code>
+<div class="block">Given a List of Coord as produced by <a href="../../../squidpony/squidmath/OrthoLine.html#line-squidpony.squidmath.Coord-squidpony.squidmath.Coord-"><code>OrthoLine.line(Coord, Coord)</code></a> or <a href="../../../squidpony/squidmath/OrthoLine.html#line-int-int-int-int-"><code>OrthoLine.line(int, int, int, int)</code></a>, this
+ gets a char array of box-drawing characters that connect when drawn at the corresponding Coord positions in the
+ given line.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static short[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#packSeveral-java.util.Collection-">packSeveral</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>
 <div class="block">Returns a new packed short[] containing the Coords in points as "on" cells, and all other cells "off"</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeSeveral-java.lang.Iterable-">removeSeveral</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static short[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#removeSeveralPacked-short:A-java.util.Collection-">removeSeveralPacked</a></span>(short[]&nbsp;original,
                    <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>

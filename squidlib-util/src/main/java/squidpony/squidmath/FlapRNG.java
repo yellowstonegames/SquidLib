@@ -12,11 +12,13 @@ import java.io.Serializable;
  * (it takes about 40% less time than LightRNG to generate ints). Quality is unclear, since this relies on some very
  * particular values for constants and shows various flaws visually when the constants are even slightly off. There are
  * probably better choices for constants out there that we may be able to find, but it doesn't seem easy.
- * It's likely that the period of FlapRNG is a full 2 to the 64 (0 seed is allowed), since this uses a pair of ints for
- * its state, though it may be less (2 to the 32 is absolutely the minimum possible period).
+ * It's likely that the period of FlapRNG is only 2 to the 33 (0 seed is allowed), which is much less than many common
+ * generators ({@link java.util.Random} has a period of approximately 2 to the 42, for instance). This may be acceptable
+ * if you don't expect to generate 8 billion numbers with one FlapRNG.
  * <br>
  * Created by Tommy Ettinger on 5/1/2017.
  */
+
 @Beta
 public class FlapRNG implements StatefulRandomness, Serializable {
     private static final long serialVersionUID = 1L;
@@ -118,12 +120,14 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * Using this method, any algorithm that needs to efficiently generate more
      * than 32 bits of random data can interface with this randomness source.
      * This implementation produces a different result than calling {@link #nextInt()} twice and shifting the bits
-     * to make a long from the two ints. It uses mostly the same steps as nextInt(), but instead of multiplying a
-     * 32-bit int by a large constant, it generates a similar 32-bit int (but multiplies by a larger 64-bit constant to
-     * get a long) and XORs two modifications of it (multiplying by a very large long, and left-shifting by 32). The end
-     * result is a long that should take only slightly longer to produce than an int, from a primarily-int generator!
-     * Hooray. The downside is that only 2 to the 32 longs can be produced by this method (not the full 2 to the 64
-     * range that would be ideal), though the period should be significantly higher than that.
+     * to make a long from the two ints, which is what most int-centric generators do. The technique this uses, as this
+     * class usually does, reduces quality but sacrifices as little speed as possible. You get a long from this with
+     * only slightly longer time than it takes to produce than an int, from a primarily-int generator! Hooray. The
+     * downside is that only 2 to the 32 longs can be produced by this method (not the full 2 to the 64 range that would
+     * be ideal), though the period is a little higher than that (2 to the 33). It may be important to note that this
+     * changes the sequence of random numbers exactly in the same way as calling {@link #nextInt()}, so you could
+     * employ any combination of nextInt() and nextLong() calls and get the same result on a subsequent nextInt() call,
+     * given the same starting state.
      * <p>
      * Pseudo-random results may be between between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
      *
