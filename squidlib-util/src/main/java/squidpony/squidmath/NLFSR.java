@@ -57,7 +57,7 @@ public class NLFSR implements StatefulRandomness, Serializable {
 
     @Override
     public int next(int bits) {
-        return (int) (nextLong() >>> (32 - bits));
+        return (int) (nextLong() >>> (64 - bits));
     }
 
     @Override
