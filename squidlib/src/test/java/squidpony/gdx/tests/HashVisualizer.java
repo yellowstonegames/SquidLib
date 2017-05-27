@@ -158,10 +158,30 @@ public class HashVisualizer extends ApplicationAdapter {
         hash = 113 * hash + x;
         hash = 113 * hash + y;
         return hash;
-
     }
 
-    /*
+    /**
+     * A miniature version of LapRNG that can be quickly copied into a project.
+     * Sometimes used here to prototype changes to LapRNG's algorithm.
+     */
+    public static class MicroRandom {
+        public long state0, state1;
+
+        public MicroRandom(long seed0, long seed1) {
+            state0 = seed0 * 0x62E2AC0DL + 0x85157AF5;
+            state1 = seed1 * 0x85157AF5L - 0x62E2AC0DL;
+        }
+
+        public final long nextLong() {
+            return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
+        }
+
+        public final int next(final int bits) {
+            return (int) (nextLong() >>> (64 - bits));
+        }
+    }
+
+        /*
         public static float determine(float alpha, float beta)
         {
             //final int a = ((x * 0x92B5CC83) << 16) ^ x, b = (((y * 0xD9B4E019) << 16) ^ y) | 1;
@@ -3334,6 +3354,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 20:
+                        //random = new LapRNG(ctr * 0x9E3779B9L + 0x7F4A7C15L, ctr * (ctr + 0x9E3779B9L) + 0x7F4A7C15L);
                         random = new LapRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3344,10 +3365,11 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 21:
+                        // * 0x9E3779B9L + 0x7F4A7C15L, ctr * 0x9E3779B9L + 0x7F4A7C15L
                         random = new LapRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(24) & 255;
+                                iBright = random.next(8);
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }

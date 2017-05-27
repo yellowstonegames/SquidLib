@@ -9,33 +9,82 @@ import java.io.Serializable;
  * Like FlapRNG, this sacrifices quality for speed, but it uses 64-bit math and as such has a larger period (FlapRNG
  * will repeat the cycle of random numbers it produces after about 8 billion numbers, while this will only repeat after
  * many more, at least 2 to the 64). As such, LapRNG is like FlapRNG but can generate for a longer period of time (more
- * laps) without repeating, and in some cases (mainly generating 64-bit values) at even higher speed.
+ * laps) without repeating, and in some cases (mainly generating 64-bit values) at even higher speed. It is currently
+ * the fastest RandomnessSource in this library at generating 64-bit longs, which is most of what {@link RNG} uses, and
+ * is second-fastest at generating 32-bit ints, with FlapRNG just slightly faster at that.
  * <br>
  * Created by Tommy Ettinger on 5/25/2017.
  */
 @Beta
 public class LapRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Constructs a LapRNG with a random internal state, using {@link Math#random()} four times to get enough bits.
+     */
     public LapRNG(){
         this((long)((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
                 ^ (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000000L),
                 (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
                         ^ (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
     }
+
+    /**
+     * Given one long for a seed, this fills the two internal longs of state with different values, each produced by
+     * multiplying seed by a large constant and adding a different large constant. You can obtain the state that this
+     * ends up using with {@link #getState0()} and {@link #getState1()}.
+     * @param seed any long; will not be used verbatim for either internal state
+     */
     public LapRNG(final long seed) {
-        state0 = seed;
-        state1 = LightRNG.determine(seed);
+        state0 = seed * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
+        state1 = seed * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
     }
+    /**
+     * Given one int for a seed, this fills the two internal longs of state with different values, each produced by
+     * multiplying seed by a large constant and adding a different large constant. You can obtain the state that this
+     * ends up using with {@link #getState0()} and {@link #getState1()}.
+     * @param seed any int; will not be used verbatim for either internal state
+     */
+    public LapRNG(final int seed) {
+        state0 = seed * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
+        state1 = seed * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
+    }
+
+    /**
+     * The only constructor that does not modify its seeds in some way; you should ensure seed0 is large enough (at
+     * least 25 bits should be needed to represent it, so greater than 33554432 or less than -33554433). If seed0 is too
+     * small, then this will appear highly repetitive for many cycles before changing its output pattern.
+     * @param seed0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
+     * @param seed1 any long
+     */
     public LapRNG(final long seed0, final long seed1) {
         state0 = seed0;
         state1 = seed1;
     }
-    public LapRNG(final CharSequence seed)
-    {
-        this(CrossHash.hash64(seed));
+
+    /**
+     * This constructor takes ints for seeds, but internally LapRNG uses longs, so it multiplies each input by a large
+     * constant and adds another to get the state it actually will start with. You can obtain the state that this ends
+     * up using with {@link #getState0()} and {@link #getState1()}.
+     * @param seed0 any int, will not be used verbatim
+     * @param seed1 any int, will not be used verbatim
+     */
+    public LapRNG(final int seed0, final int seed1) {
+        state0 = seed0 * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
+        state1 = seed1 * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
     }
 
-    public long state0, state1;
+    /**
+     * This constructor gets a 64-bit hash code from the given String or other CharSequence and gives it to the
+     * constructor that takes one long, {@link #LapRNG(long)}.
+     * @param seed any CharSequence, such as a String
+     */
+    public LapRNG(final CharSequence seed)
+    {
+        this(CrossHash.Wisp.hash64(seed));
+    }
+
+    private long state0, state1;
 
     /**
      * Using this method, any algorithm that might use the built-in Java Random
@@ -46,7 +95,7 @@ public class LapRNG implements RandomnessSource, Serializable {
      */
     @Override
     public final int next( final int bits ) {
-        return (int) ((state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L) >>> (32 - bits));
+        return (int) ((state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L) >>> (64 - bits));
     }
 
     /**
@@ -88,6 +137,40 @@ public class LapRNG implements RandomnessSource, Serializable {
     @Override
     public RandomnessSource copy() {
         return new LapRNG(state0, state1);
+    }
+
+    /**
+     * Gets the linearly-changing part of the state.
+     * @return one of the two parts of the state as a long
+     */
+    public long getState0() {
+        return state0;
+    }
+
+    /**
+     * Sets the linearly-changing part of the state; if the parameter is too small, the generator will behave poorly.
+     * At minimum, the parameter should have significant bits beyond the 24th bit (greater than 33554432 for positive
+     * longs), and should ideally be larger than can be represented in a 32-bit int.
+     * @param state0 a large-enough long, either greater than 33554432 or less than -33554433, preferably greatly so
+     */
+    public void setState0(long state0) {
+        this.state0 = state0;
+    }
+
+    /**
+     * Gets the irregularly-changing part of the state.
+     * @return one of the two parts of the state as a long
+     */
+    public long getState1() {
+        return state1;
+    }
+
+    /**
+     * Sets the irregularly-changing part of the state; just about any long can be passed as a reasonable value here.
+     * @param state1 any long
+     */
+    public void setState1(long state1) {
+        this.state1 = state1;
     }
 
     /**
