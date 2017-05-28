@@ -45,8 +45,21 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected IColorCenter<Color> scc;
     protected final int cellWidth, cellHeight;
     protected int gridWidth, gridHeight, gridOffsetX = 0, gridOffsetY = 0;
-    protected final char[][] contents;
-    protected final float[][] colors;
+    /**
+     * The 2D array of chars that this will render, using x,y indexing.
+     * Full-block cells that are completely filled with their color will be the char at Unicode codepoint 0,
+     * usually represented with {@code '\0'}.
+     */
+    public final char[][] contents;
+    /**
+     * The 2D array of floats representing colors in a way that libGDX can efficiently use, ABGR-packed.
+     * Most use won't directly involve this field, but there are various techniques SquidLib uses to boost
+     * performance by treating a color as a float. This is mainly advantageous when many colors are involved
+     * and objects shouldn't be instantiated many times. You may want to consider using
+     * {@link SColor#lerpFloatColors(float, float, float)} if you expect to smoothly mix these float colors,
+     * which avoids creating intermediate Color objects. There are more methods like that in SColor.
+     */
+    public final float[][] colors;
     protected Color lightingColor = SColor.WHITE, tmpColor = new Color();
     protected final TextCellFactory textFactory;
     protected float xOffset, yOffset, lightingFloat = NumberUtils.intToFloatColor(0xffffffff);

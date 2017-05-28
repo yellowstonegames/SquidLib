@@ -51,17 +51,17 @@ public class FakeLanguageGen implements Serializable {
                     //17 is REFlags.UNICODE | REFlags.IGNORE_CASE
                     Pattern.compile("[sξζzkкκcсς][hнlι].{1,3}[dtтτΓг]", 17),
                     Pattern.compile("(?:(?:[pрρ][hн])|[fd]).{1,3}[kкκcсςxхжχq]", 17), // lots of these end in a 'k' sound, huh
-                    Pattern.compile("[kкκcсςСQq].{1,3}[kкκcсςxхжχqmм]", 17),
-                    Pattern.compile("[bъыбвβЪЫБ].{1,3}[cсς]", 17),
+                    Pattern.compile("[kкκcсςСQq][uμυνvhн]{1,3}[kкκcсςxхжχqmм]", 17),
+                    Pattern.compile("[bъыбвβЪЫБ].?[iτιyуλγУ].?[cсς]", 17),
                     Pattern.compile("[hн][^aаαΛeезξεЗΣiτιyуλγУ][^aаαΛeезξεЗΣiτιyуλγУ]?[rяΓ]", 17),
                     Pattern.compile("[tтτΓгcсς][iτιyуλγУ][tтτΓг]+$", 17),
-                    Pattern.compile("(?:(?:[pрρ][hн])|f)..?[rяΓ][tтτΓг]", 17),
+                    Pattern.compile("(?:(?:[pрρ][hн])|f)[aаαΛhн]{1,}[rяΓ][tтτΓг]", 17),
                     Pattern.compile("[Ssξζzcсς][hн][iτιyуλγУ].?[sξζzcсς]", 17),
-                    Pattern.compile("[aаαΛ][nи]..?[Ssξlιζz]", 17),
+                    Pattern.compile("[aаαΛ][nи][aаαΛeезξεЗΣiτιyуλγУoоюσοuμυνv]{1,2}[Ssξlιζz]", 17),
                     Pattern.compile("[aаαΛ]([sξζz]{2})", 17),
-                    Pattern.compile("[uμυνv]([hн]?)[nи]+[tтτΓг]", 17),
+                    Pattern.compile("[kкκcсςСQq][hн]?[uμυνv]([hн]?)[nи]+[tтτΓг]", 17),
                     Pattern.compile("[nиfvν]..?[jg]", 17), // might as well remove two possible slurs and a body part with one check
-                    Pattern.compile("[pрρ](?:(?:([eезξεЗΣoоюσοuμυνv])\\1)|(?:[eезξεЗΣiτιyуλγУuμυνv]+[sξζzcсς]))", 17), // the grab bag of juvenile words
+                    Pattern.compile("[pрρ](?:(?:([eезξεЗΣoоюσοuμυνv])\\1)|(?:[eезξεЗΣiτιyуλγУuμυνv]+[sξζz]))", 17), // the grab bag of juvenile words
                     Pattern.compile("[mм][hнwψшщ]?..?[rяΓ].?d", 17), // should pick up the #1 obscenity from Spanish and French
                     Pattern.compile("[g][hн]?[aаαАΑΛeеёзξεЕЁЗΕΣ][yуλγУeеёзξεЕЁЗΕΣ]", 17), // could be inappropriate for random text
                     Pattern.compile("[wψшщuμυνv](?:[hн]?)[aаαΛeеёзξεЗΕΣoоюσοuμυνv](?:[nи]+)[gkкκcсςxхжχq]", 17)
@@ -2107,13 +2107,34 @@ public class FakeLanguageGen implements Serializable {
                 new String[]{}, lengths, chances, vowelHeavy, vowelHeavy * 1.8, 0.0, 0.0, genericSanityChecks, true).summarize("0#" + seed + "@1");
     }
 
-    protected boolean checkAll(CharSequence testing, Pattern[] checks) {
+    protected static boolean checkAll(CharSequence testing, Pattern[] checks) {
         CharSequence fixed = removeAccents(testing);
         for (int i = 0; i < checks.length; i++) {
             if (checks[i].matcher(fixed).find())
                 return false;
         }
         return true;
+    }
+
+    /**
+     * Checks a CharSequence, such as a String, against an overzealous vulgarity filter, returning true if the text
+     * could contain vulgar elements or words that could seem vulgar or juvenile. The idea here is that false positives
+     * are OK as long as there are very few false negatives (missed vulgar words). Does not check punctuation or numbers
+     * that could look like letters.
+     * @param testing the text, as a CharSequence such as a String, to check
+     * @return true if the text could contain a vulgar or juvenile element; false if it probably doesn't
+     */
+    public static boolean checkVulgarity(CharSequence testing)
+    {
+        CharSequence fixed = removeAccents(testing);
+        for (int i = 0; i < vulgarChecks.length; i++) {
+            if (vulgarChecks[i].matcher(fixed).find())
+            {
+                System.out.println(vulgarChecks[i]);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

@@ -316,6 +316,7 @@ public class LanguageGenTest {
                 FakeLanguageGen.NORSE,
                 FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
                 FakeLanguageGen.NAHUATL,
+                FakeLanguageGen.MONGOLIAN,
                 FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
                         FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
                         FakeLanguageGen.modifier("ii", "ai"),
