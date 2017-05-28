@@ -132,6 +132,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
     private RandomXS128 gdxRandom;
+    private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L, 0x1234567890L);
     private long seed;
     private int ctr = 0;
     private boolean keepGoing = true;
@@ -165,15 +166,23 @@ public class HashVisualizer extends ApplicationAdapter {
      * Sometimes used here to prototype changes to LapRNG's algorithm.
      */
     public static class MicroRandom {
-        public long state0, state1;
+        public long state0, state1, inc = 0x9E3779B97F4A7C15L, mul = 0x632AE59B69B3C209L;
 
         public MicroRandom(long seed0, long seed1) {
             state0 = seed0 * 0x62E2AC0DL + 0x85157AF5;
             state1 = seed1 * 0x85157AF5L - 0x62E2AC0DL;
         }
 
+        public void setState(final long seed)
+        {
+            state0 = seed * 0x62E2AC0DL + 0x85157AF5;
+            state1 = seed * 0x85157AF5L - 0x62E2AC0DL;
+        }
+
         public final long nextLong() {
-            return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
+            //good one
+            //return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
+            return (state1 += ((state0 += inc) >> 24) * mul);
         }
 
         public final int next(final int bits) {
@@ -606,8 +615,9 @@ public class HashVisualizer extends ApplicationAdapter {
                                 }
                                 break;
                             case 5:
+                                mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 24;
+                                rngMode %= 26;
                                 break;
                             case 0:
                                 hashMode++;
@@ -658,6 +668,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     case 'K': // sKip
                     case 'k':
                         ctr += 1000;
+                        mr.mul -= 2;
                         putMap();
                         //Gdx.graphics.requestRendering();
                         break;
@@ -3397,6 +3408,29 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
+                    case 24:
+                        mr.setState(ctr);
+                        //mr.mul += 2;
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = (mr.nextLong() & 0xFFFFFF00L) | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("MicroRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 25:
+                        mr.setState(ctr);
+                        //mr.mul += 2;
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = (int)(mr.nextLong() & 0xFF);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("MicroRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+
                 }
             }
             break;
