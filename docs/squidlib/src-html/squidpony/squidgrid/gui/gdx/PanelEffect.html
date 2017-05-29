@@ -15,192 +15,340 @@
 <span class="sourceLineNo">007</span>import squidpony.annotation.Beta;<a name="line.7"></a>
 <span class="sourceLineNo">008</span>import squidpony.squidgrid.FOV;<a name="line.8"></a>
 <span class="sourceLineNo">009</span>import squidpony.squidgrid.Radius;<a name="line.9"></a>
-<span class="sourceLineNo">010</span>import squidpony.squidmath.Coord;<a name="line.10"></a>
-<span class="sourceLineNo">011</span>import squidpony.squidmath.GreasedRegion;<a name="line.11"></a>
-<span class="sourceLineNo">012</span>import squidpony.squidmath.NumberTools;<a name="line.12"></a>
-<span class="sourceLineNo">013</span>import squidpony.squidmath.SeededNoise;<a name="line.13"></a>
-<span class="sourceLineNo">014</span><a name="line.14"></a>
-<span class="sourceLineNo">015</span>import java.util.List;<a name="line.15"></a>
-<span class="sourceLineNo">016</span><a name="line.16"></a>
-<span class="sourceLineNo">017</span>/**<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * Various special effects that can be applied to a SquidPanel as an {@link com.badlogic.gdx.scenes.scene2d.Action}.<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * The PanelEffect class is abstract and has implementations as static inner classes, such as {@link ExplosionEffect}.<a name="line.19"></a>
-<span class="sourceLineNo">020</span> * Each PanelEffect specifically affects one SquidPanel, which can be a layer in a SquidLayers object or a SquidPanel on<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * its own. By adding the PanelEffect to any actor using {@link com.badlogic.gdx.scenes.scene2d.Actor#addAction(Action)}<a name="line.21"></a>
-<span class="sourceLineNo">022</span> * when the Actor has its act() method called after the normal map parts of the SquidPanel have been placed, the<a name="line.22"></a>
-<span class="sourceLineNo">023</span> * PanelEffect will advance and change what chars/colors are in the SquidPanel as specified in its implementation of the<a name="line.23"></a>
-<span class="sourceLineNo">024</span> * {@link #update(float)} method. Typically the Actor you add this to is the SquidPanel this affects, but it could also<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * be a SquidLayers. Most PanelEffect implementations should allow most configuration to be set in their constructors.<a name="line.25"></a>
-<span class="sourceLineNo">026</span> * &lt;br&gt;<a name="line.26"></a>
-<span class="sourceLineNo">027</span> * Created by Tommy Ettinger on 5/24/2017.<a name="line.27"></a>
-<span class="sourceLineNo">028</span> */<a name="line.28"></a>
-<span class="sourceLineNo">029</span>@Beta<a name="line.29"></a>
-<span class="sourceLineNo">030</span>public abstract class PanelEffect extends TemporalAction{<a name="line.30"></a>
-<span class="sourceLineNo">031</span>    public SquidPanel target;<a name="line.31"></a>
-<span class="sourceLineNo">032</span>    public GreasedRegion validCells;<a name="line.32"></a>
-<span class="sourceLineNo">033</span><a name="line.33"></a>
-<span class="sourceLineNo">034</span>    protected PanelEffect(SquidPanel targeting)<a name="line.34"></a>
-<span class="sourceLineNo">035</span>    {<a name="line.35"></a>
-<span class="sourceLineNo">036</span>        target = targeting;<a name="line.36"></a>
-<span class="sourceLineNo">037</span>        validCells = new GreasedRegion(targeting.gridWidth(), targeting.gridHeight()).allOn();<a name="line.37"></a>
-<span class="sourceLineNo">038</span>    }<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    protected PanelEffect(SquidPanel targeting, float duration)<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    {<a name="line.40"></a>
-<span class="sourceLineNo">041</span>        target = targeting;<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        setDuration(duration);<a name="line.42"></a>
-<span class="sourceLineNo">043</span>        validCells = new GreasedRegion(targeting.gridWidth(), targeting.gridHeight()).allOn();<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    }<a name="line.44"></a>
-<span class="sourceLineNo">045</span>    protected PanelEffect(SquidPanel targeting, float duration, GreasedRegion valid)<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    {<a name="line.46"></a>
-<span class="sourceLineNo">047</span>        target = targeting;<a name="line.47"></a>
-<span class="sourceLineNo">048</span>        setDuration(duration);<a name="line.48"></a>
-<span class="sourceLineNo">049</span>        validCells = valid;<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    @Beta<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    public static class ExplosionEffect extends PanelEffect<a name="line.52"></a>
-<span class="sourceLineNo">053</span>    {<a name="line.53"></a>
-<span class="sourceLineNo">054</span>        /**<a name="line.54"></a>
-<span class="sourceLineNo">055</span>         * Normally you should set this in the constructor, and not change it later.<a name="line.55"></a>
-<span class="sourceLineNo">056</span>         */<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        public Coord center;<a name="line.57"></a>
-<span class="sourceLineNo">058</span>        /**<a name="line.58"></a>
-<span class="sourceLineNo">059</span>         * Normally you should set this in the constructor, and not change it later.<a name="line.59"></a>
-<span class="sourceLineNo">060</span>         */<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        public int radius = 2;<a name="line.61"></a>
-<span class="sourceLineNo">062</span>        /**<a name="line.62"></a>
-<span class="sourceLineNo">063</span>         * The default explosion colors are normal for (non-chemical, non-electrical) fire and smoke, going from orange<a name="line.63"></a>
-<span class="sourceLineNo">064</span>         * at the start to yellow, very light yellow, and then back to a different orange before going to smoke and<a name="line.64"></a>
-<span class="sourceLineNo">065</span>         * fading out to translucent and then transparent by the end.<a name="line.65"></a>
-<span class="sourceLineNo">066</span>         * &lt;br&gt;<a name="line.66"></a>
-<span class="sourceLineNo">067</span>         * If you want to change the colors the explosion uses, you can either pass a List of Color (or SColor or other<a name="line.67"></a>
-<span class="sourceLineNo">068</span>         * subclasses) to the constructor or change this array directly. The float items assigned to this should be the<a name="line.68"></a>
-<span class="sourceLineNo">069</span>         * result of calling {@link Color#toFloatBits()} or possibly the result of mixing multiple existing floats with<a name="line.69"></a>
-<span class="sourceLineNo">070</span>         * {@link SColor#lerpFloatColors(float, float, float)}; other floats that can be directly used by libGDX, that<a name="line.70"></a>
-<span class="sourceLineNo">071</span>         * is, packed as ABGR floats (usually the docs will mention this), can also be used.<a name="line.71"></a>
-<span class="sourceLineNo">072</span>         */<a name="line.72"></a>
-<span class="sourceLineNo">073</span>        public float[] colors = {<a name="line.73"></a>
-<span class="sourceLineNo">074</span>                SColor.INTERNATIONAL_ORANGE.toFloatBits(),<a name="line.74"></a>
-<span class="sourceLineNo">075</span>                SColor.FLORAL_LEAF.toFloatBits(),<a name="line.75"></a>
-<span class="sourceLineNo">076</span>                SColor.LEMON.toFloatBits(),<a name="line.76"></a>
-<span class="sourceLineNo">077</span>                SColor.LEMON_CHIFFON.toFloatBits(),<a name="line.77"></a>
-<span class="sourceLineNo">078</span>                SColor.floatGet(0xFF6600EE),  // SColor.SAFETY_ORANGE<a name="line.78"></a>
-<span class="sourceLineNo">079</span>                SColor.floatGet(0x595652DD),  // SColor.DB_SOOT<a name="line.79"></a>
-<span class="sourceLineNo">080</span>                SColor.floatGet(0x59565299)}; // SColor.DB_SOOT<a name="line.80"></a>
-<span class="sourceLineNo">081</span>        /**<a name="line.81"></a>
-<span class="sourceLineNo">082</span>         * Used internally to determine how the explosion should spread; derived from {@link #validCells}.<a name="line.82"></a>
-<span class="sourceLineNo">083</span>         */<a name="line.83"></a>
-<span class="sourceLineNo">084</span>        public double[][] resMap,<a name="line.84"></a>
-<span class="sourceLineNo">085</span>        /**<a name="line.85"></a>
-<span class="sourceLineNo">086</span>         * The internal representation of how affected each cell is by the explosion, based on proximity to center.<a name="line.86"></a>
-<span class="sourceLineNo">087</span>         */<a name="line.87"></a>
-<span class="sourceLineNo">088</span>        lightMap;<a name="line.88"></a>
-<span class="sourceLineNo">089</span>        /**<a name="line.89"></a>
-<span class="sourceLineNo">090</span>         * The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to<a name="line.90"></a>
-<span class="sourceLineNo">091</span>         * show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as<a name="line.91"></a>
-<span class="sourceLineNo">092</span>         * such (no false negatives). You can edit this if you need to, but it isn't recommended.<a name="line.92"></a>
-<span class="sourceLineNo">093</span>         */<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        public List&lt;Coord&gt; affected;<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        /**<a name="line.95"></a>
-<span class="sourceLineNo">096</span>         * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be<a name="line.96"></a>
-<span class="sourceLineNo">097</span>         * the full expanse of the SquidPanel. The duration will be 1 second.<a name="line.97"></a>
-<span class="sourceLineNo">098</span>         * @param targeting the SquidPanel to affect<a name="line.98"></a>
-<span class="sourceLineNo">099</span>         * @param center the center of the explosion<a name="line.99"></a>
-<span class="sourceLineNo">100</span>         * @param radius the radius of the explosion, in cells<a name="line.100"></a>
-<span class="sourceLineNo">101</span>         */<a name="line.101"></a>
-<span class="sourceLineNo">102</span><a name="line.102"></a>
-<span class="sourceLineNo">103</span>        public ExplosionEffect(SquidPanel targeting, Coord center, int radius)<a name="line.103"></a>
-<span class="sourceLineNo">104</span>        {<a name="line.104"></a>
-<span class="sourceLineNo">105</span>            this(targeting, 1f, center, radius);<a name="line.105"></a>
-<span class="sourceLineNo">106</span>        }<a name="line.106"></a>
-<span class="sourceLineNo">107</span>        /**<a name="line.107"></a>
-<span class="sourceLineNo">108</span>         * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be<a name="line.108"></a>
-<span class="sourceLineNo">109</span>         * the full expanse of the SquidPanel.<a name="line.109"></a>
-<span class="sourceLineNo">110</span>         * @param targeting the SquidPanel to affect<a name="line.110"></a>
-<span class="sourceLineNo">111</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.111"></a>
-<span class="sourceLineNo">112</span>         * @param center the center of the explosion<a name="line.112"></a>
-<span class="sourceLineNo">113</span>         * @param radius the radius of the explosion, in cells<a name="line.113"></a>
-<span class="sourceLineNo">114</span>         */<a name="line.114"></a>
-<span class="sourceLineNo">115</span>        public ExplosionEffect(SquidPanel targeting, float duration, Coord center, int radius)<a name="line.115"></a>
-<span class="sourceLineNo">116</span>        {<a name="line.116"></a>
-<span class="sourceLineNo">117</span>            super(targeting, duration);<a name="line.117"></a>
-<span class="sourceLineNo">118</span>            this.center = center;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>            this.radius = radius;<a name="line.119"></a>
-<span class="sourceLineNo">120</span>            resMap = new double[validCells.width][validCells.height];<a name="line.120"></a>
-<span class="sourceLineNo">121</span>            lightMap = new double[validCells.width][validCells.height];<a name="line.121"></a>
-<span class="sourceLineNo">122</span>            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius);<a name="line.122"></a>
-<span class="sourceLineNo">123</span>            affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);<a name="line.123"></a>
-<span class="sourceLineNo">124</span>        }<a name="line.124"></a>
-<span class="sourceLineNo">125</span>        /**<a name="line.125"></a>
-<span class="sourceLineNo">126</span>         * Constructs an ExplosionEffect with explicit settings for most fields.<a name="line.126"></a>
-<span class="sourceLineNo">127</span>         * @param targeting the SquidPanel to affect<a name="line.127"></a>
-<span class="sourceLineNo">128</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.128"></a>
-<span class="sourceLineNo">129</span>         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion<a name="line.129"></a>
-<span class="sourceLineNo">130</span>         * @param center the center of the explosion<a name="line.130"></a>
-<span class="sourceLineNo">131</span>         * @param radius the radius of the explosion, in cells<a name="line.131"></a>
-<span class="sourceLineNo">132</span>         */<a name="line.132"></a>
-<span class="sourceLineNo">133</span>        public ExplosionEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)<a name="line.133"></a>
-<span class="sourceLineNo">134</span>        {<a name="line.134"></a>
-<span class="sourceLineNo">135</span>            super(targeting, duration, valid);<a name="line.135"></a>
-<span class="sourceLineNo">136</span>            this.center = center;<a name="line.136"></a>
-<span class="sourceLineNo">137</span>            this.radius = radius;<a name="line.137"></a>
-<span class="sourceLineNo">138</span>            resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);<a name="line.138"></a>
-<span class="sourceLineNo">139</span>            validCells.writeDoublesInto(resMap, 0.0);<a name="line.139"></a>
-<span class="sourceLineNo">140</span>            lightMap = new double[validCells.width][validCells.height];<a name="line.140"></a>
-<span class="sourceLineNo">141</span>            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius);<a name="line.141"></a>
-<span class="sourceLineNo">142</span>            validCells.not().writeDoublesInto(lightMap, 0.0);<a name="line.142"></a>
-<span class="sourceLineNo">143</span>            validCells.not();<a name="line.143"></a>
-<span class="sourceLineNo">144</span>            affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);<a name="line.144"></a>
-<span class="sourceLineNo">145</span>        }<a name="line.145"></a>
-<span class="sourceLineNo">146</span><a name="line.146"></a>
-<span class="sourceLineNo">147</span>        /**<a name="line.147"></a>
-<span class="sourceLineNo">148</span>         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color<a name="line.148"></a>
-<span class="sourceLineNo">149</span>         * objects that it will use to color the explosion instead of using fiery/smoke colors.<a name="line.149"></a>
-<span class="sourceLineNo">150</span>         * @param targeting the SquidPanel to affect<a name="line.150"></a>
-<span class="sourceLineNo">151</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.151"></a>
-<span class="sourceLineNo">152</span>         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion<a name="line.152"></a>
-<span class="sourceLineNo">153</span>         * @param center the center of the explosion<a name="line.153"></a>
-<span class="sourceLineNo">154</span>         * @param radius the radius of the explosion, in cells<a name="line.154"></a>
-<span class="sourceLineNo">155</span>         * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here<a name="line.155"></a>
-<span class="sourceLineNo">156</span>         */<a name="line.156"></a>
-<span class="sourceLineNo">157</span>        public ExplosionEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List&lt;? extends Color&gt; coloring)<a name="line.157"></a>
-<span class="sourceLineNo">158</span>        {<a name="line.158"></a>
-<span class="sourceLineNo">159</span>            this(targeting, duration, valid, center, radius);<a name="line.159"></a>
-<span class="sourceLineNo">160</span>            if(colors.length != coloring.size())<a name="line.160"></a>
-<span class="sourceLineNo">161</span>                colors = new float[coloring.size()];<a name="line.161"></a>
-<span class="sourceLineNo">162</span>            for (int i = 0; i &lt; colors.length; i++) {<a name="line.162"></a>
-<span class="sourceLineNo">163</span>                colors[i] = coloring.get(i).toFloatBits();<a name="line.163"></a>
-<span class="sourceLineNo">164</span>            }<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        }<a name="line.165"></a>
-<span class="sourceLineNo">166</span>        /**<a name="line.166"></a>
-<span class="sourceLineNo">167</span>         * Called each frame.<a name="line.167"></a>
-<span class="sourceLineNo">168</span>         *<a name="line.168"></a>
-<span class="sourceLineNo">169</span>         * @param percent The percentage of completion for this action, growing from 0 to 1 over the duration. If<a name="line.169"></a>
-<span class="sourceLineNo">170</span>         *                {@link #setReverse(boolean) reversed}, this will shrink from 1 to 0.<a name="line.170"></a>
-<span class="sourceLineNo">171</span>         */<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        @Override<a name="line.172"></a>
-<span class="sourceLineNo">173</span>        protected void update(float percent) {<a name="line.173"></a>
-<span class="sourceLineNo">174</span>            int len = affected.size();<a name="line.174"></a>
-<span class="sourceLineNo">175</span>            Coord c;<a name="line.175"></a>
-<span class="sourceLineNo">176</span>            float f, color;<a name="line.176"></a>
-<span class="sourceLineNo">177</span>            int idx, seed = System.identityHashCode(this);<a name="line.177"></a>
-<span class="sourceLineNo">178</span>            for (int i = 0; i &lt; len; i++) {<a name="line.178"></a>
-<span class="sourceLineNo">179</span>                c = affected.get(i);<a name="line.179"></a>
-<span class="sourceLineNo">180</span>                if(lightMap[c.x][c.y] &lt;= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) &lt; 0.25)<a name="line.180"></a>
-<span class="sourceLineNo">181</span>                    continue;<a name="line.181"></a>
-<span class="sourceLineNo">182</span>                f = (float)SeededNoise.noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)<a name="line.182"></a>
-<span class="sourceLineNo">183</span>                        * 0.17f + percent * 1.2f;<a name="line.183"></a>
-<span class="sourceLineNo">184</span>                if(f &lt; 0f || 0.5 * lightMap[c.x][c.y] + f &lt; 0.4)<a name="line.184"></a>
-<span class="sourceLineNo">185</span>                    continue;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>                idx = (int) (f * colors.length);<a name="line.186"></a>
-<span class="sourceLineNo">187</span>                if(idx &gt;= colors.length - 1)<a name="line.187"></a>
-<span class="sourceLineNo">188</span>                    color = SColor.lerpFloatColors(colors[colors.length-1], NumberTools.setSelectedByte(colors[colors.length-1], 3, (byte)0), (Math.min(0.99f, f) * colors.length) % 1f);<a name="line.188"></a>
-<span class="sourceLineNo">189</span>                else<a name="line.189"></a>
-<span class="sourceLineNo">190</span>                    color = SColor.lerpFloatColors(colors[idx], colors[idx+1], (f * colors.length) % 1f);<a name="line.190"></a>
-<span class="sourceLineNo">191</span>                target.put(c.x, c.y, color);<a name="line.191"></a>
-<span class="sourceLineNo">192</span>            }<a name="line.192"></a>
-<span class="sourceLineNo">193</span>        }<a name="line.193"></a>
-<span class="sourceLineNo">194</span>    }<a name="line.194"></a>
-<span class="sourceLineNo">195</span>}<a name="line.195"></a>
+<span class="sourceLineNo">010</span>import squidpony.squidmath.*;<a name="line.10"></a>
+<span class="sourceLineNo">011</span><a name="line.11"></a>
+<span class="sourceLineNo">012</span>import java.util.List;<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>/**<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * Various special effects that can be applied to a SquidPanel as an {@link com.badlogic.gdx.scenes.scene2d.Action}.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * The PanelEffect class is abstract and has implementations as static inner classes, such as {@link ExplosionEffect}.<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Each PanelEffect specifically affects one SquidPanel, which can be a layer in a SquidLayers object or a SquidPanel on<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * its own. By adding the PanelEffect to any actor using {@link com.badlogic.gdx.scenes.scene2d.Actor#addAction(Action)}<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * when the Actor has its act() method called after the normal map parts of the SquidPanel have been placed, the<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * PanelEffect will advance and change what chars/colors are in the SquidPanel as specified in its implementation of the<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * {@link #update(float)} method. Typically the Actor you add this to is the SquidPanel this affects, but it could also<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * be a SquidLayers. Most PanelEffect implementations should allow most configuration to be set in their constructors.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * &lt;br&gt;<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Created by Tommy Ettinger on 5/24/2017.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> */<a name="line.25"></a>
+<span class="sourceLineNo">026</span>@Beta<a name="line.26"></a>
+<span class="sourceLineNo">027</span>public abstract class PanelEffect extends TemporalAction{<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    public SquidPanel target;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    public GreasedRegion validCells;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>    protected PanelEffect(SquidPanel targeting)<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    {<a name="line.32"></a>
+<span class="sourceLineNo">033</span>        target = targeting;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        validCells = new GreasedRegion(targeting.gridWidth(), targeting.gridHeight()).allOn();<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    }<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    protected PanelEffect(SquidPanel targeting, float duration)<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    {<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        target = targeting;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        setDuration(duration);<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        validCells = new GreasedRegion(targeting.gridWidth(), targeting.gridHeight()).allOn();<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    }<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    protected PanelEffect(SquidPanel targeting, float duration, GreasedRegion valid)<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    {<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        target = targeting;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        setDuration(duration);<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        validCells = valid;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    }<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    @Beta<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    public static class ExplosionEffect extends PanelEffect<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    {<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        /**<a name="line.51"></a>
+<span class="sourceLineNo">052</span>         * Normally you should set this in the constructor, and not change it later.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>         */<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        public Coord center;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        /**<a name="line.55"></a>
+<span class="sourceLineNo">056</span>         * Normally you should set this in the constructor, and not change it later.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>         */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        public int radius = 2;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        /**<a name="line.59"></a>
+<span class="sourceLineNo">060</span>         * The default explosion colors are normal for (non-chemical, non-electrical) fire and smoke, going from orange<a name="line.60"></a>
+<span class="sourceLineNo">061</span>         * at the start to yellow, very light yellow, and then back to a different orange before going to smoke and<a name="line.61"></a>
+<span class="sourceLineNo">062</span>         * fading out to translucent and then transparent by the end.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>         * &lt;br&gt;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>         * If you want to change the colors the explosion uses, you can either pass a List of Color (or SColor or other<a name="line.64"></a>
+<span class="sourceLineNo">065</span>         * subclasses) to the constructor or change this array directly. The float items assigned to this should be the<a name="line.65"></a>
+<span class="sourceLineNo">066</span>         * result of calling {@link Color#toFloatBits()} or possibly the result of mixing multiple existing floats with<a name="line.66"></a>
+<span class="sourceLineNo">067</span>         * {@link SColor#lerpFloatColors(float, float, float)}; other floats that can be directly used by libGDX, that<a name="line.67"></a>
+<span class="sourceLineNo">068</span>         * is, packed as ABGR floats (usually the docs will mention this), can also be used.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>         */<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        public float[] colors = {<a name="line.70"></a>
+<span class="sourceLineNo">071</span>                SColor.INTERNATIONAL_ORANGE.toFloatBits(),<a name="line.71"></a>
+<span class="sourceLineNo">072</span>                SColor.FLORAL_LEAF.toFloatBits(),<a name="line.72"></a>
+<span class="sourceLineNo">073</span>                SColor.LEMON.toFloatBits(),<a name="line.73"></a>
+<span class="sourceLineNo">074</span>                SColor.LEMON_CHIFFON.toFloatBits(),<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                SColor.floatGet(0xFF6600EE),  // SColor.SAFETY_ORANGE<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                SColor.floatGet(0x595652DD),  // SColor.DB_SOOT<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                SColor.floatGet(0x59565299)}; // SColor.DB_SOOT<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>         * Used internally to determine how the explosion should spread; derived from {@link #validCells}.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>         */<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        public double[][] resMap,<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        /**<a name="line.82"></a>
+<span class="sourceLineNo">083</span>         * The internal representation of how affected each cell is by the explosion, based on proximity to center.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>         */<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        lightMap;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        /**<a name="line.86"></a>
+<span class="sourceLineNo">087</span>         * The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to<a name="line.87"></a>
+<span class="sourceLineNo">088</span>         * show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         * such (no false negatives). You can edit this if you need to, but it isn't recommended.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>         */<a name="line.90"></a>
+<span class="sourceLineNo">091</span>        public List&lt;Coord&gt; affected;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        /**<a name="line.92"></a>
+<span class="sourceLineNo">093</span>         * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be<a name="line.93"></a>
+<span class="sourceLineNo">094</span>         * the full expanse of the SquidPanel. The duration will be 1 second.<a name="line.94"></a>
+<span class="sourceLineNo">095</span>         * @param targeting the SquidPanel to affect<a name="line.95"></a>
+<span class="sourceLineNo">096</span>         * @param center the center of the explosion<a name="line.96"></a>
+<span class="sourceLineNo">097</span>         * @param radius the radius of the explosion, in cells<a name="line.97"></a>
+<span class="sourceLineNo">098</span>         */<a name="line.98"></a>
+<span class="sourceLineNo">099</span><a name="line.99"></a>
+<span class="sourceLineNo">100</span>        public ExplosionEffect(SquidPanel targeting, Coord center, int radius)<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            this(targeting, 1f, center, radius);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        /**<a name="line.104"></a>
+<span class="sourceLineNo">105</span>         * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be<a name="line.105"></a>
+<span class="sourceLineNo">106</span>         * the full expanse of the SquidPanel.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>         * @param targeting the SquidPanel to affect<a name="line.107"></a>
+<span class="sourceLineNo">108</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.108"></a>
+<span class="sourceLineNo">109</span>         * @param center the center of the explosion<a name="line.109"></a>
+<span class="sourceLineNo">110</span>         * @param radius the radius of the explosion, in cells<a name="line.110"></a>
+<span class="sourceLineNo">111</span>         */<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        public ExplosionEffect(SquidPanel targeting, float duration, Coord center, int radius)<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            super(targeting, duration);<a name="line.114"></a>
+<span class="sourceLineNo">115</span>            this.center = center;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            this.radius = radius;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>            resMap = new double[validCells.width][validCells.height];<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            lightMap = new double[validCells.width][validCells.height];<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius);<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        }<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        /**<a name="line.122"></a>
+<span class="sourceLineNo">123</span>         * Constructs an ExplosionEffect with explicit settings for most fields.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>         * @param targeting the SquidPanel to affect<a name="line.124"></a>
+<span class="sourceLineNo">125</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.125"></a>
+<span class="sourceLineNo">126</span>         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion<a name="line.126"></a>
+<span class="sourceLineNo">127</span>         * @param center the center of the explosion<a name="line.127"></a>
+<span class="sourceLineNo">128</span>         * @param radius the radius of the explosion, in cells<a name="line.128"></a>
+<span class="sourceLineNo">129</span>         */<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        public ExplosionEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>            super(targeting, duration, valid);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>            this.center = center;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            this.radius = radius;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>            resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            validCells.writeDoublesInto(resMap, 0.0);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>            lightMap = new double[validCells.width][validCells.height];<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            validCells.not().writeDoublesInto(lightMap, 0.0);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            validCells.not();<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        }<a name="line.142"></a>
+<span class="sourceLineNo">143</span><a name="line.143"></a>
+<span class="sourceLineNo">144</span>        /**<a name="line.144"></a>
+<span class="sourceLineNo">145</span>         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color<a name="line.145"></a>
+<span class="sourceLineNo">146</span>         * objects that it will use to color the explosion instead of using fiery/smoke colors.<a name="line.146"></a>
+<span class="sourceLineNo">147</span>         * @param targeting the SquidPanel to affect<a name="line.147"></a>
+<span class="sourceLineNo">148</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.148"></a>
+<span class="sourceLineNo">149</span>         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion<a name="line.149"></a>
+<span class="sourceLineNo">150</span>         * @param center the center of the explosion<a name="line.150"></a>
+<span class="sourceLineNo">151</span>         * @param radius the radius of the explosion, in cells<a name="line.151"></a>
+<span class="sourceLineNo">152</span>         * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here<a name="line.152"></a>
+<span class="sourceLineNo">153</span>         */<a name="line.153"></a>
+<span class="sourceLineNo">154</span>        public ExplosionEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List&lt;? extends Color&gt; coloring)<a name="line.154"></a>
+<span class="sourceLineNo">155</span>        {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>            this(targeting, duration, valid, center, radius);<a name="line.156"></a>
+<span class="sourceLineNo">157</span>            if(colors.length != coloring.size())<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                colors = new float[coloring.size()];<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            for (int i = 0; i &lt; colors.length; i++) {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                colors[i] = coloring.get(i).toFloatBits();<a name="line.160"></a>
+<span class="sourceLineNo">161</span>            }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        /**<a name="line.163"></a>
+<span class="sourceLineNo">164</span>         * Called each frame.<a name="line.164"></a>
+<span class="sourceLineNo">165</span>         *<a name="line.165"></a>
+<span class="sourceLineNo">166</span>         * @param percent The percentage of completion for this action, growing from 0 to 1 over the duration. If<a name="line.166"></a>
+<span class="sourceLineNo">167</span>         *                {@link #setReverse(boolean) reversed}, this will shrink from 1 to 0.<a name="line.167"></a>
+<span class="sourceLineNo">168</span>         */<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        @Override<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        protected void update(float percent) {<a name="line.170"></a>
+<span class="sourceLineNo">171</span>            int len = affected.size();<a name="line.171"></a>
+<span class="sourceLineNo">172</span>            Coord c;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>            float f, color;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>            int idx, seed = System.identityHashCode(this);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>            for (int i = 0; i &lt; len; i++) {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>                c = affected.get(i);<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                if(lightMap[c.x][c.y] &lt;= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) &lt; 0.25)<a name="line.177"></a>
+<span class="sourceLineNo">178</span>                    continue;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>                f = (float)SeededNoise.noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                        * 0.17f + percent * 1.2f;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>                if(f &lt; 0f || 0.5 * lightMap[c.x][c.y] + f &lt; 0.4)<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                    continue;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                idx = (int) (f * colors.length);<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                if(idx &gt;= colors.length - 1)<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                    color = SColor.lerpFloatColors(colors[colors.length-1], NumberTools.setSelectedByte(colors[colors.length-1], 3, (byte)0), (Math.min(0.99f, f) * colors.length) % 1f);<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                else<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                    color = SColor.lerpFloatColors(colors[idx], colors[idx+1], (f * colors.length) % 1f);<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                target.put(c.x, c.y, color);<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            }<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        }<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    public static class GibberishEffect extends ExplosionEffect<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        public char[] choices = "`~!@#$%^&amp;*()-_=+\\|][}{'\";:/?.&gt;,&lt;".toCharArray();<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        public GibberishEffect(SquidPanel targeting, Coord center, int radius)<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>            super(targeting, 1f, center, radius);<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            colors[0] = SColor.PERIWINKLE.toFloatBits();<a name="line.198"></a>
+<span class="sourceLineNo">199</span>            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();<a name="line.199"></a>
+<span class="sourceLineNo">200</span>            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();<a name="line.200"></a>
+<span class="sourceLineNo">201</span>            colors[3] = SColor.LILAC.toFloatBits();<a name="line.201"></a>
+<span class="sourceLineNo">202</span>            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE<a name="line.202"></a>
+<span class="sourceLineNo">203</span>            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        }<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        /**<a name="line.206"></a>
+<span class="sourceLineNo">207</span>         * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be<a name="line.207"></a>
+<span class="sourceLineNo">208</span>         * the full expanse of the SquidPanel.<a name="line.208"></a>
+<span class="sourceLineNo">209</span>         * @param targeting the SquidPanel to affect<a name="line.209"></a>
+<span class="sourceLineNo">210</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.210"></a>
+<span class="sourceLineNo">211</span>         * @param center the center of the explosion<a name="line.211"></a>
+<span class="sourceLineNo">212</span>         * @param radius the radius of the explosion, in cells<a name="line.212"></a>
+<span class="sourceLineNo">213</span>         */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>        public GibberishEffect(SquidPanel targeting, float duration, Coord center, int radius) {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>            super(targeting, duration, center, radius);<a name="line.215"></a>
+<span class="sourceLineNo">216</span>            colors[0] = SColor.PERIWINKLE.toFloatBits();<a name="line.216"></a>
+<span class="sourceLineNo">217</span>            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();<a name="line.217"></a>
+<span class="sourceLineNo">218</span>            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();<a name="line.218"></a>
+<span class="sourceLineNo">219</span>            colors[3] = SColor.LILAC.toFloatBits();<a name="line.219"></a>
+<span class="sourceLineNo">220</span>            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO<a name="line.221"></a>
+<span class="sourceLineNo">222</span>            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO<a name="line.222"></a>
+<span class="sourceLineNo">223</span>        }<a name="line.223"></a>
+<span class="sourceLineNo">224</span>        /**<a name="line.224"></a>
+<span class="sourceLineNo">225</span>         * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be<a name="line.225"></a>
+<span class="sourceLineNo">226</span>         * the full expanse of the SquidPanel.<a name="line.226"></a>
+<span class="sourceLineNo">227</span>         * @param targeting the SquidPanel to affect<a name="line.227"></a>
+<span class="sourceLineNo">228</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.228"></a>
+<span class="sourceLineNo">229</span>         * @param center the center of the explosion<a name="line.229"></a>
+<span class="sourceLineNo">230</span>         * @param radius the radius of the explosion, in cells<a name="line.230"></a>
+<span class="sourceLineNo">231</span>         */<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        public GibberishEffect(SquidPanel targeting, float duration, Coord center, int radius, char[] choices) {<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            super(targeting, duration, center, radius);<a name="line.233"></a>
+<span class="sourceLineNo">234</span>            this.choices = choices;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>            colors[0] = SColor.PERIWINKLE.toFloatBits();<a name="line.235"></a>
+<span class="sourceLineNo">236</span>            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();<a name="line.236"></a>
+<span class="sourceLineNo">237</span>            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();<a name="line.237"></a>
+<span class="sourceLineNo">238</span>            colors[3] = SColor.LILAC.toFloatBits();<a name="line.238"></a>
+<span class="sourceLineNo">239</span>            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE<a name="line.239"></a>
+<span class="sourceLineNo">240</span>            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO<a name="line.240"></a>
+<span class="sourceLineNo">241</span>            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        }<a name="line.242"></a>
+<span class="sourceLineNo">243</span>        /**<a name="line.243"></a>
+<span class="sourceLineNo">244</span>         * Constructs an ExplosionEffect with explicit settings for most fields.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>         * @param targeting the SquidPanel to affect<a name="line.245"></a>
+<span class="sourceLineNo">246</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.246"></a>
+<span class="sourceLineNo">247</span>         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion<a name="line.247"></a>
+<span class="sourceLineNo">248</span>         * @param center the center of the explosion<a name="line.248"></a>
+<span class="sourceLineNo">249</span>         * @param radius the radius of the explosion, in cells<a name="line.249"></a>
+<span class="sourceLineNo">250</span>         */<a name="line.250"></a>
+<span class="sourceLineNo">251</span>        public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        {<a name="line.252"></a>
+<span class="sourceLineNo">253</span>            super(targeting, duration, valid, center, radius);<a name="line.253"></a>
+<span class="sourceLineNo">254</span>            colors[0] = SColor.PERIWINKLE.toFloatBits();<a name="line.254"></a>
+<span class="sourceLineNo">255</span>            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();<a name="line.255"></a>
+<span class="sourceLineNo">256</span>            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();<a name="line.256"></a>
+<span class="sourceLineNo">257</span>            colors[3] = SColor.LILAC.toFloatBits();<a name="line.257"></a>
+<span class="sourceLineNo">258</span>            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO<a name="line.259"></a>
+<span class="sourceLineNo">260</span>            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        }<a name="line.261"></a>
+<span class="sourceLineNo">262</span>        /**<a name="line.262"></a>
+<span class="sourceLineNo">263</span>         * Constructs an ExplosionEffect with explicit settings for most fields.<a name="line.263"></a>
+<span class="sourceLineNo">264</span>         * @param targeting the SquidPanel to affect<a name="line.264"></a>
+<span class="sourceLineNo">265</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.265"></a>
+<span class="sourceLineNo">266</span>         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion<a name="line.266"></a>
+<span class="sourceLineNo">267</span>         * @param center the center of the explosion<a name="line.267"></a>
+<span class="sourceLineNo">268</span>         * @param radius the radius of the explosion, in cells<a name="line.268"></a>
+<span class="sourceLineNo">269</span>         */<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, char[] choices)<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>            super(targeting, duration, valid, center, radius);<a name="line.272"></a>
+<span class="sourceLineNo">273</span>            this.choices = choices;<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            colors[0] = SColor.PERIWINKLE.toFloatBits();<a name="line.274"></a>
+<span class="sourceLineNo">275</span>            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();<a name="line.275"></a>
+<span class="sourceLineNo">276</span>            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();<a name="line.276"></a>
+<span class="sourceLineNo">277</span>            colors[3] = SColor.LILAC.toFloatBits();<a name="line.277"></a>
+<span class="sourceLineNo">278</span>            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE<a name="line.278"></a>
+<span class="sourceLineNo">279</span>            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO<a name="line.279"></a>
+<span class="sourceLineNo">280</span>            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    }<a name="line.281"></a>
+<span class="sourceLineNo">282</span><a name="line.282"></a>
+<span class="sourceLineNo">283</span>        /**<a name="line.283"></a>
+<span class="sourceLineNo">284</span>         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color<a name="line.284"></a>
+<span class="sourceLineNo">285</span>         * objects that it will use to color the explosion instead of using fiery/smoke colors.<a name="line.285"></a>
+<span class="sourceLineNo">286</span>         * @param targeting the SquidPanel to affect<a name="line.286"></a>
+<span class="sourceLineNo">287</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.287"></a>
+<span class="sourceLineNo">288</span>         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion<a name="line.288"></a>
+<span class="sourceLineNo">289</span>         * @param center the center of the explosion<a name="line.289"></a>
+<span class="sourceLineNo">290</span>         * @param radius the radius of the explosion, in cells<a name="line.290"></a>
+<span class="sourceLineNo">291</span>         * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here<a name="line.291"></a>
+<span class="sourceLineNo">292</span>         */<a name="line.292"></a>
+<span class="sourceLineNo">293</span>        public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List&lt;? extends Color&gt; coloring)<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        {<a name="line.294"></a>
+<span class="sourceLineNo">295</span>            super(targeting, duration, valid, center, radius, coloring);<a name="line.295"></a>
+<span class="sourceLineNo">296</span>        }<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        /**<a name="line.297"></a>
+<span class="sourceLineNo">298</span>         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color<a name="line.298"></a>
+<span class="sourceLineNo">299</span>         * objects that it will use to color the explosion instead of using fiery/smoke colors.<a name="line.299"></a>
+<span class="sourceLineNo">300</span>         * @param targeting the SquidPanel to affect<a name="line.300"></a>
+<span class="sourceLineNo">301</span>         * @param duration the duration of this PanelEffect in seconds, as a float<a name="line.301"></a>
+<span class="sourceLineNo">302</span>         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion<a name="line.302"></a>
+<span class="sourceLineNo">303</span>         * @param center the center of the explosion<a name="line.303"></a>
+<span class="sourceLineNo">304</span>         * @param radius the radius of the explosion, in cells<a name="line.304"></a>
+<span class="sourceLineNo">305</span>         * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here<a name="line.305"></a>
+<span class="sourceLineNo">306</span>         */<a name="line.306"></a>
+<span class="sourceLineNo">307</span>        public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List&lt;? extends Color&gt; coloring, char[] choices)<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        {<a name="line.308"></a>
+<span class="sourceLineNo">309</span>            super(targeting, duration, valid, center, radius, coloring);<a name="line.309"></a>
+<span class="sourceLineNo">310</span>            this.choices = choices;<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        }<a name="line.311"></a>
+<span class="sourceLineNo">312</span>        /**<a name="line.312"></a>
+<span class="sourceLineNo">313</span>         * Called each frame.<a name="line.313"></a>
+<span class="sourceLineNo">314</span>         *<a name="line.314"></a>
+<span class="sourceLineNo">315</span>         * @param percent The percentage of completion for this action, growing from 0 to 1 over the duration. If<a name="line.315"></a>
+<span class="sourceLineNo">316</span>         *                {@link #setReverse(boolean) reversed}, this will shrink from 1 to 0.<a name="line.316"></a>
+<span class="sourceLineNo">317</span>         */<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        @Override<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        protected void update(float percent) {<a name="line.319"></a>
+<span class="sourceLineNo">320</span>            int len = affected.size();<a name="line.320"></a>
+<span class="sourceLineNo">321</span>            Coord c;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>            float f, color;<a name="line.322"></a>
+<span class="sourceLineNo">323</span>            int idx, seed = System.identityHashCode(this), clen = choices.length;<a name="line.323"></a>
+<span class="sourceLineNo">324</span>            final long tick = LightRNG.determine((System.currentTimeMillis() &gt;&gt;&gt; 7) * seed);<a name="line.324"></a>
+<span class="sourceLineNo">325</span>            for (int i = 0; i &lt; len; i++) {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>                c = affected.get(i);<a name="line.326"></a>
+<span class="sourceLineNo">327</span>                if(lightMap[c.x][c.y] &lt;= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) &lt; 0.25)<a name="line.327"></a>
+<span class="sourceLineNo">328</span>                    continue;<a name="line.328"></a>
+<span class="sourceLineNo">329</span>                f = (float)SeededNoise.noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)<a name="line.329"></a>
+<span class="sourceLineNo">330</span>                        * 0.17f + percent * 1.2f;<a name="line.330"></a>
+<span class="sourceLineNo">331</span>                if(f &lt; 0f || 0.5 * lightMap[c.x][c.y] + f &lt; 0.4)<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                    continue;<a name="line.332"></a>
+<span class="sourceLineNo">333</span>                idx = (int) (f * colors.length);<a name="line.333"></a>
+<span class="sourceLineNo">334</span>                if(idx &gt;= colors.length - 1)<a name="line.334"></a>
+<span class="sourceLineNo">335</span>                    color = SColor.lerpFloatColors(colors[colors.length-1], NumberTools.setSelectedByte(colors[colors.length-1], 3, (byte)0), (Math.min(0.99f, f) * colors.length) % 1f);<a name="line.335"></a>
+<span class="sourceLineNo">336</span>                else<a name="line.336"></a>
+<span class="sourceLineNo">337</span>                    color = SColor.lerpFloatColors(colors[idx], colors[idx+1], (f * colors.length) % 1f);<a name="line.337"></a>
+<span class="sourceLineNo">338</span>                target.put(c.x, c.y, choices[(int) ((clen * (LightRNG.determine(tick + i) &amp; 0x7FFFFFFFL)) &gt;&gt; 31)], color);<a name="line.338"></a>
+<span class="sourceLineNo">339</span>            }<a name="line.339"></a>
+<span class="sourceLineNo">340</span>        }<a name="line.340"></a>
+<span class="sourceLineNo">341</span><a name="line.341"></a>
+<span class="sourceLineNo">342</span>    }<a name="line.342"></a>
+<span class="sourceLineNo">343</span>}<a name="line.343"></a>
 
 
 

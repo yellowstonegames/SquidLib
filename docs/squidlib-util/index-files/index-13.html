@@ -141,13 +141,34 @@
  many more, at least 2 to the 64).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG--">LapRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Constructs a LapRNG with a random internal state, using <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a> four times to get enough bits.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG-long-">LapRNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Given one long for a seed, this fills the two internal longs of state with different values, each produced by
+ multiplying seed by a large constant and adding a different large constant.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG-int-">LapRNG(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
+<dd>
+<div class="block">Given one int for a seed, this fills the two internal longs of state with different values, each produced by
+ multiplying seed by a large constant and adding a different large constant.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG-long-long-">LapRNG(long, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">The only constructor that does not modify its seeds in some way; you should ensure seed0 is large enough (at
+ least 25 bits should be needed to represent it, so greater than 33554432 or less than -33554433).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG-int-int-">LapRNG(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
+<dd>
+<div class="block">This constructor takes ints for seeds, but internally LapRNG uses longs, so it multiplies each input by a large
+ constant and adds another to get the state it actually will start with.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG-java.lang.CharSequence-">LapRNG(CharSequence)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">This constructor gets a 64-bit hash code from the given String or other CharSequence and gives it to the
+ constructor that takes one long, <a href="../squidpony/squidmath/LapRNG.html#LapRNG-long-"><code>LapRNG.LapRNG(long)</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.KeySet.html#last--">last()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.KeySet.html" title="class in squidpony.squidmath">Arrangement.KeySet</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#last">last</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>

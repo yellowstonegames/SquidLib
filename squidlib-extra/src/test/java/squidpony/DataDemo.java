@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.utils.JsonWriter;
 import squidpony.squidmath.OrderedMap;
-import squidpony.store.util.Garbler;
 
 import java.util.Scanner;
 
@@ -85,6 +84,12 @@ public class DataDemo extends ApplicationAdapter {
         System.out.println(mess);
         mess = Garbler.degarble(mess, "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
         System.out.println(mess);
+        mess = adventurers.getAt(0).serializeToString().replace('\t', ' ');
+        System.out.println(mess.length() + "    " + mess);
+        mess = Garbler.garble(mess);
+        System.out.println(mess.length() + "    " + mess);
+        mess = Garbler.degarble(mess);
+        System.out.println(mess.length() + "    " + mess);
         Gdx.app.exit();
     }
 

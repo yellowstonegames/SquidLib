@@ -6,7 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.JsonWriter;
 import squidpony.StringStringMap;
 import squidpony.annotation.Beta;
-import squidpony.store.util.Garbler;
+import squidpony.Garbler;
 
 import java.util.Map;
 
