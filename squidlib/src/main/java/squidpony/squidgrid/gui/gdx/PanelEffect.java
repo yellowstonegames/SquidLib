@@ -195,6 +195,13 @@ public abstract class PanelEffect extends TemporalAction{
         public GibberishEffect(SquidPanel targeting, Coord center, int radius)
         {
             super(targeting, 1f, center, radius);
+            colors[0] = SColor.PERIWINKLE.toFloatBits();
+            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
+            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
+            colors[3] = SColor.LILAC.toFloatBits();
+            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
+            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
+            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
@@ -206,6 +213,13 @@ public abstract class PanelEffect extends TemporalAction{
          */
         public GibberishEffect(SquidPanel targeting, float duration, Coord center, int radius) {
             super(targeting, duration, center, radius);
+            colors[0] = SColor.PERIWINKLE.toFloatBits();
+            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
+            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
+            colors[3] = SColor.LILAC.toFloatBits();
+            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
+            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
+            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
@@ -218,6 +232,13 @@ public abstract class PanelEffect extends TemporalAction{
         public GibberishEffect(SquidPanel targeting, float duration, Coord center, int radius, char[] choices) {
             super(targeting, duration, center, radius);
             this.choices = choices;
+            colors[0] = SColor.PERIWINKLE.toFloatBits();
+            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
+            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
+            colors[3] = SColor.LILAC.toFloatBits();
+            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
+            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
+            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields.
@@ -230,6 +251,13 @@ public abstract class PanelEffect extends TemporalAction{
         public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)
         {
             super(targeting, duration, valid, center, radius);
+            colors[0] = SColor.PERIWINKLE.toFloatBits();
+            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
+            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
+            colors[3] = SColor.LILAC.toFloatBits();
+            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
+            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
+            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields.
@@ -243,7 +271,14 @@ public abstract class PanelEffect extends TemporalAction{
         {
             super(targeting, duration, valid, center, radius);
             this.choices = choices;
-        }
+            colors[0] = SColor.PERIWINKLE.toFloatBits();
+            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
+            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
+            colors[3] = SColor.LILAC.toFloatBits();
+            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
+            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
+            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
+    }
 
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
@@ -286,9 +321,8 @@ public abstract class PanelEffect extends TemporalAction{
             Coord c;
             float f, color;
             int idx, seed = System.identityHashCode(this), clen = choices.length;
-            long tick = LightRNG.determine((System.currentTimeMillis() >>> 7) * 421);
+            final long tick = LightRNG.determine((System.currentTimeMillis() >>> 7) * seed);
             for (int i = 0; i < len; i++) {
-                ++tick;
                 c = affected.get(i);
                 if(lightMap[c.x][c.y] <= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
                     continue;
@@ -301,7 +335,7 @@ public abstract class PanelEffect extends TemporalAction{
                     color = SColor.lerpFloatColors(colors[colors.length-1], NumberTools.setSelectedByte(colors[colors.length-1], 3, (byte)0), (Math.min(0.99f, f) * colors.length) % 1f);
                 else
                     color = SColor.lerpFloatColors(colors[idx], colors[idx+1], (f * colors.length) % 1f);
-                target.put(c.x, c.y, choices[(int) ((clen * (LightRNG.determine(tick) & 0x7FFFFFFFL)) >> 31)], color);
+                target.put(c.x, c.y, choices[(int) ((clen * (LightRNG.determine(tick + i) & 0x7FFFFFFFL)) >> 31)], color);
             }
         }
 

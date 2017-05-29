@@ -7,7 +7,7 @@ import squidpony.Converters;
 import squidpony.StringConvert;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.OrderedMap;
-import squidpony.store.util.Garbler;
+import squidpony.Garbler;
 
 import java.util.Map;
 
