@@ -6,51 +6,54 @@ import squidpony.annotation.Beta;
 import java.io.Serializable;
 
 /**
- * Like PintRNG (only uses 32-bit int math, good for GWT), but much faster at the expense of quality.
- * This generator is faster than ThunderRNG at generating ints, while also implementing StatefulRandomness. It is slower
- * but not especially slow at generating longs, and takes between 5% and 10% more time than LightRNG to generate longs
- * (it takes about 40% less time than LightRNG to generate ints). Quality is unclear, since this relies on some very
- * particular values for constants and shows various flaws visually when the constants are even slightly off. There are
- * probably better choices for constants out there that we may be able to find, but it doesn't seem easy.
- * It's likely that the period of FlapRNG is only 2 to the 33 (0 seed is allowed), which is much less than many common
- * generators ({@link java.util.Random} has a period of approximately 2 to the 42, for instance). This may be acceptable
- * if you don't expect to generate 8 billion numbers with one FlapRNG.
+ * Like PintRNG (uses int math primarily, making it good with GWT and 32-bit machines) and FlapRNG, but with a longer
+ * period than either, plus this implements StatefulRandomness. SlapRNG should have higher quality than FlapRNG based on
+ * some rough metrics, but its period is known to be longer than FlapRNG's for most seeds, if not all. Precisely how
+ * much longer isn't clear yet; this uses an irregular increment that depends on part of the current state, and it seems
+ * possible that certain rare seeds have an effect on the length of the period. That said, the period should be at least
+ * 2 to the 35 for most seeds, and is probably significantly higher. This generator is not nearly as fast as FlapRNG or
+ * PintRNG, but it has a longer (at least 8x) period, mainly thanks to more bits of state, and good quality even with
+ * similar seeds. The mechanism by which this produces pseudo-randomness is somewhat unusual, and involves two
+ * state variables as ints, one of which is used both before and after that state part changes. This slows down the
+ * generation slightly due to a data dependency between the before and after states (the same speed problem most linear
+ * congruential generators face when trying to reach ideal performance), but seems to significantly improve period. It
+ * should be noted that when targeting GWT and 32-bit machines, SlapRNG provides one of the better combinations of
+ * period, quality, compatibility, and speed that we have, emphasizing period (which is hard to do using 32-bit math)
+ * and quality. FlapRNG is faster by about 2x-2.5x, but sacrifices quality and period. PintRNG has better quality, is
+ * a little faster, and has a lower period. Other generators give up efficient compatibility with GWT due to long math
+ * (which is slower and probably produces garbage on GWT), though many are faster on PCs (LapRNG and ThunderRNG, for
+ * instance, completely beat SlapRNG on speed and period, and LapRNG has comparable quality).
  * <br>
- * Created by Tommy Ettinger on 5/1/2017.
+ * Created by Tommy Ettinger on 5/29/2017.
  */
-
 @Beta
-public class FlapRNG implements StatefulRandomness, Serializable {
+public class SlapRNG implements StatefulRandomness, Serializable {
     private static final long serialVersionUID = 1L;
-
-    public FlapRNG() {
-        this((int) ((Math.random() * 2.0 - 1.0) * 0x80000000),
-                (int) ((Math.random() * 2.0 - 1.0) * 0x80000000));
+    public SlapRNG(){
+        this((int)((Math.random() * 2.0 - 1.0) * 0x80000000),
+                (int)((Math.random() * 2.0 - 1.0) * 0x80000000));
     }
-
-    public FlapRNG(final int seed) {
+    public SlapRNG(final int seed) {
         state0 = seed;
-        state1 = seed ^ seed >>> (4 + (seed >>> 28));
+        state1 = ((seed ^ 0xD0E89D2D) >>> 19 | (seed ^ 0xD0E89D2D) << 13);
+        state1 ^= state1 >>> (4 + (state1 >>> 28));
         state1 *= 277803737;
         state1 ^= (state1 >>> 22);
     }
-
-    public FlapRNG(final int seed0, final int seed1) {
+    public SlapRNG(final int seed0, final int seed1) {
         state0 = seed0;
         state1 = seed1;
     }
-
-    public FlapRNG(final long seed) {
-        state0 = (int) (seed & 0xFFFFFFFFL);
-        state1 = (int) (seed >>> 32);
+    public SlapRNG(final long seed) {
+        state0 = (int)(seed & 0xFFFFFFFFL);
+        state1 = (int)(seed >>> 32);
     }
-
-    public FlapRNG(final CharSequence seed) {
+    public SlapRNG(final CharSequence seed)
+    {
         this(CrossHash.Wisp.hash64(seed));
     }
 
     public int state0, state1;
-
     /**
      * Get the current internal state of the StatefulRandomness as a long.
      *
@@ -58,7 +61,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public long getState() {
-        return (long) (state1) << 32 | (state0 & 0xFFFFFFFFL);
+        return (long)(state1) << 32 | (state0 & 0xFFFFFFFFL);
     }
 
     /**
@@ -68,8 +71,8 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public void setState(final long state) {
-        state0 = (int) (state & 0xFFFFFFFFL);
-        state1 = (int) (state >>> 32);
+        state0 = (int)(state & 0xFFFFFFFFL);
+        state1 = (int)(state >>> 32);
     }
 
     /**
@@ -80,19 +83,29 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * @return the integer containing the appropriate number of bits
      */
     @Override
-    public final int next(final int bits) {
-        return (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> (32 - bits);
+    public final int next( final int bits ) {
+        //return (state0 += (state1 ^ (state1 += 0xC6BC278D))) >>> (32 - bits);
+        return (state1 += (state1 << 8 ^ (state0 += 0xCABC2C8D) >>> (state1 >>> 29))) >>> (32 - bits);
+        //return (state += (alpha += (beta += -4283) >>> 12) * 0x632D978F + 0xC6BC278D) >>> (32 - bits);
+
+        //return ((state1 += 0xC6BC278D * state0 + 0x632BE5AB) ^ (state0 += 0x85157AF5)) >>> (32 - bits);
         //return (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> (32 - bits);
     }
 
     /**
      * Gets a pseudo-random int, which can be positive or negative but is likely to be drawn from less possible options
      * than the full range of {@link Integer#MIN_VALUE} to {@link Integer#MAX_VALUE}. Very fast, though.
-     *
      * @return a pseudo-random 32-bit int
      */
-    public final int nextInt() {
-        return (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+    public final int nextInt()
+    {
+        //0x6C35 0x7A1B
+        //return (state += (alpha += (beta += -4283) >>> 12) * 0x632D978F);
+        return (state1 += (state1 << 8 ^ (state0 += 0xCABC2C8D) >>> (state1 >>> 29)));
+        //return (state1 += (state0 += (state0 ^ state1) + 0xC6BC278D));
+        //return (state1 += (state0 & (state0 += 0x85157AF5 ^ state1)) + 0xC6BC278D);
+        //return ((state1 += 0xC6BC278D * (state0 + 0x632BE5AB)) ^ (state0 += 0x85157AF5));
+
         //return (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
         //return (state0 += 0x9E3779B9 + ((state1 += 0xC6BC278D) >> 28) * 0x632DB5AB);
         //return (state0 += (state1 += 0x9E3779B9) ^ 0x632BE5AB);
@@ -116,7 +129,6 @@ public class FlapRNG implements StatefulRandomness, Serializable {
         //return state += (state >> 5) * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L;
 
     }
-
     /**
      * Using this method, any algorithm that needs to efficiently generate more
      * than 32 bits of random data can interface with this randomness source.
@@ -140,7 +152,9 @@ public class FlapRNG implements StatefulRandomness, Serializable {
         //0x9E3779B97F4A7C15L
         //final long r = (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
         //return r * 0xC6BC279692B5CC53L ^ r << 32;
-        final long r = (state0 += (((state1 += 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+        final long r = (state1 += (state1 << 8 ^ (state0 += 0xCABC2C8D) >>> (state1 >>> 29)));
+        //final long r = (state1 += (state0 += state1 >> 4) + 0xC6BC278D);
+        //final long r = ((state1 += 0xC6BC278D * state0 + 0x632BE5AB) ^ (state0 += 0x85157AF5));
         return 0xC6AC279692B5CC53L * r ^ r << 32;
         //final long r = (state0 += ((((state1 += 0xC6BC278D) >>> 24) + 0x9E3779A) >>> 4) * 0x632D978F);
         //return r * 0xC6AC279692B5CC53L ^ r << 32;
@@ -179,8 +193,9 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public RandomnessSource copy() {
-        return new FlapRNG(state0, state1);
+        return new SlapRNG(state0, state1);
     }
+
 
     /**
      * A simple "output stage" applied to state; this method does not update state on its own. If you expect to call
@@ -189,14 +204,13 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
      * can be any odd-number int, preferably a large one. This method doesn't offer very good quality assurances, but
      * should be very fast.
-     *
      * @param state should be changed when you call this (see above), e.g. {@code state += 0x9E3779B9}
      * @return an altered version of state that should be very fast to compute but doesn't promise great quality
      */
-    public static int determine(final int state) {
-        return (state + (((state + 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+    public static int determine(final int state)
+    {
+        return (state + (state << 8 ^ (state + 0xCABC2C8D) >>> (state >>> 29)));
     }
-
     /**
      * A simple "output stage" applied to a two-part state like what FlapRNG uses normally; this method does not update
      * state0 or state1 on its own. If you expect to call this method more than once, you should perform some change to
@@ -205,29 +219,27 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
      * can be any odd-number int, preferably a large one. This method doesn't offer very good quality assurances, but
      * should be very fast.
-     *
      * @param state0 should be changed when you call this (see above), e.g. by adding the result to state0
      * @param state1 should be changed when you call this (see above), e.g. {@code state1 += 0x9E3779B9}
      * @return an altered version of state0/state1 that should be very fast to compute but doesn't promise great quality
      */
-    public static int determine(final int state0, final int state1) {
-        return (state0 + (((state1 + 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+    public static int determine(final int state0, final int state1)
+    {
+        return (state1 + (state1 << 8 ^ (state0 + 0xCABC2C8D) >>> (state1 >>> 29)));
     }
-
     /**
      * Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given state. If you expect to call
      * this method more than once, you should perform some change to state as part of the call; a simple way to do this
      * is to call this method like {@code FlapRNG.determine(state += 0x9E3779B9)}. The int 0x9E3779B9 is derived from
      * the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
      * can be any odd-number int, preferably a large one.
-     *
      * @param state any int
      * @return a pseudo-random float from -0f (inclusive) to 1f (exclusive)
      */
-    public static float randomFloat(final int state) {
-        return NumberTools.intBitsToFloat(((state + (((state + 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x3f800000) - 1f;
+    public static float randomFloat(final int state)
+    {
+        return NumberTools.intBitsToFloat(((state + (state << 8 ^ (state + 0xCABC2C8D) >>> (state >>> 29))) >>> 9) | 0x3f800000) - 1f;
     }
-
     /**
      * Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given states. If you expect to
      * call this method more than once, you should perform some change to state as part of the call; a simple way to do
@@ -235,13 +247,13 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * The int 0x9E3779B9 is derived from the golden ratio, and shows up often as an optimal part of hashes and random
      * number generators, the constant can be any odd-number int, preferably a large one. Here, state0 is incremented by
      * the before-value of state1, which gives a good distribution of inputs on repeated calls.
-     *
      * @param state0 any int
      * @param state1 any int
      * @return a pseudo-random float from -0f (inclusive) to 1f (exclusive)
      */
-    public static float randomFloat(final int state0, final int state1) {
-        return NumberTools.intBitsToFloat(((state0 + (((state1 + 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x3f800000) - 1f;
+    public static float randomFloat(final int state0, final int state1)
+    {
+        return NumberTools.intBitsToFloat(((state1 + (state1 << 8 ^ (state0 + 0xCABC2C8D) >>> (state1 >>> 29))) >>> 9) | 0x3f800000) - 1f;
     }
 
     /**
@@ -250,12 +262,12 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * is to call this method like {@code FlapRNG.determine(state += 0x9E3779B9)}. The int 0x9E3779B9 is derived from
      * the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
      * can be any odd-number int, preferably a large one.
-     *
      * @param state any int
      * @return a pseudo-random float from -1f (inclusive) to 1f (exclusive)
      */
-    public static float randomSignedFloat(final int state) {
-        return NumberTools.intBitsToFloat(((state + (((state + 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x40000000) - 3f;
+    public static float randomSignedFloat(final int state)
+    {
+        return NumberTools.intBitsToFloat(((state + (state << 8 ^ (state + 0xCABC2C8D) >>> (state >>> 29))) >>> 9) | 0x40000000) - 3f;
     }
 
     /**
@@ -265,18 +277,19 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * The int 0x9E3779B9 is derived from the golden ratio, and shows up often as an optimal part of hashes and random
      * number generators, the constant can be any odd-number int, preferably a large one. Here, state0 is incremented by
      * the before-value of state1, which gives a good distribution of inputs on repeated calls.
-     *
      * @param state0 any int
      * @param state1 any int
      * @return a pseudo-random float from -1f (inclusive) to 1f (exclusive)
      */
-    public static float randomSignedFloat(final int state0, final int state1) {
-        return NumberTools.intBitsToFloat(((state0 + (((state1 + 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x40000000) - 3f;
+    public static float randomSignedFloat(final int state0, final int state1)
+    {
+        return NumberTools.intBitsToFloat(((state1 + (state1 << 8 ^ (state0 + 0xCABC2C8D) >>> (state1 >>> 29))) >>> 9) | 0x40000000) - 3f;
     }
 
     @Override
     public String toString() {
-        return "FlapRNG with state0 0x" + StringKit.hex(state0) + ", state1 0x" + StringKit.hex(state1);
+        return "SlapRNG with state0 0x" + StringKit.hex(state0)
+                + ", state1 0x" + StringKit.hex(state1);
     }
 
     @Override
@@ -289,9 +302,8 @@ public class FlapRNG implements StatefulRandomness, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FlapRNG flapRNG = (FlapRNG) o;
+        SlapRNG slapRNG = (SlapRNG) o;
 
-        if (state0 != flapRNG.state0) return false;
-        return state1 == flapRNG.state1;
+        return state0 == slapRNG.state0 && state1 == slapRNG.state1;
     }
 }
