@@ -617,7 +617,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 5:
                                 mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 26;
+                                rngMode %= 28;
                                 break;
                             case 0:
                                 hashMode++;
@@ -3388,7 +3388,6 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 22:
                         random = new FlapRNG(ctr);
-                        //state = ctr;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
@@ -3399,10 +3398,9 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 23:
                         random = new FlapRNG(ctr);
-                        //state = ctr;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(32) & 255;//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = random.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
@@ -3429,6 +3427,26 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         Gdx.graphics.setTitle("MicroRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 26:
+                        random = new SlapRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 27:
+                        random = new SlapRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = random.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
 
                 }
