@@ -19,7 +19,7 @@ import java.util.List;
  * @author hyakugei
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class ClassicRogueMapGenerator {
+public class ClassicRogueMapGenerator implements IDungeonGenerator{
 
     /**
      * Holds the information needed to track rooms in the classic rogue
@@ -69,7 +69,7 @@ public class ClassicRogueMapGenerator {
             minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight;
     private ClassicRogueRoom[][] rooms;
     private Terrain[][] map;
-
+    private char[][] dungeon;
     /**
      * Initializes the generator to turn out random dungeons within the specific
      * parameters.
@@ -167,13 +167,18 @@ public class ClassicRogueMapGenerator {
         create();
         if(map.length <= 0)
             return new char[0][0];
-        char[][] gen = new char[map.length][map[0].length];
+        if(dungeon == null || dungeon.length != map.length || dungeon[0].length != map[0].length)
+            dungeon = new char[map.length][map[0].length];
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[x].length; y++) {
-                gen[x][y] = map[x][y].symbol();
+                dungeon[x][y] = map[x][y].symbol();
             }
         }
-        return gen;
+        return dungeon;
+    }
+
+    public char[][] getDungeon() {
+        return dungeon;
     }
 
     private void initRooms() {

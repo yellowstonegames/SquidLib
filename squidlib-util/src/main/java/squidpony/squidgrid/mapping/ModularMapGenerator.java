@@ -16,7 +16,7 @@ import java.util.*;
  * Created by Tommy Ettinger on 4/2/2016.
  */
 @Beta
-public class ModularMapGenerator {
+public class ModularMapGenerator implements IDungeonGenerator {
     public DungeonUtility utility;
     protected int height, width;
     public StatefulRNG rng;
@@ -154,6 +154,15 @@ public class ModularMapGenerator {
      * @return a char[][] map, or null.
      */
     public char[][] getMap() {
+        return map;
+    }
+    /**
+     * Get the most recently generated char[][] map out of this class. The
+     * map may be null if generate() or setMap() have not been called.
+     *
+     * @return a char[][] map, or null.
+     */
+    public char[][] getDungeon() {
         return map;
     }
 

@@ -24,7 +24,7 @@ import java.util.List;
  * patrolling an obvious ring, while the player, monsters, and/or other prisoners start in the jungle.
  * Created by Tommy Ettinger on 10/24/2015.
  */
-public class LanesMapGenerator {
+public class LanesMapGenerator implements IDungeonGenerator {
     protected SymmetryDungeonGenerator mix;
     protected int[] columns, rows;
     protected RNG random;
@@ -278,5 +278,9 @@ public class LanesMapGenerator {
     public int[][] getEnvironment()
     {
         return mix.getEnvironment();
+    }
+
+    public char[][] getDungeon() {
+        return mix.getDungeon();
     }
 }

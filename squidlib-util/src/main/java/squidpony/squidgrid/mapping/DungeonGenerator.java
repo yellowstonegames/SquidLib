@@ -50,7 +50,7 @@ import java.util.EnumMap;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
-public class DungeonGenerator {
+public class DungeonGenerator implements IDungeonGenerator {
     /**
      * The effects that can be applied to this dungeon. More may be added in future releases.
      */
