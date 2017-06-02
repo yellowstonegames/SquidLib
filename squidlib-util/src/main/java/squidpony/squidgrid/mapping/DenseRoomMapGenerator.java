@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * https://gist.github.com/tommyettinger/3144b56a3a8e5bbe5ee401c1a93989f4
  * Created by Tommy Ettinger on 5/4/2016.
  */
-public class DenseRoomMapGenerator {
+public class DenseRoomMapGenerator implements IDungeonGenerator {
     public char[][] map;
     public int[][] environment;
     public RNG rng;
@@ -41,6 +41,9 @@ public class DenseRoomMapGenerator {
         environment = new int[this.width][this.height];
     }
 
+    public char[][] getDungeon() {
+        return map;
+    }
     /**
      * Generate a map as a 2D char array using the width and height specified in the constructor.
      * Should produce a crowded arrangement of rectangular rooms that overlap with each other.

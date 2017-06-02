@@ -27,7 +27,7 @@ import java.util.*;
  * @see squidpony.squidgrid.mapping.SerpentDeepMapGenerator uses MixedGenerator as it makes a multi-level dungeon
  * Created by Tommy Ettinger on 10/22/2015.
  */
-public class MixedGenerator {
+public class MixedGenerator implements IDungeonGenerator {
     public enum CarverType
     {
         CAVE,
@@ -526,6 +526,10 @@ public class MixedGenerator {
         store();
         markEnvironmentWalls();
         generated = true;
+        return dungeon;
+    }
+
+    public char[][] getDungeon() {
         return dungeon;
     }
 

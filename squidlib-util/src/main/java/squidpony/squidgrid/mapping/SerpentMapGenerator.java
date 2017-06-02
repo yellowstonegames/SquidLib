@@ -20,7 +20,7 @@ import java.util.List;
  * in some stories dug water-holes and was similarly gigantic.
  * Created by Tommy Ettinger on 10/24/2015.
  */
-public class SerpentMapGenerator {
+public class SerpentMapGenerator implements IDungeonGenerator {
     private MixedGenerator mix;
     private int[] columns, rows;
     private RNG random;
@@ -296,6 +296,7 @@ public class SerpentMapGenerator {
         return mix.generate();
     }
 
+
     /**
      * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
      * MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value
@@ -314,6 +315,10 @@ public class SerpentMapGenerator {
      */
     public int[][] getEnvironment() {
         return mix.getEnvironment();
+    }
+
+    public char[][] getDungeon() {
+        return mix.getDungeon();
     }
 
     public static ArrayList<Coord> pointPath(int width, int height, RNG rng) {

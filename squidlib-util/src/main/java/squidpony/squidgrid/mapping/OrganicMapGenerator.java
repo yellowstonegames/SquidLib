@@ -9,7 +9,7 @@ import java.util.List;
  * Map generator using Perlin/Simplex noise for the formation of "rooms" and then WobblyLine to connect with corridors.
  * Created by Tommy Ettinger on 4/18/2016.
  */
-public class OrganicMapGenerator {
+public class OrganicMapGenerator implements IDungeonGenerator {
     public char[][] map;
     public int[][] environment;
     public RNG rng;
@@ -203,4 +203,9 @@ public class OrganicMapGenerator {
     {
         return environment;
     }
+
+    public char[][] getDungeon() {
+        return map;
+    }
+
 }

@@ -17,7 +17,7 @@
 <span class="sourceLineNo">009</span> * Map generator using Perlin/Simplex noise for the formation of "rooms" and then WobblyLine to connect with corridors.<a name="line.9"></a>
 <span class="sourceLineNo">010</span> * Created by Tommy Ettinger on 4/18/2016.<a name="line.10"></a>
 <span class="sourceLineNo">011</span> */<a name="line.11"></a>
-<span class="sourceLineNo">012</span>public class OrganicMapGenerator {<a name="line.12"></a>
+<span class="sourceLineNo">012</span>public class OrganicMapGenerator implements IDungeonGenerator {<a name="line.12"></a>
 <span class="sourceLineNo">013</span>    public char[][] map;<a name="line.13"></a>
 <span class="sourceLineNo">014</span>    public int[][] environment;<a name="line.14"></a>
 <span class="sourceLineNo">015</span>    public RNG rng;<a name="line.15"></a>
@@ -211,7 +211,12 @@
 <span class="sourceLineNo">203</span>    {<a name="line.203"></a>
 <span class="sourceLineNo">204</span>        return environment;<a name="line.204"></a>
 <span class="sourceLineNo">205</span>    }<a name="line.205"></a>
-<span class="sourceLineNo">206</span>}<a name="line.206"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>    public char[][] getDungeon() {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        return map;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
+<span class="sourceLineNo">211</span>}<a name="line.211"></a>
 
 
 

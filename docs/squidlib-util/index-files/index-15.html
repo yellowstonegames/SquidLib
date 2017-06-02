@@ -306,6 +306,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
+<dd>
+<div class="block">Using this method, any algorithm that might use the built-in Java Random
+ can interface with this randomness source.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SobolQRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
@@ -693,6 +698,11 @@
 <dd>
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
+<dd>
+<div class="block">Gets a pseudo-random int, which can be positive or negative but is likely to be drawn from less possible options
+ than the full range of <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> to <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/XkcdRNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XkcdRNG.html" title="class in squidpony.squidmath">XkcdRNG</a></dt>
@@ -855,6 +865,11 @@
 <dd>
 <div class="block">Returns a random long below the given bound, or 0 if the bound is 0 or
  negative.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
+<dd>
+<div class="block">Using this method, any algorithm that needs to efficiently generate more
+ than 32 bits of random data can interface with this randomness source.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SobolQRNG.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></dt>
 <dd>

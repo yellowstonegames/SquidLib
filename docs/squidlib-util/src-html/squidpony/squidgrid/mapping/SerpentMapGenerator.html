@@ -28,7 +28,7 @@
 <span class="sourceLineNo">020</span> * in some stories dug water-holes and was similarly gigantic.<a name="line.20"></a>
 <span class="sourceLineNo">021</span> * Created by Tommy Ettinger on 10/24/2015.<a name="line.21"></a>
 <span class="sourceLineNo">022</span> */<a name="line.22"></a>
-<span class="sourceLineNo">023</span>public class SerpentMapGenerator {<a name="line.23"></a>
+<span class="sourceLineNo">023</span>public class SerpentMapGenerator implements IDungeonGenerator {<a name="line.23"></a>
 <span class="sourceLineNo">024</span>    private MixedGenerator mix;<a name="line.24"></a>
 <span class="sourceLineNo">025</span>    private int[] columns, rows;<a name="line.25"></a>
 <span class="sourceLineNo">026</span>    private RNG random;<a name="line.26"></a>
@@ -304,73 +304,78 @@
 <span class="sourceLineNo">296</span>        return mix.generate();<a name="line.296"></a>
 <span class="sourceLineNo">297</span>    }<a name="line.297"></a>
 <span class="sourceLineNo">298</span><a name="line.298"></a>
-<span class="sourceLineNo">299</span>    /**<a name="line.299"></a>
-<span class="sourceLineNo">300</span>     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of<a name="line.300"></a>
-<span class="sourceLineNo">301</span>     * MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value<a name="line.301"></a>
-<span class="sourceLineNo">302</span>     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).<a name="line.302"></a>
-<span class="sourceLineNo">303</span>     * &lt;ul&gt;<a name="line.303"></a>
-<span class="sourceLineNo">304</span>     * &lt;li&gt;MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.&lt;/li&gt;<a name="line.304"></a>
-<span class="sourceLineNo">305</span>     * &lt;li&gt;MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.&lt;/li&gt;<a name="line.305"></a>
-<span class="sourceLineNo">306</span>     * &lt;li&gt;MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.&lt;/li&gt;<a name="line.306"></a>
-<span class="sourceLineNo">307</span>     * &lt;li&gt;MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.&lt;/li&gt;<a name="line.307"></a>
-<span class="sourceLineNo">308</span>     * &lt;li&gt;MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.&lt;/li&gt;<a name="line.308"></a>
-<span class="sourceLineNo">309</span>     * &lt;li&gt;MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.&lt;/li&gt;<a name="line.309"></a>
-<span class="sourceLineNo">310</span>     * &lt;li&gt;MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.&lt;/li&gt;<a name="line.310"></a>
-<span class="sourceLineNo">311</span>     * &lt;/ul&gt;<a name="line.311"></a>
-<span class="sourceLineNo">312</span>     *<a name="line.312"></a>
-<span class="sourceLineNo">313</span>     * @return a 2D int array where each element is an environment type constant in MixedGenerator<a name="line.313"></a>
-<span class="sourceLineNo">314</span>     */<a name="line.314"></a>
-<span class="sourceLineNo">315</span>    public int[][] getEnvironment() {<a name="line.315"></a>
-<span class="sourceLineNo">316</span>        return mix.getEnvironment();<a name="line.316"></a>
-<span class="sourceLineNo">317</span>    }<a name="line.317"></a>
-<span class="sourceLineNo">318</span><a name="line.318"></a>
-<span class="sourceLineNo">319</span>    public static ArrayList&lt;Coord&gt; pointPath(int width, int height, RNG rng) {<a name="line.319"></a>
-<span class="sourceLineNo">320</span>        if (width &lt;= 2 || height &lt;= 2)<a name="line.320"></a>
-<span class="sourceLineNo">321</span>            throw new IllegalArgumentException("width and height must be greater than 2");<a name="line.321"></a>
-<span class="sourceLineNo">322</span>        long columnAlterations = rng.nextLong(0x1000000000000L);<a name="line.322"></a>
-<span class="sourceLineNo">323</span>        float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);<a name="line.323"></a>
-<span class="sourceLineNo">324</span>        long rowAlterations = rng.nextLong(0x1000000000000L);<a name="line.324"></a>
-<span class="sourceLineNo">325</span>        float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);<a name="line.325"></a>
-<span class="sourceLineNo">326</span><a name="line.326"></a>
-<span class="sourceLineNo">327</span>        int[] columns = new int[16], rows = new int[16];<a name="line.327"></a>
-<span class="sourceLineNo">328</span>        int csum = 0, rsum = 0;<a name="line.328"></a>
-<span class="sourceLineNo">329</span>        long b = 7;<a name="line.329"></a>
-<span class="sourceLineNo">330</span>        for (int i = 0; i &lt; 16; i++, b &lt;&lt;= 3) {<a name="line.330"></a>
-<span class="sourceLineNo">331</span>            columns[i] = csum + (int) (columnBase * 0.5f * (3 + Long.bitCount(columnAlterations &amp; b)));<a name="line.331"></a>
-<span class="sourceLineNo">332</span>            csum += (int) (columnBase * (3 + Long.bitCount(columnAlterations &amp; b)));<a name="line.332"></a>
-<span class="sourceLineNo">333</span>            rows[i] = rsum + (int) (rowBase * 0.5f * (3 + Long.bitCount(rowAlterations &amp; b)));<a name="line.333"></a>
-<span class="sourceLineNo">334</span>            rsum += (int) (rowBase * (3 + Long.bitCount(rowAlterations &amp; b)));<a name="line.334"></a>
-<span class="sourceLineNo">335</span>        }<a name="line.335"></a>
-<span class="sourceLineNo">336</span>        int cs = width - csum;<a name="line.336"></a>
-<span class="sourceLineNo">337</span>        int rs = height - rsum;<a name="line.337"></a>
-<span class="sourceLineNo">338</span>        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;<a name="line.338"></a>
-<span class="sourceLineNo">339</span>        for (int i = 0; i &lt;= 7; i++) {<a name="line.339"></a>
-<span class="sourceLineNo">340</span>            cs2 = cs2 * i / 7;<a name="line.340"></a>
-<span class="sourceLineNo">341</span>            rs2 = rs2 * i / 7;<a name="line.341"></a>
-<span class="sourceLineNo">342</span>            columns[i] -= cs2;<a name="line.342"></a>
-<span class="sourceLineNo">343</span>            rows[i] -= rs2;<a name="line.343"></a>
-<span class="sourceLineNo">344</span>        }<a name="line.344"></a>
-<span class="sourceLineNo">345</span>        for (int i = 15; i &gt;= 8; i--) {<a name="line.345"></a>
-<span class="sourceLineNo">346</span>            cs3 = cs3 * (i - 8) / 8;<a name="line.346"></a>
-<span class="sourceLineNo">347</span>            rs3 = rs3 * (i - 8) / 8;<a name="line.347"></a>
-<span class="sourceLineNo">348</span>            columns[i] += cs3;<a name="line.348"></a>
-<span class="sourceLineNo">349</span>            rows[i] += rs3;<a name="line.349"></a>
-<span class="sourceLineNo">350</span>        }<a name="line.350"></a>
-<span class="sourceLineNo">351</span><a name="line.351"></a>
-<span class="sourceLineNo">352</span>        ArrayList&lt;Coord&gt; points = new ArrayList&lt;&gt;(80);<a name="line.352"></a>
-<span class="sourceLineNo">353</span>        int m = rng.nextInt(64);<a name="line.353"></a>
-<span class="sourceLineNo">354</span>        Coord temp = CoordPacker.mooreToCoord(m), next;<a name="line.354"></a>
-<span class="sourceLineNo">355</span>        temp = Coord.get(columns[temp.x], rows[temp.y]);<a name="line.355"></a>
-<span class="sourceLineNo">356</span>        for (int i = 0, r; i &lt; 256; r = rng.between(4, 12), i += r, m += r) {<a name="line.356"></a>
-<span class="sourceLineNo">357</span>            next = CoordPacker.mooreToCoord(m);<a name="line.357"></a>
-<span class="sourceLineNo">358</span>            next = Coord.get(columns[next.x], rows[next.y]);<a name="line.358"></a>
-<span class="sourceLineNo">359</span>            points.addAll(OrthoLine.line(temp, next));<a name="line.359"></a>
-<span class="sourceLineNo">360</span>            temp = next;<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        }<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        points.add(points.get(0));<a name="line.362"></a>
-<span class="sourceLineNo">363</span>        return points;<a name="line.363"></a>
-<span class="sourceLineNo">364</span>    }<a name="line.364"></a>
-<span class="sourceLineNo">365</span>}<a name="line.365"></a>
+<span class="sourceLineNo">299</span><a name="line.299"></a>
+<span class="sourceLineNo">300</span>    /**<a name="line.300"></a>
+<span class="sourceLineNo">301</span>     * Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of<a name="line.301"></a>
+<span class="sourceLineNo">302</span>     * MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value<a name="line.302"></a>
+<span class="sourceLineNo">303</span>     * of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).<a name="line.303"></a>
+<span class="sourceLineNo">304</span>     * &lt;ul&gt;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>     * &lt;li&gt;MixedGenerator.UNTOUCHED, equal to 0, is used for any cells that aren't near a floor.&lt;/li&gt;<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     * &lt;li&gt;MixedGenerator.ROOM_FLOOR, equal to 1, is used for floor cells inside wide room areas.&lt;/li&gt;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     * &lt;li&gt;MixedGenerator.ROOM_WALL, equal to 2, is used for wall cells around wide room areas.&lt;/li&gt;<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * &lt;li&gt;MixedGenerator.CAVE_FLOOR, equal to 3, is used for floor cells inside rough cave areas.&lt;/li&gt;<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * &lt;li&gt;MixedGenerator.CAVE_WALL, equal to 4, is used for wall cells around rough cave areas.&lt;/li&gt;<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * &lt;li&gt;MixedGenerator.CORRIDOR_FLOOR, equal to 5, is used for floor cells inside narrow corridor areas.&lt;/li&gt;<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * &lt;li&gt;MixedGenerator.CORRIDOR_WALL, equal to 6, is used for wall cells around narrow corridor areas.&lt;/li&gt;<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     * &lt;/ul&gt;<a name="line.312"></a>
+<span class="sourceLineNo">313</span>     *<a name="line.313"></a>
+<span class="sourceLineNo">314</span>     * @return a 2D int array where each element is an environment type constant in MixedGenerator<a name="line.314"></a>
+<span class="sourceLineNo">315</span>     */<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    public int[][] getEnvironment() {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>        return mix.getEnvironment();<a name="line.317"></a>
+<span class="sourceLineNo">318</span>    }<a name="line.318"></a>
+<span class="sourceLineNo">319</span><a name="line.319"></a>
+<span class="sourceLineNo">320</span>    public char[][] getDungeon() {<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        return mix.getDungeon();<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    }<a name="line.322"></a>
+<span class="sourceLineNo">323</span><a name="line.323"></a>
+<span class="sourceLineNo">324</span>    public static ArrayList&lt;Coord&gt; pointPath(int width, int height, RNG rng) {<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        if (width &lt;= 2 || height &lt;= 2)<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            throw new IllegalArgumentException("width and height must be greater than 2");<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        long columnAlterations = rng.nextLong(0x1000000000000L);<a name="line.327"></a>
+<span class="sourceLineNo">328</span>        float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);<a name="line.328"></a>
+<span class="sourceLineNo">329</span>        long rowAlterations = rng.nextLong(0x1000000000000L);<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);<a name="line.330"></a>
+<span class="sourceLineNo">331</span><a name="line.331"></a>
+<span class="sourceLineNo">332</span>        int[] columns = new int[16], rows = new int[16];<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        int csum = 0, rsum = 0;<a name="line.333"></a>
+<span class="sourceLineNo">334</span>        long b = 7;<a name="line.334"></a>
+<span class="sourceLineNo">335</span>        for (int i = 0; i &lt; 16; i++, b &lt;&lt;= 3) {<a name="line.335"></a>
+<span class="sourceLineNo">336</span>            columns[i] = csum + (int) (columnBase * 0.5f * (3 + Long.bitCount(columnAlterations &amp; b)));<a name="line.336"></a>
+<span class="sourceLineNo">337</span>            csum += (int) (columnBase * (3 + Long.bitCount(columnAlterations &amp; b)));<a name="line.337"></a>
+<span class="sourceLineNo">338</span>            rows[i] = rsum + (int) (rowBase * 0.5f * (3 + Long.bitCount(rowAlterations &amp; b)));<a name="line.338"></a>
+<span class="sourceLineNo">339</span>            rsum += (int) (rowBase * (3 + Long.bitCount(rowAlterations &amp; b)));<a name="line.339"></a>
+<span class="sourceLineNo">340</span>        }<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        int cs = width - csum;<a name="line.341"></a>
+<span class="sourceLineNo">342</span>        int rs = height - rsum;<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        for (int i = 0; i &lt;= 7; i++) {<a name="line.344"></a>
+<span class="sourceLineNo">345</span>            cs2 = cs2 * i / 7;<a name="line.345"></a>
+<span class="sourceLineNo">346</span>            rs2 = rs2 * i / 7;<a name="line.346"></a>
+<span class="sourceLineNo">347</span>            columns[i] -= cs2;<a name="line.347"></a>
+<span class="sourceLineNo">348</span>            rows[i] -= rs2;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>        }<a name="line.349"></a>
+<span class="sourceLineNo">350</span>        for (int i = 15; i &gt;= 8; i--) {<a name="line.350"></a>
+<span class="sourceLineNo">351</span>            cs3 = cs3 * (i - 8) / 8;<a name="line.351"></a>
+<span class="sourceLineNo">352</span>            rs3 = rs3 * (i - 8) / 8;<a name="line.352"></a>
+<span class="sourceLineNo">353</span>            columns[i] += cs3;<a name="line.353"></a>
+<span class="sourceLineNo">354</span>            rows[i] += rs3;<a name="line.354"></a>
+<span class="sourceLineNo">355</span>        }<a name="line.355"></a>
+<span class="sourceLineNo">356</span><a name="line.356"></a>
+<span class="sourceLineNo">357</span>        ArrayList&lt;Coord&gt; points = new ArrayList&lt;&gt;(80);<a name="line.357"></a>
+<span class="sourceLineNo">358</span>        int m = rng.nextInt(64);<a name="line.358"></a>
+<span class="sourceLineNo">359</span>        Coord temp = CoordPacker.mooreToCoord(m), next;<a name="line.359"></a>
+<span class="sourceLineNo">360</span>        temp = Coord.get(columns[temp.x], rows[temp.y]);<a name="line.360"></a>
+<span class="sourceLineNo">361</span>        for (int i = 0, r; i &lt; 256; r = rng.between(4, 12), i += r, m += r) {<a name="line.361"></a>
+<span class="sourceLineNo">362</span>            next = CoordPacker.mooreToCoord(m);<a name="line.362"></a>
+<span class="sourceLineNo">363</span>            next = Coord.get(columns[next.x], rows[next.y]);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>            points.addAll(OrthoLine.line(temp, next));<a name="line.364"></a>
+<span class="sourceLineNo">365</span>            temp = next;<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        }<a name="line.366"></a>
+<span class="sourceLineNo">367</span>        points.add(points.get(0));<a name="line.367"></a>
+<span class="sourceLineNo">368</span>        return points;<a name="line.368"></a>
+<span class="sourceLineNo">369</span>    }<a name="line.369"></a>
+<span class="sourceLineNo">370</span>}<a name="line.370"></a>
 
 
 

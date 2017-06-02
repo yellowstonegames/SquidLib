@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -108,13 +108,18 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></dd>
+</dl>
+<dl>
 <dt>Direct Known Subclasses:</dt>
 <dd><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SymmetryDungeonGenerator</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.30">MixedGenerator</a>
-extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></pre>
 <div class="block">A dungeon generator that can use a mix of techniques to have part-cave, part-room dungeons. Not entirely intended for
  normal use outside of this library, though it can be very useful when you want to make a dungeon match a specific
  path and existing generators that use MixedGenerator aren't sufficient. You may want to use a simpler generator based
@@ -351,31 +356,38 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>char[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#getDungeon--">getDungeon</a></span>()</code>
+<div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#generate--"><code>IDungeonGenerator.generate()</code></a> or
+ some similar method present in a specific implementation.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#getEnvironment--">getEnvironment</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#getFixedRooms--">getFixedRooms</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#hasGenerated--">hasGenerated</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#mark-squidpony.squidmath.Coord-">mark</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#mark-int-int-">mark</a></span>(int&nbsp;x,
     int&nbsp;y)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markEnvironment-int-int-int-">markEnvironment</a></span>(int&nbsp;x,
                int&nbsp;y,
@@ -383,73 +395,73 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markEnvironmentCave-int-int-">markEnvironmentCave</a></span>(int&nbsp;x,
                    int&nbsp;y)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markEnvironmentCorridor-int-int-">markEnvironmentCorridor</a></span>(int&nbsp;x,
                        int&nbsp;y)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markEnvironmentRoom-int-int-">markEnvironmentRoom</a></span>(int&nbsp;x,
                    int&nbsp;y)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markEnvironmentWalls--">markEnvironmentWalls</a></span>()</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markPiercing-squidpony.squidmath.Coord-">markPiercing</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markPiercing-int-int-">markPiercing</a></span>(int&nbsp;x,
             int&nbsp;y)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markPiercingCave-squidpony.squidmath.Coord-">markPiercingCave</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#markPiercingRoom-int-int-">markPiercingRoom</a></span>(int&nbsp;x,
                 int&nbsp;y)</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#putBoxRoomCarvers-int-">putBoxRoomCarvers</a></span>(int&nbsp;count)</code>
 <div class="block">Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
  with a random size in a box shape at the start and end, and a small room at the corner if there is one.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#putCaveCarvers-int-">putCaveCarvers</a></span>(int&nbsp;count)</code>
 <div class="block">Changes the number of "carvers" that will create caves from one room to the next.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#putRoundRoomCarvers-int-">putRoundRoomCarvers</a></span>(int&nbsp;count)</code>
 <div class="block">Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
@@ -457,7 +469,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  one.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#putWalledBoxRoomCarvers-int-">putWalledBoxRoomCarvers</a></span>(int&nbsp;count)</code>
 <div class="block">Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
@@ -465,7 +477,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  the presence of walls around the rooms even if another room is already there or would be placed there.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#putWalledRoundRoomCarvers-int-">putWalledRoundRoomCarvers</a></span>(int&nbsp;count)</code>
 <div class="block">Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
@@ -474,17 +486,17 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  there.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#setFixedRooms-boolean:A:A-">setFixedRooms</a></span>(boolean[][]&nbsp;fixedRooms)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#store--">store</a></span>()</code>
 <div class="block">Internal use.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/MixedGenerator.html#wallOff-int-int-">wallOff</a></span>(int&nbsp;x,
        int&nbsp;y)</code>
@@ -1034,8 +1046,29 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  cells on the very edge of the map. Uses the numbers of the various kinds of carver that were added relative to
  each other to determine how frequently to use a given carver type.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#generate--">generate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a char[][] where '#' is a wall and '.' is a floor or corridor; x first y second</dd>
+</dl>
+</li>
+</ul>
+<a name="getDungeon--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDungeon</h4>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.532">getDungeon</a>()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#getDungeon--">IDungeonGenerator</a></code></span></div>
+<div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#generate--"><code>IDungeonGenerator.generate()</code></a> or
+ some similar method present in a specific implementation. This normally passes a direct reference and not a copy,
+ so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#getDungeon--">getDungeon</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the most recently-produced dungeon/map as a 2D char array</dd>
 </dl>
 </li>
 </ul>
@@ -1045,7 +1078,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getEnvironment</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.532">getEnvironment</a>()</pre>
+<pre>public&nbsp;int[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.536">getEnvironment</a>()</pre>
 </li>
 </ul>
 <a name="hasGenerated--">
@@ -1054,7 +1087,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>hasGenerated</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.537">hasGenerated</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.541">hasGenerated</a>()</pre>
 </li>
 </ul>
 <a name="getFixedRooms--">
@@ -1063,7 +1096,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getFixedRooms</h4>
-<pre>public&nbsp;boolean[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.542">getFixedRooms</a>()</pre>
+<pre>public&nbsp;boolean[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.546">getFixedRooms</a>()</pre>
 </li>
 </ul>
 <a name="setFixedRooms-boolean:A:A-">
@@ -1072,7 +1105,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setFixedRooms</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.546">setFixedRooms</a>(boolean[][]&nbsp;fixedRooms)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.550">setFixedRooms</a>(boolean[][]&nbsp;fixedRooms)</pre>
 </li>
 </ul>
 <a name="store--">
@@ -1081,7 +1114,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>store</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.553">store</a>()</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.557">store</a>()</pre>
 <div class="block">Internal use. Takes cells that have been previously marked and permanently stores them as floors in the dungeon.</div>
 </li>
 </ul>
@@ -1091,7 +1124,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>markEnvironmentWalls</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.570">markEnvironmentWalls</a>()</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.574">markEnvironmentWalls</a>()</pre>
 <div class="block">Internal use. Finds all floor cells by environment and marks untouched adjacent (8-way) cells as walls, using the
  appropriate type for the nearby floor.</div>
 </li>
@@ -1102,7 +1135,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>mark</h4>
-<pre>protected&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.621">mark</a>(int&nbsp;x,
+<pre>protected&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.625">mark</a>(int&nbsp;x,
                        int&nbsp;y)</pre>
 <div class="block">Internal use. Marks a point to be made into floor.</div>
 <dl>
@@ -1120,7 +1153,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>markPiercing</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.634">markPiercing</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.638">markPiercing</a>(int&nbsp;x,
                             int&nbsp;y)</pre>
 <div class="block">Internal use. Marks a point to be made into floor.</div>
 <dl>
@@ -1136,7 +1169,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>markEnvironment</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.645">markEnvironment</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.649">markEnvironment</a>(int&nbsp;x,
                                int&nbsp;y,
                                int&nbsp;kind)</pre>
 <div class="block">Internal use. Marks a point's environment type as the appropriate kind of environment.</div>
@@ -1154,7 +1187,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>markEnvironmentCorridor</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.654">markEnvironmentCorridor</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.658">markEnvironmentCorridor</a>(int&nbsp;x,
                                        int&nbsp;y)</pre>
 <div class="block">Internal use. Marks a point's environment type as a corridor floor.</div>
 <dl>
@@ -1170,7 +1203,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>markEnvironmentRoom</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.665">markEnvironmentRoom</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.669">markEnvironmentRoom</a>(int&nbsp;x,
                                    int&nbsp;y)</pre>
 <div class="block">Internal use. Marks a point's environment type as a room floor.</div>
 <dl>
@@ -1186,7 +1219,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>markEnvironmentCave</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.676">markEnvironmentCave</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.680">markEnvironmentCave</a>(int&nbsp;x,
                                    int&nbsp;y)</pre>
 <div class="block">Internal use. Marks a point's environment type as a cave floor.</div>
 <dl>
@@ -1202,7 +1235,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>wallOff</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.686">wallOff</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.690">wallOff</a>(int&nbsp;x,
                        int&nbsp;y)</pre>
 <div class="block">Internal use. Marks a point to be made into floor.</div>
 <dl>
@@ -1218,7 +1251,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>mark</h4>
-<pre>protected&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.697">mark</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</pre>
+<pre>protected&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.701">mark</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</pre>
 <div class="block">Internal use. Marks a point to be made into floor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1234,7 +1267,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>markPiercing</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.706">markPiercing</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.710">markPiercing</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</pre>
 <div class="block">Internal use. Marks a point to be made into floor, piercing walls.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1248,7 +1281,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>markPiercingCave</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.714">markPiercingCave</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.718">markPiercingCave</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pos)</pre>
 <div class="block">Internal use. Marks a point to be made into floor, piercing walls, and also marks the point as a cave floor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1262,7 +1295,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>markPiercingRoom</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.724">markPiercingRoom</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/MixedGenerator.html#line.728">markPiercingRoom</a>(int&nbsp;x,
                                 int&nbsp;y)</pre>
 <div class="block">Internal use. Marks a point to be made into floor, piercing walls, and also marks the point as a room floor.</div>
 <dl>
