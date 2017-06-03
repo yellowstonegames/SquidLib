@@ -226,7 +226,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
     }
 
     /**
-     * Advances or rolls back the LightRNG's state without actually generating each number. Skip forward
+     * Advances or rolls back the LightRNG's state without actually generating each number. Skips forward
      * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
      * and returns the random number produced at that step (you can get the state with {@link #getState()}).
      *

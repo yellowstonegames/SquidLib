@@ -252,7 +252,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness, Serial
     }
 
     /**
-     * Advances or rolls back the PermutedRNG's state without actually generating each number. Skip forward
+     * Advances or rolls back the PermutedRNG's state without actually generating each number. Skips forward
      * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
      * and returns the random number produced at that step (you can get the state with {@link #getState()}).
      * @param advance Number of future generations to skip past. Can be negative to backtrack.

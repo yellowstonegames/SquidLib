@@ -61,6 +61,9 @@ public class LinesPanel<T extends Color> extends Actor {
 	/** The font used to draw {@link #content}. */
 	protected final BitmapFont font;
 
+	/** An alternative to {@link #font}, used to draw {@link #content}. */
+	protected final TextCellFactory tcf;
+
 	/** What to display. Doesn't contain {@code null} entries. */
 	protected final LinkedList<IColoredString<T>> content;
 
@@ -134,8 +137,21 @@ public class LinesPanel<T extends Color> extends Actor {
 	public LinesPanel(/* @Nullable */ IMarkup<T> markup, BitmapFont font, int maxLines) {
 		this.markup = markup;
 		this.font = font;
+		this.tcf = null;
 		if (markup != null)
-			this.font.getData().markupEnabled |= true;
+			this.font.getData().markupEnabled = true;
+		this.content = new LinkedList<IColoredString<T>>();
+		if (maxLines < 0)
+			throw new IllegalStateException("The maximum number of lines in an instance of "
+					+ getClass().getSimpleName() + " must be greater or equal than zero");
+		this.maxLines = maxLines;
+	}
+	public LinesPanel(/* @Nullable */ IMarkup<T> markup, TextCellFactory font, int maxLines) {
+		this.markup = markup;
+		this.tcf = font;
+		this.font = font.bmpFont;
+		if (markup != null)
+			this.font.getData().markupEnabled = true;
 		this.content = new LinkedList<IColoredString<T>>();
 		if (maxLines < 0)
 			throw new IllegalStateException("The maximum number of lines in an instance of "
@@ -158,8 +174,8 @@ public class LinesPanel<T extends Color> extends Actor {
 	/**
 	 * Adds {@code ics} first in {@code this}, possibly removing the last entry,
 	 * if {@code this}' size would grow over {@link #maxLines}.
-	 * 
-	 * @param ics
+	 *
+	 * @param ics an IColoredString of the same color type as this LinesPanel; must be non-null
 	 */
 	public void addFirst(IColoredString<T> ics) {
 		if (ics == null)
@@ -170,15 +186,43 @@ public class LinesPanel<T extends Color> extends Actor {
 	}
 
 	/**
-	 * Adds {@code ics} last in {@code this}, possibly removing the last entry,
+	 * Adds {@code ics} last in {@code this}, possibly removing the first entry,
 	 * if {@code this}' size would grow over {@link #maxLines}.
-	 * 
-	 * @param ics
+	 *
+	 * @param ics an IColoredString of the same color type as this LinesPanel; must be non-null
 	 */
 	public void addLast(IColoredString<T> ics) {
 		if (ics == null)
 			throw new NullPointerException("Adding a null entry is forbidden");
 		if (atMax())
+			content.removeFirst();
+		content.addLast(ics);
+	}
+
+	/**
+	 * Change the first entry in {@code this} to  {@code ics}, overwriting the existing
+	 * first entry if present.
+	 * @param ics an IColoredString of the same color type as this LinesPanel; must be non-null
+	 */
+	public void setFirst(IColoredString<T> ics)
+	{
+		if (ics == null)
+			throw new NullPointerException("Adding a null entry is forbidden");
+		if(!content.isEmpty())
+			content.removeFirst();
+		content.addFirst(ics);
+	}
+
+	/**
+	 * Change the last entry in {@code this} to  {@code ics}, overwriting the existing
+	 * last entry if present.
+	 * @param ics an IColoredString of the same color type as this LinesPanel; must be non-null
+	 */
+	public void setLast(IColoredString<T> ics)
+	{
+		if (ics == null)
+			throw new NullPointerException("Adding a null entry is forbidden");
+		if(!content.isEmpty())
 			content.removeLast();
 		content.addLast(ics);
 	}
@@ -188,14 +232,14 @@ public class LinesPanel<T extends Color> extends Actor {
 		clearArea(batch);
 
 		final float width = getWidth();
-
+		if(tcf != null)
+			tcf.configureShader(batch);
 		final BitmapFontData data = font.getData();
 		final float lineHeight = data.lineHeight;
-
-		final float height = getHeight();
+		final float height = lineHeight * maxLines;
 
 		final float x = getX() + xOffset;
-		float y = getY() + (drawBottomUp ? lineHeight : height) - data.descent + yOffset;
+		float y = getY() + (drawBottomUp ? lineHeight : height - lineHeight) - data.descent + yOffset;
 
 		final ListIterator<IColoredString<T>> it = content.listIterator();
 		int ydx = 0;
@@ -210,25 +254,30 @@ public class LinesPanel<T extends Color> extends Actor {
 			if (height < consumed + glyph.height)
 				/* We would draw outside this Actor's bounds */
 				break;
-			final int increaseAlready;
+			final int increaseAlready, nbLines = MathUtils.ceil(glyph.height / lineHeight);
 			if (drawBottomUp) {
 				/*
 				 * If the text span multiple lines and we draw bottom-up, we
 				 * must go up *before* drawing.
 				 */
-				final int nbLines = MathUtils.ceil(glyph.height / lineHeight);
 				if (1 < nbLines) {
 					increaseAlready = nbLines - 1;
 					y += increaseAlready * lineHeight;
 				} else
 					increaseAlready = 0;
 			} else
-				increaseAlready = 0;
+			{
+				if (1 < nbLines) {
+					increaseAlready = nbLines - 1;
+					y -= increaseAlready * lineHeight;
+				} else
+					increaseAlready = 0;
+			}
 			/* Actually draw */
 			font.draw(batch, str, x, y, width, align, wrap);
-			y += (drawBottomUp ? /* Go up */ 1 : /* Go down */ -1) * glyph.height;
+			y += (drawBottomUp ? /* Go up */ lineHeight : /* Go down */ -lineHeight);
 			y -= increaseAlready * lineHeight;
-			consumed += glyph.height;
+			consumed += lineHeight;
 			ydx++;
 		}
 	}
@@ -265,7 +314,7 @@ public class LinesPanel<T extends Color> extends Actor {
 	 * If you want to grey out "older" messages, you would do it in this method,
 	 * when {@code ydx > 0} (using an {@link squidpony.IColorCenter} maybe ?).
 	 * 
-	 * @param ics an IColorCenter with the same generic color type as this LinesPanel
+	 * @param ics an IColoredString with the same generic color type as this LinesPanel
 	 * @param ydx
 	 *            The index of {@code ics} within {@link #content}.
 	 * @return A variation of {@code ics}, or {@code ics} itself.

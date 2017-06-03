@@ -72,7 +72,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
     // for more convenient access to some methods
     private SquidPanel fg;
-    private SquidMessageBox messages;
+    private LinesPanel<Color> messages;
     /**
      * Non-{@code null} iff '?' was pressed before
      */
@@ -127,7 +127,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private SquidColorCenter[] colorCenters;
     private int currentCenter;
     private boolean changingColors = false;
-    private TextCellFactory textFactory;
+    private TextCellFactory textFactory, printText;
     public static final int INTERNAL_ZOOM = 1;
     private Viewport viewport, messageViewport;
     private Camera camera;
@@ -198,7 +198,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         batch = new SpriteBatch();
         width = 90;
-        height = 26;
+        height = 24;
         totalWidth = width * 3;
         totalHeight = height * 3;
         //Only needed if totalWidth and/or totalHeight is 257 or larger
@@ -226,8 +226,8 @@ public class EverythingDemo extends ApplicationAdapter {
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
         // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
-        cellWidth = 10 * INTERNAL_ZOOM;
-        cellHeight = 22 * INTERNAL_ZOOM;
+        cellWidth = 11 * INTERNAL_ZOOM;
+        cellHeight = 24 * INTERNAL_ZOOM;
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
         // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
         // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
@@ -256,28 +256,35 @@ public class EverythingDemo extends ApplicationAdapter {
         // if you check the JavaDocs on SColor.COSMIC_LATTE, you will (depending on IDE) probably see a nice preview
         // of the actual color, which should be practically white but just a little closer to yellow.
         display.setLightingColor(SColor.COSMIC_LATTE);
-        messages = new SquidMessageBox(width, 4,
-                textFactory.copy());
+        printText = DefaultResources.getStretchablePrintFont().width(0.575f * cellWidth).height(cellHeight * 1.15f)
+                .initBySize();
+        messages = new LinesPanel<Color>(new GDXMarkup(), printText, 5);
+        messages.clearingColor = null;
+        //messages.drawBottomUp = true;
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1.15f, cellHeight * 1.1f);
         display.setTextSize(cellWidth * 1.15f, cellHeight  * 1.1f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
-        viewport = new StretchViewport(width * cellWidth, (height) * cellHeight);
-        messageViewport = new StretchViewport(width * cellWidth, (4) * cellHeight);
+        viewport = new StretchViewport(width * cellWidth, height * cellHeight);
+        messageViewport = new StretchViewport(width * cellWidth, cellHeight * 6);
         camera = viewport.getCamera();
         stage = new Stage(viewport, batch);
         messageStage = new Stage(messageViewport, batch);
         //These need to have their positions set before adding any entities if there is an offset involved.
-        messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
+        messages.setBounds(0, 0, cellWidth * width, cellHeight * 6);
         display.setPosition(0, 0);
         viewport.setScreenY((int)messages.getHeight());
         //subCell.setPosition(0, messages.getHeight());
-        messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
-                " Click the top or bottom border of this box to scroll.");
+        //messages.addLast(IColoredString.Impl.<Color>create("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
+        //        " Click the top or bottom border of this box to scroll."));
+        messages.addLast(new IColoredString.Impl<>("Use numpad or vi-keys (hjklyubn) to move.", Color.WHITE));
+        messages.addLast(new IColoredString.Impl<>("Use ? for help, f to change colors, q to quit.", Color.WHITE));
+        messages.addLast(new IColoredString.Impl<>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE));
+        messages.addLast(new IColoredString.Impl<>("Each Я is an AЯMED GUAЯD; bump into them to kill them.", Color.WHITE));
+        messages.addLast(new IColoredString.Impl<>("If an Я starts its turn next to where you just moved, you take damage.", Color.WHITE));
         counter = 0;
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
@@ -644,9 +651,9 @@ public class EverythingDemo extends ApplicationAdapter {
             // monster values are used to store their aggression, 1 for actively stalking the player, 0 for not.
             if (mon.state > 0 || fovmap[pos.x][pos.y] > 0.1) {
                 if (mon.state == 0) {
-                    messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
+                    messages.addLast(IColoredString.Impl.<Color>create("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
-                                    new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
+                                    new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\""));
                 }
                 getToPlayer.clearGoals();
                 nextMovePositions = getToPlayer.findPath(1, monplaces, null, pos, playerArray);
@@ -833,7 +840,7 @@ public class EverythingDemo extends ApplicationAdapter {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (170 * fovmap[pt.x][pt.y]));
         }
-        messages.put(width - 10 >> 1, 0, "Health: " + health, SColor.RED_PIGMENT);
+        //messages.put(width - 10 >> 1, 0, "Health: " + health, SColor.RED_PIGMENT);
         //if(pt != null)
         //    display.putString(0, 0, String.valueOf(monPathMap[pt.x][pt.y]));
     }
@@ -985,13 +992,15 @@ public class EverythingDemo extends ApplicationAdapter {
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
         currentZoomX = width * 1f / this.width;
         // total new screen height in pixels divided by total number of rows on the screen
-        currentZoomY = height * 1f / (this.height + messages.getGridHeight());
+        currentZoomY = height / (this.height + 6f);
         // message box should be given updated bounds since I don't think it will do this automatically
-        messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
+        messages.setBounds(0, 0, width, currentZoomY * 6);
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
         input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
         currentZoomX = cellWidth / currentZoomX;
         currentZoomY = cellHeight / currentZoomY;
+        //printText.bmpFont.getData().lineHeight /= currentZoomY;
+        //printText.bmpFont.getData().descent /= currentZoomY;
         input.update(width, height, false);
         messageViewport.update(width, height, false);
         messageViewport.setScreenBounds(0, 0, width, (int)messages.getHeight());
