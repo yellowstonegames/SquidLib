@@ -105,7 +105,7 @@ public class LapRNG implements RandomnessSource, Serializable {
      */
     public final int nextInt()
     {
-        return (int) ((state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L) >>> 32);
+        return (int) (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
     }
     /**
      * Using this method, any algorithm that needs to efficiently generate more
