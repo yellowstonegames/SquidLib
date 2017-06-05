@@ -6,16 +6,20 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * An RNG that has a drastically longer period than the other generators in SquidLib, other than MersenneTwister,
- * without sacrificing speed or HTML target compatibility. If you don't already know what the period of an RNG is, this
- * probably isn't needed for your purposes, or many purposes in games at all. It is primarily meant for applications
- * that need to generate massive amounts of random numbers, more than pow(2, 64) (18,446,744,073,709,551,616), without
- * repeating sequences of generated numbers. An RNG's period refers to the number of numbers it generates given a single
+ * An RNG that has a drastically longer period than the other generators in Sarong, other than IsaacRNG, without
+ * sacrificing speed or HTML target compatibility. If you don't already know what the period of an RNG is, this probably
+ * isn't needed for your purposes, or many purposes in games at all. It is primarily meant for applications that need to
+ * generate massive amounts of random numbers, more than pow(2, 64) (18,446,744,073,709,551,616), without repeating
+ * the sequence of generated numbers. An RNG's period refers to the number of numbers it generates given a single
  * seed before the sequence repeats from the beginning. The period of this class is pow(2, 1024) minus 1
  * (179,769,313,486,231,590,772,930,519,078,902,473,361,797,697,894,230,657,273,430,081,157,732,675,805,500,963,132,708,
  * 477,322,407,536,021,120,113,879,871,393,357,658,789,768,814,416,622,492,847,430,639,474,124,377,767,893,424,865,485,
  * 276,302,219,601,246,094,119,453,082,952,085,005,768,838,150,682,342,462,881,473,913,110,540,827,237,163,350,510,684,
- * 586,298,239,947,245,938,479,716,304,835,356,329,624,224,137,215).
+ * 586,298,239,947,245,938,479,716,304,835,356,329,624,224,137,215). While that number is preposterously large, there's
+ * always some application that seems to need more; if you really need more than that, look into CMWC generators, which
+ * can have even larger state and also even larger periods. There isn't one of those in Sarong currently, though there
+ * is a possibility of one being added in the future.
+ * <br>
  * This class may be particularly useful in conjunction with the shuffle method of RNG; the period of an RNG determines
  * how many possible "shuffles", a.k.a orderings or permutations, can be produced over all calls to a permuting method
  * like shuffle. A LightRNG-backed RNG with a period of pow(2, 64) will only be able to produce all possible "shuffles"
@@ -27,6 +31,7 @@ import java.util.Arrays;
  * periods themselves from a single seed. This uses the xorshift-1024* algorithm, and has competitive speed.
  * Created by Tommy Ettinger on 3/21/2016.
  * Ported from CC0-licensed C code by Sebastiano Vigna, at http://xorshift.di.unimi.it/xorshift1024star.c
+ * @author Tommy Ettinger
  */
 public class LongPeriodRNG implements RandomnessSource, Serializable {
 
@@ -52,9 +57,7 @@ public class LongPeriodRNG implements RandomnessSource, Serializable {
 
     /**
      * Builds a LongPeriodRNG and initializes this class' 1024 bits of state with many calls to a SplitMix64-based RNG
-     * with a random seed influenced by Math.random() and also the time (in milliseconds to keep GWT compatibility),
-     * mixing Math.random() calls in to alter the SplitMix64 state at uneven intervals.
-     *
+     * using a variant on seed produced by running it through PCG-Random's output step (PermutedRNG here).
      * @param seed a 64-bit seed; can be any value.
      */
     public LongPeriodRNG(long seed) {
@@ -62,22 +65,21 @@ public class LongPeriodRNG implements RandomnessSource, Serializable {
     }
 
     public void reseed() {
-        LightRNG lr = new LightRNG(System.currentTimeMillis() ^
-                (NumberTools.doubleToLongBits(Math.random()) << 32) |
-                (NumberTools.doubleToLongBits(Math.random()) & 0xffffffffL));
-        long ts = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();
+        LightRNG lr = new LightRNG(
+                (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
+                        ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
+        long ts = lr.nextLong();
         if (ts == 0)
-            ts++;
+            ts = 1;
         choice = (int) (ts & 15);
         state[0] = ts;
         for (int i = 1; i < 16; i++) {
             //Chosen by trial and error to unevenly reseed 4 times, where i is 2, 5, 10, or 13
             if ((6 & (i * 1281783497376652987L)) == 6)
-                lr.state ^= (NumberTools.doubleToLongBits(Math.random()) << 32) |
-                        (NumberTools.doubleToLongBits(Math.random()) & 0xffffffffL);
-            state[i] = lr.nextLong() ^ lr.nextLong() ^ lr.nextLong();
-            state[i - 1] ^= state[i];
-            if (state[i - 1] == 0) state[i - 1]++;
+                lr.state ^= (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
+                        ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L);
+            state[i - 1] ^= (state[i] = lr.nextLong());
+            if (state[i - 1] == 0) state[i - 1] = 1;
         }
     }
 
@@ -169,15 +171,15 @@ public class LongPeriodRNG implements RandomnessSource, Serializable {
             choice = 0;
         } else if (len < 16) {
             for (int i = 0, s = 0; i < 16; i++, s++) {
-                state[i] = seed[s];
-                if (state[i] == 0) state[i]++;
                 if(s == len) s = 0;
+                state[i] ^= seed[s];
+                if (state[i] == 0) state[i] = 1;
             }
             choice = (int) (state[0] & 15);
         } else {
             for (int i = 0, s = 0; s < len; s++, i = (i + 1) & 15) {
                 state[i] ^= seed[s];
-                if (state[i] == 0) state[i]++;
+                if (state[i] == 0) state[i] = 1;
             }
             choice = (int) (state[0] & 15);
         }
@@ -197,7 +199,7 @@ public class LongPeriodRNG implements RandomnessSource, Serializable {
             z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
             z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
             state[i] = z ^ (z >>> 31);
-            if (state[i] == 0) state[i]++;
+            if (state[i] == 0) state[i] = 1;
         }
     }
 
@@ -222,9 +224,8 @@ public class LongPeriodRNG implements RandomnessSource, Serializable {
     public long nextLong() {
         final long s0 = state[choice];
         long s1 = state[choice = (choice + 1) & 15];
-        s1 ^= s1 << 31; // a
-        state[choice] = s1 ^ s0 ^ (s1 >>> 11) ^ (s0 >>> 30); // b,c
-        return state[choice] * 1181783497276652981L;
+        s1 ^= s1 << 31;
+        return (state[choice] = s1 ^ s0 ^ (s1 >>> 11) ^ (s0 >>> 30)) * 1181783497276652981L;
     }
 
     /**

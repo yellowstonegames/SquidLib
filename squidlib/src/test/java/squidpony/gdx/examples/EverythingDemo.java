@@ -951,12 +951,16 @@ public class EverythingDemo extends ApplicationAdapter {
         }
 
         input.show();
+        // the order here matters. We apply two viewports at different times to clip different areas.
         messageViewport.apply(false);
+        // you do need to tell each Stage to act().
         messageStage.act();
+        // ... just like you need to tell each stage to draw().
         messageStage.draw();
-        // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
         stage.act();
+        //here we apply the other viewport, which clips a different area while leaving the message area intact.
         viewport.apply(false);
+        // each stage has its own batch that it starts an ends, so certain batch-wide effects only change one stage.
         stage.draw();
         //subCell.erase();
         if (help == null) {

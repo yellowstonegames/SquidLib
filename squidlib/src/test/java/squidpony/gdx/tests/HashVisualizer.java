@@ -132,7 +132,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
     private RandomXS128 gdxRandom;
-    private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L, 0x1234567890L);
+    private HybridRNG mr = new HybridRNG(0xFEDCBA987654321L, 0x1234567890L);
     private long seed;
     private int ctr = 0;
     private boolean keepGoing = true;
@@ -165,28 +165,67 @@ public class HashVisualizer extends ApplicationAdapter {
      * A miniature version of LapRNG that can be quickly copied into a project.
      * Sometimes used here to prototype changes to LapRNG's algorithm.
      */
-    public static class MicroRandom {
-        public long state0, state1, inc = 0x9E3779B97F4A7C15L, mul = 0x632AE59B69B3C209L;
+    public static class HybridRNG implements RandomnessSource {
+        public long state0, state1, mul = 0x632AE59B69B3C209L, inc = 0x9E3779B97F4A7C15L;
 
-        public MicroRandom(long seed0, long seed1) {
+        public HybridRNG(long seed0, long seed1) {
             state0 = seed0 * 0x62E2AC0DL + 0x85157AF5;
             state1 = seed1 * 0x85157AF5L - 0x62E2AC0DL;
+            mul = (0x632AE59B69B3C209L ^ seed1 + state0);
+            if(mul == 0L) mul = 0x632AE59B69B3C209L;
+            inc = (0x9E3779B97F4A7C15L ^ seed0 - state1);
+            if(inc == 0L) inc = 0x9E3779B97F4A7C15L;
+        }
+
+        public HybridRNG(long seed0, long seed1, long seed2, long seed3) {
+            state0 = seed0 * 0x62E2AC0DL + 0x85157AF5;
+            state1 = seed1 * 0x85157AF5L - 0x62E2AC0DL;
+            mul = (0x632AE59B69B3C209L + seed2);
+            if(mul == 0L) mul = 0x632AE59B69B3C209L;
+            inc = (0x9E3779B97F4A7C15L + seed3);
+            if(inc == 0L) inc = 0x9E3779B97F4A7C15L;
         }
 
         public void setState(final long seed)
         {
             state0 = seed * 0x62E2AC0DL + 0x85157AF5;
             state1 = seed * 0x85157AF5L - 0x62E2AC0DL;
+            mul = (0x632AE59B69B3C209L ^ seed - state0);
+            if(mul == 0L) mul = 0x632AE59B69B3C209L;
+            inc = (0x9E3779B97F4A7C15L ^ seed + state1);
+            if(inc == 0L) inc = 0x9E3779B97F4A7C15L;
+
         }
 
         public final long nextLong() {
             //good one
             //return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
-            return (state1 += ((state0 += inc) >> 24) * mul);
+            return (state1 ^= (state0 +=
+                    (inc = inc >>> 1 ^ (-(inc & 1L) & 0xD800000000000000L)) // LFSR, 64-bit
+            ) * (
+                            (mul = (mul >>> 1 ^ (-(mul & 1L) & 0x6000000000000000L))) // LFSR, 63-bit
+                                    << 1 | 1)); // always multiply by odd numbers, top bit of mul is never used
         }
 
         public final int next(final int bits) {
             return (int) (nextLong() >>> (64 - bits));
+        }
+
+        /**
+         * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+         * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
+         * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+         *
+         * @return a copy of this RandomnessSource
+         */
+        @Override
+        public RandomnessSource copy() {
+            HybridRNG mr = new HybridRNG(1111111L, 2222222L, 3333333L, 4444444L);
+            mr.state0 = state0;
+            mr.state1 = state1;
+            mr.mul = mul;
+            mr.inc = inc;
+            return mr;
         }
     }
 
@@ -3415,7 +3454,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("MicroRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("HybridRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 25:
                         mr.setState(ctr);
@@ -3426,7 +3465,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("MicroRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("HybridRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 26:
                         random = new SlapRNG(ctr);
