@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 18, noiseMode = 70;
+    private int hashMode = 43, rngMode = 22, noiseMode = 70;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -132,7 +132,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
     private RandomXS128 gdxRandom;
-    private HybridRNG mr = new HybridRNG(0xFEDCBA987654321L, 0x1234567890L);
+    private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L, 0x1234567890L);
     private long seed;
     private int ctr = 0;
     private boolean keepGoing = true;
@@ -165,48 +165,28 @@ public class HashVisualizer extends ApplicationAdapter {
      * A miniature version of LapRNG that can be quickly copied into a project.
      * Sometimes used here to prototype changes to LapRNG's algorithm.
      */
-    public static class HybridRNG implements RandomnessSource {
-        public long state0, state1, mul = 0x632AE59B69B3C209L, inc = 0x9E3779B97F4A7C15L;
+    public static class MicroRandom implements RandomnessSource {
+        public long state0, state1, inc = 0x9E3779B97F4A7C15L, mul = 0x632AE59B69B3C209L;
 
-        public HybridRNG(long seed0, long seed1) {
+        public MicroRandom(long seed0, long seed1) {
             state0 = seed0 * 0x62E2AC0DL + 0x85157AF5;
             state1 = seed1 * 0x85157AF5L - 0x62E2AC0DL;
-            mul = (0x632AE59B69B3C209L ^ seed1 + state0);
-            if(mul == 0L) mul = 0x632AE59B69B3C209L;
-            inc = (0x9E3779B97F4A7C15L ^ seed0 - state1);
-            if(inc == 0L) inc = 0x9E3779B97F4A7C15L;
-        }
-
-        public HybridRNG(long seed0, long seed1, long seed2, long seed3) {
-            state0 = seed0 * 0x62E2AC0DL + 0x85157AF5;
-            state1 = seed1 * 0x85157AF5L - 0x62E2AC0DL;
-            mul = (0x632AE59B69B3C209L + seed2);
-            if(mul == 0L) mul = 0x632AE59B69B3C209L;
-            inc = (0x9E3779B97F4A7C15L + seed3);
-            if(inc == 0L) inc = 0x9E3779B97F4A7C15L;
         }
 
         public void setState(final long seed)
         {
             state0 = seed * 0x62E2AC0DL + 0x85157AF5;
             state1 = seed * 0x85157AF5L - 0x62E2AC0DL;
-            mul = (0x632AE59B69B3C209L ^ seed - state0);
-            if(mul == 0L) mul = 0x632AE59B69B3C209L;
-            inc = (0x9E3779B97F4A7C15L ^ seed + state1);
-            if(inc == 0L) inc = 0x9E3779B97F4A7C15L;
-
         }
 
+        @Override
         public final long nextLong() {
             //good one
             //return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
-            return (state1 ^= (state0 +=
-                    (inc = inc >>> 1 ^ (-(inc & 1L) & 0xD800000000000000L)) // LFSR, 64-bit
-            ) * (
-                            (mul = (mul >>> 1 ^ (-(mul & 1L) & 0x6000000000000000L))) // LFSR, 63-bit
-                                    << 1 | 1)); // always multiply by odd numbers, top bit of mul is never used
+            return (state1 += ((state0 += inc) >> 24) * mul);
         }
 
+        @Override
         public final int next(final int bits) {
             return (int) (nextLong() >>> (64 - bits));
         }
@@ -220,7 +200,7 @@ public class HashVisualizer extends ApplicationAdapter {
          */
         @Override
         public RandomnessSource copy() {
-            HybridRNG mr = new HybridRNG(1111111L, 2222222L, 3333333L, 4444444L);
+            MicroRandom mr = new MicroRandom(1L, 1L);
             mr.state0 = state0;
             mr.state1 = state1;
             mr.mul = mul;
@@ -656,7 +636,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 5:
                                 mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 28;
+                                rngMode %= 32;
                                 break;
                             case 0:
                                 hashMode++;
@@ -3454,7 +3434,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("HybridRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 25:
                         mr.setState(ctr);
@@ -3465,7 +3445,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("HybridRNG (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 26:
                         random = new SlapRNG(ctr);
@@ -3486,6 +3466,46 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 28:
+                        random = new HordeRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("HordeRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 29:
+                        random = new HordeRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = random.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("HordeRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 30:
+                        random = new HerdRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 31:
+                        random = new HerdRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = random.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
 
                 }
