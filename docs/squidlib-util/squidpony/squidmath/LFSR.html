@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -207,7 +207,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#determineBounded-int-int-">determineBounded</a></span>(int&nbsp;state,
                 int&nbsp;bound)</code>
-<div class="block">Gets the next int using <a href="../../squidpony/squidmath/LFSR.html#determineInt-int-"><code>determineInt(int)</code></a> and bounds it to fit betwee.</div>
+<div class="block">Gets an int using <a href="../../squidpony/squidmath/LFSR.html#determineInt-int-"><code>determineInt(int)</code></a> and bounds it to fit between 0 (inclusive) and bound (exclusive).</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -227,7 +227,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#determineInt-int-">determineInt</a></span>(int&nbsp;state)</code>
-<div class="block">Gets the next int that a different kind of LFSR would produce if its state was <code>state</code>.</div>
+<div class="block">Gets the next number that a different kind of 32-bit LFSR would produce if its state was <code>state</code>.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -237,81 +237,93 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#determinePositiveInt-int-">determinePositiveInt</a></span>(int&nbsp;state)</code>
+<div class="block">Gets the next positive int that a different kind of 31-bit LFSR would produce if its state was <code>state</code>.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#determinePositiveLong-long-">determinePositiveLong</a></span>(long&nbsp;state)</code>
+<div class="block">Gets the next positive long that a different kind of 63-bit LFSR would produce if its state was <code>state</code>.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#getState--">getState</a></span>()</code>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextBoolean--">nextBoolean</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextBytes-byte:A-">nextBytes</a></span>(byte[]&nbsp;bytes)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextDouble--">nextDouble</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextFloat--">nextFloat</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextInt--">nextInt</a></span>()</code>
 <div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextInt-int-">nextInt</a></span>(int&nbsp;bound)</code>
 <div class="block">Exclusive on the upper bound.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextInt-int-int-">nextInt</a></span>(int&nbsp;lower,
        int&nbsp;upper)</code>
 <div class="block">Inclusive lower, exclusive upper.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#nextLong-long-">nextLong</a></span>(long&nbsp;bound)</code>
 <div class="block">Exclusive on the upper bound.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#setState-long-">setState</a></span>(long&nbsp;seed)</code>
 <div class="block">Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LFSR.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -625,14 +637,17 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.186">determine</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.189">determine</a>(long&nbsp;state)</pre>
 <div class="block">Gets the next number that an LFSR would produce using <a href="../../squidpony/squidmath/LFSR.html#nextLong--"><code>nextLong()</code></a> if its state was <code>state</code>.
- Does not allow state to be 0.</div>
+ Does not allow state to be 0. Strongly consider using the result of this and assigning it to state if you expect
+ to call this again, such as with <code>(state = LFSR.determine(state))</code>, which will ensure the long-term
+ properties of an LFSR hold up (such as having a period of ((2 to the 64) minus 1), or the guarantee that every
+ number from 1 to ((2 to the 64) minus 1), inclusive on both, will be generated once per period).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - any long other than 0</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the next long that an LFSR would produce with the given state</dd>
+<dd>the next long that a 64-bit LFSR would produce with the given state</dd>
 </dl>
 </li>
 </ul>
@@ -642,14 +657,18 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determineByte</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.197">determineByte</a>(byte&nbsp;state)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.204">determineByte</a>(byte&nbsp;state)</pre>
 <div class="block">Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was <code>state</code>.
- Does not allow state to be 0. If given all byte values except 0 as arguments, will produce all ints 1-255.</div>
+ Does not allow state to be 0. If given all byte values except 0 as arguments, will produce all ints 1-255.
+ Strongly consider using the result of this and assigning it to state if you expect to call this again, such as
+ with <code>(state = LFSR.determineByte(state))</code>, which will ensure the long-term properties of an LFSR hold up
+ (such as having a period of 255, or the guarantee that every number from 1 to 255, inclusive on both, will be
+ generated once per period).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - any byte other than 0</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the next int between 1 and 255 that an LFSR would produce with the given state</dd>
+<dd>the next int between 1 and 255 that an 8-bit LFSR would produce with the given state</dd>
 </dl>
 </li>
 </ul>
@@ -659,15 +678,66 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determineInt</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.209">determineInt</a>(int&nbsp;state)</pre>
-<div class="block">Gets the next int that a different kind of LFSR would produce if its state was <code>state</code>.
- Does not allow state to be 0, nor will this produce a result of 0 (as long as 0 was not the input). If given all
- int values except 0 as arguments, will produce all non-zero ints.</div>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.219">determineInt</a>(int&nbsp;state)</pre>
+<div class="block">Gets the next number that a different kind of 32-bit LFSR would produce if its state was <code>state</code>.
+ Does not allow state to be 0. If given all int values except 0 as arguments, will produce all ints except 0.
+ Strongly consider using the result of this and assigning it to state if you expect to call this again, such as
+ with <code>(state = LFSR.determineInt(state))</code>, which will ensure the long-term properties of an LFSR hold up
+ (such as having a period of ((2 to the 32) minus 1), or the guarantee that every number from 1 to ((2 to the 32)
+ minus 1), inclusive on both, will be generated once per period).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>state</code> - any int other than 0</dd>
+<dd><code>state</code> - any long other than 0</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the next non-zero int that an LFSR would produce with the given state</dd>
+<dd>the next int that a 32-bit LFSR would produce with the given state</dd>
+</dl>
+</li>
+</ul>
+<a name="determinePositiveLong-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>determinePositiveLong</h4>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.234">determinePositiveLong</a>(long&nbsp;state)</pre>
+<div class="block">Gets the next positive long that a different kind of 63-bit LFSR would produce if its state was <code>state</code>.
+ Does not allow state to be 0 or negative. If given all positive long values (not including 0) as arguments, will
+ produce all longs greater than 0. Strongly consider using the result of this and assigning it to state if you
+ expect to call this again, such as with <code>(state = LFSR.determinePositiveLong(state))</code>, which will ensure
+ the long-term properties of an LFSR hold up (such as having a period of ((2 to the 63) minus 1), or the guarantee
+ that every number from 1 to ((2 to the 63) minus 1), inclusive on both, will be generated once per period).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - any positive long, not including 0</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the next int that a 63-bit LFSR would produce with the given state</dd>
+</dl>
+</li>
+</ul>
+<a name="determinePositiveInt-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>determinePositiveInt</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.255">determinePositiveInt</a>(int&nbsp;state)</pre>
+<div class="block">Gets the next positive int that a different kind of 31-bit LFSR would produce if its state was <code>state</code>.
+ Does not allow state to be 0 or negative. If given all positive int values (not including 0) as arguments, will
+ produce all ints greater than 0. Strongly consider using the result of this and assigning it to state if you
+ expect to call this again, such as with <code>(state = LFSR.determinePositiveInt(state))</code>, which will ensure the
+ long-term properties of an LFSR hold up (such as having a period of ((2 to the 31) minus 1), or the guarantee
+ that every number from 1 to ((2 to the 31) minus 1), inclusive on both, will be generated once per period).
+ <br>
+ A potential benefit of using this particular LFSR type is that the period is a prime number, 2147483647; this can
+ sometimes be relevant if you simultaneously get pseudo-random numbers from sources of randomness with different
+ periods that are "relatively co-prime" (that is, they share no common factors other than 1). This case lengthens
+ the total period of the combined generators significantly, generally multiplying the periods together to get the
+ combined period, as opposed to other cases that may simply add them together.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - any positive int, not including 0</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the next int that a 31-bit LFSR would produce with the given state</dd>
 </dl>
 </li>
 </ul>
@@ -677,13 +747,16 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determineIntSymmetrical</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.226">determineIntSymmetrical</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.276">determineIntSymmetrical</a>(int&nbsp;state)</pre>
 <div class="block">Gets the next int that a different kind of LFSR would produce if its state was <code>state</code>.
  Does not allow state to be <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a>, nor will this produce a result of <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a>
  (as long as <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> was not the input). If given all int values except
  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> as arguments, will produce all ints in the range <code>[-2147483647,2147483647]</code>,
- including 0 but not -2147483648 (the minimum int).
-
+ including 0 but not -2147483648 (the minimum int). Strongly consider using the result of this and assigning it to
+ state if you expect to call this again, such as with <code>(state = LFSR.determineIntSymmetrical(state))</code>, which
+ will ensure the long-term properties of an LFSR hold up (such as having a period of ((2 to the 32) minus 1), or
+ the guarantee that every int except <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> will be generated once per period).
+ <br>
  This is called Symmetrical because it produces the same amount of positive and negative numbers, instead of the
  normal generation of more negative ones (due to how ints are represented, the min value is always further from 0
  than the max value for any signed integer type).</div>
@@ -701,16 +774,18 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.238">determineBounded</a>(long&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.290">determineBounded</a>(long&nbsp;state,
                                    int&nbsp;bound)</pre>
 <div class="block">Gets the next number that an LFSR would produce using <a href="../../squidpony/squidmath/LFSR.html#nextInt-int-"><code>nextInt(int)</code></a> if its state was <code>state</code> and
- <code>bound</code> was passed to nextInt(). Does not allow state to be 0.</div>
+ <code>bound</code> was passed to nextInt(). Does not allow state to be 0, but bound can be negative, which causes this
+ not to produce positive numbers. This method is very predictable and its use is not encouraged; prefer using
+ <a href="../../squidpony/squidmath/LFSR.html#determineBounded-int-int-"><code>determineBounded(int, int)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - any long other than 0</dd>
 <dd><code>bound</code> - the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the next int that an LFSR would produce with the given state and bound</dd>
+<dd>the next value that <a href="../../squidpony/squidmath/LFSR.html#determine-long-"><code>determine(long)</code></a> would produce with the given state, but limited to bound; can return 0</dd>
 </dl>
 </li>
 </ul>
@@ -720,15 +795,16 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.248">determineBounded</a>(int&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LFSR.html#line.301">determineBounded</a>(int&nbsp;state,
                                    int&nbsp;bound)</pre>
-<div class="block">Gets the next int using <a href="../../squidpony/squidmath/LFSR.html#determineInt-int-"><code>determineInt(int)</code></a> and bounds it to fit betwee. Does not allow state to be 0.</div>
+<div class="block">Gets an int using <a href="../../squidpony/squidmath/LFSR.html#determineInt-int-"><code>determineInt(int)</code></a> and bounds it to fit between 0 (inclusive) and bound (exclusive).
+ Does not allow state to be 0, but bound can be negative, which causes this not to produce positive numbers.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - any int other than 0</dd>
 <dd><code>bound</code> - the exclusive bound on the result as an int; does better if the bound is not too high (below 10000?)</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the next int that an LFSR would produce with the given state and bound; can return 0</dd>
+<dd>the next int that <a href="../../squidpony/squidmath/LFSR.html#determineInt-int-"><code>determineInt(int)</code></a> would produce with the given state, but limited to bound; can return 0</dd>
 </dl>
 </li>
 </ul>

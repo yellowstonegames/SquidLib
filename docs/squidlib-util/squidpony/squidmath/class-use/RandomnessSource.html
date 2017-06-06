@@ -133,6 +133,20 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/HerdRNG.html" title="class in squidpony.squidmath">HerdRNG</a></span></code>
+<div class="block">A mix of fast 32-bit-friendly RNGs like FlapRNG with the larger state size of LongPeriodRNG, in the hopes of
+ improving Flap's period without seriously reducing speed.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/HordeRNG.html" title="class in squidpony.squidmath">HordeRNG</a></span></code>
+<div class="block">A mix of something like the fast algorithm of LapRNG with the larger state size of LongPeriodRNG, in the hopes of
+ improving Lap's period without seriously reducing speed.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Isaac32RNG.html" title="class in squidpony.squidmath">Isaac32RNG</a></span></code>
 <div class="block">This is a port of the public domain Isaac (cryptographic) random number generator to Java, by Bob Jenkins.</div>
 </td>
@@ -173,8 +187,8 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a></span></code>
-<div class="block">An RNG that has a drastically longer period than the other generators in SquidLib, other than MersenneTwister,
- without sacrificing speed or HTML target compatibility.</div>
+<div class="block">An RNG that has a drastically longer period than the other generators in Sarong, other than IsaacRNG, without
+ sacrificing speed or HTML target compatibility.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -386,6 +400,20 @@
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Isaac32RNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Isaac32RNG.html#copy--">copy</a></span>()</code>
 <div class="block">Produces another RandomnessSource, but the new one will not produce the same data as this one.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
+<td class="colLast"><span class="typeNameLabel">HordeRNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/HordeRNG.html#copy--">copy</a></span>()</code>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
+<td class="colLast"><span class="typeNameLabel">HerdRNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/HerdRNG.html#copy--">copy</a></span>()</code>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
 </td>
 </tr>
 <tr class="altColor">

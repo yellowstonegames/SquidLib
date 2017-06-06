@@ -1,7 +1,9 @@
 package squidpony.squidmath;
 
-
 import squidpony.StringKit;
+import squidpony.annotation.Beta;
+
+import java.util.Arrays;
 
 /**
  * A mix of something like the fast algorithm of LapRNG with the larger state size of LongPeriodRNG, in the hopes of
@@ -17,12 +19,13 @@ import squidpony.StringKit;
  * though this last possibility is very unlikely.
  * Created by Tommy Ettinger on 6/4/2017.
  */
+@Beta
 public class HordeRNG implements RandomnessSource {
     public final long[] state = new long[16];
     public int choice = 0;
     public HordeRNG() {
         this((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
-                        ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
+                ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
     }
 
     public HordeRNG(final long seed) {
@@ -30,6 +33,30 @@ public class HordeRNG implements RandomnessSource {
             state[i] = LightRNG.determine(seed + i);
         }
         choice = (int) (state[0] ^ seed);
+    }
+
+    public HordeRNG(final long a, final long b, final long c, final long d,
+                    final long e, final long f, final long g, final long h,
+                    final long i, final long j, final long k, final long l,
+                    final long m, final long n, final long o, final long p)
+    {
+        state[0]  = a;
+        state[1]  = b;
+        state[2]  = c;
+        state[3]  = d;
+        state[4]  = e;
+        state[5]  = f;
+        state[6]  = g;
+        state[7]  = h;
+        state[8]  = i;
+        state[9]  = j;
+        state[10] = k;
+        state[11] = l;
+        state[12] = m;
+        state[13] = n;
+        state[14] = o;
+        state[15] = p;
+        choice = (int)(a ^ ~p);
     }
 
     public HordeRNG(final long[] seed) {
@@ -61,7 +88,8 @@ public class HordeRNG implements RandomnessSource {
     }
 
     public final long nextLong() {
-        return (state[choice & 15] += state[(choice += 0xC6BC278D) >>> 28] >>> 1);
+        final int c = (choice += 0x9CBC278D);
+        return (state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B97F4A7C15L);
         // 0x632AE59B69B3C209L
 
         //        + high ^ (0x9E3779B97F4A7C15L * ((high += low & (low += 0xAB79B96DCD7FE75EL)) >> 20))); // thunder
@@ -70,7 +98,8 @@ public class HordeRNG implements RandomnessSource {
     }
 
     public final int nextInt() {
-        return (int)(state[choice & 15] += state[(choice += 0xC6BC278D) >>> 28] >>> 1);
+        final int c = (choice += 0x9CBC278D);
+        return (int)(state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B97F4A7C15L);
         //0x9E3779B97F4A7C15L
         //0xBE377BB97F4A7C17L
         /*
@@ -81,7 +110,8 @@ public class HordeRNG implements RandomnessSource {
     }
 
     public final int next(final int bits) {
-        return (int) ((state[choice & 15] += state[(choice += 0xC6BC278D) >>> 28] >>> 1) >>> (64 - bits));
+        final int c = (choice += 0x9CBC278D);
+        return (int) ((state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B97F4A7C15L) >>> (64 - bits));
     }
 
     /**
@@ -104,5 +134,21 @@ public class HordeRNG implements RandomnessSource {
                 "state=" + StringKit.hex(state) +
                 ", choice=" + choice +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HordeRNG hordeRNG = (HordeRNG) o;
+
+        if (choice != hordeRNG.choice) return false;
+        return Arrays.equals(state, hordeRNG.state);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * choice + CrossHash.Wisp.hash(state);
     }
 }

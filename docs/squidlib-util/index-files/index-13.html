@@ -669,8 +669,8 @@
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">LongPeriodRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
-<div class="block">An RNG that has a drastically longer period than the other generators in SquidLib, other than MersenneTwister,
- without sacrificing speed or HTML target compatibility.</div>
+<div class="block">An RNG that has a drastically longer period than the other generators in Sarong, other than IsaacRNG, without
+ sacrificing speed or HTML target compatibility.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG--">LongPeriodRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a></dt>
 <dd>
@@ -680,8 +680,7 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG-long-">LongPeriodRNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a></dt>
 <dd>
 <div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with many calls to a SplitMix64-based RNG
- with a random seed influenced by Math.random() and also the time (in milliseconds to keep GWT compatibility),
- mixing Math.random() calls in to alter the SplitMix64 state at uneven intervals.</div>
+ using a variant on seed produced by running it through PCG-Random's output step (PermutedRNG here).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG-java.lang.String-">LongPeriodRNG(String)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a></dt>
 <dd>

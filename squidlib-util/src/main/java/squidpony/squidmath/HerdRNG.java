@@ -1,6 +1,9 @@
 package squidpony.squidmath;
 
 import squidpony.StringKit;
+import squidpony.annotation.Beta;
+
+import java.util.Arrays;
 
 /**
  * A mix of fast 32-bit-friendly RNGs like FlapRNG with the larger state size of LongPeriodRNG, in the hopes of
@@ -15,6 +18,7 @@ import squidpony.StringKit;
  * 256), and potentially as high as (2 to the 512), though this last possibility is very unlikely.
  * Created by Tommy Ettinger on 6/5/2017.
  */
+@Beta
 public class HerdRNG implements RandomnessSource {
     public final int[] state = new int[16];
     public int choice = 0;
@@ -24,6 +28,30 @@ public class HerdRNG implements RandomnessSource {
 
     public HerdRNG(final int seed) {
         setState(seed);
+    }
+
+    public HerdRNG(final int a, final int b, final int c, final int d,
+                   final int e, final int f, final int g, final int h,
+                   final int i, final int j, final int k, final int l,
+                   final int m, final int n, final int o, final int p)
+    {
+        state[0]  = a;
+        state[1]  = b;
+        state[2]  = c;
+        state[3]  = d;
+        state[4]  = e;
+        state[5]  = f;
+        state[6]  = g;
+        state[7]  = h;
+        state[8]  = i;
+        state[9]  = j;
+        state[10] = k;
+        state[11] = l;
+        state[12] = m;
+        state[13] = n;
+        state[14] = o;
+        state[15] = p;
+        choice = a ^ ~p;
     }
 
     public HerdRNG(final int[] seed) {
@@ -55,8 +83,9 @@ public class HerdRNG implements RandomnessSource {
     }
 
     public final long nextLong() {
-        return (state[choice & 15] += state[(choice += 0xC6BC278D) >>> 28] >>> 1)
-                * 0xC6AC279692B5CC53L ^ state[choice >>> 26 & 15];
+        final int c = (choice += 0x9CBC278D);
+        return (state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B9)
+                * 0xC6AC279692B5CC53L ^ state[c >>> 26 & 15];
         // 0x632AE59B69B3C209L
 
         //        + high ^ (0x9E3779B97F4A7C15L * ((high += low & (low += 0xAB79B96DCD7FE75EL)) >> 20))); // thunder
@@ -65,7 +94,8 @@ public class HerdRNG implements RandomnessSource {
     }
 
     public final int nextInt() {
-        return (state[choice & 15] += state[(choice += 0xC6BC278D) >>> 28] >>> 1);
+        final int c = (choice += 0x9CBC278D);
+        return (state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B9);
         //0xBE377BB97F4A7C17L
         /*
         return (int) ((state1 += (state0 += 0x632AE59B69B3C209L) * 0x9E3779B97F4A7C15L)
@@ -75,7 +105,8 @@ public class HerdRNG implements RandomnessSource {
     }
 
     public final int next(final int bits) {
-        return ((state[choice & 15] += state[(choice += 0xC6BC278D) >>> 28] >>> 1) >>> (32 - bits)); //0x9E3779B9
+        final int c = (choice += 0x9CBC278D);
+        return ((state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B9) >>> (32 - bits)); //0x9E3779B9
     }
 
     /**
@@ -98,5 +129,19 @@ public class HerdRNG implements RandomnessSource {
                 "state=" + StringKit.hex(state) +
                 ", choice=" + choice +
                 '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HerdRNG herdRNG = (HerdRNG) o;
+
+        return choice == herdRNG.choice && Arrays.equals(state, herdRNG.state);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * choice + CrossHash.Wisp.hash(state);
     }
 }

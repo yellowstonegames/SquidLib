@@ -483,7 +483,9 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutedRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath">PermutedRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#determine-int-">determine(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Gets a pseudo-random int that is a permutation of <code>state</code>, which is an int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#determine-int-int-">determine(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#determine-int-">determine(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
@@ -520,7 +522,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineBounded-int-int-">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>
-<div class="block">Gets the next int using <a href="../squidpony/squidmath/LFSR.html#determineInt-int-"><code>LFSR.determineInt(int)</code></a> and bounds it to fit betwee.</div>
+<div class="block">Gets an int using <a href="../squidpony/squidmath/LFSR.html#determineInt-int-"><code>LFSR.determineInt(int)</code></a> and bounds it to fit between 0 (inclusive) and bound (exclusive).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>&nbsp;</dd>
@@ -542,7 +544,7 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineInt-int-">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>
-<div class="block">Gets the next int that a different kind of LFSR would produce if its state was <code>state</code>.</div>
+<div class="block">Gets the next number that a different kind of 32-bit LFSR would produce if its state was <code>state</code>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineIntSymmetrical-int-">determineIntSymmetrical(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>
@@ -553,6 +555,14 @@
 <div class="block">Chooses one sequence from the van der Corput sequences with bases 2, 3, and 5, where 5 is used 1/8 of the time,
  3 is used 3/8 of the time, and 2 is used 1/2 of the time, and returns a double from the chosen sequence at the
  specified <code>index</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determinePositiveInt-int-">determinePositiveInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next positive int that a different kind of 31-bit LFSR would produce if its state was <code>state</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determinePositiveLong-long-">determinePositiveLong(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
+<dd>
+<div class="block">Gets the next positive long that a different kind of 63-bit LFSR would produce if its state was <code>state</code>.</div>
 </dd>
 <dt><a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">DharmaRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
@@ -707,12 +717,18 @@
  Uses a "checkerboard" pattern to determine which cells to turn  off, with all cells that would be black on a
  checkerboard turned off and all others kept as-is.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#disperse-int-">disperse(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/PintRNG.html#determine-int-"><code>PintRNG.determine(int)</code></a>, gets a pseudo-random int that is a permutation of <code>state</code>, which is an int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperse8way--">disperse8way()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Removes "on" cells that are 8-way adjacent to other "on" cells, keeping at least one cell in a group "on."
  Uses a "grid-like" pattern to determine which cells to turn off, with all cells with even x and even y kept as-is
  but all other cells (with either or both odd x or odd y) turned off.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#disperseBounded-int-int-">disperseBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperseRandom-squidpony.squidmath.RNG-">disperseRandom(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
 <div class="block">Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
