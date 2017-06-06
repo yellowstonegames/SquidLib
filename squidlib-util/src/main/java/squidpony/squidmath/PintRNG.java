@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import squidpony.StringKit;
-import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
@@ -24,7 +23,6 @@ import java.io.Serializable;
  * Based on work by Melissa E. O'Neill for PCG-Random, though no code is actually shared with PCG-Random.
  * Created by Tommy Ettinger on 11/15/2016.
  */
-@Beta
 public class PintRNG implements RandomnessSource, StatefulRandomness, Serializable {
 
     /** 2 raised to the 53, - 1. */
@@ -249,8 +247,36 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
         p ^= p >>> (4 + (p >>> 28));
         return ((p *= 277803737) >>> 22) ^ p;
     }
+
+    /**
+     * Gets a pseudo-random int that is a permutation of {@code state}, which is an int.
+     * This should normally be called with a technique like {@code PintRNG.determine(state += 0x9E3779B9)}, where
+     * successive calls receive highly-separated state parameters; 0x9E3779B9 can be any odd-number int but should
+     * usually be very large (at least 4 non-zero hex digits is a good gauge). If you need to more-thoroughly randomize
+     * inputs that may be not-highly-separated, such as sequential ints, then you should use {@link #disperse(int)}.
+     * @param state any int
+     * @return any int, pseudo-randomly obtained from state
+     */
     public static int determine(int state)
     {
+        state ^= state >>> (4 + (state >>> 28));
+        return ((state *= 277803737) >>> 22) ^ state;
+    }
+
+    /**
+     * Like {@link #determine(int)}, gets a pseudo-random int that is a permutation of {@code state}, which is an int.
+     * Unlike determine(), this static method performs an extra step to avoid correlation between similar inputs, such
+     * as 4, 5, and 6, and their outputs. If you already give very distant numbers as subsequent inputs to determine(),
+     * then you should continue to use that method unless you discover issues with correlation; otherwise it's not a bad
+     * idea to default to this method, though it is somewhat slower than determine(). This method is safe to use with
+     * sequential ints, so you can call it with the technique {@code PintRNG.disperse(++state)}, or just use it on int
+     * data as you obtain it to randomize its values.
+     * @param state any int
+     * @return any int, pseudo-randomly obtained from state
+     */
+    public static int disperse(int state)
+    {
+        state = (state ^= 0xD0E89D2D) >>> 19 | state << 13;
         state ^= state >>> (4 + (state >>> 28));
         return ((state *= 277803737) >>> 22) ^ state;
     }
@@ -263,6 +289,12 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
 
     public static int determineBounded(int state, final int bound)
     {
+        state ^= state >>> (4 + (state >>> 28));
+        return (int)((bound * ((((state *= 277803737) >>> 22) ^ state) & 0x7FFFFFFFL)) >>> 31);
+    }
+    public static int disperseBounded(int state, final int bound)
+    {
+        state = (state ^= 0xD0E89D2D) >>> 19 | state << 13;
         state ^= state >>> (4 + (state >>> 28));
         return (int)((bound * ((((state *= 277803737) >>> 22) ^ state) & 0x7FFFFFFFL)) >>> 31);
     }
