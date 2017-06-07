@@ -636,7 +636,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 5:
                                 mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 32;
+                                rngMode %= 34;
                                 break;
                             case 0:
                                 hashMode++;
@@ -3384,7 +3384,6 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 20:
-                        //random = new LapRNG(ctr * 0x9E3779B9L + 0x7F4A7C15L, ctr * (ctr + 0x9E3779B9L) + 0x7F4A7C15L);
                         random = new LapRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3395,7 +3394,6 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 21:
-                        // * 0x9E3779B9L + 0x7F4A7C15L, ctr * 0x9E3779B9L + 0x7F4A7C15L
                         random = new LapRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3506,6 +3504,26 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 32:
+                        random = new ZapRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 33:
+                        random = new ZapRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = random.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
 
                 }

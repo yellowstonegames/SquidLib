@@ -6,25 +6,24 @@ import squidpony.annotation.Beta;
 import java.io.Serializable;
 
 /**
- * Like FlapRNG, this sacrifices quality for speed, but it uses 64-bit math and as such has a larger period (FlapRNG
- * will repeat the cycle of random numbers it produces after about 8 billion numbers, while this will only repeat after
- * many more, probably 2 to the 65). As such, LapRNG is like FlapRNG but can generate for a longer period of time (more
- * laps) without repeating, and in some cases (mainly generating 64-bit values) at even higher speed. It is currently
- * the fastest RandomnessSource in this library at generating 64-bit longs, which is most of what {@link RNG} uses, and
- * is second-fastest at generating 32-bit ints, with FlapRNG just slightly faster at that. While the period must be at
- * least 2 to the 64, it is likely that it is actually 2 to the 65.
+ * A variant on LapRNG that improves the quality at the expense of some speed. Running ZapRNG through PractRand, a tool
+ * for evaluating the statistical quality of PRNGs, found far, far fewer statistical failures than LapRNG, and also had
+ * them generally be less severe. The period is still relatively low, at (with a high degree of certainty) 2 to the 65,
+ * but the speed is still fairly good; approximately the same as or slightly faster than ThunderRNG (generally within
+ * 1% difference, and definitely within the margin of error), faster than LightRNG all around, slower than LapRNG for
+ * all methods, and slower than FlapRNG on next() and nextInt() but not on nextLong(). Like LapRNG, there should be many
+ * possible sequences of length (2 to the 65) this can produce, depending on the relationship between the two longs used
+ * for state, determined at construction or when the seed is set.
  * <br>
  * Created by Tommy Ettinger on 5/25/2017.
- * @see FlapRNG FlapRNG is similar in goal to LapRNG but is implemented using int math, ideal for GWT or 32-bit OSes
- * @see ZapRNG ZapRNG is based on LapRNG, and is somewhat slower but has better quality with the same period
  */
 @Beta
-public class LapRNG implements RandomnessSource, Serializable {
+public class ZapRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * Constructs a LapRNG with a random internal state, using {@link Math#random()} four times to get enough bits.
+     * Constructs a ZapRNG with a random internal state, using {@link Math#random()} four times to get enough bits.
      */
-    public LapRNG(){
+    public ZapRNG(){
         this((long)((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
                         ^ (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000000L),
                 (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
@@ -37,7 +36,7 @@ public class LapRNG implements RandomnessSource, Serializable {
      * ends up using with {@link #getState0()} and {@link #getState1()}.
      * @param seed any long; will not be used verbatim for either internal state
      */
-    public LapRNG(final long seed) {
+    public ZapRNG(final long seed) {
         state0 = seed * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
         state1 = seed * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
     }
@@ -47,60 +46,58 @@ public class LapRNG implements RandomnessSource, Serializable {
      * ends up using with {@link #getState0()} and {@link #getState1()}.
      * @param seed any int; will not be used verbatim for either internal state
      */
-    public LapRNG(final int seed) {
+    public ZapRNG(final int seed) {
         state0 = seed * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
         state1 = seed * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
     }
 
     /**
-     * The only constructor that does not modify its seeds in some way; you should ensure seed0 is large enough (at
-     * least 25 bits should be needed to represent it, so greater than 33554432 or less than -33554433). If seed0 is too
-     * small, then this will appear highly repetitive for many cycles before changing its output pattern.
-     * @param seed0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
+     * The only constructor that does not modify its seeds in some way.
+     * @param seed0 any long
      * @param seed1 any long
      */
-    public LapRNG(final long seed0, final long seed1) {
+    public ZapRNG(final long seed0, final long seed1) {
         state0 = seed0;
         state1 = seed1;
     }
 
     /**
-     * This constructor takes ints for seeds, but internally LapRNG uses longs, so it multiplies each input by a large
+     * This constructor takes ints for seeds, but internally ZapRNG uses longs, so it multiplies each input by a large
      * constant and adds another to get the state it actually will start with. You can obtain the state that this ends
      * up using with {@link #getState0()} and {@link #getState1()}.
      * @param seed0 any int, will not be used verbatim
      * @param seed1 any int, will not be used verbatim
      */
-    public LapRNG(final int seed0, final int seed1) {
+    public ZapRNG(final int seed0, final int seed1) {
         state0 = seed0 * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
         state1 = seed1 * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
     }
+
     /**
-     * This constructor takes 3 ints for seeds, but internally LapRNG uses 2 longs (one, state0, only considers its
-     * upper 48 bits significant and has closely correlated results if inputs don't differ on significant bits). To
-     * ensure the state works fairly well, this uses seed0 to affect the upper 48 bits of state0 (this also uses the
-     * product of seed1 and seed2), while employing all 3 seed parameters again to set state1 (but these can affect all
-     * 64 bits of state1). Note that only 96 bits of parameter are supplied here to set 128 bits of state, which is all
-     * right in this case because LapRNG only has a period of 2 to the 65. Anything more than 65 bits of state isn't
-     * strictly necessary, though giving more should allow different, non-overlapping sequences to be produced.
+     * This constructor takes 3 ints for seeds, but internally ZapRNG uses 2 longs, so it mixes the parameters around
+     * to fill out 128 bits worth of state. This is mainly provided for compatibility with LapRNG, which works better
+     * with a constructor that is guaranteed to have many of the bits set in places that it treats as important, but
+     * this behavior isn't needed here, so this acts much like the other constructors and just uses seed2 as an extra
+     * modifying factor when setting the state.
      * You can obtain the state that this ends up using with {@link #getState0()} and {@link #getState1()}.
      * @param seed0 any int, will not be used verbatim
      * @param seed1 any int, will not be used verbatim
      * @param seed2 any int, will not be used verbatim
      */
-    public LapRNG(final int seed0, final int seed1, final int seed2) {
-        state0 = (seed0 * 0xBFL + seed1 * seed2 << 24) ^ 0x8329C6EB9E6AD3E3L;
+    public ZapRNG(final int seed0, final int seed1, final int seed2) {
+        state0 = (seed0 * 0xC6BC279692B5C483L ^ seed1 + 0x9E3779B97F4A7C15L) - seed2 * 0x8329C6EB9E6AD3E3L;
         state1 = (seed1 * 0x8329C6EB9E6AD3E3L ^ seed2 - 0xC6BC279692B5C483L) + seed0 * 0x9E3779B97F4A7C15L;
     }
 
     /**
-     * This constructor gets a 64-bit hash code from the given String or other CharSequence and gives it to the
-     * constructor that takes one long, {@link #LapRNG(long)}.
+     * This constructor gets a pair of differently-calculated 64-bit hash codes from the given String or other
+     * CharSequence and gives them to the constructor that takes two longs, {@link #ZapRNG(long, long)}. You can pass a
+     * null seed and this will still work.
      * @param seed any CharSequence, such as a String
      */
-    public LapRNG(final CharSequence seed)
+    public ZapRNG(final CharSequence seed)
     {
-        this(CrossHash.Wisp.hash64(seed));
+        this(CrossHash.Mist.alpha.hash64(seed) ^ 0xC6BC279692B5C483L, CrossHash.Mist.beta.hash64(seed));
     }
 
     private long state0, state1;
@@ -114,7 +111,7 @@ public class LapRNG implements RandomnessSource, Serializable {
      */
     @Override
     public final int next( final int bits ) {
-        return (int) ((state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L) >>> (64 - bits));
+        return (int) (((state0 | 0xC6BC279692B5CC83L) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24)) >>> (64 - bits));
     }
 
     /**
@@ -124,16 +121,15 @@ public class LapRNG implements RandomnessSource, Serializable {
      */
     public final int nextInt()
     {
-        return (int) (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
+        return (int) ((state0 | 0xC6BC279692B5CC83L) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24));
     }
     /**
      * Using this method, any algorithm that needs to efficiently generate more
      * than 32 bits of random data can interface with this randomness source.
      * This implementation is the primary one, and {@link #nextInt()} and {@link #next(int)} just use some portion of
-     * the bits this produces. It should be very, very fast on most desktops, with lower speed relative to its closest
-     * competitor ({@link FlapRNG}) on 32-bit operating systems or 32-bit JREs or JDKs, and possibly lower speed on
-     * mobile devices as well, but at the time of writing LapRNG is the fastest source SquidLib has of pseudo-random
-     * long values.
+     * the bits this produces. It should be fairly fast on desktops, with good-not-great quality, unlike alternatives
+     * such as LapRNG, which is extremely fast but has low quality when inspected enough, and LightRNG, which the
+     * fastest of the "Made by an Expert" RandomnessSources and has superior quality but is somewhat slower.
      * <p>
      * Pseudo-random results may be between between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).
      *
@@ -142,10 +138,13 @@ public class LapRNG implements RandomnessSource, Serializable {
     @Override
     public final long nextLong() {
         //return (state1 += state0 ^ (state0 += 0xD43779B97F4A7C13L) >> 24);
-        return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
+        return ((state0 | 0xC6BC279692B5CC83L) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24));
 
         //return (state0 += (((state1 += 0xC6BC279692B5C483L) >>> 59) + 124) * 0x632AE59B79B4E319L);
         //0x9E3779B97F4A7C15L
+        //0xBF58476D1CE4E5B9L
+        //0x632AE59B69B3C209L
+        //0xE32AF556CBA5E739L
     }
 
     /**
@@ -157,7 +156,7 @@ public class LapRNG implements RandomnessSource, Serializable {
      */
     @Override
     public RandomnessSource copy() {
-        return new LapRNG(state0, state1);
+        return new ZapRNG(state0, state1);
     }
 
     /**
@@ -194,6 +193,16 @@ public class LapRNG implements RandomnessSource, Serializable {
         this.state1 = state1;
     }
 
+    public void setState(final long seed)
+    {
+        state0 = seed * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
+        state1 = seed * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
+    }
+    public void setState(final long seed0, final long seed1) {
+        state0 = seed0 * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
+        state1 = seed1 * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
+    }
+
     /**
      * @param state0 any long
      * @param state1 any long
@@ -226,7 +235,7 @@ public class LapRNG implements RandomnessSource, Serializable {
 
     @Override
     public String toString() {
-        return "LapRNG with state0 0x" + StringKit.hex(state0) + ", state1 0x" + StringKit.hex(state1);
+        return "ZapRNG with state0 0x" + StringKit.hex(state0) + ", state1 0x" + StringKit.hex(state1);
     }
 
     @Override
@@ -240,9 +249,9 @@ public class LapRNG implements RandomnessSource, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LapRNG lapRNG = (LapRNG) o;
+        ZapRNG zapRNG = (ZapRNG) o;
 
-        if (state0 != lapRNG.state0) return false;
-        return state1 == lapRNG.state1;
+        if (state0 != zapRNG.state0) return false;
+        return state1 == zapRNG.state1;
     }
 }
