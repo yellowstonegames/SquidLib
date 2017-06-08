@@ -9,26 +9,26 @@ import java.io.Serializable;
  * A variant on LapRNG that improves the quality at the expense of some speed. Running ZapRNG through PractRand, a tool
  * for evaluating the statistical quality of PRNGs, found far, far fewer statistical failures than LapRNG, and also had
  * them generally be less severe. The period is still relatively low, at (with a high degree of certainty) 2 to the 65,
- * but the speed is still fairly good; approximately the same as or slightly faster than ThunderRNG (generally within
- * 1% difference, and definitely within the margin of error), faster than LightRNG all around, slower than LapRNG for
- * all methods, and slower than FlapRNG on next() and nextInt() but not on nextLong(). Like LapRNG, there should be many
- * possible sequences of length (2 to the 65) this can produce, depending on the relationship between the two longs used
- * for state, determined at construction or when the seed is set.
+ * but the speed is still fairly good; slightly faster than ThunderRNG (an earlier version was within 1% difference, but
+ * subsequent changes sped up Zap by about 5-10%), faster than LightRNG all around, slower than LapRNG for all methods,
+ * and slower than FlapRNG on next() and nextInt() but not on nextLong(). Like LapRNG, there should be many possible
+ * sequences of length (2 to the 65) this can produce, depending on the relationship between the two longs used for
+ * state, determined at construction or when the seed is set.
  * <br>
- * Created by Tommy Ettinger on 5/25/2017.
+ * Created by Tommy Ettinger on 6/7/2017.
  */
 @Beta
 public class ZapRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * Constructs a ZapRNG with a random internal state, using {@link Math#random()} four times to get enough bits.
+     * Constructs a ZapRNG with a random internal state, using {@link Math#random()} three times to get enough bits.
      */
     public ZapRNG(){
-        this((long)((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
-                        ^ (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000000L),
-                (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
-                        ^ (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
+        this((int)((Math.random() * 2.0 - 1.0) * 0x80000000),
+                (int)((Math.random() * 2.0 - 1.0) * 0x80000000),
+                (int)((Math.random() * 2.0 - 1.0) * 0x80000000));
     }
+
 
     /**
      * Given one long for a seed, this fills the two internal longs of state with different values, each produced by
@@ -52,8 +52,10 @@ public class ZapRNG implements RandomnessSource, Serializable {
     }
 
     /**
-     * The only constructor that does not modify its seeds in some way.
-     * @param seed0 any long
+     * The only constructor that does not modify its seeds in some way; you should ensure seed0 is large enough (at
+     * least 25 bits should be needed to represent it, so greater than 33554432 or less than -33554433). If seed0 is too
+     * small, then this will appear highly repetitive for many cycles before changing its output pattern.
+     * @param seed0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
      * @param seed1 any long
      */
     public ZapRNG(final long seed0, final long seed1) {
@@ -74,30 +76,32 @@ public class ZapRNG implements RandomnessSource, Serializable {
     }
 
     /**
-     * This constructor takes 3 ints for seeds, but internally ZapRNG uses 2 longs, so it mixes the parameters around
-     * to fill out 128 bits worth of state. This is mainly provided for compatibility with LapRNG, which works better
-     * with a constructor that is guaranteed to have many of the bits set in places that it treats as important, but
-     * this behavior isn't needed here, so this acts much like the other constructors and just uses seed2 as an extra
-     * modifying factor when setting the state.
+     * This constructor takes 3 ints for seeds, but internally ZapRNG uses 2 longs (one, state0, only considers its
+     * upper 48 bits significant and has closely correlated results if inputs don't differ on significant bits). To
+     * ensure the state works fairly well, this uses seed0 to affect the upper 48 bits of state0 (this also uses the
+     * product of seed1 and seed2), while employing all 3 seed parameters again to set state1 (but these can affect all
+     * 64 bits of state1). Note that only 96 bits of parameter are supplied here to set 128 bits of state, which is all
+     * right in this case because ZapRNG only has a period of 2 to the 65. Anything more than 65 bits of state isn't
+     * strictly necessary, though giving more should allow different, non-overlapping sequences to be produced.
      * You can obtain the state that this ends up using with {@link #getState0()} and {@link #getState1()}.
      * @param seed0 any int, will not be used verbatim
      * @param seed1 any int, will not be used verbatim
      * @param seed2 any int, will not be used verbatim
      */
     public ZapRNG(final int seed0, final int seed1, final int seed2) {
-        state0 = (seed0 * 0xC6BC279692B5C483L ^ seed1 + 0x9E3779B97F4A7C15L) - seed2 * 0x8329C6EB9E6AD3E3L;
+        state0 = (seed0 * 0xBFL + seed1 * 0x1FL * seed2 << 24) ^ 0x8329C6EB9E6AD3E3L;
         state1 = (seed1 * 0x8329C6EB9E6AD3E3L ^ seed2 - 0xC6BC279692B5C483L) + seed0 * 0x9E3779B97F4A7C15L;
     }
 
     /**
-     * This constructor gets a pair of differently-calculated 64-bit hash codes from the given String or other
-     * CharSequence and gives them to the constructor that takes two longs, {@link #ZapRNG(long, long)}. You can pass a
-     * null seed and this will still work.
+     * This constructor gets three differently-calculated 32-bit hash codes from the given String or other
+     * CharSequence and gives them to the constructor that takes three ints, {@link #ZapRNG(int, int, int)}. You can
+     * pass a null seed and this will still work.
      * @param seed any CharSequence, such as a String
      */
     public ZapRNG(final CharSequence seed)
     {
-        this(CrossHash.Mist.alpha.hash64(seed) ^ 0xC6BC279692B5C483L, CrossHash.Mist.beta.hash64(seed));
+        this(CrossHash.Mist.alpha.hash(seed), CrossHash.Mist.beta.hash(seed), CrossHash.Mist.gamma.hash(seed));
     }
 
     private long state0, state1;
@@ -111,7 +115,7 @@ public class ZapRNG implements RandomnessSource, Serializable {
      */
     @Override
     public final int next( final int bits ) {
-        return (int) (((state0 | 0xC6BC279692B5CC83L) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24)) >>> (64 - bits));
+        return (int) (((state1 | 0xC6BC279692B5DBEFL) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24)) >>> (64 - bits));
     }
 
     /**
@@ -121,7 +125,7 @@ public class ZapRNG implements RandomnessSource, Serializable {
      */
     public final int nextInt()
     {
-        return (int) ((state0 | 0xC6BC279692B5CC83L) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24));
+        return (int) ((state1 | 0xC6BC279692B5DBEFL) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24));
     }
     /**
      * Using this method, any algorithm that needs to efficiently generate more
@@ -138,7 +142,7 @@ public class ZapRNG implements RandomnessSource, Serializable {
     @Override
     public final long nextLong() {
         //return (state1 += state0 ^ (state0 += 0xD43779B97F4A7C13L) >> 24);
-        return ((state0 | 0xC6BC279692B5CC83L) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24));
+        return ((state1 | 0xC6BC279692B5DBEFL) * (state1 += (state0 += 0x9E3779B97F4A7C15L) >>> 24));
 
         //return (state0 += (((state1 += 0xC6BC279692B5C483L) >>> 59) + 124) * 0x632AE59B79B4E319L);
         //0x9E3779B97F4A7C15L
@@ -193,45 +197,95 @@ public class ZapRNG implements RandomnessSource, Serializable {
         this.state1 = state1;
     }
 
+    /**
+     * Sets both state variables using one long seed, using the same code as {@link #ZapRNG(long)}.
+     * @param seed any long
+     */
     public void setState(final long seed)
     {
         state0 = seed * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
         state1 = seed * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
     }
-    public void setState(final long seed0, final long seed1) {
+
+    /**
+     * Sets both state variables using one int seed, using the same code as {@link #ZapRNG(int)}.
+     * @param seed any int
+     */
+    public void setState(final int seed)
+    {
+        state0 = seed * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
+        state1 = seed * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
+    }
+    /**
+     * Sets both state variables using two int seeds, using the same code as {@link #ZapRNG(int, int)}.
+     * @param seed0 any int
+     * @param seed1 any int
+     */
+    public void setState(final int seed0, final int seed1) {
         state0 = seed0 * 0xC6BC279692B5C483L + 0x8329C6EB9E6AD3E3L;
         state1 = seed1 * 0x8329C6EB9E6AD3E3L - 0xC6BC279692B5C483L;
     }
 
+    public void setState(final long seed0, final long seed1) {
+        state0 = seed0;
+        state1 = seed1;
+    }
+
+    public void setState(final int seed0, final int seed1, final int seed2) {
+        state0 = (seed0 * 0xBFL + seed1 * 0x1FL * seed2 << 24) ^ 0x8329C6EB9E6AD3E3L;
+        state1 = (seed1 * 0x8329C6EB9E6AD3E3L ^ seed2 - 0xC6BC279692B5C483L) + seed0 * 0x9E3779B97F4A7C15L;
+    }
+
+
     /**
-     * @param state0 any long
+     * Gets a seemingly-random value from two inputs as longs. If you expect to call this method repeatedly, consider
+     * using the technique {@code (state1 ^= ZapRNG.determine((state0 += 0x9E3779B97F4A7C15L), state1))}, which will
+     * update each call to use different values for state0 and state1 (it may be surprising that it is an expression
+     * that returns the value of state1 after assignment, so the parenthesized expression can be substituted for the
+     * method call on its own). You may want to experiment with using {@code +=} or {@code -=} instead of {@code ^=} in
+     * the given code, which will affect the results quite a bit. Like with the ZapRNG constructor that takes two longs,
+     * state0 should be a fairly large number, either greater than 33554432 or less than -33554433; if it isn't, then
+     * similar state0 inputs will produce very similar results.
+     * @param state0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
      * @param state1 any long
      * @return any long, from the full range
      */
     public static long determine(final long state0, final long state1)
     {
-        return (state1 + ((state0 * 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
+        return ((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 + 0x9E3779B97F4A7C15L) >>> 24));
     }
     /**
-     * @param state0 any long
+     * Gets a seemingly-random double from two inputs as longs. If you expect to call this method repeatedly, consider
+     * using the technique {@code ZapRNG.randomDouble((state0 += 0x9E3779B97F4A7C15L), (state1 += state0 >>> 1))}, which
+     * will update each call to use different values for state0 and state1, with state1 depending on state0. Like with
+     * the ZapRNG constructor that takes two longs, state0 should be a fairly large number, either greater than 33554432
+     * or less than -33554433; if it isn't, then similar state0 inputs will produce very similar results.
+     * @param state0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
      * @param state1 any long
      * @return a pseudo-random double from 0.0 (inclusive) to 1.0 (exclusive)
      */
     public static double randomDouble(final long state0, final long state1)
     {
-        return NumberTools.longBitsToDouble(((state1 + ((state0 * 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L)
+        return NumberTools.longBitsToDouble((((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 + 0x9E3779B97F4A7C15L) >>> 24))
                 >>> 12) | 0x3ff00000) - 1f;
     }
 
     /**
-     * @param state0 any long
+     * Gets a seemingly-random double between -1.0 and 1.0 from two inputs as longs. If you expect to call this method
+     * repeatedly, consider using the technique
+     * {@code ZapRNG.randomSignedDouble((state0 += 0x9E3779B97F4A7C15L), (state1 += state0 >>> 1))}, which will update
+     * each call to use different values for state0 and state1, with state1 depending on state0. Like with the ZapRNG
+     * constructor that takes two longs, state0 should be a fairly large number, either greater than 33554432 or less
+     * than -33554433; if it isn't, then similar state0 inputs will produce very similar results.
+     * @param state0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
      * @param state1 any long
      * @return a pseudo-random double from -1.0 (inclusive) to 1.0 (exclusive)
      */
     public static double randomSignedDouble(final long state0, final long state1) {
-        return NumberTools.longBitsToDouble(((state1 + ((state0 * 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L)
+        return NumberTools.longBitsToDouble((((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 + 0x9E3779B97F4A7C15L) >>> 24))
                 >>> 12) | 0x40000000) - 3.0;
     }
+
 
     @Override
     public String toString() {
@@ -251,7 +305,6 @@ public class ZapRNG implements RandomnessSource, Serializable {
 
         ZapRNG zapRNG = (ZapRNG) o;
 
-        if (state0 != zapRNG.state0) return false;
-        return state1 == zapRNG.state1;
+        return state0 == zapRNG.state0 && state1 == zapRNG.state1;
     }
 }
