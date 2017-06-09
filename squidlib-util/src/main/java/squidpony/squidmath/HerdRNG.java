@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.StringKit;
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -19,7 +20,8 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 6/5/2017.
  */
 @Beta
-public class HerdRNG implements RandomnessSource {
+public class HerdRNG implements RandomnessSource, Serializable {
+    private static final long serialVersionUID = 1L;
     public final int[] state = new int[16];
     public int choice = 0;
     public HerdRNG() {
@@ -51,41 +53,51 @@ public class HerdRNG implements RandomnessSource {
         state[13] = n;
         state[14] = o;
         state[15] = p;
-        choice = a ^ ~p;
+        choice = a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p;
     }
 
     public HerdRNG(final int[] seed) {
         int len;
         if (seed == null || (len = seed.length) == 0) {
             for (int i = 0; i < 16; i++) {
-                state[i] = PintRNG.determine(0x632D978F + i * 0x9E3779B9);
+                choice += (state[i] = PintRNG.determine(0x632D978F + i * 0x9E3779B9));
             }
-            choice = state[0];
         } else if (len < 16) {
             for (int i = 0, s = 0; i < 16; i++, s++) {
                 if(s == len) s = 0;
-                state[i] ^= seed[s];
+                choice += (state[i] ^= seed[s]);
             }
-            choice = state[0] * len;
         } else {
             for (int i = 0, s = 0; s < len; s++, i = (i + 1) & 15) {
-                state[i] ^= seed[s];
+                choice += (state[i] ^= seed[s]);
             }
-            choice = state[0] * len;
+        }
+    }
+
+    /**
+     * Uses the given String or other CharSequence as the basis for the 16 ints this uses as state, assigning choice to
+     * be the sum of the rest of state.
+     * Internally, this gets a 32-bit hash for seed with 16 different variations on the {@link CrossHash.Mist} hashing
+     * algorithm, and uses one for each int in state. This tolerates null and empty-String values for seed.
+     * @param seed a String or other CharSequence; may be null
+     */
+    public HerdRNG(final CharSequence seed)
+    {
+        for (int i = 0; i < 16; i++) {
+            choice += (state[i] = CrossHash.Mist.predefined[i].hash(seed));
         }
     }
 
     public void setState(final int seed) {
+        choice = 0;
         for (int i = 0; i < 16; i++) {
-            state[i] = PintRNG.determine(seed + i * 0x9E3779B9);
+            choice += (state[i] = PintRNG.determine(seed + i * 0x9E3779B9));
         }
-        choice = state[0] ^ seed;
     }
 
     public final long nextLong() {
-        final int c = (choice += 0x9CBC278D);
-        return (state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B9)
-                * 0xC6AC279692B5CC53L ^ state[c >>> 26 & 15];
+        return (state[(choice += 0x9CBC276D) & 15] += (state[choice >>> 28] + 0xBA3779D9 >>> 1))
+                * 0x632AE59B69B3C209L - choice;
         // 0x632AE59B69B3C209L
 
         //        + high ^ (0x9E3779B97F4A7C15L * ((high += low & (low += 0xAB79B96DCD7FE75EL)) >> 20))); // thunder
@@ -94,8 +106,8 @@ public class HerdRNG implements RandomnessSource {
     }
 
     public final int nextInt() {
-        final int c = (choice += 0x9CBC278D);
-        return (state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B9);
+        //final int c = (choice += 0x9CBC278D);
+        return (state[(choice += 0x9CBC276D) & 15] += (state[choice >>> 28] + 0xBA3779D9 >>> 1));
         //0xBE377BB97F4A7C17L
         /*
         return (int) ((state1 += (state0 += 0x632AE59B69B3C209L) * 0x9E3779B97F4A7C15L)
@@ -105,8 +117,7 @@ public class HerdRNG implements RandomnessSource {
     }
 
     public final int next(final int bits) {
-        final int c = (choice += 0x9CBC278D);
-        return ((state[c & 15] += (state[c >>> 28] >>> 1) + 0x8E3779B9) >>> (32 - bits)); //0x9E3779B9
+        return ((state[(choice += 0x9CBC276D) & 15] += (state[choice >>> 28] + 0xBA3779D9 >>> 1)) >>> (32 - bits)); //0x9E3779B9
     }
 
     /**
@@ -130,6 +141,7 @@ public class HerdRNG implements RandomnessSource {
                 ", choice=" + choice +
                 '}';
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

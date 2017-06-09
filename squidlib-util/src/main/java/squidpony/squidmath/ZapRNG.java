@@ -238,52 +238,127 @@ public class ZapRNG implements RandomnessSource, Serializable {
 
 
     /**
+     * Gets a seemingly-random value from one inputs as a long. If you expect to call this method repeatedly, consider
+     * using the technique {@code (state += ZapRNG.determine(state) + 0x9E3779B97F4A7C15L)}, which will
+     * update each call to use different values for state (it may be surprising that it is an expression
+     * that returns the value of state1 after assignment, so the parenthesized expression can be substituted for the
+     * method call on its own). You may want to experiment with using {@code ^=} or {@code -=} instead of {@code +=} in
+     * the given code, which may affect the results quite a bit.
+     * @param state any long
+     * @return any long, from the full range
+     */
+    public static long determine(final long state)
+    {
+        return ((state | 0xC6BC279692B5DBEFL) * (state + (state * 0x9E3779B97F4A7C15L ^ state << 28) >> 24));
+    }
+
+    /**
      * Gets a seemingly-random value from two inputs as longs. If you expect to call this method repeatedly, consider
      * using the technique {@code (state1 ^= ZapRNG.determine((state0 += 0x9E3779B97F4A7C15L), state1))}, which will
      * update each call to use different values for state0 and state1 (it may be surprising that it is an expression
      * that returns the value of state1 after assignment, so the parenthesized expression can be substituted for the
      * method call on its own). You may want to experiment with using {@code +=} or {@code -=} instead of {@code ^=} in
-     * the given code, which will affect the results quite a bit. Like with the ZapRNG constructor that takes two longs,
-     * state0 should be a fairly large number, either greater than 33554432 or less than -33554433; if it isn't, then
-     * similar state0 inputs will produce very similar results.
-     * @param state0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
+     * the given code, which will affect the results quite a bit. Unlike {@link #ZapRNG(long, long)}, this does not have
+     * any special requirements for state0, and both parameters should be free to be large or small.
+     * @param state0 any long
      * @param state1 any long
      * @return any long, from the full range
      */
     public static long determine(final long state0, final long state1)
     {
-        return ((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 + 0x9E3779B97F4A7C15L) >>> 24));
+        return ((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 * 0x9E3779B97F4A7C15L ^ state0 << 28) >> 24));
     }
+
+    /**
+     * Gets a seemingly-random value between 0 and bound, given two state values as longs. If you expect to call this
+     * method repeatedly, consider using the technique
+     * {@code ZapRNG.determineBounded((state0 += 0x9E3779B97F4A7C15L), state1 += state0 >> 1)}, which will update each
+     * call to use different values for state0 and state1.
+     * @param state any long
+     * @param bound the outer bound, exclusive
+     * @return any long, from the full range
+     */
+    public static int determineBounded(final long state, final int bound)
+    {
+        return (int)((bound * (((state | 0xC6BC279692B5DBEFL) * (state + (state * 0x9E3779B97F4A7C15L ^ state << 28) >> 24)) & 0x7FFFFFFFL)) >> 31);
+    }
+
+    /**
+     * Gets a seemingly-random value between 0 and bound, given two state values as longs. If you expect to call this
+     * method repeatedly, consider using the technique
+     * {@code ZapRNG.determineBounded((state0 += 0x9E3779B97F4A7C15L), state1 += state0 >> 1)}, which will update each
+     * call to use different values for state0 and state1.
+     * @param state0 any long
+     * @param state1 any long
+     * @param bound the outer bound, exclusive
+     * @return any long, from the full range
+     */
+    public static int determineBounded(final long state0, final long state1, final int bound)
+    {
+        return (int)((bound * (((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 * 0x9E3779B97F4A7C15L ^ state0 << 28) >> 24)) & 0x7FFFFFFFL)) >> 31);
+    }
+
     /**
      * Gets a seemingly-random double from two inputs as longs. If you expect to call this method repeatedly, consider
-     * using the technique {@code ZapRNG.randomDouble((state0 += 0x9E3779B97F4A7C15L), (state1 += state0 >>> 1))}, which
-     * will update each call to use different values for state0 and state1, with state1 depending on state0. Like with
-     * the ZapRNG constructor that takes two longs, state0 should be a fairly large number, either greater than 33554432
-     * or less than -33554433; if it isn't, then similar state0 inputs will produce very similar results.
-     * @param state0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
+     * using the technique {@code ZapRNG.randomDouble((state0 += 0x9E3779B97F4A7C15L), (state1 += state0 >> 1))}, which
+     * will update each call to use different values for state0 and state1, with state1 depending on state0. Unlike
+     * {@link #ZapRNG(long, long)}, this does not have any special requirements for state0, and both parameters should
+     * be free to be large or small.
+     * @param state0 any long
      * @param state1 any long
      * @return a pseudo-random double from 0.0 (inclusive) to 1.0 (exclusive)
      */
     public static double randomDouble(final long state0, final long state1)
     {
-        return NumberTools.longBitsToDouble((((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 + 0x9E3779B97F4A7C15L) >>> 24))
+        return NumberTools.longBitsToDouble((((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 * 0x9E3779B97F4A7C15L ^ state0 << 28) >> 24))
                 >>> 12) | 0x3ff00000) - 1f;
     }
 
     /**
      * Gets a seemingly-random double between -1.0 and 1.0 from two inputs as longs. If you expect to call this method
      * repeatedly, consider using the technique
-     * {@code ZapRNG.randomSignedDouble((state0 += 0x9E3779B97F4A7C15L), (state1 += state0 >>> 1))}, which will update
-     * each call to use different values for state0 and state1, with state1 depending on state0. Like with the ZapRNG
-     * constructor that takes two longs, state0 should be a fairly large number, either greater than 33554432 or less
-     * than -33554433; if it isn't, then similar state0 inputs will produce very similar results.
-     * @param state0 a long that should be greater than 33554432 or less than -33554433, preferably by a large amount
+     * {@code ZapRNG.randomSignedDouble((state0 += 0x9E3779B97F4A7C15L), (state1 += state0 >> 1))}, which will update
+     * each call to use different values for state0 and state1, with state1 depending on state0. Unlike
+     * {@link #ZapRNG(long, long)}, this does not have any special requirements for state0, and both parameters should
+     * be free to be large or small.
+     * @param state0 any long
      * @param state1 any long
      * @return a pseudo-random double from -1.0 (inclusive) to 1.0 (exclusive)
      */
     public static double randomSignedDouble(final long state0, final long state1) {
-        return NumberTools.longBitsToDouble((((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 + 0x9E3779B97F4A7C15L) >>> 24))
+        return NumberTools.longBitsToDouble((((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 * 0x9E3779B97F4A7C15L ^ state0 << 28) >> 24))
                 >>> 12) | 0x40000000) - 3.0;
+    }
+    /**
+     * Gets a seemingly-random float from two inputs as longs. If you expect to call this method repeatedly, consider
+     * using the technique {@code ZapRNG.randomFloat((state0 += 0x9E3779B97F4A7C15L), (state1 += state0 >> 1))}, which
+     * will update each call to use different values for state0 and state1, with state1 depending on state0. Unlike
+     * {@link #ZapRNG(long, long)}, this does not have any special requirements for state0, and both parameters should
+     * be free to be large or small.
+     * @param state0 any long
+     * @param state1 any long
+     * @return a pseudo-random double from 0.0 (inclusive) to 1.0 (exclusive)
+     */
+    public static float randomFloat(final long state0, final long state1)
+    {
+        return NumberTools.intBitsToFloat(((int)((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 * 0x9E3779B97F4A7C15L ^ state0 << 28) >> 24))
+                >>> 9) | 0x3f800000) - 1f;
+    }
+
+    /**
+     * Gets a seemingly-random double between -1.0 and 1.0 from two inputs as longs. If you expect to call this method
+     * repeatedly, consider using the technique
+     * {@code ZapRNG.randomSignedDouble((state0 += 0x9E3779B97F4A7C15L), (state1 += state0 >>> 1))}, which will update
+     * each call to use different values for state0 and state1, with state1 depending on state0. Unlike
+     * {@link #ZapRNG(long, long)}, this does not have any special requirements for state0, and both parameters should
+     * be free to be large or small.
+     * @param state0 any long
+     * @param state1 any long
+     * @return a pseudo-random double from -1.0 (inclusive) to 1.0 (exclusive)
+     */
+    public static float randomSignedFloat(final long state0, final long state1) {
+        return NumberTools.intBitsToFloat(((int)((state1 | 0xC6BC279692B5DBEFL) * (state1 + (state0 * 0x9E3779B97F4A7C15L ^ state0 << 28) >> 24))
+                >>> 9) | 0x40000000) - 3f;
     }
 
 

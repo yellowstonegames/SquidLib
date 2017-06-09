@@ -196,6 +196,15 @@ public class LapRNG implements RandomnessSource, Serializable {
     }
 
     /**
+     * @param state any long
+     * @return any long, from the full range
+     */
+    public static long determine(final long state)
+    {
+        return (state + ((state * 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
+    }
+
+    /**
      * @param state0 any long
      * @param state1 any long
      * @return any long, from the full range
@@ -204,6 +213,27 @@ public class LapRNG implements RandomnessSource, Serializable {
     {
         return (state1 + ((state0 * 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
     }
+
+    /**
+     * @param state any long
+     * @return any long, from the full range
+     */
+    public static int determineBounded(final long state, final int bound)
+    {
+        return (int)((bound * ((state + ((state * 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L) & 0x7FFFFFFFL)) >> 31);
+    }
+
+    /**
+     * @param state0 any long
+     * @param state1 any long
+     * @return any long, from the full range
+     */
+    public static int determineBounded(final long state0, final long state1, final int bound)
+    {
+        return (int)((bound * ((state1 + ((state0 * 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L) & 0x7FFFFFFFL)) >> 31);
+
+    }
+
     /**
      * @param state0 any long
      * @param state1 any long

@@ -322,7 +322,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * circumstances this does better than {@link SobolQRNG} at avoiding extremely close values (the kind that overlap
      * on actual maps). Speed is not a concern here; this should be very much fast enough for the expected usage in
      * map generation (it's used in {@link GreasedRegion#quasiRandomSeparated(double)}.
-     * @param index the index to use from one of the sequences
+     * @param index the index to use from one of the sequences; will also be used to select sequence
      * @return a double from 0.0 (inclusive, but extremely rare) to 1.0 (exclusive); values will tend to spread apart
      */
     public static double determineMixed(int index)
@@ -340,7 +340,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * method, this method needs to perform some manipulation of index to keep a call that passes 2 for index different
      * enough from a call that passes 3 (this should result in 0.4257662296295166 and 0.7359509468078613). You may want
      * to perform a similar manipulation if you find yourself reseeding a PRNG with numerically-close seeds; this can be
-     * done for a value called index with {@code ((index ^ 0xD0E89D2D) >>> 19 | (index ^ 0xD0E89D2D) << 13)}.
+     * done for a value called index with {@code ((index >>> 19 | index << 13) ^ 0x13A5BA1D)}.
      *
      * <br>
      * Not all int values for index will produce unique results, since this produces a float and there are less distinct
@@ -349,9 +349,9 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @param index any int
      * @return a float from 0.0 (inclusive) to 1.0 (exclusive) that should not be closely correlated to index
      */
-    public static float weakDetermine(int index)
+    public static float weakDetermine(final int index)
     {
-        return NumberTools.randomFloat((index ^= 0xD0E89D2D) >>> 19 | index << 13);
+        return NumberTools.randomFloat((index >>> 19 | index << 13) ^ 0x13A5BA1D);
         //return NumberTools.longBitsToDouble(0x3ff0000000000000L | ((index<<1|1) * 0x9E3779B97F4A7C15L * ~index
         //        - ((index ^ ~(index * 11L)) * 0x632BE59BD9B4E019L)) >>> 12) - 1.0;
         //return NumberTools.setExponent(
@@ -366,7 +366,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @param index any int
      * @return a sub-random float between -1.0f and 1.0f (both exclusive, unlike some other methods)
      */
-    public static float weakSignedDetermine(int index) {
-        return NumberTools.randomSignedFloat((index ^= 0xD0E89D2D) >>> 19 | index << 13);
+    public static float weakSignedDetermine(final int index) {
+        return NumberTools.randomSignedFloat((index >>> 19 | index << 13) ^ 0x13A5BA1D);
     }
 }

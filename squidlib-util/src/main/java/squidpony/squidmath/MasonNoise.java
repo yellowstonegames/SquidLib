@@ -103,7 +103,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 
     static {
         for (int i = 0, seed = 0x1337BEEF; i < 261; i++, seed += 0x9E3779B9) {
-            gradientLUT[i] = PintRNG.determine(((seed ^= 0xD0E89D2D) >>> 19 | seed << 13)) >>> 8;
+            gradientLUT[i] = PintRNG.determine((seed >>> 19 | seed << 13) ^ 0x13A5BA1D) >>> 8;
         }
     }
 

@@ -37,7 +37,7 @@ public class TuringPattern {
         int seed = 65537;
         for (int i = 0; i < substance.length; i++) {
             seed += 0x9E3779B9;
-            substance[i] = PintRNG.determine((seed ^ 0xD0E89D2D) >>> 19 | (seed ^ 0xD0E89D2D) << 13) * fraction;
+            substance[i] = PintRNG.determine((seed >>> 19 | seed << 13) ^ 0x13A5BA1D) * fraction;
         }
         return substance;
     }
@@ -64,7 +64,7 @@ public class TuringPattern {
         if(substance == null) return null;
         for (int i = 0; i < substance.length; i++) {
             seed += 0x9E3779B9;
-            substance[i] = PintRNG.determine((seed ^ 0xD0E89D2D) >>> 19 | (seed ^ 0xD0E89D2D) << 13) * fraction;
+            substance[i] = PintRNG.determine((seed >>> 19 | seed << 13) ^ 0x13A5BA1D) * fraction;
         }
         return substance;
     }
