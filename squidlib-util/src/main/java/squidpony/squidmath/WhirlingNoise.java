@@ -2,8 +2,8 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
-import static squidpony.squidmath.PintRNG.determine;
-import static squidpony.squidmath.PintRNG.determineBounded;
+import static squidpony.squidmath.LightRNG.determine;
+import static squidpony.squidmath.LightRNG.determineBounded;
 
 /**
  * Another experimental noise class. Extends PerlinNoise and should have similar quality, but can be faster and has less
@@ -42,6 +42,16 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             {unit3_8f, unit1_8f}, {unit3_8f, -unit1_8f}, {-unit3_8f, unit1_8f}, {-unit3_8f, -unit1_8f},
             {unit1_4f, unit1_4f}, {unit1_4f, -unit1_4f}, {-unit1_4f, unit1_4f}, {-unit1_4f, -unit1_4f},
             {unit1_8f, unit3_8f}, {unit1_8f, -unit3_8f}, {-unit1_8f, unit3_8f}, {-unit1_8f, -unit3_8f}};
+    protected static final float[][] phiGrad2f = {
+            {1, 0}, {(float)Math.cos(phi), (float)Math.sin(phi)},
+            {(float)Math.cos(phi*2),  (float)Math.sin(phi*2)},  {(float)Math.cos(phi*3),  (float)Math.sin(phi*3)},
+            {(float)Math.cos(phi*4),  (float)Math.sin(phi*4)},  {(float)Math.cos(phi*5),  (float)Math.sin(phi*5)},
+            {(float)Math.cos(phi*6),  (float)Math.sin(phi*6)},  {(float)Math.cos(phi*7),  (float)Math.sin(phi*7)},
+            {(float)Math.cos(phi*8),  (float)Math.sin(phi*8)},  {(float)Math.cos(phi*9),  (float)Math.sin(phi*9)},
+            {(float)Math.cos(phi*10), (float)Math.sin(phi*10)}, {(float)Math.cos(phi*11), (float)Math.sin(phi*11)},
+            {(float)Math.cos(phi*13), (float)Math.sin(phi*12)}, {(float)Math.cos(phi*13), (float)Math.sin(phi*13)},
+            {(float)Math.cos(phi*14), (float)Math.sin(phi*14)}, {(float)Math.cos(phi*15), (float)Math.sin(phi*15)},
+    };
 
     protected static float dotf(final float g[], final float x, final float y) {
         return g[0] * x + g[1] * y;
@@ -50,6 +60,14 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     protected static float dotf(final int g[], final float x, final float y, final float z) {
         return g[0] * x + g[1] * y + g[2] * z;
     }
+
+    /*
+    // makes the noise appear muddled and murky; probably not ideal
+    protected static float dotterize(final float x, final float y, final int i, final int j)
+    {
+        return ZapRNG.randomSignedFloat(i * 0x9E3779B97F4A7C15L, j * 0xC6BC279692B5C483L) * x + ZapRNG.randomSignedFloat(j * 0x8E3779B97F4A7C15L, i * 0x632AE59B69B3C209L) * y;
+    }
+    */
 
     /*
     public static double interpolate(double t, double low, double high)
@@ -167,7 +185,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         //xin *= epi;
         //yin *= epi;
         double noise0, noise1, noise2; // from the three corners
-        // Skew the input space to determine which simplex cell we're in
+        // Skew the input space to figure out which simplex cell we're in
         double skew = (xin + yin) * F2; // Hairy factor for 2D
         int i = fastFloor(xin + skew);
         int j = fastFloor(yin + skew);
@@ -215,9 +233,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi1 = (hash >>>= 4) & 15;
         int gi2 = (hash >>> 4) & 15;
         */
-        int gi0 = determine(i + determine(j)) & 15;
-        int gi1 = determine(i + i1 + determine(j + j1)) & 15;
-        int gi2 = determine(i + 1 + determine(j + 1)) & 15;
+        int gi0 = determineBounded(i + determine(j), 16);
+        int gi1 = determineBounded(i + i1 + determine(j + j1), 16);
+        int gi2 = determineBounded(i + 1 + determine(j + 1), 16);
 
         // Calculate the contribution from the three corners
         double t0 = 0.5 - x0 * x0 - y0 * y0;
@@ -225,7 +243,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             noise0 = 0.0;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dot(grad2[gi0], x0, y0);
+            noise0 = t0 * t0 * dot(phiGrad2[gi0], x0, y0);
             // for 2D gradient
         }
         double t1 = 0.5 - x1 * x1 - y1 * y1;
@@ -233,14 +251,14 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             noise1 = 0.0;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dot(grad2[gi1], x1, y1);
+            noise1 = t1 * t1 * dot(phiGrad2[gi1], x1, y1);
         }
         double t2 = 0.5 - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0.0;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dot(grad2[gi2], x2, y2);
+            noise2 = t2 * t2 * dot(phiGrad2[gi2], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
@@ -262,7 +280,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         //yin *= epi;
         float noise0, noise1, noise2; // from the three corners
         float xin = (float)x, yin = (float)y;
-        // Skew the input space to determine which simplex cell we're in
+        // Skew the input space to figure out which simplex cell we're in
         float skew = (xin + yin) * F2f; // Hairy factor for 2D
         int i = fastFloor(xin + skew);
         int j = fastFloor(yin + skew);
@@ -310,9 +328,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi1 = (hash >>>= 4) & 15;
         int gi2 = (hash >>> 4) & 15;
         */
-        int gi0 = PintRNG.determine(i + PintRNG.determine(j)) & 15;
-        int gi1 = PintRNG.determine(i + i1 + PintRNG.determine(j + j1)) & 15;
-        int gi2 = PintRNG.determine(i + 1 + PintRNG.determine(j + 1)) & 15;
+        int gi0 = determineBounded(i + determine(j), 16);
+        int gi1 = determineBounded(i + i1 + determine(j + j1), 16);
+        int gi2 = determineBounded(i + 1 + determine(j + 1), 16);
 
         // Calculate the contribution from the three corners
         float t0 = 0.5f - x0 * x0 - y0 * y0;
@@ -320,22 +338,24 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             noise0 = 0f;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dotf(grad2f[gi0], x0, y0);
-            // for 2D gradient
+            //noise0 = t0 * t0 * dotterize(x0, y0, i, j);
+            noise0 = t0 * t0 * dotf(phiGrad2f[gi0], x0, y0);
         }
         float t1 = 0.5f - x1 * x1 - y1 * y1;
         if (t1 < 0) {
             noise1 = 0f;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dotf(grad2f[gi1], x1, y1);
+            //noise1 = t1 * t1 * dotterize(x1, y1, i + i1, j + j1);
+            noise1 = t1 * t1 * dotf(phiGrad2f[gi1], x1, y1);
         }
         float t2 = 0.5f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0f;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dotf(grad2f[gi2], x2, y2);
+            //noise2 = t2 * t2 * dotterize(x2, y2, i+1, j+1);
+            noise2 = t2 * t2 * dotf(phiGrad2f[gi2], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
@@ -358,7 +378,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         //yin *= epi;
         //zin *= epi;
         double n0, n1, n2, n3; // Noise contributions from the four corners
-        // Skew the input space to determine which simplex cell we're in
+        // Skew the input space to figure out which simplex cell we're in
         double s = (xin + yin + zin) * F3; // Very nice and simple skew
         // factor for 3D
         int i = fastFloor(xin + s);
@@ -460,7 +480,6 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
-
         int gi0 = determineBounded(i + determine(j + determine(k)), 12);
         int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 12);
         int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2)), 12);
@@ -531,7 +550,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         //zin *= epi;
         float xin = (float)x, yin = (float)y, zin = (float)z;
         float n0, n1, n2, n3; // Noise contributions from the four corners
-        // Skew the input space to determine which simplex cell we're in
+        // Skew the input space to figure out which simplex cell we're in
         float s = (xin + yin + zin) * F3f; // Very nice and simple skew
         // factor for 3D
         int i = fastFloor(xin + s);
@@ -702,7 +721,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     public static double noise(double x, double y, double z, double w) {
         // The skewing and unskewing factors are hairy again for the 4D case
 
-        // Skew the (x,y,z,w) space to determine which cell of 24 simplices
+        // Skew the (x,y,z,w) space to figure out which cell of 24 simplices
         // we're in
         double s = (x + y + z + w) * F4; // Factor for 4D skewing
         int i = fastFloor(x + s);
@@ -721,8 +740,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         // For the 4D case, the simplex is a 4D shape I won't even try to
         // describe.
         // To find out which of the 24 possible simplices we're in, we need
-        // to
-        // determine the magnitude ordering of x0, y0, z0 and w0.
+        // to figure out the magnitude ordering of x0, y0, z0 and w0.
         // The method below is a good way of finding the ordering of x,y,z,w
         // and
         // then find the correct traversal order for the simplex we’re in.
@@ -785,11 +803,11 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         double z4 = z0 - 1.0 + 4.0 * G4;
         double w4 = w0 - 1.0 + 4.0 * G4;
 
-        int gi0 = determine(i + determine(j + determine(k + determine(l)))) & 31;
-        int gi1 = determine(i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1)))) & 31;
-        int gi2 = determine(i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2)))) & 31;
-        int gi3 = determine(i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3)))) & 31;
-        int gi4 = determine(i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1)))) & 31;
+        int gi0 = determineBounded(i + determine(j + determine(k + determine(l))), 32);
+        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1))), 32);
+        int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2))), 32);
+        int gi3 = determineBounded(i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3))), 32);
+        int gi4 = determineBounded(i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1))), 32);
 
         // Noise contributions from the five corners are n0 to n4
 

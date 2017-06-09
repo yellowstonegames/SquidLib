@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.StringKit;
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -20,7 +21,8 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 6/4/2017.
  */
 @Beta
-public class HordeRNG implements RandomnessSource {
+public class HordeRNG implements RandomnessSource, Serializable{
+    private static final long serialVersionUID = 1L;
     public final long[] state = new long[16];
     public int choice = 0;
     public HordeRNG() {

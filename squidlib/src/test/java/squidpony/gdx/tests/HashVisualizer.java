@@ -380,7 +380,7 @@ public class HashVisualizer extends ApplicationAdapter {
     }
     public static int prepareSeed(final int seed)
     {
-        return (seed ^ 0xD0E89D2D) >>> 19 | (seed ^ 0xD0E89D2D) << 13;
+        return ((seed >>> 19 | seed << 13) ^ 0x13A5BA1D);
     }
     public static double tabbyNoise(final float ox, final float oy, final float oz, final int seed) {
         final float skew = (ox + oy + oz) / 128f,

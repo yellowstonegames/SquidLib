@@ -194,13 +194,13 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * @return an altered version of state that should be very fast to compute but doesn't promise great quality
      */
     public static int determine(final int state) {
-        return (state + (((state + 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+        return (state + (((state * 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
     }
 
     /**
      * A simple "output stage" applied to a two-part state like what FlapRNG uses normally; this method does not update
      * state0 or state1 on its own. If you expect to call this method more than once, you should perform some change to
-     * state as part of the call; a simple way to do this is to call this method like
+     * state0 and state1 as part of the call; a simple way to do this is to call this method like
      * {@code (state0 += FlapRNG.determine(state0, state1 += 0x9E3779B9))}. The int 0x9E3779B9 is derived from
      * the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
      * can be any odd-number int, preferably a large one. This method doesn't offer very good quality assurances, but
@@ -211,9 +211,44 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * @return an altered version of state0/state1 that should be very fast to compute but doesn't promise great quality
      */
     public static int determine(final int state0, final int state1) {
-        return (state0 + (((state1 + 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+        return (state0 + (((state1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
     }
 
+    /**
+     * Like {@link #determine(int)}, but limits its results to between 0 (inclusive) and bound (exclusive). You can give
+     * a negative value for bound, which will produce a negative result or 0. If you expect to call this method more
+     * than once, you should perform some change to state as part of the call; a simple way to do this is to call this
+     * method like {@code FlapRNG.determineBounded(state += 0x9E3779B9)}. The int 0x9E3779B9 is derived from the golden
+     * ratio, and shows up often as an optimal part of hashes and random number generators, but the constant can be any
+     * odd-number int, preferably a large one.
+     * @param state should usually be changed when you call this (see above), e.g. {@code state += 0x9E3779B9}
+     * @param bound the exclusive outer bound; may be negative
+     * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)
+     */
+    public static int determineBounded(int state, final int bound)
+    {
+        return (int)((bound * ((state + (((state * 0xC6BC278D) >>> 28) + 60) * 0x632D978F) & 0x7FFFFFFFL)) >> 31);
+    }
+
+    /**
+     * Like {@link #determine(int, int)}, but limits its results to between 0 (inclusive) and bound (exclusive). You can
+     * give a negative value for bound, which will produce a negative result or 0. this method does not update state0 or
+     * state1 on its own. If you expect to call this method more than once, you should perform some change to
+     * state0 and state1 as part of the call; a simple way to do this is to call this method like
+     * {@code FlapRNG.determineBounded(state0 += 0x9E3779B9, state1 += state0 >> 1)}. The int 0x9E3779B9 is derived from
+     * the golden ratio, and shows up often as an optimal part of hashes and random number generators, but this constant
+     * can be any odd-number int, preferably a large one. This method doesn't offer very good quality assurances, but
+     * should be very fast.
+     *
+     * @param state0 should be changed when you call this (see above), e.g. {@code state0 += 0x9E3779B9}
+     * @param state1 should be changed when you call this (see above), e.g. by adding some portion of state0 to state1
+     * @param bound the exclusive outer bound; may be negative
+     * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)
+     */
+    public static int determineBounded(final int state0, final int state1, final int bound)
+    {
+        return (int)((bound * ((state0 + (((state1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F) & 0x7FFFFFFFL)) >> 31);
+    }
     /**
      * Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given state. If you expect to call
      * this method more than once, you should perform some change to state as part of the call; a simple way to do this
@@ -225,7 +260,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * @return a pseudo-random float from -0f (inclusive) to 1f (exclusive)
      */
     public static float randomFloat(final int state) {
-        return NumberTools.intBitsToFloat(((state + (((state + 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x3f800000) - 1f;
+        return NumberTools.intBitsToFloat(((state + (((state * 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x3f800000) - 1f;
     }
 
     /**
@@ -241,7 +276,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * @return a pseudo-random float from -0f (inclusive) to 1f (exclusive)
      */
     public static float randomFloat(final int state0, final int state1) {
-        return NumberTools.intBitsToFloat(((state0 + (((state1 + 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x3f800000) - 1f;
+        return NumberTools.intBitsToFloat(((state0 + (((state1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x3f800000) - 1f;
     }
 
     /**
@@ -255,7 +290,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * @return a pseudo-random float from -1f (inclusive) to 1f (exclusive)
      */
     public static float randomSignedFloat(final int state) {
-        return NumberTools.intBitsToFloat(((state + (((state + 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x40000000) - 3f;
+        return NumberTools.intBitsToFloat(((state + (((state * 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x40000000) - 3f;
     }
 
     /**
@@ -271,7 +306,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * @return a pseudo-random float from -1f (inclusive) to 1f (exclusive)
      */
     public static float randomSignedFloat(final int state0, final int state1) {
-        return NumberTools.intBitsToFloat(((state0 + (((state1 + 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x40000000) - 3f;
+        return NumberTools.intBitsToFloat(((state0 + (((state1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F) >>> 9) | 0x40000000) - 3f;
     }
 
     @Override
