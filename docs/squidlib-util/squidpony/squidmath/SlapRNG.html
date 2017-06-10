@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":9,"i10":9,"i11":9,"i12":9,"i13":10,"i14":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":9,"i12":9,"i13":9,"i14":9,"i15":10,"i16":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.30">SlapRNG</a>
+public class <a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.34">SlapRNG</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Like PintRNG (uses int math primarily, making it good with GWT and 32-bit machines) and FlapRNG, but with a longer
@@ -129,16 +129,20 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  generation slightly due to a data dependency between the before and after states (the same speed problem most linear
  congruential generators face when trying to reach ideal performance), but seems to significantly improve period. It
  should be noted that when targeting GWT and 32-bit machines, SlapRNG provides one of the better combinations of
- period, quality, compatibility, and speed that we have, emphasizing period (which is hard to do using 32-bit math)
- and quality. FlapRNG is faster by about 2x-2.5x, but sacrifices quality and period. PintRNG has better quality, is
- a little faster, and has a lower period. Other generators give up efficient compatibility with GWT due to long math
- (which is slower and probably produces garbage on GWT), though many are faster on PCs (LapRNG and ThunderRNG, for
- instance, completely beat SlapRNG on speed and period, and LapRNG has comparable quality).
+ period, quality, compatibility, and speed that we have for a StatefulRandomness, emphasizing period (which is hard to
+ do using 32-bit math) and quality. FlapRNG is faster by about 2x-2.5x, but sacrifices quality and period. PintRNG has
+ better quality, is a little faster, and has a lower period. Other generators give up efficient compatibility with GWT
+ due to long math (which is slower and probably produces garbage on GWT), though many are faster on PCs (LapRNG and
+ ThunderRNG, for instance, completely beat SlapRNG on speed and period, and LapRNG has comparable quality). If you
+ don't specifically need a StatefulRandomness, you may be better served by HerdRNG, which also uses int math, has a
+ significantly longer period, may have better quality, and can be about 1.5x as fast (or vice versa in some cases),
+ but only achieves this by having a much larger state of 544 bits instead of SlapRNG's 64.
  <br>
  Created by Tommy Ettinger on 5/29/2017.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../serialized-form.html#squidpony.squidmath.SlapRNG">Serialized Form</a></dd>
+<dd><a href="../../squidpony/squidmath/HerdRNG.html" title="class in squidpony.squidmath"><code>HerdRNG is similar to SlapRNG, but can be faster and has a larger period; however, it has a large state</code></a>, 
+<a href="../../serialized-form.html#squidpony.squidmath.SlapRNG">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -228,78 +232,93 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#determine-int-int-">determine</a></span>(int&nbsp;state0,
          int&nbsp;state1)</code>
-<div class="block">A simple "output stage" applied to a two-part state like what FlapRNG uses normally; this method does not update
+<div class="block">A simple "output stage" applied to a two-part state like what SlapRNG uses normally; this method does not update
  state0 or state1 on its own.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#determineBounded-int-int-">determineBounded</a></span>(int&nbsp;state,
+                int&nbsp;bound)</code>
+<div class="block">Like <a href="../../squidpony/squidmath/SlapRNG.html#determine-int-"><code>determine(int)</code></a>, but limits its results to between 0 (inclusive) and bound (exclusive).</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#determineBounded-int-int-int-">determineBounded</a></span>(int&nbsp;state0,
+                int&nbsp;state1,
+                int&nbsp;bound)</code>
+<div class="block">Like <a href="../../squidpony/squidmath/SlapRNG.html#determine-int-int-"><code>determine(int, int)</code></a>, but limits its results to between 0 (inclusive) and bound (exclusive).</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#getState--">getState</a></span>()</code>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#nextInt--">nextInt</a></span>()</code>
 <div class="block">Gets a pseudo-random int, which can be positive or negative but is likely to be drawn from less possible options
  than the full range of <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> to <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#randomFloat-int-">randomFloat</a></span>(int&nbsp;state)</code>
 <div class="block">Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given state.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#randomFloat-int-int-">randomFloat</a></span>(int&nbsp;state0,
            int&nbsp;state1)</code>
 <div class="block">Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given states.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#randomSignedFloat-int-">randomSignedFloat</a></span>(int&nbsp;state)</code>
 <div class="block">Gets a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given state.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#randomSignedFloat-int-int-">randomSignedFloat</a></span>(int&nbsp;state0,
                  int&nbsp;state1)</code>
 <div class="block">Gets a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given states.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#setState-long-">setState</a></span>(long&nbsp;state)</code>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SlapRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -331,7 +350,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>state0</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.56">state0</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.60">state0</a></pre>
 </li>
 </ul>
 <a name="state1">
@@ -340,7 +359,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>state1</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.56">state1</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.60">state1</a></pre>
 </li>
 </ul>
 </li>
@@ -357,7 +376,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>SlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.32">SlapRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.36">SlapRNG</a>()</pre>
 </li>
 </ul>
 <a name="SlapRNG-int-">
@@ -366,7 +385,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>SlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.36">SlapRNG</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.40">SlapRNG</a>(int&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="SlapRNG-int-int-">
@@ -375,7 +394,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>SlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.43">SlapRNG</a>(int&nbsp;seed0,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.47">SlapRNG</a>(int&nbsp;seed0,
                int&nbsp;seed1)</pre>
 </li>
 </ul>
@@ -385,7 +404,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>SlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.47">SlapRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.51">SlapRNG</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="SlapRNG-java.lang.CharSequence-">
@@ -394,7 +413,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SlapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.51">SlapRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.55">SlapRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -411,7 +430,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.63">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.67">getState</a>()</pre>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -427,7 +446,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.73">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.77">setState</a>(long&nbsp;state)</pre>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -443,7 +462,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.86">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.90">next</a>(int&nbsp;bits)</pre>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 <dl>
@@ -462,7 +481,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.100">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.104">nextInt</a>()</pre>
 <div class="block">Gets a pseudo-random int, which can be positive or negative but is likely to be drawn from less possible options
  than the full range of <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> to <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>. Very fast, though.</div>
 <dl>
@@ -477,7 +496,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.150">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.154">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  This implementation produces a different result than calling <a href="../../squidpony/squidmath/SlapRNG.html#nextInt--"><code>nextInt()</code></a> twice and shifting the bits
@@ -505,7 +524,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.195">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.199">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -523,10 +542,10 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.210">determine</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.214">determine</a>(int&nbsp;state)</pre>
 <div class="block">A simple "output stage" applied to state; this method does not update state on its own. If you expect to call
  this method more than once, you should perform some change to state as part of the call; a simple way to do this
- is to call this method like <code>FlapRNG.determine(state += 0x9E3779B9)</code>. The int 0x9E3779B9 is derived from
+ is to call this method like <code>SlapRNG.determine(state += 0x9E3779B9)</code>. The int 0x9E3779B9 is derived from
  the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
  can be any odd-number int, preferably a large one. This method doesn't offer very good quality assurances, but
  should be very fast.</div>
@@ -544,12 +563,12 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.226">determine</a>(int&nbsp;state0,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.230">determine</a>(int&nbsp;state0,
                             int&nbsp;state1)</pre>
-<div class="block">A simple "output stage" applied to a two-part state like what FlapRNG uses normally; this method does not update
+<div class="block">A simple "output stage" applied to a two-part state like what SlapRNG uses normally; this method does not update
  state0 or state1 on its own. If you expect to call this method more than once, you should perform some change to
  state as part of the call; a simple way to do this is to call this method like
- <code>(state0 += FlapRNG.determine(state0, state1 += 0x9E3779B9))</code>. The int 0x9E3779B9 is derived from
+ <code>(state0 += SlapRNG.determine(state0, state1 += 0x9E3779B9))</code>. The int 0x9E3779B9 is derived from
  the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
  can be any odd-number int, preferably a large one. This method doesn't offer very good quality assurances, but
  should be very fast.</div>
@@ -562,16 +581,66 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </dl>
 </li>
 </ul>
+<a name="determineBounded-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>determineBounded</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.246">determineBounded</a>(int&nbsp;state,
+                                   int&nbsp;bound)</pre>
+<div class="block">Like <a href="../../squidpony/squidmath/SlapRNG.html#determine-int-"><code>determine(int)</code></a>, but limits its results to between 0 (inclusive) and bound (exclusive). You can give
+ a negative value for bound, which will produce a negative result or 0. If you expect to call this method more
+ than once, you should perform some change to state as part of the call; a simple way to do this is to call this
+ method like <code>SlapRNG.determineBounded(state += 0x9E3779B9)</code>. The int 0x9E3779B9 is derived from the golden
+ ratio, and shows up often as an optimal part of hashes and random number generators, but the constant can be any
+ odd-number int, preferably a large one.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - should usually be changed when you call this (see above), e.g. <code>state += 0x9E3779B9</code></dd>
+<dd><code>bound</code> - the exclusive outer bound; may be negative</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a pseudo-random int between 0 (inclusive) and bound (exclusive)</dd>
+</dl>
+</li>
+</ul>
+<a name="determineBounded-int-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>determineBounded</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.266">determineBounded</a>(int&nbsp;state0,
+                                   int&nbsp;state1,
+                                   int&nbsp;bound)</pre>
+<div class="block">Like <a href="../../squidpony/squidmath/SlapRNG.html#determine-int-int-"><code>determine(int, int)</code></a>, but limits its results to between 0 (inclusive) and bound (exclusive). You can
+ give a negative value for bound, which will produce a negative result or 0. this method does not update state0 or
+ state1 on its own. If you expect to call this method more than once, you should perform some change to
+ state0 and state1 as part of the call; a simple way to do this is to call this method like
+ <code>SlapRNG.determineBounded(state0 += 0x9E3779B9, state1 += state0 &gt;&gt; 1)</code>. The int 0x9E3779B9 is derived from
+ the golden ratio, and shows up often as an optimal part of hashes and random number generators, but this constant
+ can be any odd-number int, preferably a large one. This method doesn't offer very good quality assurances, but
+ should be very fast.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state0</code> - should be changed when you call this (see above), e.g. <code>state0 += 0x9E3779B9</code></dd>
+<dd><code>state1</code> - should be changed when you call this (see above), e.g. by adding some portion of state0 to state1</dd>
+<dd><code>bound</code> - the exclusive outer bound; may be negative</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a pseudo-random int between 0 (inclusive) and bound (exclusive)</dd>
+</dl>
+</li>
+</ul>
 <a name="randomFloat-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>randomFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.239">randomFloat</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.280">randomFloat</a>(int&nbsp;state)</pre>
 <div class="block">Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given state. If you expect to call
  this method more than once, you should perform some change to state as part of the call; a simple way to do this
- is to call this method like <code>FlapRNG.determine(state += 0x9E3779B9)</code>. The int 0x9E3779B9 is derived from
+ is to call this method like <code>SlapRNG.randomFloat(state += 0x9E3779B9)</code>. The int 0x9E3779B9 is derived from
  the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
  can be any odd-number int, preferably a large one.</div>
 <dl>
@@ -588,11 +657,11 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>randomFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.254">randomFloat</a>(int&nbsp;state0,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.295">randomFloat</a>(int&nbsp;state0,
                                 int&nbsp;state1)</pre>
 <div class="block">Gets a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given states. If you expect to
  call this method more than once, you should perform some change to state as part of the call; a simple way to do
- this is to call this method like <code>FlapRNG.randomFloat(state0 += state1, state1 += 0x9E3779B9)</code>.
+ this is to call this method like <code>SlapRNG.randomFloat(state0 += state1, state1 += 0x9E3779B9)</code>.
  The int 0x9E3779B9 is derived from the golden ratio, and shows up often as an optimal part of hashes and random
  number generators, the constant can be any odd-number int, preferably a large one. Here, state0 is incremented by
  the before-value of state1, which gives a good distribution of inputs on repeated calls.</div>
@@ -611,12 +680,12 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSignedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.268">randomSignedFloat</a>(int&nbsp;state)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.309">randomSignedFloat</a>(int&nbsp;state)</pre>
 <div class="block">Gets a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given state. If you expect to call
  this method more than once, you should perform some change to state as part of the call; a simple way to do this
- is to call this method like <code>FlapRNG.determine(state += 0x9E3779B9)</code>. The int 0x9E3779B9 is derived from
- the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant
- can be any odd-number int, preferably a large one.</div>
+ is to call this method like <code>SlapRNG.randomSignedFloat(state += 0x9E3779B9)</code>. The int 0x9E3779B9 is derived
+ from the golden ratio, and shows up often as an optimal part of hashes and random number generators, but the
+ constant can be any odd-number int, preferably a large one.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - any int</dd>
@@ -631,11 +700,11 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSignedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.284">randomSignedFloat</a>(int&nbsp;state0,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.325">randomSignedFloat</a>(int&nbsp;state0,
                                       int&nbsp;state1)</pre>
 <div class="block">Gets a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given states. If you expect to
  call this method more than once, you should perform some change to state as part of the call; a simple way to do
- this is to call this method like <code>FlapRNG.randomSignedFloat(state0 += state1, state1 += 0x9E3779B9)</code>.
+ this is to call this method like <code>SlapRNG.randomSignedFloat(state0 += state1, state1 += 0x9E3779B9)</code>.
  The int 0x9E3779B9 is derived from the golden ratio, and shows up often as an optimal part of hashes and random
  number generators, the constant can be any odd-number int, preferably a large one. Here, state0 is incremented by
  the before-value of state1, which gives a good distribution of inputs on repeated calls.</div>
@@ -654,7 +723,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.290">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.331">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -667,7 +736,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.296">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.337">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -680,7 +749,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.301">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/SlapRNG.html#line.342">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

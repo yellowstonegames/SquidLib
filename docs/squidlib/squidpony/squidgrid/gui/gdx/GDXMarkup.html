@@ -112,10 +112,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.10">GDXMarkup</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.13">GDXMarkup</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
-<div class="block">Created by Tommy Ettinger on 1/23/2016.</div>
+<div class="block">GDXMarkup implements IMarkup for libGDX Color objects, and can start blocks of markup that libGDX understands that
+ display text in a given Color. Typically, this class needs only to be instantiated and passed to a class that uses
+ IMarkup of Color, and then anything else will be handled internally as Colors are given to the using class.
+ Created by Tommy Ettinger on 1/23/2016.</div>
 </li>
 </ul>
 </div>
@@ -202,7 +205,7 @@ implements squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GDXMarkup</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.11">GDXMarkup</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.14">GDXMarkup</a>()</pre>
 </li>
 </ul>
 </li>
@@ -219,7 +222,7 @@ implements squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMarkup</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.22">getMarkup</a>(com.badlogic.gdx.graphics.Color&nbsp;value)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.25">getMarkup</a>(com.badlogic.gdx.graphics.Color&nbsp;value)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getMarkup</code>&nbsp;in interface&nbsp;<code>squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -232,7 +235,7 @@ implements squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>closeMarkup</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.27">closeMarkup</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.30">closeMarkup</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>closeMarkup</code>&nbsp;in interface&nbsp;<code>squidpony.panel.IMarkup&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>

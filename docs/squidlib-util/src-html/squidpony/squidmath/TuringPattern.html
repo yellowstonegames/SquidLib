@@ -45,7 +45,7 @@
 <span class="sourceLineNo">037</span>        int seed = 65537;<a name="line.37"></a>
 <span class="sourceLineNo">038</span>        for (int i = 0; i &lt; substance.length; i++) {<a name="line.38"></a>
 <span class="sourceLineNo">039</span>            seed += 0x9E3779B9;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>            substance[i] = PintRNG.determine((seed ^ 0xD0E89D2D) &gt;&gt;&gt; 19 | (seed ^ 0xD0E89D2D) &lt;&lt; 13) * fraction;<a name="line.40"></a>
+<span class="sourceLineNo">040</span>            substance[i] = PintRNG.determine((seed &gt;&gt;&gt; 19 | seed &lt;&lt; 13) ^ 0x13A5BA1D) * fraction;<a name="line.40"></a>
 <span class="sourceLineNo">041</span>        }<a name="line.41"></a>
 <span class="sourceLineNo">042</span>        return substance;<a name="line.42"></a>
 <span class="sourceLineNo">043</span>    }<a name="line.43"></a>
@@ -72,7 +72,7 @@
 <span class="sourceLineNo">064</span>        if(substance == null) return null;<a name="line.64"></a>
 <span class="sourceLineNo">065</span>        for (int i = 0; i &lt; substance.length; i++) {<a name="line.65"></a>
 <span class="sourceLineNo">066</span>            seed += 0x9E3779B9;<a name="line.66"></a>
-<span class="sourceLineNo">067</span>            substance[i] = PintRNG.determine((seed ^ 0xD0E89D2D) &gt;&gt;&gt; 19 | (seed ^ 0xD0E89D2D) &lt;&lt; 13) * fraction;<a name="line.67"></a>
+<span class="sourceLineNo">067</span>            substance[i] = PintRNG.determine((seed &gt;&gt;&gt; 19 | seed &lt;&lt; 13) ^ 0x13A5BA1D) * fraction;<a name="line.67"></a>
 <span class="sourceLineNo">068</span>        }<a name="line.68"></a>
 <span class="sourceLineNo">069</span>        return substance;<a name="line.69"></a>
 <span class="sourceLineNo">070</span>    }<a name="line.70"></a>

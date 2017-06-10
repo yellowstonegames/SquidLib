@@ -557,9 +557,20 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LinesPanel</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.149">LinesPanel</a>(squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;markup,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.163">LinesPanel</a>(squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;markup,
                   <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
                   int&nbsp;maxLines)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>markup</code> - The markup to use, or <code>null</code> if none. You likely want to
+            give <a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html" title="class in squidpony.squidgrid.gui.gdx"><code>GDXMarkup</code></a>. If non-<code>null</code>, markup will be
+            enabled in <code>font</code>.</dd>
+<dd><code>font</code> - The font to use as a TextCellFactory, typically for distance field fonts.</dd>
+<dd><code>maxLines</code> - The maximum number of lines that this panel should display.
+            Must be <code>&gt;= 0</code>.</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang">IllegalStateException</a></code> - If <code>maxLines &lt; 0</code></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -576,7 +587,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>computeMaxLines</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.170">computeMaxLines</a>(com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;font,
+<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.184">computeMaxLines</a>(com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;font,
                                   float&nbsp;height)</pre>
 <div class="block">Used to help find the last parameter to give the constructor of this class.</div>
 <dl>
@@ -596,7 +607,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>addFirst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.180">addFirst</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.194">addFirst</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
 <div class="block">Adds <code>ics</code> first in <code>this</code>, possibly removing the last entry,
  if <code>this</code>' size would grow over <a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html#maxLines"><code>maxLines</code></a>.</div>
 <dl>
@@ -611,7 +622,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>addLast</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.194">addLast</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.208">addLast</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
 <div class="block">Adds <code>ics</code> last in <code>this</code>, possibly removing the first entry,
  if <code>this</code>' size would grow over <a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html#maxLines"><code>maxLines</code></a>.</div>
 <dl>
@@ -626,7 +637,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setFirst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.207">setFirst</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.221">setFirst</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
 <div class="block">Change the first entry in <code>this</code> to  <code>ics</code>, overwriting the existing
  first entry if present.</div>
 <dl>
@@ -641,7 +652,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setLast</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.221">setLast</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.235">setLast</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
 <div class="block">Change the last entry in <code>this</code> to  <code>ics</code>, overwriting the existing
  last entry if present.</div>
 <dl>
@@ -656,7 +667,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.231">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.245">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  float&nbsp;parentAlpha)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -670,7 +681,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>clearArea</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.288">clearArea</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.302">clearArea</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</pre>
 <div class="block">Paints this panel with <a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html#clearingColor"><code>clearingColor</code></a></div>
 </li>
 </ul>
@@ -680,7 +691,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>atMax</h4>
-<pre>protected&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.297">atMax</a>()</pre>
+<pre>protected&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.311">atMax</a>()</pre>
 </li>
 </ul>
 <a name="toDraw-squidpony.panel.IColoredString-int-">
@@ -689,7 +700,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>toDraw</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.302">toDraw</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics,
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.316">toDraw</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics,
                         int&nbsp;ydx)</pre>
 </li>
 </ul>
@@ -699,7 +710,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>applyMarkup</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.306">applyMarkup</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.320">applyMarkup</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics)</pre>
 </li>
 </ul>
 <a name="transform-squidpony.panel.IColoredString-int-">
@@ -708,7 +719,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>transform</h4>
-<pre>protected&nbsp;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.322">transform</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics,
+<pre>protected&nbsp;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.336">transform</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="type parameter in LinesPanel">T</a>&gt;&nbsp;ics,
                                                       int&nbsp;ydx)</pre>
 <div class="block">If you want to grey out "older" messages, you would do it in this method,
  when <code>ydx &gt; 0</code> (using an <code>IColorCenter</code> maybe ?).</div>
@@ -727,7 +738,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getRenderer</h4>
-<pre>protected&nbsp;com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.326">getRenderer</a>()</pre>
+<pre>protected&nbsp;com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LinesPanel.html#line.340">getRenderer</a>()</pre>
 </li>
 </ul>
 </li>

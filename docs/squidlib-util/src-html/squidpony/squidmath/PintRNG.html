@@ -284,7 +284,7 @@
 <span class="sourceLineNo">276</span>     */<a name="line.276"></a>
 <span class="sourceLineNo">277</span>    public static int disperse(int state)<a name="line.277"></a>
 <span class="sourceLineNo">278</span>    {<a name="line.278"></a>
-<span class="sourceLineNo">279</span>        state = (state ^= 0xD0E89D2D) &gt;&gt;&gt; 19 | state &lt;&lt; 13;<a name="line.279"></a>
+<span class="sourceLineNo">279</span>        state = ((state &gt;&gt;&gt; 19 | state &lt;&lt; 13) ^ 0x13A5BA1D);<a name="line.279"></a>
 <span class="sourceLineNo">280</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.280"></a>
 <span class="sourceLineNo">281</span>        return ((state *= 277803737) &gt;&gt;&gt; 22) ^ state;<a name="line.281"></a>
 <span class="sourceLineNo">282</span>    }<a name="line.282"></a>
@@ -302,7 +302,7 @@
 <span class="sourceLineNo">294</span>    }<a name="line.294"></a>
 <span class="sourceLineNo">295</span>    public static int disperseBounded(int state, final int bound)<a name="line.295"></a>
 <span class="sourceLineNo">296</span>    {<a name="line.296"></a>
-<span class="sourceLineNo">297</span>        state = (state ^= 0xD0E89D2D) &gt;&gt;&gt; 19 | state &lt;&lt; 13;<a name="line.297"></a>
+<span class="sourceLineNo">297</span>        state = ((state &gt;&gt;&gt; 19 | state &lt;&lt; 13) ^ 0x13A5BA1D);<a name="line.297"></a>
 <span class="sourceLineNo">298</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.298"></a>
 <span class="sourceLineNo">299</span>        return (int)((bound * ((((state *= 277803737) &gt;&gt;&gt; 22) ^ state) &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.299"></a>
 <span class="sourceLineNo">300</span>    }<a name="line.300"></a>

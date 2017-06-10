@@ -138,7 +138,7 @@
 <dd>
 <div class="block">Like FlapRNG, this sacrifices quality for speed, but it uses 64-bit math and as such has a larger period (FlapRNG
  will repeat the cycle of random numbers it produces after about 8 billion numbers, while this will only repeat after
- many more, at least 2 to the 64).</div>
+ many more, probably 2 to the 65).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG--">LapRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
 <dd>
@@ -164,10 +164,15 @@
 <div class="block">This constructor takes ints for seeds, but internally LapRNG uses longs, so it multiplies each input by a large
  constant and adds another to get the state it actually will start with.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG-int-int-int-">LapRNG(int, int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
+<dd>
+<div class="block">This constructor takes 3 ints for seeds, but internally LapRNG uses 2 longs (one, state0, only considers its
+ upper 48 bits significant and has closely correlated results if inputs don't differ on significant bits).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#LapRNG-java.lang.CharSequence-">LapRNG(CharSequence)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
 <dd>
-<div class="block">This constructor gets a 64-bit hash code from the given String or other CharSequence and gives it to the
- constructor that takes one long, <a href="../squidpony/squidmath/LapRNG.html#LapRNG-long-"><code>LapRNG.LapRNG(long)</code></a>.</div>
+<div class="block">This constructor gets three differently-calculated 32-bit hash codes from the given String or other
+ CharSequence and gives them to the constructor that takes three ints, <a href="../squidpony/squidmath/LapRNG.html#LapRNG-int-int-int-"><code>LapRNG.LapRNG(int, int, int)</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.KeySet.html#last--">last()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.KeySet.html" title="class in squidpony.squidmath">Arrangement.KeySet</a></dt>
 <dd>&nbsp;</dd>

@@ -757,7 +757,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  map generation (it's used in <a href="../../squidpony/squidmath/GreasedRegion.html#quasiRandomSeparated-double-"><code>GreasedRegion.quasiRandomSeparated(double)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>index</code> - the index to use from one of the sequences</dd>
+<dd><code>index</code> - the index to use from one of the sequences; will also be used to select sequence</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a double from 0.0 (inclusive, but extremely rare) to 1.0 (exclusive); values will tend to spread apart</dd>
 </dl>
@@ -779,7 +779,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  method, this method needs to perform some manipulation of index to keep a call that passes 2 for index different
  enough from a call that passes 3 (this should result in 0.4257662296295166 and 0.7359509468078613). You may want
  to perform a similar manipulation if you find yourself reseeding a PRNG with numerically-close seeds; this can be
- done for a value called index with <code>((index ^ 0xD0E89D2D) &gt;&gt;&gt; 19 | (index ^ 0xD0E89D2D) &lt;&lt; 13)</code>.
+ done for a value called index with <code>((index &gt;&gt;&gt; 19 | index &lt;&lt; 13) ^ 0x13A5BA1D)</code>.
 
  <br>
  Not all int values for index will produce unique results, since this produces a float and there are less distinct

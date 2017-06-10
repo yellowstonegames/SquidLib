@@ -76,6 +76,44 @@
 <dl>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord3D.html#z">z</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord3D.html" title="class in squidpony.squidmath">Coord3D</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">ZapRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">A variant on LapRNG that improves the quality at the expense of some speed.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ZapRNG.html#ZapRNG--">ZapRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath">ZapRNG</a></dt>
+<dd>
+<div class="block">Constructs a ZapRNG with a random internal state, using <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a> three times to get enough bits.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ZapRNG.html#ZapRNG-long-">ZapRNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath">ZapRNG</a></dt>
+<dd>
+<div class="block">Given one long for a seed, this fills the two internal longs of state with different values, each produced by
+ multiplying seed by a large constant and adding a different large constant.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ZapRNG.html#ZapRNG-int-">ZapRNG(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath">ZapRNG</a></dt>
+<dd>
+<div class="block">Given one int for a seed, this fills the two internal longs of state with different values, each produced by
+ multiplying seed by a large constant and adding a different large constant.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ZapRNG.html#ZapRNG-long-long-">ZapRNG(long, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath">ZapRNG</a></dt>
+<dd>
+<div class="block">The only constructor that does not modify its seeds in some way; you should ensure seed0 is large enough (at
+ least 25 bits should be needed to represent it, so greater than 33554432 or less than -33554433).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ZapRNG.html#ZapRNG-int-int-">ZapRNG(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath">ZapRNG</a></dt>
+<dd>
+<div class="block">This constructor takes ints for seeds, but internally ZapRNG uses longs, so it multiplies each input by a large
+ constant and adds another to get the state it actually will start with.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ZapRNG.html#ZapRNG-int-int-int-">ZapRNG(int, int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath">ZapRNG</a></dt>
+<dd>
+<div class="block">This constructor takes 3 ints for seeds, but internally ZapRNG uses 2 longs (one, state0, only considers its
+ upper 48 bits significant and has closely correlated results if inputs don't differ on significant bits).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ZapRNG.html#ZapRNG-java.lang.CharSequence-">ZapRNG(CharSequence)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath">ZapRNG</a></dt>
+<dd>
+<div class="block">This constructor gets three differently-calculated 32-bit hash codes from the given String or other
+ CharSequence and gives them to the constructor that takes three ints, <a href="../squidpony/squidmath/ZapRNG.html#ZapRNG-int-int-int-"><code>ZapRNG.ZapRNG(int, int, int)</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#zDecode-short-">zDecode(short)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Takes a Morton code, with interleaved x and y bits and x in the least significant bit, and returns the Coord

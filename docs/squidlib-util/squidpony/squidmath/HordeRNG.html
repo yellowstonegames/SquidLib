@@ -114,9 +114,9 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.23">HordeRNG</a>
+public class <a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.24">HordeRNG</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></pre>
+implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A mix of something like the fast algorithm of LapRNG with the larger state size of LongPeriodRNG, in the hopes of
  improving Lap's period without seriously reducing speed. It sorta works, since <a href="../../squidpony/squidmath/HordeRNG.html#nextLong--"><code>nextLong()</code></a> is faster than
  <a href="../../squidpony/squidmath/LongPeriodRNG.html#nextLong--"><code>LongPeriodRNG.nextLong()</code></a> by a fair amount, but only "sorta" because methods like <a href="../../squidpony/squidmath/HordeRNG.html#next-int-"><code>next(int)</code></a> slow
@@ -284,7 +284,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>state</h4>
-<pre>public final&nbsp;long[] <a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.24">state</a></pre>
+<pre>public final&nbsp;long[] <a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.26">state</a></pre>
 </li>
 </ul>
 <a name="choice">
@@ -293,7 +293,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>choice</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.25">choice</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.27">choice</a></pre>
 </li>
 </ul>
 </li>
@@ -310,7 +310,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>HordeRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.26">HordeRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.28">HordeRNG</a>()</pre>
 </li>
 </ul>
 <a name="HordeRNG-long-">
@@ -319,7 +319,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>HordeRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.31">HordeRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.33">HordeRNG</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="HordeRNG-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-">
@@ -328,7 +328,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>HordeRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.38">HordeRNG</a>(long&nbsp;a,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.40">HordeRNG</a>(long&nbsp;a,
                 long&nbsp;b,
                 long&nbsp;c,
                 long&nbsp;d,
@@ -352,7 +352,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>HordeRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.62">HordeRNG</a>(long[]&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.64">HordeRNG</a>(long[]&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -369,7 +369,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.83">setState</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.85">setState</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="nextLong--">
@@ -378,7 +378,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.90">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.92">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -398,7 +398,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.100">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.102">nextInt</a>()</pre>
 </li>
 </ul>
 <a name="next-int-">
@@ -407,7 +407,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.112">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.114">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -427,7 +427,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.125">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.127">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -445,7 +445,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.132">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.134">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -458,7 +458,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.140">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.142">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -471,7 +471,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.151">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/HordeRNG.html#line.153">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
