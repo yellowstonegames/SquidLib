@@ -146,6 +146,20 @@ public class LinesPanel<T extends Color> extends Actor {
 					+ getClass().getSimpleName() + " must be greater or equal than zero");
 		this.maxLines = maxLines;
 	}
+	/**
+	 * @param markup
+	 *            The markup to use, or {@code null} if none. You likely want to
+	 *            give {@link GDXMarkup}. If non-{@code null}, markup will be
+	 *            enabled in {@code font}.
+	 * @param font
+	 *            The font to use as a TextCellFactory, typically for distance field fonts.
+	 * @param maxLines
+	 *            The maximum number of lines that this panel should display.
+	 *            Must be {@code >= 0}.
+	 * @throws IllegalStateException
+	 *             If {@code maxLines < 0}
+	 */
+
 	public LinesPanel(/* @Nullable */ IMarkup<T> markup, TextCellFactory font, int maxLines) {
 		this.markup = markup;
 		this.tcf = font;
