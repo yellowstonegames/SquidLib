@@ -64,23 +64,20 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     public MeadNoise() {
         this(0x1337BEEF);
     }
-
-    public MeadNoise(final int seed) {
+    public MeadNoise(int seed)
+    {
         defaultSeed = seed;
     }
 
     public double getNoise(final double x, final double y) {
         return noise(x, y, defaultSeed);
     }
-
     public double getNoise(final double x, final double y, final double z) {
         return noise(x, y, z, defaultSeed);
     }
-
     public double getNoise(final double x, final double y, final double z, final double w) {
         return noise(x, y, z, w, defaultSeed);
     }
-
     public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
         return noise(x, y, z, w, u, v, defaultSeed);
     }
@@ -88,28 +85,17 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     public double getNoiseWithSeed(final double x, final double y, final int seed) {
         return noise(x, y, seed);
     }
-
     public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
         return noise(x, y, z, seed);
     }
-
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
         return noise(x, y, z, w, seed);
     }
-
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
         return noise(x, y, z, w, u, v, seed);
     }
 
-    private final static int[] gradientLUT = new int[261];
-
-    static {
-        for (int i = 0, seed = 0x1337BEEF; i < 261; i++, seed += 0x9E3779B9) {
-            gradientLUT[i] = PintRNG.determine((seed >>> 19 | seed << 13) ^ 0x13A5BA1D) >>> 8;
-        }
-    }
-
-    protected static final int[] gradient2DLUT = {0, 1, 0, -1,
+    protected static final float[] gradient2DLUT = {0, 1, 0, -1,
             1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
             0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
             0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
@@ -148,7 +134,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
             1, 0, -1, 0};
 
-    protected static final int[] gradient3DLUT = {0, 0, 1, 0, 0, -1,
+    protected static final float[] gradient3DLUT = {0, 0, 1, 0, 0, -1,
             0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 0, 0, 0, 0, 1,
             0, 0, -1, 0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 0, 0,
             0, 0, 1, 0, 0, -1, 0, 1, 0, 0, -1, 0, 1, 0, 0,
@@ -995,12 +981,11 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             7, 3, 0, 1, 7, 3, 1, 0};
 
     /**
-     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 24 bits.
-     *
-     * @param x    an int to incorporate into the hash
-     * @param y    an int to incorporate into the hash
+     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
+     * @param x an int to incorporate into the hash
+     * @param y an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int with 24 bits used
+     * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
     /*
@@ -1012,18 +997,17 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     */
     public static int hash(final int x, final int y, final int seed) {
         int a = 0x632BE5AB;
-        return (0x9E3779B9
+        return  (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
                 + (a ^= 0x85157AF5 * x + y)
-                + (a ^= 0x85157AF5 * y + seed)) * a >>> 8;
+                + (a ^= 0x85157AF5 * y + seed)) * a >>> 24;
     }
 
     /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
-     *
-     * @param x    an int to incorporate into the hash
-     * @param y    an int to incorporate into the hash
-     * @param z    an int to incorporate into the hash
+     * @param x an int to incorporate into the hash
+     * @param y an int to incorporate into the hash
+     * @param z an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
@@ -1038,7 +1022,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     */
     public static int hash(final int x, final int y, final int z, final int seed) {
         int a = 0x632BE5AB;
-        return (0x9E3779B9
+        return  (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
                 + (a ^= 0x85157AF5 * x + y)
                 + (a ^= 0x85157AF5 * y + z)
@@ -1048,31 +1032,28 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     /**
      * Possibly useful outside SeededNoise. A customized 5-input hash that mixes around all inputs fairly well, and
      * produces 8 bits.
-     *
-     * @param x    an int to incorporate into the hash
-     * @param y    an int to incorporate into the hash
-     * @param z    an int to incorporate into the hash
-     * @param w    an int to incorporate into the hash
+     * @param x an int to incorporate into the hash
+     * @param y an int to incorporate into the hash
+     * @param z an int to incorporate into the hash
+     * @param w an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
     public static int hashAlt(final int x, final int y, final int z, final int w, final int seed) {
         return (
-                z + 0xD3 * (seed + y)
-                        ^ w + 0xB5 * (x + z)
-                        ^ seed + 0xC1 * (y + w)
-                        ^ x + 0x95 * (z + seed)
-                        ^ y + 0xA3 * (w + x)) & 255;
+                z    + 0xD3 * (seed + y)
+                        ^ w    + 0xB5 * (x + z   )
+                        ^ seed + 0xC1 * (y + w   )
+                        ^ x    + 0x95 * (z + seed)
+                        ^ y    + 0xA3 * (w + x   )) & 255;
     }
-
     /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
-     *
-     * @param x    an int to incorporate into the hash
-     * @param y    an int to incorporate into the hash
-     * @param z    an int to incorporate into the hash
-     * @param w    an int to incorporate into the hash
+     * @param x an int to incorporate into the hash
+     * @param y an int to incorporate into the hash
+     * @param z an int to incorporate into the hash
+     * @param w an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
@@ -1085,41 +1066,38 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                 + (a ^= 0x85157AF5 * z + w)
                 + (a ^= 0x85157AF5 * w + seed)) * a >>> 24;
     }
-
     /**
      * Possibly useful outside SeededNoise. A customized 5-input hash that mixes around all inputs fairly well, and
      * produces 8 bits.
-     *
-     * @param x    an int to incorporate into the hash
-     * @param y    an int to incorporate into the hash
-     * @param z    an int to incorporate into the hash
-     * @param w    an int to incorporate into the hash
-     * @param u    an int to incorporate into the hash
-     * @param v    an int to incorporate into the hash
+     * @param x an int to incorporate into the hash
+     * @param y an int to incorporate into the hash
+     * @param z an int to incorporate into the hash
+     * @param w an int to incorporate into the hash
+     * @param u an int to incorporate into the hash
+     * @param v an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
     public static int hashAlt(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
         return (
-                z + 0x89 * (seed + x)
-                        ^ w + 0xC1 * (x + y)
-                        ^ u + 0x95 * (y + z)
-                        ^ v + 0xD3 * (z + w)
+                z    + 0x89 * (seed + x)
+                        ^ w    + 0xC1 * (x + y)
+                        ^ u    + 0x95 * (y + z)
+                        ^ v    + 0xD3 * (z + w)
                         ^ seed + 0xA3 * (w + u)
-                        ^ x + 0xE3 * (u + v)
-                        ^ y + 0xB5 * (v + seed)) & 255;
+                        ^ x    + 0xE3 * (u + v)
+                        ^ y    + 0xB5 * (v + seed)) & 255;
     }
 
     /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
-     *
-     * @param x    an int to incorporate into the hash
-     * @param y    an int to incorporate into the hash
-     * @param z    an int to incorporate into the hash
-     * @param w    an int to incorporate into the hash
-     * @param u    an int to incorporate into the hash
-     * @param v    an int to incorporate into the hash
+     * @param x an int to incorporate into the hash
+     * @param y an int to incorporate into the hash
+     * @param z an int to incorporate into the hash
+     * @param w an int to incorporate into the hash
+     * @param u an int to incorporate into the hash
+     * @param v an int to incorporate into the hash
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
@@ -1135,10 +1113,68 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                 + (a ^= 0x85157AF5 * v + seed)) * a >>> 24;
     }
 
+    /*
+    private static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
+        final int result = 191 * x + 151 * y + 181 * w + 139 * z + 179 * u + 149 * v + 167 * seed;
+        return 0xFF & (result ^ (result >>> 7));
+    }
+    */
+//    /**
+//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
+//     * @param x an int to incorporate into the hash
+//     * @param y an int to incorporate into the hash
+//     * @param seed an int to incorporate into the hash
+//     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+//     */
+//    public static int hash(final int x, final int y, int seed) {
+//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ seed * 0x63413) ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
+//    }
+//
+//    /**
+//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
+//     * @param x an int to incorporate into the hash
+//     * @param y an int to incorporate into the hash
+//     * @param z an int to incorporate into the hash
+//     * @param seed an int to incorporate into the hash
+//     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+//     */
+//    public static int hash(final int x, final int y, final int z, int seed) {
+//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ seed * 0x63413)
+//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
+//    }
+//    /**
+//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
+//     * @param x an int to incorporate into the hash
+//     * @param y an int to incorporate into the hash
+//     * @param z an int to incorporate into the hash
+//     * @param w an int to incorporate into the hash
+//     * @param seed an int to incorporate into the hash
+//     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+//     */
+//    public static int hash(final int x, final int y, final int z, final int w, int seed) {
+//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ seed * 0x63413)
+//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
+//    }
+//    /**
+//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
+//     * @param x an int to incorporate into the hash
+//     * @param y an int to incorporate into the hash
+//     * @param z an int to incorporate into the hash
+//     * @param w an int to incorporate into the hash
+//     * @param u an int to incorporate into the hash
+//     * @param v an int to incorporate into the hash
+//     * @param seed an int to incorporate into the hash
+//     * @return a pseudo-random-like int between 0 and 255, inclusive on both
+//     */
+//    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, int seed) {
+//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ u * 0xb34eb ^ v * 0x2feb7 ^ seed * 0x63413)
+//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
+//    }
+
+
 
     /**
      * Like {@link Math#floor}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
-     *
      * @param t the float to find the floor for
      * @return the floor of t, as an int
      */
@@ -1146,23 +1182,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         return t >= 0 ? (int) t : (int) t - 1;
     }
 
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird doubles like INFINITY and NaN.
-     *
-     * @param t the double to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static int fastFloor(double t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
 
-
-    protected static final int BOUND = 0xffffff,
-            F2 = 6140887, G2 = 3545443,
-            F3 = 5592405, G3 = 2796203,
-            F4 = 5184445, G4 = 2318554, LIMIT4 = 10401873,
-            F6 = 4601854, G6 = 1739337, LIMIT6 = 14428405;
-    /*
     protected static final float F2 = 0.36602540378443864676372317075294f,
             G2 = 0.21132486540518711774542560974902f,
             F3 = 1f / 3f,
@@ -1172,7 +1192,8 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             F6 = (float)(Math.sqrt(7.0) - 1.0) / 6f,
             G6 = F6 / (float)(1.0 + 6.0 * F6),
             LIMIT4 = 0.62f,
-            LIMIT6 = 0.86f;*/
+    //LIMIT6 = 0.777f
+    LIMIT6 = 0.86f
             /*
             sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
             a6 = (float)(Math.sqrt((sideLength * sideLength)
@@ -1181,7 +1202,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             cornerFaceSq = cornerFace * cornerFace,
             valueScaler = 9.5f
              */
-
+            ;
     //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
 
     private static final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
@@ -1191,412 +1212,180 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     private static final int[] distOrder = {0, 0, 0, 0, 0, 0},
             newDistOrder = new int[]{-1, 0, 0, 0, 0, 0, 0},
             intLoc = {0, 0, 0, 0, 0, 0};
-
     public static double noise(final double x, final double y, final int seed) {
-        return noise((float) x, (float) y, seed);
+        return noise((float)x, (float)y, seed);
     }
-
-    public static float randomize(int state, final int jump) {
-        state = (state - jump) * jump;
-        state ^= state >>> (4 + (state >>> 28));
-        return NumberTools.intBitsToFloat(((((state *= 277803737) >>> 22) ^ state) >>> 9) | 0x40000000) - 3f;
-    }
-
-    public static int randomInt(int state, final int jump) {
-        state = (state - jump) * jump;
-        state ^= state >>> (4 + (state >>> 28));
-        return ((state *= 277803737) >>> 22) ^ state;
-    }
-
-    public static int randomInt(int state) {
-        state ^= state >>> (4 + (state >>> 28));
-        return ((state *= 277803737) >>> 22) ^ state;
-    }
-
-    /**
-     * Quintic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve
-     *
-     * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
-     */
-    private static float querp(final float x) {
-        return x * x * x * (x * (x * 6f - 15f) + 10f);
-    }
-
-    /**
-     * Pair of Cubic (Hermite) Flat Interpolations; for x from 0 to 1, returns results from 0 to 0 on an S-curve, with
-     * crests and valleys no more than 0.097f above or below 0.
-     *
-     * @param x a float from 0 to 1
-     * @return a float from 0 to 0.97, easing in to 0 at the endpoints on a curve
-     */
-    private static float carp(final float x) {
-        return x * (x * (x - 1) + (1 - x) * (1 - x));
-    }
-
-    /**
-     * Pair of Cubic (Hermite) Flat Interpolations plus linear interpolation; for x from 0 to 1, returns results from 0
-     * to 1 on an S-curve.
-     *
-     * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
-     */
-    private static float carp2(final float x) {
-        return x - x * (x * (x - 1) + (1 - x) * (1 - x));
-    }
-
-    /**
-     * Pair of Cubic (Hermite) Flat Interpolations plus linear interpolation; for x from -1 to 1, returns results from
-     * -1 to 1 on an S-curve.
-     *
-     * @param x a float from -1 to 1
-     * @return a float from -1 to 1, easing in to -1 or 1 at those endpoints on a curve
-     */
-    private static float carpMid(final float x) {
-        return carp2(x * 0.5f + 0.5f) * 2f - 1f;
-    }
-
-    /**
-     * Simple Cubic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve, with more
-     * distinct curving but less smooth of a "takeoff and landing" as it reaches endpoints, relative to
-     * {@link #querp(float)}. In practice, this looks more like a middle ground between linear interpolation and querp.
-     *
-     * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in somewhat to 0 or 1 at those endpoints on a curve
-     */
-    private static float cerp(final float x) {
-        return x * x * (3f - 2f * x);
-    }
-
-    /**
-     * Slightly faster verson of {@link #querp(float)} for quintic hermite interpolation, but this doesn't distribute
-     * as evenly as proper quintic interpolation, and may offset the average value when used for noise.
-     *
-     * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
-     */
-    private static float querp2(final float x) {
-        final float x3 = x * x * x;
-        return (7f + (x3 - 7f) * x) * x3;
-    }
-
-    /**
-     * Linearly interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
-     * @param start a valid float
-     * @param end a valid float
-     * @param a a float between 0 and 1 inclusive
-     * @return a float between x and y inclusive
-     */
-    private static float interpolate(final float start, final float end, final float a)
-    {
-        return (1f - a) * start + a * end;
-    }
-
-    private static float balanceFloat(final int n) {
-        return (NumberTools.intBitsToFloat(0x40000000 | n >>> 9) - 3.0f);
-    }
-
-    private static final int xJump = 0x9E3779B9, yJump = 0xBFDAE4F7, zJump = 0xF35692B5,
-            wJump = 0xA98145F3, uJump = 0xE723596B, vJump = 0xC85EA40D;
-
     public static float noise(final float x, final float y, final int seed) {
-        final int
-                xx0 = fastFloor(x), yy0 = fastFloor(y),
-                num2 =  (seed - (((seed * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx0g0 = (seed + (((xx0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx0g1 = (rxx0g0 + ((((xx0 + xJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ryy0g0 = (num2 + (((yy0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ryy0g1 = (ryy0g0 + ((((yy0 + yJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx1g0 = (seed + ((((xx0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx1g1 = (rxx1g0 + ((((xx0 + 1 + xJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ryy1g0 = (num2 + ((((yy0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ryy1g1 = (ryy1g0 + ((((yy0 + 1 + yJump) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F);
+        final float s = (x + y) * F2;
+        final float[] gradient2DLUT = MeadNoise.gradient2DLUT, jitterLUT = MeadNoise.gradient6DLUT;
+        final int i = fastFloor(x + s),
+                j = fastFloor(y + s);
+        float t = (i + j) * G2,
+                x0 = x - (i - t),
+                y0 = y - (j - t);
+        int i1, j1;
+        if (x0 > y0) {
+            i1 = 1;
+            j1 = 0;
+        } else {
+            i1 = 0;
+            j1 = 1;
+        }
+        final int h0 = hash(i, j, seed) << 1,
+                h1 = hash(i + i1, j + j1, seed) << 1,
+                h2 = hash(i + 1, j + 1, seed) << 1;
+        final float mx0 = jitterLUT[h0] * 0.25f, my0 = jitterLUT[h0 | 1] * 0.25f,
+                mx1 = jitterLUT[h1] * 0.25f, my1 = jitterLUT[h1 | 1] * 0.25f,
+                mx2 = jitterLUT[h2] * 0.25f, my2 = jitterLUT[h2 | 1] * 0.25f;
         final float
-                dx = (x - xx0), dy = (y - yy0),
-                cx = querp(dx), cy = querp(dy),
-                rx0y0 = ((rxx0g0 * ryy0g0 >> 16) * dx        + (rxx0g1 * ryy0g1 >> 16) * dy       ) * 1.625f,
-                rx0y1 = ((rxx0g0 * ryy1g0 >> 16) * dx        + (rxx0g1 * ryy1g1 >> 16) * (dy - 1f)) * 1.625f,
-                rx1y0 = ((rxx1g0 * ryy0g0 >> 16) * (dx - 1f) + (rxx1g1 * ryy0g1 >> 16) * dy       ) * 1.625f,
-                rx1y1 = ((rxx1g0 * ryy1g0 >> 16) * (dx - 1f) + (rxx1g1 * ryy1g1 >> 16) * (dy - 1f)) * 1.625f;
-        return NumberTools.bounce(interpolate(interpolate(rx0y0, rx1y0, cx), interpolate(rx0y1, rx1y1, cx), cy) + 163840f);
-    }
-
-    private static final IntVLA columns = new IntVLA(128), // x
-            rows = new IntVLA(128), // y
-            layers = new IntVLA(128), // z
-            wos = new IntVLA(128), // w
-            ubs = new IntVLA(128), // u
-            vys = new IntVLA(128); // v
-
-    public static void addNoiseField(final float[][] target, final float startX, final float startY,
-                                     final float endX, final float endY, final int seed, final float multiplier, final float shrink) {
-        int callWidth = target.length, callHeight = target[0].length,
-                alter = randomInt(seed, xJump), alter2 = randomInt(~seed, yJump),
-                xx0, yy0, rxx0, ryy0, rxx1, ryy1, cx, cy;
-        final float startX2 = startX * shrink, startY2 = startY * shrink, endX2 = endX * shrink, endY2 = endY * shrink,
-                stretchX = (1f + randomize(alter, yJump) * 0.25f) * (alter2 >> 31 | 1),
-                stretchY = (1f + randomize(alter2, xJump) * 0.25f) * (alter >> 31 | 1),
-                stepX = (endX2 - startX2) / callWidth, stepY = (endY2 - startY2) / callHeight,
-                minimumX = Math.min(startX2 * stretchX - startY2 * stretchY * 0.25f,
-                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.25f,
-                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.25f, endX2 * stretchX - endY2 * stretchY * 0.25f))),
-                maximumX = Math.max(startX2 * stretchX - startY2 * stretchY * 0.25f,
-                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.25f,
-                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.25f, endX2 * stretchX - endY2 * stretchY * 0.25f))),
-                minimumY = Math.min(startY2 * stretchX - startX2 * stretchY * 0.25f,
-                        Math.min(startY2 * stretchX - endX2 * stretchY * 0.25f,
-                                Math.min(endY2 * stretchX - startX2 * stretchY * 0.25f, endY2 * stretchX - endX2 * stretchY * 0.25f))),
-                maximumY = Math.max(startY2 * stretchX - startX2 * stretchY * 0.25f,
-                        Math.max(startY2 * stretchX - endX2 * stretchY * 0.25f,
-                                Math.max(endY2 * stretchX - startX2 * stretchY * 0.25f, endY2 * stretchX - endX2 * stretchY * 0.25f)));
-        float dx, dy, ax, ay;
-        final int startFloorX = fastFloor(minimumX),
-                startFloorY = fastFloor(minimumY),
-                //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,
-                spaceWidth = fastFloor(maximumX - minimumX) + 4, spaceHeight = fastFloor(maximumY - minimumY) + 4;//bonusWidth = Math.abs(startFloorX - fastFloor(minimumX)), bonusHeight = Math.abs(startFloorY - fastFloor(minimumY));
-
-        columns.clear();
-        rows.clear();
-        columns.ensureCapacity(spaceWidth);
-        rows.ensureCapacity(spaceHeight);
-        for (int x = 0, r = startFloorX * alter; x < spaceWidth; x++, r += alter) {
-            columns.add(randomInt(r));
+                x1 = x0 - i1 + G2,
+                y1 = y0 - j1 + G2,
+                x2 = x0 - 1f + 2f * G2,
+                y2 = y0 - 1f + 2f * G2;
+        float n0, n1, n2;
+        float t0 = 0.5f - x0 * x0 - y0 * y0;
+        if (t0 < 0)
+            n0 = 0;
+        else {
+            t0 *= t0;
+            n0 = t0 * ((x0 + mx0) * gradient2DLUT[h0] + (y0 + my0) * gradient2DLUT[h0 | 1]);
         }
-        for (int y = 0, r = startFloorY * alter2; y < spaceHeight; y++, r += alter2) {
-            rows.add(randomInt(r));
+        float t1 = 0.5f - x1 * x1 - y1 * y1;
+        if (t1 < 0)
+            n1 = 0;
+        else {
+            t1 *= t1;
+            n1 = t1 * ((x1 + mx1) * gradient2DLUT[h1] + (y1 + my1) * gradient2DLUT[h1 | 1]);
         }
-        cx = 0;
-        for (float x = startX2; cx < callWidth; x += stepX, cx++) {
-            cy = 0;
-            for (float y = startY2; cy < callHeight; y += stepY, cy++) {
-                ax = x * stretchX - y * stretchY * 0.25f;
-                ay = y * stretchX - x * stretchY * 0.25f;
-                xx0 = fastFloor(ax);
-                yy0 = fastFloor(ay);
-                rxx0 = columns.get(xx0 - startFloorX + 1);
-                ryy0 = rows.get(yy0 - startFloorY + 1);
-                rxx1 = columns.get(xx0 + 1 - startFloorX + 1);
-                ryy1 = rows.get(yy0 + 1 - startFloorY + 1);
-                dx = carp2(ax - xx0);
-                dy = carp2(ay - yy0);
-                target[cx][cy] += NumberTools.bounce(
-                        (rxx0 * ryy0 >> 16) * (1f - dx) * (1f - dy)
-                                + (rxx0 * ryy1 >> 16) * (1f - dx) * dy
-                                + (rxx1 * ryy0 >> 16) * dx * (1f - dy)
-                                + (rxx1 * ryy1 >> 16) * dx * dy
-                                + 163840f) * multiplier;
-            }
+        float t2 = 0.5f - x2 * x2 - y2 * y2;
+        if (t2 < 0)
+            n2 = 0;
+        else {
+            t2 *= t2;
+            n2 = t2 * ((x2 + mx2) * gradient2DLUT[h2] + (y2 + my2) * gradient2DLUT[h2 | 1]);
         }
-    }
-
-    public static void addNoiseField(final float[][][] target,
-                                     final float startX, final float startY, final float startZ,
-                                     final float endX, final float endY, final float endZ,
-                                     final int seed, final float multiplier, final float shrink) {
-        int callWidth = target[0].length, callHeight = target[0][0].length, callDepth = target.length,
-                alter = randomInt(seed, xJump), alter2 = randomInt(~seed, yJump), alter3 = randomInt(alter + alter2, zJump),
-                xx0, yy0, zz0, rxx0, ryy0, rzz0, rxx1, ryy1, rzz1, cx, cy, cz, vx0y0, vx1y0, vx0y1, vx1y1;
-        final float startX2 = startX * shrink, startY2 = startY * shrink, startZ2 = startZ * shrink,
-                endX2 = endX * shrink, endY2 = endY * shrink, endZ2 = endZ * shrink,
-                stretchX = (1f + randomize(alter, yJump) * 0.25f) * (alter3 >> 31 | 1),
-                stretchY = (1f + randomize(alter2, zJump) * 0.25f) * (alter >> 31 | 1),
-                stretchZ = (1f + randomize(alter3, xJump) * 0.25f) * (alter2 >> 31 | 1),
-                stepX = (endX2 - startX2) / callWidth, stepY = (endY2 - startY2) / callHeight, stepZ = (endZ2 - startZ2) / callDepth,
-                minimumX = Math.min(startX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
-                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
-                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
-                                        Math.min(endX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
-                                                Math.min(startX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
-                                                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
-                                                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
-                                                                        endX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f))))))),
-                maximumX = Math.max(startX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
-                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
-                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
-                                        Math.max(endX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,
-                                                Math.max(startX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
-                                                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
-                                                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,
-                                                                        endX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f))))))),
-                minimumY = Math.min(startY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
-                        Math.min(startY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
-                                Math.min(endY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
-                                        Math.min(endY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
-                                                Math.min(startY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
-                                                        Math.min(startY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
-                                                                Math.min(endY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
-                                                                        endY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f))))))),
-                maximumY = Math.max(startY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
-                        Math.max(startY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
-                                Math.max(endY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
-                                        Math.max(endY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,
-                                                Math.max(startY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
-                                                        Math.max(startY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
-                                                                Math.max(endY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,
-                                                                        endY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f))))))),
-                minimumZ = Math.min(startZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
-                        Math.min(startZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
-                                Math.min(endZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
-                                        Math.min(endZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
-                                                Math.min(startZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
-                                                        Math.min(startZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
-                                                                Math.min(endZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
-                                                                        endZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f))))))),
-                maximumZ = Math.max(startZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
-                        Math.max(startZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
-                                Math.max(endZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
-                                        Math.max(endZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,
-                                                Math.max(startZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
-                                                        Math.max(startZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
-                                                                Math.max(endZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,
-                                                                        endZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f)))))));
-
-
-        float dx, dy, dz, ax, ay, az, mx0y0, mx1y0, mx0y1, mx1y1;
-        final int startFloorX = fastFloor(minimumX),
-                startFloorY = fastFloor(minimumY),
-                startFloorZ = fastFloor(minimumZ),
-                //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,
-                spaceWidth = fastFloor(maximumX - minimumX) + 4,
-                spaceHeight = fastFloor(maximumY - minimumY) + 4,
-                spaceDepth = fastFloor(maximumZ - minimumZ) + 4;//bonusWidth = Math.abs(startFloorX - fastFloor(minimumX)), bonusHeight = Math.abs(startFloorY - fastFloor(minimumY));
-
-        columns.clear();
-        rows.clear();
-        layers.clear();
-        columns.ensureCapacity(spaceWidth);
-        rows.ensureCapacity(spaceHeight);
-        layers.ensureCapacity(spaceDepth);
-        for (int x = 0, r = startFloorX * alter; x < spaceWidth; x++, r += alter) {
-            columns.add(randomInt(r));
-        }
-        for (int y = 0, r = startFloorY * alter2; y < spaceHeight; y++, r += alter2) {
-            rows.add(randomInt(r));
-        }
-        for (int z = 0, r = startFloorZ * alter3; z < spaceDepth; z++, r += alter3) {
-            layers.add(randomInt(r));
-        }
-        cz = 0;
-        float[][] tt;
-        float[] t;
-        for (float z = startZ2; cz < callDepth; z += stepZ, cz++) {
-            tt = target[cz];
-            cx = 0;
-            for (float x = startX2; cx < callWidth; x += stepX, cx++) {
-                cy = 0;
-                t = tt[cx];
-                for (float y = startY2; cy < callHeight; y += stepY, cy++) {
-                    ax = x * stretchX - y * stretchY * 0.15625f + z * stretchZ * 0.09375f;
-                    ay = y * stretchX - z * stretchY * 0.15625f + x * stretchZ * 0.09375f;
-                    az = z * stretchX - x * stretchY * 0.15625f + y * stretchZ * 0.09375f;
-                    xx0 = fastFloor(ax);
-                    yy0 = fastFloor(ay);
-                    zz0 = fastFloor(az);
-                    rxx0 = columns.get(xx0 - startFloorX + 1);
-                    ryy0 = rows.get(yy0 - startFloorY + 1);
-                    rzz0 = layers.get(zz0 - startFloorZ + 1);
-                    rxx1 = columns.get(xx0 + 1 - startFloorX + 1);
-                    ryy1 = rows.get(yy0 + 1 - startFloorY + 1);
-                    rzz1 = layers.get(zz0 + 1 - startFloorZ + 1);
-                    dx = carp2(ax - xx0);
-                    dy = carp2(ay - yy0);
-                    dz = carp2(az - zz0);
-                    vx0y0 = rxx0 * ryy0;
-                    vx0y1 = rxx0 * ryy1;
-                    vx1y0 = rxx1 * ryy0;
-                    vx1y1 = rxx1 * ryy1;
-                    mx0y0 = (1f - dx) * (1f - dy);
-                    mx0y1 = (1f - dx) * dy;
-                    mx1y0 = dx * (1f - dy);
-                    mx1y1 = dx * dy;
-                    t[cy] += NumberTools.bounce(
-                            (vx0y0 * rzz0 >> 16) * mx0y0 * (1f - dz)
-                                    + (vx0y0 * rzz1 >> 16) * mx0y0 * dz
-                                    + (vx0y1 * rzz0 >> 16) * mx0y1 * (1f - dz)
-                                    + (vx0y1 * rzz1 >> 16) * mx0y1 * dz
-                                    + (vx1y0 * rzz0 >> 16) * mx1y0 * (1f - dz)
-                                    + (vx1y0 * rzz1 >> 16) * mx1y0 * dz
-                                    + (vx1y1 * rzz0 >> 16) * mx1y1 * (1f - dz)
-                                    + (vx1y1 * rzz1 >> 16) * mx1y1 * dz
-                                    + 163840f) * multiplier;
-                }
-            }
-        }
+        return NumberTools.bounce((n0 + n1 + n2) * 32f + 20f);
     }
 
     public static double noise(final double x, final double y, final double z, final int seed) {
-        return noise((float) x, (float) y, (float) z, seed);
+        return noise((float)x, (float)y, (float)z, seed);
     }
     public static float noise(final float x, final float y, final float z, final int seed) {
-        final int
-                xx0 = fastFloor(x), yy0 = fastFloor(y), zz0 = fastFloor(z),
-                num1 =  (seed - (((seed * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                num2 =  (num1 - (((num1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rx0 = PintRNG.determine(xx0 * num2 + num1),//(num2 - (((xx0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ry0 = PintRNG.determine(yy0 * seed + num2),//(seed - (((yy0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rz0 = PintRNG.determine(zz0 * num1 + seed),//(num1 - (((zz0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rx1 = PintRNG.determine((xx0+1) * num2 + num1),//(num2 - ((((xx0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                ry1 = PintRNG.determine((yy0+1) * seed + num2),//(seed - ((((yy0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rz1 = PintRNG.determine((zz0+1) * num1 + seed),//(num1 - ((((zz0 + 1) * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                rxx0g0 = (num1 + (((rx0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                //rxx0g1 = (rxx0g0 + ((((xx0 + xJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
-                //rxx0g2 = (rxx0g1 + ((((xx0 + xJump + num1) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F),//rxx0g0 + rxx0g1 + xJump,//
-                ryy0g0 = (num2 + (((ry0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                //ryy0g1 = (ryy0g0 + ((((yy0 + yJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
-                //ryy0g2 = (ryy0g1 + ((((yy0 + yJump + num2) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F),//ryy0g0 + ryy0g1 * yJump,//
-                rzz0g0 = (seed + (((rz0 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                //rzz0g1 = (rzz0g0 + ((((zz0 + zJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
-                //rzz0g2 = (rzz0g1 + ((((zz0 + zJump + seed) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F),//rzz0g0 + rzz0g1 + zJump,//
-                rxx1g0 = (num1 + (((rx1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                //rxx1g1 = (rxx1g0 + ((((xx0 + 1 + xJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
-                //rxx1g2 = (rxx1g1 + ((((xx0 + 1 + xJump + num1) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F), //rxx1g0 + rxx1g1 + xJump,//
-                ryy1g0 = (num2 + (((ry1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F),
-                //ryy1g1 = (ryy1g0 + ((((yy0 + 1 + yJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
-                //ryy1g2 = (ryy1g1 + ((((yy0 + 1 + yJump + num2) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F),//ryy1g0 + ryy1g1 + yJump,//
-                rzz1g0 = (seed + (((rz1 * 0xC6BC278D) >>> 28) + 60) * 0x632D978F)
-                //rzz1g1 = (rzz1g0 + ((((zz0 + 1 + zJump) * 0xC7BC278D) >>> 28) + 60) * 0x632D978F),
-                //rzz1g2 = (rzz1g1 + ((((zz0 + 1 + zJump + seed) * 0xC8BC278D) >>> 28) + 60) * 0x632D978F)
-                        ;//rzz1g0 + rzz1g1 + zJump;//
-        final float
-                dx = (x - xx0), dy = (y - yy0), dz = (z - zz0),
-                ex = dx - 1f, ey = dy - 1f, ez = dz - 1f,
-                cx = querp(dx), cy = querp(dy), cz = querp(dz),
-//                rx0 = (rxx0g0 * dx + ryy0g0 * dy + rzz0g0 * dz) * 0x3p-17f,
-//                rx1 = (rxx1g0 * ex + ryy1g0 * ey + rzz1g0 * ez) * 0x3p-17f,
-//                ry0 = (rxx0g1 * dx + ryy0g1 * dy + rzz0g1 * dz) * 0x3p-17f,
-//                ry1 = (rxx1g1 * ex + ryy1g1 * ey + rzz1g1 * ez) * 0x3p-17f,
-//                rz0 = (rxx0g2 * dx + ryy0g2 * dy + rzz0g2 * dz) * 0x3p-17f,
-//                rz1 = (rxx1g2 * ex + ryy1g2 * ey + rzz1g2 * ez) * 0x3p-17f,
-                rx0y0z0 = (rx0 * rxx0g0 * ryy0g0 * rzz0g0 * dx + ry0 * rxx0g0 * ryy0g0 * rzz0g0 * dy + rz0 * rxx0g0 * ryy0g0 * rzz0g0 * dz) * 0x2.87p-17f,
-                rx0y1z0 = (rx0 * rxx0g0 * ryy1g0 * rzz0g0 * dx + ry1 * rxx0g0 * ryy1g0 * rzz0g0 * ey + rz0 * rxx0g0 * ryy1g0 * rzz0g0 * dz) * 0x2.87p-17f,
-                rx1y0z0 = (rx1 * rxx1g0 * ryy0g0 * rzz0g0 * ex + ry0 * rxx1g0 * ryy0g0 * rzz0g0 * dy + rz0 * rxx1g0 * ryy0g0 * rzz0g0 * dz) * 0x2.87p-17f,
-                rx1y1z0 = (rx1 * rxx1g0 * ryy1g0 * rzz0g0 * ex + ry1 * rxx1g0 * ryy1g0 * rzz0g0 * ey + rz0 * rxx1g0 * ryy1g0 * rzz0g0 * dz) * 0x2.87p-17f,
-                rx0y0z1 = (rx0 * rxx0g0 * ryy0g0 * rzz1g0 * dx + ry0 * rxx0g0 * ryy0g0 * rzz1g0 * dy + rz1 * rxx0g0 * ryy0g0 * rzz1g0 * ez) * 0x2.87p-17f,
-                rx0y1z1 = (rx0 * rxx0g0 * ryy1g0 * rzz1g0 * dx + ry1 * rxx0g0 * ryy1g0 * rzz1g0 * ey + rz1 * rxx0g0 * ryy1g0 * rzz1g0 * ez) * 0x2.87p-17f,
-                rx1y0z1 = (rx1 * rxx1g0 * ryy0g0 * rzz1g0 * ex + ry0 * rxx1g0 * ryy0g0 * rzz1g0 * dy + rz1 * rxx1g0 * ryy0g0 * rzz1g0 * ez) * 0x2.87p-17f,
-                rx1y1z1 = (rx1 * rxx1g0 * ryy1g0 * rzz1g0 * ex + ry1 * rxx1g0 * ryy1g0 * rzz1g0 * ey + rz1 * rxx1g0 * ryy1g0 * rzz1g0 * ez) * 0x2.87p-17f;
+        float n0, n1, n2, n3;
+        final float[] gradient3DLUT = MeadNoise.gradient3DLUT;
+        final float s = (x + y + z) * F3;
+        final int i = fastFloor(x + s),
+                j = fastFloor(y + s),
+                k = fastFloor(z + s);
 
-//                rx0y0z0 = ((rxx0g0 * ryy0g0 * rzz0g0 >> 14) * dx        + (rxx0g1 * ryy0g1 * rzz0g1 >> 14) * dy        + (rxx0g2 * ryy0g2 * rzz0g2 >> 14) * dz       ) * 0.355f,
-//                rx0y1z0 = ((rxx0g0 * ryy1g0 * rzz0g0 >> 14) * dx        + (rxx0g1 * ryy1g1 * rzz0g1 >> 14) * (dy - 1f) + (rxx0g2 * ryy1g2 * rzz0g2 >> 14) * dz       ) * 0.355f,
-//                rx1y0z0 = ((rxx1g0 * ryy0g0 * rzz0g0 >> 14) * (dx - 1f) + (rxx1g1 * ryy0g1 * rzz0g1 >> 14) * dy        + (rxx1g2 * ryy0g2 * rzz0g2 >> 14) * dz       ) * 0.355f,
-//                rx1y1z0 = ((rxx1g0 * ryy1g0 * rzz0g0 >> 14) * (dx - 1f) + (rxx1g1 * ryy1g1 * rzz0g1 >> 14) * (dy - 1f) + (rxx1g2 * ryy1g2 * rzz0g2 >> 14) * dz       ) * 0.355f,
-//                rx0y0z1 = ((rxx0g0 * ryy0g0 * rzz1g0 >> 14) * dx        + (rxx0g1 * ryy0g1 * rzz1g1 >> 14) * dy        + (rxx0g2 * ryy0g2 * rzz1g2 >> 14) * (dz - 1f)) * 0.355f,
-//                rx0y1z1 = ((rxx0g0 * ryy1g0 * rzz1g0 >> 14) * dx        + (rxx0g1 * ryy1g1 * rzz1g1 >> 14) * (dy - 1f) + (rxx0g2 * ryy1g2 * rzz1g2 >> 14) * (dz - 1f)) * 0.355f,
-//                rx1y0z1 = ((rxx1g0 * ryy0g0 * rzz1g0 >> 14) * (dx - 1f) + (rxx1g1 * ryy0g1 * rzz1g1 >> 14) * dy        + (rxx1g2 * ryy0g2 * rzz1g2 >> 14) * (dz - 1f)) * 0.355f,
-//                rx1y1z1 = ((rxx1g0 * ryy1g0 * rzz1g0 >> 14) * (dx - 1f) + (rxx1g1 * ryy1g1 * rzz1g1 >> 14) * (dy - 1f) + (rxx1g2 * ryy1g2 * rzz1g2 >> 14) * (dz - 1f)) * 0.355f;
+        final float t = (i + j + k) * G3;
+        final float X0 = i - t, Y0 = j - t, Z0 = k - t,
+                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;
 
-//        return NumberTools.bounce(interpolate(rx0, rx1, cx) + interpolate(ry0, ry1, cy) + interpolate(rz0, rz1, cz) + 163840f);
-        return NumberTools.bounce(
-                interpolate(
-                        interpolate(interpolate(rx0y0z0, rx1y0z0, cx), interpolate(rx0y1z0, rx1y1z0, cx), cy),
-                        interpolate(interpolate(rx0y0z1, rx1y0z1, cx), interpolate(rx0y1z1, rx1y1z1, cx), cy),
-                        cz) + 163840f);
+        int i1, j1, k1;
+        int i2, j2, k2;
+
+        if (x0 >= y0) {
+            if (y0 >= z0) {
+                i1 = 1;
+                j1 = 0;
+                k1 = 0;
+                i2 = 1;
+                j2 = 1;
+                k2 = 0;
+            } else if (x0 >= z0) {
+                i1 = 1;
+                j1 = 0;
+                k1 = 0;
+                i2 = 1;
+                j2 = 0;
+                k2 = 1;
+            } else {
+                i1 = 0;
+                j1 = 0;
+                k1 = 1;
+                i2 = 1;
+                j2 = 0;
+                k2 = 1;
+            }
+        } else {
+            if (y0 < z0) {
+                i1 = 0;
+                j1 = 0;
+                k1 = 1;
+                i2 = 0;
+                j2 = 1;
+                k2 = 1;
+            } else if (x0 < z0) {
+                i1 = 0;
+                j1 = 1;
+                k1 = 0;
+                i2 = 0;
+                j2 = 1;
+                k2 = 1;
+            } else {
+                i1 = 0;
+                j1 = 1;
+                k1 = 0;
+                i2 = 1;
+                j2 = 1;
+                k2 = 0;
+            }
+        }
+
+        float x1 = x0 - i1 + G3,
+                y1 = y0 - j1 + G3,
+                z1 = z0 - k1 + G3,
+                x2 = x0 - i2 + 2f * G3,
+                y2 = y0 - j2 + 2f * G3,
+                z2 = z0 - k2 + 2f * G3,
+                x3 = x0 - 1f + 3f * G3,
+                y3 = y0 - 1f + 3f * G3,
+                z3 = z0 - 1f + 3f * G3;
+
+        final int h0 = hash(i, j, k, seed) * 3,
+                h1 = hash(i + i1, j + j1, k + k1, seed) * 3,
+                h2 = hash(i + i2, j + j2, k + k2, seed) * 3,
+                h3 = hash(i + 1, j + 1, k + 1, seed) * 3;
+
+        float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
+        if (t0 < 0.0f)
+            n0 = 0.0f;
+        else {
+            t0 *= t0;
+            n0 = t0 * t0 * (x0 * gradient3DLUT[h0] + y0 * gradient3DLUT[h0 + 1] + z0 * gradient3DLUT[h0 + 2]);
+        }
+
+        float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
+        if (t1 < 0.0f)
+            n1 = 0.0f;
+        else {
+            t1 *= t1;
+            n1 = t1 * t1 * (x1 * gradient3DLUT[h1] + y1 * gradient3DLUT[h1 + 1] + z1 * gradient3DLUT[h1 + 2]);
+        }
+
+        float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
+        if (t2 < 0.0f)
+            n2 = 0.0f;
+        else {
+            t2 *= t2;
+            n2 = t2 * t2 * (x2 * gradient3DLUT[h2] + y2 * gradient3DLUT[h2 + 1] + z2 * gradient3DLUT[h2 + 2]);
+        }
+
+        float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
+        if (t3 < 0.0f)
+            n3 = 0.0f;
+        else {
+            t3 *= t3;
+            n3 = t3 * t3 * (x3 * gradient3DLUT[h3] + y3 * gradient3DLUT[h3 + 1] + z3 * gradient3DLUT[h3 + 2]);
+        }
+
+        return (32f * (n0 + n1 + n2 + n3)) * 1.25086885f + 0.0003194984f;
     }
 
     public static double noise(final double x, final double y, final double z, final double w, final int seed) {
-        return noise((float) x, (float) y, (float) z, (float) w, seed);
+        return noise((float)x, (float)y, (float)z, (float)w, seed);
     }
-
     public static double noise(final float x, final float y, final float z, final float w, final int seed) {
         float n = 0.0f;
         final float s = (x + y + z + w) * F4;
@@ -1646,7 +1435,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                 h3 = hash(i + i3, j + j3, k + k3, l + l3, seed) << 2,
                 h4 = hash(i + 1, j + 1, k + 1, l + 1, seed) << 2;
         float t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-        if (t0 > 0) {
+        if(t0 > 0) {
             t0 *= t0;
             n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
         }
@@ -1676,7 +1465,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 
     public static double noise(final double x, final double y, final double z,
                                final double w, final double u, final double v, final int seed) {
-        return noise((float) x, (float) y, (float) z, (float) w, (float) u, (float) v, seed);
+        return noise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v, seed);
     }
 
     public static double noise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {
@@ -1702,19 +1491,19 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         cellDist[4] = u - skewU + unskew;
         cellDist[5] = v - skewV + unskew;
 
-        int o0 = (cellDist[0] < cellDist[1] ? 1 : 0) + (cellDist[0] < cellDist[2] ? 1 : 0) + (cellDist[0] < cellDist[3] ? 1 : 0) + (cellDist[0] < cellDist[4] ? 1 : 0) + (cellDist[0] < cellDist[5] ? 1 : 0);
-        int o1 = (cellDist[1] <= cellDist[0] ? 1 : 0) + (cellDist[1] < cellDist[2] ? 1 : 0) + (cellDist[1] < cellDist[3] ? 1 : 0) + (cellDist[1] < cellDist[4] ? 1 : 0) + (cellDist[1] < cellDist[5] ? 1 : 0);
-        int o2 = (cellDist[2] <= cellDist[0] ? 1 : 0) + (cellDist[2] <= cellDist[1] ? 1 : 0) + (cellDist[2] < cellDist[3] ? 1 : 0) + (cellDist[2] < cellDist[4] ? 1 : 0) + (cellDist[2] < cellDist[5] ? 1 : 0);
-        int o3 = (cellDist[3] <= cellDist[0] ? 1 : 0) + (cellDist[3] <= cellDist[1] ? 1 : 0) + (cellDist[3] <= cellDist[2] ? 1 : 0) + (cellDist[3] < cellDist[4] ? 1 : 0) + (cellDist[3] < cellDist[5] ? 1 : 0);
-        int o4 = (cellDist[4] <= cellDist[0] ? 1 : 0) + (cellDist[4] <= cellDist[1] ? 1 : 0) + (cellDist[4] <= cellDist[2] ? 1 : 0) + (cellDist[4] <= cellDist[3] ? 1 : 0) + (cellDist[4] < cellDist[5] ? 1 : 0);
-        int o5 = 15 - (o0 + o1 + o2 + o3 + o4);
+        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
+        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
+        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
+        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
+        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
+        int o5 = 15-(o0+o1+o2+o3+o4);
 
-        distOrder[o0] = 0;
-        distOrder[o1] = 1;
-        distOrder[o2] = 2;
-        distOrder[o3] = 3;
-        distOrder[o4] = 4;
-        distOrder[o5] = 5;
+        distOrder[o0]=0;
+        distOrder[o1]=1;
+        distOrder[o2]=2;
+        distOrder[o3]=3;
+        distOrder[o4]=4;
+        distOrder[o5]=5;
 
         float n = 0f;
         float skewOffset = 0f;
