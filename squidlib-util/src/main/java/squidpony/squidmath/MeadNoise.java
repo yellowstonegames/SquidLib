@@ -95,6 +95,43 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         return noise(x, y, z, w, u, v, seed);
     }
 
+    public static float[] randomUnitVectors(final int size, final int len) {
+        long seed = 0xC6BC279692B5C483L * len;
+        float[] vectors = new float[size * len];
+        float mag = 0.0f, v1, v2, s;
+        for (int u = 0; u < size; u++) {
+            for (int i = 0; i < len; ) {
+
+                do {
+                    v1 = ZapRNG.randomSignedFloat(seed, seed += 0xAE3779BE3779B9L); // between -1 and 1
+                    v2 = ZapRNG.randomSignedFloat(seed >> 1, seed + 0xDE3779BE3779B9L); // between -1 and 1
+                    s = v1 * v1 + v2 * v2;
+                } while (s >= 1 || s == 0);
+                double multiplier = Math.sqrt(-2 * Math.log(s) / s);
+                v1 *= multiplier;
+                vectors[u * len + i++] = v1;
+                mag += v1 * v1;
+                if (i < len) {
+                    vectors[u * len + i++] = (v2 *= multiplier);
+                    mag += v2 * v2;
+                }
+            }
+            if (mag == 0.0) {
+                vectors[u * len] = 1.0f;
+            } else {
+                mag = (float)Math.sqrt(mag);
+                for (int i = 0; i < len; i++) {
+                    vectors[u * len + i] /= mag;
+                }
+            }
+        }
+        return vectors;
+    }
+
+    protected static final float[] jitter2DLUT = randomUnitVectors(256, 2),
+            jitter3DLUT = randomUnitVectors(256, 3),  jitter4DLUT = randomUnitVectors(256, 4),
+            jitter6DLUT = randomUnitVectors(256, 6);
+
     protected static final float[] gradient2DLUT = {0, 1, 0, -1,
             1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
             0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
@@ -1217,7 +1254,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     }
     public static float noise(final float x, final float y, final int seed) {
         final float s = (x + y) * F2;
-        final float[] gradient2DLUT = MeadNoise.gradient2DLUT, jitterLUT = MeadNoise.gradient6DLUT;
+        final float[] gradient2DLUT = MeadNoise.gradient2DLUT, jitterLUT = MeadNoise.jitter2DLUT;
         final int i = fastFloor(x + s),
                 j = fastFloor(y + s);
         float t = (i + j) * G2,
@@ -1234,9 +1271,9 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         final int h0 = hash(i, j, seed) << 1,
                 h1 = hash(i + i1, j + j1, seed) << 1,
                 h2 = hash(i + 1, j + 1, seed) << 1;
-        final float mx0 = jitterLUT[h0] * 0.25f, my0 = jitterLUT[h0 | 1] * 0.25f,
-                mx1 = jitterLUT[h1] * 0.25f, my1 = jitterLUT[h1 | 1] * 0.25f,
-                mx2 = jitterLUT[h2] * 0.25f, my2 = jitterLUT[h2 | 1] * 0.25f;
+        final float mx0 = jitterLUT[h0] * 0.5f, my0 = jitterLUT[h0 | 1] * 0.5f,
+                mx1 = jitterLUT[h1] * 0.5f, my1 = jitterLUT[h1 | 1] * 0.5f,
+                mx2 = jitterLUT[h2] * 0.5f, my2 = jitterLUT[h2 | 1] * 0.5f;
         final float
                 x1 = x0 - i1 + G2,
                 y1 = y0 - j1 + G2,
@@ -1264,7 +1301,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             t2 *= t2;
             n2 = t2 * ((x2 + mx2) * gradient2DLUT[h2] + (y2 + my2) * gradient2DLUT[h2 | 1]);
         }
-        return NumberTools.bounce((n0 + n1 + n2) * 32f + 20f);
+        return NumberTools.bounce((n0 + n1 + n2) * 11.5f + 10f);
     }
 
     public static double noise(final double x, final double y, final double z, final int seed) {
@@ -1272,7 +1309,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     }
     public static float noise(final float x, final float y, final float z, final int seed) {
         float n0, n1, n2, n3;
-        final float[] gradient3DLUT = MeadNoise.gradient3DLUT;
+        final float[] gradient3DLUT = MeadNoise.gradient3DLUT, jitterLUT = MeadNoise.jitter3DLUT;
         final float s = (x + y + z) * F3;
         final int i = fastFloor(x + s),
                 j = fastFloor(y + s),
@@ -1347,40 +1384,44 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                 h1 = hash(i + i1, j + j1, k + k1, seed) * 3,
                 h2 = hash(i + i2, j + j2, k + k2, seed) * 3,
                 h3 = hash(i + 1, j + 1, k + 1, seed) * 3;
+        final float mx0 = jitterLUT[h0] * 0.25f, my0 = jitterLUT[h0 + 1] * 0.25f, mz0 = jitterLUT[h0 + 2] * 0.25f,
+                mx1 = jitterLUT[h1] * 0.25f, my1 = jitterLUT[h1 + 1] * 0.25f, mz1 = jitterLUT[h1 + 2] * 0.25f,
+                mx2 = jitterLUT[h2] * 0.25f, my2 = jitterLUT[h2 + 1] * 0.25f, mz2 = jitterLUT[h2 + 2] * 0.25f,
+                mx3 = jitterLUT[h3] * 0.25f, my3 = jitterLUT[h3 + 1] * 0.25f, mz3 = jitterLUT[h3 + 2] * 0.25f;
 
-        float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
+        float t0 = 0.75f - x0 * x0 - y0 * y0 - z0 * z0;
         if (t0 < 0.0f)
             n0 = 0.0f;
         else {
             t0 *= t0;
-            n0 = t0 * t0 * (x0 * gradient3DLUT[h0] + y0 * gradient3DLUT[h0 + 1] + z0 * gradient3DLUT[h0 + 2]);
+            n0 = t0 * t0 * ((x0 + mx0) * gradient3DLUT[h0] + (y0 + my0) * gradient3DLUT[h0 + 1] + (z0 + mz0) * gradient3DLUT[h0 + 2]);
         }
 
-        float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
+        float t1 = 0.75f - x1 * x1 - y1 * y1 - z1 * z1;
         if (t1 < 0.0f)
             n1 = 0.0f;
         else {
             t1 *= t1;
-            n1 = t1 * t1 * (x1 * gradient3DLUT[h1] + y1 * gradient3DLUT[h1 + 1] + z1 * gradient3DLUT[h1 + 2]);
+            n1 = t1 * t1 * ((x1 + mx1) * gradient3DLUT[h1] + (y1 + my1) * gradient3DLUT[h1 + 1] + (z1 + mz1) * gradient3DLUT[h1 + 2]);
         }
 
-        float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
+        float t2 = 0.75f - x2 * x2 - y2 * y2 - z2 * z2;
         if (t2 < 0.0f)
             n2 = 0.0f;
         else {
             t2 *= t2;
-            n2 = t2 * t2 * (x2 * gradient3DLUT[h2] + y2 * gradient3DLUT[h2 + 1] + z2 * gradient3DLUT[h2 + 2]);
+            n2 = t2 * t2 * ((x2 + mx2) * gradient3DLUT[h2] + (y2 + my2) * gradient3DLUT[h2 + 1] + (z2 + mz2) * gradient3DLUT[h2 + 2]);
         }
 
-        float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
+        float t3 = 0.75f - x3 * x3 - y3 * y3 - z3 * z3;
         if (t3 < 0.0f)
             n3 = 0.0f;
         else {
             t3 *= t3;
-            n3 = t3 * t3 * (x3 * gradient3DLUT[h3] + y3 * gradient3DLUT[h3 + 1] + z3 * gradient3DLUT[h3 + 2]);
+            n3 = t3 * t3 * ((x3 + mx3) * gradient3DLUT[h3] + (y3 + my3) * gradient3DLUT[h3 + 1] + (z3 + mz3) * gradient3DLUT[h3 + 2]);
         }
 
-        return (32f * (n0 + n1 + n2 + n3)) * 1.25086885f + 0.0003194984f;
+        return NumberTools.bounce((18.0f * (n0 + n1 + n2 + n3)) + 10f);
     }
 
     public static double noise(final double x, final double y, final double z, final double w, final int seed) {
