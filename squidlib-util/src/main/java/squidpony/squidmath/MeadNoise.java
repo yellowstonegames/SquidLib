@@ -103,8 +103,8 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             for (int i = 0; i < len; ) {
 
                 do {
-                    v1 = ZapRNG.randomSignedFloat(seed, seed += 0xAE3779BE3779B9L); // between -1 and 1
-                    v2 = ZapRNG.randomSignedFloat(seed >> 1, seed + 0xDE3779BE3779B9L); // between -1 and 1
+                    v1 = ZapRNG.randomSignedFloat(seed, seed += 0xA3779BE3779BE9L); // between -1 and 1
+                    v2 = ZapRNG.randomSignedFloat(seed >> 1, seed + 0xD9E3779BE3779BL); // between -1 and 1
                     s = v1 * v1 + v2 * v2;
                 } while (s >= 1 || s == 0);
                 double multiplier = Math.sqrt(-2 * Math.log(s) / s);
