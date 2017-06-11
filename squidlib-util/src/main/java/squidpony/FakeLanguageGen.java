@@ -1602,6 +1602,59 @@ public class FakeLanguageGen implements Serializable {
             new String[]{"'"}, new int[]{1, 2, 3, 4}, new double[]{3, 5, 9, 4}, 0.75, 0.35, 0.17, 0.07, genericSanityChecks, true).register();
 
     /**
+     * English-like language that omits complex spelling and doesn't include any of the uncommon word endings of English
+     * like "ought" or "ation." A good choice when you want something that doesn't use any non-US-keyboard letters,
+     * looks somewhat similar to English, and tries to be pronounceable without too much effort. This doesn't have any
+     * doubled or silent letters, nor does it require special rules for pronouncing vowels like "road" vs. "rod", though
+     * someone could make up any rules they want.
+     * <br>
+     * Fledan pranam, simig bag chaimer, drefar, woshash is sasik.
+     */
+    public static final FakeLanguageGen SIMPLISH = new FakeLanguageGen(
+            new String[]{
+                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                    "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
+                    "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
+                    "ai", "ai", "ea", "io", "oi", "ia", "io", "eo"
+            },
+            new String[]{"u", "u", "oa"},
+            new String[]{
+                    "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gl", "gr", "h", "j", "k", "l", "m", "n",
+                    "p", "pl", "pr", "r", "s", "sh", "sk", "st", "sp", "sl", "sm", "sn", "t", "tr", "th", "v", "w", "y", "z",
+                    "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gr", "h", "j", "k", "l", "m", "n",
+                    "p", "pl", "pr", "r", "s", "sh", "st", "sp", "sl", "t", "tr", "th", "w", "y",
+                    "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+                    "p", "r", "s", "sh", "t", "th",
+                    "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+                    "p", "r", "s", "sh", "t", "th",
+                    "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+                    "p", "r", "s", "sh", "t", "th",
+                    "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+                    "p", "r", "s", "sh", "t", "th",
+                    "b", "d", "f", "g", "h", "l", "m", "n",
+                    "p", "r", "s", "sh", "t", "th",
+                    "b", "d", "f", "g", "h", "l", "m", "n",
+                    "p", "r", "s", "sh", "t", "th",
+                    "r", "s", "t", "l", "n",
+            },
+            new String[]{"ch", "j", "w", "y", "v", "w", "y", "w", "y", "ch",
+                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+            },
+            new String[]{"bs", "lt", "mb", "ng", "ng", "nt", "ns", "ps", "mp", "rt", "rg", "sk", "rs", "ts", "lk", "ct",
+                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t", "th", "z",
+                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                    "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                    "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                    "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                    "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+            },
+            new String[]{},
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{7, 18, 6, 1}, 0.26, 0.12, 0.0, 0.0, genericSanityChecks, true).register();
+
+    /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
      */
     public FakeLanguageGen() {

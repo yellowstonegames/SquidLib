@@ -94,8 +94,8 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
      * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
-     * it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
-     * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good distribution
+     * and is fast) instead of a number chosen by hash from a single 256-element array.
      *
      * @param x X input; works well if between 0.0 and 1.0, but anything is accepted
      * @param y Y input; works well if between 0.0 and 1.0, but anything is accepted
@@ -113,14 +113,14 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public double getNoiseWithSeed(final double x, final double y, final int seed) {
-        return noise(x, y);
+        return noise(x, y, seed);
     }
     /**
      * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
-     * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good
+     * distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
      * @param z Z input
@@ -138,15 +138,15 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
-        return noise(x, y, z);
+        return noise(x, y, z, seed);
     }
 
     /**
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
-     * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good
+     * distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
      * @param z Z input
@@ -166,7 +166,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
-        return noise(x, y, z, w);
+        return noise(x, y, z, w, seed);
     }
 
 
@@ -174,14 +174,29 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
      * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
-     * it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
-     * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good distribution
+     * and is fast) instead of a number chosen by hash from a single 256-element array.
      *
      * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
      * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(final double xin, final double yin) {
+    public static double noise(final double xin, final double yin){
+        return noise(xin, yin, 123456789);
+    }
+
+    /**
+     * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
+     * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
+     * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
+     * it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good distribution
+     * and is fast) instead of a number chosen by hash from a single 256-element array.
+     *
+     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public static double noise(final double xin, final double yin, final int seed) {
         //xin *= epi;
         //yin *= epi;
         double noise0, noise1, noise2; // from the three corners
@@ -233,9 +248,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi1 = (hash >>>= 4) & 15;
         int gi2 = (hash >>> 4) & 15;
         */
-        int gi0 = determineBounded(i + determine(j), 16);
-        int gi1 = determineBounded(i + i1 + determine(j + j1), 16);
-        int gi2 = determineBounded(i + 1 + determine(j + 1), 16);
+        int gi0 = determineBounded(seed + i + determine(j), 16);
+        int gi1 = determineBounded(seed + i + i1 + determine(j + j1), 16);
+        int gi2 = determineBounded(seed + i + 1 + determine(j + 1), 16);
 
         // Calculate the contribution from the three corners
         double t0 = 0.5 - x0 * x0 - y0 * y0;
@@ -366,14 +381,29 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized for the
-     * limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather
+     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param xin X input
      * @param yin Y input
      * @param zin Z input
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(final double xin, final double yin, final double zin) {
+    public static double noise(final double xin, final double yin, final double zin){
+        return noise(xin, yin, zin, 123456789);
+    }
+
+    /**
+     * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
+     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
+     * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
+     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather
+     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
+     * @param xin X input
+     * @param yin Y input
+     * @param zin Z input
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public static double noise(final double xin, final double yin, final double zin, final int seed){
         //xin *= epi;
         //yin *= epi;
         //zin *= epi;
@@ -480,10 +510,10 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
-        int gi0 = determineBounded(i + determine(j + determine(k)), 12);
-        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 12);
-        int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2)), 12);
-        int gi3 = determineBounded(i + 1 + determine(j + 1 + determine(k + 1)), 12);
+        int gi0 = determineBounded(seed + i + determine(j + determine(k)), 12);
+        int gi1 = determineBounded(seed + i + i1 + determine(j + j1 + determine(k + k1)), 12);
+        int gi2 = determineBounded(seed + i + i2 + determine(j + j2 + determine(k + k2)), 12);
+        int gi3 = determineBounded(seed + i + 1 + determine(j + 1 + determine(k + 1)), 12);
 
         /*
         int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),
@@ -653,10 +683,10 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
 
-        int gi0 = PintRNG.determineBounded(i + PintRNG.determine(j + PintRNG.determine(k)), 12);
-        int gi1 = PintRNG.determineBounded(i + i1 + PintRNG.determine(j + j1 + PintRNG.determine(k + k1)), 12);
-        int gi2 = PintRNG.determineBounded(i + i2 + PintRNG.determine(j + j2 + PintRNG.determine(k + k2)), 12);
-        int gi3 = PintRNG.determineBounded(i + 1 + PintRNG.determine(j + 1 + PintRNG.determine(k + 1)), 12);
+        int gi0 = determineBounded(i + determine(j + determine(k)), 12);
+        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 12);
+        int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2)), 12);
+        int gi3 = determineBounded(i + 1 + determine(j + 1 + determine(k + 1)), 12);
 
         /*
         int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),
@@ -710,15 +740,33 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
      * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
-     * chunks because it uses a pseudo-random function (curiously, {@link PintRNG#determine(int)}, which is optimized
-     * for the limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.
+     * chunks because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather
+     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
      * @param z Z input
      * @param w W input (fourth-dimensional)
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(double x, double y, double z, double w) {
+    public static double noise(final double x, final double y, final double z, final double w) {
+        return noise(x, y, z, w, 123456789);
+    }
+
+    /**
+     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
+     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
+     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
+     * chunks because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather
+     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
+     * @param x X input
+     * @param y Y input
+     * @param z Z input
+     * @param w W input (fourth-dimensional)
+     * @param seed any int; will be used to completely alter the noise
+     * @return noise from -1.0 to 1.0, inclusive
+     */
+    public static double noise(final double x, final double y, final double z, final double w, final int seed)
+    {
         // The skewing and unskewing factors are hairy again for the 4D case
 
         // Skew the (x,y,z,w) space to figure out which cell of 24 simplices
@@ -803,11 +851,11 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         double z4 = z0 - 1.0 + 4.0 * G4;
         double w4 = w0 - 1.0 + 4.0 * G4;
 
-        int gi0 = determineBounded(i + determine(j + determine(k + determine(l))), 32);
-        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1))), 32);
-        int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2))), 32);
-        int gi3 = determineBounded(i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3))), 32);
-        int gi4 = determineBounded(i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1))), 32);
+        int gi0 = determineBounded(seed + i + determine(j + determine(k + determine(l))), 32);
+        int gi1 = determineBounded(seed + i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1))), 32);
+        int gi2 = determineBounded(seed + i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2))), 32);
+        int gi3 = determineBounded(seed + i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3))), 32);
+        int gi4 = determineBounded(seed + i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1))), 32);
 
         // Noise contributions from the five corners are n0 to n4
 
