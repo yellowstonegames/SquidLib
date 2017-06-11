@@ -13,10 +13,7 @@ import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.MeadNoise;
-import squidpony.squidmath.Noise;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 /**
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
@@ -45,7 +42,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
-    private FakeLanguageGen lang;
+    private FakeLanguageGen lang = FakeLanguageGen.SIMPLISH;
     private Pixmap pm;
     Texture pt;
     private int counter = 0;
@@ -312,13 +309,13 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         if(!Gdx.files.local("out/worlds/").exists())
             Gdx.files.local("out/worlds/").mkdirs();
-        pm = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pm = new Pixmap(width, height, Pixmap.Format.RGB888);
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
         rng = new StatefulRNG();
         seed = rng.getState();
         //world = new WorldMapGenerator.TilingMap(seed, width, height, SeededNoise.instance, 0.75);
-        world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Scaled3D(MeadNoise.instance, 1.1, 1.1, 1.1), 0.75);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Scaled3D(WhirlingNoise.instance, 0.75, 0.75, 0.75), 1.05);
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -401,8 +398,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
 
     public void putMap() {
-        // uncomment next line to generate maps as quickly as possible
-        generate(rng.nextLong());
+        String name = lang.word(rng, true); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
+        while (Gdx.files.local("out/worlds/" + name + ".png").exists())
+            name = lang.word(rng, true);
+
+        generate(CrossHash.Wisp.hash64(name));
         //display.erase();
         int hc, tc;
         int[][] heightCodeData = world.heightCodeData;
@@ -473,11 +473,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         pt.draw(pm, 0, 0);
         batch.draw(pt, 0, 0);
         batch.end();
-        lang = FakeLanguageGen.randomLanguage(rng.nextLong()).removeAccents();
-        String name = "out/worlds/" + lang.word(rng, true) + ".png";
-        while (Gdx.files.local(name).exists())
-            name = "out/worlds/" + lang.word(rng, true) + ".png";
-        PixmapIO.writePNG(Gdx.files.local(name), pm);
+        PixmapIO.writePNG(Gdx.files.local("out/worlds/" + name + ".png"), pm);
         if(++counter >= 64)
             Gdx.app.exit();
 
