@@ -57,7 +57,7 @@ public class Noise {
         public double getNoise(double x) {
             x *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 0.5) + (o << 6)) * s;
             }
@@ -68,7 +68,7 @@ public class Noise {
         public double getNoiseWithSeed(double x, final int seed) {
             x *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 //seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 0.5), (seed2 += 0x9E3779B9)) * s;
@@ -103,7 +103,7 @@ public class Noise {
             x *= frequency;
             y *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7)) * s;
             }
@@ -115,7 +115,7 @@ public class Noise {
             x *= frequency;
             y *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 //seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 0.5), y * i_s, (seed2 += 0x9E3779B9)) * s;
@@ -150,7 +150,7 @@ public class Noise {
             y *= frequency;
             z *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)) * s;
             }
@@ -163,7 +163,7 @@ public class Noise {
             y *= frequency;
             z *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 //seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 0.5), y * i_s, z * i_s, (seed2 += 0x9E3779B9)) * s;
@@ -199,7 +199,7 @@ public class Noise {
             z *= frequency;
             w *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9)) * s;
             }
@@ -213,7 +213,7 @@ public class Noise {
             z *= frequency;
             w *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 //seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 0.5), y * i_s, z * i_s, w * i_s, (seed2 += 0x9E3779B9)) * s;
@@ -251,7 +251,7 @@ public class Noise {
             u *= frequency;
             v *= frequency;
             int s = 1 << (octaves - 1);
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
                         , w * i_s + (o << 9), u * i_s + (o << 10), v * i_s + (o << 11)) * s;
@@ -268,7 +268,7 @@ public class Noise {
             u *= frequency;
             v *= frequency;
             int s = 1 << (octaves - 1), seed2 = seed;
-            double n = 0.0, i_s = 1.0;
+            double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s >>= 1) {
                 //seed2 = PintRNG.determine(seed2);
                 n += basis.getNoiseWithSeed(x * (i_s *= 0.5), y * i_s, z * i_s

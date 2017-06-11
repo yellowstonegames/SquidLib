@@ -46,7 +46,7 @@ public abstract class WorldMapGenerator {
             partialRiverData, partialLakeData;
     protected final GreasedRegion workingData;
     public final int[][] heightCodeData;
-    public double waterModifier = 0.0, coolingModifier = 1.0,
+    public double waterModifier = -1.0, coolingModifier = 1.0,
             minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
             minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
@@ -707,7 +707,8 @@ public abstract class WorldMapGenerator {
      * <a href="http://squidpony.github.io/SquidLib/DetailedWorldMapRiverDemo.png" >Example map</a>.
      */
     public static class TilingMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.75, terrainRidgedFreq = 1.1, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
+        //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
+        protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -830,7 +831,7 @@ public abstract class WorldMapGenerator {
             rng.setState(state);
             int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.25) + 0.89 : waterMod;
+            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p, q,
@@ -1003,7 +1004,7 @@ public abstract class WorldMapGenerator {
      * <a href="http://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
      */
     public static class SphereMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 2.5, terrainRidgedFreq = 1.3, heatFreq = 5.05, moistureFreq = 5.2, otherFreq = 5.5;
+        protected static final double terrainFreq = 1.9, terrainRidgedFreq = 2.8, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -1137,7 +1138,7 @@ public abstract class WorldMapGenerator {
             rng.setState(state);
             int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.25) + 0.89 : waterMod;
+            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p, q,

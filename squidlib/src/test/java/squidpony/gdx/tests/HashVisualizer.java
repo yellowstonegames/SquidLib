@@ -84,6 +84,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private final double[][][][] seamless = new double[3][64][64][64];
     private final SeededNoise seeded = new SeededNoise(0xDEADD00D);
     private final MeadNoise mead = new MeadNoise(); //new Noise.Layered4D(new MeadNoise(0xDEADD00D), 1, 4.55);
+    private final Noise.Noise2D mead2D = new Noise.Layered2D(MeadNoise.instance, 3);
+    private final Noise.Noise3D mead3D = new Noise.Layered3D(MeadNoise.instance, 3);
     private final Noise.Noise2D layered2D = new Noise.Layered2D(SeededNoise.instance, 2, 1.75);
     private final Noise.Noise3D layered3D = new Noise.Layered3D(SeededNoise.instance, 2, 1.75);
     private final Noise.Noise4D layered4D = new Noise.Layered4D(SeededNoise.instance, 2, 1.75);
@@ -106,10 +108,10 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
 
-    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(layered2D, ridged2D, 1, 1);
-    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(layered3D, ridged3D, 1, 1);
-    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(layered4D, ridged4D, 1, 1);
-    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(layered6D, ridged6D, 1, 1);
+    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(mead, ridged2D, 1, 1);
+    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(mead, ridged3D, 1, 1);
+    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(mead, ridged4D, 1, 1);
+    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(mead, ridged6D, 1, 1);
     private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
 
@@ -3060,9 +3062,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         floatGet(
-                                                (float)(mead.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
-                                                (float)(mead.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
-                                                (float)(mead.getNoiseWithSeed(x * 0.03125 + 10 + ctr * 0.05125, y * 0.03125 + 20 + ctr * 0.05125, 1234321) * 0.5 + 0.5),
+                                                (float)mead2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.045, y * 0.03125 + 30 + ctr * 0.045, 1234) * 0.5f + 0.5f,
+                                                (float)mead2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.045, y * 0.03125 + 10 + ctr * 0.045, 54321) * 0.5f + 0.5f,
+                                                (float)mead2D.getNoiseWithSeed(x * 0.03125 + 10 + ctr * 0.045, y * 0.03125 + 20 + ctr * 0.045, 1234321) * 0.5f + 0.5f,
                                                 1.0f));
                             }
                         }
@@ -3071,12 +3073,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Mead 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
-                                        20.0, 20.0, 20.0, 12) * 0.5
-                                        + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
-                                        40.0, 40.0, 20.0, 1234)
-                                        + */mead.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
-                                        123456) * 0.5 + 0.5);
+                                bright = (float)mead2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.045, y * 0.03125 + ctr * 0.045,123456)
+                                        * 0.5f + 0.5f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -3088,9 +3086,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         floatGet(
-                                                MeadNoise.noise(x * 0.03125f + 20f, y * 0.03125f + 30f, ctr * 0.05125f, 1234) * 0.5f + 0.5f,
-                                                MeadNoise.noise(x * 0.03125f + 30f, y * 0.03125f + 10f, ctr * 0.05125f, 54321) * 0.5f + 0.5f,
-                                                MeadNoise.noise(x * 0.03125f + 10f, y * 0.03125f + 20f, ctr * 0.05125f, 1234321) * 0.5f + 0.5f,
+                                                (float)mead3D.getNoiseWithSeed(x * 0.03125f + 20f, y * 0.03125f + 30f, ctr * 0.045f, 1234) * 0.5f + 0.5f,
+                                                (float)mead3D.getNoiseWithSeed(x * 0.03125f + 30f, y * 0.03125f + 10f, ctr * 0.045f, 54321) * 0.5f + 0.5f,
+                                                (float)mead3D.getNoiseWithSeed(x * 0.03125f + 10f, y * 0.03125f + 20f, ctr * 0.045f, 1234321) * 0.5f + 0.5f,
                                                 1.0f));
                             }
                         }
@@ -3099,7 +3097,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Mead 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = MeadNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.05125f, 123456) * 0.5f + 0.5f;
+                                bright = (float)mead3D.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456) * 0.5f + 0.5f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }

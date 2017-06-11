@@ -1,6 +1,7 @@
 # Build and Release Folders
 build/
 target/
+out/
 *.class
 *.iml
 .idea/
