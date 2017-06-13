@@ -19,38 +19,10 @@ public class ColorNoise extends SeededNoise {
 
     public static float colorNoise(final double noise)
     {
-        final int start = (int) ((noise + 1.0) * 0x1fffffff),
-                red = bounce256((int) ((noise + 1.0) * 0x7E9ef) >>> 9),//(start /* & 0x24924900 ) * 0x00015554 */ * 13 ) & 0xff000000,
-                grn = bounce256((int) ((noise + 1.0) * 0x789df) >>> 9),//(start /* & 0x49249200 ) * 0x0000AAAA */ * 11 ) & 0xff000000,
-                blu = bounce256((int) ((noise + 1.0) * 0x729bf) >>> 9);//(start /* & 0x92492400 ) * 0x00005555 */ * 7 )  & 0xff000000;
-
-        // crazy bitwise math trick.
-        // From https://stackoverflow.com/questions/14547087/extracting-bits-with-a-single-multiplication/14547307
-        // 00000000_00000000_00000000_00000000
-        // blue
-        // abcdefgh_00000000_00000000_00000000 // target
-        // a00b00c0_0d00e00f_00g00h00_00000000 // source bits
-        // 0x92492400
-        // 00000000_00000000_0h0g0f0e_0d0c0b0a // multiplier bits
-        // 0x00005555
-        // green
-        // abcdefgh_00000000_00000000_00000000 // target
-        // 0a00b00c_00d00e00_f00g00h0_00000000 // source bits
-        // 0x49249200
-        // 00000000_00000000_h0g0f0e0_d0c0b0a0 // multiplier bits
-        // 0x0000AAAA
-        // red
-        // abcdefgh_00000000_00000000_00000000 // target
-        // 00a00b00_c00d00e0_0f00g00h_00000000 // source bits
-        // 0x24924900
-        // 00000000_0000000h_0g0f0e0d_0c0b0a00 // multiplier bits
-        // 0x00015554
-
-        //System.out.println("red: " + StringKit.hex(((start & 0x24924900) * 0x00015554 >>> 24 & 0xff)));
-        //System.out.println("grn: " + StringKit.hex(((start & 0x49249200) * 0x0000AAAA >>> 16 & 0xff00)));
-        //System.out.println("blu: " + StringKit.hex(((start & 0x92492400) * 0x00005555 >>> 8 & 0xff0000)));
-        return NumberUtils.intToFloatColor(0xfe000000 | (blu << 16) |
-                (grn << 8) | (red));
+        return NumberUtils.intToFloatColor(0xfe000000 |
+                (bounce256((int) ((noise * 1.29 + 1.39) * (0x3DF9f)) >>> 8) << 16) |
+                (bounce256((int) ((noise * 1.18 + 1.45) * (0x3EB9f)) >>> 8) << 8) |
+                (bounce256((int) ((noise * 1.07 + 1.51) * (0x3E99f)) >>> 8)));
         //return NumberUtils.intToFloatColor(0xfe000000 | ((blu >>> 8) + (red >>> 10) + (grn >>> 10) & 0xff0000) |
         //        ((grn >>> 16) + (red >>> 18) + (blu >>> 18) & 0xff00) | ((red >>> 24) + (blu >>> 26) + (grn >>> 26) & 0xff));
     }
