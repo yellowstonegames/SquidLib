@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 22, noiseMode = 72;
+    private int hashMode = 43, rngMode = 22, noiseMode = 76;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -486,7 +486,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 78;
+                                    noiseMode %= 80;
                                 }
                                 switch (noiseMode)
                                 {
@@ -3099,6 +3099,24 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)mead3D.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456) * 0.5f + 0.5f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 78:
+                        Gdx.graphics.setTitle("ColorNoise 2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                                ColorNoise.colorNoise(x * 0.03125f + 20f + ctr * 0.045f, y * 0.03125f + 30f + ctr * 0.045f, 1234));
+                            }
+                        }
+                        break;
+                    case 79:
+                        Gdx.graphics.setTitle("ColorNoise 3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        ColorNoise.colorNoise(x * 0.03125f + 20f, y * 0.03125f + 30f, ctr * 0.045f, 1234));
                             }
                         }
                         break;

@@ -315,7 +315,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         rng = new StatefulRNG();
         seed = rng.getState();
         //world = new WorldMapGenerator.TilingMap(seed, width, height, SeededNoise.instance, 0.75);
-        world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Scaled3D(WhirlingNoise.instance, 0.75, 0.75, 0.75), 1.05);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Scaled3D(WhirlingNoise.instance, 0.78, 0.78, 0.78), 1.1);
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
