@@ -1114,12 +1114,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 + (a ^= 0x85157AF5 * v + seed)) * a >>> 24;
     }
 
-    /*
-    private static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
-        final int result = 191 * x + 151 * y + 181 * w + 139 * z + 179 * u + 149 * v + 167 * seed;
-        return 0xFF & (result ^ (result >>> 7));
-    }
-    */
 //    /**
 //     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
 //     * @param x an int to incorporate into the hash
@@ -1207,16 +1201,12 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
 
     private static final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
-    /*private static final int[]
-            distOrder = new int[]{-1, 0, 0, 0, 0, 0, 0},
-            intLoc = {0, 0, 0, 0, 0, 0};*/
     private static final int[] distOrder = {0, 0, 0, 0, 0, 0},
-            newDistOrder = new int[]{-1, 0, 0, 0, 0, 0, 0},
             intLoc = {0, 0, 0, 0, 0, 0};
     public static double noise(final double x, final double y, final int seed) {
         return noise((float)x, (float)y, seed);
     }
-    public static double noise(final float x, final float y, final int seed) {
+    public static float noise(final float x, final float y, final int seed) {
         final float s = (x + y) * F2;
         final float[] gradient2DLUT = SeededNoise.gradient2DLUT;
         final int i = fastFloor(x + s),
@@ -1264,14 +1254,14 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             t2 *= t2;
             n2 = t2 * t2 * (x2 * gradient2DLUT[h2] + y2 * gradient2DLUT[h2 | 1]);
         }
-        return (70f * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
+        return (70f * (n0 + n1 + n2)) * 1.42188695f + 0.001054489f;
     }
 
     public static double noise(final double x, final double y, final double z, final int seed) {
         return noise((float)x, (float)y, (float)z, seed);
     }
-    public static double noise(final float x, final float y, final float z, final int seed) {
-        double n0, n1, n2, n3;
+    public static float noise(final float x, final float y, final float z, final int seed) {
+        float n0, n1, n2, n3;
         final float[] gradient3DLUT = SeededNoise.gradient3DLUT;
         final float s = (x + y + z) * F3;
         final int i = fastFloor(x + s),
@@ -1349,44 +1339,44 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 h3 = hash(i + 1, j + 1, k + 1, seed) * 3;
 
         float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0.0)
-            n0 = 0.0;
+        if (t0 < 0.0f)
+            n0 = 0.0f;
         else {
             t0 *= t0;
             n0 = t0 * t0 * (x0 * gradient3DLUT[h0] + y0 * gradient3DLUT[h0 + 1] + z0 * gradient3DLUT[h0 + 2]);
         }
 
         float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0.0)
-            n1 = 0.0;
+        if (t1 < 0.0f)
+            n1 = 0.0f;
         else {
             t1 *= t1;
             n1 = t1 * t1 * (x1 * gradient3DLUT[h1] + y1 * gradient3DLUT[h1 + 1] + z1 * gradient3DLUT[h1 + 2]);
         }
 
         float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0)
-            n2 = 0.0;
+        if (t2 < 0.0f)
+            n2 = 0.0f;
         else {
             t2 *= t2;
             n2 = t2 * t2 * (x2 * gradient3DLUT[h2] + y2 * gradient3DLUT[h2 + 1] + z2 * gradient3DLUT[h2 + 2]);
         }
 
         float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0)
-            n3 = 0.0;
+        if (t3 < 0.0f)
+            n3 = 0.0f;
         else {
             t3 *= t3;
             n3 = t3 * t3 * (x3 * gradient3DLUT[h3] + y3 * gradient3DLUT[h3 + 1] + z3 * gradient3DLUT[h3 + 2]);
         }
 
-        return (32f * (n0 + n1 + n2 + n3)) * 1.25086885 + 0.0003194984;
+        return (32f * (n0 + n1 + n2 + n3)) * 1.25086885f + 0.0003194984f;
     }
 
     public static double noise(final double x, final double y, final double z, final double w, final int seed) {
         return noise((float)x, (float)y, (float)z, (float)w, seed);
     }
-    public static double noise(final float x, final float y, final float z, final float w, final int seed) {
+    public static float noise(final float x, final float y, final float z, final float w, final int seed) {
         float n = 0.0f;
         final float s = (x + y + z + w) * F4;
         final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
@@ -1459,7 +1449,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             t4 *= t4;
             n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
         }
-        return NumberTools.bounce(5.0 + 41.0 * n);
+        return NumberTools.bounce(5.0f + 41.0f * n);
     }
 
 
@@ -1468,7 +1458,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         return noise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v, seed);
     }
 
-    public static double noise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {
+    public static float noise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {
 
         final float s = (x + y + z + w + u + v) * F6;
 
@@ -1537,7 +1527,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             skewOffset += G6;
         }
         //return NumberTools.bounce(5.0 + 13.5 * n);
-        return NumberTools.bounce(10.0 + 16.25 * n);
+        return NumberTools.bounce(10.0f + 16.25f * n);
     }
 
 }

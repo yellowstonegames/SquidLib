@@ -6993,8 +6993,8 @@ public class SColor extends Color {
      */
     public static float floatGet(int c)
     {
-        return NumberUtils.intToFloatColor((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
-                | (c << 24 & 0xfe000000));
+        return NumberUtils.intToFloatColor((c >>> 24) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+                | (c << 24));
     }
 
     /**

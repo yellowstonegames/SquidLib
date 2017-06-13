@@ -52,12 +52,49 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             {(float)Math.cos(phi*13), (float)Math.sin(phi*12)}, {(float)Math.cos(phi*13), (float)Math.sin(phi*13)},
             {(float)Math.cos(phi*14), (float)Math.sin(phi*14)}, {(float)Math.cos(phi*15), (float)Math.sin(phi*15)},
     };
+//    protected static final float[][] phiGrad3f = new float[96][3];
+//
+//    static {
+//        final float root2 = 1.2599211f;
+//        int i = 0;
+//        for (; i < 16; i++) {
+//            phiGrad3f[i][0] = phiGrad2f[i & 15][0] * root2;
+//            phiGrad3f[i][1] = phiGrad2f[i & 15][1] * root2;
+//        }
+//        for (; i < 32; i++) {
+//            phiGrad3f[i][0] = phiGrad2f[i & 15][1] * root2;
+//            phiGrad3f[i][1] = phiGrad2f[i & 15][0] * root2;
+//        }
+//        for (; i < 48; i++) {
+//            phiGrad3f[i][0] = phiGrad2f[i & 15][0] * root2;
+//            phiGrad3f[i][2] = phiGrad2f[i & 15][1] * root2;
+//        }
+//        for (; i < 64; i++) {
+//            phiGrad3f[i][0] = phiGrad2f[i & 15][1] * root2;
+//            phiGrad3f[i][2] = phiGrad2f[i & 15][0] * root2;
+//        }
+//        for (; i < 80; i++) {
+//            phiGrad3f[i][1] = phiGrad2f[i & 15][0] * root2;
+//            phiGrad3f[i][2] = phiGrad2f[i & 15][1] * root2;
+//        }
+//        for (; i < 96; i++) {
+//            phiGrad3f[i][1] = phiGrad2f[i & 15][1] * root2;
+//            phiGrad3f[i][2] = phiGrad2f[i & 15][0] * root2;
+//        }
+//    }
 
     protected static float dotf(final float g[], final float x, final float y) {
         return g[0] * x + g[1] * y;
     }
 
     protected static float dotf(final int g[], final float x, final float y, final float z) {
+        return g[0] * x + g[1] * y + g[2] * z;
+    }
+    protected static float dotf(final float g[], final float x, final float y, final float z) {
+        return g[0] * x + g[1] * y + g[2] * z;
+    }
+
+    protected static double dot(final float g[], final double x, final double y, final double z) {
         return g[0] * x + g[1] * y + g[2] * z;
     }
 

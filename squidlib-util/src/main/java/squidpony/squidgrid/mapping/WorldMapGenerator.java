@@ -1004,7 +1004,7 @@ public abstract class WorldMapGenerator {
      * <a href="http://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
      */
     public static class SphereMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.9, terrainRidgedFreq = 2.8, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
+        protected static final double terrainFreq = 2.0, terrainRidgedFreq = 2.4, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
