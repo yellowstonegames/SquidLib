@@ -7015,6 +7015,39 @@ public class SColor extends Color {
                 | 0xfe000000); //rgbToFloatColor((b & 0xff) | (g << 8 & 0xff00) | (r << 16));
     }
 
+    /**
+     *
+     * @param hue 0f to 1f, color wheel position
+     * @param saturation 0f to 1f, 0f is grayscale and 1f is brightly colored
+     * @param value 0f to 1f, 0f is black and 1f is bright or light
+     * @param opacity 0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a float encoding a color with the given properties
+     */
+    public static float floatGetHSV(float hue, float saturation, float value, float opacity) {
+        if ( saturation < 0.004 )                       //HSV from 0 to 1
+        {
+            return floatGet(value, value, value, opacity);
+        }
+        else
+        {
+            final float h = (hue * 6f) % 6f;
+            final int i = (int)h;             //Or ... var_i = floor( var_h )
+            final float a = value * ( 1 - saturation );
+            final float b = value * ( 1 - saturation * ( h - i ) );
+            final float c = value * ( 1 - saturation * ( 1 - ( h - i ) ) );
+
+            switch (i)
+            {
+                case 0: return floatGet(value, c, a, opacity);
+                case 1: return floatGet(b, value, a, opacity);
+                case 2: return floatGet(a, value, c, opacity);
+                case 3: return floatGet(a, b, value, opacity);
+                case 4: return floatGet(c, a, value, opacity);
+                default: return floatGet(value, a, b, opacity);
+            }
+        }
+    }
+
     @SuppressWarnings("NumericOverflow")
     public static float lerpFloatColors(final float start, final float end, final float change)
     {
