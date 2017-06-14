@@ -1,6 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
-import com.badlogic.gdx.utils.NumberUtils;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.SeededNoise;
 
 /**
@@ -19,12 +19,11 @@ public class ColorNoise extends SeededNoise {
 
     public static float colorNoise(final double noise)
     {
-        return NumberUtils.intToFloatColor(0xfe000000 |
-                (bounce256((int) ((noise * 1.29 + 1.39) * (0x3DF9f)) >>> 8) << 16) |
-                (bounce256((int) ((noise * 1.18 + 1.45) * (0x3EB9f)) >>> 8) << 8) |
-                (bounce256((int) ((noise * 1.07 + 1.51) * (0x3E99f)) >>> 8)));
-        //return NumberUtils.intToFloatColor(0xfe000000 | ((blu >>> 8) + (red >>> 10) + (grn >>> 10) & 0xff0000) |
-        //        ((grn >>> 16) + (red >>> 18) + (blu >>> 18) & 0xff00) | ((red >>> 24) + (blu >>> 26) + (grn >>> 26) & 0xff));
+        return SColor.floatGetHSV(((float) noise + 1f), 0.8f + (float) NumberTools.bounce(noise * 9.0 + 10.0) * 0.2f, 0.8f + (float) NumberTools.bounce(noise * 7.0 + 8.5) * 0.2f, 1f);
+//        return NumberUtils.intToFloatColor(0xfe000000 |
+//                (bounce256((int) ((noise * 1.29 + 1.39) * (0x3DF9f)) >>> 8) << 16) |
+//                (bounce256((int) ((noise * 1.18 + 1.45) * (0x3EB9f)) >>> 8) << 8) |
+//                (bounce256((int) ((noise * 1.07 + 1.51) * (0x3E99f)) >>> 8)));
     }
 
     public static float colorNoise(final double x, final double y, final int seed) {
