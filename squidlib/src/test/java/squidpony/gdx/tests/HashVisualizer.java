@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 22, noiseMode = 76;
+    private int hashMode = 43, rngMode = 30, noiseMode = 76;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -129,7 +129,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
 
     private RandomnessSource fuzzy, random;
     private Random jreRandom;
@@ -638,7 +638,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 5:
                                 mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 34;
+                                rngMode %= 36;
                                 break;
                             case 0:
                                 hashMode++;
@@ -3541,7 +3541,26 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
-
+                    case 34:
+                        random = new BirdRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = random.next(24) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("BirdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 35:
+                        random = new BirdRNG(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = random.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("BirdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
                 }
             }
             break;
