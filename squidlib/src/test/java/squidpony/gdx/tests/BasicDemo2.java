@@ -1,9 +1,8 @@
-package squidpony.gdx.examples;
+package squidpony.gdx.tests;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,19 +11,18 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.OrthoLine;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BasicDemo extends ApplicationAdapter {
+public class BasicDemo2 extends ApplicationAdapter {
     SpriteBatch batch;
 
     private RNG rng;
@@ -32,14 +30,29 @@ public class BasicDemo extends ApplicationAdapter {
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
     private int[][] colorIndices, bgColorIndices, baseLightness;
+
+    //Here, gridHeight refers to the total number of rows to be displayed on the screen.
+    //We're displaying 24 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
+    //gridHeight is 24 because that variable will be used for generating the dungeon and handling movement within
+    //the upper 24 rows. The bonusHeight is the number of additional rows that aren't handled like the dungeon rows for
+    //UI reasons; here we use them for language samples. Next is gridWidth, which is 80 because we want 80 grid spaces
+    //across the whole screen. cellWidth and cellHeight are 10 and 22, which will match the starting dimensions of a
+    //cell, but won't be stuck at that value because we use a "Stretchable" font, and the cells can change size. While
+    //gridWidth and gridHeight are measured in spaces on the grid, cellWidth and cellHeight are the initial pixel
+    // dimensions of one cell. The font will look more crisp if the cell dimensions match the config multipliers
+    //exactly, and the stretchable fonts (technically, distance field fonts) can resize to non-square sizes and
+    //still retain most of that crispness.
+
     /** In number of cells */
-    private int gridWidth;
+    private static final int gridWidth = 80;
     /** In number of cells */
-    private int gridHeight;
+    private static final int gridHeight = 24;
+    /** In number of cells */
+    private static final int bonusHeight = 8;
     /** The pixel width of a cell */
-    private int cellWidth;
+    private static final int cellWidth = 10;
     /** The pixel height of a cell */
-    private int cellHeight;
+    private static final int cellHeight = 22;
     private SquidInput input;
     private Color bgColor;
     private Stage stage;
@@ -51,39 +64,23 @@ public class BasicDemo extends ApplicationAdapter {
     private String[] lang;
     private FakeLanguageGen.SentenceForm[] forms;
     private int langIndex = 0;
+    private char[] line;
+    private double[][] resistance;
+    private double[][] visible;
+    private GreasedRegion blockage;
+    private GreasedRegion seen;
     @Override
     public void create () {
-        //These variables, corresponding to the screen's width and height in cells and a cell's width and height in
-        //pixels, must match the size you specified in the launcher for input to behave.
-        //This is one of the more common places a mistake can happen.
-        //In our desktop launcher, we gave these arguments to the configuration:
-        //	config.width = 80 * 10;
-        //  config.height = 32 * 22;
-        //Here, config.height refers to the total number of rows to be displayed on the screen.
-        //We're displaying 24 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
-        //gridHeight is 24 because that variable will be used for generating the dungeon and handling movement within
-        //the upper 24 rows. Anything that refers to the full height, which happens rarely and usually for things like
-        //screen resizes, just uses gridHeight + 8. Next to it is gridWidth, which is 80 because we want 80 grid spaces
-        //across the whole screen. cellWidth and cellHeight are 10 and 22, and match the multipliers for config.width
-        //and config.height, but in this case don't strictly need to because we soon use a "Stretchable" font. While
-        //gridWidth and gridHeight are measured in spaces on the grid, cellWidth and cellHeight are the pixel dimensions
-        //of an individual cell. The font will look more crisp if the cell dimensions match the config multipliers
-        //exactly, and the stretchable fonts (technically, distance field fonts) can resize to non-square sizes and
-        //still retain most of that crispness.
-        gridWidth = 80;
-        gridHeight = 24;
-        cellWidth = 10;
-        cellHeight = 22;
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
         rng = new RNG("SquidLib!");
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         batch = new SpriteBatch();
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
-        stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + 8) * cellHeight), batch);
+        stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + bonusHeight) * cellHeight), batch);
         // the font will try to load CM-Custom as an embedded bitmap font with a distance field effect.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SquidLayers(gridWidth, gridHeight + 8, cellWidth, cellHeight,
+        display = new SquidLayers(gridWidth, gridHeight + bonusHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableSlabFont());
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
@@ -110,6 +107,10 @@ public class BasicDemo extends ApplicationAdapter {
         //When we draw, we may want to use a nicer representation of walls. DungeonUtility has lots of useful methods
         //for modifying char[][] dungeon grids, and this one takes each '#' and replaces it with a box-drawing character.
         lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
+
+        resistance = DungeonUtility.generateResistances(bareDungeon);
+        visible = new double[gridWidth][gridHeight];
+
         //Coord is the type we use as a general 2D point, usually in a dungeon.
         //Because we know dungeons won't be incredibly huge, Coord performs best for x and y values less than 256, but
         // by default it can also handle some negative x and y values (-3 is the lowest it can efficiently store). You
@@ -142,6 +143,13 @@ public class BasicDemo extends ApplicationAdapter {
         // if you gave a seed to the RNG constructor, then the cell this chooses will be reliable for testing. If you
         // don't seed the RNG, any valid cell should be possible.
         player = placement.singleRandom(rng);
+        // Uses shadowcasting FOV and reuses the visible array without creating new arrays constantly.
+        FOV.reuseFOV(resistance, visible, player.x, player.y, 7.0, Radius.CIRCLE);
+        // 0.1 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.1 will _not_ be in
+        // the blockage Collection, but anything 0.1 or less will be in it. This lets us use blockage to prevent access
+        // to cells we can't see from the start of the move.
+        blockage = new GreasedRegion(visible, 0.1);
+        seen = blockage.copy().not();
         //This is used to allow clicks or taps to take the player to the desired area.
         toCursor = new ArrayList<>(200);
         //When a path is confirmed by clicking, we draw from this List to find which cell is next to move into.
@@ -155,12 +163,13 @@ public class BasicDemo extends ApplicationAdapter {
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(player);
-        playerToCursor.scan(null);
+        playerToCursor.scan(blockage);
 
         //The next three lines set the background color for anything we don't draw on, but also create 2D arrays of the
         //same size as decoDungeon that store simple indexes into a common list of colors, using the colors that looks
         // up as the colors for the cell with the same x and y.
         bgColor = SColor.DARK_SLATE_GRAY;
+        display.alterPalette(3, SColor.DB_GRAPHITE);
         colorIndices = DungeonUtility.generatePaletteIndices(decoDungeon);
         bgColorIndices = DungeonUtility.generateBGPaletteIndices(decoDungeon);
         baseLightness = ArrayTools.fill(40, gridWidth, gridHeight);
@@ -322,6 +331,7 @@ public class BasicDemo extends ApplicationAdapter {
                         // ArrayList, since it keeps the original list around and only gets a "view" of it.
                         if(!toCursor.isEmpty())
                         {
+                            line = OrthoLine.lineChars(toCursor);
                             toCursor = toCursor.subList(1, toCursor.size());
                         }
                     }
@@ -360,6 +370,7 @@ public class BasicDemo extends ApplicationAdapter {
                 // ArrayList, since it keeps the original list around and only gets a "view" of it.
                 if(!toCursor.isEmpty())
                 {
+                    line = OrthoLine.lineChars(toCursor);
                     toCursor = toCursor.subList(1, toCursor.size());
                 }
                 return false;
@@ -399,20 +410,24 @@ public class BasicDemo extends ApplicationAdapter {
      */
     public void putMap()
     {
-        /*
+
         for (int i = 0; i < gridWidth; i++) {
             for (int j = 0; j < gridHeight; j++) {
-                display.put(i, j, lineDungeon[i][j], colorIndices[i][j], bgColorIndices[i][j], 40);
+                if(visible[i][j] > 0.1) {
+                    int bright = baseLightness[i][j] + (int) (-105 +
+                            180 * (visible[i][j] * (1.0 + 0.2 * SeededNoise.noise(i * 0.2, j * 0.2, (int) (System.currentTimeMillis() & 0xffffff) * 0.001, 10000))));
+                    display.put(i, j, lineDungeon[i][j], colorIndices[i][j], bgColorIndices[i][j], bright);
+                }else if(seen.contains(i, j))
+                    display.put(i, j, lineDungeon[i][j], colorIndices[i][j], bgColorIndices[i][j], -80);
+                else
+                    display.put(i, j, ' ', 0);
             }
-        }*/
-        // bulk put, placing a 2D array of chars with corresponding color indices for foreground and background, plus
-        // lightness (which is always 40 at this step, and was set earlier)
-        display.put(0, 0, lineDungeon, colorIndices, bgColorIndices, baseLightness);
+        }
         Coord pt;
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.highlight(pt.x, pt.y, 100);
+            display.put(pt.x, pt.y, line[i+1], 23, bgColorIndices[pt.x][pt.y], 130);
         }
         //places the player as an '@' at his position in orange (6 is an index into SColor.LIMITED_PALETTE).
         display.put(player.x, player.y, '@', 6);
@@ -442,6 +457,7 @@ public class BasicDemo extends ApplicationAdapter {
             if (secondsWithoutMoves >= 0.1) {
                 secondsWithoutMoves = 0;
                 Coord m = awaitedMoves.remove(0);
+                line = OrthoLine.lineChars(toCursor);
                 toCursor.remove(0);
                 move(m.x - player.x, m.y - player.y);
             }
@@ -450,6 +466,12 @@ public class BasicDemo extends ApplicationAdapter {
             // each part of a many-cell move (just the end), nor do we need to calculate it whenever the mouse moves.
             if(awaitedMoves.isEmpty())
             {
+                FOV.reuseFOV(resistance, visible, player.x, player.y, 7.0, Radius.CIRCLE);
+                // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
+                // a new one just for this movement.
+                blockage.refill(visible, 0.1);
+                seen.or(blockage.not());
+                blockage.not();
                 // the next two lines remove any lingering data needed for earlier paths
                 playerToCursor.clearGoals();
                 playerToCursor.resetMap();
@@ -460,7 +482,7 @@ public class BasicDemo extends ApplicationAdapter {
                 // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
                 // currently-moused-over cell, which we only need to set where the mouse is being handled.
                 playerToCursor.setGoal(player);
-                playerToCursor.scan(null);
+                playerToCursor.scan(blockage);
             }
         }
         // if we are waiting for the player's input and get input, process it.
@@ -478,6 +500,17 @@ public class BasicDemo extends ApplicationAdapter {
 	public void resize(int width, int height) {
 		super.resize(width, height);
         //very important to have the mouse behave correctly if the user fullscreens or resizes the game!
-		input.getMouse().reinitialize((float) width / this.gridWidth, (float)height / (this.gridHeight + 8), this.gridWidth, this.gridHeight, 0, 0);
+		input.getMouse().reinitialize((float) width / gridWidth, (float)height / (gridHeight + bonusHeight), gridWidth, gridHeight, 0, 0);
 	}
+    public static void main (String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "SquidLib GDX Basic Demo";
+        config.width = gridWidth * cellWidth;
+        config.height = (gridHeight + bonusHeight) * cellHeight;
+        config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
+        new LwjglApplication(new BasicDemo2(), config);
+    }
+
 }
