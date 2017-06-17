@@ -87,6 +87,48 @@ public class DijkstraMap implements Serializable {
                 default: return 8;
             }
         }
+        /**
+         * Gets the appropriate DijkstraMap.Measurement that matches a Radius enum.
+         * Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.
+         * <br>
+         * Equivalent to {@link DijkstraMap#findMeasurement(Radius)}.
+         *
+         * @param radius the Radius to find the corresponding Measurement for
+         * @return a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
+         */
+        public static Measurement matchingMeasurement(Radius radius) {
+            switch (radius)
+            {
+                case CUBE:
+                case SQUARE:
+                    return DijkstraMap.Measurement.CHEBYSHEV;
+                case DIAMOND:
+                case OCTAHEDRON:
+                    return DijkstraMap.Measurement.MANHATTAN;
+                default:
+                    return DijkstraMap.Measurement.EUCLIDEAN;
+            }
+        }
+
+        /**
+         * Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.
+         * Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.
+         * <br>
+         * You may also consider {@link DijkstraMap#findRadius(Measurement)}, which is a static method with the same
+         * general capability.
+         * @return a Radius enum that matches this Measurement; CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, etc.
+         */
+        public Radius matchingRadius() {
+            switch (this) {
+                case CHEBYSHEV:
+                    return Radius.SQUARE;
+                case EUCLIDEAN:
+                    return Radius.CIRCLE;
+                default:
+                    return Radius.DIAMOND;
+            }
+        }
+
     }
 
     /**
@@ -506,20 +548,26 @@ public class DijkstraMap implements Serializable {
      * @return a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.
      */
     public static Measurement findMeasurement(Radius radius) {
-        if (radius.equals2D(Radius.SQUARE))
-            return DijkstraMap.Measurement.CHEBYSHEV;
-        else if (radius.equals2D(Radius.DIAMOND))
-            return DijkstraMap.Measurement.MANHATTAN;
-        else
-            return DijkstraMap.Measurement.EUCLIDEAN;
+        switch (radius)
+        {
+            case CUBE:
+            case SQUARE:
+                return DijkstraMap.Measurement.CHEBYSHEV;
+            case DIAMOND:
+            case OCTAHEDRON:
+                return DijkstraMap.Measurement.MANHATTAN;
+            default:
+                return DijkstraMap.Measurement.EUCLIDEAN;
+        }
     }
 
     /**
      * Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.
      * Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.
-     *
+     * <br>
+     * See also {@link Measurement#matchingRadius()} as a method on Measurement.
      * @param measurement the Measurement to find the corresponding Radius for
-     * @return a DijkstraMap.Measurement that matches radius; CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, etc.
+     * @return a Radius that matches measurement; CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, etc.
      */
     public static Radius findRadius(Measurement measurement) {
         switch (measurement) {
@@ -2907,7 +2955,8 @@ public class DijkstraMap implements Serializable {
     /**
      * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
      * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
-     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
+     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move. If you haven't set
+     * this yet, then the default is 2.
      * <br>
      * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.
      * <br>
@@ -2915,9 +2964,9 @@ public class DijkstraMap implements Serializable {
      * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard
      * corner" rule used in some games.
      * <br>
-     * If this is 2, having two orthogonal obstacles adjacent to both the current cell and the cell the pathfinder is
-     * trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the north and a wall
-     * to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
+     * If this is 2 (the default), having two orthogonal obstacles adjacent to both the current cell and the cell the
+     * pathfinder is trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the
+     * north and a wall to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
      * @return the current level of blocking required to stop a diagonal move
      */
     public int getBlockingRequirement() {
@@ -2927,7 +2976,8 @@ public class DijkstraMap implements Serializable {
     /**
      * If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
      * can be used to make thin diagonal walls non-viable to move through, or even to prevent diagonal movement if any
-     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move.
+     * one obstacle is orthogonally adjacent to both the start and target cell of a diagonal move. If you haven't set
+     * this yet, then the default is 2.
      * <br>
      * If this is 0, as a special case no orthogonal obstacles will block diagonal moves.
      * <br>
@@ -2935,9 +2985,9 @@ public class DijkstraMap implements Serializable {
      * trying to diagonally enter will block diagonal moves. This generally blocks movement around corners, the "hard
      * corner" rule used in some games.
      * <br>
-     * If this is 2, having two orthogonal obstacles adjacent to both the current cell and the cell the pathfinder is
-     * trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the north and a wall
-     * to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
+     * If this is 2 (the default), having two orthogonal obstacles adjacent to both the current cell and the cell the
+     * pathfinder is trying to diagonally enter will block diagonal moves. As an example, if there is a wall to the
+     * north and a wall to the east, then the pathfinder won't be able to move northeast even if there is a floor there.
      * @param blockingRequirement the desired level of blocking required to stop a diagonal move
      */
     public void setBlockingRequirement(int blockingRequirement) {
