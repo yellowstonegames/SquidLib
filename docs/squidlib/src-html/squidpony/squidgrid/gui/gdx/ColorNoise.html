@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.gui.gdx;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.squidmath.NumberTools;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.squidmath.SeededNoise;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>/**<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * Created by Tommy Ettinger on 6/12/2017.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> */<a name="line.8"></a>
+<span class="sourceLineNo">009</span>public class ColorNoise extends SeededNoise {<a name="line.9"></a>
+<span class="sourceLineNo">010</span>    public static final ColorNoise instance = new ColorNoise();<a name="line.10"></a>
+<span class="sourceLineNo">011</span>    public ColorNoise() {<a name="line.11"></a>
+<span class="sourceLineNo">012</span>    }<a name="line.12"></a>
+<span class="sourceLineNo">013</span><a name="line.13"></a>
+<span class="sourceLineNo">014</span>    public ColorNoise(int seed) {<a name="line.14"></a>
+<span class="sourceLineNo">015</span>        super(seed);<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    }<a name="line.16"></a>
+<span class="sourceLineNo">017</span><a name="line.17"></a>
+<span class="sourceLineNo">018</span>    public static int bounce256(final int s) { return (s ^ -((s &amp; 0x100) &gt;&gt; 8)) &amp; 0xff; }<a name="line.18"></a>
+<span class="sourceLineNo">019</span><a name="line.19"></a>
+<span class="sourceLineNo">020</span>    public static float colorNoise(final double noise)<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    {<a name="line.21"></a>
+<span class="sourceLineNo">022</span>        return SColor.floatGetHSV(((float) noise + 1f), 0.8f + (float) NumberTools.bounce(noise * 9.0 + 10.0) * 0.2f, 0.8f + (float) NumberTools.bounce(noise * 7.0 + 8.5) * 0.2f, 1f);<a name="line.22"></a>
+<span class="sourceLineNo">023</span>//        return NumberUtils.intToFloatColor(0xfe000000 |<a name="line.23"></a>
+<span class="sourceLineNo">024</span>//                (bounce256((int) ((noise * 1.29 + 1.39) * (0x3DF9f)) &gt;&gt;&gt; 8) &lt;&lt; 16) |<a name="line.24"></a>
+<span class="sourceLineNo">025</span>//                (bounce256((int) ((noise * 1.18 + 1.45) * (0x3EB9f)) &gt;&gt;&gt; 8) &lt;&lt; 8) |<a name="line.25"></a>
+<span class="sourceLineNo">026</span>//                (bounce256((int) ((noise * 1.07 + 1.51) * (0x3E99f)) &gt;&gt;&gt; 8)));<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    }<a name="line.27"></a>
+<span class="sourceLineNo">028</span><a name="line.28"></a>
+<span class="sourceLineNo">029</span>    public static float colorNoise(final double x, final double y, final int seed) {<a name="line.29"></a>
+<span class="sourceLineNo">030</span>        return colorNoise(noise(x, y, seed));<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    }<a name="line.31"></a>
+<span class="sourceLineNo">032</span><a name="line.32"></a>
+<span class="sourceLineNo">033</span>    public static float colorNoise(final double x, final double y, final double z, final int seed) {<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        return colorNoise(noise(x, y, z, seed));<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    }<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>    public static float colorNoise(final double x, final double y, final double z,  final double w, final int seed) {<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        return colorNoise(noise(x, y, z, w, seed));<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    }<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>    public static float colorNoise(final double x, final double y, final double z,  final double w, final double u, final double v, final int seed) {<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        return colorNoise(noise(x, y, z, w, u, v, seed));<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /*<a name="line.45"></a>
+<span class="sourceLineNo">046</span>            final float s = (x + y) * F2;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        final float[] gradient2DLUT = SeededNoise.gradient2DLUT;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        final int i = fastFloor(x + s),<a name="line.48"></a>
+<span class="sourceLineNo">049</span>                j = fastFloor(y + s);<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        final float t = (i + j) * G2,<a name="line.50"></a>
+<span class="sourceLineNo">051</span>                X0 = i - t,<a name="line.51"></a>
+<span class="sourceLineNo">052</span>                Y0 = j - t,<a name="line.52"></a>
+<span class="sourceLineNo">053</span>                x0 = x - X0,<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                y0 = y - Y0;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        int i1, j1;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        if (x0 &gt; y0) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>            i1 = 1;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>            j1 = 0;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        } else {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>            i1 = 0;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>            j1 = 1;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        }<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        final float<a name="line.63"></a>
+<span class="sourceLineNo">064</span>                x1 = x0 - i1 + G2,<a name="line.64"></a>
+<span class="sourceLineNo">065</span>                y1 = y0 - j1 + G2,<a name="line.65"></a>
+<span class="sourceLineNo">066</span>                x2 = x0 - 1f + 2f * G2,<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                y2 = y0 - 1f + 2f * G2;<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>        final int<a name="line.69"></a>
+<span class="sourceLineNo">070</span>                r0 = determineBounded(i + determine(j), 256) &lt;&lt; 1                  ,<a name="line.70"></a>
+<span class="sourceLineNo">071</span>                r1 = determineBounded(i + i1 + determine(j + j1), 256) &lt;&lt; 1  ,<a name="line.71"></a>
+<span class="sourceLineNo">072</span>                r2 = determineBounded(i + 1 + determine(j + 1), 256) &lt;&lt; 1    ,<a name="line.72"></a>
+<span class="sourceLineNo">073</span>                g0 = determineBounded(i + determine(j) + r0, 256) &lt;&lt; 1                  ,<a name="line.73"></a>
+<span class="sourceLineNo">074</span>                g1 = determineBounded(i + i1 + determine(j + j1) + r1, 256) &lt;&lt; 1  ,<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                g2 = determineBounded(i + 1 + determine(j + 1) + r2, 256) &lt;&lt; 1    ,<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                b0 = determineBounded(i + determine(j) + g0, 256) &lt;&lt; 1                  ,<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                b1 = determineBounded(i + i1 + determine(j + j1) + g1, 256) &lt;&lt; 1  ,<a name="line.77"></a>
+<span class="sourceLineNo">078</span>                b2 = determineBounded(i + 1 + determine(j + 1) + g2, 256) &lt;&lt; 1<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        ;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        int rr = 0, gg = 0, bb = 0;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        float rOff = NumberTools.bounce(r0 + r1 + r2 + -160f) * 0.125f + 0.25f,<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                gOff = NumberTools.bounce(g0 + g1 + g2 + -160f) * 0.125f + 0.25f,<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                bOff = NumberTools.bounce(b0 + b1 + b2 + -160f) * 0.125f + 0.25f,<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                tt = 0.5f - x0 * x0 - y0 * y0 + rOff;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        if (tt &gt; 0) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            tt *= tt * tt * tt;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>            rr += tt * Math.abs(x0 * (gradient2DLUT[r0]) + y0 * (gradient2DLUT[r0 | 1])) * 1000;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        }<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        tt = 0.5f - x0 * x0 - y0 * y0 + gOff;<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        if (tt &gt; 0) {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>            tt *= tt * tt * tt;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>            gg += tt * Math.abs(x0 * (gradient2DLUT[g0]) + y0 * (gradient2DLUT[g0 | 1])) * 1000;<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        }<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        tt = 0.5f - x0 * x0 - y0 * y0 + bOff;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        if (tt &gt; 0) {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            tt *= tt * tt * tt;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            bb += tt * Math.abs(x0 * (gradient2DLUT[b0]) + y0 * (gradient2DLUT[b0 | 1])) * 1000;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        }<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        tt = 0.5f - x1 * x1 - y1 * y1 + rOff;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        if (tt &gt; 0) {<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            tt *= tt * tt * tt;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            rr += tt * Math.abs(x1 * (gradient2DLUT[r1]) + y1 * (gradient2DLUT[r1 | 1])) * 1000;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        tt = 0.5f - x1 * x1 - y1 * y1 + gOff;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        if (tt &gt; 0) {<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            tt *= tt * tt * tt;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            gg += tt * Math.abs(x1 * (gradient2DLUT[g1]) + y1 * (gradient2DLUT[g1 | 1])) * 1000;<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        }<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        tt = 0.5f - x1 * x1 - y1 * y1 + bOff;<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        if (tt &gt; 0) {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>            tt *= tt * tt * tt;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            bb += tt * Math.abs(x1 * (gradient2DLUT[b1]) + y1 * (gradient2DLUT[b1 | 1])) * 1000;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        tt = 0.5f - x2 * x2 - y2 * y2 + rOff;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        if (tt &gt; 0) {<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            tt *= tt * tt * tt;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>            rr += tt * Math.abs(x2 * (gradient2DLUT[r2]) + y2 * (gradient2DLUT[r2 | 1])) * 1000;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        }<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        tt = 0.5f - x2 * x2 - y2 * y2 + tt;<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        if (tt &gt; 0) {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>            tt *= tt * tt * tt;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            gg += tt * Math.abs(x2 * (gradient2DLUT[g2]) + y2 * (gradient2DLUT[g2 | 1])) * 1000;<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        }<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        tt = 0.5f - x2 * x2 - y2 * y2 + tt;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        if (tt &gt; 0) {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>            tt *= tt * tt * tt;<a name="line.126"></a>
+<span class="sourceLineNo">127</span>            bb += tt * Math.abs(x2 * (gradient2DLUT[b2]) + y2 * (gradient2DLUT[b2 | 1])) * 1000;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        }<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        return SColor.floatGetI(bounce256(rr * 5 + gg + bb), bounce256(gg * 5 + rr + bb), bounce256(bb * 5 + rr + gg));<a name="line.129"></a>
+<span class="sourceLineNo">130</span><a name="line.130"></a>
+<span class="sourceLineNo">131</span>     */<a name="line.131"></a>
+<span class="sourceLineNo">132</span>}<a name="line.132"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -246,26 +246,40 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#dot-float:A-double-double-double-">dot</a></span>(float[]&nbsp;g,
+   double&nbsp;x,
+   double&nbsp;y,
+   double&nbsp;z)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#dotf-float:A-float-float-">dotf</a></span>(float[]&nbsp;g,
     float&nbsp;x,
     float&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>protected static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#dotf-float:A-float-float-float-">dotf</a></span>(float[]&nbsp;g,
+    float&nbsp;x,
+    float&nbsp;y,
+    float&nbsp;z)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#dotf-int:A-float-float-float-">dotf</a></span>(int[]&nbsp;g,
     float&nbsp;x,
     float&nbsp;y,
     float&nbsp;z)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#getNoise-double-double-">getNoise</a></span>(double&nbsp;x,
         double&nbsp;y)</code>
 <div class="block">2D simplex noise.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#getNoise-double-double-double-">getNoise</a></span>(double&nbsp;x,
         double&nbsp;y,
@@ -273,7 +287,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <div class="block">3D simplex noise.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#getNoise-double-double-double-double-">getNoise</a></span>(double&nbsp;x,
         double&nbsp;y,
@@ -282,7 +296,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <div class="block">4D simplex noise.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#getNoiseWithSeed-double-double-double-double-int-">getNoiseWithSeed</a></span>(double&nbsp;x,
                 double&nbsp;y,
@@ -292,7 +306,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <div class="block">Identical to <a href="../../squidpony/squidmath/WhirlingNoise.html#getNoise-double-double-double-double-"><code>getNoise(double, double, double, double)</code></a>; ignores seed.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#getNoiseWithSeed-double-double-double-int-">getNoiseWithSeed</a></span>(double&nbsp;x,
                 double&nbsp;y,
@@ -301,7 +315,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <div class="block">Identical to <a href="../../squidpony/squidmath/WhirlingNoise.html#getNoise-double-double-double-"><code>getNoise(double, double, double)</code></a>; ignores seed.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#getNoiseWithSeed-double-double-int-">getNoiseWithSeed</a></span>(double&nbsp;x,
                 double&nbsp;y,
@@ -309,14 +323,14 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <div class="block">Identical to <a href="../../squidpony/squidmath/WhirlingNoise.html#getNoise-double-double-"><code>getNoise(double, double)</code></a>; ignores seed.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-">noise</a></span>(double&nbsp;xin,
      double&nbsp;yin)</code>
 <div class="block">2D simplex noise.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-">noise</a></span>(double&nbsp;xin,
      double&nbsp;yin,
@@ -324,7 +338,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <div class="block">3D simplex noise.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-double-">noise</a></span>(double&nbsp;x,
      double&nbsp;y,
@@ -333,7 +347,34 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <div class="block">4D simplex noise.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-double-int-">noise</a></span>(double&nbsp;x,
+     double&nbsp;y,
+     double&nbsp;z,
+     double&nbsp;w,
+     int&nbsp;seed)</code>
+<div class="block">4D simplex noise.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-int-">noise</a></span>(double&nbsp;xin,
+     double&nbsp;yin,
+     double&nbsp;zin,
+     int&nbsp;seed)</code>
+<div class="block">3D simplex noise.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-int-">noise</a></span>(double&nbsp;xin,
+     double&nbsp;yin,
+     int&nbsp;seed)</code>
+<div class="block">2D simplex noise.</div>
+</td>
+</tr>
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noiseAlt-double-double-">noiseAlt</a></span>(double&nbsp;x,
         double&nbsp;y)</code>
@@ -341,7 +382,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
  faster or slightly slower.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/WhirlingNoise.html#noiseAlt-double-double-double-">noiseAlt</a></span>(double&nbsp;x,
         double&nbsp;y,
@@ -580,7 +621,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>dotf</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.56">dotf</a>(float[]&nbsp;g,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.86">dotf</a>(float[]&nbsp;g,
                             float&nbsp;x,
                             float&nbsp;y)</pre>
 </li>
@@ -591,10 +632,34 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>dotf</h4>
-<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.60">dotf</a>(int[]&nbsp;g,
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.90">dotf</a>(int[]&nbsp;g,
                             float&nbsp;x,
                             float&nbsp;y,
                             float&nbsp;z)</pre>
+</li>
+</ul>
+<a name="dotf-float:A-float-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dotf</h4>
+<pre>protected static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.93">dotf</a>(float[]&nbsp;g,
+                            float&nbsp;x,
+                            float&nbsp;y,
+                            float&nbsp;z)</pre>
+</li>
+</ul>
+<a name="dot-float:A-double-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dot</h4>
+<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.97">dot</a>(float[]&nbsp;g,
+                            double&nbsp;x,
+                            double&nbsp;y,
+                            double&nbsp;z)</pre>
 </li>
 </ul>
 <a name="getNoise-double-double-">
@@ -603,13 +668,13 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.104">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.141">getNoise</a>(double&nbsp;x,
                        double&nbsp;y)</pre>
 <div class="block">2D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
  different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-"><code>PerlinNoise.noise(double, double)</code></a> and this method. Roughly
  20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
- it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/PintRNG.html#determine-int-"><code>PintRNG.determine(int)</code></a>, which is optimized for the
- limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.</div>
+ it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather good distribution
+ and is fast) instead of a number chosen by hash from a single 256-element array.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/Noise.Noise2D.html#getNoise-double-double-">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a></code></dd>
@@ -627,7 +692,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.115">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.152">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                int&nbsp;seed)</pre>
 <div class="block">Identical to <a href="../../squidpony/squidmath/WhirlingNoise.html#getNoise-double-double-"><code>getNoise(double, double)</code></a>; ignores seed.</div>
@@ -649,14 +714,14 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.129">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.166">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z)</pre>
 <div class="block">3D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
  different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-"><code>PerlinNoise.noise(double, double, double)</code></a> and this method.
  Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
- because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/PintRNG.html#determine-int-"><code>PintRNG.determine(int)</code></a>, which is optimized for the
- limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.</div>
+ because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather good
+ distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/Noise.Noise3D.html#getNoise-double-double-double-">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a></code></dd>
@@ -675,7 +740,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.140">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.177">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                int&nbsp;seed)</pre>
@@ -699,15 +764,15 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.156">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.193">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w)</pre>
 <div class="block">4D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
  different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-"><code>PerlinNoise.noise(double, double, double)</code></a> and this method.
  Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
- because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/PintRNG.html#determine-int-"><code>PintRNG.determine(int)</code></a>, which is optimized for the
- limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.</div>
+ because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather good
+ distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/Noise.Noise4D.html#getNoise-double-double-double-double-">getNoise</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a></code></dd>
@@ -727,7 +792,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.168">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.205">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,
@@ -753,13 +818,36 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.184">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.221">noise</a>(double&nbsp;xin,
                            double&nbsp;yin)</pre>
 <div class="block">2D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
  different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-"><code>PerlinNoise.noise(double, double)</code></a> and this method. Roughly
  20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
- it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/PintRNG.html#determine-int-"><code>PintRNG.determine(int)</code></a>, which is optimized for the
- limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.</div>
+ it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather good distribution
+ and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>xin</code> - X input; works well if between 0.0 and 1.0, but anything is accepted</dd>
+<dd><code>yin</code> - Y input; works well if between 0.0 and 1.0, but anything is accepted</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>noise from -1.0 to 1.0, inclusive</dd>
+</dl>
+</li>
+</ul>
+<a name="noise-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>noise</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.236">noise</a>(double&nbsp;xin,
+                           double&nbsp;yin,
+                           int&nbsp;seed)</pre>
+<div class="block">2D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
+ different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-"><code>PerlinNoise.noise(double, double)</code></a> and this method. Roughly
+ 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
+ it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather good distribution
+ and is fast) instead of a number chosen by hash from a single 256-element array.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>xin</code> - X input; works well if between 0.0 and 1.0, but anything is accepted</dd>
@@ -775,7 +863,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noiseAlt</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.278">noiseAlt</a>(double&nbsp;x,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.330">noiseAlt</a>(double&nbsp;x,
                              double&nbsp;y)</pre>
 <div class="block">2D simplex noise returning a float; extremely similar to <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-"><code>noise(double, double)</code></a>, but this may be slightly
  faster or slightly slower. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result
@@ -795,14 +883,39 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.376">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.428">noise</a>(double&nbsp;xin,
                            double&nbsp;yin,
                            double&nbsp;zin)</pre>
 <div class="block">3D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
  different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-"><code>PerlinNoise.noise(double, double, double)</code></a> and this method.
  Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
- because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/PintRNG.html#determine-int-"><code>PintRNG.determine(int)</code></a>, which is optimized for the
- limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.</div>
+ because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather
+ good distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>xin</code> - X input</dd>
+<dd><code>yin</code> - Y input</dd>
+<dd><code>zin</code> - Z input</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>noise from -1.0 to 1.0, inclusive</dd>
+</dl>
+</li>
+</ul>
+<a name="noise-double-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>noise</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.443">noise</a>(double&nbsp;xin,
+                           double&nbsp;yin,
+                           double&nbsp;zin,
+                           int&nbsp;seed)</pre>
+<div class="block">3D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
+ different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-"><code>PerlinNoise.noise(double, double, double)</code></a> and this method.
+ Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
+ because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather
+ good distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>xin</code> - X input</dd>
@@ -819,7 +932,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noiseAlt</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.547">noiseAlt</a>(double&nbsp;x,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.614">noiseAlt</a>(double&nbsp;x,
                              double&nbsp;y,
                              double&nbsp;z)</pre>
 <div class="block">3D simplex noise returning a float; extremely similar to <a href="../../squidpony/squidmath/WhirlingNoise.html#noise-double-double-double-"><code>noise(double, double, double)</code></a>, but this may
@@ -839,24 +952,52 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <a name="noise-double-double-double-double-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.721">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.788">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w)</pre>
 <div class="block">4D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
  different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-double-"><code>PerlinNoise.noise(double, double, double, double)</code></a> and this
  method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
- chunks because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/PintRNG.html#determine-int-"><code>PintRNG.determine(int)</code></a>, which is optimized
- for the limitations of GWT but is rather fast here) instead of a number chosen from a single 256-element array.</div>
+ chunks because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather
+ good distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - X input</dd>
 <dd><code>y</code> - Y input</dd>
 <dd><code>z</code> - Z input</dd>
 <dd><code>w</code> - W input (fourth-dimensional)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>noise from -1.0 to 1.0, inclusive</dd>
+</dl>
+</li>
+</ul>
+<a name="noise-double-double-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>noise</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/WhirlingNoise.html#line.805">noise</a>(double&nbsp;x,
+                           double&nbsp;y,
+                           double&nbsp;z,
+                           double&nbsp;w,
+                           int&nbsp;seed)</pre>
+<div class="block">4D simplex noise. Unlike <a href="../../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath"><code>PerlinNoise</code></a>, uses its parameters verbatim, so the scale of the result will be
+ different when passing the same arguments to <a href="../../squidpony/squidmath/PerlinNoise.html#noise-double-double-double-double-"><code>PerlinNoise.noise(double, double, double, double)</code></a> and this
+ method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
+ chunks because it uses a pseudo-random function (curiously, <a href="../../squidpony/squidmath/LightRNG.html#determine-long-"><code>LightRNG.determine(long)</code></a>, which has rather
+ good distribution and is fast) instead of a number chosen by hash from a single 256-element array.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - X input</dd>
+<dd><code>y</code> - Y input</dd>
+<dd><code>z</code> - Z input</dd>
+<dd><code>w</code> - W input (fourth-dimensional)</dd>
+<dd><code>seed</code> - any int; will be used to completely alter the noise</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>noise from -1.0 to 1.0, inclusive</dd>
 </dl>

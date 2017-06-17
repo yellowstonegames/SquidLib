@@ -3235,491 +3235,503 @@
 <span class="sourceLineNo">3227</span>     * The salt fields are not serialized, so it is important that the same salt will be given by the<a name="line.3227"></a>
 <span class="sourceLineNo">3228</span>     * program when the same hash results are wanted for some inputs.<a name="line.3228"></a>
 <span class="sourceLineNo">3229</span>     * &lt;br&gt;<a name="line.3229"></a>
-<span class="sourceLineNo">3230</span>     * A group of 24 static, final, pre-initialized Mist members are present in this class, each with the<a name="line.3230"></a>
+<span class="sourceLineNo">3230</span>     * A group of 48 static, final, pre-initialized Mist members are present in this class, 24 with the<a name="line.3230"></a>
 <span class="sourceLineNo">3231</span>     * name of a letter in the Greek alphabet (this uses the convention on Wikipedia,<a name="line.3231"></a>
-<span class="sourceLineNo">3232</span>     * https://en.wikipedia.org/wiki/Greek_alphabet#Letters , where lambda is spelled with a 'b'). The whole<a name="line.3232"></a>
-<span class="sourceLineNo">3233</span>     * group of 24 pre-initialized members are also present in a static array called {@code predefined}.<a name="line.3233"></a>
-<span class="sourceLineNo">3234</span>     * These can be useful when, for example, you want to get multiple hashes of a single array or String<a name="line.3234"></a>
-<span class="sourceLineNo">3235</span>     * as part of cuckoo hashing or similar techniques that need multiple hashes for the same inputs.<a name="line.3235"></a>
-<span class="sourceLineNo">3236</span>     */<a name="line.3236"></a>
-<span class="sourceLineNo">3237</span>    @Beta<a name="line.3237"></a>
-<span class="sourceLineNo">3238</span>    public static final class Mist implements Serializable {<a name="line.3238"></a>
-<span class="sourceLineNo">3239</span>        private static final long serialVersionUID = -1275284837479983271L;<a name="line.3239"></a>
-<span class="sourceLineNo">3240</span><a name="line.3240"></a>
-<span class="sourceLineNo">3241</span>        private transient long $l1, $l2;<a name="line.3241"></a>
-<span class="sourceLineNo">3242</span><a name="line.3242"></a>
-<span class="sourceLineNo">3243</span>        private transient int $i1, $i2;<a name="line.3243"></a>
-<span class="sourceLineNo">3244</span><a name="line.3244"></a>
-<span class="sourceLineNo">3245</span>        public Mist() {<a name="line.3245"></a>
-<span class="sourceLineNo">3246</span>            this(0x1234567876543210L, 0xEDCBA98789ABCDEFL);<a name="line.3246"></a>
-<span class="sourceLineNo">3247</span>        }<a name="line.3247"></a>
-<span class="sourceLineNo">3248</span><a name="line.3248"></a>
-<span class="sourceLineNo">3249</span>        public Mist(final CharSequence alteration) {<a name="line.3249"></a>
-<span class="sourceLineNo">3250</span>            this(Wisp.hash64(alteration), Falcon.hash64(alteration));<a name="line.3250"></a>
-<span class="sourceLineNo">3251</span>        }<a name="line.3251"></a>
-<span class="sourceLineNo">3252</span>        private static int permute(final long state)<a name="line.3252"></a>
-<span class="sourceLineNo">3253</span>        {<a name="line.3253"></a>
-<span class="sourceLineNo">3254</span>            int s = (int)state ^ 0xD0E89D2D;<a name="line.3254"></a>
-<span class="sourceLineNo">3255</span>            s = (s &gt;&gt;&gt; 19 | s &lt;&lt; 13);<a name="line.3255"></a>
-<span class="sourceLineNo">3256</span>            s ^= state &gt;&gt;&gt; (5 + (state &gt;&gt;&gt; 59));<a name="line.3256"></a>
-<span class="sourceLineNo">3257</span>            return ((s *= 277803737) &gt;&gt;&gt; 22) ^ s;<a name="line.3257"></a>
-<span class="sourceLineNo">3258</span>        }<a name="line.3258"></a>
-<span class="sourceLineNo">3259</span><a name="line.3259"></a>
-<span class="sourceLineNo">3260</span>        @SuppressWarnings("NumericOverflow")<a name="line.3260"></a>
-<span class="sourceLineNo">3261</span>        public Mist(final long alteration) {<a name="line.3261"></a>
-<span class="sourceLineNo">3262</span>            $i1 = permute(alteration);<a name="line.3262"></a>
-<span class="sourceLineNo">3263</span>            $l1 = alteration + $i1;<a name="line.3263"></a>
-<span class="sourceLineNo">3264</span>            $l1 = ($l1 ^ ($l1 &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.3264"></a>
-<span class="sourceLineNo">3265</span>            $l1 = ($l1 ^ ($l1 &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.3265"></a>
-<span class="sourceLineNo">3266</span>            $l1 ^= $l1 &gt;&gt;&gt; 31;<a name="line.3266"></a>
-<span class="sourceLineNo">3267</span><a name="line.3267"></a>
-<span class="sourceLineNo">3268</span>            $i2 = permute($l1 + 0x9E3779B97F4A7C15L);<a name="line.3268"></a>
-<span class="sourceLineNo">3269</span>            $l2 = alteration + 6 * 0x9E3779B97F4A7C15L;<a name="line.3269"></a>
-<span class="sourceLineNo">3270</span>            $l2 = ($l2 ^ ($l2 &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.3270"></a>
-<span class="sourceLineNo">3271</span>            $l2 = ($l2 ^ ($l2 &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.3271"></a>
-<span class="sourceLineNo">3272</span>            $l2 ^= $l2 &gt;&gt;&gt; 31;<a name="line.3272"></a>
-<span class="sourceLineNo">3273</span>        }<a name="line.3273"></a>
-<span class="sourceLineNo">3274</span><a name="line.3274"></a>
-<span class="sourceLineNo">3275</span>        @SuppressWarnings("NumericOverflow")<a name="line.3275"></a>
-<span class="sourceLineNo">3276</span>        public Mist(final long alteration1, long alteration2) {<a name="line.3276"></a>
-<span class="sourceLineNo">3277</span>            $i1 = permute(alteration1);<a name="line.3277"></a>
-<span class="sourceLineNo">3278</span>            $l1 = alteration1 + $i1;<a name="line.3278"></a>
-<span class="sourceLineNo">3279</span>            $i2 = permute(alteration2 + $i1);<a name="line.3279"></a>
-<span class="sourceLineNo">3280</span>            $l2 = alteration2 + $i2;<a name="line.3280"></a>
-<span class="sourceLineNo">3281</span>        }<a name="line.3281"></a>
-<span class="sourceLineNo">3282</span><a name="line.3282"></a>
-<span class="sourceLineNo">3283</span>        /**<a name="line.3283"></a>
-<span class="sourceLineNo">3284</span>         * Alters all of the salt values in a pseudo-random way based on the previous salt value.<a name="line.3284"></a>
-<span class="sourceLineNo">3285</span>         * This will effectively make this Mist object a different, incompatible hashing functor.<a name="line.3285"></a>
-<span class="sourceLineNo">3286</span>         * Meant for use in Cuckoo Hashing, which can need the hash function to be updated or changed.<a name="line.3286"></a>
-<span class="sourceLineNo">3287</span>         * An alternative is to select a different Mist object from {@link #predefined}, or to simply<a name="line.3287"></a>
-<span class="sourceLineNo">3288</span>         * construct a new Mist with a different parameter or set of parameters.<a name="line.3288"></a>
-<span class="sourceLineNo">3289</span>         */<a name="line.3289"></a>
-<span class="sourceLineNo">3290</span>        @SuppressWarnings("NumericOverflow")<a name="line.3290"></a>
-<span class="sourceLineNo">3291</span>        public void randomize()<a name="line.3291"></a>
-<span class="sourceLineNo">3292</span>        {<a name="line.3292"></a>
-<span class="sourceLineNo">3293</span>            $i1 = permute($l2 + 3 * 0x9E3779B97F4A7C15L);<a name="line.3293"></a>
-<span class="sourceLineNo">3294</span>            $l1 = $l2 + $i1;<a name="line.3294"></a>
-<span class="sourceLineNo">3295</span>            $l1 = ($l1 ^ ($l1 &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.3295"></a>
-<span class="sourceLineNo">3296</span>            $l1 = ($l1 ^ ($l1 &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.3296"></a>
-<span class="sourceLineNo">3297</span>            $l1 ^= $l1 &gt;&gt;&gt; 31;<a name="line.3297"></a>
-<span class="sourceLineNo">3298</span><a name="line.3298"></a>
-<span class="sourceLineNo">3299</span>            $i2 = permute($l1 + 5 * 0x9E3779B97F4A7C15L);<a name="line.3299"></a>
-<span class="sourceLineNo">3300</span>            $l2 = $l1 + 6 * 0x9E3779B97F4A7C15L;<a name="line.3300"></a>
-<span class="sourceLineNo">3301</span>            $l2 = ($l2 ^ ($l2 &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.3301"></a>
-<span class="sourceLineNo">3302</span>            $l2 = ($l2 ^ ($l2 &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.3302"></a>
-<span class="sourceLineNo">3303</span>            $l2 ^= $l2 &gt;&gt;&gt; 31;<a name="line.3303"></a>
-<span class="sourceLineNo">3304</span><a name="line.3304"></a>
-<span class="sourceLineNo">3305</span>        }<a name="line.3305"></a>
-<span class="sourceLineNo">3306</span><a name="line.3306"></a>
-<span class="sourceLineNo">3307</span>        public static final Mist alpha = new Mist("alpha"), beta = new Mist("beta"), gamma = new Mist("gamma"),<a name="line.3307"></a>
-<span class="sourceLineNo">3308</span>                delta = new Mist("delta"), epsilon = new Mist("epsilon"), zeta = new Mist("zeta"),<a name="line.3308"></a>
-<span class="sourceLineNo">3309</span>                eta = new Mist("eta"), theta = new Mist("theta"), iota = new Mist("iota"),<a name="line.3309"></a>
-<span class="sourceLineNo">3310</span>                kappa = new Mist("kappa"), lambda = new Mist("lambda"), mu = new Mist("mu"),<a name="line.3310"></a>
-<span class="sourceLineNo">3311</span>                nu = new Mist("nu"), xi = new Mist("xi"), omicron = new Mist("omicron"), pi = new Mist("pi"),<a name="line.3311"></a>
-<span class="sourceLineNo">3312</span>                rho = new Mist("rho"), sigma = new Mist("sigma"), tau = new Mist("tau"),<a name="line.3312"></a>
-<span class="sourceLineNo">3313</span>                upsilon = new Mist("upsilon"), phi = new Mist("phi"), chi = new Mist("chi"), psi = new Mist("psi"),<a name="line.3313"></a>
-<span class="sourceLineNo">3314</span>                omega = new Mist("omega");<a name="line.3314"></a>
-<span class="sourceLineNo">3315</span>        public static final Mist[] predefined = new Mist[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,<a name="line.3315"></a>
-<span class="sourceLineNo">3316</span>                kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega};<a name="line.3316"></a>
-<span class="sourceLineNo">3317</span><a name="line.3317"></a>
-<span class="sourceLineNo">3318</span>        public long hash64(final boolean[] data) {<a name="line.3318"></a>
-<span class="sourceLineNo">3319</span>            if (data == null)<a name="line.3319"></a>
-<span class="sourceLineNo">3320</span>                return 0;<a name="line.3320"></a>
-<span class="sourceLineNo">3321</span>            final int len = data.length;<a name="line.3321"></a>
-<span class="sourceLineNo">3322</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3322"></a>
-<span class="sourceLineNo">3323</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3323"></a>
-<span class="sourceLineNo">3324</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L)) ^ $l2 * a + $l1;<a name="line.3324"></a>
-<span class="sourceLineNo">3325</span>            }<a name="line.3325"></a>
-<span class="sourceLineNo">3326</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3326"></a>
-<span class="sourceLineNo">3327</span>        }<a name="line.3327"></a>
-<span class="sourceLineNo">3328</span><a name="line.3328"></a>
+<span class="sourceLineNo">3232</span>     * https://en.wikipedia.org/wiki/Greek_alphabet#Letters , where lambda is spelled with a 'b') and 24 with the same<a name="line.3232"></a>
+<span class="sourceLineNo">3233</span>     * name followed by an underscore, such as {@link #alpha_}. The whole group of 48 pre-initialized members are also<a name="line.3233"></a>
+<span class="sourceLineNo">3234</span>     * present in a static array called {@code predefined}. These can be useful when, for example, you want to get<a name="line.3234"></a>
+<span class="sourceLineNo">3235</span>     * multiple hashes of a single array or String as part of cuckoo hashing or similar techniques that need multiple<a name="line.3235"></a>
+<span class="sourceLineNo">3236</span>     * hashes for the same inputs.<a name="line.3236"></a>
+<span class="sourceLineNo">3237</span>     */<a name="line.3237"></a>
+<span class="sourceLineNo">3238</span>    @Beta<a name="line.3238"></a>
+<span class="sourceLineNo">3239</span>    public static final class Mist implements Serializable {<a name="line.3239"></a>
+<span class="sourceLineNo">3240</span>        private static final long serialVersionUID = -1275284837479983271L;<a name="line.3240"></a>
+<span class="sourceLineNo">3241</span><a name="line.3241"></a>
+<span class="sourceLineNo">3242</span>        private transient final long $l1, $l2;<a name="line.3242"></a>
+<span class="sourceLineNo">3243</span><a name="line.3243"></a>
+<span class="sourceLineNo">3244</span>        private transient final int $i1, $i2;<a name="line.3244"></a>
+<span class="sourceLineNo">3245</span><a name="line.3245"></a>
+<span class="sourceLineNo">3246</span>        public Mist() {<a name="line.3246"></a>
+<span class="sourceLineNo">3247</span>            this(0x1234567876543210L, 0xEDCBA98789ABCDEFL);<a name="line.3247"></a>
+<span class="sourceLineNo">3248</span>        }<a name="line.3248"></a>
+<span class="sourceLineNo">3249</span><a name="line.3249"></a>
+<span class="sourceLineNo">3250</span>        public Mist(final CharSequence alteration) {<a name="line.3250"></a>
+<span class="sourceLineNo">3251</span>            this(Wisp.hash64(alteration), Falcon.hash64(alteration));<a name="line.3251"></a>
+<span class="sourceLineNo">3252</span>        }<a name="line.3252"></a>
+<span class="sourceLineNo">3253</span>        private static int permute(final long state)<a name="line.3253"></a>
+<span class="sourceLineNo">3254</span>        {<a name="line.3254"></a>
+<span class="sourceLineNo">3255</span>            int s = (int)state ^ 0xD0E89D2D;<a name="line.3255"></a>
+<span class="sourceLineNo">3256</span>            s = (s &gt;&gt;&gt; 19 | s &lt;&lt; 13);<a name="line.3256"></a>
+<span class="sourceLineNo">3257</span>            s ^= state &gt;&gt;&gt; (5 + (state &gt;&gt;&gt; 59));<a name="line.3257"></a>
+<span class="sourceLineNo">3258</span>            return ((s *= 277803737) &gt;&gt;&gt; 22) ^ s;<a name="line.3258"></a>
+<span class="sourceLineNo">3259</span>        }<a name="line.3259"></a>
+<span class="sourceLineNo">3260</span><a name="line.3260"></a>
+<span class="sourceLineNo">3261</span>        @SuppressWarnings("NumericOverflow")<a name="line.3261"></a>
+<span class="sourceLineNo">3262</span>        public Mist(final long alteration) {<a name="line.3262"></a>
+<span class="sourceLineNo">3263</span>            $i1 = permute(alteration);<a name="line.3263"></a>
+<span class="sourceLineNo">3264</span>            long l1, l2;<a name="line.3264"></a>
+<span class="sourceLineNo">3265</span>            l1 = alteration + $i1;<a name="line.3265"></a>
+<span class="sourceLineNo">3266</span>            l1 = (l1 ^ (l1 &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.3266"></a>
+<span class="sourceLineNo">3267</span>            l1 = (l1 ^ (l1 &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.3267"></a>
+<span class="sourceLineNo">3268</span>            $l1 = l1 ^ l1 &gt;&gt;&gt; 31;<a name="line.3268"></a>
+<span class="sourceLineNo">3269</span><a name="line.3269"></a>
+<span class="sourceLineNo">3270</span>            $i2 = permute($l1 + 0x9E3779B97F4A7C15L);<a name="line.3270"></a>
+<span class="sourceLineNo">3271</span>            l2 = alteration + 6 * 0x9E3779B97F4A7C15L;<a name="line.3271"></a>
+<span class="sourceLineNo">3272</span>            l2 = (l2 ^ (l2 &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.3272"></a>
+<span class="sourceLineNo">3273</span>            l2 = (l2 ^ (l2 &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.3273"></a>
+<span class="sourceLineNo">3274</span>            $l2 = l2 ^ l2 &gt;&gt;&gt; 31;<a name="line.3274"></a>
+<span class="sourceLineNo">3275</span>        }<a name="line.3275"></a>
+<span class="sourceLineNo">3276</span><a name="line.3276"></a>
+<span class="sourceLineNo">3277</span>        @SuppressWarnings("NumericOverflow")<a name="line.3277"></a>
+<span class="sourceLineNo">3278</span>        public Mist(final long alteration1, long alteration2) {<a name="line.3278"></a>
+<span class="sourceLineNo">3279</span>            $i1 = permute(alteration1);<a name="line.3279"></a>
+<span class="sourceLineNo">3280</span>            $l1 = alteration1 + $i1;<a name="line.3280"></a>
+<span class="sourceLineNo">3281</span>            $i2 = permute(alteration2 + $i1);<a name="line.3281"></a>
+<span class="sourceLineNo">3282</span>            $l2 = alteration2 + $i2;<a name="line.3282"></a>
+<span class="sourceLineNo">3283</span>        }<a name="line.3283"></a>
+<span class="sourceLineNo">3284</span><a name="line.3284"></a>
+<span class="sourceLineNo">3285</span>        /**<a name="line.3285"></a>
+<span class="sourceLineNo">3286</span>         * Makes a new Mist with all of the salt values altered based on the previous salt values.<a name="line.3286"></a>
+<span class="sourceLineNo">3287</span>         * This will make a different, incompatible Mist object that will give different results than the original.<a name="line.3287"></a>
+<span class="sourceLineNo">3288</span>         * Meant for use in Cuckoo Hashing, which can need the hash function to be updated or changed.<a name="line.3288"></a>
+<span class="sourceLineNo">3289</span>         * An alternative is to select a different Mist object from {@link #predefined}, or to simply<a name="line.3289"></a>
+<span class="sourceLineNo">3290</span>         * construct a new Mist with a different parameter or set of parameters.<a name="line.3290"></a>
+<span class="sourceLineNo">3291</span>         */<a name="line.3291"></a>
+<span class="sourceLineNo">3292</span>        @SuppressWarnings("NumericOverflow")<a name="line.3292"></a>
+<span class="sourceLineNo">3293</span>        public Mist randomize()<a name="line.3293"></a>
+<span class="sourceLineNo">3294</span>        {<a name="line.3294"></a>
+<span class="sourceLineNo">3295</span>            long l1, l2;<a name="line.3295"></a>
+<span class="sourceLineNo">3296</span>            l1 = $l2 + permute($l2 + 3 * 0x9E3779B97F4A7C15L);<a name="line.3296"></a>
+<span class="sourceLineNo">3297</span>            l1 = (l1 ^ (l1 &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.3297"></a>
+<span class="sourceLineNo">3298</span>            l1 = (l1 ^ (l1 &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.3298"></a>
+<span class="sourceLineNo">3299</span>            l1 ^= l1 &gt;&gt;&gt; 31;<a name="line.3299"></a>
+<span class="sourceLineNo">3300</span><a name="line.3300"></a>
+<span class="sourceLineNo">3301</span>            l2 = permute(l1 + 5 * 0x9E3779B97F4A7C15L) + 6 * 0x9E3779B97F4A7C15L;<a name="line.3301"></a>
+<span class="sourceLineNo">3302</span>            l2 = (l2 ^ (l2 &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.3302"></a>
+<span class="sourceLineNo">3303</span>            l2 = (l2 ^ (l2 &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.3303"></a>
+<span class="sourceLineNo">3304</span>            l2 ^= l2 &gt;&gt;&gt; 31;<a name="line.3304"></a>
+<span class="sourceLineNo">3305</span><a name="line.3305"></a>
+<span class="sourceLineNo">3306</span>            return new Mist(l1, l2);<a name="line.3306"></a>
+<span class="sourceLineNo">3307</span>        }<a name="line.3307"></a>
+<span class="sourceLineNo">3308</span><a name="line.3308"></a>
+<span class="sourceLineNo">3309</span>        public static final Mist alpha = new Mist("alpha"), beta = new Mist("beta"), gamma = new Mist("gamma"),<a name="line.3309"></a>
+<span class="sourceLineNo">3310</span>                delta = new Mist("delta"), epsilon = new Mist("epsilon"), zeta = new Mist("zeta"),<a name="line.3310"></a>
+<span class="sourceLineNo">3311</span>                eta = new Mist("eta"), theta = new Mist("theta"), iota = new Mist("iota"),<a name="line.3311"></a>
+<span class="sourceLineNo">3312</span>                kappa = new Mist("kappa"), lambda = new Mist("lambda"), mu = new Mist("mu"),<a name="line.3312"></a>
+<span class="sourceLineNo">3313</span>                nu = new Mist("nu"), xi = new Mist("xi"), omicron = new Mist("omicron"), pi = new Mist("pi"),<a name="line.3313"></a>
+<span class="sourceLineNo">3314</span>                rho = new Mist("rho"), sigma = new Mist("sigma"), tau = new Mist("tau"),<a name="line.3314"></a>
+<span class="sourceLineNo">3315</span>                upsilon = new Mist("upsilon"), phi = new Mist("phi"), chi = new Mist("chi"), psi = new Mist("psi"),<a name="line.3315"></a>
+<span class="sourceLineNo">3316</span>                omega = new Mist("omega"),<a name="line.3316"></a>
+<span class="sourceLineNo">3317</span>                alpha_ = new Mist("ALPHA"), beta_ = new Mist("BETA"), gamma_ = new Mist("GAMMA"),<a name="line.3317"></a>
+<span class="sourceLineNo">3318</span>                delta_ = new Mist("DELTA"), epsilon_ = new Mist("EPSILON"), zeta_ = new Mist("ZETA"),<a name="line.3318"></a>
+<span class="sourceLineNo">3319</span>                eta_ = new Mist("ETA"), theta_ = new Mist("THETA"), iota_ = new Mist("IOTA"),<a name="line.3319"></a>
+<span class="sourceLineNo">3320</span>                kappa_ = new Mist("KAPPA"), lambda_ = new Mist("LAMBDA"), mu_ = new Mist("MU"),<a name="line.3320"></a>
+<span class="sourceLineNo">3321</span>                nu_ = new Mist("NU"), xi_ = new Mist("XI"), omicron_ = new Mist("OMICRON"), pi_ = new Mist("PI"),<a name="line.3321"></a>
+<span class="sourceLineNo">3322</span>                rho_ = new Mist("RHO"), sigma_ = new Mist("SIGMA"), tau_ = new Mist("TAU"),<a name="line.3322"></a>
+<span class="sourceLineNo">3323</span>                upsilon_ = new Mist("UPSILON"), phi_ = new Mist("PHI"), chi_ = new Mist("CHI"), psi_ = new Mist("PSI"),<a name="line.3323"></a>
+<span class="sourceLineNo">3324</span>                omega_ = new Mist("OMEGA");<a name="line.3324"></a>
+<span class="sourceLineNo">3325</span>        public static final Mist[] predefined = new Mist[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,<a name="line.3325"></a>
+<span class="sourceLineNo">3326</span>                kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega,<a name="line.3326"></a>
+<span class="sourceLineNo">3327</span>                alpha_, beta_, gamma_, delta_, epsilon_, zeta_, eta_, theta_, iota_,<a name="line.3327"></a>
+<span class="sourceLineNo">3328</span>                kappa_, lambda_, mu_, nu_, xi_, omicron_, pi_, rho_, sigma_, tau_, upsilon_, phi_, chi_, psi_, omega_};<a name="line.3328"></a>
 <span class="sourceLineNo">3329</span><a name="line.3329"></a>
-<span class="sourceLineNo">3330</span>        public long hash64(final byte[] data) {<a name="line.3330"></a>
+<span class="sourceLineNo">3330</span>        public long hash64(final boolean[] data) {<a name="line.3330"></a>
 <span class="sourceLineNo">3331</span>            if (data == null)<a name="line.3331"></a>
 <span class="sourceLineNo">3332</span>                return 0;<a name="line.3332"></a>
 <span class="sourceLineNo">3333</span>            final int len = data.length;<a name="line.3333"></a>
 <span class="sourceLineNo">3334</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3334"></a>
 <span class="sourceLineNo">3335</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3335"></a>
-<span class="sourceLineNo">3336</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3336"></a>
+<span class="sourceLineNo">3336</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * (data[i] ? 0x9E3779B97F4A7C15L : 0x789ABCDEFEDCBA98L)) ^ $l2 * a + $l1;<a name="line.3336"></a>
 <span class="sourceLineNo">3337</span>            }<a name="line.3337"></a>
 <span class="sourceLineNo">3338</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3338"></a>
 <span class="sourceLineNo">3339</span>        }<a name="line.3339"></a>
 <span class="sourceLineNo">3340</span><a name="line.3340"></a>
-<span class="sourceLineNo">3341</span>        public long hash64(final short[] data) {<a name="line.3341"></a>
-<span class="sourceLineNo">3342</span>            if (data == null)<a name="line.3342"></a>
-<span class="sourceLineNo">3343</span>                return 0;<a name="line.3343"></a>
-<span class="sourceLineNo">3344</span>            final int len = data.length;<a name="line.3344"></a>
-<span class="sourceLineNo">3345</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3345"></a>
-<span class="sourceLineNo">3346</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3346"></a>
-<span class="sourceLineNo">3347</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3347"></a>
-<span class="sourceLineNo">3348</span>            }<a name="line.3348"></a>
-<span class="sourceLineNo">3349</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3349"></a>
-<span class="sourceLineNo">3350</span>        }<a name="line.3350"></a>
-<span class="sourceLineNo">3351</span><a name="line.3351"></a>
-<span class="sourceLineNo">3352</span>        public long hash64(final char[] data) {<a name="line.3352"></a>
-<span class="sourceLineNo">3353</span>            if (data == null)<a name="line.3353"></a>
-<span class="sourceLineNo">3354</span>                return 0;<a name="line.3354"></a>
-<span class="sourceLineNo">3355</span>            final int len = data.length;<a name="line.3355"></a>
-<span class="sourceLineNo">3356</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3356"></a>
-<span class="sourceLineNo">3357</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3357"></a>
-<span class="sourceLineNo">3358</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3358"></a>
-<span class="sourceLineNo">3359</span>            }<a name="line.3359"></a>
-<span class="sourceLineNo">3360</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3360"></a>
-<span class="sourceLineNo">3361</span>        }<a name="line.3361"></a>
-<span class="sourceLineNo">3362</span><a name="line.3362"></a>
-<span class="sourceLineNo">3363</span>        public long hash64(final int[] data) {<a name="line.3363"></a>
-<span class="sourceLineNo">3364</span>            if (data == null)<a name="line.3364"></a>
-<span class="sourceLineNo">3365</span>                return 0;<a name="line.3365"></a>
-<span class="sourceLineNo">3366</span>            final int len = data.length;<a name="line.3366"></a>
-<span class="sourceLineNo">3367</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3367"></a>
-<span class="sourceLineNo">3368</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3368"></a>
-<span class="sourceLineNo">3369</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3369"></a>
-<span class="sourceLineNo">3370</span>            }<a name="line.3370"></a>
-<span class="sourceLineNo">3371</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3371"></a>
-<span class="sourceLineNo">3372</span>        }<a name="line.3372"></a>
-<span class="sourceLineNo">3373</span><a name="line.3373"></a>
-<span class="sourceLineNo">3374</span>        public long hash64(final long[] data) {<a name="line.3374"></a>
-<span class="sourceLineNo">3375</span>            if (data == null)<a name="line.3375"></a>
-<span class="sourceLineNo">3376</span>                return 0;<a name="line.3376"></a>
-<span class="sourceLineNo">3377</span>            final int len = data.length;<a name="line.3377"></a>
-<span class="sourceLineNo">3378</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3378"></a>
-<span class="sourceLineNo">3379</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3379"></a>
-<span class="sourceLineNo">3380</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3380"></a>
-<span class="sourceLineNo">3381</span>            }<a name="line.3381"></a>
-<span class="sourceLineNo">3382</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3382"></a>
-<span class="sourceLineNo">3383</span>        }<a name="line.3383"></a>
-<span class="sourceLineNo">3384</span><a name="line.3384"></a>
+<span class="sourceLineNo">3341</span><a name="line.3341"></a>
+<span class="sourceLineNo">3342</span>        public long hash64(final byte[] data) {<a name="line.3342"></a>
+<span class="sourceLineNo">3343</span>            if (data == null)<a name="line.3343"></a>
+<span class="sourceLineNo">3344</span>                return 0;<a name="line.3344"></a>
+<span class="sourceLineNo">3345</span>            final int len = data.length;<a name="line.3345"></a>
+<span class="sourceLineNo">3346</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3346"></a>
+<span class="sourceLineNo">3347</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3347"></a>
+<span class="sourceLineNo">3348</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3348"></a>
+<span class="sourceLineNo">3349</span>            }<a name="line.3349"></a>
+<span class="sourceLineNo">3350</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3350"></a>
+<span class="sourceLineNo">3351</span>        }<a name="line.3351"></a>
+<span class="sourceLineNo">3352</span><a name="line.3352"></a>
+<span class="sourceLineNo">3353</span>        public long hash64(final short[] data) {<a name="line.3353"></a>
+<span class="sourceLineNo">3354</span>            if (data == null)<a name="line.3354"></a>
+<span class="sourceLineNo">3355</span>                return 0;<a name="line.3355"></a>
+<span class="sourceLineNo">3356</span>            final int len = data.length;<a name="line.3356"></a>
+<span class="sourceLineNo">3357</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3357"></a>
+<span class="sourceLineNo">3358</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3358"></a>
+<span class="sourceLineNo">3359</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3359"></a>
+<span class="sourceLineNo">3360</span>            }<a name="line.3360"></a>
+<span class="sourceLineNo">3361</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3361"></a>
+<span class="sourceLineNo">3362</span>        }<a name="line.3362"></a>
+<span class="sourceLineNo">3363</span><a name="line.3363"></a>
+<span class="sourceLineNo">3364</span>        public long hash64(final char[] data) {<a name="line.3364"></a>
+<span class="sourceLineNo">3365</span>            if (data == null)<a name="line.3365"></a>
+<span class="sourceLineNo">3366</span>                return 0;<a name="line.3366"></a>
+<span class="sourceLineNo">3367</span>            final int len = data.length;<a name="line.3367"></a>
+<span class="sourceLineNo">3368</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3368"></a>
+<span class="sourceLineNo">3369</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3369"></a>
+<span class="sourceLineNo">3370</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3370"></a>
+<span class="sourceLineNo">3371</span>            }<a name="line.3371"></a>
+<span class="sourceLineNo">3372</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3372"></a>
+<span class="sourceLineNo">3373</span>        }<a name="line.3373"></a>
+<span class="sourceLineNo">3374</span><a name="line.3374"></a>
+<span class="sourceLineNo">3375</span>        public long hash64(final int[] data) {<a name="line.3375"></a>
+<span class="sourceLineNo">3376</span>            if (data == null)<a name="line.3376"></a>
+<span class="sourceLineNo">3377</span>                return 0;<a name="line.3377"></a>
+<span class="sourceLineNo">3378</span>            final int len = data.length;<a name="line.3378"></a>
+<span class="sourceLineNo">3379</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3379"></a>
+<span class="sourceLineNo">3380</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3380"></a>
+<span class="sourceLineNo">3381</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3381"></a>
+<span class="sourceLineNo">3382</span>            }<a name="line.3382"></a>
+<span class="sourceLineNo">3383</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3383"></a>
+<span class="sourceLineNo">3384</span>        }<a name="line.3384"></a>
 <span class="sourceLineNo">3385</span><a name="line.3385"></a>
-<span class="sourceLineNo">3386</span>        public long hash64(final float[] data) {<a name="line.3386"></a>
+<span class="sourceLineNo">3386</span>        public long hash64(final long[] data) {<a name="line.3386"></a>
 <span class="sourceLineNo">3387</span>            if (data == null)<a name="line.3387"></a>
 <span class="sourceLineNo">3388</span>                return 0;<a name="line.3388"></a>
 <span class="sourceLineNo">3389</span>            final int len = data.length;<a name="line.3389"></a>
 <span class="sourceLineNo">3390</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3390"></a>
 <span class="sourceLineNo">3391</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3391"></a>
-<span class="sourceLineNo">3392</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.floatToIntBits(data[i])) ^ $l2 * a + $l1;<a name="line.3392"></a>
+<span class="sourceLineNo">3392</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3392"></a>
 <span class="sourceLineNo">3393</span>            }<a name="line.3393"></a>
 <span class="sourceLineNo">3394</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3394"></a>
 <span class="sourceLineNo">3395</span>        }<a name="line.3395"></a>
 <span class="sourceLineNo">3396</span><a name="line.3396"></a>
-<span class="sourceLineNo">3397</span>        public long hash64(final double[] data) {<a name="line.3397"></a>
-<span class="sourceLineNo">3398</span>            if (data == null)<a name="line.3398"></a>
-<span class="sourceLineNo">3399</span>                return 0;<a name="line.3399"></a>
-<span class="sourceLineNo">3400</span>            final int len = data.length;<a name="line.3400"></a>
-<span class="sourceLineNo">3401</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3401"></a>
-<span class="sourceLineNo">3402</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3402"></a>
-<span class="sourceLineNo">3403</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToLongBits(data[i])) ^ $l2 * a + $l1;<a name="line.3403"></a>
-<span class="sourceLineNo">3404</span>            }<a name="line.3404"></a>
-<span class="sourceLineNo">3405</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3405"></a>
-<span class="sourceLineNo">3406</span>        }<a name="line.3406"></a>
-<span class="sourceLineNo">3407</span><a name="line.3407"></a>
-<span class="sourceLineNo">3408</span>        public long hash64(final char[] data, final int start, final int end) {<a name="line.3408"></a>
-<span class="sourceLineNo">3409</span>            if (data == null || start &gt;= end)<a name="line.3409"></a>
-<span class="sourceLineNo">3410</span>                return 0;<a name="line.3410"></a>
-<span class="sourceLineNo">3411</span>            final int len = data.length;<a name="line.3411"></a>
-<span class="sourceLineNo">3412</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3412"></a>
-<span class="sourceLineNo">3413</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i++) {<a name="line.3413"></a>
-<span class="sourceLineNo">3414</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3414"></a>
-<span class="sourceLineNo">3415</span>            }<a name="line.3415"></a>
-<span class="sourceLineNo">3416</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3416"></a>
-<span class="sourceLineNo">3417</span>        }<a name="line.3417"></a>
-<span class="sourceLineNo">3418</span><a name="line.3418"></a>
-<span class="sourceLineNo">3419</span>        public long hash64(final char[] data, final int start, final int end, final int step) {<a name="line.3419"></a>
-<span class="sourceLineNo">3420</span>            if (data == null || start &gt;= end || step &lt;= 0)<a name="line.3420"></a>
-<span class="sourceLineNo">3421</span>                return 0;<a name="line.3421"></a>
-<span class="sourceLineNo">3422</span>            final int len = data.length;<a name="line.3422"></a>
-<span class="sourceLineNo">3423</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3423"></a>
-<span class="sourceLineNo">3424</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i += step) {<a name="line.3424"></a>
-<span class="sourceLineNo">3425</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3425"></a>
-<span class="sourceLineNo">3426</span>            }<a name="line.3426"></a>
-<span class="sourceLineNo">3427</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3427"></a>
-<span class="sourceLineNo">3428</span>        }<a name="line.3428"></a>
-<span class="sourceLineNo">3429</span><a name="line.3429"></a>
-<span class="sourceLineNo">3430</span>        public long hash64(final CharSequence data) {<a name="line.3430"></a>
-<span class="sourceLineNo">3431</span>            if (data == null)<a name="line.3431"></a>
-<span class="sourceLineNo">3432</span>                return 0;<a name="line.3432"></a>
-<span class="sourceLineNo">3433</span>            final int len = data.length();<a name="line.3433"></a>
-<span class="sourceLineNo">3434</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3434"></a>
-<span class="sourceLineNo">3435</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3435"></a>
-<span class="sourceLineNo">3436</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i)) ^ $l2 * a + $l1;<a name="line.3436"></a>
-<span class="sourceLineNo">3437</span>            }<a name="line.3437"></a>
-<span class="sourceLineNo">3438</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3438"></a>
-<span class="sourceLineNo">3439</span>        }<a name="line.3439"></a>
-<span class="sourceLineNo">3440</span><a name="line.3440"></a>
-<span class="sourceLineNo">3441</span>        public long hash64(final char[][] data) {<a name="line.3441"></a>
-<span class="sourceLineNo">3442</span>            if (data == null)<a name="line.3442"></a>
-<span class="sourceLineNo">3443</span>                return 0;<a name="line.3443"></a>
-<span class="sourceLineNo">3444</span>            final int len = data.length;<a name="line.3444"></a>
-<span class="sourceLineNo">3445</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3445"></a>
-<span class="sourceLineNo">3446</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3446"></a>
-<span class="sourceLineNo">3447</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;<a name="line.3447"></a>
-<span class="sourceLineNo">3448</span>            }<a name="line.3448"></a>
-<span class="sourceLineNo">3449</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3449"></a>
-<span class="sourceLineNo">3450</span>        }<a name="line.3450"></a>
-<span class="sourceLineNo">3451</span><a name="line.3451"></a>
-<span class="sourceLineNo">3452</span>        public long hash64(final long[][] data) {<a name="line.3452"></a>
-<span class="sourceLineNo">3453</span>            if (data == null)<a name="line.3453"></a>
-<span class="sourceLineNo">3454</span>                return 0;<a name="line.3454"></a>
-<span class="sourceLineNo">3455</span>            final int len = data.length;<a name="line.3455"></a>
-<span class="sourceLineNo">3456</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3456"></a>
-<span class="sourceLineNo">3457</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3457"></a>
-<span class="sourceLineNo">3458</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;<a name="line.3458"></a>
-<span class="sourceLineNo">3459</span>            }<a name="line.3459"></a>
-<span class="sourceLineNo">3460</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3460"></a>
-<span class="sourceLineNo">3461</span>        }<a name="line.3461"></a>
-<span class="sourceLineNo">3462</span><a name="line.3462"></a>
-<span class="sourceLineNo">3463</span>        public long hash64(final CharSequence[] data) {<a name="line.3463"></a>
-<span class="sourceLineNo">3464</span>            if (data == null)<a name="line.3464"></a>
-<span class="sourceLineNo">3465</span>                return 0;<a name="line.3465"></a>
-<span class="sourceLineNo">3466</span>            final int len = data.length;<a name="line.3466"></a>
-<span class="sourceLineNo">3467</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3467"></a>
-<span class="sourceLineNo">3468</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3468"></a>
-<span class="sourceLineNo">3469</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;<a name="line.3469"></a>
-<span class="sourceLineNo">3470</span>            }<a name="line.3470"></a>
-<span class="sourceLineNo">3471</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3471"></a>
-<span class="sourceLineNo">3472</span>        }<a name="line.3472"></a>
-<span class="sourceLineNo">3473</span><a name="line.3473"></a>
-<span class="sourceLineNo">3474</span>        public long hash64(final Iterable&lt;? extends CharSequence&gt; data) {<a name="line.3474"></a>
-<span class="sourceLineNo">3475</span>            if (data == null)<a name="line.3475"></a>
-<span class="sourceLineNo">3476</span>                return 0;<a name="line.3476"></a>
-<span class="sourceLineNo">3477</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3477"></a>
-<span class="sourceLineNo">3478</span>            for (CharSequence datum : data) {<a name="line.3478"></a>
-<span class="sourceLineNo">3479</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(datum)) ^ $l2 * a + $l1;<a name="line.3479"></a>
-<span class="sourceLineNo">3480</span>            }<a name="line.3480"></a>
-<span class="sourceLineNo">3481</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3481"></a>
-<span class="sourceLineNo">3482</span>        }<a name="line.3482"></a>
-<span class="sourceLineNo">3483</span><a name="line.3483"></a>
-<span class="sourceLineNo">3484</span>        public long hash64(final CharSequence[]... data) {<a name="line.3484"></a>
-<span class="sourceLineNo">3485</span>            if (data == null)<a name="line.3485"></a>
-<span class="sourceLineNo">3486</span>                return 0;<a name="line.3486"></a>
-<span class="sourceLineNo">3487</span>            final int len = data.length;<a name="line.3487"></a>
-<span class="sourceLineNo">3488</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3488"></a>
-<span class="sourceLineNo">3489</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3489"></a>
-<span class="sourceLineNo">3490</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;<a name="line.3490"></a>
-<span class="sourceLineNo">3491</span>            }<a name="line.3491"></a>
-<span class="sourceLineNo">3492</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3492"></a>
-<span class="sourceLineNo">3493</span>        }<a name="line.3493"></a>
-<span class="sourceLineNo">3494</span><a name="line.3494"></a>
-<span class="sourceLineNo">3495</span>        public long hash64(final Object[] data) {<a name="line.3495"></a>
-<span class="sourceLineNo">3496</span>            if (data == null)<a name="line.3496"></a>
-<span class="sourceLineNo">3497</span>                return 0;<a name="line.3497"></a>
-<span class="sourceLineNo">3498</span>            final int len = data.length;<a name="line.3498"></a>
-<span class="sourceLineNo">3499</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3499"></a>
-<span class="sourceLineNo">3500</span>            Object o;<a name="line.3500"></a>
+<span class="sourceLineNo">3397</span><a name="line.3397"></a>
+<span class="sourceLineNo">3398</span>        public long hash64(final float[] data) {<a name="line.3398"></a>
+<span class="sourceLineNo">3399</span>            if (data == null)<a name="line.3399"></a>
+<span class="sourceLineNo">3400</span>                return 0;<a name="line.3400"></a>
+<span class="sourceLineNo">3401</span>            final int len = data.length;<a name="line.3401"></a>
+<span class="sourceLineNo">3402</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3402"></a>
+<span class="sourceLineNo">3403</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3403"></a>
+<span class="sourceLineNo">3404</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.floatToIntBits(data[i])) ^ $l2 * a + $l1;<a name="line.3404"></a>
+<span class="sourceLineNo">3405</span>            }<a name="line.3405"></a>
+<span class="sourceLineNo">3406</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3406"></a>
+<span class="sourceLineNo">3407</span>        }<a name="line.3407"></a>
+<span class="sourceLineNo">3408</span><a name="line.3408"></a>
+<span class="sourceLineNo">3409</span>        public long hash64(final double[] data) {<a name="line.3409"></a>
+<span class="sourceLineNo">3410</span>            if (data == null)<a name="line.3410"></a>
+<span class="sourceLineNo">3411</span>                return 0;<a name="line.3411"></a>
+<span class="sourceLineNo">3412</span>            final int len = data.length;<a name="line.3412"></a>
+<span class="sourceLineNo">3413</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3413"></a>
+<span class="sourceLineNo">3414</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3414"></a>
+<span class="sourceLineNo">3415</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToLongBits(data[i])) ^ $l2 * a + $l1;<a name="line.3415"></a>
+<span class="sourceLineNo">3416</span>            }<a name="line.3416"></a>
+<span class="sourceLineNo">3417</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3417"></a>
+<span class="sourceLineNo">3418</span>        }<a name="line.3418"></a>
+<span class="sourceLineNo">3419</span><a name="line.3419"></a>
+<span class="sourceLineNo">3420</span>        public long hash64(final char[] data, final int start, final int end) {<a name="line.3420"></a>
+<span class="sourceLineNo">3421</span>            if (data == null || start &gt;= end)<a name="line.3421"></a>
+<span class="sourceLineNo">3422</span>                return 0;<a name="line.3422"></a>
+<span class="sourceLineNo">3423</span>            final int len = data.length;<a name="line.3423"></a>
+<span class="sourceLineNo">3424</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3424"></a>
+<span class="sourceLineNo">3425</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i++) {<a name="line.3425"></a>
+<span class="sourceLineNo">3426</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3426"></a>
+<span class="sourceLineNo">3427</span>            }<a name="line.3427"></a>
+<span class="sourceLineNo">3428</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3428"></a>
+<span class="sourceLineNo">3429</span>        }<a name="line.3429"></a>
+<span class="sourceLineNo">3430</span><a name="line.3430"></a>
+<span class="sourceLineNo">3431</span>        public long hash64(final char[] data, final int start, final int end, final int step) {<a name="line.3431"></a>
+<span class="sourceLineNo">3432</span>            if (data == null || start &gt;= end || step &lt;= 0)<a name="line.3432"></a>
+<span class="sourceLineNo">3433</span>                return 0;<a name="line.3433"></a>
+<span class="sourceLineNo">3434</span>            final int len = data.length;<a name="line.3434"></a>
+<span class="sourceLineNo">3435</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3435"></a>
+<span class="sourceLineNo">3436</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i += step) {<a name="line.3436"></a>
+<span class="sourceLineNo">3437</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3437"></a>
+<span class="sourceLineNo">3438</span>            }<a name="line.3438"></a>
+<span class="sourceLineNo">3439</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3439"></a>
+<span class="sourceLineNo">3440</span>        }<a name="line.3440"></a>
+<span class="sourceLineNo">3441</span><a name="line.3441"></a>
+<span class="sourceLineNo">3442</span>        public long hash64(final CharSequence data) {<a name="line.3442"></a>
+<span class="sourceLineNo">3443</span>            if (data == null)<a name="line.3443"></a>
+<span class="sourceLineNo">3444</span>                return 0;<a name="line.3444"></a>
+<span class="sourceLineNo">3445</span>            final int len = data.length();<a name="line.3445"></a>
+<span class="sourceLineNo">3446</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3446"></a>
+<span class="sourceLineNo">3447</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3447"></a>
+<span class="sourceLineNo">3448</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i)) ^ $l2 * a + $l1;<a name="line.3448"></a>
+<span class="sourceLineNo">3449</span>            }<a name="line.3449"></a>
+<span class="sourceLineNo">3450</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3450"></a>
+<span class="sourceLineNo">3451</span>        }<a name="line.3451"></a>
+<span class="sourceLineNo">3452</span><a name="line.3452"></a>
+<span class="sourceLineNo">3453</span>        public long hash64(final char[][] data) {<a name="line.3453"></a>
+<span class="sourceLineNo">3454</span>            if (data == null)<a name="line.3454"></a>
+<span class="sourceLineNo">3455</span>                return 0;<a name="line.3455"></a>
+<span class="sourceLineNo">3456</span>            final int len = data.length;<a name="line.3456"></a>
+<span class="sourceLineNo">3457</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3457"></a>
+<span class="sourceLineNo">3458</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3458"></a>
+<span class="sourceLineNo">3459</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;<a name="line.3459"></a>
+<span class="sourceLineNo">3460</span>            }<a name="line.3460"></a>
+<span class="sourceLineNo">3461</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3461"></a>
+<span class="sourceLineNo">3462</span>        }<a name="line.3462"></a>
+<span class="sourceLineNo">3463</span><a name="line.3463"></a>
+<span class="sourceLineNo">3464</span>        public long hash64(final long[][] data) {<a name="line.3464"></a>
+<span class="sourceLineNo">3465</span>            if (data == null)<a name="line.3465"></a>
+<span class="sourceLineNo">3466</span>                return 0;<a name="line.3466"></a>
+<span class="sourceLineNo">3467</span>            final int len = data.length;<a name="line.3467"></a>
+<span class="sourceLineNo">3468</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3468"></a>
+<span class="sourceLineNo">3469</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3469"></a>
+<span class="sourceLineNo">3470</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;<a name="line.3470"></a>
+<span class="sourceLineNo">3471</span>            }<a name="line.3471"></a>
+<span class="sourceLineNo">3472</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3472"></a>
+<span class="sourceLineNo">3473</span>        }<a name="line.3473"></a>
+<span class="sourceLineNo">3474</span><a name="line.3474"></a>
+<span class="sourceLineNo">3475</span>        public long hash64(final CharSequence[] data) {<a name="line.3475"></a>
+<span class="sourceLineNo">3476</span>            if (data == null)<a name="line.3476"></a>
+<span class="sourceLineNo">3477</span>                return 0;<a name="line.3477"></a>
+<span class="sourceLineNo">3478</span>            final int len = data.length;<a name="line.3478"></a>
+<span class="sourceLineNo">3479</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3479"></a>
+<span class="sourceLineNo">3480</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3480"></a>
+<span class="sourceLineNo">3481</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;<a name="line.3481"></a>
+<span class="sourceLineNo">3482</span>            }<a name="line.3482"></a>
+<span class="sourceLineNo">3483</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3483"></a>
+<span class="sourceLineNo">3484</span>        }<a name="line.3484"></a>
+<span class="sourceLineNo">3485</span><a name="line.3485"></a>
+<span class="sourceLineNo">3486</span>        public long hash64(final Iterable&lt;? extends CharSequence&gt; data) {<a name="line.3486"></a>
+<span class="sourceLineNo">3487</span>            if (data == null)<a name="line.3487"></a>
+<span class="sourceLineNo">3488</span>                return 0;<a name="line.3488"></a>
+<span class="sourceLineNo">3489</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3489"></a>
+<span class="sourceLineNo">3490</span>            for (CharSequence datum : data) {<a name="line.3490"></a>
+<span class="sourceLineNo">3491</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(datum)) ^ $l2 * a + $l1;<a name="line.3491"></a>
+<span class="sourceLineNo">3492</span>            }<a name="line.3492"></a>
+<span class="sourceLineNo">3493</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3493"></a>
+<span class="sourceLineNo">3494</span>        }<a name="line.3494"></a>
+<span class="sourceLineNo">3495</span><a name="line.3495"></a>
+<span class="sourceLineNo">3496</span>        public long hash64(final CharSequence[]... data) {<a name="line.3496"></a>
+<span class="sourceLineNo">3497</span>            if (data == null)<a name="line.3497"></a>
+<span class="sourceLineNo">3498</span>                return 0;<a name="line.3498"></a>
+<span class="sourceLineNo">3499</span>            final int len = data.length;<a name="line.3499"></a>
+<span class="sourceLineNo">3500</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3500"></a>
 <span class="sourceLineNo">3501</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3501"></a>
-<span class="sourceLineNo">3502</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $l2 * a + $l1;<a name="line.3502"></a>
+<span class="sourceLineNo">3502</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * hash64(data[i])) ^ $l2 * a + $l1;<a name="line.3502"></a>
 <span class="sourceLineNo">3503</span>            }<a name="line.3503"></a>
 <span class="sourceLineNo">3504</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3504"></a>
 <span class="sourceLineNo">3505</span>        }<a name="line.3505"></a>
 <span class="sourceLineNo">3506</span><a name="line.3506"></a>
-<span class="sourceLineNo">3507</span>        public int hash(final boolean[] data) {<a name="line.3507"></a>
+<span class="sourceLineNo">3507</span>        public long hash64(final Object[] data) {<a name="line.3507"></a>
 <span class="sourceLineNo">3508</span>            if (data == null)<a name="line.3508"></a>
 <span class="sourceLineNo">3509</span>                return 0;<a name="line.3509"></a>
 <span class="sourceLineNo">3510</span>            final int len = data.length;<a name="line.3510"></a>
-<span class="sourceLineNo">3511</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3511"></a>
-<span class="sourceLineNo">3512</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3512"></a>
-<span class="sourceLineNo">3513</span>                result += (a ^= 0x85157AF5 * (data[i] ? 0x789ABCDE : 0x62E2AC0D)) ^ $i2 * a + $i1;<a name="line.3513"></a>
-<span class="sourceLineNo">3514</span>            }<a name="line.3514"></a>
-<span class="sourceLineNo">3515</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3515"></a>
-<span class="sourceLineNo">3516</span>        }<a name="line.3516"></a>
-<span class="sourceLineNo">3517</span><a name="line.3517"></a>
-<span class="sourceLineNo">3518</span>        public int hash(final byte[] data) {<a name="line.3518"></a>
-<span class="sourceLineNo">3519</span>            if (data == null)<a name="line.3519"></a>
-<span class="sourceLineNo">3520</span>                return 0;<a name="line.3520"></a>
-<span class="sourceLineNo">3521</span>            final int len = data.length;<a name="line.3521"></a>
-<span class="sourceLineNo">3522</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3522"></a>
-<span class="sourceLineNo">3523</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3523"></a>
-<span class="sourceLineNo">3524</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3524"></a>
-<span class="sourceLineNo">3525</span>            }<a name="line.3525"></a>
-<span class="sourceLineNo">3526</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3526"></a>
-<span class="sourceLineNo">3527</span>        }<a name="line.3527"></a>
-<span class="sourceLineNo">3528</span><a name="line.3528"></a>
-<span class="sourceLineNo">3529</span>        public int hash(final short[] data) {<a name="line.3529"></a>
-<span class="sourceLineNo">3530</span>            if (data == null)<a name="line.3530"></a>
-<span class="sourceLineNo">3531</span>                return 0;<a name="line.3531"></a>
-<span class="sourceLineNo">3532</span>            final int len = data.length;<a name="line.3532"></a>
-<span class="sourceLineNo">3533</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3533"></a>
-<span class="sourceLineNo">3534</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3534"></a>
-<span class="sourceLineNo">3535</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3535"></a>
-<span class="sourceLineNo">3536</span>            }<a name="line.3536"></a>
-<span class="sourceLineNo">3537</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3537"></a>
-<span class="sourceLineNo">3538</span>        }<a name="line.3538"></a>
-<span class="sourceLineNo">3539</span><a name="line.3539"></a>
-<span class="sourceLineNo">3540</span>        public int hash(final char[] data) {<a name="line.3540"></a>
-<span class="sourceLineNo">3541</span>            if (data == null)<a name="line.3541"></a>
-<span class="sourceLineNo">3542</span>                return 0;<a name="line.3542"></a>
-<span class="sourceLineNo">3543</span>            final int len = data.length;<a name="line.3543"></a>
-<span class="sourceLineNo">3544</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3544"></a>
-<span class="sourceLineNo">3545</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3545"></a>
-<span class="sourceLineNo">3546</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3546"></a>
-<span class="sourceLineNo">3547</span>            }<a name="line.3547"></a>
-<span class="sourceLineNo">3548</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3548"></a>
-<span class="sourceLineNo">3549</span>        }<a name="line.3549"></a>
-<span class="sourceLineNo">3550</span><a name="line.3550"></a>
-<span class="sourceLineNo">3551</span>        public int hash(final int[] data) {<a name="line.3551"></a>
-<span class="sourceLineNo">3552</span>            if (data == null)<a name="line.3552"></a>
-<span class="sourceLineNo">3553</span>                return 0;<a name="line.3553"></a>
-<span class="sourceLineNo">3554</span>            final int len = data.length;<a name="line.3554"></a>
-<span class="sourceLineNo">3555</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3555"></a>
-<span class="sourceLineNo">3556</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3556"></a>
-<span class="sourceLineNo">3557</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3557"></a>
-<span class="sourceLineNo">3558</span>            }<a name="line.3558"></a>
-<span class="sourceLineNo">3559</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3559"></a>
-<span class="sourceLineNo">3560</span>        }<a name="line.3560"></a>
-<span class="sourceLineNo">3561</span><a name="line.3561"></a>
-<span class="sourceLineNo">3562</span>        public int hash(final long[] data) {<a name="line.3562"></a>
-<span class="sourceLineNo">3563</span>            if (data == null)<a name="line.3563"></a>
-<span class="sourceLineNo">3564</span>                return 0;<a name="line.3564"></a>
-<span class="sourceLineNo">3565</span>            final int len = data.length;<a name="line.3565"></a>
-<span class="sourceLineNo">3566</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3566"></a>
-<span class="sourceLineNo">3567</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3567"></a>
-<span class="sourceLineNo">3568</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3568"></a>
-<span class="sourceLineNo">3569</span>            }<a name="line.3569"></a>
-<span class="sourceLineNo">3570</span>            return (int)((result = (result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37))) ^ (result &gt;&gt;&gt; 32));<a name="line.3570"></a>
-<span class="sourceLineNo">3571</span>        }<a name="line.3571"></a>
-<span class="sourceLineNo">3572</span><a name="line.3572"></a>
+<span class="sourceLineNo">3511</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3511"></a>
+<span class="sourceLineNo">3512</span>            Object o;<a name="line.3512"></a>
+<span class="sourceLineNo">3513</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3513"></a>
+<span class="sourceLineNo">3514</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $l2 * a + $l1;<a name="line.3514"></a>
+<span class="sourceLineNo">3515</span>            }<a name="line.3515"></a>
+<span class="sourceLineNo">3516</span>            return result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37);<a name="line.3516"></a>
+<span class="sourceLineNo">3517</span>        }<a name="line.3517"></a>
+<span class="sourceLineNo">3518</span><a name="line.3518"></a>
+<span class="sourceLineNo">3519</span>        public int hash(final boolean[] data) {<a name="line.3519"></a>
+<span class="sourceLineNo">3520</span>            if (data == null)<a name="line.3520"></a>
+<span class="sourceLineNo">3521</span>                return 0;<a name="line.3521"></a>
+<span class="sourceLineNo">3522</span>            final int len = data.length;<a name="line.3522"></a>
+<span class="sourceLineNo">3523</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3523"></a>
+<span class="sourceLineNo">3524</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3524"></a>
+<span class="sourceLineNo">3525</span>                result += (a ^= 0x85157AF5 * (data[i] ? 0x789ABCDE : 0x62E2AC0D)) ^ $i2 * a + $i1;<a name="line.3525"></a>
+<span class="sourceLineNo">3526</span>            }<a name="line.3526"></a>
+<span class="sourceLineNo">3527</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3527"></a>
+<span class="sourceLineNo">3528</span>        }<a name="line.3528"></a>
+<span class="sourceLineNo">3529</span><a name="line.3529"></a>
+<span class="sourceLineNo">3530</span>        public int hash(final byte[] data) {<a name="line.3530"></a>
+<span class="sourceLineNo">3531</span>            if (data == null)<a name="line.3531"></a>
+<span class="sourceLineNo">3532</span>                return 0;<a name="line.3532"></a>
+<span class="sourceLineNo">3533</span>            final int len = data.length;<a name="line.3533"></a>
+<span class="sourceLineNo">3534</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3534"></a>
+<span class="sourceLineNo">3535</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3535"></a>
+<span class="sourceLineNo">3536</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3536"></a>
+<span class="sourceLineNo">3537</span>            }<a name="line.3537"></a>
+<span class="sourceLineNo">3538</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3538"></a>
+<span class="sourceLineNo">3539</span>        }<a name="line.3539"></a>
+<span class="sourceLineNo">3540</span><a name="line.3540"></a>
+<span class="sourceLineNo">3541</span>        public int hash(final short[] data) {<a name="line.3541"></a>
+<span class="sourceLineNo">3542</span>            if (data == null)<a name="line.3542"></a>
+<span class="sourceLineNo">3543</span>                return 0;<a name="line.3543"></a>
+<span class="sourceLineNo">3544</span>            final int len = data.length;<a name="line.3544"></a>
+<span class="sourceLineNo">3545</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3545"></a>
+<span class="sourceLineNo">3546</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3546"></a>
+<span class="sourceLineNo">3547</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3547"></a>
+<span class="sourceLineNo">3548</span>            }<a name="line.3548"></a>
+<span class="sourceLineNo">3549</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3549"></a>
+<span class="sourceLineNo">3550</span>        }<a name="line.3550"></a>
+<span class="sourceLineNo">3551</span><a name="line.3551"></a>
+<span class="sourceLineNo">3552</span>        public int hash(final char[] data) {<a name="line.3552"></a>
+<span class="sourceLineNo">3553</span>            if (data == null)<a name="line.3553"></a>
+<span class="sourceLineNo">3554</span>                return 0;<a name="line.3554"></a>
+<span class="sourceLineNo">3555</span>            final int len = data.length;<a name="line.3555"></a>
+<span class="sourceLineNo">3556</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3556"></a>
+<span class="sourceLineNo">3557</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3557"></a>
+<span class="sourceLineNo">3558</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3558"></a>
+<span class="sourceLineNo">3559</span>            }<a name="line.3559"></a>
+<span class="sourceLineNo">3560</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3560"></a>
+<span class="sourceLineNo">3561</span>        }<a name="line.3561"></a>
+<span class="sourceLineNo">3562</span><a name="line.3562"></a>
+<span class="sourceLineNo">3563</span>        public int hash(final int[] data) {<a name="line.3563"></a>
+<span class="sourceLineNo">3564</span>            if (data == null)<a name="line.3564"></a>
+<span class="sourceLineNo">3565</span>                return 0;<a name="line.3565"></a>
+<span class="sourceLineNo">3566</span>            final int len = data.length;<a name="line.3566"></a>
+<span class="sourceLineNo">3567</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3567"></a>
+<span class="sourceLineNo">3568</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3568"></a>
+<span class="sourceLineNo">3569</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3569"></a>
+<span class="sourceLineNo">3570</span>            }<a name="line.3570"></a>
+<span class="sourceLineNo">3571</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3571"></a>
+<span class="sourceLineNo">3572</span>        }<a name="line.3572"></a>
 <span class="sourceLineNo">3573</span><a name="line.3573"></a>
-<span class="sourceLineNo">3574</span>        public int hash(final float[] data) {<a name="line.3574"></a>
+<span class="sourceLineNo">3574</span>        public int hash(final long[] data) {<a name="line.3574"></a>
 <span class="sourceLineNo">3575</span>            if (data == null)<a name="line.3575"></a>
 <span class="sourceLineNo">3576</span>                return 0;<a name="line.3576"></a>
 <span class="sourceLineNo">3577</span>            final int len = data.length;<a name="line.3577"></a>
-<span class="sourceLineNo">3578</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3578"></a>
+<span class="sourceLineNo">3578</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3578"></a>
 <span class="sourceLineNo">3579</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3579"></a>
-<span class="sourceLineNo">3580</span>                result += (a ^= 0x85157AF5 * NumberTools.floatToIntBits(data[i])) ^ $i2 * a + $i1;<a name="line.3580"></a>
+<span class="sourceLineNo">3580</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;<a name="line.3580"></a>
 <span class="sourceLineNo">3581</span>            }<a name="line.3581"></a>
-<span class="sourceLineNo">3582</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3582"></a>
+<span class="sourceLineNo">3582</span>            return (int)((result = (result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37))) ^ (result &gt;&gt;&gt; 32));<a name="line.3582"></a>
 <span class="sourceLineNo">3583</span>        }<a name="line.3583"></a>
 <span class="sourceLineNo">3584</span><a name="line.3584"></a>
-<span class="sourceLineNo">3585</span>        public int hash(final double[] data) {<a name="line.3585"></a>
-<span class="sourceLineNo">3586</span>            if (data == null)<a name="line.3586"></a>
-<span class="sourceLineNo">3587</span>                return 0;<a name="line.3587"></a>
-<span class="sourceLineNo">3588</span>            final int len = data.length;<a name="line.3588"></a>
-<span class="sourceLineNo">3589</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3589"></a>
-<span class="sourceLineNo">3590</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3590"></a>
-<span class="sourceLineNo">3591</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToLongBits(data[i])) ^ $l2 * a + $l1;<a name="line.3591"></a>
-<span class="sourceLineNo">3592</span>            }<a name="line.3592"></a>
-<span class="sourceLineNo">3593</span>            return (int)((result = (result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37))) ^ (result &gt;&gt;&gt; 32));<a name="line.3593"></a>
-<span class="sourceLineNo">3594</span>        }<a name="line.3594"></a>
-<span class="sourceLineNo">3595</span><a name="line.3595"></a>
-<span class="sourceLineNo">3596</span>        public int hash(final char[] data, final int start, final int end) {<a name="line.3596"></a>
-<span class="sourceLineNo">3597</span>            if (data == null || start &gt;= end)<a name="line.3597"></a>
-<span class="sourceLineNo">3598</span>                return 0;<a name="line.3598"></a>
-<span class="sourceLineNo">3599</span>            final int len = data.length;<a name="line.3599"></a>
-<span class="sourceLineNo">3600</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3600"></a>
-<span class="sourceLineNo">3601</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i++) {<a name="line.3601"></a>
-<span class="sourceLineNo">3602</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3602"></a>
-<span class="sourceLineNo">3603</span>            }<a name="line.3603"></a>
-<span class="sourceLineNo">3604</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3604"></a>
-<span class="sourceLineNo">3605</span>        }<a name="line.3605"></a>
-<span class="sourceLineNo">3606</span><a name="line.3606"></a>
-<span class="sourceLineNo">3607</span>        public int hash(final char[] data, final int start, final int end, final int step) {<a name="line.3607"></a>
-<span class="sourceLineNo">3608</span>            if (data == null || start &gt;= end || step &lt;= 0)<a name="line.3608"></a>
-<span class="sourceLineNo">3609</span>                return 0;<a name="line.3609"></a>
-<span class="sourceLineNo">3610</span>            final int len = data.length;<a name="line.3610"></a>
-<span class="sourceLineNo">3611</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3611"></a>
-<span class="sourceLineNo">3612</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i += step) {<a name="line.3612"></a>
-<span class="sourceLineNo">3613</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3613"></a>
-<span class="sourceLineNo">3614</span>            }<a name="line.3614"></a>
-<span class="sourceLineNo">3615</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3615"></a>
-<span class="sourceLineNo">3616</span>        }<a name="line.3616"></a>
-<span class="sourceLineNo">3617</span><a name="line.3617"></a>
-<span class="sourceLineNo">3618</span>        public int hash(final CharSequence data) {<a name="line.3618"></a>
-<span class="sourceLineNo">3619</span>            if (data == null)<a name="line.3619"></a>
-<span class="sourceLineNo">3620</span>                return 0;<a name="line.3620"></a>
-<span class="sourceLineNo">3621</span>            final int len = data.length();<a name="line.3621"></a>
-<span class="sourceLineNo">3622</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3622"></a>
-<span class="sourceLineNo">3623</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3623"></a>
-<span class="sourceLineNo">3624</span>                result += (a ^= 0x85157AF5 * data.charAt(i)) ^ $i2 * a + $i1;<a name="line.3624"></a>
-<span class="sourceLineNo">3625</span>            }<a name="line.3625"></a>
-<span class="sourceLineNo">3626</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3626"></a>
-<span class="sourceLineNo">3627</span>        }<a name="line.3627"></a>
-<span class="sourceLineNo">3628</span><a name="line.3628"></a>
-<span class="sourceLineNo">3629</span>        public int hash(final char[][] data) {<a name="line.3629"></a>
-<span class="sourceLineNo">3630</span>            if (data == null)<a name="line.3630"></a>
-<span class="sourceLineNo">3631</span>                return 0;<a name="line.3631"></a>
-<span class="sourceLineNo">3632</span>            final int len = data.length;<a name="line.3632"></a>
-<span class="sourceLineNo">3633</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3633"></a>
-<span class="sourceLineNo">3634</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3634"></a>
-<span class="sourceLineNo">3635</span>                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;<a name="line.3635"></a>
-<span class="sourceLineNo">3636</span>            }<a name="line.3636"></a>
-<span class="sourceLineNo">3637</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3637"></a>
-<span class="sourceLineNo">3638</span>        }<a name="line.3638"></a>
-<span class="sourceLineNo">3639</span><a name="line.3639"></a>
-<span class="sourceLineNo">3640</span>        public int hash(final long[][] data) {<a name="line.3640"></a>
-<span class="sourceLineNo">3641</span>            if (data == null)<a name="line.3641"></a>
-<span class="sourceLineNo">3642</span>                return 0;<a name="line.3642"></a>
-<span class="sourceLineNo">3643</span>            final int len = data.length;<a name="line.3643"></a>
-<span class="sourceLineNo">3644</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3644"></a>
-<span class="sourceLineNo">3645</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3645"></a>
-<span class="sourceLineNo">3646</span>                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;<a name="line.3646"></a>
-<span class="sourceLineNo">3647</span>            }<a name="line.3647"></a>
-<span class="sourceLineNo">3648</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3648"></a>
-<span class="sourceLineNo">3649</span>        }<a name="line.3649"></a>
-<span class="sourceLineNo">3650</span><a name="line.3650"></a>
-<span class="sourceLineNo">3651</span>        public int hash(final CharSequence[] data) {<a name="line.3651"></a>
-<span class="sourceLineNo">3652</span>            if (data == null)<a name="line.3652"></a>
-<span class="sourceLineNo">3653</span>                return 0;<a name="line.3653"></a>
-<span class="sourceLineNo">3654</span>            final int len = data.length;<a name="line.3654"></a>
-<span class="sourceLineNo">3655</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3655"></a>
-<span class="sourceLineNo">3656</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3656"></a>
-<span class="sourceLineNo">3657</span>                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;<a name="line.3657"></a>
-<span class="sourceLineNo">3658</span>            }<a name="line.3658"></a>
-<span class="sourceLineNo">3659</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3659"></a>
-<span class="sourceLineNo">3660</span>        }<a name="line.3660"></a>
-<span class="sourceLineNo">3661</span><a name="line.3661"></a>
-<span class="sourceLineNo">3662</span>        public int hash(final Iterable&lt;? extends CharSequence&gt; data) {<a name="line.3662"></a>
-<span class="sourceLineNo">3663</span><a name="line.3663"></a>
+<span class="sourceLineNo">3585</span><a name="line.3585"></a>
+<span class="sourceLineNo">3586</span>        public int hash(final float[] data) {<a name="line.3586"></a>
+<span class="sourceLineNo">3587</span>            if (data == null)<a name="line.3587"></a>
+<span class="sourceLineNo">3588</span>                return 0;<a name="line.3588"></a>
+<span class="sourceLineNo">3589</span>            final int len = data.length;<a name="line.3589"></a>
+<span class="sourceLineNo">3590</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3590"></a>
+<span class="sourceLineNo">3591</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3591"></a>
+<span class="sourceLineNo">3592</span>                result += (a ^= 0x85157AF5 * NumberTools.floatToIntBits(data[i])) ^ $i2 * a + $i1;<a name="line.3592"></a>
+<span class="sourceLineNo">3593</span>            }<a name="line.3593"></a>
+<span class="sourceLineNo">3594</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3594"></a>
+<span class="sourceLineNo">3595</span>        }<a name="line.3595"></a>
+<span class="sourceLineNo">3596</span><a name="line.3596"></a>
+<span class="sourceLineNo">3597</span>        public int hash(final double[] data) {<a name="line.3597"></a>
+<span class="sourceLineNo">3598</span>            if (data == null)<a name="line.3598"></a>
+<span class="sourceLineNo">3599</span>                return 0;<a name="line.3599"></a>
+<span class="sourceLineNo">3600</span>            final int len = data.length;<a name="line.3600"></a>
+<span class="sourceLineNo">3601</span>            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;<a name="line.3601"></a>
+<span class="sourceLineNo">3602</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3602"></a>
+<span class="sourceLineNo">3603</span>                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToLongBits(data[i])) ^ $l2 * a + $l1;<a name="line.3603"></a>
+<span class="sourceLineNo">3604</span>            }<a name="line.3604"></a>
+<span class="sourceLineNo">3605</span>            return (int)((result = (result * (a * $l1 | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37))) ^ (result &gt;&gt;&gt; 32));<a name="line.3605"></a>
+<span class="sourceLineNo">3606</span>        }<a name="line.3606"></a>
+<span class="sourceLineNo">3607</span><a name="line.3607"></a>
+<span class="sourceLineNo">3608</span>        public int hash(final char[] data, final int start, final int end) {<a name="line.3608"></a>
+<span class="sourceLineNo">3609</span>            if (data == null || start &gt;= end)<a name="line.3609"></a>
+<span class="sourceLineNo">3610</span>                return 0;<a name="line.3610"></a>
+<span class="sourceLineNo">3611</span>            final int len = data.length;<a name="line.3611"></a>
+<span class="sourceLineNo">3612</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3612"></a>
+<span class="sourceLineNo">3613</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i++) {<a name="line.3613"></a>
+<span class="sourceLineNo">3614</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3614"></a>
+<span class="sourceLineNo">3615</span>            }<a name="line.3615"></a>
+<span class="sourceLineNo">3616</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3616"></a>
+<span class="sourceLineNo">3617</span>        }<a name="line.3617"></a>
+<span class="sourceLineNo">3618</span><a name="line.3618"></a>
+<span class="sourceLineNo">3619</span>        public int hash(final char[] data, final int start, final int end, final int step) {<a name="line.3619"></a>
+<span class="sourceLineNo">3620</span>            if (data == null || start &gt;= end || step &lt;= 0)<a name="line.3620"></a>
+<span class="sourceLineNo">3621</span>                return 0;<a name="line.3621"></a>
+<span class="sourceLineNo">3622</span>            final int len = data.length;<a name="line.3622"></a>
+<span class="sourceLineNo">3623</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3623"></a>
+<span class="sourceLineNo">3624</span>            for (int i = start; i &lt; end &amp;&amp; i &lt; len; i += step) {<a name="line.3624"></a>
+<span class="sourceLineNo">3625</span>                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;<a name="line.3625"></a>
+<span class="sourceLineNo">3626</span>            }<a name="line.3626"></a>
+<span class="sourceLineNo">3627</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3627"></a>
+<span class="sourceLineNo">3628</span>        }<a name="line.3628"></a>
+<span class="sourceLineNo">3629</span><a name="line.3629"></a>
+<span class="sourceLineNo">3630</span>        public int hash(final CharSequence data) {<a name="line.3630"></a>
+<span class="sourceLineNo">3631</span>            if (data == null)<a name="line.3631"></a>
+<span class="sourceLineNo">3632</span>                return 0;<a name="line.3632"></a>
+<span class="sourceLineNo">3633</span>            final int len = data.length();<a name="line.3633"></a>
+<span class="sourceLineNo">3634</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3634"></a>
+<span class="sourceLineNo">3635</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3635"></a>
+<span class="sourceLineNo">3636</span>                result += (a ^= 0x85157AF5 * data.charAt(i)) ^ $i2 * a + $i1;<a name="line.3636"></a>
+<span class="sourceLineNo">3637</span>            }<a name="line.3637"></a>
+<span class="sourceLineNo">3638</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3638"></a>
+<span class="sourceLineNo">3639</span>        }<a name="line.3639"></a>
+<span class="sourceLineNo">3640</span><a name="line.3640"></a>
+<span class="sourceLineNo">3641</span>        public int hash(final char[][] data) {<a name="line.3641"></a>
+<span class="sourceLineNo">3642</span>            if (data == null)<a name="line.3642"></a>
+<span class="sourceLineNo">3643</span>                return 0;<a name="line.3643"></a>
+<span class="sourceLineNo">3644</span>            final int len = data.length;<a name="line.3644"></a>
+<span class="sourceLineNo">3645</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3645"></a>
+<span class="sourceLineNo">3646</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3646"></a>
+<span class="sourceLineNo">3647</span>                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;<a name="line.3647"></a>
+<span class="sourceLineNo">3648</span>            }<a name="line.3648"></a>
+<span class="sourceLineNo">3649</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3649"></a>
+<span class="sourceLineNo">3650</span>        }<a name="line.3650"></a>
+<span class="sourceLineNo">3651</span><a name="line.3651"></a>
+<span class="sourceLineNo">3652</span>        public int hash(final long[][] data) {<a name="line.3652"></a>
+<span class="sourceLineNo">3653</span>            if (data == null)<a name="line.3653"></a>
+<span class="sourceLineNo">3654</span>                return 0;<a name="line.3654"></a>
+<span class="sourceLineNo">3655</span>            final int len = data.length;<a name="line.3655"></a>
+<span class="sourceLineNo">3656</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3656"></a>
+<span class="sourceLineNo">3657</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3657"></a>
+<span class="sourceLineNo">3658</span>                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;<a name="line.3658"></a>
+<span class="sourceLineNo">3659</span>            }<a name="line.3659"></a>
+<span class="sourceLineNo">3660</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3660"></a>
+<span class="sourceLineNo">3661</span>        }<a name="line.3661"></a>
+<span class="sourceLineNo">3662</span><a name="line.3662"></a>
+<span class="sourceLineNo">3663</span>        public int hash(final CharSequence[] data) {<a name="line.3663"></a>
 <span class="sourceLineNo">3664</span>            if (data == null)<a name="line.3664"></a>
 <span class="sourceLineNo">3665</span>                return 0;<a name="line.3665"></a>
-<span class="sourceLineNo">3666</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3666"></a>
-<span class="sourceLineNo">3667</span>            for (CharSequence datum : data) {<a name="line.3667"></a>
-<span class="sourceLineNo">3668</span>                result += (a ^= 0x85157AF5 * hash(datum)) ^ $i2 * a + $i1;<a name="line.3668"></a>
-<span class="sourceLineNo">3669</span>            }<a name="line.3669"></a>
-<span class="sourceLineNo">3670</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3670"></a>
-<span class="sourceLineNo">3671</span>        }<a name="line.3671"></a>
-<span class="sourceLineNo">3672</span><a name="line.3672"></a>
-<span class="sourceLineNo">3673</span>        public int hash(final CharSequence[]... data) {<a name="line.3673"></a>
-<span class="sourceLineNo">3674</span>            if (data == null)<a name="line.3674"></a>
-<span class="sourceLineNo">3675</span>                return 0;<a name="line.3675"></a>
-<span class="sourceLineNo">3676</span>            final int len = data.length;<a name="line.3676"></a>
-<span class="sourceLineNo">3677</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3677"></a>
-<span class="sourceLineNo">3678</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3678"></a>
-<span class="sourceLineNo">3679</span>                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;<a name="line.3679"></a>
-<span class="sourceLineNo">3680</span>            }<a name="line.3680"></a>
-<span class="sourceLineNo">3681</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3681"></a>
-<span class="sourceLineNo">3682</span>        }<a name="line.3682"></a>
-<span class="sourceLineNo">3683</span><a name="line.3683"></a>
-<span class="sourceLineNo">3684</span>        public int hash(final Object[] data) {<a name="line.3684"></a>
-<span class="sourceLineNo">3685</span>            if (data == null)<a name="line.3685"></a>
-<span class="sourceLineNo">3686</span>                return 0;<a name="line.3686"></a>
-<span class="sourceLineNo">3687</span>            final int len = data.length;<a name="line.3687"></a>
-<span class="sourceLineNo">3688</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3688"></a>
-<span class="sourceLineNo">3689</span>            Object o;<a name="line.3689"></a>
+<span class="sourceLineNo">3666</span>            final int len = data.length;<a name="line.3666"></a>
+<span class="sourceLineNo">3667</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3667"></a>
+<span class="sourceLineNo">3668</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3668"></a>
+<span class="sourceLineNo">3669</span>                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;<a name="line.3669"></a>
+<span class="sourceLineNo">3670</span>            }<a name="line.3670"></a>
+<span class="sourceLineNo">3671</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3671"></a>
+<span class="sourceLineNo">3672</span>        }<a name="line.3672"></a>
+<span class="sourceLineNo">3673</span><a name="line.3673"></a>
+<span class="sourceLineNo">3674</span>        public int hash(final Iterable&lt;? extends CharSequence&gt; data) {<a name="line.3674"></a>
+<span class="sourceLineNo">3675</span><a name="line.3675"></a>
+<span class="sourceLineNo">3676</span>            if (data == null)<a name="line.3676"></a>
+<span class="sourceLineNo">3677</span>                return 0;<a name="line.3677"></a>
+<span class="sourceLineNo">3678</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3678"></a>
+<span class="sourceLineNo">3679</span>            for (CharSequence datum : data) {<a name="line.3679"></a>
+<span class="sourceLineNo">3680</span>                result += (a ^= 0x85157AF5 * hash(datum)) ^ $i2 * a + $i1;<a name="line.3680"></a>
+<span class="sourceLineNo">3681</span>            }<a name="line.3681"></a>
+<span class="sourceLineNo">3682</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3682"></a>
+<span class="sourceLineNo">3683</span>        }<a name="line.3683"></a>
+<span class="sourceLineNo">3684</span><a name="line.3684"></a>
+<span class="sourceLineNo">3685</span>        public int hash(final CharSequence[]... data) {<a name="line.3685"></a>
+<span class="sourceLineNo">3686</span>            if (data == null)<a name="line.3686"></a>
+<span class="sourceLineNo">3687</span>                return 0;<a name="line.3687"></a>
+<span class="sourceLineNo">3688</span>            final int len = data.length;<a name="line.3688"></a>
+<span class="sourceLineNo">3689</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3689"></a>
 <span class="sourceLineNo">3690</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3690"></a>
-<span class="sourceLineNo">3691</span>                result += (a ^= 0x85157AF5 * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $i2 * a + $i1;<a name="line.3691"></a>
+<span class="sourceLineNo">3691</span>                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;<a name="line.3691"></a>
 <span class="sourceLineNo">3692</span>            }<a name="line.3692"></a>
 <span class="sourceLineNo">3693</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3693"></a>
 <span class="sourceLineNo">3694</span>        }<a name="line.3694"></a>
-<span class="sourceLineNo">3695</span>        public int hash(final List&lt;? extends CharSequence&gt; data) {<a name="line.3695"></a>
-<span class="sourceLineNo">3696</span>            if (data == null)<a name="line.3696"></a>
-<span class="sourceLineNo">3697</span>                return 0;<a name="line.3697"></a>
-<span class="sourceLineNo">3698</span>            final int len = data.size();<a name="line.3698"></a>
-<span class="sourceLineNo">3699</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3699"></a>
-<span class="sourceLineNo">3700</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3700"></a>
-<span class="sourceLineNo">3701</span>                result += (a ^= 0x85157AF5 * hash(data.get(i))) ^ $i2 * a + $i1;<a name="line.3701"></a>
-<span class="sourceLineNo">3702</span>            }<a name="line.3702"></a>
-<span class="sourceLineNo">3703</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3703"></a>
-<span class="sourceLineNo">3704</span>        }<a name="line.3704"></a>
-<span class="sourceLineNo">3705</span><a name="line.3705"></a>
-<span class="sourceLineNo">3706</span>        public int hash(final Object data) {<a name="line.3706"></a>
-<span class="sourceLineNo">3707</span>            if (data == null)<a name="line.3707"></a>
-<span class="sourceLineNo">3708</span>                return 0;<a name="line.3708"></a>
-<span class="sourceLineNo">3709</span>            int a = 0x632BE5AB ^ 0x85157AF5 * data.hashCode(), result = 0x9E3779B9 + $i2 + (a ^ $i2 * a + $i1);<a name="line.3709"></a>
-<span class="sourceLineNo">3710</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3710"></a>
-<span class="sourceLineNo">3711</span>        }<a name="line.3711"></a>
-<span class="sourceLineNo">3712</span><a name="line.3712"></a>
-<span class="sourceLineNo">3713</span>    }<a name="line.3713"></a>
-<span class="sourceLineNo">3714</span>}<a name="line.3714"></a>
+<span class="sourceLineNo">3695</span><a name="line.3695"></a>
+<span class="sourceLineNo">3696</span>        public int hash(final Object[] data) {<a name="line.3696"></a>
+<span class="sourceLineNo">3697</span>            if (data == null)<a name="line.3697"></a>
+<span class="sourceLineNo">3698</span>                return 0;<a name="line.3698"></a>
+<span class="sourceLineNo">3699</span>            final int len = data.length;<a name="line.3699"></a>
+<span class="sourceLineNo">3700</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3700"></a>
+<span class="sourceLineNo">3701</span>            Object o;<a name="line.3701"></a>
+<span class="sourceLineNo">3702</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3702"></a>
+<span class="sourceLineNo">3703</span>                result += (a ^= 0x85157AF5 * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $i2 * a + $i1;<a name="line.3703"></a>
+<span class="sourceLineNo">3704</span>            }<a name="line.3704"></a>
+<span class="sourceLineNo">3705</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3705"></a>
+<span class="sourceLineNo">3706</span>        }<a name="line.3706"></a>
+<span class="sourceLineNo">3707</span>        public int hash(final List&lt;? extends CharSequence&gt; data) {<a name="line.3707"></a>
+<span class="sourceLineNo">3708</span>            if (data == null)<a name="line.3708"></a>
+<span class="sourceLineNo">3709</span>                return 0;<a name="line.3709"></a>
+<span class="sourceLineNo">3710</span>            final int len = data.size();<a name="line.3710"></a>
+<span class="sourceLineNo">3711</span>            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;<a name="line.3711"></a>
+<span class="sourceLineNo">3712</span>            for (int i = 0; i &lt; len; i++) {<a name="line.3712"></a>
+<span class="sourceLineNo">3713</span>                result += (a ^= 0x85157AF5 * hash(data.get(i))) ^ $i2 * a + $i1;<a name="line.3713"></a>
+<span class="sourceLineNo">3714</span>            }<a name="line.3714"></a>
+<span class="sourceLineNo">3715</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3715"></a>
+<span class="sourceLineNo">3716</span>        }<a name="line.3716"></a>
+<span class="sourceLineNo">3717</span><a name="line.3717"></a>
+<span class="sourceLineNo">3718</span>        public int hash(final Object data) {<a name="line.3718"></a>
+<span class="sourceLineNo">3719</span>            if (data == null)<a name="line.3719"></a>
+<span class="sourceLineNo">3720</span>                return 0;<a name="line.3720"></a>
+<span class="sourceLineNo">3721</span>            int a = 0x632BE5AB ^ 0x85157AF5 * data.hashCode(), result = 0x9E3779B9 + $i2 + (a ^ $i2 * a + $i1);<a name="line.3721"></a>
+<span class="sourceLineNo">3722</span>            return result * (a * $i1 | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.3722"></a>
+<span class="sourceLineNo">3723</span>        }<a name="line.3723"></a>
+<span class="sourceLineNo">3724</span><a name="line.3724"></a>
+<span class="sourceLineNo">3725</span>    }<a name="line.3725"></a>
+<span class="sourceLineNo">3726</span>}<a name="line.3726"></a>
 
 
 

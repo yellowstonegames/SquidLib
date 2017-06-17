@@ -111,8 +111,8 @@
 <span class="sourceLineNo">103</span>            for (int i = 0; i &lt; len; ) {<a name="line.103"></a>
 <span class="sourceLineNo">104</span><a name="line.104"></a>
 <span class="sourceLineNo">105</span>                do {<a name="line.105"></a>
-<span class="sourceLineNo">106</span>                    v1 = ZapRNG.randomSignedFloat(seed, seed += 0xAE3779BE3779B9L); // between -1 and 1<a name="line.106"></a>
-<span class="sourceLineNo">107</span>                    v2 = ZapRNG.randomSignedFloat(seed &gt;&gt; 1, seed + 0xDE3779BE3779B9L); // between -1 and 1<a name="line.107"></a>
+<span class="sourceLineNo">106</span>                    v1 = ZapRNG.randomSignedFloat(seed, seed += 0xA3779BE3779BE9L); // between -1 and 1<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                    v2 = ZapRNG.randomSignedFloat(seed &gt;&gt; 1, seed + 0xD9E3779BE3779BL); // between -1 and 1<a name="line.107"></a>
 <span class="sourceLineNo">108</span>                    s = v1 * v1 + v2 * v2;<a name="line.108"></a>
 <span class="sourceLineNo">109</span>                } while (s &gt;= 1 || s == 0);<a name="line.109"></a>
 <span class="sourceLineNo">110</span>                double multiplier = Math.sqrt(-2 * Math.log(s) / s);<a name="line.110"></a>

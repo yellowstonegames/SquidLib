@@ -148,26 +148,32 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/ColorNoise.html" title="class in squidpony.squidgrid.gui.gdx">ColorNoise</a></td>
+<td class="colLast">
+<div class="block">Created by Tommy Ettinger on 6/12/2017.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html" title="class in squidpony.squidgrid.gui.gdx">DefaultResources</a></td>
 <td class="colLast">
 <div class="block">Default BitmapFonts, a sample image, "stretchable" fonts and icons, and a central RNG for use with LibGDX.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="class in squidpony.squidgrid.gui.gdx">Filter</a>&lt;T extends com.badlogic.gdx.graphics.Color&gt;</td>
 <td class="colLast">
 <div class="block">An abstract class that handles changes between a given color component and an actual one, and may carry state as a
  float array.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.html" title="class in squidpony.squidgrid.gui.gdx">Filters</a></td>
 <td class="colLast">
 <div class="block">Implementations of <code>IFilter</code>, that all are meant to perform different changes
  to colors before they are created (they should be passed to SquidColorCenter's constructor, which can use them).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.ColorizeFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.ColorizeFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that is constructed with a color and makes any color it is told to alter have the same hue as the given
@@ -175,7 +181,7 @@
  distinguishable from other colors by value.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.DistinctRedGreenFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.DistinctRedGreenFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that alters primarily-red and primarily-green colors so they can be more easily be distinguished by
@@ -183,19 +189,19 @@
  very well, and tritanopia may not benefit at all).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.GammaCorrectFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.GammaCorrectFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that performs a brightness adjustment to make dark areas lighter and light areas not much less bright.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.GrayscaleFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.GrayscaleFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that converts all colors passed to it to grayscale, like a black and white film.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.HallucinateFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.HallucinateFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that makes the colors requested from it highly saturated, with the original hue, value and a timer that
@@ -203,134 +209,134 @@
  saturation, and value all altering value.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.IdentityFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.IdentityFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that does nothing to the colors it is given but pass them along unchanged.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.LerpFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.LerpFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that is constructed with a color and linear-interpolates any color it is told to alter toward the color
  it was constructed with.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.MaxValueFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.MaxValueFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that tracks the highest brightness for any component it was assigned and stores it in state as the first
  and only element.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.MultiLerpFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.MultiLerpFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
  the color it was constructed with that has the closest hue.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.PaletteFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that is constructed with a group of colors and forces any color it is told to alter to exactly
  the color it was constructed with that has the closest red, green, and blue components.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.SaturationFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.SaturationFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that multiplies the saturation of any color requested from it by a number given during construction.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.Utility.html" title="class in squidpony.squidgrid.gui.gdx">Filters.Utility</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.WiggleFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.WiggleFilter</a></td>
 <td class="colLast">
 <div class="block">A Filter that is constructed with a palette of colors and randomly increases or decreases the red, green, and
  blue components of any color it is told to alter.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html" title="class in squidpony.squidgrid.gui.gdx">GDXMarkup</a></td>
 <td class="colLast">
 <div class="block">GDXMarkup implements IMarkup for libGDX Color objects, and can start blocks of markup that libGDX understands that
  display text in a given Color.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></td>
 <td class="colLast">
 <div class="block">Displays text and images in a grid pattern, like SquidPanel, but will automatically render certain chars as images.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/IPanelBuilder.Skeleton.html" title="class in squidpony.squidgrid.gui.gdx">IPanelBuilder.Skeleton</a></td>
 <td class="colLast">
 <div class="block">A partial implementation of <a href="../../../../squidpony/squidgrid/gui/gdx/IPanelBuilder.html" title="interface in squidpony.squidgrid.gui.gdx"><code>IPanelBuilder</code></a>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx">LinesPanel</a>&lt;T extends com.badlogic.gdx.graphics.Color&gt;</td>
 <td class="colLast">
 <div class="block">An actor capable of drawing <code>IColoredString</code>s.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></td>
 <td class="colLast">
 <div class="block">Various special effects that can be applied to a SquidPanel as an <code>Action</code>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.GibberishEffect</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></td>
 <td class="colLast">
 <div class="block">Allows for the use of custom colors with custom names.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SColorFactory.html" title="class in squidpony.squidgrid.gui.gdx">SColorFactory</a></td>
 <td class="colLast">
 <div class="block">Provides utilities for working with colors as well as caching operations for
  color creation.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/ScreenSizeManager.html" title="class in squidpony.squidgrid.gui.gdx">ScreenSizeManager</a></td>
 <td class="colLast">
 <div class="block">A container that keeps tracks of the sizes of margins and cells.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html" title="class in squidpony.squidgrid.gui.gdx">ShrinkPartViewport</a></td>
 <td class="colLast">
 <div class="block">A viewport that scales the world using <code>Scaling.stretch</code> on a sub-region of the screen.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidApplicationAdapter.html" title="class in squidpony.squidgrid.gui.gdx">SquidApplicationAdapter</a></td>
 <td class="colLast">
 <div class="block">A partial application adapter that uses the Zodiac-Square fonts.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a></td>
 <td class="colLast">
 <div class="block">A concrete implementation of <code>IColorCenter</code> for libgdx's <code>Color</code>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></td>
 <td class="colLast">
 <div class="block">This input processing class can handle mouse and keyboard input, using a squidpony.squidgrid.gui.gdx.SquidMouse for
@@ -338,73 +344,73 @@
  and the modifiers those keys were pressed with, any of alt, ctrl, and/or shift.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidKey.html" title="class in squidpony.squidgrid.gui.gdx">SquidKey</a></td>
 <td class="colLast">
 <div class="block">This wraps an InputProcessor, storing all key events and allowing them to be processed one at a time using next() or
  all at once using drain().</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></td>
 <td class="colLast">
 <div class="block">A helper class to make using multiple SquidPanels easier.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidMessageBox.html" title="class in squidpony.squidgrid.gui.gdx">SquidMessageBox</a></td>
 <td class="colLast">
 <div class="block">A specialized SquidPanel that is meant for displaying messages in a scrolling pane.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a></td>
 <td class="colLast">
 <div class="block">This mouse processor allows for easy conversion to a grid based system.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></td>
 <td class="colLast">
 <div class="block">Displays text and images in a grid pattern.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanelBuilder.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanelBuilder</a></td>
 <td class="colLast">
 <div class="block">An almost-concrete implementation of <a href="../../../../squidpony/squidgrid/gui/gdx/IPanelBuilder.html" title="interface in squidpony.squidgrid.gui.gdx"><code>IPanelBuilder</code></a>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/StarterKit.html" title="class in squidpony.squidgrid.gui.gdx">StarterKit</a></td>
 <td class="colLast">
 <div class="block">A convenience class that groups several commonly-used GUI classes into one object and provides ways to
  initialize these kits for specific purposes, some of which would be a challenge to write without this code.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/StretchContainer.html" title="class in squidpony.squidgrid.gui.gdx">StretchContainer</a></td>
 <td class="colLast">
 <div class="block">A single-Actor container that should stretch the container to fill the dimensions of the container.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></td>
 <td class="colLast">
 <div class="block">Class for creating text blocks.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="class in squidpony.squidgrid.gui.gdx">TextPanel</a>&lt;T extends com.badlogic.gdx.graphics.Color&gt;</td>
 <td class="colLast">
 <div class="block">A panel to display some text using libgdx directly (i.e.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.html" title="class in squidpony.squidgrid.gui.gdx">UIUtil</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html" title="class in squidpony.squidgrid.gui.gdx">VisualInput</a></td>
 <td class="colLast">
 <div class="block">Acts like SquidInput but displays available keys as visible buttons if the device has no physical keyboard.</div>
