@@ -799,6 +799,21 @@ public class DijkstraMap implements Serializable {
      * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
      * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
      *
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] scan() {
+        return scan(null);
+    }
+
+    /**
+     * Recalculate the Dijkstra map and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. The exceptions are walls,
+     * which will have a value defined by the WALL constant in this class, and areas that the scan was
+     * unable to reach, which will have a value defined by the DARK constant in this class (typically,
+     * these areas should not be used to place NPCs or items and should be filled with walls). This uses the
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
      * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
@@ -924,6 +939,22 @@ public class DijkstraMap implements Serializable {
                     gradientMap[pt.x][pt.y] = physicalMap[pt.x][pt.y];
             }
         }
+    }
+
+    /**
+     * Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
+     * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
+     * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
+     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
+     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
+     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
+     * current measurement. The result is stored in the {@link #gradientMap} field and a copy is returned.
+     *
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
+     */
+    public double[][] partialScan(final int limit) {
+        return partialScan(limit, null);
     }
 
     /**
