@@ -19,31 +19,24 @@ public class LOSComparisonTest {
     {
         for(int l : new int[]{1, 3, 4, 5, 6, 7, 8, 9, 3}) {
             //seed is, in base 36, the number SQUIDLIB
-            StatefulRNG rng = new StatefulRNG(new ThunderRNG(2252637788195L));
+            StatefulRNG rng = new StatefulRNG(new SlapRNG(2252637788195L));
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
 
             char[][] dungeon = dungeonGenerator.generate(TilesetType.OPEN_AREAS);
             char[][] bare = dungeonGenerator.getBareDungeon();
-            short[] floors = CoordPacker.pack(bare, '.');
-            Coord start = dungeonGenerator.utility.randomCell(floors);
-            short[] flooded = CoordPacker.flood(floors, CoordPacker.packOne(start), 11, true);
-            short[] outside = CoordPacker.differencePacked(CoordPacker.rectangle(width, height),// flooded);
-                    CoordPacker.expand(flooded, 1, width, height));
+            GreasedRegion floors = new GreasedRegion(bare, '.').retract();
+            Coord start = floors.singleRandom(rng);
+            GreasedRegion flooded = new GreasedRegion(start, width, height).flood(floors.expand(), 16),
+                    outside = flooded.copy().expand8way(1), temp = new GreasedRegion(width, height);
             ArrayList<Coord> allSeen = new ArrayList<>(128), targets = new ArrayList<>(5);
             LOS los;
             if(l < 7) los = new LOS(l);
             else los = new LOS(6);
             los.setRadiusStrategy(Radius.SQUARE);
             rng.nextLong();
-            CoordPacker.singleRandom(
-                    CoordPacker.differencePacked(flooded,
-                            CoordPacker.flood(floors, CoordPacker.packOne(start), 3, true)),
-                    rng);
-            for (int i = 0; i < 2; i++) {
-                Coord end = CoordPacker.singleRandom(
-                        CoordPacker.differencePacked(flooded,
-                                CoordPacker.flood(floors, CoordPacker.packOne(start), 3, true)),
-                        rng);
+
+            for (int i = 0; i < 4; i++) {
+                Coord end = temp.empty().insert(start).flood8way(floors, 3).notAnd(flooded).singleRandom(rng);
 
                 targets.add(end);
                 if(l < 7)
@@ -52,10 +45,7 @@ public class LOSComparisonTest {
                     los.spreadReachable(bare, start.x, start.y, end.x, end.y, Radius.CIRCLE, l - 7);
                 allSeen.addAll(los.getLastPath());
             }
-            for(Coord c : CoordPacker.allPacked(outside))
-            {
-                dungeon[c.x][c.y] = ' ';
-            }
+            dungeon = outside.mask(dungeon, ' ');
             for(Coord c : allSeen)
             {
                 dungeon[c.x][c.y] = '*';
