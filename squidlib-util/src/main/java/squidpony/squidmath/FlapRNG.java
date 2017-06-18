@@ -218,9 +218,9 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * Like {@link #determine(int)}, but limits its results to between 0 (inclusive) and bound (exclusive). You can give
      * a negative value for bound, which will produce a negative result or 0. If you expect to call this method more
      * than once, you should perform some change to state as part of the call; a simple way to do this is to call this
-     * method like {@code FlapRNG.determineBounded(state += 0x9E3779B9)}. The int 0x9E3779B9 is derived from the golden
-     * ratio, and shows up often as an optimal part of hashes and random number generators, but the constant can be any
-     * odd-number int, preferably a large one.
+     * method like {@code FlapRNG.determineBounded(state += 0x9E3779B9, bound)}. The int 0x9E3779B9 is derived from the
+     * golden ratio, and shows up often as an optimal part of hashes and random number generators, but the constant can
+     * be any odd-number int, preferably a large one.
      * @param state should usually be changed when you call this (see above), e.g. {@code state += 0x9E3779B9}
      * @param bound the exclusive outer bound; may be negative
      * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)
@@ -235,10 +235,10 @@ public class FlapRNG implements StatefulRandomness, Serializable {
      * give a negative value for bound, which will produce a negative result or 0. this method does not update state0 or
      * state1 on its own. If you expect to call this method more than once, you should perform some change to
      * state0 and state1 as part of the call; a simple way to do this is to call this method like
-     * {@code FlapRNG.determineBounded(state0 += 0x9E3779B9, state1 += state0 >> 1)}. The int 0x9E3779B9 is derived from
-     * the golden ratio, and shows up often as an optimal part of hashes and random number generators, but this constant
-     * can be any odd-number int, preferably a large one. This method doesn't offer very good quality assurances, but
-     * should be very fast.
+     * {@code FlapRNG.determineBounded(state0 += 0x9E3779B9, state1 += state0 >> 1, bound)}. The int 0x9E3779B9 is
+     * derived from the golden ratio, and shows up often as an optimal part of hashes and random number generators, but
+     * this constant can be any odd-number int, preferably a large one. This method doesn't offer very good quality
+     * assurances, but should be very fast.
      *
      * @param state0 should be changed when you call this (see above), e.g. {@code state0 += 0x9E3779B9}
      * @param state1 should be changed when you call this (see above), e.g. by adding some portion of state0 to state1

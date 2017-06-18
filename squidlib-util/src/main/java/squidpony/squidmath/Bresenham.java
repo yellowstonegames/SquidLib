@@ -166,7 +166,7 @@ public class Bresenham {
      * Generates a 2D Bresenham line between two points. If you don't need
      * the {@link Queue} interface for the returned reference, consider
      * using {@link #line2D_(int, int, int, int)} to save some memory.
-     *
+     * <br>
      * Uses ordinary Coord values for points, and these can be pooled
      * if they aren't beyond what the current pool allows (it starts,
      * by default, pooling Coords with x and y between -3 and 255,
@@ -181,6 +181,31 @@ public class Bresenham {
      * @return a Queue (internally, a LinkedList) of Coord points along the line
      */
     public static Queue<Coord> line2D(int startx, int starty, int endx, int endy) {
+        // largest positive int for maxLength; a Queue cannot actually be given that many elements on the JVM
+        return line2D(startx, starty, endx, endy, 0x7fffffff);
+    }
+
+    /**
+     * Generates a 2D Bresenham line between two points, stopping early if
+     * the number of Coords returned reaches maxLength. If you don't need
+     * the {@link Queue} interface for the returned reference, consider
+     * using {@link #line2D_(int, int, int, int, int)} to save some memory.
+     * <br>
+     * Uses ordinary Coord values for points, and these can be pooled
+     * if they aren't beyond what the current pool allows (it starts,
+     * by default, pooling Coords with x and y between -3 and 255,
+     * inclusive). If the Coords are pool-able, it can significantly
+     * reduce the work the garbage collector needs to do, especially
+     * on Android.
+     *
+     * @param startx the x coordinate of the starting point
+     * @param starty the y coordinate of the starting point
+     * @param endx the x coordinate of the starting point
+     * @param endy the y coordinate of the starting point
+     * @param maxLength the largest count of Coord points this can return; will stop early if reached
+     * @return a Queue (internally, a LinkedList) of Coord points along the line
+     */
+    public static Queue<Coord> line2D(int startx, int starty, int endx, int endy, int maxLength) {
         Queue<Coord> result = new LinkedList<>();
 
         int dx = endx - startx;
@@ -198,7 +223,7 @@ public class Bresenham {
         int deltax, deltay;
         if (ax >= ay) /* x dominant */ {
             deltay = ay - (ax >> 1);
-            while (true) {
+            while (result.size() < maxLength) {
                 result.offer(Coord.get(x, y));
                 if (x == endx) {
                     return result;
@@ -214,7 +239,7 @@ public class Bresenham {
             }
         } else /* y dominant */ {
             deltax = ax - (ay >> 1);
-            while (true) {
+            while (result.size() < maxLength) {
                 result.offer(Coord.get(x, y));
                 if (y == endy) {
                     return result;
@@ -230,13 +255,14 @@ public class Bresenham {
                 deltax += ax;
             }
         }
+        return result;
     }
 
 
     /**
      * Generates a 2D Bresenham line between two points. Returns an array
      * of Coord instead of a Queue.
-     *
+     * <br>
      * Uses ordinary Coord values for points, and these can be pooled
      * if they aren't beyond what the current pool allows (it starts,
      * by default, pooling Coords with x and y between -3 and 255,
@@ -251,6 +277,31 @@ public class Bresenham {
      * @return an array of Coord points along the line
      */
     public static Coord[] line2D_(int startx, int starty, int endx, int endy) {
+        // largest positive int for maxLength; it is extremely unlikely that this could be reached
+        return line2D_(startx, starty, endx, endy, 0x7fffffff);
+    }
+
+
+    /**
+     * Generates a 2D Bresenham line between two points, stopping early if
+     * the number of Coords returned reaches maxLength.. Returns an array
+     * of Coord instead of a Queue.
+     * <br>
+     * Uses ordinary Coord values for points, and these can be pooled
+     * if they aren't beyond what the current pool allows (it starts,
+     * by default, pooling Coords with x and y between -3 and 255,
+     * inclusive). If the Coords are pool-able, it can significantly
+     * reduce the work the garbage collector needs to do, especially
+     * on Android.
+     *
+     * @param startx the x coordinate of the starting point
+     * @param starty the y coordinate of the starting point
+     * @param endx the x coordinate of the starting point
+     * @param endy the y coordinate of the starting point
+     * @param maxLength the largest count of Coord points this can return; will stop early if reached
+     * @return an array of Coord points along the line
+     */
+    public static Coord[] line2D_(int startx, int starty, int endx, int endy, int maxLength) {
         int dx = endx - startx;
         int dy = endy - starty;
 
@@ -266,8 +317,8 @@ public class Bresenham {
         int deltax, deltay;
         if (ax >= ay) /* x dominant */ {
             deltay = ay - (ax >> 1);
-            Coord[] result = new Coord[dx+1];
-            for (int i = 0; i <= dx; i++) {
+            Coord[] result = new Coord[Math.min(maxLength, dx+1)];
+            for (int i = 0; i <= dx && i < maxLength; i++) {
                 result[i] = Coord.get(x, y);
 
                 if (deltay >= 0) {
@@ -281,8 +332,8 @@ public class Bresenham {
             return result;
         } else /* y dominant */ {
             deltax = ax - (ay >> 1);
-            Coord[] result = new Coord[dy+1];
-            for (int i = 0; i <= dy; i++) {
+            Coord[] result = new Coord[Math.min(maxLength, dy+1)];
+            for (int i = 0; i <= dy && i < maxLength; i++) {
                 result[i] = Coord.get(x, y);
 
                 if (deltax >= 0) {

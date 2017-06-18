@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":9};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":9,"i5":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -184,11 +184,23 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html?is
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/DijkstraMap.Measurement.html#matchingMeasurement-squidpony.squidgrid.Radius-">matchingMeasurement</a></span>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius)</code>
+<div class="block">Gets the appropriate DijkstraMap.Measurement that matches a Radius enum.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/DijkstraMap.Measurement.html#matchingRadius--">matchingRadius</a></span>()</code>
+<div class="block">Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static <a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/DijkstraMap.Measurement.html#valueOf-java.lang.String-">valueOf</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidai/DijkstraMap.Measurement.html#values--">values</a></span>()</code>
 <div class="block">Returns an array containing the constants of this enum type, in
@@ -319,10 +331,47 @@ not permitted.)</div>
 <a name="directionCount--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>directionCount</h4>
 <pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.Measurement.html#line.84">directionCount</a>()</pre>
+</li>
+</ul>
+<a name="matchingMeasurement-squidpony.squidgrid.Radius-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>matchingMeasurement</h4>
+<pre>public static&nbsp;<a href="../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.Measurement.html#line.99">matchingMeasurement</a>(<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius)</pre>
+<div class="block">Gets the appropriate DijkstraMap.Measurement that matches a Radius enum.
+ Matches SQUARE or CUBE to CHEBYSHEV, DIAMOND or OCTAHEDRON to MANHATTAN, and CIRCLE or SPHERE to EUCLIDEAN.
+ <br>
+ Equivalent to <a href="../../squidpony/squidai/DijkstraMap.html#findMeasurement-squidpony.squidgrid.Radius-"><code>DijkstraMap.findMeasurement(Radius)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>radius</code> - the Radius to find the corresponding Measurement for</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a DijkstraMap.Measurement that matches radius; SQUARE to CHEBYSHEV, DIAMOND to MANHATTAN, etc.</dd>
+</dl>
+</li>
+</ul>
+<a name="matchingRadius--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>matchingRadius</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;<a href="../../src-html/squidpony/squidai/DijkstraMap.Measurement.html#line.121">matchingRadius</a>()</pre>
+<div class="block">Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.
+ Matches CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, and EUCLIDEAN to CIRCLE.
+ <br>
+ You may also consider <a href="../../squidpony/squidai/DijkstraMap.html#findRadius-squidpony.squidai.DijkstraMap.Measurement-"><code>DijkstraMap.findRadius(Measurement)</code></a>, which is a static method with the same
+ general capability.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Radius enum that matches this Measurement; CHEBYSHEV to SQUARE, MANHATTAN to DIAMOND, etc.</dd>
+</dl>
 </li>
 </ul>
 </li>

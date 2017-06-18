@@ -208,6 +208,12 @@
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></code></td>
 <td class="colLast"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BeamAOE.html#getRadiusType--">getRadiusType</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.Measurement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.Measurement.html#matchingRadius--">matchingRadius</a></span>()</code>
+<div class="block">Gets the appropriate Radius corresponding to a DijkstraMap.Measurement.</div>
+</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -230,61 +236,67 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidai/DijkstraMap.Measurement.html" title="enum in squidpony.squidai">DijkstraMap.Measurement</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DijkstraMap.Measurement.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/DijkstraMap.Measurement.html#matchingMeasurement-squidpony.squidgrid.Radius-">matchingMeasurement</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radius)</code>
+<div class="block">Gets the appropriate DijkstraMap.Measurement that matches a Radius enum.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">PointAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/PointAOE.html#setMetric-squidpony.squidgrid.Radius-">setMetric</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/LineAOE.html#setMetric-squidpony.squidgrid.Radius-">setMetric</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/ConeAOE.html#setMetric-squidpony.squidgrid.Radius-">setMetric</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CloudAOE.html#setMetric-squidpony.squidgrid.Radius-">setMetric</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BurstAOE.html#setMetric-squidpony.squidgrid.Radius-">setMetric</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BlastAOE.html#setMetric-squidpony.squidgrid.Radius-">setMetric</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BeamAOE.html#setMetric-squidpony.squidgrid.Radius-">setMetric</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">AOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/AOE.html#setMetric-squidpony.squidgrid.Radius-">setMetric</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;metric)</code>
 <div class="block">Used to determine distance from origin for the purposes of selecting a target location that is within the bounds
  of minRange and maxRange.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">LineAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/LineAOE.html#setRadiusType-squidpony.squidgrid.Radius-">setRadiusType</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">ConeAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/ConeAOE.html#setRadiusType-squidpony.squidgrid.Radius-">setRadiusType</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">CloudAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/CloudAOE.html#setRadiusType-squidpony.squidgrid.Radius-">setRadiusType</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">BurstAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BurstAOE.html#setRadiusType-squidpony.squidgrid.Radius-">setRadiusType</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">BlastAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BlastAOE.html#setRadiusType-squidpony.squidgrid.Radius-">setRadiusType</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">BeamAOE.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidai/BeamAOE.html#setRadiusType-squidpony.squidgrid.Radius-">setRadiusType</a></span>(<a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;radiusType)</code>&nbsp;</td>
 </tr>

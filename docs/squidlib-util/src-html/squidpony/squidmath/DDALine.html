@@ -49,219 +49,234 @@
 <span class="sourceLineNo">041</span>            drawn.add(Coord.get(startX, startY));<a name="line.41"></a>
 <span class="sourceLineNo">042</span>            return drawn;<a name="line.42"></a>
 <span class="sourceLineNo">043</span>        }<a name="line.43"></a>
-<span class="sourceLineNo">044</span>        if(mn == nx) //ny is 0<a name="line.44"></a>
+<span class="sourceLineNo">044</span>        if(ny == 0)<a name="line.44"></a>
 <span class="sourceLineNo">045</span>        {<a name="line.45"></a>
-<span class="sourceLineNo">046</span>            for (int x = startX; x &lt;= endX; x++) {<a name="line.46"></a>
-<span class="sourceLineNo">047</span>                drawn.add(Coord.get(x, startY));<a name="line.47"></a>
-<span class="sourceLineNo">048</span>            }<a name="line.48"></a>
-<span class="sourceLineNo">049</span>            return drawn;<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        }<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        if(mn == ny) //nx is 0<a name="line.51"></a>
-<span class="sourceLineNo">052</span>        {<a name="line.52"></a>
-<span class="sourceLineNo">053</span>            for (int y = startY; y &lt;= endY; y++) {<a name="line.53"></a>
-<span class="sourceLineNo">054</span>                drawn.add(Coord.get(startX, y));<a name="line.54"></a>
+<span class="sourceLineNo">046</span>            if(dx &gt; 0) {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>                for (int x = startX, i = 0; x &lt;= endX; x++, i++) {<a name="line.47"></a>
+<span class="sourceLineNo">048</span>                    drawn.add(Coord.get(x, startY));<a name="line.48"></a>
+<span class="sourceLineNo">049</span>                }<a name="line.49"></a>
+<span class="sourceLineNo">050</span>            }<a name="line.50"></a>
+<span class="sourceLineNo">051</span>            else {<a name="line.51"></a>
+<span class="sourceLineNo">052</span>                for (int x = startX, i = 0; x &gt;= endX; x--, i++) {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>                    drawn.add(Coord.get(x, startY));<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                }<a name="line.54"></a>
 <span class="sourceLineNo">055</span>            }<a name="line.55"></a>
-<span class="sourceLineNo">056</span>            return drawn;<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        }<a name="line.57"></a>
-<span class="sourceLineNo">058</span><a name="line.58"></a>
-<span class="sourceLineNo">059</span>        switch (octant)<a name="line.59"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>            return drawn;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        }<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        if(nx == 0)<a name="line.59"></a>
 <span class="sourceLineNo">060</span>        {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>            // x positive, y positive<a name="line.61"></a>
-<span class="sourceLineNo">062</span>            case 0:<a name="line.62"></a>
-<span class="sourceLineNo">063</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.63"></a>
-<span class="sourceLineNo">064</span>                for (int primary = startX; primary &lt;= endX; primary++, frac+=move) {<a name="line.64"></a>
-<span class="sourceLineNo">065</span>                    drawn.add(Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16)));<a name="line.65"></a>
-<span class="sourceLineNo">066</span>                }<a name="line.66"></a>
-<span class="sourceLineNo">067</span>                break;<a name="line.67"></a>
-<span class="sourceLineNo">068</span>            case 1:<a name="line.68"></a>
-<span class="sourceLineNo">069</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.69"></a>
-<span class="sourceLineNo">070</span>                for (int primary = startY; primary &lt;= endY; primary++, frac+=move) {<a name="line.70"></a>
-<span class="sourceLineNo">071</span>                    drawn.add(Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary));<a name="line.71"></a>
-<span class="sourceLineNo">072</span>                }<a name="line.72"></a>
-<span class="sourceLineNo">073</span>                break;<a name="line.73"></a>
-<span class="sourceLineNo">074</span>            // x negative, y positive<a name="line.74"></a>
-<span class="sourceLineNo">075</span>            case 2:<a name="line.75"></a>
-<span class="sourceLineNo">076</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.76"></a>
-<span class="sourceLineNo">077</span>                for (int primary = startX; primary &gt;= endX; primary--, frac+=move) {<a name="line.77"></a>
-<span class="sourceLineNo">078</span>                    drawn.add(Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16)));<a name="line.78"></a>
-<span class="sourceLineNo">079</span>                }<a name="line.79"></a>
-<span class="sourceLineNo">080</span>                break;<a name="line.80"></a>
-<span class="sourceLineNo">081</span>            case 3:<a name="line.81"></a>
-<span class="sourceLineNo">082</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.82"></a>
-<span class="sourceLineNo">083</span>                for (int primary = startY; primary &lt;= endY; primary++, frac+=move) {<a name="line.83"></a>
-<span class="sourceLineNo">084</span>                    drawn.add(Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary));<a name="line.84"></a>
-<span class="sourceLineNo">085</span>                }<a name="line.85"></a>
-<span class="sourceLineNo">086</span>                break;<a name="line.86"></a>
-<span class="sourceLineNo">087</span>            // x negative, y negative<a name="line.87"></a>
-<span class="sourceLineNo">088</span>            case 6:<a name="line.88"></a>
-<span class="sourceLineNo">089</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.89"></a>
-<span class="sourceLineNo">090</span>                for (int primary = startX; primary &gt;= endX; primary--, frac+=move) {<a name="line.90"></a>
-<span class="sourceLineNo">091</span>                    drawn.add(Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16)));<a name="line.91"></a>
-<span class="sourceLineNo">092</span>                }<a name="line.92"></a>
-<span class="sourceLineNo">093</span>                break;<a name="line.93"></a>
-<span class="sourceLineNo">094</span>            case 7:<a name="line.94"></a>
-<span class="sourceLineNo">095</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.95"></a>
-<span class="sourceLineNo">096</span>                for (int primary = startY; primary &gt;= endY; primary--, frac+=move) {<a name="line.96"></a>
-<span class="sourceLineNo">097</span>                    drawn.add(Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary));<a name="line.97"></a>
-<span class="sourceLineNo">098</span>                }<a name="line.98"></a>
-<span class="sourceLineNo">099</span>                break;<a name="line.99"></a>
-<span class="sourceLineNo">100</span>            // x positive, y negative<a name="line.100"></a>
-<span class="sourceLineNo">101</span>            case 4:<a name="line.101"></a>
-<span class="sourceLineNo">102</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.102"></a>
-<span class="sourceLineNo">103</span>                for (int primary = startX; primary &lt;= endX; primary++, frac+=move) {<a name="line.103"></a>
-<span class="sourceLineNo">104</span>                    drawn.add(Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16)));<a name="line.104"></a>
-<span class="sourceLineNo">105</span>                }<a name="line.105"></a>
-<span class="sourceLineNo">106</span>                break;<a name="line.106"></a>
-<span class="sourceLineNo">107</span>            case 5:<a name="line.107"></a>
-<span class="sourceLineNo">108</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.108"></a>
-<span class="sourceLineNo">109</span>                for (int primary = startY; primary &gt;= endY; primary--, frac+=move) {<a name="line.109"></a>
-<span class="sourceLineNo">110</span>                    drawn.add(Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary));<a name="line.110"></a>
-<span class="sourceLineNo">111</span>                }<a name="line.111"></a>
-<span class="sourceLineNo">112</span>                break;<a name="line.112"></a>
-<span class="sourceLineNo">113</span>        }<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        return drawn;<a name="line.114"></a>
-<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
-<span class="sourceLineNo">116</span><a name="line.116"></a>
-<span class="sourceLineNo">117</span>    /**<a name="line.117"></a>
-<span class="sourceLineNo">118</span>     * Draws a line from start to end using the DDA algorithm. Returns a List of Coord in order.<a name="line.118"></a>
-<span class="sourceLineNo">119</span>     * @param start starting point<a name="line.119"></a>
-<span class="sourceLineNo">120</span>     * @param end ending point<a name="line.120"></a>
-<span class="sourceLineNo">121</span>     * @return List of Coord, including start and end and all points walked between<a name="line.121"></a>
-<span class="sourceLineNo">122</span>     */<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    public static List&lt;Coord&gt; line(Coord start, Coord end)<a name="line.123"></a>
-<span class="sourceLineNo">124</span>    {<a name="line.124"></a>
-<span class="sourceLineNo">125</span>        return line(start.x, start.y, end.x, end.y);<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    }<a name="line.126"></a>
-<span class="sourceLineNo">127</span>    /**<a name="line.127"></a>
-<span class="sourceLineNo">128</span>     * Draws a line from (startX, startY) to (endX, endY) using the DDA algorithm. Returns an array of Coord in order.<a name="line.128"></a>
-<span class="sourceLineNo">129</span>     * @param startX x of starting point<a name="line.129"></a>
-<span class="sourceLineNo">130</span>     * @param startY y of starting point<a name="line.130"></a>
-<span class="sourceLineNo">131</span>     * @param endX   x of ending point<a name="line.131"></a>
-<span class="sourceLineNo">132</span>     * @param endY   y of ending point<a name="line.132"></a>
-<span class="sourceLineNo">133</span>     * @return array of Coord, including (startX, startY) and (endX, endY) and all points walked between<a name="line.133"></a>
-<span class="sourceLineNo">134</span>     */<a name="line.134"></a>
-<span class="sourceLineNo">135</span>    public static Coord[] line_(int startX, int startY, int endX, int endY) {<a name="line.135"></a>
-<span class="sourceLineNo">136</span>        return line_(startX, startY, endX, endY, 0x7fff, 0x7fff);<a name="line.136"></a>
-<span class="sourceLineNo">137</span>    }<a name="line.137"></a>
-<span class="sourceLineNo">138</span><a name="line.138"></a>
-<span class="sourceLineNo">139</span>    /**<a name="line.139"></a>
-<span class="sourceLineNo">140</span>     * Not intended for external use; prefer the overloads without a modifier argument.<a name="line.140"></a>
-<span class="sourceLineNo">141</span>     * @param startX x of starting point<a name="line.141"></a>
-<span class="sourceLineNo">142</span>     * @param startY y of starting point<a name="line.142"></a>
-<span class="sourceLineNo">143</span>     * @param endX   x of ending point<a name="line.143"></a>
-<span class="sourceLineNo">144</span>     * @param endY   y of ending point<a name="line.144"></a>
-<span class="sourceLineNo">145</span>     * @param modifierX an integer that should typically be one of 0x3fff, 0x7fff, or 0xbfff<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * @param modifierY an integer that should typically be one of 0x3fff, 0x7fff, or 0xbfff<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * @return array of Coord, including (startX, startY) and (endX, endY) and all points walked between<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     */<a name="line.148"></a>
-<span class="sourceLineNo">149</span>    public static Coord[] line_(int startX, int startY, int endX, int endY, int modifierX, int modifierY) {<a name="line.149"></a>
-<span class="sourceLineNo">150</span>        int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy),<a name="line.150"></a>
-<span class="sourceLineNo">151</span>                octant = ((dy &lt; 0) ? 4 : 0) | ((dx &lt; 0) ? 2 : 0) | ((ny &gt; nx) ? 1 : 0), move, frac = 0,<a name="line.151"></a>
-<span class="sourceLineNo">152</span>                mn = Math.max(nx, ny);<a name="line.152"></a>
-<span class="sourceLineNo">153</span>        if(mn == 0)<a name="line.153"></a>
-<span class="sourceLineNo">154</span>        {<a name="line.154"></a>
-<span class="sourceLineNo">155</span>            return new Coord[]{Coord.get(startX, startY)};<a name="line.155"></a>
-<span class="sourceLineNo">156</span>        }<a name="line.156"></a>
-<span class="sourceLineNo">157</span>        Coord[] drawn = new Coord[mn + 1];<a name="line.157"></a>
-<span class="sourceLineNo">158</span>        if(mn == nx) //ny is 0<a name="line.158"></a>
-<span class="sourceLineNo">159</span>        {<a name="line.159"></a>
-<span class="sourceLineNo">160</span>            if(dx &gt; 0) {<a name="line.160"></a>
-<span class="sourceLineNo">161</span>                for (int x = startX, i = 0; x &lt;= endX; x++, i++) {<a name="line.161"></a>
-<span class="sourceLineNo">162</span>                    drawn[i] = Coord.get(x, startY);<a name="line.162"></a>
-<span class="sourceLineNo">163</span>                }<a name="line.163"></a>
-<span class="sourceLineNo">164</span>            }<a name="line.164"></a>
-<span class="sourceLineNo">165</span>            else {<a name="line.165"></a>
-<span class="sourceLineNo">166</span>                for (int x = startX, i = 0; x &gt;= endX; x--, i++) {<a name="line.166"></a>
-<span class="sourceLineNo">167</span>                    drawn[i] = Coord.get(x, startY);<a name="line.167"></a>
-<span class="sourceLineNo">168</span>                }<a name="line.168"></a>
-<span class="sourceLineNo">169</span>            }<a name="line.169"></a>
-<span class="sourceLineNo">170</span><a name="line.170"></a>
-<span class="sourceLineNo">171</span>            return drawn;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        }<a name="line.172"></a>
-<span class="sourceLineNo">173</span>        if(mn == ny) //nx is 0<a name="line.173"></a>
+<span class="sourceLineNo">061</span>            if(dy &gt; 0) {<a name="line.61"></a>
+<span class="sourceLineNo">062</span>                for (int y = startY, i = 0; y &lt;= endY; y++, i++) {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>                    drawn.add(Coord.get(startX, y));<a name="line.63"></a>
+<span class="sourceLineNo">064</span>                }<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            }<a name="line.65"></a>
+<span class="sourceLineNo">066</span>            else {<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                for (int y = startY, i = 0; y &gt;= endY; y--, i++) {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>                    drawn.add(Coord.get(startX, y));<a name="line.68"></a>
+<span class="sourceLineNo">069</span>                }<a name="line.69"></a>
+<span class="sourceLineNo">070</span>            }<a name="line.70"></a>
+<span class="sourceLineNo">071</span>            return drawn;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        }<a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>        switch (octant)<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>            // x positive, y positive<a name="line.76"></a>
+<span class="sourceLineNo">077</span>            case 0:<a name="line.77"></a>
+<span class="sourceLineNo">078</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.78"></a>
+<span class="sourceLineNo">079</span>                for (int primary = startX; primary &lt;= endX; primary++, frac+=move) {<a name="line.79"></a>
+<span class="sourceLineNo">080</span>                    drawn.add(Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16)));<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                }<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                break;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>            case 1:<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>                for (int primary = startY; primary &lt;= endY; primary++, frac+=move) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                    drawn.add(Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary));<a name="line.86"></a>
+<span class="sourceLineNo">087</span>                }<a name="line.87"></a>
+<span class="sourceLineNo">088</span>                break;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>            // x negative, y positive<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            case 2:<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                for (int primary = startX; primary &gt;= endX; primary--, frac+=move) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                    drawn.add(Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16)));<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                }<a name="line.94"></a>
+<span class="sourceLineNo">095</span>                break;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            case 3:<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                for (int primary = startY; primary &lt;= endY; primary++, frac+=move) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                    drawn.add(Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary));<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                }<a name="line.100"></a>
+<span class="sourceLineNo">101</span>                break;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            // x negative, y negative<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            case 6:<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                for (int primary = startX; primary &gt;= endX; primary--, frac+=move) {<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                    drawn.add(Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16)));<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                }<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                break;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            case 7:<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                for (int primary = startY; primary &gt;= endY; primary--, frac+=move) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                    drawn.add(Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary));<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                break;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>            // x positive, y negative<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            case 4:<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                for (int primary = startX; primary &lt;= endX; primary++, frac+=move) {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                    drawn.add(Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16)));<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                }<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                break;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            case 5:<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                for (int primary = startY; primary &gt;= endY; primary--, frac+=move) {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                    drawn.add(Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary));<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                }<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                break;<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        }<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        return drawn;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    }<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>    /**<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * Draws a line from start to end using the DDA algorithm. Returns a List of Coord in order.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * @param start starting point<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * @param end ending point<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * @return List of Coord, including start and end and all points walked between<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     */<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    public static List&lt;Coord&gt; line(Coord start, Coord end)<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    {<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        return line(start.x, start.y, end.x, end.y);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    }<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    /**<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * Draws a line from (startX, startY) to (endX, endY) using the DDA algorithm. Returns an array of Coord in order.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * @param startX x of starting point<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * @param startY y of starting point<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * @param endX   x of ending point<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * @param endY   y of ending point<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * @return array of Coord, including (startX, startY) and (endX, endY) and all points walked between<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     */<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    public static Coord[] line_(int startX, int startY, int endX, int endY) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        return line_(startX, startY, endX, endY, 0x7fff, 0x7fff);<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    }<a name="line.152"></a>
+<span class="sourceLineNo">153</span><a name="line.153"></a>
+<span class="sourceLineNo">154</span>    /**<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * Not intended for external use; prefer the overloads without a modifier argument.<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * @param startX x of starting point<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * @param startY y of starting point<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * @param endX   x of ending point<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * @param endY   y of ending point<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * @param modifierX an integer that should typically be one of 0x3fff, 0x7fff, or 0xbfff<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * @param modifierY an integer that should typically be one of 0x3fff, 0x7fff, or 0xbfff<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * @return array of Coord, including (startX, startY) and (endX, endY) and all points walked between<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     */<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    public static Coord[] line_(int startX, int startY, int endX, int endY, int modifierX, int modifierY) {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy),<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                octant = ((dy &lt; 0) ? 4 : 0) | ((dx &lt; 0) ? 2 : 0) | ((ny &gt; nx) ? 1 : 0), move, frac = 0,<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                mn = Math.max(nx, ny);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        if(mn == 0)<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>            return new Coord[]{Coord.get(startX, startY)};<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        }<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        Coord[] drawn = new Coord[mn + 1];<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        if(ny == 0)<a name="line.173"></a>
 <span class="sourceLineNo">174</span>        {<a name="line.174"></a>
-<span class="sourceLineNo">175</span>            if(dy &gt; 0) {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>                for (int y = startY, i = 0; y &lt;= endY; y++, i++) {<a name="line.176"></a>
-<span class="sourceLineNo">177</span>                    drawn[i] = Coord.get(startX, y);<a name="line.177"></a>
+<span class="sourceLineNo">175</span>            if(dx &gt; 0) {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>                for (int x = startX, i = 0; x &lt;= endX; x++, i++) {<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                    drawn[i] = Coord.get(x, startY);<a name="line.177"></a>
 <span class="sourceLineNo">178</span>                }<a name="line.178"></a>
 <span class="sourceLineNo">179</span>            }<a name="line.179"></a>
 <span class="sourceLineNo">180</span>            else {<a name="line.180"></a>
-<span class="sourceLineNo">181</span>                for (int y = startY, i = 0; y &gt;= endY; y--, i++) {<a name="line.181"></a>
-<span class="sourceLineNo">182</span>                    drawn[i] = Coord.get(startX, y);<a name="line.182"></a>
+<span class="sourceLineNo">181</span>                for (int x = startX, i = 0; x &gt;= endX; x--, i++) {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                    drawn[i] = Coord.get(x, startY);<a name="line.182"></a>
 <span class="sourceLineNo">183</span>                }<a name="line.183"></a>
 <span class="sourceLineNo">184</span>            }<a name="line.184"></a>
-<span class="sourceLineNo">185</span>            return drawn;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>        }<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        switch (octant)<a name="line.187"></a>
-<span class="sourceLineNo">188</span>        {<a name="line.188"></a>
-<span class="sourceLineNo">189</span>            // x positive, y positive<a name="line.189"></a>
-<span class="sourceLineNo">190</span>            case 0:<a name="line.190"></a>
-<span class="sourceLineNo">191</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.191"></a>
-<span class="sourceLineNo">192</span>                for (int i = 0, primary = startX; primary &lt;= endX; primary++, frac+=move, i++) {<a name="line.192"></a>
-<span class="sourceLineNo">193</span>                    drawn[i] = Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16));<a name="line.193"></a>
-<span class="sourceLineNo">194</span>                }<a name="line.194"></a>
-<span class="sourceLineNo">195</span>                break;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>            case 1:<a name="line.196"></a>
-<span class="sourceLineNo">197</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.197"></a>
-<span class="sourceLineNo">198</span>                for (int i = 0, primary = startY; primary &lt;= endY; primary++, frac+=move, i++) {<a name="line.198"></a>
-<span class="sourceLineNo">199</span>                    drawn[i] = Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary);<a name="line.199"></a>
-<span class="sourceLineNo">200</span>                }<a name="line.200"></a>
-<span class="sourceLineNo">201</span>                break;<a name="line.201"></a>
-<span class="sourceLineNo">202</span>            // x negative, y positive<a name="line.202"></a>
-<span class="sourceLineNo">203</span>            case 2:<a name="line.203"></a>
-<span class="sourceLineNo">204</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.204"></a>
-<span class="sourceLineNo">205</span>                for (int i = 0, primary = startX; primary &gt;= endX; primary--, frac+=move, i++) {<a name="line.205"></a>
-<span class="sourceLineNo">206</span>                    drawn[i] = Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16));<a name="line.206"></a>
-<span class="sourceLineNo">207</span>                }<a name="line.207"></a>
-<span class="sourceLineNo">208</span>                break;<a name="line.208"></a>
-<span class="sourceLineNo">209</span>            case 3:<a name="line.209"></a>
-<span class="sourceLineNo">210</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.210"></a>
-<span class="sourceLineNo">211</span>                for (int i = 0, primary = startY; primary &lt;= endY; primary++, frac+=move, i++) {<a name="line.211"></a>
-<span class="sourceLineNo">212</span>                    drawn[i] = Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary);<a name="line.212"></a>
-<span class="sourceLineNo">213</span>                }<a name="line.213"></a>
-<span class="sourceLineNo">214</span>                break;<a name="line.214"></a>
-<span class="sourceLineNo">215</span>            // x negative, y negative<a name="line.215"></a>
-<span class="sourceLineNo">216</span>            case 6:<a name="line.216"></a>
-<span class="sourceLineNo">217</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.217"></a>
-<span class="sourceLineNo">218</span>                for (int i = 0, primary = startX; primary &gt;= endX; primary--, frac+=move, i++) {<a name="line.218"></a>
-<span class="sourceLineNo">219</span>                    drawn[i] = Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16));<a name="line.219"></a>
-<span class="sourceLineNo">220</span>                }<a name="line.220"></a>
-<span class="sourceLineNo">221</span>                break;<a name="line.221"></a>
-<span class="sourceLineNo">222</span>            case 7:<a name="line.222"></a>
-<span class="sourceLineNo">223</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.223"></a>
-<span class="sourceLineNo">224</span>                for (int i = 0, primary = startY; primary &gt;= endY; primary--, frac+=move, i++) {<a name="line.224"></a>
-<span class="sourceLineNo">225</span>                    drawn[i] = Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary);<a name="line.225"></a>
-<span class="sourceLineNo">226</span>                }<a name="line.226"></a>
-<span class="sourceLineNo">227</span>                break;<a name="line.227"></a>
-<span class="sourceLineNo">228</span>            // x positive, y negative<a name="line.228"></a>
-<span class="sourceLineNo">229</span>            case 4:<a name="line.229"></a>
-<span class="sourceLineNo">230</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.230"></a>
-<span class="sourceLineNo">231</span>                for (int i = 0, primary = startX; primary &lt;= endX; primary++, frac+=move, i++) {<a name="line.231"></a>
-<span class="sourceLineNo">232</span>                    drawn[i] = Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16));<a name="line.232"></a>
-<span class="sourceLineNo">233</span>                }<a name="line.233"></a>
-<span class="sourceLineNo">234</span>                break;<a name="line.234"></a>
-<span class="sourceLineNo">235</span>            case 5:<a name="line.235"></a>
-<span class="sourceLineNo">236</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.236"></a>
-<span class="sourceLineNo">237</span>                for (int i = 0, primary = startY; primary &gt;= endY; primary--, frac+=move, i++) {<a name="line.237"></a>
-<span class="sourceLineNo">238</span>                    drawn[i] = Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary);<a name="line.238"></a>
-<span class="sourceLineNo">239</span>                }<a name="line.239"></a>
-<span class="sourceLineNo">240</span>                break;<a name="line.240"></a>
-<span class="sourceLineNo">241</span>        }<a name="line.241"></a>
-<span class="sourceLineNo">242</span>        return drawn;<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    }<a name="line.243"></a>
-<span class="sourceLineNo">244</span><a name="line.244"></a>
-<span class="sourceLineNo">245</span>    /**<a name="line.245"></a>
-<span class="sourceLineNo">246</span>     * Draws a line from start to end using the DDA algorithm. Returns an array of Coord in order.<a name="line.246"></a>
-<span class="sourceLineNo">247</span>     * @param start starting point<a name="line.247"></a>
-<span class="sourceLineNo">248</span>     * @param end ending point<a name="line.248"></a>
-<span class="sourceLineNo">249</span>     * @return array of Coord, including start and end and all points walked between<a name="line.249"></a>
-<span class="sourceLineNo">250</span>     */<a name="line.250"></a>
-<span class="sourceLineNo">251</span>    public static Coord[] line_(Coord start, Coord end)<a name="line.251"></a>
-<span class="sourceLineNo">252</span>    {<a name="line.252"></a>
-<span class="sourceLineNo">253</span>        return line_(start.x, start.y, end.x, end.y);<a name="line.253"></a>
-<span class="sourceLineNo">254</span>    }<a name="line.254"></a>
-<span class="sourceLineNo">255</span><a name="line.255"></a>
-<span class="sourceLineNo">256</span>}<a name="line.256"></a>
+<span class="sourceLineNo">185</span><a name="line.185"></a>
+<span class="sourceLineNo">186</span>            return drawn;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        }<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        if(nx == 0)<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        {<a name="line.189"></a>
+<span class="sourceLineNo">190</span>            if(dy &gt; 0) {<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                for (int y = startY, i = 0; y &lt;= endY; y++, i++) {<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                    drawn[i] = Coord.get(startX, y);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                }<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            }<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            else {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                for (int y = startY, i = 0; y &gt;= endY; y--, i++) {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                    drawn[i] = Coord.get(startX, y);<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                }<a name="line.198"></a>
+<span class="sourceLineNo">199</span>            }<a name="line.199"></a>
+<span class="sourceLineNo">200</span>            return drawn;<a name="line.200"></a>
+<span class="sourceLineNo">201</span>        }<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        switch (octant)<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            // x positive, y positive<a name="line.204"></a>
+<span class="sourceLineNo">205</span>            case 0:<a name="line.205"></a>
+<span class="sourceLineNo">206</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>                for (int i = 0, primary = startX; primary &lt;= endX; primary++, frac+=move, i++) {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>                    drawn[i] = Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16));<a name="line.208"></a>
+<span class="sourceLineNo">209</span>                }<a name="line.209"></a>
+<span class="sourceLineNo">210</span>                break;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>            case 1:<a name="line.211"></a>
+<span class="sourceLineNo">212</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>                for (int i = 0, primary = startY; primary &lt;= endY; primary++, frac+=move, i++) {<a name="line.213"></a>
+<span class="sourceLineNo">214</span>                    drawn[i] = Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary);<a name="line.214"></a>
+<span class="sourceLineNo">215</span>                }<a name="line.215"></a>
+<span class="sourceLineNo">216</span>                break;<a name="line.216"></a>
+<span class="sourceLineNo">217</span>            // x negative, y positive<a name="line.217"></a>
+<span class="sourceLineNo">218</span>            case 2:<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                for (int i = 0, primary = startX; primary &gt;= endX; primary--, frac+=move, i++) {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>                    drawn[i] = Coord.get(primary, startY + ((frac+modifierY)&gt;&gt;16));<a name="line.221"></a>
+<span class="sourceLineNo">222</span>                }<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                break;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>            case 3:<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                for (int i = 0, primary = startY; primary &lt;= endY; primary++, frac+=move, i++) {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                    drawn[i] = Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary);<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                break;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>            // x negative, y negative<a name="line.230"></a>
+<span class="sourceLineNo">231</span>            case 6:<a name="line.231"></a>
+<span class="sourceLineNo">232</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.232"></a>
+<span class="sourceLineNo">233</span>                for (int i = 0, primary = startX; primary &gt;= endX; primary--, frac+=move, i++) {<a name="line.233"></a>
+<span class="sourceLineNo">234</span>                    drawn[i] = Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16));<a name="line.234"></a>
+<span class="sourceLineNo">235</span>                }<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                break;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>            case 7:<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                for (int i = 0, primary = startY; primary &gt;= endY; primary--, frac+=move, i++) {<a name="line.239"></a>
+<span class="sourceLineNo">240</span>                    drawn[i] = Coord.get(startX - ((frac+modifierX)&gt;&gt;16), primary);<a name="line.240"></a>
+<span class="sourceLineNo">241</span>                }<a name="line.241"></a>
+<span class="sourceLineNo">242</span>                break;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>            // x positive, y negative<a name="line.243"></a>
+<span class="sourceLineNo">244</span>            case 4:<a name="line.244"></a>
+<span class="sourceLineNo">245</span>                move = (ny &lt;&lt; 16)/nx;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                for (int i = 0, primary = startX; primary &lt;= endX; primary++, frac+=move, i++) {<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                    drawn[i] = Coord.get(primary, startY - ((frac+modifierY)&gt;&gt;16));<a name="line.247"></a>
+<span class="sourceLineNo">248</span>                }<a name="line.248"></a>
+<span class="sourceLineNo">249</span>                break;<a name="line.249"></a>
+<span class="sourceLineNo">250</span>            case 5:<a name="line.250"></a>
+<span class="sourceLineNo">251</span>                move = (nx &lt;&lt; 16)/ny;<a name="line.251"></a>
+<span class="sourceLineNo">252</span>                for (int i = 0, primary = startY; primary &gt;= endY; primary--, frac+=move, i++) {<a name="line.252"></a>
+<span class="sourceLineNo">253</span>                    drawn[i] = Coord.get(startX + ((frac+modifierX)&gt;&gt;16), primary);<a name="line.253"></a>
+<span class="sourceLineNo">254</span>                }<a name="line.254"></a>
+<span class="sourceLineNo">255</span>                break;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>        }<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        return drawn;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    }<a name="line.258"></a>
+<span class="sourceLineNo">259</span><a name="line.259"></a>
+<span class="sourceLineNo">260</span>    /**<a name="line.260"></a>
+<span class="sourceLineNo">261</span>     * Draws a line from start to end using the DDA algorithm. Returns an array of Coord in order.<a name="line.261"></a>
+<span class="sourceLineNo">262</span>     * @param start starting point<a name="line.262"></a>
+<span class="sourceLineNo">263</span>     * @param end ending point<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     * @return array of Coord, including start and end and all points walked between<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     */<a name="line.265"></a>
+<span class="sourceLineNo">266</span>    public static Coord[] line_(Coord start, Coord end)<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    {<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        return line_(start.x, start.y, end.x, end.y);<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    }<a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>}<a name="line.271"></a>
 
 
 

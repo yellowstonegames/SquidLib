@@ -41,17 +41,32 @@ public class DDALine {
             drawn.add(Coord.get(startX, startY));
             return drawn;
         }
-        if(mn == nx) //ny is 0
+        if(ny == 0)
         {
-            for (int x = startX; x <= endX; x++) {
-                drawn.add(Coord.get(x, startY));
+            if(dx > 0) {
+                for (int x = startX, i = 0; x <= endX; x++, i++) {
+                    drawn.add(Coord.get(x, startY));
+                }
             }
+            else {
+                for (int x = startX, i = 0; x >= endX; x--, i++) {
+                    drawn.add(Coord.get(x, startY));
+                }
+            }
+
             return drawn;
         }
-        if(mn == ny) //nx is 0
+        if(nx == 0)
         {
-            for (int y = startY; y <= endY; y++) {
-                drawn.add(Coord.get(startX, y));
+            if(dy > 0) {
+                for (int y = startY, i = 0; y <= endY; y++, i++) {
+                    drawn.add(Coord.get(startX, y));
+                }
+            }
+            else {
+                for (int y = startY, i = 0; y >= endY; y--, i++) {
+                    drawn.add(Coord.get(startX, y));
+                }
             }
             return drawn;
         }
@@ -155,7 +170,7 @@ public class DDALine {
             return new Coord[]{Coord.get(startX, startY)};
         }
         Coord[] drawn = new Coord[mn + 1];
-        if(mn == nx) //ny is 0
+        if(ny == 0)
         {
             if(dx > 0) {
                 for (int x = startX, i = 0; x <= endX; x++, i++) {
@@ -170,7 +185,7 @@ public class DDALine {
 
             return drawn;
         }
-        if(mn == ny) //nx is 0
+        if(nx == 0)
         {
             if(dy > 0) {
                 for (int y = startY, i = 0; y <= endY; y++, i++) {
