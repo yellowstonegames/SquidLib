@@ -2764,7 +2764,29 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
     /**
      * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
+     * order as original and keeping it associated with the same value (which also keeps its iteration index). Unlike
+     * the similar method {@link #alter(Object, Object)}, this will not change this OrderedMap if replacement is already
+     * present. To contrast, alter() can reduce the size of the OrderedMap if both original and replacement are already
+     * in the Map. If replacement is found, this returns the default return value, otherwise it switches out original
+     * for replacement and returns whatever was associated with original.
+     * @param original the key to find and swap out
+     * @param replacement the key to replace original with
+     * @return the value associated with original before, and replacement now
+     */
+    public V alterCarefully(final K original, final K replacement) {
+        if(!containsKey(replacement))
+            return alter(original, replacement);
+        else
+            return defRetValue;
+    }
+    /**
+     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
      * order as original and keeping it associated with the same value (which also keeps its iteration index).
+     * Be aware that if both original and replacement are present in the OrderedMap, this will still replace original
+     * with replacement but will also remove the other occurrence of replacement to avoid duplicate keys. This can throw
+     * off the expected order because the duplicate could be at any point in the ordering when it is removed. You may
+     * want to prefer {@link #alterCarefully(Object, Object)} if you don't feel like checking by hand for whether
+     * replacement is already present, but using this method is perfectly reasonable if you know overlaps won't happen.
      * @param original the key to find and swap out
      * @param replacement the key to replace original with
      * @return the value associated with original before, and replacement now
@@ -2822,7 +2844,11 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
     /**
      * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.
-     *
+     * Be aware that if replacement is present in the OrderedMap, this will still replace the given index
+     * with replacement but will also remove the other occurrence of replacement to avoid duplicate keys. This can throw
+     * off the expected order because the duplicate could be at any point in the ordering when it is removed. You may
+     * want to prefer {@link #alterAtCarefully(int, Object)} if you don't feel like checking by hand for whether
+     * replacement is already present, but using this method is perfectly reasonable if you know overlaps won't happen.
      * @param index       an index to replace the K key at
      * @param replacement another K key that will replace the original at the remembered index
      * @return the value associated with the possibly-altered key
@@ -2831,6 +2857,19 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     {
         return alter(keyAt(index), replacement);
     }
-
+    /**
+     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.
+     * Unlike the similar method {@link #alterAt(int, Object)}, this will not change this OrderedMap if replacement is
+     * already present. To contrast, alterAt() can reduce the size of the OrderedMap if replacement is already
+     * in the Map. If replacement is found, this returns the default return value, otherwise it switches out the index
+     * for replacement and returns whatever value was at the index before.
+     * @param index       an index to replace the K key at
+     * @param replacement another K key that will replace the original at the remembered index
+     * @return the value associated with the key at the altered index before, and replacement now
+     */
+    public V alterAtCarefully(int index, K replacement)
+    {
+        return alterCarefully(keyAt(index), replacement);
+    }
 
 }
