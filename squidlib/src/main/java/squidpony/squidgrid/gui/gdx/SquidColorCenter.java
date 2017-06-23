@@ -85,6 +85,17 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
                 start.a + change * (end.a - start.a)
         );
     }
+    /**
+     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.
+     * @param start the initial Color
+     * @param end the "target" color
+     * @param change the degree to change closer to end; a change of 0.0 produces start, 1.0 produces end
+     * @return a new Color
+     */
+    public Color lerp(Color start, Color end, double change)
+    {
+        return lerp(start, end, (float)change);
+    }
 	@Override
 	public int getRed(Color c) {
 		return Math.round(c.r * 255f);
@@ -135,6 +146,17 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
     {
         return lerp(color, Color.WHITE, degree);
     }
+
+    /**
+     * Lightens a color by degree and returns the new color (mixed with white).
+     * @param color the color to lighten
+     * @param degree a double between 0.0 and 1.0; more makes it lighter
+     * @return the lightened (and if a filter is used, also filtered) new color
+     */
+    public Color light(Color color, double degree)
+    {
+        return lerp(color, Color.WHITE, degree);
+    }
     /**
      * Lightens a color slightly and returns the new color (10% mix with white).
      * @param color the color to lighten
@@ -170,6 +192,17 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      * @return the darkened (and if a filter is used, also filtered) new color
      */
     public Color dim(Color color, float degree)
+    {
+        return lerp(color, Color.BLACK, degree);
+    }
+
+    /**
+     * Darkens a color by the specified degree and returns the new color (mixed with black).
+     * @param color the color to darken
+     * @param degree a double between 0.0 and 1.0; more makes it darker
+     * @return the darkened (and if a filter is used, also filtered) new color
+     */
+    public Color dim(Color color, double degree)
     {
         return lerp(color, Color.BLACK, degree);
     }
@@ -227,6 +260,17 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
     }
 
     /**
+     * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).
+     * @param color the color to desaturate
+     * @param degree a double between 0.0 and 1.0; more makes it less colorful
+     * @return the desaturated (and if a filter is used, also filtered) new color
+     */
+    public Color desaturate(Color color, double degree)
+    {
+        return lerp(color, desaturated(color), degree);
+    }
+
+    /**
      * Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.
      * Leaves alpha unchanged.
      *
@@ -248,6 +292,19 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      */
     @Override
     public Color saturate(Color color, float degree)
+    {
+        return lerp(color, saturated(color), degree);
+    }
+
+    /**
+     * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and
+     * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this is
+     * likely to produce a red hue by default (if there's no hue to make vivid, it needs to choose something).
+     * @param color the color to saturate
+     * @param degree a double between 0.0 and 1.0; more makes it more colorful
+     * @return the saturated (and if a filter is used, also filtered) new color
+     */
+    public Color saturate(Color color, double degree)
     {
         return lerp(color, saturated(color), degree);
     }
@@ -424,6 +481,21 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
         return colors;
     }
 
+    /**
+     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and
+     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should
+     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more
+     * likely to see colors that appear for shorter spans on the color wheel, like orange.
+     * Uses the given saturation and value for all colors in the rainbow, and only changes hue.
+     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale
+     * @param value the brightness of the rainbow's colors; 1.0 is brightest
+     * @param steps the number of different Color elements to generate in the returned ArrayList
+     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.
+     */
+    public ArrayList<Color> rainbow(double saturation, double value, int steps)
+    {
+        return rainbow((float)saturation, (float)value, steps);
+    }
     /**
      * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the
      * gradient. This does not typically take a direct path on its way between fromColor and toColor, and is useful to
