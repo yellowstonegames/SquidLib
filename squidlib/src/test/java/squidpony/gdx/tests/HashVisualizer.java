@@ -1,5 +1,7 @@
 package squidpony.gdx.tests;
 
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.NumberTools;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
@@ -16,7 +18,35 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
 import squidpony.IFilter;
 import squidpony.squidgrid.gui.gdx.*;
-import squidpony.squidmath.*;
+import squidpony.squidmath.RandomnessSource;
+
+import squidpony.squidmath.BeardRNG;
+import squidpony.squidmath.BirdRNG;
+import squidpony.squidmath.FlapRNG;
+import squidpony.squidmath.HerdRNG;
+import squidpony.squidmath.HordeRNG;
+import squidpony.squidmath.IsaacRNG;
+import squidpony.squidmath.LapRNG;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.LongPeriodRNG;
+import squidpony.squidmath.PermutedRNG;
+import squidpony.squidmath.PintRNG;
+import squidpony.squidmath.SlapRNG;
+import squidpony.squidmath.ThunderRNG;
+import squidpony.squidmath.XoRoRNG;
+import squidpony.squidmath.XorRNG;
+import squidpony.squidmath.ZapRNG;
+
+import squidpony.squidmath.MasonNoise;
+import squidpony.squidmath.MeadNoise;
+import squidpony.squidmath.MerlinNoise;
+import squidpony.squidmath.Noise;
+import squidpony.squidmath.PerlinNoise;
+import squidpony.squidmath.SeededNoise;
+import squidpony.squidmath.ValueNoise;
+import squidpony.squidmath.WhirlingNoise;
+
+import squidpony.squidmath.TuringPattern;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -78,6 +108,24 @@ public class HashVisualizer extends ApplicationAdapter {
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
+    private BeardRNG beard = new BeardRNG();
+    private BirdRNG bird = new BirdRNG();
+    private FlapRNG flap = new FlapRNG();
+    private HerdRNG herd = new HerdRNG();
+    private HordeRNG horde = new HordeRNG();
+    private IsaacRNG isaac = new IsaacRNG();
+    private LapRNG lap = new LapRNG();
+    private LightRNG light = new LightRNG();
+    private LongPeriodRNG longPeriod = new LongPeriodRNG();
+    private PermutedRNG permuted = new PermutedRNG();
+    private PintRNG pint = new PintRNG();
+    private SlapRNG slap = new SlapRNG();
+    private ThunderRNG thunder = new ThunderRNG();
+    private XoRoRNG xoRo = new XoRoRNG();
+    private XorRNG xor = new XorRNG();
+    private ZapRNG zap = new ZapRNG();
+
+
     private final int[] coordinates = new int[2];
     private final int[] coordinate = new int[1];
     private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
@@ -169,6 +217,14 @@ public class HashVisualizer extends ApplicationAdapter {
      */
     public static class MicroRandom implements RandomnessSource {
         public long state0, state1, inc = 0x9E3779B97F4A7C15L, mul = 0x632AE59B69B3C209L;
+
+        public MicroRandom()
+        {
+            this((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
+                    ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L),
+                    (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
+                            ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
+        }
 
         public MicroRandom(long seed0, long seed1) {
             state0 = seed0 * 0x62E2AC0DL + 0x85157AF5;
@@ -638,7 +694,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 5:
                                 mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 36;
+                                rngMode %= 38;
                                 break;
                             case 0:
                                 hashMode++;
@@ -3200,181 +3256,181 @@ public class HashVisualizer extends ApplicationAdapter {
             case 5: { //RNG mode
                 switch (rngMode) {
                     case 0:
-                        jreRandom = new Random(ctr);
+                        jreRandom.setSeed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (jreRandom.nextInt() << 8) | 255L;
+                                code = jreRandom.nextInt() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 1:
-                        random = new ThunderRNG(ctr);
+                        thunder.reseed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = thunder.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 2:
-                        random = new LightRNG(ctr);
+                        light.setState(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = light.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 3:
-                        random = new XorRNG(ctr);
+                        xor.setSeed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = xor.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 4:
-                        random = new XoRoRNG(ctr);
+                        xoRo.setSeed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = xoRo.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 5:
-                        random = new PermutedRNG(ctr);
+                        permuted.setState(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = permuted.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 6:
-                        random = new LongPeriodRNG(ctr);
+                        longPeriod.reseed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = longPeriod.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 7:
-                        random = new IsaacRNG(ctr);
+                        isaac.regen();
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = isaac.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 8:
-                        gdxRandom = new RandomXS128(ctr);
+                        gdxRandom.setSeed(ctr * 0x9E3779B9L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (gdxRandom.nextInt() << 8) | 255L;
+                                code = gdxRandom.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 9:
-                        jreRandom = new Random(ctr);
+                        jreRandom.setSeed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(jreRandom.nextInt());
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = jreRandom.nextInt() >>> 24;
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 10:
-                        random = new ThunderRNG(ctr);
+                        thunder.reseed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = thunder.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 11:
-                        random = new LightRNG(ctr);
+                        light.setState(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = light.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 12:
-                        random = new XorRNG(ctr);
+                        xor.setSeed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = xor.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 13:
-                        random = new XoRoRNG(ctr);
+                        xoRo.setSeed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = xoRo.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 14:
-                        random = new PermutedRNG(ctr);
+                        permuted.setState(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = permuted.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 15:
-                        random = new LongPeriodRNG(ctr);
+                        longPeriod.reseed(ctr * 0xD0666BE7L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = longPeriod.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 16:
-                        random = new IsaacRNG(ctr);
+                        isaac.regen();
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = isaac.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 17:
-                        gdxRandom = new RandomXS128(ctr);
+                        gdxRandom.setSeed(ctr * 0x9E3779B9L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(gdxRandom.nextInt());
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = gdxRandom.nextInt() >>> 24;
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
@@ -3383,57 +3439,59 @@ public class HashVisualizer extends ApplicationAdapter {
                         random = new PintRNG(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = pint.nextInt() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 19:
-                        random = new PintRNG(ctr);
+                        pint.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                iBright = pint.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 20:
-                        random = new LapRNG(ctr);
+                        lap.setState0(ctr * 0x9E3779B9L + 0xAC8C0FE02D14624DL);
+                        lap.setState1((~ctr * 0xAC8C0FE02D14624DL) * 0x9E3779B9L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = lap.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 21:
-                        random = new LapRNG(ctr);
+                        lap.setState0(ctr * 0x9E3779B9L + 0xAC8C0FE02D14624DL);
+                        lap.setState1((~ctr * 0xAC8C0FE02D14624DL) * 0x9E3779B9L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(8);
+                                iBright = lap.next(8);
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 22:
-                        random = new FlapRNG(ctr);
+                        flap.setState(ctr * 0x9E3779B9L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                code = flap.nextInt() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 23:
-                        random = new FlapRNG(ctr);
+                        flap.setState(ctr * 0x9E3779B9L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = flap.next(8);
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
@@ -3462,104 +3520,124 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 26:
-                        random = new SlapRNG(ctr);
+                        slap.setState(ctr * 0x9E3779B9L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                code = slap.nextInt() | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 27:
-                        random = new SlapRNG(ctr);
+                        slap.setState(ctr * 0x9E3779B9L);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = slap.nextInt() >>> 24;//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 28:
-                        random = new HordeRNG(ctr);
+                        horde.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                code = horde.nextLong() | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("HordeRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 29:
-                        random = new HordeRNG(ctr);
+                        horde.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = horde.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("HordeRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 30:
-                        random = new HerdRNG(ctr);
+                        herd.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
+                                code = herd.nextInt() | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 31:
-                        random = new HerdRNG(ctr);
+                        herd.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
+                                iBright = herd.nextInt() >>> 24;//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 32:
-                        random = new ZapRNG(ctr);
+                        zap.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = zap.nextLong() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 33:
-                        random = new ZapRNG(ctr);
+                        zap.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(8);
+                                iBright = zap.next(8);
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 34:
-                        random = new BirdRNG(ctr);
+                        bird.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = random.next(24) << 8 | 255L;
+                                code = bird.nextInt() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("BirdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                     case 35:
-                        random = new BirdRNG(ctr);
+                        bird.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = random.next(8);
+                                iBright = bird.nextInt() >>> 24;
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         Gdx.graphics.setTitle("BirdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 36:
+                        beard.setState(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = beard.nextLong() | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        Gdx.graphics.setTitle("BeardRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        break;
+                    case 37:
+                        beard.setState(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = beard.nextInt() >>> 24;
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("BeardRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
                         break;
                 }
             }
