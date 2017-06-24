@@ -101,14 +101,15 @@ public class PoliticalMapper {
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
         Coord.expandPoolTo(width, height);
         GreasedRegion map = land.copy();
-        Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
+        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
         int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
+        map.randomScatter(rng, (width + height) / 25, factionCount);
 
         spreader.initialize(land.toChars());
         OrderedMap<Coord, Double> entries = new OrderedMap<>();
         entries.put(Coord.get(-1, -1), 0.0);
         for (int i = 0; i < factionCount; i++) {
-            entries.put(centers[i], rng.between(0.5, 1.0));
+            entries.put(map.nth(i), rng.between(0.5, 1.0));
         }
         spreader.start(entries, controlled, null);
         short[][] sm = spreader.spillMap;
@@ -190,14 +191,15 @@ public class PoliticalMapper {
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
         Coord.expandPoolTo(width, height);
         GreasedRegion map = land.copy();
-        Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
+        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
         int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
+        map.randomScatter(rng, (width + height) / 25, factionCount);
 
         spreader.initialize(land.toChars());
         OrderedMap<Coord, Double> entries = new OrderedMap<>();
         entries.put(Coord.get(-1, -1), 0.0);
         for (int i = 0; i < factionCount; i++) {
-            entries.put(centers[i], rng.between(0.5, 1.0));
+            entries.put(map.nth(i), rng.between(0.5, 1.0));
         }
         spreader.start(entries, controlled, null);
         short[][] sm = spreader.spillMap;
@@ -291,14 +293,15 @@ public class PoliticalMapper {
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
         Coord.expandPoolTo(width, height);
         GreasedRegion map = land.copy();
-        Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
+        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
         int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
+        map.randomScatter(rng, (width + height) / 25, factionCount);
 
         spreader.initialize(land.toChars());
         OrderedMap<Coord, Double> entries = new OrderedMap<>();
         entries.put(Coord.get(-1, -1), 0.0);
         for (int i = 0; i < factionCount; i++) {
-            entries.put(centers[i], rng.between(0.5, 1.0));
+            entries.put(map.nth(i), rng.between(0.5, 1.0));
         }
         spreader.start(entries, controlled, null);
         short[][] sm = spreader.spillMap;
