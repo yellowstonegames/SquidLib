@@ -1466,16 +1466,28 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public GreasedRegion removeRectangle(int startX, int startY, int rectangleWidth, int rectangleHeight)
     {
+        if(startX < 0)
+        {
+            rectangleWidth += startX;
+            startX = 0;
+        }
+        else if(startX >= width)
+        {
+            rectangleWidth = 1;
+            startX = width - 1;
+        }
+        if(startY < 0)
+        {
+            rectangleHeight += startY;
+            startY = 0;
+        }
+        else if(startY >= height)
+        {
+            rectangleHeight = 1;
+            startY = height - 1;
+        }
         if(rectangleWidth < 1 || rectangleHeight < 1 || ySections <= 0)
             return this;
-        if(startX < 0)
-            startX = 0;
-        else if(startX >= width)
-            startX = width - 1;
-        if(startY < 0)
-            startY = 0;
-        else if(startY >= height)
-            startY = height - 1;
         int endX = Math.min(width, startX + rectangleWidth) - 1,
                 endY = Math.min(height, startY + rectangleHeight) - 1,
                 startSection = startY >> 6, endSection = endY >> 6;
@@ -3781,6 +3793,78 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
+        return this;
+    }
+    /**
+     * Modifies this GreasedRegion so it contains a random subset of its previous contents, choosing cells so that the
+     * distance between any two "on" cells is at least {@code minimumDistance}, with at least one cell as "on" if any
+     * were "on" in this originally. Does not limit the count of "on" cells in the result.
+     * @param rng used to generate random positions
+     * @param minimumDistance the minimum distance between "on" cells in the result
+     * @return this for chaining
+     */
+    public GreasedRegion randomScatter(RNG rng, int minimumDistance) {
+        return randomScatter(rng, minimumDistance, -1);
+    }
+    /**
+     * Modifies this GreasedRegion so it contains a random subset of its previous contents, choosing cells so that the
+     * distance between any two "on" cells is at least {@code minimumDistance}, with at least one cell as "on" if any
+     * were "on" in this originally.
+     * Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0 if no
+     * cells are "on"). If limit is negative, this will not restrict the count.
+     * @param rng used to generate random positions
+     * @param minimumDistance the minimum distance between "on" cells in the result
+     * @param limit the maximum count of "on" cells to keep
+     * @return this for chaining
+     */
+    public GreasedRegion randomScatter(RNG rng, int minimumDistance, int limit) {
+        int ic = 0;
+        for (; ic < width * ySections; ic++) {
+            if(Long.bitCount(data[ic]) > 0)
+                break;
+        }
+        if(ic == width * ySections)
+            return this;
+        if(limit == 0)
+            return empty();
+        else if(limit < 0)
+            limit = 0x7fffffff;
+        long[] data2 = new long[data.length];
+        long t, w;
+        int tmp, total = 0;
+        MAIN_LOOP:
+        while (total < limit) {
+            int ct = 0;
+            int[] counts = new int[width * ySections];
+            for (int i = 0; i < width * ySections; i++) {
+                tmp = Long.bitCount(data[i]);
+                counts[i] = tmp == 0 ? -1 : (ct += tmp);
+            }
+            tmp = rng.nextInt(ct);
+
+            for (int s = 0; s < ySections; s++) {
+                for (int x = 0; x < width; x++) {
+                    if ((ct = counts[x * ySections + s]) > tmp) {
+                        t = data[x * ySections + s];
+                        w = Long.lowestOneBit(t);
+                        for (--ct; w != 0; ct--) {
+                            if (ct == tmp) {
+                                data2[x * ySections + s] |= w;
+                                ++total;
+                                removeRectangle(x - minimumDistance,
+                                        ((s << 6) | Long.numberOfTrailingZeros(w)) - minimumDistance,
+                                        minimumDistance << 1 | 1, minimumDistance << 1 | 1);
+                                continue MAIN_LOOP;
+                            }
+                            t ^= w;
+                            w = Long.lowestOneBit(t);
+                        }
+                    }
+                }
+            }
+            break;
+        }
+        data = data2;
         return this;
     }
 
