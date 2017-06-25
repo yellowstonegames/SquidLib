@@ -53,13 +53,13 @@ public class TextCellFactory implements Disposable {
     public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\ ",
     LINE_FITTING = "┼├┤┴┬┌┐└┘│─",
             SQUID_FITTING = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmno"+
-                    "pqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàá"+
+                    "pqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàá"+
                     "âãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİı"+
                     "ĲĳĴĵĶķĹĺĻļĽľĿŀŁłŃńŅņŇňŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſƒǺǻǼǽǾ"+
                     "ǿȘșȚțȷˆˇˉˋ˘˙˚˛˜˝;΄΅Ά·ΈΉΊΌΎΏΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυ"+
                     "φχψωϊϋόύώЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхц"+
-                    "чшщъыьэюяѐёђѓєѕіїјљњћќѝўџѢѣѲѳѴѵҐґẀẁẂẃẄẅỲỳ–—‘’‚‛“”„†‡•…‰‹›ⁿ₤€№™Ω℮←↑→↓∆−√≈" +
-                    "─│┌┐└┘├┤┬┴┼═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫■□▪▫▲▼◊○●◦♀♂♠♣♥♦♪";
+                    "чшщъыьэюяѐёђѓєѕіїјљњћќѝўџѴѵҐґẀẁẂẃẄẅỲỳ–—‘’‚‛“”„†‡•…‰‹›ⁿ₤€№™Ω℮←↑→↓∆−√≈" +
+                    "─│┌┐└┘├┤┬┴┼═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬■□▲▼○●◦♀♂♠♣♥♦♪";
 
 	/**
 	 * The {@link AssetManager} from where to load the font. Use it to share
@@ -77,6 +77,7 @@ public class TextCellFactory implements Disposable {
     protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
     private boolean initialized = false, initializedByFont = false, initializedBySize = false;
     protected boolean distanceField = false;
+    protected boolean msdf = false;
     protected ShaderProgram shader;
     protected float smoothingMultiplier = 1f;
     protected float descent, lineHeight;
@@ -123,6 +124,7 @@ public class TextCellFactory implements Disposable {
         next.block = block;
         next.swap = new OrderedMap<>(swap);
         next.distanceField = distanceField;
+        next.msdf = msdf;
         next.distanceFieldScaleX = distanceFieldScaleX;
         next.distanceFieldScaleY = distanceFieldScaleY;
         next.shader = null;
@@ -200,7 +202,18 @@ public class TextCellFactory implements Disposable {
         block = new Texture(1, 1, Pixmap.Format.RGBA8888);
         block.draw(temp, 0, 0);
         temp.dispose();
-        if(distanceField)
+        if(msdf)
+        {
+            bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
+
+            shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.msdfFragmentShader);
+            if (!shader.isCompiled()) {
+                Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
+            }
+            //lineTweak = lineHeight / 20f;
+            //distanceFieldScaleX *= (((float)width) / height) / (distanceFieldScaleX / distanceFieldScaleY);
+        }
+        else if(distanceField)
         {
             bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
 
@@ -208,16 +221,15 @@ public class TextCellFactory implements Disposable {
             if (!shader.isCompiled()) {
                 Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
             }
-            lineHeight = bmpFont.getLineHeight();
             //lineTweak = lineHeight / 20f;
             //distanceFieldScaleX *= (((float)width) / height) / (distanceFieldScaleX / distanceFieldScaleY);
         }
         else {
             shader = SpriteBatch.createDefaultShader();
-            lineHeight = bmpFont.getLineHeight();
             //lineTweak = lineHeight * 0.0625f;
         }
-        descent = bmpFont.getDescent();
+        lineHeight = bmpFont.getLineHeight();
+        descent = bmpFont.getDescent();//(msdf ? -8 * bmpFont.getDescent(): bmpFont.getDescent());
         style = new Label.LabelStyle(bmpFont, null);
         BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
         dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
@@ -385,9 +397,9 @@ public class TextCellFactory implements Disposable {
             tex = new Texture(Gdx.files.classpath(texturePath), true);
             tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
         } else {
-			bmpFont = DefaultResources.getIncludedFont();
-			Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");
-			return this;
+            bmpFont = DefaultResources.getIncludedFont();
+            Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");
+            return this;
         }
         if (Gdx.files.internal(fontPath).exists()) {
             Gdx.app.debug("font", "Using internal font at " + fontPath);
@@ -399,9 +411,51 @@ public class TextCellFactory implements Disposable {
             distanceField = true;
         } else {
             bmpFont = DefaultResources.getIncludedFont();
-			Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
-		}
+            Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
+        }
         //bmpFont.getData().padBottom = bmpFont.getDescent();
+        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;
+        distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
+        return this;
+    }
+    /**
+     * @param fontPath the path to a .fnt bitmap font file with multi-channel distance field effects applied, which
+     *                 requires a complex process to create.
+     * @param texturePath the path to the texture used by the bitmap font
+     * @return this factory for method chaining
+     */
+    public TextCellFactory fontMultiDistanceField(String fontPath, String texturePath) {
+        Texture tex;
+        if (Gdx.files.internal(texturePath).exists()) {
+            Gdx.app.debug("font", "Using internal font texture at " + texturePath);
+            tex = new Texture(Gdx.files.internal(texturePath), true);
+            tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
+        } else if (Gdx.files.classpath(texturePath).exists()) {
+            Gdx.app.debug("font", "Using classpath font texture at " + texturePath);
+            tex = new Texture(Gdx.files.classpath(texturePath), true);
+            tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
+        } else {
+            bmpFont = DefaultResources.getIncludedFont();
+            Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");
+            return this;
+        }
+        if (Gdx.files.internal(fontPath).exists()) {
+            Gdx.app.debug("font", "Using internal font at " + fontPath);
+            bmpFont = new BitmapFont(Gdx.files.internal(fontPath), new TextureRegion(tex), false);
+            msdf = true;
+        } else if (Gdx.files.classpath(fontPath).exists()) {
+            Gdx.app.debug("font", "Using classpath font at " + fontPath);
+            bmpFont = new BitmapFont(Gdx.files.classpath(fontPath), new TextureRegion(tex), false);
+            msdf = true;
+        } else {
+            bmpFont = DefaultResources.getIncludedFont();
+            Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
+        }
+        //bmpFont.getData().padBottom = bmpFont.getDescent();
+        if(msdf)
+        {
+            bmpFont.getData().setScale(0.75f, 1.0f);
+        }
         distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;
         distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
         return this;
@@ -1655,6 +1709,10 @@ public class TextCellFactory implements Disposable {
         return block;
     }
 
+    public boolean isMultiDistanceField() {
+        return msdf;
+    }
+
     public boolean isDistanceField() {
         return distanceField;
     }
@@ -1702,9 +1760,16 @@ public class TextCellFactory implements Disposable {
      * @param batch the Batch, such as a SpriteBatch, to configure to render distance field fonts if necessary.
      */
     public void configureShader(Batch batch) {
-        if (initialized && distanceField) {
-            batch.setShader(shader);
-            shader.setUniformf("u_smoothing", 0.2f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));
+        if(initialized)
+        {
+            if(msdf)
+            {
+                batch.setShader(shader);
+            }
+            else if (distanceField) {
+                batch.setShader(shader);
+                shader.setUniformf("u_smoothing", 0.2f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));
+            }
         }
     }
     /**
