@@ -63,7 +63,9 @@ public class DefaultResources implements LifecycleListener {
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
-            distanceSciFi = null, distanceOrbit = null, distanceLean = null, distanceSlab = null;
+            distanceSciFi = null, distanceOrbit = null, distanceLean = null, distanceSlab = null,
+            msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
+            msdfDejaVu = null, msdfDejaVuItalic = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
@@ -96,8 +98,21 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldLean = "Iosevka-distance.fnt",
             distanceFieldLeanTexture = "Iosevka-distance.png",
             distanceFieldSlab = "Iosevka-Slab-distance.fnt",
-            distanceFieldSlabTexture = "Iosevka-Slab-distance.png";
-    public static String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
+            distanceFieldSlabTexture = "Iosevka-Slab-distance.png",
+            crispSlab = "Iosevka-Slab-msdf.fnt",
+            crispSlabTexture = "Iosevka-Slab-msdf.png",
+            crispSlabItalic = "Iosevka-Slab-Oblique-msdf.fnt",
+            crispSlabItalicTexture = "Iosevka-Slab-Oblique-msdf.png",
+            crispLean = "Iosevka-msdf.fnt",
+            crispLeanTexture = "Iosevka-msdf.png",
+            crispLeanItalic = "Iosevka-Oblique-msdf.fnt",
+            crispLeanItalicTexture = "Iosevka-Oblique-msdf.png",
+            crispDejaVu = "DejaVuSansMono-msdf.fnt",
+            crispDejaVuTexture = "DejaVuSansMono-msdf.png",
+            crispDejaVuItalic = "DejaVuSansMono-Oblique-msdf.fnt",
+            crispDejaVuItalicTexture = "DejaVuSansMono-Oblique-msdf.png"
+                    ;
+    public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
             + "attribute vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n"
             + "uniform mat4 u_projTrans;\n"
@@ -111,7 +126,7 @@ public class DefaultResources implements LifecycleListener {
             + "	gl_Position =  u_projTrans * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "}\n";
 
-    public static String fragmentShader = "#ifdef GL_ES\n"
+    public static final String fragmentShader = "#ifdef GL_ES\n"
             + "	precision mediump float;\n"
             + "	precision mediump int;\n"
             + "#endif\n"
@@ -129,6 +144,24 @@ public class DefaultResources implements LifecycleListener {
             + "	} else {\n"
             + "		gl_FragColor = v_color * texture2D(u_texture, v_texCoords);\n"
             + "	}\n"
+            + "}\n";
+    public static final String msdfFragmentShader =  "#ifdef GL_ES\n"
+            + "	precision mediump float;\n"
+            + "	precision mediump int;\n"
+            + "#endif\n"
+            + "\n"
+            + "uniform sampler2D u_texture;\n"
+            + "uniform float u_smoothing;\n"
+            + "varying vec4 v_color;\n"
+            + "varying vec2 v_texCoords;\n"
+            + "\n"
+            + "void main() {\n"
+            + "	vec3 sdf = texture2D(u_texture, v_texCoords).rgb;\n"
+            + " float dist = max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5;\n"
+            + " float d = fwidth(dist);\n"
+            + " float alpha = smoothstep(-d, d, dist);\n"
+            //+ " if(alpha == 0) { discard; }\n"
+            + "	gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
             + "}\n";
     private SquidColorCenter scc = null;
     private Texture tentacle = null;
@@ -814,6 +847,252 @@ public class DefaultResources implements LifecycleListener {
     }
 
     /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
+     * and a slab-serif geometric style, that should scale cleanly to even very large sizes. Caches the result for later
+     * calls. The font used is Iosevka with Slab style, an open-source (SIL Open Font License) typeface by Belleve Invis
+     * (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
+     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also the
+     * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
+     * normal Signed Distance Field technique, which should allow sharper edges. As an aside, Luc Devroye (a
+     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
+     * deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
+     * version SquidLib has, {@link #getCrispLeanFont()}.
+     * <br>
+     * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
+     * <br>
+     * Preview: none yet
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-msdf.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab.ttf
+     */
+    public static TextCellFactory getCrispSlabFont()
+    {
+        initialize();
+        if(instance.msdfSlab == null)
+        {
+            try {
+                instance.msdfSlab = new TextCellFactory()
+                        .fontMultiDistanceField(crispSlab, crispSlabTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfSlab != null)
+            return instance.msdfSlab.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible oblique (similar to italic) fixed-width font
+     * with good Unicode support and a slab-serif geometric style, that should scale cleanly to even very large sizes.
+     * Caches the result for later calls. The font used is Iosevka with Slab style, an open-source (SIL Open Font
+     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations
+     * thanks to Iosevka's special build process. It supports a lot of glyphs, including quite a bit of extended Latin,
+     * Greek, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
+     * Field technique as opposed to the normal Signed Distance Field technique, which should allow sharper edges. As an
+     * aside, Luc Devroye (a true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A
+     * tour de force that deserves an award."</a> You may want to try using both this version of Iosevka with slab
+     * serifs and the other version SquidLib has, {@link #getCrispLeanItalicFont()}.
+     * <br>
+     * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
+     * <br>
+     * Preview: none yet
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Oblique-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Oblique-msdf.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab-Oblique.ttf
+     */
+    public static TextCellFactory getCrispSlabItalicFont()
+    {
+        initialize();
+        if(instance.msdfSlabItalic == null)
+        {
+            try {
+                instance.msdfSlabItalic = new TextCellFactory()
+                        .fontMultiDistanceField(crispSlabItalic, crispSlabItalicTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfSlabItalic != null)
+            return instance.msdfSlabItalic.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
+     * and a sans-serif geometric style, that should scale cleanly to even very large sizes. Caches the result for later
+     * calls. The font used is Iosevka, an open-source (SIL Open Font License) typeface by Belleve Invis
+     * (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
+     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also the
+     * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
+     * normal Signed Distance Field technique, which should allow sharper edges. As an aside, Luc Devroye (a
+     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
+     * deserves an award."</a> You may want to try using both this version of Iosevka without serifs and the other
+     * version SquidLib has, {@link #getCrispSlabFont()}.
+     * <br>
+     * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
+     * <br>
+     * Preview: none yet
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-msdf.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka.ttf
+     */
+    public static TextCellFactory getCrispLeanFont()
+    {
+        initialize();
+        if(instance.msdfLean == null)
+        {
+            try {
+                instance.msdfLean = new TextCellFactory()
+                        .fontMultiDistanceField(crispLean, crispLeanTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfLean != null)
+            return instance.msdfLean.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible oblique (similar to italic) fixed-width font
+     * with good Unicode support and a sans-serif geometric style, that should scale cleanly to even very large sizes.
+     * Caches the result for later calls. The font used is Iosevka, an open-source (SIL Open Font
+     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations
+     * thanks to Iosevka's special build process. It supports a lot of glyphs, including quite a bit of extended Latin,
+     * Greek, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
+     * Field technique as opposed to the normal Signed Distance Field technique, which should allow sharper edges. As an
+     * aside, Luc Devroye (a true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A
+     * tour de force that deserves an award."</a> You may want to try using both this version of Iosevka without
+     * serifs and the other version SquidLib has, {@link #getCrispSlabItalicFont()}.
+     * <br>
+     * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
+     * <br>
+     * Preview: none yet
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Oblique-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Oblique-msdf.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Oblique.ttf
+     */
+    public static TextCellFactory getCrispLeanItalicFont()
+    {
+        initialize();
+        if(instance.msdfLeanItalic == null)
+        {
+            try {
+                instance.msdfLeanItalic = new TextCellFactory()
+                        .fontMultiDistanceField(crispLeanItalic, crispLeanItalicTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfLeanItalic != null)
+            return instance.msdfLeanItalic.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a fixed-width sans-serif font with good Unicode support,
+     * that should scale cleanly to even very large sizes. Caches the result for later calls. The font used is DejaVu
+     * Sans Mono, an open-source (SIL Open Font License) typeface that is widely used by Linux distros and other groups.
+     * It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also the
+     * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
+     * normal Signed Distance Field technique, which should allow sharper edges.
+     * <br>
+     * Preview: none yet
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-msdf.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono.ttf
+     */
+    public static TextCellFactory getCrispDejaVuFont()
+    {
+        initialize();
+        if(instance.msdfDejaVu == null)
+        {
+            try {
+                instance.msdfDejaVu = new TextCellFactory()
+                        .fontMultiDistanceField(crispDejaVu, crispDejaVuTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfDejaVu != null)
+            return instance.msdfDejaVu.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a fixed-width sans-serif oblique (similar to italic) font
+     * with good Unicode support, that should scale cleanly to even very large sizes. Caches the result for later calls.
+     * The font used is DejaVu Sans Mono, an open-source (SIL Open Font License) typeface that is widely used by Linux
+     * distros and other groups. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic,
+     * but also the necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as
+     * opposed to the normal Signed Distance Field technique, which should allow sharper edges.
+     * <br>
+     * NOTE: This currently has some errors on a few Greek lower-case letters with accents, where a large blob appears
+     * above and overlapping with the accents. Un-accented Greek letters should be fine.
+     * <br>
+     * Preview: none yet
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-Oblique-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-Oblique-msdf.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono-Oblique.ttf
+     */
+
+    public static TextCellFactory getCrispDejaVuItalicFont()
+    {
+        initialize();
+        if(instance.msdfDejaVuItalic == null)
+        {
+            try {
+                instance.msdfDejaVuItalic = new TextCellFactory()
+                        .fontMultiDistanceField(crispDejaVuItalic, crispDejaVuItalicTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfDejaVuItalic != null)
+            return instance.msdfDejaVuItalic.copy();
+        return null;
+    }
+
+
+    /**
      * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.
      * Source is public domain: http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg
      * Created by Henrique Lazarini (7Soul1, http://7soul1.deviantart.com/ )
@@ -1007,6 +1286,30 @@ public class DefaultResources implements LifecycleListener {
         if(distanceOrbit != null) {
             distanceOrbit.dispose();
             distanceOrbit = null;
+        }
+        if(msdfSlab != null) {
+            msdfSlab.dispose();
+            msdfSlab = null;
+        }
+        if(msdfSlabItalic != null) {
+            msdfSlabItalic.dispose();
+            msdfSlabItalic = null;
+        }
+        if(msdfLean != null) {
+            msdfLean.dispose();
+            msdfLean = null;
+        }
+        if(msdfLeanItalic != null) {
+            msdfLeanItalic.dispose();
+            msdfLeanItalic = null;
+        }
+        if(msdfDejaVu != null) {
+            msdfDejaVu.dispose();
+            msdfDejaVu = null;
+        }
+        if(msdfDejaVuItalic != null) {
+            msdfDejaVuItalic.dispose();
+            msdfDejaVuItalic = null;
         }
         if (unicode1 != null) {
             unicode1.dispose();

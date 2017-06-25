@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../squidpony/squidmath/AStarSearch.SearchType.html" title="enum in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidmath/BeardRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../squidpony/squidmath/Bresenham.html" title="class in squidpony.squidmath"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -118,27 +118,27 @@ public class <a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.36">B
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">One of the highest-quality 32-bit-math generators present in this library, complete with a very long period and over
- 1024 bits of state (1056 if you include a necessary counter). While BirdRNG does not have a fast lookahead or
+ 2048 bits of state (2080 if you include a necessary counter). While BirdRNG does not have a fast lookahead or
  lookbehind and isn't especially fast, those are its most significant flaws. While it is slower than FlapRNG and
  HerdRNG, it should be faster than PintRNG, which is also its closest competitor on quality. While it is similar to
- LongPeriodRNG in that it has 1056 bits of state, BirdRNG is much faster on int generation and (strangely) competitive
- on long generation as well. BirdRNG currently passes the PractRand suite of RNG quality testing with no failures
- given 64MB of random ints, except on one of PractRand's optional folding modes (32-bit folding with the stdin32
- argument), where it has 2 failures and 97 anomaly-free tests. It may be able to pass DIEHARDER, but that wouldn't be
- much of a surprise because BirdRNG has so much state, and that tends to make passing that test suite easier.
+ LongPeriodRNG in that it has a lot of state, BirdRNG is faster on int generation and not drastically worse on long
+ generation (despite not using long values for state). BirdRNG currently passes the PractRand suite of RNG quality
+ testing with no failures given 64MB of random ints, and generally no more than a few minor anomalies depending on the
+ seeds used. It may be able to pass DIEHARDER, but that wouldn't be much of a surprise because BirdRNG has so much
+ state, and that tends to make passing that test suite easier.
  <br>
  There are a lot of quirks in each generator, but it should be mentioned that BirdRNG has an unorthodox state update
- pattern that may result in a lower period but also ensures its high quality. There are 32 ints of main state stored
+ pattern that may result in a lower period but also ensures its high quality. There are 64 ints of main state stored
  in an array, as well as 1 int for a counter that is incremented by a very large int with each number generated.
- The bottom 5 bits of the counter determine the primary part of the state array being updated, which can be any of the
- 32 ints. The actual value used during the update, which is a simple add-and-assign, is determined by the upper 4 bits
- of counter, which means only 16 of the ints in the main state can be used for this step. The int chosen by the upper
- bits is incremented by a large value (this is assigned to it as well), then the result unsigned-right-shifted by 1
- (which reduces the issues of low period on the least significant bit), and this is added to the int of main state
- chosen by the lower bits. Confused yet? I know I was making this... Even slight tweaks to any part of this generator
- can completely change the quality. It is unclear if this actually has a lower period than 2 to the 1024, since
- testing more than 2 to the 128 generated numbers empirically would take an incredible amount of time, as well as
- requiring an impossible amount of storage space, so the proof would need to be algorithmic. Anyone want to try?
+ The bottom 6 bits of the counter determine the primary part of the state array being updated, which can be any of the
+ 64 ints. The actual value used during the update is chosen from state using an index from the upper 5 bits of
+ counter, which means only 32 of the ints in the main state can be used for this step. A large constant is added to
+ the selected int from state, and this is unsigned-right-shifted by 1. The current counter value is also added into
+ the update value after the shift. Unlike in other versions of BirdRNG and its relative<a href="../../squidpony/squidmath/BeardRNG.html" title="class in squidpony.squidmath"><code>BeardRNG</code></a>, only one
+ element of state is changed with each generated int. Even slight tweaks to any part of this generator can completely
+ change the quality. It is unclear if this actually has a lower period than 2 to the 2048, since testing more than 2
+ to the 128 generated numbers empirically would take an incredible amount of time, as well as requiring an impossible
+ amount of storage space, so the proof would need to be algorithmic. Anyone want to try?
  <br>
  Created by Tommy Ettinger on 6/14/2017.</div>
 <dl>
@@ -190,7 +190,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/BirdRNG.html#BirdRNG-java.lang.CharSequence-">BirdRNG</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</code>
-<div class="block">Uses the given String or other CharSequence as the basis for the 16 ints this uses as state, assigning choice to
+<div class="block">Uses the given String or other CharSequence as the basis for the 64 ints this uses as state, assigning choice to
  be the sum of the rest of state.</div>
 </td>
 </tr>
@@ -363,11 +363,12 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BirdRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.105">BirdRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
-<div class="block">Uses the given String or other CharSequence as the basis for the 16 ints this uses as state, assigning choice to
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.106">BirdRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
+<div class="block">Uses the given String or other CharSequence as the basis for the 64 ints this uses as state, assigning choice to
  be the sum of the rest of state.
- Internally, this gets a 32-bit hash for seed with 16 different variations on the <a href="../../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath"><code>CrossHash.Mist</code></a> hashing
- algorithm, and uses one for each int in state. This tolerates null and empty-String values for seed.</div>
+ Internally, this gets a 32-bit hash for seed with 48 different variations on the <a href="../../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath"><code>CrossHash.Mist</code></a> hashing
+ algorithm and 16 variations on the <a href="../../squidpony/squidmath/CrossHash.Storm.html" title="class in squidpony.squidmath"><code>CrossHash.Storm</code></a> algorithm, and uses one for each int in state. This
+ tolerates null and empty-String values for seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seed</code> - a String or other CharSequence; may be null</dd>
@@ -404,7 +405,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.112">setState</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.116">setState</a>(int&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="setState-long-">
@@ -413,7 +414,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.119">setState</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.123">setState</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="setState-int:A-">
@@ -422,7 +423,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.126">setState</a>(int[]&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.130">setState</a>(int[]&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="nextLong--">
@@ -431,7 +432,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.146">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.157">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -451,7 +452,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.151">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.164">nextInt</a>()</pre>
 </li>
 </ul>
 <a name="next-int-">
@@ -460,7 +461,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.156">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.168">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -480,7 +481,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.168">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.180">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -498,7 +499,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.175">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.187">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -511,7 +512,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.183">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.195">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -524,7 +525,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.193">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/BirdRNG.html#line.205">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -559,7 +560,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../squidpony/squidmath/AStarSearch.SearchType.html" title="enum in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../squidpony/squidmath/BeardRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../squidpony/squidmath/Bresenham.html" title="class in squidpony.squidmath"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

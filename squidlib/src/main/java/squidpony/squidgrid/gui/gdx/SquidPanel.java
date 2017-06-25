@@ -1163,7 +1163,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     public float adjustY(float y)
     {
-        return (gridHeight - y - 1) * cellHeight + getY() + 1 + cellHeight - textFactory.actualCellHeight; // - textFactory.lineHeight //textFactory.lineTweak * 3f
+        return (gridHeight - y - 1) * cellHeight + getY() + (textFactory.msdf ? -textFactory.descent : 1 + cellHeight - textFactory.actualCellHeight); // - textFactory.lineHeight //textFactory.lineTweak * 3f
         //return (gridHeight - y - 1) * cellHeight + textFactory.getDescent() * 3 / 2f + getY();
     }
 

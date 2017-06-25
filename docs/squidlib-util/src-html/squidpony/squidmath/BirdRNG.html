@@ -16,27 +16,27 @@
 <span class="sourceLineNo">008</span><a name="line.8"></a>
 <span class="sourceLineNo">009</span>/**<a name="line.9"></a>
 <span class="sourceLineNo">010</span> * One of the highest-quality 32-bit-math generators present in this library, complete with a very long period and over<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * 1024 bits of state (1056 if you include a necessary counter). While BirdRNG does not have a fast lookahead or<a name="line.11"></a>
+<span class="sourceLineNo">011</span> * 2048 bits of state (2080 if you include a necessary counter). While BirdRNG does not have a fast lookahead or<a name="line.11"></a>
 <span class="sourceLineNo">012</span> * lookbehind and isn't especially fast, those are its most significant flaws. While it is slower than FlapRNG and<a name="line.12"></a>
 <span class="sourceLineNo">013</span> * HerdRNG, it should be faster than PintRNG, which is also its closest competitor on quality. While it is similar to<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * LongPeriodRNG in that it has 1056 bits of state, BirdRNG is much faster on int generation and (strangely) competitive<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * on long generation as well. BirdRNG currently passes the PractRand suite of RNG quality testing with no failures<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * given 64MB of random ints, except on one of PractRand's optional folding modes (32-bit folding with the stdin32<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * argument), where it has 2 failures and 97 anomaly-free tests. It may be able to pass DIEHARDER, but that wouldn't be<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * much of a surprise because BirdRNG has so much state, and that tends to make passing that test suite easier.<a name="line.18"></a>
+<span class="sourceLineNo">014</span> * LongPeriodRNG in that it has a lot of state, BirdRNG is faster on int generation and not drastically worse on long<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * generation (despite not using long values for state). BirdRNG currently passes the PractRand suite of RNG quality<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * testing with no failures given 64MB of random ints, and generally no more than a few minor anomalies depending on the<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * seeds used. It may be able to pass DIEHARDER, but that wouldn't be much of a surprise because BirdRNG has so much<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * state, and that tends to make passing that test suite easier.<a name="line.18"></a>
 <span class="sourceLineNo">019</span> * &lt;br&gt;<a name="line.19"></a>
 <span class="sourceLineNo">020</span> * There are a lot of quirks in each generator, but it should be mentioned that BirdRNG has an unorthodox state update<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * pattern that may result in a lower period but also ensures its high quality. There are 32 ints of main state stored<a name="line.21"></a>
+<span class="sourceLineNo">021</span> * pattern that may result in a lower period but also ensures its high quality. There are 64 ints of main state stored<a name="line.21"></a>
 <span class="sourceLineNo">022</span> * in an array, as well as 1 int for a counter that is incremented by a very large int with each number generated.<a name="line.22"></a>
-<span class="sourceLineNo">023</span> * The bottom 5 bits of the counter determine the primary part of the state array being updated, which can be any of the<a name="line.23"></a>
-<span class="sourceLineNo">024</span> * 32 ints. The actual value used during the update, which is a simple add-and-assign, is determined by the upper 4 bits<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * of counter, which means only 16 of the ints in the main state can be used for this step. The int chosen by the upper<a name="line.25"></a>
-<span class="sourceLineNo">026</span> * bits is incremented by a large value (this is assigned to it as well), then the result unsigned-right-shifted by 1<a name="line.26"></a>
-<span class="sourceLineNo">027</span> * (which reduces the issues of low period on the least significant bit), and this is added to the int of main state<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * chosen by the lower bits. Confused yet? I know I was making this... Even slight tweaks to any part of this generator<a name="line.28"></a>
-<span class="sourceLineNo">029</span> * can completely change the quality. It is unclear if this actually has a lower period than 2 to the 1024, since<a name="line.29"></a>
-<span class="sourceLineNo">030</span> * testing more than 2 to the 128 generated numbers empirically would take an incredible amount of time, as well as<a name="line.30"></a>
-<span class="sourceLineNo">031</span> * requiring an impossible amount of storage space, so the proof would need to be algorithmic. Anyone want to try?<a name="line.31"></a>
+<span class="sourceLineNo">023</span> * The bottom 6 bits of the counter determine the primary part of the state array being updated, which can be any of the<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * 64 ints. The actual value used during the update is chosen from state using an index from the upper 5 bits of<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * counter, which means only 32 of the ints in the main state can be used for this step. A large constant is added to<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * the selected int from state, and this is unsigned-right-shifted by 1. The current counter value is also added into<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * the update value after the shift. Unlike in other versions of BirdRNG and its relative{@link BeardRNG}, only one<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * element of state is changed with each generated int. Even slight tweaks to any part of this generator can completely<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * change the quality. It is unclear if this actually has a lower period than 2 to the 2048, since testing more than 2<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * to the 128 generated numbers empirically would take an incredible amount of time, as well as requiring an impossible<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * amount of storage space, so the proof would need to be algorithmic. Anyone want to try?<a name="line.31"></a>
 <span class="sourceLineNo">032</span> * &lt;br&gt;<a name="line.32"></a>
 <span class="sourceLineNo">033</span> * Created by Tommy Ettinger on 6/14/2017.<a name="line.33"></a>
 <span class="sourceLineNo">034</span> */<a name="line.34"></a>
@@ -70,7 +70,7 @@
 <span class="sourceLineNo">062</span>    }<a name="line.62"></a>
 <span class="sourceLineNo">063</span><a name="line.63"></a>
 <span class="sourceLineNo">064</span>    private static final long serialVersionUID = 1L;<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    public final int[] state = new int[32];<a name="line.65"></a>
+<span class="sourceLineNo">065</span>    public final int[] state = new int[64];<a name="line.65"></a>
 <span class="sourceLineNo">066</span>    public int choice = 0;<a name="line.66"></a>
 <span class="sourceLineNo">067</span>    public BirdRNG() {<a name="line.67"></a>
 <span class="sourceLineNo">068</span>        this((int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.68"></a>
@@ -88,11 +88,11 @@
 <span class="sourceLineNo">080</span>    public BirdRNG(final int[] seed) {<a name="line.80"></a>
 <span class="sourceLineNo">081</span>        int len;<a name="line.81"></a>
 <span class="sourceLineNo">082</span>        if (seed == null || (len = seed.length) == 0) {<a name="line.82"></a>
-<span class="sourceLineNo">083</span>            for (int i = 0; i &lt; 32; i++) {<a name="line.83"></a>
+<span class="sourceLineNo">083</span>            for (int i = 0; i &lt; 64; i++) {<a name="line.83"></a>
 <span class="sourceLineNo">084</span>                choice += (state[i] = splitMix32(0x632D978F + i * 0x9E3779B9));<a name="line.84"></a>
 <span class="sourceLineNo">085</span>            }<a name="line.85"></a>
-<span class="sourceLineNo">086</span>        } else if (len &lt; 32) {<a name="line.86"></a>
-<span class="sourceLineNo">087</span>            for (int i = 0, s = 0; i &lt; 32; i++, s++) {<a name="line.87"></a>
+<span class="sourceLineNo">086</span>        } else if (len &lt; 64) {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>            for (int i = 0, s = 0; i &lt; 64; i++, s++) {<a name="line.87"></a>
 <span class="sourceLineNo">088</span>                if(s == len) s = 0;<a name="line.88"></a>
 <span class="sourceLineNo">089</span>                choice += (state[i] ^= splitMix32(seed[s] + i * 0x9E3779B9));<a name="line.89"></a>
 <span class="sourceLineNo">090</span>            }<a name="line.90"></a>
@@ -104,104 +104,117 @@
 <span class="sourceLineNo">096</span>    }<a name="line.96"></a>
 <span class="sourceLineNo">097</span><a name="line.97"></a>
 <span class="sourceLineNo">098</span>    /**<a name="line.98"></a>
-<span class="sourceLineNo">099</span>     * Uses the given String or other CharSequence as the basis for the 16 ints this uses as state, assigning choice to<a name="line.99"></a>
+<span class="sourceLineNo">099</span>     * Uses the given String or other CharSequence as the basis for the 64 ints this uses as state, assigning choice to<a name="line.99"></a>
 <span class="sourceLineNo">100</span>     * be the sum of the rest of state.<a name="line.100"></a>
-<span class="sourceLineNo">101</span>     * Internally, this gets a 32-bit hash for seed with 16 different variations on the {@link CrossHash.Mist} hashing<a name="line.101"></a>
-<span class="sourceLineNo">102</span>     * algorithm, and uses one for each int in state. This tolerates null and empty-String values for seed.<a name="line.102"></a>
-<span class="sourceLineNo">103</span>     * @param seed a String or other CharSequence; may be null<a name="line.103"></a>
-<span class="sourceLineNo">104</span>     */<a name="line.104"></a>
-<span class="sourceLineNo">105</span>    public BirdRNG(final CharSequence seed)<a name="line.105"></a>
-<span class="sourceLineNo">106</span>    {<a name="line.106"></a>
-<span class="sourceLineNo">107</span>        for (int i = 0; i &lt; 32; i++) {<a name="line.107"></a>
-<span class="sourceLineNo">108</span>            choice += (state[i] = CrossHash.Mist.predefined[i].hash(seed));<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        }<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    }<a name="line.110"></a>
-<span class="sourceLineNo">111</span><a name="line.111"></a>
-<span class="sourceLineNo">112</span>    public void setState(final int seed) {<a name="line.112"></a>
-<span class="sourceLineNo">113</span>        choice = 0;<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        for (int i = 0; i &lt; 32; i++) {<a name="line.114"></a>
-<span class="sourceLineNo">115</span>            choice += (state[i] = splitMix32(seed + i * 0x9E3779B9));<a name="line.115"></a>
-<span class="sourceLineNo">116</span>        }<a name="line.116"></a>
-<span class="sourceLineNo">117</span>    }<a name="line.117"></a>
-<span class="sourceLineNo">118</span><a name="line.118"></a>
-<span class="sourceLineNo">119</span>    public void setState(final long seed) {<a name="line.119"></a>
-<span class="sourceLineNo">120</span>        choice = 0;<a name="line.120"></a>
-<span class="sourceLineNo">121</span>        for (int i = 0; i &lt; 32; i++) {<a name="line.121"></a>
-<span class="sourceLineNo">122</span>            choice += (state[i] = (int)LightRNG.determine(seed + i));<a name="line.122"></a>
-<span class="sourceLineNo">123</span>        }<a name="line.123"></a>
-<span class="sourceLineNo">124</span>    }<a name="line.124"></a>
-<span class="sourceLineNo">125</span><a name="line.125"></a>
-<span class="sourceLineNo">126</span>    public void setState(final int[] seed)<a name="line.126"></a>
-<span class="sourceLineNo">127</span>    {<a name="line.127"></a>
-<span class="sourceLineNo">128</span>        int len;<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        if (seed == null || (len = seed.length) == 0) {<a name="line.129"></a>
-<span class="sourceLineNo">130</span>            for (int i = 0; i &lt; 32; i++) {<a name="line.130"></a>
-<span class="sourceLineNo">131</span>                choice += (state[i] = splitMix32(0x632D978F + i * 0x9E3779B9));<a name="line.131"></a>
-<span class="sourceLineNo">132</span>            }<a name="line.132"></a>
-<span class="sourceLineNo">133</span>        } else if (len &lt; 32) {<a name="line.133"></a>
-<span class="sourceLineNo">134</span>            for (int i = 0, s = 0; i &lt; 32; i++, s++) {<a name="line.134"></a>
-<span class="sourceLineNo">135</span>                if(s == len) s = 0;<a name="line.135"></a>
-<span class="sourceLineNo">136</span>                choice += (state[i] ^= splitMix32(seed[s] + i * 0x9E3779B9));<a name="line.136"></a>
-<span class="sourceLineNo">137</span>            }<a name="line.137"></a>
-<span class="sourceLineNo">138</span>        } else {<a name="line.138"></a>
-<span class="sourceLineNo">139</span>            for (int i = 0, s = 0; s &lt; len; s++, i = (i + 1) &amp; 31) {<a name="line.139"></a>
-<span class="sourceLineNo">140</span>                choice += (state[i] ^= seed[s]);<a name="line.140"></a>
+<span class="sourceLineNo">101</span>     * Internally, this gets a 32-bit hash for seed with 48 different variations on the {@link CrossHash.Mist} hashing<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * algorithm and 16 variations on the {@link CrossHash.Storm} algorithm, and uses one for each int in state. This<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * tolerates null and empty-String values for seed.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * @param seed a String or other CharSequence; may be null<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     */<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    public BirdRNG(final CharSequence seed)<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    {<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        for (int i = 0; i &lt; 48; i++) {<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            choice += (state[i] = CrossHash.Mist.predefined[i].hash(seed));<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        }<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        for (int i = 48; i &lt; 64; i++) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            choice += (state[i] = CrossHash.Storm.predefined[i &amp; 15].hash(seed));<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    }<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>    public void setState(final int seed) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        choice = 0;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        for (int i = 0; i &lt; 64; i++) {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            choice += (state[i] = splitMix32(seed + i * 0x9E3779B9));<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        }<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>    public void setState(final long seed) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        choice = 0;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        for (int i = 0; i &lt; 64; i++) {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>            choice += (state[i] = (int)LightRNG.determine(seed + i));<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        }<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>    public void setState(final int[] seed)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        int len;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        if (seed == null || (len = seed.length) == 0) {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            for (int i = 0; i &lt; 64; i++) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                choice += (state[i] = splitMix32(0x632D978F + i * 0x9E3779B9));<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            }<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        } else if (len &lt; 64) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            for (int i = 0, s = 0; i &lt; 64; i++, s++) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                if(s == len) s = 0;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                choice += (state[i] ^= splitMix32(seed[s] + i * 0x9E3779B9));<a name="line.140"></a>
 <span class="sourceLineNo">141</span>            }<a name="line.141"></a>
-<span class="sourceLineNo">142</span>        }<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
-<span class="sourceLineNo">144</span><a name="line.144"></a>
-<span class="sourceLineNo">145</span>    @Override<a name="line.145"></a>
-<span class="sourceLineNo">146</span>    public final long nextLong() {<a name="line.146"></a>
-<span class="sourceLineNo">147</span>        return (state[(choice += 0xCBBC475B) &amp; 31] += (state[choice &gt;&gt;&gt; 28] += 0x9C7B7B99) &gt;&gt;&gt; 1)<a name="line.147"></a>
-<span class="sourceLineNo">148</span>                * 0x632AE59B69B3C209L - choice;<a name="line.148"></a>
-<span class="sourceLineNo">149</span>    }<a name="line.149"></a>
-<span class="sourceLineNo">150</span><a name="line.150"></a>
-<span class="sourceLineNo">151</span>    public final int nextInt() {<a name="line.151"></a>
-<span class="sourceLineNo">152</span>        return (state[(choice += 0xCBBC475B) &amp; 31] += (state[choice &gt;&gt;&gt; 28] += 0x9C7B7B99) &gt;&gt;&gt; 1);<a name="line.152"></a>
-<span class="sourceLineNo">153</span>    }<a name="line.153"></a>
-<span class="sourceLineNo">154</span><a name="line.154"></a>
-<span class="sourceLineNo">155</span>    @Override<a name="line.155"></a>
-<span class="sourceLineNo">156</span>    public final int next(final int bits) {<a name="line.156"></a>
-<span class="sourceLineNo">157</span>        return ((state[(choice += 0xCBBC475B) &amp; 31] += (state[choice &gt;&gt;&gt; 28] += 0x9C7B7B99) &gt;&gt;&gt; 1) &gt;&gt;&gt; (32 - bits)); //0x9E3779B9<a name="line.157"></a>
-<span class="sourceLineNo">158</span>    }<a name="line.158"></a>
-<span class="sourceLineNo">159</span><a name="line.159"></a>
-<span class="sourceLineNo">160</span>    /**<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.163"></a>
-<span class="sourceLineNo">164</span>     *<a name="line.164"></a>
-<span class="sourceLineNo">165</span>     * @return a copy of this RandomnessSource<a name="line.165"></a>
-<span class="sourceLineNo">166</span>     */<a name="line.166"></a>
+<span class="sourceLineNo">142</span>        } else {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>            if (len == 64) {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                choice = 0;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                for (int i = 0; i &lt; 64; i++) {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                    choice += (state[i] = seed[i]);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                }<a name="line.147"></a>
+<span class="sourceLineNo">148</span>            } else {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                for (int i = 0, s = 0; s &lt; len; s++, i = (i + 1) &amp; 31) {<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                    choice += (state[i] ^= seed[s]);<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                }<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            }<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        }<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span>    @Override<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    public final long nextLong() {<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        return (long)nextInt() &lt;&lt; 32 ^ nextInt();<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        //final int c = (choice + 0xB9A2842F), d = (choice += 0x7345085E);<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        //return (long) (state[c &amp; 63] += (state[c &gt;&gt;&gt; 27] + 0x9296FE47 + d &gt;&gt;&gt; 1)) &lt;&lt; 32 ^<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        //        (state[d &amp; 63] + (state[d &gt;&gt;&gt; 27] + 0x9296FE47 + c &gt;&gt;&gt; 1));<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        // (state[(choice += 0x8A532AEF) &amp; 31] += (state[choice &gt;&gt;&gt; 28] += choice | 0x941CCBAD) &gt;&gt;&gt; 1)<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    }<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    public final int nextInt() {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        return (state[choice &amp; 63] += (state[choice &gt;&gt;&gt; 27] + 0x9296FE47 &gt;&gt;&gt; 1) + (choice += 0xB9A2842F));<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    }<a name="line.166"></a>
 <span class="sourceLineNo">167</span>    @Override<a name="line.167"></a>
-<span class="sourceLineNo">168</span>    public RandomnessSource copy() {<a name="line.168"></a>
-<span class="sourceLineNo">169</span>        BirdRNG hr = new BirdRNG(state);<a name="line.169"></a>
-<span class="sourceLineNo">170</span>        hr.choice = choice;<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        return hr;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>    }<a name="line.172"></a>
-<span class="sourceLineNo">173</span><a name="line.173"></a>
-<span class="sourceLineNo">174</span>    @Override<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    public String toString() {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>        return "BirdRNG{" +<a name="line.176"></a>
-<span class="sourceLineNo">177</span>                "state=" + StringKit.hex(state) +<a name="line.177"></a>
-<span class="sourceLineNo">178</span>                ", choice=" + choice +<a name="line.178"></a>
-<span class="sourceLineNo">179</span>                '}';<a name="line.179"></a>
-<span class="sourceLineNo">180</span>    }<a name="line.180"></a>
-<span class="sourceLineNo">181</span><a name="line.181"></a>
-<span class="sourceLineNo">182</span>    @Override<a name="line.182"></a>
-<span class="sourceLineNo">183</span>    public boolean equals(Object o) {<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        if (this == o) return true;<a name="line.184"></a>
-<span class="sourceLineNo">185</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.185"></a>
-<span class="sourceLineNo">186</span><a name="line.186"></a>
-<span class="sourceLineNo">187</span>        BirdRNG birdRNG = (BirdRNG) o;<a name="line.187"></a>
-<span class="sourceLineNo">188</span><a name="line.188"></a>
-<span class="sourceLineNo">189</span>        return choice == birdRNG.choice &amp;&amp; Arrays.equals(state, birdRNG.state);<a name="line.189"></a>
-<span class="sourceLineNo">190</span>    }<a name="line.190"></a>
-<span class="sourceLineNo">191</span><a name="line.191"></a>
-<span class="sourceLineNo">192</span>    @Override<a name="line.192"></a>
-<span class="sourceLineNo">193</span>    public int hashCode() {<a name="line.193"></a>
-<span class="sourceLineNo">194</span>        return 31 * choice + CrossHash.Wisp.hash(state);<a name="line.194"></a>
-<span class="sourceLineNo">195</span>    }<a name="line.195"></a>
-<span class="sourceLineNo">196</span>}<a name="line.196"></a>
+<span class="sourceLineNo">168</span>    public final int next(final int bits) {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        return  nextInt() &gt;&gt;&gt; (32 - bits);<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    }<a name="line.170"></a>
+<span class="sourceLineNo">171</span><a name="line.171"></a>
+<span class="sourceLineNo">172</span>    /**<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     *<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @return a copy of this RandomnessSource<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     */<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    @Override<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    public RandomnessSource copy() {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        BirdRNG hr = new BirdRNG(state);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        hr.choice = choice;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        return hr;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    }<a name="line.184"></a>
+<span class="sourceLineNo">185</span><a name="line.185"></a>
+<span class="sourceLineNo">186</span>    @Override<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    public String toString() {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        return "BirdRNG{" +<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                "state=" + StringKit.hex(state) +<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                ", choice=" + choice +<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                '}';<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    }<a name="line.192"></a>
+<span class="sourceLineNo">193</span><a name="line.193"></a>
+<span class="sourceLineNo">194</span>    @Override<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    public boolean equals(Object o) {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        if (this == o) return true;<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>        BirdRNG birdRNG = (BirdRNG) o;<a name="line.199"></a>
+<span class="sourceLineNo">200</span><a name="line.200"></a>
+<span class="sourceLineNo">201</span>        return choice == birdRNG.choice &amp;&amp; Arrays.equals(state, birdRNG.state);<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    }<a name="line.202"></a>
+<span class="sourceLineNo">203</span><a name="line.203"></a>
+<span class="sourceLineNo">204</span>    @Override<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    public int hashCode() {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        return 31 * choice + CrossHash.Wisp.hash(state);<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
+<span class="sourceLineNo">208</span>}<a name="line.208"></a>
+<span class="sourceLineNo">209</span><a name="line.209"></a>
 
 
 

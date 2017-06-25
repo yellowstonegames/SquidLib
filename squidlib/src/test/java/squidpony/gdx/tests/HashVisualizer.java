@@ -1,13 +1,10 @@
 package squidpony.gdx.tests;
 
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.NumberTools;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.RandomXS128;
@@ -16,37 +13,8 @@ import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
-import squidpony.IFilter;
 import squidpony.squidgrid.gui.gdx.*;
-import squidpony.squidmath.RandomnessSource;
-
-import squidpony.squidmath.BeardRNG;
-import squidpony.squidmath.BirdRNG;
-import squidpony.squidmath.FlapRNG;
-import squidpony.squidmath.HerdRNG;
-import squidpony.squidmath.HordeRNG;
-import squidpony.squidmath.IsaacRNG;
-import squidpony.squidmath.LapRNG;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.LongPeriodRNG;
-import squidpony.squidmath.PermutedRNG;
-import squidpony.squidmath.PintRNG;
-import squidpony.squidmath.SlapRNG;
-import squidpony.squidmath.ThunderRNG;
-import squidpony.squidmath.XoRoRNG;
-import squidpony.squidmath.XorRNG;
-import squidpony.squidmath.ZapRNG;
-
-import squidpony.squidmath.MasonNoise;
-import squidpony.squidmath.MeadNoise;
-import squidpony.squidmath.MerlinNoise;
-import squidpony.squidmath.Noise;
-import squidpony.squidmath.PerlinNoise;
-import squidpony.squidmath.SeededNoise;
-import squidpony.squidmath.ValueNoise;
-import squidpony.squidmath.WhirlingNoise;
-
-import squidpony.squidmath.TuringPattern;
+import squidpony.squidmath.*;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -179,9 +147,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 5;
 
-    private RandomnessSource fuzzy, random;
-    private Random jreRandom;
-    private RandomXS128 gdxRandom;
+    private RandomnessSource fuzzy;
+    private Random jreRandom = new Random(0xFEDCBA987654321L);
+    private RandomXS128 gdxRandom = new RandomXS128(0xFEDCBA987654321L);
     private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L, 0x1234567890L);
     private long seed;
     private int ctr = 0;
@@ -493,18 +461,17 @@ public class HashVisualizer extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         display = new SquidPanel(width, height, cellWidth, cellHeight);
-        //overlay = new SquidPanel(16, 8, DefaultResources.getStretchableFont().width(32).height(64).initBySize());
-        IFilter<Color> filter0 = new Filters.PaletteFilter(
-                new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
-                new float[]{0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,},
-                new float[]{0.5f, 0.5625f, 0.625f, 0.6875f, 0.75f, 0.8125f, 0.875f, 0.9375f, 1f, 0.5f, 0.5625f, 0.625f, 0.6875f, 0.75f, 0.8125f, 0.875f, 0.9375f, 1f},
-                new float[]{1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f,}),
-                filter1 = new Filters.PaletteFilter(SColor.YELLOW_GREEN_SERIES),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
-                filter2 = new Filters.PaletteFilter(new SColor[]{SColor.TREE_PEONY, SColor.NAVAJO_WHITE, SColor.BELLFLOWER, SColor.CAPE_JASMINE, SColor.CELADON, SColor.DAWN, SColor.TEAL}),
-                filter3 = new Filters.GrayscaleFilter(),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
-                filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
-                filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
-        colorFactory = new SquidColorCenter();
+//        IFilter<Color> filter0 = new Filters.PaletteFilter(
+//                new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
+//                new float[]{0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,},
+//                new float[]{0.5f, 0.5625f, 0.625f, 0.6875f, 0.75f, 0.8125f, 0.875f, 0.9375f, 1f, 0.5f, 0.5625f, 0.625f, 0.6875f, 0.75f, 0.8125f, 0.875f, 0.9375f, 1f},
+//                new float[]{1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f,}),
+//                filter1 = new Filters.PaletteFilter(SColor.YELLOW_GREEN_SERIES),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
+//                filter2 = new Filters.PaletteFilter(new SColor[]{SColor.TREE_PEONY, SColor.NAVAJO_WHITE, SColor.BELLFLOWER, SColor.CAPE_JASMINE, SColor.CELADON, SColor.DAWN, SColor.TEAL}),
+//                filter3 = new Filters.GrayscaleFilter(),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
+//                filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
+//                filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
+        //colorFactory = new SquidColorCenter();
         storm = new CrossHash.Storm();
         stormA = CrossHash.Storm.alpha;
         stormB = CrossHash.Storm.beta;
@@ -772,13 +739,12 @@ public class HashVisualizer extends ApplicationAdapter {
     }
 
     public void putMap() {
-        display.erase();
+        //display.erase();
         //overlay.erase();
         long code;
         float bright;
         int iBright;
         int xx, yy;
-        int state;
         switch (testType) {
             case 1: {
                 switch (hashMode) {
@@ -2130,7 +2096,7 @@ public class HashVisualizer extends ApplicationAdapter {
                 switch (noiseMode) {
                     case 0:
                         Gdx.graphics.setTitle("Perlin Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond() +
-                                " FPS, cache size " + colorFactory.cacheSize());
+                                " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2148,7 +2114,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("Merlin Noise, no zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Merlin Noise, no zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2159,7 +2125,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Merlin Noise, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Merlin Noise, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2170,7 +2136,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Merlin Noise Alt, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Merlin Noise Alt, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2186,7 +2152,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 4:
-                        Gdx.graphics.setTitle("Merlin Noise 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Merlin Noise 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = MerlinNoise.noise3D(x, y, ctr, 3);
@@ -2195,7 +2161,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 5:
-                        Gdx.graphics.setTitle("Merlin Noise Alt 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Merlin Noise Alt 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = MerlinNoise.noise3D_alt(x, y, ctr, 3);
@@ -2204,7 +2170,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 6:
-                        Gdx.graphics.setTitle("Merlin Noise Alt 3D Emphasized, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Merlin Noise Alt 3D Emphasized, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = MerlinNoise.noise3D_emphasized(x, y, ctr, 3);
@@ -2235,7 +2201,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;*/
                     case 7:
-                        Gdx.graphics.setTitle("Perlin 3D Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Perlin 3D Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)
@@ -2251,7 +2217,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 8:
-                        Gdx.graphics.setTitle("Perlin Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Perlin Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2270,7 +2236,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
 
                     case 9:
-                        Gdx.graphics.setTitle("Perlin 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Perlin 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)
@@ -2287,7 +2253,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
 
                     case 10:
-                        Gdx.graphics.setTitle("Whirling 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Whirling 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)
@@ -2304,7 +2270,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
 
                     case 11:
-                        Gdx.graphics.setTitle("Whirling Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Whirling Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2323,7 +2289,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
 
                     case 12:
-                        Gdx.graphics.setTitle("Whirling Alt 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Whirling Alt 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
@@ -2339,7 +2305,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
 
                     case 13:
-                        Gdx.graphics.setTitle("Whirling Alt Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Whirling Alt Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2358,7 +2324,7 @@ public class HashVisualizer extends ApplicationAdapter {
 
                         //You can preview this at https://dl.dropboxusercontent.com/u/11914692/rainbow-perlin.gif
                     case 14:
-                        Gdx.graphics.setTitle("Whirling 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Whirling 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y, floatGet(
@@ -2370,7 +2336,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("Whirling 3D Color Noise, one octave as all channels at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Whirling 3D Color Noise, one octave as all channels at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2428,7 +2394,7 @@ public class HashVisualizer extends ApplicationAdapter {
 
                     case 16:
                     case 60:
-                        Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2443,7 +2409,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 17:
                     case 61:
-                        Gdx.graphics.setTitle("Seeded Seamless 3D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
@@ -2454,7 +2420,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 18:
                     case 62:
-                        Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2468,7 +2434,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 19:
                     case 63:
-                        Gdx.graphics.setTitle("Seeded 6D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 6D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2483,7 +2449,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 20:
                     case 64:
-                        Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2497,7 +2463,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     break;
                     case 21:
                     case 65:
-                        Gdx.graphics.setTitle("Seeded Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
@@ -2507,7 +2473,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     break;
                     case 22:
                     case 66:
-                        Gdx.graphics.setTitle("Seeded 4D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 4D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2521,7 +2487,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 23:
                     case 67:
-                        Gdx.graphics.setTitle("Seeded 4D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 4D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2535,7 +2501,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 24:
-                        Gdx.graphics.setTitle("Seeded 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2548,7 +2514,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 25:
-                        Gdx.graphics.setTitle("Seeded 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2562,7 +2528,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 26:
-                        Gdx.graphics.setTitle("Seeded 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2575,7 +2541,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 27:
-                        Gdx.graphics.setTitle("Seeded 2D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 2D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2590,7 +2556,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
 
                     case 28:
-                        Gdx.graphics.setTitle("Seeded Ridged 3D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Ridged 3D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2603,7 +2569,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 29:
-                        Gdx.graphics.setTitle("Seeded Ridged 3D Noise, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Ridged 3D Noise, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2617,7 +2583,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 30:
-                        Gdx.graphics.setTitle("Seeded Ridged 2D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Ridged 2D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2630,7 +2596,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 31:
-                        Gdx.graphics.setTitle("Seeded Ridged 2D Noise, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Ridged 2D Noise, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2644,7 +2610,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 32:
-                        Gdx.graphics.setTitle("Seeded Turbulent Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Turbulent Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2657,7 +2623,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 33:
-                        //Gdx.graphics.setTitle("Seeded Turbulent Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        //Gdx.graphics.setTitle("Seeded Turbulent Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
@@ -2667,7 +2633,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Turb6D Seamless at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
                         break;
                     case 34:
-                        Gdx.graphics.setTitle("Seeded Turbulent Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Turbulent Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2680,7 +2646,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 35:
-                        //Gdx.graphics.setTitle("Seeded Turbulent Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        //Gdx.graphics.setTitle("Seeded Turbulent Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
@@ -2690,7 +2656,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Turb4D Seamless at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
                         break;
                     case 36:
-                        Gdx.graphics.setTitle("Seeded Turbulent 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Turbulent 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2720,7 +2686,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Turb3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
                         break;
                     case 38:
-                        Gdx.graphics.setTitle("Seeded Turbulent 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Turbulent 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2750,7 +2716,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Turb2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
                         break;
                     case 40:
-                        Gdx.graphics.setTitle("Seeded Slick Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Slick Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2763,7 +2729,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 41:
-                        Gdx.graphics.setTitle("Seeded Slick Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Slick Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
@@ -2772,7 +2738,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 42:
-                        Gdx.graphics.setTitle("Seeded Slick Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Slick Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2785,7 +2751,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 43: {
-                        Gdx.graphics.setTitle("Seeded Slick Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Slick Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
@@ -2795,7 +2761,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     }
                     break;
                     case 44:
-                        Gdx.graphics.setTitle("Seeded Slick 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Slick 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2808,7 +2774,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 45:
-                        Gdx.graphics.setTitle("Seeded Slick 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Slick 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2822,7 +2788,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 46:
-                        Gdx.graphics.setTitle("Seeded Slick 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Slick 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2835,7 +2801,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 47:
-                        Gdx.graphics.setTitle("Seeded Slick 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Slick 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2849,7 +2815,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 48:
-                        Gdx.graphics.setTitle("Seeded Ridged Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Ridged Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2862,7 +2828,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 49:
-                        Gdx.graphics.setTitle("Seeded Ridged Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Ridged Seamless 3D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
@@ -2871,7 +2837,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 50:
-                        Gdx.graphics.setTitle("Seeded Ridged Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Ridged Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2884,7 +2850,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 51: {
-                        Gdx.graphics.setTitle("Seeded Ridged Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Ridged Seamless 2D Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
@@ -2895,7 +2861,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     break;
 
                     case 52:
-                        Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2909,7 +2875,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 53:
-                        Gdx.graphics.setTitle("Seeded Seamless 3D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 3D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
@@ -2919,7 +2885,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 54:
-                        Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2932,7 +2898,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 55:
-                        Gdx.graphics.setTitle("Seeded 6D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded 6D as 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -2946,7 +2912,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 56:
-                        Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -2959,7 +2925,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 57: {
-                        Gdx.graphics.setTitle("Seeded Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Seeded Seamless 2D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
@@ -2969,7 +2935,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     }
                     break;
                     case 58:
-                        Gdx.graphics.setTitle("Tabby 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Tabby 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 /*
@@ -2989,7 +2955,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 59:
-                        Gdx.graphics.setTitle("Tabby 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Tabby 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -3113,7 +3079,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 74:
-                        Gdx.graphics.setTitle("Mead 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Mead 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -3126,7 +3092,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 75:
-                        Gdx.graphics.setTitle("Mead 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Mead 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)mead2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.045, y * 0.03125 + ctr * 0.045,123456)
@@ -3137,7 +3103,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
 
                     case 76:
-                        Gdx.graphics.setTitle("Mead 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Mead 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -3150,7 +3116,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 77:
-                        Gdx.graphics.setTitle("Mead 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("Mead 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)mead3D.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456) * 0.5f + 0.5f;
@@ -3159,7 +3125,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 78:
-                        Gdx.graphics.setTitle("ColorNoise 2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("ColorNoise 2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -3168,7 +3134,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 79:
-                        Gdx.graphics.setTitle("ColorNoise 3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("ColorNoise 3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -3263,7 +3229,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 1:
                         thunder.reseed(ctr * 0xD0666BE7L);
@@ -3273,7 +3239,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 2:
                         light.setState(ctr * 0xD0666BE7L);
@@ -3283,7 +3249,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 3:
                         xor.setSeed(ctr * 0xD0666BE7L);
@@ -3293,7 +3259,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 4:
                         xoRo.setSeed(ctr * 0xD0666BE7L);
@@ -3303,7 +3269,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 5:
                         permuted.setState(ctr * 0xD0666BE7L);
@@ -3313,7 +3279,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 6:
                         longPeriod.reseed(ctr * 0xD0666BE7L);
@@ -3323,7 +3289,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 7:
                         isaac.regen();
@@ -3333,7 +3299,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 8:
                         gdxRandom.setSeed(ctr * 0x9E3779B9L);
@@ -3343,7 +3309,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 9:
                         jreRandom.setSeed(ctr * 0xD0666BE7L);
@@ -3353,7 +3319,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 10:
                         thunder.reseed(ctr * 0xD0666BE7L);
@@ -3363,7 +3329,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 11:
                         light.setState(ctr * 0xD0666BE7L);
@@ -3373,7 +3339,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 12:
                         xor.setSeed(ctr * 0xD0666BE7L);
@@ -3383,7 +3349,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 13:
                         xoRo.setSeed(ctr * 0xD0666BE7L);
@@ -3393,7 +3359,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 14:
                         permuted.setState(ctr * 0xD0666BE7L);
@@ -3403,7 +3369,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 15:
                         longPeriod.reseed(ctr * 0xD0666BE7L);
@@ -3413,7 +3379,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 16:
                         isaac.regen();
@@ -3423,7 +3389,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 17:
                         gdxRandom.setSeed(ctr * 0x9E3779B9L);
@@ -3433,17 +3399,17 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 18:
-                        random = new PintRNG(ctr);
+                        pint.setState(ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = pint.nextInt() | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 19:
                         pint.setState(ctr);
@@ -3453,7 +3419,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 20:
                         lap.setState0(ctr * 0x9E3779B9L + 0xAC8C0FE02D14624DL);
@@ -3464,7 +3430,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 21:
                         lap.setState0(ctr * 0x9E3779B9L + 0xAC8C0FE02D14624DL);
@@ -3475,7 +3441,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 22:
                         flap.setState(ctr * 0x9E3779B9L);
@@ -3485,7 +3451,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 23:
                         flap.setState(ctr * 0x9E3779B9L);
@@ -3495,7 +3461,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 24:
                         mr.setState(ctr);
@@ -3506,7 +3472,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 25:
                         mr.setState(ctr);
@@ -3517,7 +3483,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 26:
                         slap.setState(ctr * 0x9E3779B9L);
@@ -3527,7 +3493,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 27:
                         slap.setState(ctr * 0x9E3779B9L);
@@ -3537,7 +3503,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("SlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 28:
                         horde.setState(ctr);
@@ -3547,7 +3513,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("HordeRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("HordeRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 29:
                         horde.setState(ctr);
@@ -3557,7 +3523,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("HordeRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("HordeRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 30:
                         herd.setState(ctr);
@@ -3567,7 +3533,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 31:
                         herd.setState(ctr);
@@ -3577,7 +3543,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("HerdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 32:
                         zap.setState(ctr);
@@ -3587,7 +3553,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 33:
                         zap.setState(ctr);
@@ -3597,7 +3563,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("ZapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 34:
                         bird.setState(ctr);
@@ -3607,7 +3573,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("BirdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("BirdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 35:
                         bird.setState(ctr);
@@ -3617,7 +3583,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("BirdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("BirdRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 36:
                         beard.setState(ctr);
@@ -3627,7 +3593,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("BeardRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("BeardRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 37:
                         beard.setState(ctr);
@@ -3637,7 +3603,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("BeardRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS, cache size " + colorFactory.cacheSize());
+                        Gdx.graphics.setTitle("BeardRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                 }
             }
@@ -3965,7 +3931,7 @@ public class HashVisualizer extends ApplicationAdapter {
                 }
             }
         }
-        colorFactory.clearCache();
+        //colorFactory.clearCache();
     }
 
     @Override

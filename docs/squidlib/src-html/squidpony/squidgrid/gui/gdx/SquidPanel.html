@@ -1171,7 +1171,7 @@
 <span class="sourceLineNo">1163</span><a name="line.1163"></a>
 <span class="sourceLineNo">1164</span>    public float adjustY(float y)<a name="line.1164"></a>
 <span class="sourceLineNo">1165</span>    {<a name="line.1165"></a>
-<span class="sourceLineNo">1166</span>        return (gridHeight - y - 1) * cellHeight + getY() + 1 + cellHeight - textFactory.actualCellHeight; // - textFactory.lineHeight //textFactory.lineTweak * 3f<a name="line.1166"></a>
+<span class="sourceLineNo">1166</span>        return (gridHeight - y - 1) * cellHeight + getY() + (textFactory.msdf ? -textFactory.descent : 1 + cellHeight - textFactory.actualCellHeight); // - textFactory.lineHeight //textFactory.lineTweak * 3f<a name="line.1166"></a>
 <span class="sourceLineNo">1167</span>        //return (gridHeight - y - 1) * cellHeight + textFactory.getDescent() * 3 / 2f + getY();<a name="line.1167"></a>
 <span class="sourceLineNo">1168</span>    }<a name="line.1168"></a>
 <span class="sourceLineNo">1169</span><a name="line.1169"></a>

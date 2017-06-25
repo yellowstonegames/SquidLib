@@ -2772,76 +2772,115 @@
 <span class="sourceLineNo">2764</span>    }<a name="line.2764"></a>
 <span class="sourceLineNo">2765</span>    /**<a name="line.2765"></a>
 <span class="sourceLineNo">2766</span>     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration<a name="line.2766"></a>
-<span class="sourceLineNo">2767</span>     * order as original and keeping it associated with the same value (which also keeps its iteration index).<a name="line.2767"></a>
-<span class="sourceLineNo">2768</span>     * @param original the key to find and swap out<a name="line.2768"></a>
-<span class="sourceLineNo">2769</span>     * @param replacement the key to replace original with<a name="line.2769"></a>
-<span class="sourceLineNo">2770</span>     * @return the value associated with original before, and replacement now<a name="line.2770"></a>
-<span class="sourceLineNo">2771</span>     */<a name="line.2771"></a>
-<span class="sourceLineNo">2772</span>    public V alter(final K original, final K replacement) {<a name="line.2772"></a>
-<span class="sourceLineNo">2773</span>        V v;<a name="line.2773"></a>
-<span class="sourceLineNo">2774</span>        int idx;<a name="line.2774"></a>
-<span class="sourceLineNo">2775</span>        if (original == null) {<a name="line.2775"></a>
-<span class="sourceLineNo">2776</span>            if (containsNullKey) {<a name="line.2776"></a>
-<span class="sourceLineNo">2777</span>                v = value[n];<a name="line.2777"></a>
-<span class="sourceLineNo">2778</span>                idx = alterNullEntry();<a name="line.2778"></a>
-<span class="sourceLineNo">2779</span>                putAt(replacement, v, idx);<a name="line.2779"></a>
-<span class="sourceLineNo">2780</span>                return v;<a name="line.2780"></a>
-<span class="sourceLineNo">2781</span>            }<a name="line.2781"></a>
-<span class="sourceLineNo">2782</span>            else<a name="line.2782"></a>
-<span class="sourceLineNo">2783</span>                v = defRetValue;<a name="line.2783"></a>
-<span class="sourceLineNo">2784</span>            return v;<a name="line.2784"></a>
-<span class="sourceLineNo">2785</span>        }<a name="line.2785"></a>
-<span class="sourceLineNo">2786</span>        K curr;<a name="line.2786"></a>
-<span class="sourceLineNo">2787</span>        final K[] key = this.key;<a name="line.2787"></a>
-<span class="sourceLineNo">2788</span>        int pos;<a name="line.2788"></a>
-<span class="sourceLineNo">2789</span>        // The starting point.<a name="line.2789"></a>
-<span class="sourceLineNo">2790</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) &amp; mask]) == null)<a name="line.2790"></a>
-<span class="sourceLineNo">2791</span>            return defRetValue;<a name="line.2791"></a>
-<span class="sourceLineNo">2792</span>        if (hasher.areEqual(original, curr))<a name="line.2792"></a>
-<span class="sourceLineNo">2793</span>        {<a name="line.2793"></a>
-<span class="sourceLineNo">2794</span>            v = value[pos];<a name="line.2794"></a>
-<span class="sourceLineNo">2795</span>            idx = alterEntry(pos);<a name="line.2795"></a>
-<span class="sourceLineNo">2796</span>            putAt(replacement, v, idx);<a name="line.2796"></a>
-<span class="sourceLineNo">2797</span>            return v;<a name="line.2797"></a>
-<span class="sourceLineNo">2798</span>        }<a name="line.2798"></a>
-<span class="sourceLineNo">2799</span>        while (true) {<a name="line.2799"></a>
-<span class="sourceLineNo">2800</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.2800"></a>
-<span class="sourceLineNo">2801</span>                return defRetValue;<a name="line.2801"></a>
-<span class="sourceLineNo">2802</span>            if (hasher.areEqual(original, curr))<a name="line.2802"></a>
-<span class="sourceLineNo">2803</span>            {<a name="line.2803"></a>
-<span class="sourceLineNo">2804</span>                v = value[pos];<a name="line.2804"></a>
-<span class="sourceLineNo">2805</span>                idx = alterEntry(pos);<a name="line.2805"></a>
-<span class="sourceLineNo">2806</span>                putAt(replacement, v, idx);<a name="line.2806"></a>
-<span class="sourceLineNo">2807</span>                return v;<a name="line.2807"></a>
-<span class="sourceLineNo">2808</span>            }<a name="line.2808"></a>
-<span class="sourceLineNo">2809</span>        }<a name="line.2809"></a>
-<span class="sourceLineNo">2810</span>    }<a name="line.2810"></a>
-<span class="sourceLineNo">2811</span><a name="line.2811"></a>
-<span class="sourceLineNo">2812</span>    public List&lt;V&gt; getMany(Collection&lt;K&gt; keys)<a name="line.2812"></a>
-<span class="sourceLineNo">2813</span>    {<a name="line.2813"></a>
-<span class="sourceLineNo">2814</span>        if(keys == null)<a name="line.2814"></a>
-<span class="sourceLineNo">2815</span>            return new ArrayList&lt;&gt;(1);<a name="line.2815"></a>
-<span class="sourceLineNo">2816</span>        ArrayList&lt;V&gt; vals = new ArrayList&lt;&gt;(keys.size());<a name="line.2816"></a>
-<span class="sourceLineNo">2817</span>        for(K k : keys)<a name="line.2817"></a>
-<span class="sourceLineNo">2818</span>        {<a name="line.2818"></a>
-<span class="sourceLineNo">2819</span>            vals.add(get(k));<a name="line.2819"></a>
+<span class="sourceLineNo">2767</span>     * order as original and keeping it associated with the same value (which also keeps its iteration index). Unlike<a name="line.2767"></a>
+<span class="sourceLineNo">2768</span>     * the similar method {@link #alter(Object, Object)}, this will not change this OrderedMap if replacement is already<a name="line.2768"></a>
+<span class="sourceLineNo">2769</span>     * present. To contrast, alter() can reduce the size of the OrderedMap if both original and replacement are already<a name="line.2769"></a>
+<span class="sourceLineNo">2770</span>     * in the Map. If replacement is found, this returns the default return value, otherwise it switches out original<a name="line.2770"></a>
+<span class="sourceLineNo">2771</span>     * for replacement and returns whatever was associated with original.<a name="line.2771"></a>
+<span class="sourceLineNo">2772</span>     * @param original the key to find and swap out<a name="line.2772"></a>
+<span class="sourceLineNo">2773</span>     * @param replacement the key to replace original with<a name="line.2773"></a>
+<span class="sourceLineNo">2774</span>     * @return the value associated with original before, and replacement now<a name="line.2774"></a>
+<span class="sourceLineNo">2775</span>     */<a name="line.2775"></a>
+<span class="sourceLineNo">2776</span>    public V alterCarefully(final K original, final K replacement) {<a name="line.2776"></a>
+<span class="sourceLineNo">2777</span>        if(!containsKey(replacement))<a name="line.2777"></a>
+<span class="sourceLineNo">2778</span>            return alter(original, replacement);<a name="line.2778"></a>
+<span class="sourceLineNo">2779</span>        else<a name="line.2779"></a>
+<span class="sourceLineNo">2780</span>            return defRetValue;<a name="line.2780"></a>
+<span class="sourceLineNo">2781</span>    }<a name="line.2781"></a>
+<span class="sourceLineNo">2782</span>    /**<a name="line.2782"></a>
+<span class="sourceLineNo">2783</span>     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration<a name="line.2783"></a>
+<span class="sourceLineNo">2784</span>     * order as original and keeping it associated with the same value (which also keeps its iteration index).<a name="line.2784"></a>
+<span class="sourceLineNo">2785</span>     * Be aware that if both original and replacement are present in the OrderedMap, this will still replace original<a name="line.2785"></a>
+<span class="sourceLineNo">2786</span>     * with replacement but will also remove the other occurrence of replacement to avoid duplicate keys. This can throw<a name="line.2786"></a>
+<span class="sourceLineNo">2787</span>     * off the expected order because the duplicate could be at any point in the ordering when it is removed. You may<a name="line.2787"></a>
+<span class="sourceLineNo">2788</span>     * want to prefer {@link #alterCarefully(Object, Object)} if you don't feel like checking by hand for whether<a name="line.2788"></a>
+<span class="sourceLineNo">2789</span>     * replacement is already present, but using this method is perfectly reasonable if you know overlaps won't happen.<a name="line.2789"></a>
+<span class="sourceLineNo">2790</span>     * @param original the key to find and swap out<a name="line.2790"></a>
+<span class="sourceLineNo">2791</span>     * @param replacement the key to replace original with<a name="line.2791"></a>
+<span class="sourceLineNo">2792</span>     * @return the value associated with original before, and replacement now<a name="line.2792"></a>
+<span class="sourceLineNo">2793</span>     */<a name="line.2793"></a>
+<span class="sourceLineNo">2794</span>    public V alter(final K original, final K replacement) {<a name="line.2794"></a>
+<span class="sourceLineNo">2795</span>        V v;<a name="line.2795"></a>
+<span class="sourceLineNo">2796</span>        int idx;<a name="line.2796"></a>
+<span class="sourceLineNo">2797</span>        if (original == null) {<a name="line.2797"></a>
+<span class="sourceLineNo">2798</span>            if (containsNullKey) {<a name="line.2798"></a>
+<span class="sourceLineNo">2799</span>                v = value[n];<a name="line.2799"></a>
+<span class="sourceLineNo">2800</span>                idx = alterNullEntry();<a name="line.2800"></a>
+<span class="sourceLineNo">2801</span>                putAt(replacement, v, idx);<a name="line.2801"></a>
+<span class="sourceLineNo">2802</span>                return v;<a name="line.2802"></a>
+<span class="sourceLineNo">2803</span>            }<a name="line.2803"></a>
+<span class="sourceLineNo">2804</span>            else<a name="line.2804"></a>
+<span class="sourceLineNo">2805</span>                v = defRetValue;<a name="line.2805"></a>
+<span class="sourceLineNo">2806</span>            return v;<a name="line.2806"></a>
+<span class="sourceLineNo">2807</span>        }<a name="line.2807"></a>
+<span class="sourceLineNo">2808</span>        K curr;<a name="line.2808"></a>
+<span class="sourceLineNo">2809</span>        final K[] key = this.key;<a name="line.2809"></a>
+<span class="sourceLineNo">2810</span>        int pos;<a name="line.2810"></a>
+<span class="sourceLineNo">2811</span>        // The starting point.<a name="line.2811"></a>
+<span class="sourceLineNo">2812</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) &amp; mask]) == null)<a name="line.2812"></a>
+<span class="sourceLineNo">2813</span>            return defRetValue;<a name="line.2813"></a>
+<span class="sourceLineNo">2814</span>        if (hasher.areEqual(original, curr))<a name="line.2814"></a>
+<span class="sourceLineNo">2815</span>        {<a name="line.2815"></a>
+<span class="sourceLineNo">2816</span>            v = value[pos];<a name="line.2816"></a>
+<span class="sourceLineNo">2817</span>            idx = alterEntry(pos);<a name="line.2817"></a>
+<span class="sourceLineNo">2818</span>            putAt(replacement, v, idx);<a name="line.2818"></a>
+<span class="sourceLineNo">2819</span>            return v;<a name="line.2819"></a>
 <span class="sourceLineNo">2820</span>        }<a name="line.2820"></a>
-<span class="sourceLineNo">2821</span>        return vals;<a name="line.2821"></a>
-<span class="sourceLineNo">2822</span>    }<a name="line.2822"></a>
-<span class="sourceLineNo">2823</span>    /**<a name="line.2823"></a>
-<span class="sourceLineNo">2824</span>     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.<a name="line.2824"></a>
-<span class="sourceLineNo">2825</span>     *<a name="line.2825"></a>
-<span class="sourceLineNo">2826</span>     * @param index       an index to replace the K key at<a name="line.2826"></a>
-<span class="sourceLineNo">2827</span>     * @param replacement another K key that will replace the original at the remembered index<a name="line.2827"></a>
-<span class="sourceLineNo">2828</span>     * @return the value associated with the possibly-altered key<a name="line.2828"></a>
-<span class="sourceLineNo">2829</span>     */<a name="line.2829"></a>
-<span class="sourceLineNo">2830</span>    public V alterAt(int index, K replacement)<a name="line.2830"></a>
-<span class="sourceLineNo">2831</span>    {<a name="line.2831"></a>
-<span class="sourceLineNo">2832</span>        return alter(keyAt(index), replacement);<a name="line.2832"></a>
-<span class="sourceLineNo">2833</span>    }<a name="line.2833"></a>
-<span class="sourceLineNo">2834</span><a name="line.2834"></a>
-<span class="sourceLineNo">2835</span><a name="line.2835"></a>
-<span class="sourceLineNo">2836</span>}<a name="line.2836"></a>
+<span class="sourceLineNo">2821</span>        while (true) {<a name="line.2821"></a>
+<span class="sourceLineNo">2822</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.2822"></a>
+<span class="sourceLineNo">2823</span>                return defRetValue;<a name="line.2823"></a>
+<span class="sourceLineNo">2824</span>            if (hasher.areEqual(original, curr))<a name="line.2824"></a>
+<span class="sourceLineNo">2825</span>            {<a name="line.2825"></a>
+<span class="sourceLineNo">2826</span>                v = value[pos];<a name="line.2826"></a>
+<span class="sourceLineNo">2827</span>                idx = alterEntry(pos);<a name="line.2827"></a>
+<span class="sourceLineNo">2828</span>                putAt(replacement, v, idx);<a name="line.2828"></a>
+<span class="sourceLineNo">2829</span>                return v;<a name="line.2829"></a>
+<span class="sourceLineNo">2830</span>            }<a name="line.2830"></a>
+<span class="sourceLineNo">2831</span>        }<a name="line.2831"></a>
+<span class="sourceLineNo">2832</span>    }<a name="line.2832"></a>
+<span class="sourceLineNo">2833</span><a name="line.2833"></a>
+<span class="sourceLineNo">2834</span>    public List&lt;V&gt; getMany(Collection&lt;K&gt; keys)<a name="line.2834"></a>
+<span class="sourceLineNo">2835</span>    {<a name="line.2835"></a>
+<span class="sourceLineNo">2836</span>        if(keys == null)<a name="line.2836"></a>
+<span class="sourceLineNo">2837</span>            return new ArrayList&lt;&gt;(1);<a name="line.2837"></a>
+<span class="sourceLineNo">2838</span>        ArrayList&lt;V&gt; vals = new ArrayList&lt;&gt;(keys.size());<a name="line.2838"></a>
+<span class="sourceLineNo">2839</span>        for(K k : keys)<a name="line.2839"></a>
+<span class="sourceLineNo">2840</span>        {<a name="line.2840"></a>
+<span class="sourceLineNo">2841</span>            vals.add(get(k));<a name="line.2841"></a>
+<span class="sourceLineNo">2842</span>        }<a name="line.2842"></a>
+<span class="sourceLineNo">2843</span>        return vals;<a name="line.2843"></a>
+<span class="sourceLineNo">2844</span>    }<a name="line.2844"></a>
+<span class="sourceLineNo">2845</span>    /**<a name="line.2845"></a>
+<span class="sourceLineNo">2846</span>     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.<a name="line.2846"></a>
+<span class="sourceLineNo">2847</span>     * Be aware that if replacement is present in the OrderedMap, this will still replace the given index<a name="line.2847"></a>
+<span class="sourceLineNo">2848</span>     * with replacement but will also remove the other occurrence of replacement to avoid duplicate keys. This can throw<a name="line.2848"></a>
+<span class="sourceLineNo">2849</span>     * off the expected order because the duplicate could be at any point in the ordering when it is removed. You may<a name="line.2849"></a>
+<span class="sourceLineNo">2850</span>     * want to prefer {@link #alterAtCarefully(int, Object)} if you don't feel like checking by hand for whether<a name="line.2850"></a>
+<span class="sourceLineNo">2851</span>     * replacement is already present, but using this method is perfectly reasonable if you know overlaps won't happen.<a name="line.2851"></a>
+<span class="sourceLineNo">2852</span>     * @param index       an index to replace the K key at<a name="line.2852"></a>
+<span class="sourceLineNo">2853</span>     * @param replacement another K key that will replace the original at the remembered index<a name="line.2853"></a>
+<span class="sourceLineNo">2854</span>     * @return the value associated with the possibly-altered key<a name="line.2854"></a>
+<span class="sourceLineNo">2855</span>     */<a name="line.2855"></a>
+<span class="sourceLineNo">2856</span>    public V alterAt(int index, K replacement)<a name="line.2856"></a>
+<span class="sourceLineNo">2857</span>    {<a name="line.2857"></a>
+<span class="sourceLineNo">2858</span>        return alter(keyAt(index), replacement);<a name="line.2858"></a>
+<span class="sourceLineNo">2859</span>    }<a name="line.2859"></a>
+<span class="sourceLineNo">2860</span>    /**<a name="line.2860"></a>
+<span class="sourceLineNo">2861</span>     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.<a name="line.2861"></a>
+<span class="sourceLineNo">2862</span>     * Unlike the similar method {@link #alterAt(int, Object)}, this will not change this OrderedMap if replacement is<a name="line.2862"></a>
+<span class="sourceLineNo">2863</span>     * already present. To contrast, alterAt() can reduce the size of the OrderedMap if replacement is already<a name="line.2863"></a>
+<span class="sourceLineNo">2864</span>     * in the Map. If replacement is found, this returns the default return value, otherwise it switches out the index<a name="line.2864"></a>
+<span class="sourceLineNo">2865</span>     * for replacement and returns whatever value was at the index before.<a name="line.2865"></a>
+<span class="sourceLineNo">2866</span>     * @param index       an index to replace the K key at<a name="line.2866"></a>
+<span class="sourceLineNo">2867</span>     * @param replacement another K key that will replace the original at the remembered index<a name="line.2867"></a>
+<span class="sourceLineNo">2868</span>     * @return the value associated with the key at the altered index before, and replacement now<a name="line.2868"></a>
+<span class="sourceLineNo">2869</span>     */<a name="line.2869"></a>
+<span class="sourceLineNo">2870</span>    public V alterAtCarefully(int index, K replacement)<a name="line.2870"></a>
+<span class="sourceLineNo">2871</span>    {<a name="line.2871"></a>
+<span class="sourceLineNo">2872</span>        return alterCarefully(keyAt(index), replacement);<a name="line.2872"></a>
+<span class="sourceLineNo">2873</span>    }<a name="line.2873"></a>
+<span class="sourceLineNo">2874</span><a name="line.2874"></a>
+<span class="sourceLineNo">2875</span>}<a name="line.2875"></a>
 
 
 
