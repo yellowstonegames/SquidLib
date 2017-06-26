@@ -855,12 +855,11 @@ public class DefaultResources implements LifecycleListener {
      * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
      * normal Signed Distance Field technique, which should allow sharper edges. As an aside, Luc Devroye (a
      * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
-     * deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
-     * version SquidLib has, {@link #getCrispLeanFont()}.
+     * deserves an award."</a>
      * <br>
      * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
      * <br>
-     * Preview: none yet
+     * Preview: <a href="http://i.imgur.com/Ogdb1mx.png">Image link</a>
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
@@ -889,6 +888,8 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
+     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
+     * <br>
      * Returns a TextCellFactory already configured to use a highly-legible oblique (similar to italic) fixed-width font
      * with good Unicode support and a slab-serif geometric style, that should scale cleanly to even very large sizes.
      * Caches the result for later calls. The font used is Iosevka with Slab style, an open-source (SIL Open Font
@@ -897,8 +898,7 @@ public class DefaultResources implements LifecycleListener {
      * Greek, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
      * Field technique as opposed to the normal Signed Distance Field technique, which should allow sharper edges. As an
      * aside, Luc Devroye (a true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A
-     * tour de force that deserves an award."</a> You may want to try using both this version of Iosevka with slab
-     * serifs and the other version SquidLib has, {@link #getCrispLeanItalicFont()}.
+     * tour de force that deserves an award."</a>
      * <br>
      * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
      * <br>
@@ -907,7 +907,7 @@ public class DefaultResources implements LifecycleListener {
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files:
+     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Oblique-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Oblique-msdf.png</li>
@@ -931,6 +931,8 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
+     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
+     * <br>
      * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
      * and a sans-serif geometric style, that should scale cleanly to even very large sizes. Caches the result for later
      * calls. The font used is Iosevka, an open-source (SIL Open Font License) typeface by Belleve Invis
@@ -939,8 +941,7 @@ public class DefaultResources implements LifecycleListener {
      * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
      * normal Signed Distance Field technique, which should allow sharper edges. As an aside, Luc Devroye (a
      * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
-     * deserves an award."</a> You may want to try using both this version of Iosevka without serifs and the other
-     * version SquidLib has, {@link #getCrispSlabFont()}.
+     * deserves an award."</a>
      * <br>
      * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
      * <br>
@@ -949,7 +950,7 @@ public class DefaultResources implements LifecycleListener {
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files:
+     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-msdf.png</li>
@@ -973,6 +974,8 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
+     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
+     * <br>
      * Returns a TextCellFactory already configured to use a highly-legible oblique (similar to italic) fixed-width font
      * with good Unicode support and a sans-serif geometric style, that should scale cleanly to even very large sizes.
      * Caches the result for later calls. The font used is Iosevka, an open-source (SIL Open Font
@@ -981,8 +984,7 @@ public class DefaultResources implements LifecycleListener {
      * Greek, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
      * Field technique as opposed to the normal Signed Distance Field technique, which should allow sharper edges. As an
      * aside, Luc Devroye (a true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A
-     * tour de force that deserves an award."</a> You may want to try using both this version of Iosevka without
-     * serifs and the other version SquidLib has, {@link #getCrispSlabItalicFont()}.
+     * tour de force that deserves an award."</a>
      * <br>
      * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
      * <br>
@@ -991,7 +993,7 @@ public class DefaultResources implements LifecycleListener {
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files:
+     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Oblique-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Oblique-msdf.png</li>
@@ -1015,6 +1017,8 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
+     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
+     * <br>
      * Returns a TextCellFactory already configured to use a fixed-width sans-serif font with good Unicode support,
      * that should scale cleanly to even very large sizes. Caches the result for later calls. The font used is DejaVu
      * Sans Mono, an open-source (SIL Open Font License) typeface that is widely used by Linux distros and other groups.
@@ -1027,7 +1031,7 @@ public class DefaultResources implements LifecycleListener {
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files:
+     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-msdf.png</li>
@@ -1051,6 +1055,8 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
+     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
+     * <br>
      * Returns a TextCellFactory already configured to use a fixed-width sans-serif oblique (similar to italic) font
      * with good Unicode support, that should scale cleanly to even very large sizes. Caches the result for later calls.
      * The font used is DejaVu Sans Mono, an open-source (SIL Open Font License) typeface that is widely used by Linux
@@ -1066,7 +1072,7 @@ public class DefaultResources implements LifecycleListener {
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files:
+     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-Oblique-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-Oblique-msdf.png</li>
