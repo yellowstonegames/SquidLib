@@ -36,7 +36,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    private static final int width = 314 * 5, height = 500;
+    private static final int width = 314 * 6, height = 600;
 
     //private static final int width = 800, height = 800;
 

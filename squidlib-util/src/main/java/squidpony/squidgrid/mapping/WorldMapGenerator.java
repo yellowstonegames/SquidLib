@@ -44,7 +44,7 @@ public abstract class WorldMapGenerator {
     public final double[][] heightData, heatData, moistureData;
     public final GreasedRegion landData, riverData, lakeData,
             partialRiverData, partialLakeData;
-    protected final GreasedRegion workingData;
+    protected transient GreasedRegion workingData;
     public final int[][] heightCodeData;
     public double waterModifier = -1.0, coolingModifier = 1.0,
             minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
@@ -73,7 +73,7 @@ public abstract class WorldMapGenerator {
      * Always makes a 256x256 map. If you were using {@link WorldMapGenerator#WorldMapGenerator(long, int, int)}, then
      * this would be the same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256}.
      */
-    public WorldMapGenerator()
+    protected WorldMapGenerator()
     {
         this(0x1337BABE1337D00DL, 256, 256);
     }
@@ -87,7 +87,7 @@ public abstract class WorldMapGenerator {
      * @param mapWidth the width of the map(s) to generate; cannot be changed later
      * @param mapHeight the height of the map(s) to generate; cannot be changed later
      */
-    public WorldMapGenerator(int mapWidth, int mapHeight)
+    protected WorldMapGenerator(int mapWidth, int mapHeight)
     {
         this(0x1337BABE1337D00DL, mapWidth, mapHeight);
     }
@@ -102,7 +102,7 @@ public abstract class WorldMapGenerator {
      * @param mapWidth the width of the map(s) to generate; cannot be changed later
      * @param mapHeight the height of the map(s) to generate; cannot be changed later
      */
-    public WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight)
+    protected WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight)
     {
         width = mapWidth;
         height = mapHeight;
@@ -322,7 +322,7 @@ public abstract class WorldMapGenerator {
         //workingData.allOn();
                 //.empty().insertRectangle(8, 8, width - 16, height - 16);
         riverData.empty().refill(heightCodeData, 6, 100);
-        riverData.quasiRandomRegion(0.0066);
+        riverData.separatedRegionZCurve(0.0036);
         int[] starts = riverData.asTightEncoded();
         int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
         riverData.clear();
@@ -977,14 +977,14 @@ public abstract class WorldMapGenerator {
                                 sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
                         if ((i & 3) == 3) {
                             partialRiverData.zoom(stx, sty).connect8way();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.4));
                             partialLakeData.zoom(stx, sty).connect8way();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.55));
                         } else {
                             partialRiverData.zoom(stx, sty).connect8way().thin();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.5));
                             partialLakeData.zoom(stx, sty).connect8way().thin();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.7));
                         }
                     }
                 }
@@ -1285,14 +1285,14 @@ public abstract class WorldMapGenerator {
                                 sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
                         if ((i & 3) == 3) {
                             partialRiverData.zoom(stx, sty).connect8way();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.4));
                             partialLakeData.zoom(stx, sty).connect8way();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.55));
                         } else {
                             partialRiverData.zoom(stx, sty).connect8way().thin();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.5));
                             partialLakeData.zoom(stx, sty).connect8way().thin();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.7));
                         }
                     }
                 }
