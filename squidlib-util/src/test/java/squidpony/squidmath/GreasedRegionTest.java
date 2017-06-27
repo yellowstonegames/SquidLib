@@ -81,26 +81,68 @@ public class GreasedRegionTest {
             System.out.println("\nVDC_2:");
             printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.quasiRandomSeparated(0.05)));
             System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
+            System.out.println("\nZ_CURVE:");
+            printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.separatedZCurve(0.05)));
+            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
             System.out.println();
             printRegion(dataDungeon);
+            System.out.println("\nWith fraction 0.05:");
             System.out.println("\nSOBOL:");
             printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.05)));
-            System.out.println("expected size: " + (dataDungeon.size() * 3 / 50) + ", actual size " + gr.size());
+            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr.size());
             System.out.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.05)));
-            System.out.println("expected size: " + (dataDungeon.size() * 3 / 50) + ", actual size " + gr2.size());
-            System.out.println("\nrandomScatter with minimum distance 1:");
-            printRegion(gr = dataDungeon.copy().randomScatter(rng, 1));
-            System.out.println("\nrandomScatter with minimum distance 2:");
-            printRegion(gr = dataDungeon.copy().randomScatter(rng, 2));
-            System.out.println("\nrandomScatter with minimum distance 3:");
-            printRegion(gr = dataDungeon.copy().randomScatter(rng, 3));
-            System.out.println("\nrandomScatter with minimum distance 1 and limit of 20:");
-            printRegion(gr = dataDungeon.copy().randomScatter(rng, 1, 20));
-            System.out.println("\nrandomScatter with minimum distance 2 and limit of 20:");
-            printRegion(gr = dataDungeon.copy().randomScatter(rng, 2, 20));
-            System.out.println("\nrandomScatter with minimum distance 3 and limit of 20:");
-            printRegion(gr = dataDungeon.copy().randomScatter(rng, 3, 20));
+            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
+            System.out.println("\nZ_CURVE:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.05)));
+            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
+
+            System.out.println("\nWith fraction 0.15:");
+            System.out.println("\nSOBOL:");
+            printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.15)));
+            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr.size());
+            System.out.println("\nVDC_2:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.15)));
+            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
+            System.out.println("\nZ_CURVE:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.15)));
+            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
+
+            System.out.println("\nWith fraction 0.25:");
+            System.out.println("\nSOBOL:");
+            printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.25)));
+            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr.size());
+            System.out.println("\nVDC_2:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.25)));
+            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
+            System.out.println("\nZ_CURVE:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.25)));
+            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
+
+            System.out.println("\nWith fraction 0.4:");
+            System.out.println("\nSOBOL:");
+            printRegion(gr = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedPortion(0.4)));
+            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr.size());
+            System.out.println("\nVDC_2:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.4)));
+            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
+            System.out.println("\nZ_CURVE:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.4)));
+            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
+
+
+//            System.out.println("\nrandomScatter with minimum distance 1:");
+//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 1));
+//            System.out.println("\nrandomScatter with minimum distance 2:");
+//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 2));
+//            System.out.println("\nrandomScatter with minimum distance 3:");
+//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 3));
+//            System.out.println("\nrandomScatter with minimum distance 1 and limit of 20:");
+//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 1, 20));
+//            System.out.println("\nrandomScatter with minimum distance 2 and limit of 20:");
+//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 2, 20));
+//            System.out.println("\nrandomScatter with minimum distance 3 and limit of 20:");
+//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 3, 20));
         }
         GreasedRegion g = new GreasedRegion(box);
         GreasedRegion g2 = new GreasedRegion(64, 64);
@@ -119,9 +161,9 @@ public class GreasedRegionTest {
         GreasedRegion bigOn = new GreasedRegion(152, 152).not();
         GreasedRegion gri = new GreasedRegion(150, 150).insertRectangle(3, 4, 147, 146);
         GreasedRegion gri2 = new GreasedRegion(150, 150).insert(3, 4, bigOn);
-        printRegion(box);
-        printRegion(gri);
-        printRegion(gri2);
+//        printRegion(box);
+//        printRegion(gri);
+//        printRegion(gri2);
         assertTrue(gri.equals(gri2));
 
     }

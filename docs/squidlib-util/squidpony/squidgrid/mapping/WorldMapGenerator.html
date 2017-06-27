@@ -400,23 +400,27 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
 <caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
-<th class="colOne" scope="col">Constructor and Description</th>
+<th class="colFirst" scope="col">Modifier</th>
+<th class="colLast" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator--">WorldMapGenerator</a></span>()</code>
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator--">WorldMapGenerator</a></span>()</code>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
  part of an anonymous class that implements <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-long-"><code>regenerate(int, int, int, int, double, double, long)</code></a>).</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator-int-int-">WorldMapGenerator</a></span>(int&nbsp;mapWidth,
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator-int-int-">WorldMapGenerator</a></span>(int&nbsp;mapWidth,
                  int&nbsp;mapHeight)</code>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
  part of an anonymous class that implements <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-long-"><code>regenerate(int, int, int, int, double, double, long)</code></a>).</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator-long-int-int-">WorldMapGenerator</a></span>(long&nbsp;initialSeed,
+<td class="colFirst"><code>protected </code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator-long-int-int-">WorldMapGenerator</a></span>(long&nbsp;initialSeed,
                  int&nbsp;mapWidth,
                  int&nbsp;mapHeight)</code>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
@@ -677,7 +681,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>workingData</h4>
-<pre>protected final&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.47">workingData</a></pre>
+<pre>protected transient&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.47">workingData</a></pre>
 </li>
 </ul>
 <a name="heightCodeData">
@@ -1063,7 +1067,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>WorldMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.76">WorldMapGenerator</a>()</pre>
+<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.76">WorldMapGenerator</a>()</pre>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
  part of an anonymous class that implements <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-long-"><code>regenerate(int, int, int, int, double, double, long)</code></a>).
  Always makes a 256x256 map. If you were using <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator-long-int-int-"><code>WorldMapGenerator(long, int, int)</code></a>, then
@@ -1076,8 +1080,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>WorldMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.90">WorldMapGenerator</a>(int&nbsp;mapWidth,
-                         int&nbsp;mapHeight)</pre>
+<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.90">WorldMapGenerator</a>(int&nbsp;mapWidth,
+                            int&nbsp;mapHeight)</pre>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
  part of an anonymous class that implements <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-long-"><code>regenerate(int, int, int, int, double, double, long)</code></a>).
  Takes only the width/height of the map. The initial seed is set to the same large long
@@ -1096,9 +1100,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>WorldMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.105">WorldMapGenerator</a>(long&nbsp;initialSeed,
-                         int&nbsp;mapWidth,
-                         int&nbsp;mapHeight)</pre>
+<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.105">WorldMapGenerator</a>(long&nbsp;initialSeed,
+                            int&nbsp;mapWidth,
+                            int&nbsp;mapHeight)</pre>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
  part of an anonymous class that implements <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-long-"><code>regenerate(int, int, int, int, double, double, long)</code></a>).
  Takes an initial seed and the width/height of the map. The <code>initialSeed</code>

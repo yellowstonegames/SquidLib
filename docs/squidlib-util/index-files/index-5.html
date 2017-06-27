@@ -767,6 +767,12 @@
  Uses a "grid-like" pattern to determine which cells to turn off, with all cells with even x and even y kept as-is
  but all other cells (with either or both odd x or odd y) turned off.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperseBits-int-">disperseBits(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Narrow-purpose; takes an int that represents a distance down the Z-order curve and moves its bits around so that
+ its x component is stored in the bottom 16 bits (use <code>(n &amp; 0xffff)</code> to obtain) and its y component is
+ stored in the upper 16 bits (use <code>(n &gt;&gt;&gt; 16)</code> to obtain).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#disperseBounded-int-int-">disperseBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#disperseRandom-squidpony.squidmath.RNG-">disperseRandom(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>

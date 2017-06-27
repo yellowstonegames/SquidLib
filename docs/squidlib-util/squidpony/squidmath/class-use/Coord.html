@@ -4873,13 +4873,17 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#nthZCurve-int-">nthZCurve</a></span>(int&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#quasiRandomSeparated-double-">quasiRandomSeparated</a></span>(double&nbsp;fraction)</code>
 <div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
  with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#quasiRandomSeparated-double-int-">quasiRandomSeparated</a></span>(double&nbsp;fraction,
                     int&nbsp;limit)</code>
@@ -4887,12 +4891,12 @@
  with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#randomPortion-squidpony.squidmath.RNG-int-">randomPortion</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
              int&nbsp;size)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#randomSample-short:A-double-squidpony.squidmath.RNG-">randomSample</a></span>(short[]&nbsp;packed,
             double&nbsp;fraction,
@@ -4901,18 +4905,18 @@
  them as a Coord[].</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#randomSeparated-double-squidpony.squidmath.RNG-">randomSeparated</a></span>(double&nbsp;fraction,
                <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#randomSeparated-double-squidpony.squidmath.RNG-int-">randomSeparated</a></span>(double&nbsp;fraction,
                <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                int&nbsp;limit)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#randomSeparated-short:A-int-squidpony.squidmath.RNG-">randomSeparated</a></span>(short[]&nbsp;packed,
                int&nbsp;separation,
@@ -4922,7 +4926,7 @@
  accumulated random portion of positions as a Coord[].</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PoissonDisk.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PoissonDisk.html#randomUnblockedTile-squidpony.squidmath.Coord-squidpony.squidmath.Coord-char:A:A-squidpony.squidmath.RNG-java.util.HashSet-">randomUnblockedTile</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;minPosition,
                    <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;maxPosition,
@@ -4932,32 +4936,47 @@
 <div class="block">Finds a random Coord where the x and y match up to a [x][y] location on map that has any value not in blocking.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#scale-int-">scale</a></span>(int&nbsp;i)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#scale-int-int-">scale</a></span>(int&nbsp;i,
      int&nbsp;j)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#separatedPortion-double-">separatedPortion</a></span>(double&nbsp;fraction)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#separatedZCurve-double-">separatedZCurve</a></span>(double&nbsp;fraction)</code>
+<div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
+ with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this.</div>
+</td>
+</tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#separatedZCurve-double-int-">separatedZCurve</a></span>(double&nbsp;fraction,
+               int&nbsp;limit)</code>
+<div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
+ with a count that matches the given <code>fraction</code> of the total amount of "on" cells in this.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#setX-int-">setX</a></span>(int&nbsp;x)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#setY-int-">setY</a></span>(int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#singleRandom-squidpony.squidmath.RNG-">singleRandom</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#singleRandom-short:A-squidpony.squidmath.RNG-">singleRandom</a></span>(short[]&nbsp;packed,
             <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
@@ -4965,43 +4984,43 @@
  it as a Coord or returns null of the array is empty.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">AStarSearch.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/AStarSearch.html#smallestF--">smallestF</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#subtract-squidpony.squidmath.Coord-">subtract</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</code>
 <div class="block">Separately subtracts the x and y positions of other from this Coord, producing a different Coord as their
  "difference."</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#subtract-double-">subtract</a></span>(double&nbsp;operand)</code>
 <div class="block">Separately subtracts operand from the x and y positions of this Coord, rounding to the nearest int for each of x
  and y and producing a different Coord as their "difference."</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#subtract-int-">subtract</a></span>(int&nbsp;operand)</code>
 <div class="block">Separately subtracts operand from the x and y positions of this Coord, producing a different Coord as their
  "difference."</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#translate-squidpony.squidgrid.Direction-">translate</a></span>(<a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;d)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#translate-int-int-">translate</a></span>(int&nbsp;x,
          int&nbsp;y)</code>
 <div class="block">Takes this Coord, adds x to its x and y to its y, and returns the Coord at that position.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Coord.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Coord.html#translateCapped-int-int-int-int-">translateCapped</a></span>(int&nbsp;x,
                int&nbsp;y,
@@ -5011,7 +5030,7 @@
  and returns the Coord at that position.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#zDecode-short-">zDecode</a></span>(short&nbsp;morton)</code>
 <div class="block">Takes a Morton code, with interleaved x and y bits and x in the least significant bit, and returns the Coord
