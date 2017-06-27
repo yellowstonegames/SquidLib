@@ -18,7 +18,10 @@ import java.util.Map;
  * claims by various nations/factions, possibly procedural or possibly hand-made. This can assign contiguous areas of
  * land to various factions, while ignoring some amount of "wild" land if desired, and keeping oceans unclaimed.
  * The factions can be given procedural names in an atlas that is linked to the chars used by the world map.
- * Uses MultiSpill internally to produce the semi-random nation shapes.
+ * Uses {@link MultiSpill} internally to produce the semi-random nation shapes. Stores an {@link #atlas} that can be
+ * used to figure out what a char in a produced 2D char array means for its claiming nation, a {@link #briefAtlas} that
+ * will have short, identifiable parts of generated names corresponding to the same chars as in atlas, and an OrderedMap
+ * of {@link #spokenLanguages} that contains any randomly generated languages produced for nations.
  * <a href="https://gist.github.com/tommyettinger/4a16a09bebed8e2fe8473c8ea444a2dd">Example output of a related class</a>.
  */
 @Beta
@@ -29,7 +32,18 @@ public class PoliticalMapper {
     public String name;
     public char[][] politicalMap;
     public static final char[] letters = ArrayTools.letterSpan(256);
+    /**
+     * Maps chars, as found in the returned array from generate(), to Strings that store the full name of nations.
+     */
     public final OrderedMap<Character, String> atlas = new OrderedMap<>(32);
+    /**
+     * Maps chars, as found in the returned array from generate(), to Strings that store the short name of nations.
+     */
+    public final OrderedMap<Character, String> briefAtlas = new OrderedMap<>(32);
+    /**
+     * Maps chars, as found in the returned array from generate(), to Strings that store the languages spoken in those
+     * nations, which could be user-assigned, unassigned, or randomly-generated.
+     */
     public final OrderedMap<Character, List<FakeLanguageGen>> spokenLanguages = new OrderedMap<>(32);
 
     public PoliticalMapper()
@@ -54,7 +68,7 @@ public class PoliticalMapper {
      * @param random an RNG to generate the name for the world in a random language, which will also serve as a seed
      */
     public PoliticalMapper(RNG random) {
-        this(FakeLanguageGen.randomLanguage(random).word(random, true));
+        this(FakeLanguageGen.SIMPLISH.word(random, true));
     }
     /**
      * Produces a political map for the land stored in the given WorldMapGenerator, with the given number
@@ -121,10 +135,13 @@ public class PoliticalMapper {
         }
 
         atlas.clear();
+        briefAtlas.clear();
         spokenLanguages.clear();
         atlas.put('~', "Ocean");
+        briefAtlas.put('~', "Ocean");
         spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.ELF));
         atlas.put('%', "Wilderness");
+        briefAtlas.put('%', "Wilderness");
         spokenLanguages.put('%', Collections.singletonList(FakeLanguageGen.DEMONIC));
 
         if (factionCount > 0) {
@@ -132,6 +149,7 @@ public class PoliticalMapper {
             th.addKnownCategories();
             for (int i = 0; i < factionCount && i < 256; i++) {
                 atlas.put(letters[i], th.makeNationName());
+                briefAtlas.put(letters[i], th.latestGenerated);
                 if(th.randomLanguages == null || th.randomLanguages.isEmpty())
                     spokenLanguages.put(letters[i], Collections.singletonList(FakeLanguageGen.randomLanguage(rng)));
                 else
@@ -180,12 +198,14 @@ public class PoliticalMapper {
      */
     public char[][] generate(GreasedRegion land, Map<Character, String> existingAtlas, double controlledFraction) {
         atlas.clear();
+        briefAtlas.clear();
         atlas.putAll(existingAtlas);
         if(atlas.getAndMoveToFirst('%') == null)
             atlas.putAndMoveToFirst('%', "Wilderness");
         if(atlas.getAndMoveToFirst('~') == null)
             atlas.putAndMoveToFirst('~', "Ocean");
         int factionCount = atlas.size() - 2;
+        briefAtlas.putAll(atlas);
         width = land.width;
         height = land.height;
         MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
@@ -259,6 +279,7 @@ public class PoliticalMapper {
      */
     public char[][] generate(GreasedRegion land, OrderedMap<Character, FakeLanguageGen> atlasLanguages, double controlledFraction) {
         atlas.clear();
+        briefAtlas.clear();
         spokenLanguages.clear();
 
         Thesaurus th = new Thesaurus(rng.nextLong());
@@ -266,25 +287,30 @@ public class PoliticalMapper {
         FakeLanguageGen flg;
         if((flg = atlasLanguages.get('~')) == null) {
             atlas.put('~', "Ocean");
+            briefAtlas.put('~', "Ocean");
             spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.ELF));
         }
         else {
             atlas.put('~', th.makeNationName(flg));
+            briefAtlas.put('~', th.latestGenerated);
             spokenLanguages.put('~', Collections.singletonList(flg));
         }
         if((flg = atlasLanguages.get('%')) == null) {
             atlas.put('%', "Wilderness");
+            briefAtlas.put('%', "Wilderness");
             spokenLanguages.put('%', Collections.singletonList(FakeLanguageGen.DEMONIC));
         }
         else {
-            atlas.put('~', th.makeNationName(flg));
-            spokenLanguages.put('~', Collections.singletonList(flg));
+            atlas.put('%', th.makeNationName(flg));
+            briefAtlas.put('%', th.latestGenerated);
+            spokenLanguages.put('%', Collections.singletonList(flg));
         }
 
         for (int i = 0; i < atlasLanguages.size() && i < 256; i++) {
             Character c = atlasLanguages.keyAt(i);
             flg = atlasLanguages.getAt(i);
             atlas.put(c, th.makeNationName(flg));
+            briefAtlas.put(c, th.latestGenerated);
             spokenLanguages.put(c, Collections.singletonList(flg));
         }
         int factionCount = atlas.size() - 2;
@@ -308,7 +334,7 @@ public class PoliticalMapper {
         politicalMap = new char[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : atlas.keyAt((sm[x][y] + 1));
+                politicalMap[x][y] = atlas.keyAt(sm[x][y] + 1);
             }
         }
         return politicalMap;
