@@ -2025,8 +2025,82 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
 
 
-        if(ySections > 0 && yEndMask != -1) {
-            for (int a = ySections - 1; a < data.length; a += ySections) {
+        if(yEndMask != -1) {
+            for (int a = ySections - 1; a < data2.length; a += ySections) {
+                data2[a] &= yEndMask;
+            }
+        }
+
+        data = data2;
+        return this;
+    }
+
+    /**
+     * Adds to this GreasedRegion with a moved set of its own "on" cells, moved to the given x and y offset.
+     * Ignores cells that would be added out of bounds. Keeps all cells that are currently "on" unchanged.
+     * @param x the x offset to translate by; can be negative
+     * @param y the y offset to translate by; can be negative
+     * @return this for chaining
+     */
+    public GreasedRegion insertTranslation(int x, int y)
+    {
+        if(width < 1 || ySections <= 0 || (x == 0 && y == 0))
+            return this;
+        int start = Math.max(0, x), len = Math.min(width, width + x) - start,
+                jump = (y == 0) ? 0 : (y < 0) ? -(1-y >>> 6) : (y-1 >>> 6), lily = (y < 0) ? -(-y & 63) : (y & 63),
+                originalJump = Math.max(0, -jump), alterJump = Math.max(0, jump);
+        long[] data2 = new long[width * ySections];
+        long prev, tmp;
+        if (x < 0) {
+            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                for (int j = Math.max(0, -x), jj = 0; jj < len; j++, jj++) {
+                    data2[jj * ySections + i] = data[j * ySections + oi];
+                }
+            }
+        } else if (x > 0) {
+            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                for (int j = 0, jj = start; j < len; j++, jj++) {
+                    data2[jj * ySections + i] = data[j * ySections + oi];
+                }
+            }
+        } else {
+            for (int i = alterJump, oi = originalJump; i < ySections && oi < ySections; i++, oi++) {
+                for (int j = 0; j < len; j++) {
+                    data2[j * ySections + i] = data[j * ySections + oi];
+                }
+            }
+        }
+
+        if(lily < 0) {
+            for (int i = start; i < len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L << -lily)) << (64 + lily);
+                    data2[i * ySections + j] >>>= -lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+        else if(lily > 0) {
+            for (int i = start; i < start + len; i++) {
+                prev = 0L;
+                for (int j = 0; j < ySections; j++) {
+                    tmp = prev;
+                    prev = (data2[i * ySections + j] & ~(-1L >>> lily)) >>> (64 - lily);
+                    data2[i * ySections + j] <<= lily;
+                    data2[i * ySections + j] |= tmp;
+                }
+            }
+        }
+
+        for (int i = 0; i < width * ySections; i++) {
+            data2[i] |= data[i];
+        }
+
+
+        if(yEndMask != -1) {
+            for (int a = ySections - 1; a < data2.length; a += ySections) {
                 data2[a] &= yEndMask;
             }
         }
@@ -4473,7 +4547,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         if(regions == null || regions.length <= 0)
             return new int[0][0];
-        int w = regions[0].width, h = regions[0].height, l = Math.min(32, regions.length), ys = regions[0].ySections;
+        int w = regions[0].width, h = regions[0].height, l = regions.length, ys = regions[0].ySections;
         int[][] numbers = new int[w][h];
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
@@ -4486,11 +4560,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
+     * Generates a 2D int array from a List of GreasedRegions, starting at all 0 and adding 1 to the int at
      * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
      * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
      * produce number between 0 and 16 in a cell.
-     * @param regions an array or vararg of GreasedRegions; must all have the same width and height
+     * @param regions a List of GreasedRegions; must all have the same width and height
      * @return a 2D int array with the same width and height as the regions, where an int cell equals the number of given GreasedRegions that had an "on" cell at that position
      */
     public static int[][] sum(List<GreasedRegion> regions)
@@ -4509,6 +4583,112 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return numbers;
     }
+
+    /**
+     * Generates a 2D double array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the double at
+     * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+     * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+     * produce number between 0 and 16 in a cell.
+     * @param regions an array or vararg of GreasedRegions; must all have the same width and height
+     * @return a 2D double array with the same width and height as the regions, where an double cell equals the number of given GreasedRegions that had an "on" cell at that position
+     */
+    public static double[][] sumDouble(GreasedRegion... regions)
+    {
+        if(regions == null || regions.length <= 0)
+            return new double[0][0];
+        int w = regions[0].width, h = regions[0].height, l = regions.length, ys = regions[0].ySections;
+        double[][] numbers = new double[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] += (regions[i].data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1.0 : 0.0;
+                }
+            }
+        }
+        return numbers;
+    }
+
+    /**
+     * Generates a 2D double array from a List of GreasedRegions, starting at all 0 and adding 1 to the double at
+     * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+     * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+     * produce number between 0 and 16 in a cell.
+     * @param regions a List of GreasedRegions; must all have the same width and height
+     * @return a 2D double array with the same width and height as the regions, where an double cell equals the number of given GreasedRegions that had an "on" cell at that position
+     */
+    public static double[][] sumDouble(List<GreasedRegion> regions)
+    {
+        if(regions == null || regions.isEmpty())
+            return new double[0][0];
+        GreasedRegion t = regions.get(0);
+        int w = t.width, h = t.height, l = regions.size(), ys = t.ySections;
+        double[][] numbers = new double[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] += (regions.get(i).data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1.0 : 0.0;
+                }
+            }
+        }
+        return numbers;
+    }
+
+    /**
+     * Generates a 2D int array from an array of GreasedRegions and an array of weights, starting the 2D result at all 0
+     * and, for every GreasedRegion that has that cell as "on," adding the int in the corresponding weights array at
+     * the position of that cell. This means if you give an array of 4 GreasedRegions to this method along with the
+     * weights {@code 1, 2, 3, 4}, it can produce a number between 0 and 10 in a cell (where 10 is used when all 4
+     * GreasedRegions have a cell "on," since {@code 1 + 2 + 3 + 4 == 10}); if the weights are instead
+     * {@code 1, 10, 100, 1000}, then the results can vary between 0 and 1111, where 1111 is only if all GreasedRegions
+     * have a cell as "on." The weights array must have a length at least equal to the length of the regions array.
+     * @param regions an array of GreasedRegions; must all have the same width and height
+     * @param weights an array of ints; must have length at least equal to regions' length
+     * @return a 2D int array with the same width and height as the regions, where an int cell equals the sum of the weights corresponding to GreasedRegions that had an "on" cell at that position
+     */
+    public static int[][] sumWeighted(GreasedRegion[] regions, int[] weights)
+    {
+        if(regions == null || regions.length <= 0 || weights == null || weights.length < regions.length)
+            return new int[0][0];
+        int w = regions[0].width, h = regions[0].height, l = regions.length, ys = regions[0].ySections;
+        int[][] numbers = new int[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] += (regions[i].data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? weights[i] : 0;
+                }
+            }
+        }
+        return numbers;
+    }
+
+    /**
+     * Generates a 2D double array from an array of GreasedRegions and an array of weights, starting the 2D result at
+     * all 0 and, for every GreasedRegion that has that cell as "on," adding the double in the corresponding weights
+     * array at the position of that cell. This means if you give an array of 4 GreasedRegions to this method along with
+     * the weights {@code 1, 2, 3, 4}, it can produce a number between 0 and 10 in a cell (where 10 is used when all 4
+     * GreasedRegions have a cell "on," since {@code 1 + 2 + 3 + 4 == 10}); if the weights are instead
+     * {@code 1, 10, 100, 1000}, then the results can vary between 0 and 1111, where 1111 is only if all GreasedRegions
+     * have a cell as "on." The weights array must have a length at least equal to the length of the regions array.
+     * @param regions an array of GreasedRegions; must all have the same width and height
+     * @param weights an array of doubles; must have length at least equal to regions' length
+     * @return a 2D double array with the same width and height as the regions, where an double cell equals the sum of the weights corresponding to GreasedRegions that had an "on" cell at that position
+     */
+    public static double[][] sumWeightedDouble(GreasedRegion[] regions, double[] weights)
+    {
+        if(regions == null || regions.length <= 0 || weights == null || weights.length < regions.length)
+            return new double[0][0];
+        int w = regions[0].width, h = regions[0].height, l = regions.length, ys = regions[0].ySections;
+        double[][] numbers = new double[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                for (int i = 0; i < l; i++) {
+                    numbers[x][y] += (regions[i].data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? weights[i] : 0.0;
+                }
+            }
+        }
+        return numbers;
+    }
+
 
     public static double[][] dijkstraScan(char[][] map, Coord... goals)
     {
