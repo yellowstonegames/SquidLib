@@ -8,15 +8,12 @@ import java.util.Arrays;
  * Isaac32RNG is slower than the non-cryptographic RNGs in SquidLib, but much faster than cryptographic RNGs
  * that need SecureRandom, and it's compatible with GWT and Android to boot! Isaac32RNG should perform better
  * than IsaacRNG on GWT, or when you specifically need a large amount of int values to be set using
- * {@link #setBlock(int[])}. If you don't need GWT support, then {@link IsaacRNG} will have better properties.
+ * {@link #fillBlock(int[])}. If you don't need GWT support, then {@link IsaacRNG} will have better properties.
  * Created by Tommy Ettinger on 8/1/2016.
  */
 public class Isaac32RNG implements RandomnessSource {
-    final static int SIZEL = 8;              /* log of size of results[] and mem[] */
-    final static int SIZE = 1 << SIZEL;               /* size of results[] and mem[] */ // 256
-    final static int MASK = (SIZE - 1) << 2;            /* for pseudorandom lookup */ // 1020
-    int count;                           /* count through the results in results[] */
-    int results[];                                /* the results given to the user */
+    private int count;                           /* count through the results in results[] */
+    private int results[];                                /* the results given to the user */
     private int mem[];                                   /* the internal state */
     private int a;                                              /* accumulator */
     private int b;                                          /* the last result */
@@ -25,15 +22,15 @@ public class Isaac32RNG implements RandomnessSource {
 
     /* no seed, equivalent to randinit(ctx,FALSE) in C */
     public Isaac32RNG() {
-        mem = new int[SIZE];
-        results = new int[SIZE];
+        mem = new int[256];
+        results = new int[256];
         init(false);
     }
 
     /* equivalent to randinit(ctx, TRUE) after putting seed in randctx in C */
     public Isaac32RNG(final int seed[]) {
-        mem = new int[SIZE];
-        results = new int[SIZE];
+        mem = new int[256];
+        results = new int[256];
         if(seed == null)
             init(false);
         else {
@@ -46,8 +43,8 @@ public class Isaac32RNG implements RandomnessSource {
      * @param seed any long; will have equal influence on all bits of state
      */
     public Isaac32RNG(long seed) {
-        mem = new int[SIZE];
-        results = new int[SIZE];
+        mem = new int[256];
+        results = new int[256];
         long z;
         for (int i = 0; i < 256; i++) {
             z = seed += 0x9E3779B97F4A7C15L;
@@ -64,8 +61,8 @@ public class Isaac32RNG implements RandomnessSource {
      * @param seed a String that should be exceptionally long to get the best results.
      */
     public Isaac32RNG(String seed) {
-        mem = new int[SIZE];
-        results = new int[SIZE];
+        mem = new int[256];
+        results = new int[256];
         if(seed == null)
             init(false);
         else {
@@ -95,56 +92,48 @@ public class Isaac32RNG implements RandomnessSource {
         int i, j, x, y;
 
         b += ++c;
-        for (i = 0, j = SIZE >>> 1; i < SIZE >>> 1; ) {
+        for (i = 0, j = 128; i < 128; ) {
             x = mem[i];
-            a ^= a << 13;
-            a += mem[j++];
-            mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-            results[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
+            a = (a ^ a << 13) + mem[j++];
+            mem[i] = y = mem[x >> 2 & 255] + a + b;
+            results[i++] = b = mem[y >> 10 & 255] + x;
 
             x = mem[i];
-            a ^= a >>> 6;
-            a += mem[j++];
-            mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-            results[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
+            a = (a ^ a >>> 6) + mem[j++];
+            mem[i] = y = mem[x >> 2 & 255] + a + b;
+            results[i++] = b = mem[y >> 10 & 255] + x;
 
             x = mem[i];
-            a ^= a << 2;
-            a += mem[j++];
-            mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-            results[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
+            a = (a ^ a << 2) + mem[j++];
+            mem[i] = y = mem[x >> 2 & 255] + a + b;
+            results[i++] = b = mem[y >> 10 & 255] + x;
 
             x = mem[i];
-            a ^= a >>> 16;
-            a += mem[j++];
-            mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-            results[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
+            a = (a ^ a >>> 16) + mem[j++];
+            mem[i] = y = mem[x >> 2 & 255] + a + b;
+            results[i++] = b = mem[y >> 10 & 255] + x;
         }
 
-        for (j = 0; j < SIZE >>> 1; ) {
+        for (j = 0; j < 128; ) {
             x = mem[i];
-            a ^= a << 13;
-            a += mem[j++];
-            mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-            results[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
+            a = (a ^ a << 13) + mem[j++];
+            mem[i] = y = mem[x >> 2 & 255] + a + b;
+            results[i++] = b = mem[y >> 10 & 255] + x;
 
             x = mem[i];
-            a ^= a >>> 6;
-            a += mem[j++];
-            mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-            results[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
+            a = (a ^ a >>> 6) + mem[j++];
+            mem[i] = y = mem[x >> 2 & 255] + a + b;
+            results[i++] = b = mem[y >> 10 & 255] + x;
 
             x = mem[i];
-            a ^= a << 2;
-            a += mem[j++];
-            mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-            results[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
+            a = (a ^ a << 2) + mem[j++];
+            mem[i] = y = mem[x >> 2 & 255] + a + b;
+            results[i++] = b = mem[y >> 10 & 255] + x;
 
             x = mem[i];
-            a ^= a >>> 16;
-            a += mem[j++];
-            mem[i] = y = mem[(x & MASK) >> 2] + a + b;
-            results[i++] = b = mem[((y >> SIZEL) & MASK) >> 2] + x;
+            a = (a ^ a >>> 16) + mem[j++];
+            mem[i] = y = mem[x >> 2 & 255] + a + b;
+            results[i++] = b = mem[y >> 10 & 255] + x;
         }
     }
 
@@ -186,7 +175,7 @@ public class Isaac32RNG implements RandomnessSource {
             a += b;
         }
 
-        for (i = 0; i < SIZE; i += 8) {              /* fill in mem[] with messy stuff */
+        for (i = 0; i < 256; i += 8) {              /* fill in mem[] with messy stuff */
             if (flag) {
                 a += results[i];
                 b += results[i + 1];
@@ -232,7 +221,7 @@ public class Isaac32RNG implements RandomnessSource {
         }
 
         if (flag) {           /* second pass makes all of seed affect all of mem */
-            for (i = 0; i < SIZE; i += 8) {
+            for (i = 0; i < 256; i += 8) {
                 a += mem[i];
                 b += mem[i + 1];
                 c += mem[i + 2];
@@ -277,13 +266,13 @@ public class Isaac32RNG implements RandomnessSource {
         }
 
         regen();
-        count = SIZE;
+        count = 256;
     }
 
     public final int nextInt() {
         if (0 == count--) {
             regen();
-            count = SIZE - 1;
+            count = 255;
         }
         return results[count];
     }
@@ -294,8 +283,8 @@ public class Isaac32RNG implements RandomnessSource {
     public final int[] nextBlock()
     {
         regen();
-        final int[] block = new int[SIZE];
-        System.arraycopy(results, 0, block, 0, SIZE);
+        final int[] block = new int[256];
+        System.arraycopy(results, 0, block, 0, 256);
         count = 0;
         return block;
     }
@@ -303,7 +292,7 @@ public class Isaac32RNG implements RandomnessSource {
     /**
      * Generates enough pseudo-random int values to fill {@code data} and assigns them to it.
      */
-    public final void setBlock(final int[] data)
+    public final void fillBlock(final int[] data)
     {
         int len, i;
         if(data == null || (len = data.length) == 0) return;
@@ -321,7 +310,7 @@ public class Isaac32RNG implements RandomnessSource {
      * Inclusive on 0f, exclusive on 1f. Intended for cases where you need some large source of randomness to be checked
      * later repeatedly, such as how permutation tables are used in Simplex noise.
      */
-    public final void setBlock(final float[] data)
+    public final void fillFloats(final float[] data)
     {
         int len, n;
         if(data == null || (len = data.length) == 0) return;
@@ -335,7 +324,7 @@ public class Isaac32RNG implements RandomnessSource {
      * Inclusive on -1f, exclusive on 1f. Intended for cases where you need some large source of randomness to be
      * checked later repeatedly, such as how permutation tables are used in Simplex noise.
      */
-    public final void setSignedBlock(final float[] data)
+    public final void fillSignedFloats(final float[] data)
     {
         int len, n;
         if(data == null || (len = data.length) == 0) return;

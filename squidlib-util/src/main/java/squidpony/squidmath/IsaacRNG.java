@@ -13,21 +13,16 @@
 package squidpony.squidmath;
 
 import java.util.Arrays;
-
 /**
- * This is a port of the public domain Isaac64 (cryptographic) random number generator to Java, by Bob Jenkins.
- * It is a RandomnessSource here, so it should generally be used to make an RNG, which has more features.
- * IsaacRNG is slower than the non-cryptographic RNGs in SquidLib, but much faster than cryptographic RNGs
- * that need SecureRandom, and it's compatible with GWT and Android to boot!
+ * This is a port of the public domain Isaac64 (cryptographic) random number generator to Java.
+ * It is a RandomnessSource here, so it should generally be used to make an RNG, which has more
+ * features. IsaacRNG is slower than the non-cryptographic RNGs in SquidLib, but much faster
+ * than cryptographic RNGs that need SecureRandom, plus it's compatible with GWT and Android!
  * Created by Tommy Ettinger on 8/1/2016.
  */
-
 public class IsaacRNG implements RandomnessSource {
-    static final int SIZEL = 8;              /* log of size of results[] and mem[] */
-    static final int SIZE = 256;               /* size of results[] and mem[] */
-    static final int MASK = 255<<2;            /* for pseudorandom lookup */
     private int count;                           /* count through the results in results[] */
-    long results[];                                /* the results given to the user */
+    private long results[];                                /* the results given to the user */
     private long mem[];                                   /* the internal state */
     private long a;                                              /* accumulator */
     private long b;                                          /* the last result */
@@ -41,8 +36,8 @@ public class IsaacRNG implements RandomnessSource {
      * from Math.random()).
      */
     public IsaacRNG() {
-        mem = new long[SIZE];
-        results = new long[SIZE];
+        mem = new long[256];
+        results = new long[256];
         init(false);
     }
 
@@ -53,9 +48,9 @@ public class IsaacRNG implements RandomnessSource {
      * Arrays larger than 256 items will only have the first 256 used.
      * @param seed an array of longs to use as a seed; ideally it should be 256 individual longs
      */
-    public IsaacRNG(final long seed[]) {
-        mem = new long[SIZE];
-        results = new long[SIZE];
+    public IsaacRNG(long seed[]) {
+        mem = new long[256];
+        results = new long[256];
         if(seed == null)
             init(false);
         else {
@@ -69,11 +64,11 @@ public class IsaacRNG implements RandomnessSource {
      * @param seed any long; will have equal influence on all bits of state
      */
     public IsaacRNG(long seed) {
-        mem = new long[SIZE];
-        results = new long[SIZE];
+        mem = new long[256];
+        results = new long[256];
         long z;
         for (int i = 0; i < 256; i++) {
-            z = seed += 0x9E3779B97F4A7C15L;
+            z = ( seed += 0x9E3779B97F4A7C15L );
             z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
             z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
             results[i] = z ^ (z >>> 31);
@@ -86,18 +81,18 @@ public class IsaacRNG implements RandomnessSource {
      * @param seed a String that should be exceptionally long to get the best results.
      */
     public IsaacRNG(String seed) {
-        mem = new long[SIZE];
-        results = new long[SIZE];
+        mem = new long[256];
+        results = new long[256];
         if(seed == null)
             init(false);
         else {
             char[] chars = seed.toCharArray();
             int slen = seed.length(), i = 0;
             for (; i < 256 && i < slen; i++) {
-                results[i] = CrossHash.hash64(chars, i, slen);
+                results[i] = CrossHash.Wisp.hash64(chars, i, slen);
             }
             for (; i < 256; i++) {
-                results[i] = CrossHash.hash64(results);
+                results[i] = CrossHash.Wisp.hash64(results);
             }
             init(true);
         }
@@ -119,54 +114,46 @@ public class IsaacRNG implements RandomnessSource {
         b += ++c;
         for (i=0, j=128; i<128;) {
             x = mem[i];
-            a ^= a<<21;
-            a += mem[j++];
-            mem[i] = y = mem[(int)(x&MASK)>>3] + a + b;
-            results[i++] = b = mem[(int)((y>>8)&MASK)>>3] + x;
+            a = ~(a ^ a << 21) + mem[j++];
+            mem[i] = y = mem[(int)(x >> 3 & 255)] + a + b;
+            results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
 
             x = mem[i];
-            a ^= a>>>5;
-            a += mem[j++];
-            mem[i] = y = mem[(int)(x&MASK)>>3] + a + b;
-            results[i++] = b = mem[(int)((y>>8)&MASK)>>3] + x;
+            a = (a ^ a >>> 5) + mem[j++];
+            mem[i] = y = mem[(int)(x >> 3 & 255)] + a + b;
+            results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
 
             x = mem[i];
-            a ^= a<<12;
-            a += mem[j++];
-            mem[i] = y = mem[(int)(x&MASK)>>3] + a + b;
-            results[i++] = b = mem[(int)((y>>8)&MASK)>>3] + x;
+            a = (a ^ a << 12) + mem[j++];
+            mem[i] = y = mem[(int)(x >> 3 & 255)] + a + b;
+            results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
 
             x = mem[i];
-            a ^= a>>>33;
-            a += mem[j++];
-            mem[i] = y = mem[(int)(x&MASK)>>3] + a + b;
-            results[i++] = b = mem[(int)((y>>8)&MASK)>>3] + x;
+            a = (a ^ a >>> 33) + mem[j++];
+            mem[i] = y = mem[(int)(x >> 3 & 255)] + a + b;
+            results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
         }
 
         for (j=0; j<128;) {
             x = mem[i];
-            a ^= a<<21;
-            a += mem[j++];
-            mem[i] = y = mem[(int)(x&MASK)>>3] + a + b;
-            results[i++] = b = mem[(int)((y>>8)&MASK)>>3] + x;
+            a = ~(a ^ a << 21) + mem[j++];
+            mem[i] = y = mem[(int)(x >> 3 & 255)] + a + b;
+            results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
 
             x = mem[i];
-            a ^= a>>>5;
-            a += mem[j++];
-            mem[i] = y = mem[(int)(x&MASK)>>3] + a + b;
-            results[i++] = b = mem[(int)((y>>8)&MASK)>>3] + x;
+            a = (a ^ a >>> 5) + mem[j++];
+            mem[i] = y = mem[(int)(x >> 3 & 255)] + a + b;
+            results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
 
             x = mem[i];
-            a ^= a<<12;
-            a += mem[j++];
-            mem[i] = y = mem[(int)(x&MASK)>>3] + a + b;
-            results[i++] = b = mem[(int)((y>>8)&MASK)>>3] + x;
+            a = (a ^ a << 12) + mem[j++];
+            mem[i] = y = mem[(int)(x >> 3 & 255)] + a + b;
+            results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
 
             x = mem[i];
-            a ^= a>>>33;
-            a += mem[j++];
-            mem[i] = y = mem[(int)(x&MASK)>>3] + a + b;
-            results[i++] = b = mem[(int)((y>>8)&MASK)>>3] + x;
+            a = (a ^ a >>> 33) + mem[j++];
+            mem[i] = y = mem[(int)(x >> 3 & 255)] + a + b;
+            results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
         }
     }
 
@@ -256,8 +243,8 @@ public class IsaacRNG implements RandomnessSource {
     public final long[] nextBlock()
     {
         regen();
-        final long[] block = new long[SIZE];
-        System.arraycopy(results, 0, block, 0, SIZE);
+        final long[] block = new long[256];
+        System.arraycopy(results, 0, block, 0, 256);
         count = 0;
         return block;
     }
@@ -265,7 +252,7 @@ public class IsaacRNG implements RandomnessSource {
     /**
      * Generates enough pseudo-random long values to fill {@code data} and assigns them to it.
      */
-    public final void setBlock(final long[] data)
+    public final void fillBlock(final long[] data)
     {
         int len, i;
         if(data == null || (len = data.length) == 0) return;
@@ -291,7 +278,7 @@ public class IsaacRNG implements RandomnessSource {
      * @return another RandomnessSource with the same implementation but no guarantees as to generation
      */
     @Override
-    public RandomnessSource copy() {
+    public final RandomnessSource copy() {
         return new IsaacRNG(results);
     }
 
@@ -312,15 +299,16 @@ public class IsaacRNG implements RandomnessSource {
 
     @Override
     public int hashCode() {
-        int result = count;
-        result = 31 * result + CrossHash.Wisp.hash(results);
-        result = 31 * result + CrossHash.Wisp.hash(mem);
-        result = 31 * result + (int) (a ^ (a >>> 32));
-        result = 31 * result + (int) (b ^ (b >>> 32));
-        result = 31 * result + (int) (c ^ (c >>> 32));
-        return result;
+        return 31 *
+                (31 *
+                        (31 *
+                                (31 *
+                                        (31 * count + CrossHash.Wisp.hash(results)
+                                        ) + CrossHash.Wisp.hash(mem)
+                                ) + (int) (a ^ (a >>> 32))
+                        ) + (int) (b ^ (b >>> 32))
+                ) + (int) (c ^ (c >>> 32));
     }
-
     @Override
     public String toString()
     {
