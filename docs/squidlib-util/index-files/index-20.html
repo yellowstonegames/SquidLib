@@ -518,18 +518,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/ConeAOE.html#setAngle-double-">setAngle(double)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/ConeAOE.html" title="class in squidpony.squidai">ConeAOE</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Isaac32RNG.html#setBlock-int:A-">setBlock(int[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Isaac32RNG.html" title="class in squidpony.squidmath">Isaac32RNG</a></dt>
-<dd>
-<div class="block">Generates enough pseudo-random int values to fill <code>data</code> and assigns them to it.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Isaac32RNG.html#setBlock-float:A-">setBlock(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Isaac32RNG.html" title="class in squidpony.squidmath">Isaac32RNG</a></dt>
-<dd>
-<div class="block">Generates enough pseudo-random float values between 0f and 1f to fill <code>data</code> and assigns them to it.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IsaacRNG.html#setBlock-long:A-">setBlock(long[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath">IsaacRNG</a></dt>
-<dd>
-<div class="block">Generates enough pseudo-random long values to fill <code>data</code> and assigns them to it.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/DijkstraMap.html#setBlockingRequirement-int-">setBlockingRequirement(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a></dt>
 <dd>
 <div class="block">If you want obstacles present in orthogonal cells to prevent pathfinding along the diagonal between them, this
@@ -1013,10 +1001,6 @@
 <dd>
 <div class="block">Like <a href="../squidpony/squidmath/NumberTools.html#getSelectedByte-float-int-"><code>NumberTools.getSelectedByte(float, int)</code></a>, this sets the byte at a selected position in the int representation of
  a float, then returns the float produced by the bit change.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Isaac32RNG.html#setSignedBlock-float:A-">setSignedBlock(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Isaac32RNG.html" title="class in squidpony.squidmath">Isaac32RNG</a></dt>
-<dd>
-<div class="block">Generates enough pseudo-random float values between -1f and 1f to fill <code>data</code> and assigns them to it.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#setSize-int-">setSize(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
 <dd>
@@ -1969,7 +1953,10 @@
 <div class="block">Call this with <code>splitMix32(z += 0x9E3779B9)</code>, where z is an int to use as state.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/PoliticalMapper.html#spokenLanguages">spokenLanguages</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/PoliticalMapper.html" title="class in squidpony.squidgrid.mapping">PoliticalMapper</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Maps chars, as found in the returned array from generate(), to Strings that store the languages spoken in those
+ nations, which could be user-assigned, unassigned, or randomly-generated.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/MultiSpill.html#spreadPattern">spreadPattern</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid">MultiSpill</a></dt>
 <dd>
 <div class="block">Each key here is an initial point for a spiller passed to start(), and each value corresponds to a list of points
@@ -2195,10 +2182,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PintRNG.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
-<dd>
-<div class="block">The state can be seeded with any value.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlapRNG.html#state0">state0</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></dt>
@@ -2354,13 +2337,27 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#sum-java.util.List-">sum(List&lt;GreasedRegion&gt;)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>
-<div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
+<div class="block">Generates a 2D int array from a List of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
  produce number between 0 and 16 in a cell.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#sum--">sum()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#sumDouble-squidpony.squidmath.GreasedRegion...-">sumDouble(GreasedRegion...)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Generates a 2D double array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the double at
+ a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+ this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+ produce number between 0 and 16 in a cell.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#sumDouble-java.util.List-">sumDouble(List&lt;GreasedRegion&gt;)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Generates a 2D double array from a List of GreasedRegions, starting at all 0 and adding 1 to the double at
+ a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+ this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+ produce number between 0 and 16 in a cell.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#sumMany-int-int-short:A...-">sumMany(int, int, short[]...)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Takes multiple pieces of packed data as short[], encoded by pack() or another similar method of this class, and
@@ -2370,6 +2367,18 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#summary">summary</a></span> - Variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#sumWeighted-squidpony.squidmath.GreasedRegion:A-int:A-">sumWeighted(GreasedRegion[], int[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Generates a 2D int array from an array of GreasedRegions and an array of weights, starting the 2D result at all 0
+ and, for every GreasedRegion that has that cell as "on," adding the int in the corresponding weights array at
+ the position of that cell.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#sumWeightedDouble-squidpony.squidmath.GreasedRegion:A-double:A-">sumWeightedDouble(GreasedRegion[], double[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Generates a 2D double array from an array of GreasedRegions and an array of weights, starting the 2D result at
+ all 0 and, for every GreasedRegion that has that cell as "on," adding the double in the corresponding weights
+ array at the position of that cell.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#surface-short:A-int-int-int-">surface(short[], int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Finds the area consisting of the "on" positions in packed that are within the specified depth distance of an

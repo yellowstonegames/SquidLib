@@ -121,7 +121,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
  Isaac32RNG is slower than the non-cryptographic RNGs in SquidLib, but much faster than cryptographic RNGs
  that need SecureRandom, and it's compatible with GWT and Android to boot! Isaac32RNG should perform better
  than IsaacRNG on GWT, or when you specifically need a large amount of int values to be set using
- <a href="../../squidpony/squidmath/Isaac32RNG.html#setBlock-int:A-"><code>setBlock(int[])</code></a>. If you don't need GWT support, then <a href="../../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath"><code>IsaacRNG</code></a> will have better properties.
+ <a href="../../squidpony/squidmath/Isaac32RNG.html#fillBlock-int:A-"><code>fillBlock(int[])</code></a>. If you don't need GWT support, then <a href="../../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath"><code>IsaacRNG</code></a> will have better properties.
  Created by Tommy Ettinger on 8/1/2016.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -186,61 +186,61 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#fillBlock-int:A-">fillBlock</a></span>(int[]&nbsp;data)</code>
+<div class="block">Generates enough pseudo-random int values to fill <code>data</code> and assigns them to it.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#fillFloats-float:A-">fillFloats</a></span>(float[]&nbsp;data)</code>
+<div class="block">Generates enough pseudo-random float values between 0f and 1f to fill <code>data</code> and assigns them to it.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#fillSignedFloats-float:A-">fillSignedFloats</a></span>(float[]&nbsp;data)</code>
+<div class="block">Generates enough pseudo-random float values between -1f and 1f to fill <code>data</code> and assigns them to it.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#init-boolean-">init</a></span>(boolean&nbsp;flag)</code>
 <div class="block">Initializes this IsaacRNG; typically used from the constructor but can be called externally.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#nextBlock--">nextBlock</a></span>()</code>
 <div class="block">Generates and returns a block of 256 pseudo-random int values.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#nextInt--">nextInt</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#regen--">regen</a></span>()</code>
 <div class="block">Generates 256 results to be used by later calls to next() or nextLong().</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#setBlock-float:A-">setBlock</a></span>(float[]&nbsp;data)</code>
-<div class="block">Generates enough pseudo-random float values between 0f and 1f to fill <code>data</code> and assigns them to it.</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#setBlock-int:A-">setBlock</a></span>(int[]&nbsp;data)</code>
-<div class="block">Generates enough pseudo-random int values to fill <code>data</code> and assigns them to it.</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Isaac32RNG.html#setSignedBlock-float:A-">setSignedBlock</a></span>(float[]&nbsp;data)</code>
-<div class="block">Generates enough pseudo-random float values between -1f and 1f to fill <code>data</code> and assigns them to it.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -275,7 +275,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>Isaac32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.27">Isaac32RNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.24">Isaac32RNG</a>()</pre>
 </li>
 </ul>
 <a name="Isaac32RNG-int:A-">
@@ -284,7 +284,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>Isaac32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.34">Isaac32RNG</a>(int[]&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.31">Isaac32RNG</a>(int[]&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="Isaac32RNG-long-">
@@ -293,7 +293,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>Isaac32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.48">Isaac32RNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.45">Isaac32RNG</a>(long&nbsp;seed)</pre>
 <div class="block">Constructs an IsaacRNG with its state filled by the value of seed, run through the LightRNG algorithm.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -307,7 +307,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Isaac32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.66">Isaac32RNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.63">Isaac32RNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
 <div class="block">Constructs an IsaacRNG with its state filled by repeated hashing of seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -329,7 +329,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>regen</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.94">regen</a>()</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.91">regen</a>()</pre>
 <div class="block">Generates 256 results to be used by later calls to next() or nextLong().
  This is a fast (not small) implementation.</div>
 </li>
@@ -340,7 +340,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.157">init</a>(boolean&nbsp;flag)</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.146">init</a>(boolean&nbsp;flag)</pre>
 <div class="block">Initializes this IsaacRNG; typically used from the constructor but can be called externally.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -354,7 +354,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.283">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.272">nextInt</a>()</pre>
 </li>
 </ul>
 <a name="nextBlock--">
@@ -363,7 +363,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBlock</h4>
-<pre>public final&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.294">nextBlock</a>()</pre>
+<pre>public final&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.283">nextBlock</a>()</pre>
 <div class="block">Generates and returns a block of 256 pseudo-random int values.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -371,35 +371,35 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </dl>
 </li>
 </ul>
-<a name="setBlock-int:A-">
+<a name="fillBlock-int:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setBlock</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.306">setBlock</a>(int[]&nbsp;data)</pre>
+<h4>fillBlock</h4>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.295">fillBlock</a>(int[]&nbsp;data)</pre>
 <div class="block">Generates enough pseudo-random int values to fill <code>data</code> and assigns them to it.</div>
 </li>
 </ul>
-<a name="setBlock-float:A-">
+<a name="fillFloats-float:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setBlock</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.324">setBlock</a>(float[]&nbsp;data)</pre>
+<h4>fillFloats</h4>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.313">fillFloats</a>(float[]&nbsp;data)</pre>
 <div class="block">Generates enough pseudo-random float values between 0f and 1f to fill <code>data</code> and assigns them to it.
  Inclusive on 0f, exclusive on 1f. Intended for cases where you need some large source of randomness to be checked
  later repeatedly, such as how permutation tables are used in Simplex noise.</div>
 </li>
 </ul>
-<a name="setSignedBlock-float:A-">
+<a name="fillSignedFloats-float:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setSignedBlock</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.338">setSignedBlock</a>(float[]&nbsp;data)</pre>
+<h4>fillSignedFloats</h4>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.327">fillSignedFloats</a>(float[]&nbsp;data)</pre>
 <div class="block">Generates enough pseudo-random float values between -1f and 1f to fill <code>data</code> and assigns them to it.
  Inclusive on -1f, exclusive on 1f. Intended for cases where you need some large source of randomness to be
  checked later repeatedly, such as how permutation tables are used in Simplex noise.</div>
@@ -411,7 +411,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.348">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.337">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -431,7 +431,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.361">nextLong</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.350">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  <p>
@@ -450,7 +450,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.373">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.362">copy</a>()</pre>
 <div class="block">Produces another RandomnessSource, but the new one will not produce the same data as this one.
  This is meant to be a "more-secure" generator, so this helps reduce the ability to guess future
  results from a given sequence of output.</div>
@@ -468,7 +468,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.378">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.367">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -481,7 +481,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.393">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.382">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -494,7 +494,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.404">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Isaac32RNG.html#line.393">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

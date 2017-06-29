@@ -58,8 +58,8 @@ public class ThunderRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 3L;
 
     /** The state can be seeded with any value. */
-    public long state;
-    protected long jumble;
+    private long state;
+    private long jumble;
     /** Creates a new generator seeded using Math.random. */
     public ThunderRNG() {
         this((long) (Math.random() * Integer.MAX_VALUE) << 32 | (int)(Math.random() * Integer.MAX_VALUE));

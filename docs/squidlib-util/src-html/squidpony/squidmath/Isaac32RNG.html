@@ -16,405 +16,394 @@
 <span class="sourceLineNo">008</span> * Isaac32RNG is slower than the non-cryptographic RNGs in SquidLib, but much faster than cryptographic RNGs<a name="line.8"></a>
 <span class="sourceLineNo">009</span> * that need SecureRandom, and it's compatible with GWT and Android to boot! Isaac32RNG should perform better<a name="line.9"></a>
 <span class="sourceLineNo">010</span> * than IsaacRNG on GWT, or when you specifically need a large amount of int values to be set using<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * {@link #setBlock(int[])}. If you don't need GWT support, then {@link IsaacRNG} will have better properties.<a name="line.11"></a>
+<span class="sourceLineNo">011</span> * {@link #fillBlock(int[])}. If you don't need GWT support, then {@link IsaacRNG} will have better properties.<a name="line.11"></a>
 <span class="sourceLineNo">012</span> * Created by Tommy Ettinger on 8/1/2016.<a name="line.12"></a>
 <span class="sourceLineNo">013</span> */<a name="line.13"></a>
 <span class="sourceLineNo">014</span>public class Isaac32RNG implements RandomnessSource {<a name="line.14"></a>
-<span class="sourceLineNo">015</span>    final static int SIZEL = 8;              /* log of size of results[] and mem[] */<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    final static int SIZE = 1 &lt;&lt; SIZEL;               /* size of results[] and mem[] */ // 256<a name="line.16"></a>
-<span class="sourceLineNo">017</span>    final static int MASK = (SIZE - 1) &lt;&lt; 2;            /* for pseudorandom lookup */ // 1020<a name="line.17"></a>
-<span class="sourceLineNo">018</span>    int count;                           /* count through the results in results[] */<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    int results[];                                /* the results given to the user */<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    private int mem[];                                   /* the internal state */<a name="line.20"></a>
-<span class="sourceLineNo">021</span>    private int a;                                              /* accumulator */<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    private int b;                                          /* the last result */<a name="line.22"></a>
-<span class="sourceLineNo">023</span>    private int c;              /* counter, guarantees cycle is at least 2^^40 */<a name="line.23"></a>
-<span class="sourceLineNo">024</span><a name="line.24"></a>
-<span class="sourceLineNo">025</span><a name="line.25"></a>
-<span class="sourceLineNo">026</span>    /* no seed, equivalent to randinit(ctx,FALSE) in C */<a name="line.26"></a>
-<span class="sourceLineNo">027</span>    public Isaac32RNG() {<a name="line.27"></a>
-<span class="sourceLineNo">028</span>        mem = new int[SIZE];<a name="line.28"></a>
-<span class="sourceLineNo">029</span>        results = new int[SIZE];<a name="line.29"></a>
-<span class="sourceLineNo">030</span>        init(false);<a name="line.30"></a>
-<span class="sourceLineNo">031</span>    }<a name="line.31"></a>
-<span class="sourceLineNo">032</span><a name="line.32"></a>
-<span class="sourceLineNo">033</span>    /* equivalent to randinit(ctx, TRUE) after putting seed in randctx in C */<a name="line.33"></a>
-<span class="sourceLineNo">034</span>    public Isaac32RNG(final int seed[]) {<a name="line.34"></a>
-<span class="sourceLineNo">035</span>        mem = new int[SIZE];<a name="line.35"></a>
-<span class="sourceLineNo">036</span>        results = new int[SIZE];<a name="line.36"></a>
-<span class="sourceLineNo">037</span>        if(seed == null)<a name="line.37"></a>
-<span class="sourceLineNo">038</span>            init(false);<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        else {<a name="line.39"></a>
-<span class="sourceLineNo">040</span>            System.arraycopy(seed, 0, results, 0, Math.min(256, seed.length));<a name="line.40"></a>
-<span class="sourceLineNo">041</span>            init(true);<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        }<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    /**<a name="line.44"></a>
-<span class="sourceLineNo">045</span>     * Constructs an IsaacRNG with its state filled by the value of seed, run through the LightRNG algorithm.<a name="line.45"></a>
-<span class="sourceLineNo">046</span>     * @param seed any long; will have equal influence on all bits of state<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     */<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    public Isaac32RNG(long seed) {<a name="line.48"></a>
-<span class="sourceLineNo">049</span>        mem = new int[SIZE];<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        results = new int[SIZE];<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        long z;<a name="line.51"></a>
-<span class="sourceLineNo">052</span>        for (int i = 0; i &lt; 256; i++) {<a name="line.52"></a>
-<span class="sourceLineNo">053</span>            z = seed += 0x9E3779B97F4A7C15L;<a name="line.53"></a>
-<span class="sourceLineNo">054</span>            z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.54"></a>
-<span class="sourceLineNo">055</span>            z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.55"></a>
-<span class="sourceLineNo">056</span>            results[i++] = (int) ((z ^ (z &gt;&gt;&gt; 31)) &amp; 0xffffffffL);<a name="line.56"></a>
-<span class="sourceLineNo">057</span>            results[i] = (int) ((z ^ (z &gt;&gt;&gt; 31)) &gt;&gt;&gt; 32);<a name="line.57"></a>
-<span class="sourceLineNo">058</span>        }<a name="line.58"></a>
-<span class="sourceLineNo">059</span>        init(true);<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    }<a name="line.60"></a>
-<span class="sourceLineNo">061</span><a name="line.61"></a>
-<span class="sourceLineNo">062</span>    /**<a name="line.62"></a>
-<span class="sourceLineNo">063</span>     * Constructs an IsaacRNG with its state filled by repeated hashing of seed.<a name="line.63"></a>
-<span class="sourceLineNo">064</span>     * @param seed a String that should be exceptionally long to get the best results.<a name="line.64"></a>
-<span class="sourceLineNo">065</span>     */<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    public Isaac32RNG(String seed) {<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        mem = new int[SIZE];<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        results = new int[SIZE];<a name="line.68"></a>
-<span class="sourceLineNo">069</span>        if(seed == null)<a name="line.69"></a>
-<span class="sourceLineNo">070</span>            init(false);<a name="line.70"></a>
-<span class="sourceLineNo">071</span>        else {<a name="line.71"></a>
-<span class="sourceLineNo">072</span>            char[] chars = seed.toCharArray();<a name="line.72"></a>
-<span class="sourceLineNo">073</span>            int slen = chars.length, i = 0;<a name="line.73"></a>
-<span class="sourceLineNo">074</span>            for (; i &lt; 256 &amp;&amp; i &lt; slen; i++) {<a name="line.74"></a>
-<span class="sourceLineNo">075</span>                results[i] = CrossHash.Wisp.hash(chars, i, slen);<a name="line.75"></a>
+<span class="sourceLineNo">015</span>    private int count;                           /* count through the results in results[] */<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    private int results[];                                /* the results given to the user */<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    private int mem[];                                   /* the internal state */<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    private int a;                                              /* accumulator */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    private int b;                                          /* the last result */<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    private int c;              /* counter, guarantees cycle is at least 2^^40 */<a name="line.20"></a>
+<span class="sourceLineNo">021</span><a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>    /* no seed, equivalent to randinit(ctx,FALSE) in C */<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    public Isaac32RNG() {<a name="line.24"></a>
+<span class="sourceLineNo">025</span>        mem = new int[256];<a name="line.25"></a>
+<span class="sourceLineNo">026</span>        results = new int[256];<a name="line.26"></a>
+<span class="sourceLineNo">027</span>        init(false);<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    }<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>    /* equivalent to randinit(ctx, TRUE) after putting seed in randctx in C */<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    public Isaac32RNG(final int seed[]) {<a name="line.31"></a>
+<span class="sourceLineNo">032</span>        mem = new int[256];<a name="line.32"></a>
+<span class="sourceLineNo">033</span>        results = new int[256];<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        if(seed == null)<a name="line.34"></a>
+<span class="sourceLineNo">035</span>            init(false);<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        else {<a name="line.36"></a>
+<span class="sourceLineNo">037</span>            System.arraycopy(seed, 0, results, 0, Math.min(256, seed.length));<a name="line.37"></a>
+<span class="sourceLineNo">038</span>            init(true);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        }<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    }<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    /**<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * Constructs an IsaacRNG with its state filled by the value of seed, run through the LightRNG algorithm.<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * @param seed any long; will have equal influence on all bits of state<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     */<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    public Isaac32RNG(long seed) {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        mem = new int[256];<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        results = new int[256];<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        long z;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        for (int i = 0; i &lt; 256; i++) {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>            z = seed += 0x9E3779B97F4A7C15L;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>            z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>            z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>            results[i++] = (int) ((z ^ (z &gt;&gt;&gt; 31)) &amp; 0xffffffffL);<a name="line.53"></a>
+<span class="sourceLineNo">054</span>            results[i] = (int) ((z ^ (z &gt;&gt;&gt; 31)) &gt;&gt;&gt; 32);<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        }<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        init(true);<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    }<a name="line.57"></a>
+<span class="sourceLineNo">058</span><a name="line.58"></a>
+<span class="sourceLineNo">059</span>    /**<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * Constructs an IsaacRNG with its state filled by repeated hashing of seed.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * @param seed a String that should be exceptionally long to get the best results.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     */<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    public Isaac32RNG(String seed) {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        mem = new int[256];<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        results = new int[256];<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        if(seed == null)<a name="line.66"></a>
+<span class="sourceLineNo">067</span>            init(false);<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        else {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>            char[] chars = seed.toCharArray();<a name="line.69"></a>
+<span class="sourceLineNo">070</span>            int slen = chars.length, i = 0;<a name="line.70"></a>
+<span class="sourceLineNo">071</span>            for (; i &lt; 256 &amp;&amp; i &lt; slen; i++) {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>                results[i] = CrossHash.Wisp.hash(chars, i, slen);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>            }<a name="line.73"></a>
+<span class="sourceLineNo">074</span>            for (; i &lt; 256; i++) {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                results[i] = CrossHash.Wisp.hash(results);<a name="line.75"></a>
 <span class="sourceLineNo">076</span>            }<a name="line.76"></a>
-<span class="sourceLineNo">077</span>            for (; i &lt; 256; i++) {<a name="line.77"></a>
-<span class="sourceLineNo">078</span>                results[i] = CrossHash.Wisp.hash(results);<a name="line.78"></a>
-<span class="sourceLineNo">079</span>            }<a name="line.79"></a>
-<span class="sourceLineNo">080</span>            init(true);<a name="line.80"></a>
-<span class="sourceLineNo">081</span>        }<a name="line.81"></a>
-<span class="sourceLineNo">082</span>    }<a name="line.82"></a>
-<span class="sourceLineNo">083</span><a name="line.83"></a>
-<span class="sourceLineNo">084</span>    private Isaac32RNG(Isaac32RNG other)<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    {<a name="line.85"></a>
-<span class="sourceLineNo">086</span>        this(other.results);<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
-<span class="sourceLineNo">088</span><a name="line.88"></a>
-<span class="sourceLineNo">089</span><a name="line.89"></a>
-<span class="sourceLineNo">090</span>    /**<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * Generates 256 results to be used by later calls to next() or nextLong().<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * This is a fast (not small) implementation.<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     */<a name="line.93"></a>
-<span class="sourceLineNo">094</span>    public final void regen() {<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        int i, j, x, y;<a name="line.95"></a>
-<span class="sourceLineNo">096</span><a name="line.96"></a>
-<span class="sourceLineNo">097</span>        b += ++c;<a name="line.97"></a>
-<span class="sourceLineNo">098</span>        for (i = 0, j = SIZE &gt;&gt;&gt; 1; i &lt; SIZE &gt;&gt;&gt; 1; ) {<a name="line.98"></a>
-<span class="sourceLineNo">099</span>            x = mem[i];<a name="line.99"></a>
-<span class="sourceLineNo">100</span>            a ^= a &lt;&lt; 13;<a name="line.100"></a>
-<span class="sourceLineNo">101</span>            a += mem[j++];<a name="line.101"></a>
-<span class="sourceLineNo">102</span>            mem[i] = y = mem[(x &amp; MASK) &gt;&gt; 2] + a + b;<a name="line.102"></a>
-<span class="sourceLineNo">103</span>            results[i++] = b = mem[((y &gt;&gt; SIZEL) &amp; MASK) &gt;&gt; 2] + x;<a name="line.103"></a>
-<span class="sourceLineNo">104</span><a name="line.104"></a>
-<span class="sourceLineNo">105</span>            x = mem[i];<a name="line.105"></a>
-<span class="sourceLineNo">106</span>            a ^= a &gt;&gt;&gt; 6;<a name="line.106"></a>
-<span class="sourceLineNo">107</span>            a += mem[j++];<a name="line.107"></a>
-<span class="sourceLineNo">108</span>            mem[i] = y = mem[(x &amp; MASK) &gt;&gt; 2] + a + b;<a name="line.108"></a>
-<span class="sourceLineNo">109</span>            results[i++] = b = mem[((y &gt;&gt; SIZEL) &amp; MASK) &gt;&gt; 2] + x;<a name="line.109"></a>
+<span class="sourceLineNo">077</span>            init(true);<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        }<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    }<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>    private Isaac32RNG(Isaac32RNG other)<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        this(other.results);<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    }<a name="line.84"></a>
+<span class="sourceLineNo">085</span><a name="line.85"></a>
+<span class="sourceLineNo">086</span><a name="line.86"></a>
+<span class="sourceLineNo">087</span>    /**<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * Generates 256 results to be used by later calls to next() or nextLong().<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * This is a fast (not small) implementation.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     */<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    public final void regen() {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        int i, j, x, y;<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>        b += ++c;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        for (i = 0, j = 128; i &lt; 128; ) {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            x = mem[i];<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            a = (a ^ a &lt;&lt; 13) + mem[j++];<a name="line.97"></a>
+<span class="sourceLineNo">098</span>            mem[i] = y = mem[x &gt;&gt; 2 &amp; 255] + a + b;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            results[i++] = b = mem[y &gt;&gt; 10 &amp; 255] + x;<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>            x = mem[i];<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            a = (a ^ a &gt;&gt;&gt; 6) + mem[j++];<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            mem[i] = y = mem[x &gt;&gt; 2 &amp; 255] + a + b;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>            results[i++] = b = mem[y &gt;&gt; 10 &amp; 255] + x;<a name="line.104"></a>
+<span class="sourceLineNo">105</span><a name="line.105"></a>
+<span class="sourceLineNo">106</span>            x = mem[i];<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            a = (a ^ a &lt;&lt; 2) + mem[j++];<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            mem[i] = y = mem[x &gt;&gt; 2 &amp; 255] + a + b;<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            results[i++] = b = mem[y &gt;&gt; 10 &amp; 255] + x;<a name="line.109"></a>
 <span class="sourceLineNo">110</span><a name="line.110"></a>
 <span class="sourceLineNo">111</span>            x = mem[i];<a name="line.111"></a>
-<span class="sourceLineNo">112</span>            a ^= a &lt;&lt; 2;<a name="line.112"></a>
-<span class="sourceLineNo">113</span>            a += mem[j++];<a name="line.113"></a>
-<span class="sourceLineNo">114</span>            mem[i] = y = mem[(x &amp; MASK) &gt;&gt; 2] + a + b;<a name="line.114"></a>
-<span class="sourceLineNo">115</span>            results[i++] = b = mem[((y &gt;&gt; SIZEL) &amp; MASK) &gt;&gt; 2] + x;<a name="line.115"></a>
+<span class="sourceLineNo">112</span>            a = (a ^ a &gt;&gt;&gt; 16) + mem[j++];<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            mem[i] = y = mem[x &gt;&gt; 2 &amp; 255] + a + b;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            results[i++] = b = mem[y &gt;&gt; 10 &amp; 255] + x;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        }<a name="line.115"></a>
 <span class="sourceLineNo">116</span><a name="line.116"></a>
-<span class="sourceLineNo">117</span>            x = mem[i];<a name="line.117"></a>
-<span class="sourceLineNo">118</span>            a ^= a &gt;&gt;&gt; 16;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>            a += mem[j++];<a name="line.119"></a>
-<span class="sourceLineNo">120</span>            mem[i] = y = mem[(x &amp; MASK) &gt;&gt; 2] + a + b;<a name="line.120"></a>
-<span class="sourceLineNo">121</span>            results[i++] = b = mem[((y &gt;&gt; SIZEL) &amp; MASK) &gt;&gt; 2] + x;<a name="line.121"></a>
-<span class="sourceLineNo">122</span>        }<a name="line.122"></a>
-<span class="sourceLineNo">123</span><a name="line.123"></a>
-<span class="sourceLineNo">124</span>        for (j = 0; j &lt; SIZE &gt;&gt;&gt; 1; ) {<a name="line.124"></a>
-<span class="sourceLineNo">125</span>            x = mem[i];<a name="line.125"></a>
-<span class="sourceLineNo">126</span>            a ^= a &lt;&lt; 13;<a name="line.126"></a>
-<span class="sourceLineNo">127</span>            a += mem[j++];<a name="line.127"></a>
-<span class="sourceLineNo">128</span>            mem[i] = y = mem[(x &amp; MASK) &gt;&gt; 2] + a + b;<a name="line.128"></a>
-<span class="sourceLineNo">129</span>            results[i++] = b = mem[((y &gt;&gt; SIZEL) &amp; MASK) &gt;&gt; 2] + x;<a name="line.129"></a>
-<span class="sourceLineNo">130</span><a name="line.130"></a>
-<span class="sourceLineNo">131</span>            x = mem[i];<a name="line.131"></a>
-<span class="sourceLineNo">132</span>            a ^= a &gt;&gt;&gt; 6;<a name="line.132"></a>
-<span class="sourceLineNo">133</span>            a += mem[j++];<a name="line.133"></a>
-<span class="sourceLineNo">134</span>            mem[i] = y = mem[(x &amp; MASK) &gt;&gt; 2] + a + b;<a name="line.134"></a>
-<span class="sourceLineNo">135</span>            results[i++] = b = mem[((y &gt;&gt; SIZEL) &amp; MASK) &gt;&gt; 2] + x;<a name="line.135"></a>
-<span class="sourceLineNo">136</span><a name="line.136"></a>
-<span class="sourceLineNo">137</span>            x = mem[i];<a name="line.137"></a>
-<span class="sourceLineNo">138</span>            a ^= a &lt;&lt; 2;<a name="line.138"></a>
-<span class="sourceLineNo">139</span>            a += mem[j++];<a name="line.139"></a>
-<span class="sourceLineNo">140</span>            mem[i] = y = mem[(x &amp; MASK) &gt;&gt; 2] + a + b;<a name="line.140"></a>
-<span class="sourceLineNo">141</span>            results[i++] = b = mem[((y &gt;&gt; SIZEL) &amp; MASK) &gt;&gt; 2] + x;<a name="line.141"></a>
-<span class="sourceLineNo">142</span><a name="line.142"></a>
-<span class="sourceLineNo">143</span>            x = mem[i];<a name="line.143"></a>
-<span class="sourceLineNo">144</span>            a ^= a &gt;&gt;&gt; 16;<a name="line.144"></a>
-<span class="sourceLineNo">145</span>            a += mem[j++];<a name="line.145"></a>
-<span class="sourceLineNo">146</span>            mem[i] = y = mem[(x &amp; MASK) &gt;&gt; 2] + a + b;<a name="line.146"></a>
-<span class="sourceLineNo">147</span>            results[i++] = b = mem[((y &gt;&gt; SIZEL) &amp; MASK) &gt;&gt; 2] + x;<a name="line.147"></a>
-<span class="sourceLineNo">148</span>        }<a name="line.148"></a>
-<span class="sourceLineNo">149</span>    }<a name="line.149"></a>
+<span class="sourceLineNo">117</span>        for (j = 0; j &lt; 128; ) {<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            x = mem[i];<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            a = (a ^ a &lt;&lt; 13) + mem[j++];<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            mem[i] = y = mem[x &gt;&gt; 2 &amp; 255] + a + b;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>            results[i++] = b = mem[y &gt;&gt; 10 &amp; 255] + x;<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>            x = mem[i];<a name="line.123"></a>
+<span class="sourceLineNo">124</span>            a = (a ^ a &gt;&gt;&gt; 6) + mem[j++];<a name="line.124"></a>
+<span class="sourceLineNo">125</span>            mem[i] = y = mem[x &gt;&gt; 2 &amp; 255] + a + b;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>            results[i++] = b = mem[y &gt;&gt; 10 &amp; 255] + x;<a name="line.126"></a>
+<span class="sourceLineNo">127</span><a name="line.127"></a>
+<span class="sourceLineNo">128</span>            x = mem[i];<a name="line.128"></a>
+<span class="sourceLineNo">129</span>            a = (a ^ a &lt;&lt; 2) + mem[j++];<a name="line.129"></a>
+<span class="sourceLineNo">130</span>            mem[i] = y = mem[x &gt;&gt; 2 &amp; 255] + a + b;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            results[i++] = b = mem[y &gt;&gt; 10 &amp; 255] + x;<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>            x = mem[i];<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            a = (a ^ a &gt;&gt;&gt; 16) + mem[j++];<a name="line.134"></a>
+<span class="sourceLineNo">135</span>            mem[i] = y = mem[x &gt;&gt; 2 &amp; 255] + a + b;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            results[i++] = b = mem[y &gt;&gt; 10 &amp; 255] + x;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        }<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span><a name="line.140"></a>
+<span class="sourceLineNo">141</span>    /**<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * Initializes this IsaacRNG; typically used from the constructor but can be called externally.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     *<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * @param flag if true, use data from seed; if false, initializes this to unseeded random state<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     */<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    public final void init(boolean flag) {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        int i;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        int a, b, c, d, e, f, g, h;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        a = b = c = d = e = f = g = h = 0x9e3779b9;                        /* the golden ratio */<a name="line.149"></a>
 <span class="sourceLineNo">150</span><a name="line.150"></a>
-<span class="sourceLineNo">151</span><a name="line.151"></a>
-<span class="sourceLineNo">152</span>    /**<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     * Initializes this IsaacRNG; typically used from the constructor but can be called externally.<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     *<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     * @param flag if true, use data from seed; if false, initializes this to unseeded random state<a name="line.155"></a>
-<span class="sourceLineNo">156</span>     */<a name="line.156"></a>
-<span class="sourceLineNo">157</span>    public final void init(boolean flag) {<a name="line.157"></a>
-<span class="sourceLineNo">158</span>        int i;<a name="line.158"></a>
-<span class="sourceLineNo">159</span>        int a, b, c, d, e, f, g, h;<a name="line.159"></a>
-<span class="sourceLineNo">160</span>        a = b = c = d = e = f = g = h = 0x9e3779b9;                        /* the golden ratio */<a name="line.160"></a>
-<span class="sourceLineNo">161</span><a name="line.161"></a>
-<span class="sourceLineNo">162</span>        for (i = 0; i &lt; 4; ++i) {<a name="line.162"></a>
-<span class="sourceLineNo">163</span>            a ^= b &lt;&lt; 11;<a name="line.163"></a>
-<span class="sourceLineNo">164</span>            d += a;<a name="line.164"></a>
-<span class="sourceLineNo">165</span>            b += c;<a name="line.165"></a>
-<span class="sourceLineNo">166</span>            b ^= c &gt;&gt;&gt; 2;<a name="line.166"></a>
-<span class="sourceLineNo">167</span>            e += b;<a name="line.167"></a>
-<span class="sourceLineNo">168</span>            c += d;<a name="line.168"></a>
-<span class="sourceLineNo">169</span>            c ^= d &lt;&lt; 8;<a name="line.169"></a>
-<span class="sourceLineNo">170</span>            f += c;<a name="line.170"></a>
-<span class="sourceLineNo">171</span>            d += e;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>            d ^= e &gt;&gt;&gt; 16;<a name="line.172"></a>
-<span class="sourceLineNo">173</span>            g += d;<a name="line.173"></a>
-<span class="sourceLineNo">174</span>            e += f;<a name="line.174"></a>
-<span class="sourceLineNo">175</span>            e ^= f &lt;&lt; 10;<a name="line.175"></a>
-<span class="sourceLineNo">176</span>            h += e;<a name="line.176"></a>
-<span class="sourceLineNo">177</span>            f += g;<a name="line.177"></a>
-<span class="sourceLineNo">178</span>            f ^= g &gt;&gt;&gt; 4;<a name="line.178"></a>
-<span class="sourceLineNo">179</span>            a += f;<a name="line.179"></a>
-<span class="sourceLineNo">180</span>            g += h;<a name="line.180"></a>
-<span class="sourceLineNo">181</span>            g ^= h &lt;&lt; 8;<a name="line.181"></a>
-<span class="sourceLineNo">182</span>            b += g;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>            h += a;<a name="line.183"></a>
-<span class="sourceLineNo">184</span>            h ^= a &gt;&gt;&gt; 9;<a name="line.184"></a>
-<span class="sourceLineNo">185</span>            c += h;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>            a += b;<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        }<a name="line.187"></a>
-<span class="sourceLineNo">188</span><a name="line.188"></a>
-<span class="sourceLineNo">189</span>        for (i = 0; i &lt; SIZE; i += 8) {              /* fill in mem[] with messy stuff */<a name="line.189"></a>
-<span class="sourceLineNo">190</span>            if (flag) {<a name="line.190"></a>
-<span class="sourceLineNo">191</span>                a += results[i];<a name="line.191"></a>
-<span class="sourceLineNo">192</span>                b += results[i + 1];<a name="line.192"></a>
-<span class="sourceLineNo">193</span>                c += results[i + 2];<a name="line.193"></a>
-<span class="sourceLineNo">194</span>                d += results[i + 3];<a name="line.194"></a>
-<span class="sourceLineNo">195</span>                e += results[i + 4];<a name="line.195"></a>
-<span class="sourceLineNo">196</span>                f += results[i + 5];<a name="line.196"></a>
-<span class="sourceLineNo">197</span>                g += results[i + 6];<a name="line.197"></a>
-<span class="sourceLineNo">198</span>                h += results[i + 7];<a name="line.198"></a>
-<span class="sourceLineNo">199</span>            }<a name="line.199"></a>
-<span class="sourceLineNo">200</span>            a ^= b &lt;&lt; 11;<a name="line.200"></a>
-<span class="sourceLineNo">201</span>            d += a;<a name="line.201"></a>
-<span class="sourceLineNo">202</span>            b += c;<a name="line.202"></a>
-<span class="sourceLineNo">203</span>            b ^= c &gt;&gt;&gt; 2;<a name="line.203"></a>
-<span class="sourceLineNo">204</span>            e += b;<a name="line.204"></a>
-<span class="sourceLineNo">205</span>            c += d;<a name="line.205"></a>
-<span class="sourceLineNo">206</span>            c ^= d &lt;&lt; 8;<a name="line.206"></a>
-<span class="sourceLineNo">207</span>            f += c;<a name="line.207"></a>
-<span class="sourceLineNo">208</span>            d += e;<a name="line.208"></a>
-<span class="sourceLineNo">209</span>            d ^= e &gt;&gt;&gt; 16;<a name="line.209"></a>
-<span class="sourceLineNo">210</span>            g += d;<a name="line.210"></a>
-<span class="sourceLineNo">211</span>            e += f;<a name="line.211"></a>
-<span class="sourceLineNo">212</span>            e ^= f &lt;&lt; 10;<a name="line.212"></a>
-<span class="sourceLineNo">213</span>            h += e;<a name="line.213"></a>
-<span class="sourceLineNo">214</span>            f += g;<a name="line.214"></a>
-<span class="sourceLineNo">215</span>            f ^= g &gt;&gt;&gt; 4;<a name="line.215"></a>
-<span class="sourceLineNo">216</span>            a += f;<a name="line.216"></a>
-<span class="sourceLineNo">217</span>            g += h;<a name="line.217"></a>
-<span class="sourceLineNo">218</span>            g ^= h &lt;&lt; 8;<a name="line.218"></a>
-<span class="sourceLineNo">219</span>            b += g;<a name="line.219"></a>
-<span class="sourceLineNo">220</span>            h += a;<a name="line.220"></a>
-<span class="sourceLineNo">221</span>            h ^= a &gt;&gt;&gt; 9;<a name="line.221"></a>
-<span class="sourceLineNo">222</span>            c += h;<a name="line.222"></a>
-<span class="sourceLineNo">223</span>            a += b;<a name="line.223"></a>
-<span class="sourceLineNo">224</span>            mem[i] = a;<a name="line.224"></a>
-<span class="sourceLineNo">225</span>            mem[i + 1] = b;<a name="line.225"></a>
-<span class="sourceLineNo">226</span>            mem[i + 2] = c;<a name="line.226"></a>
-<span class="sourceLineNo">227</span>            mem[i + 3] = d;<a name="line.227"></a>
-<span class="sourceLineNo">228</span>            mem[i + 4] = e;<a name="line.228"></a>
-<span class="sourceLineNo">229</span>            mem[i + 5] = f;<a name="line.229"></a>
-<span class="sourceLineNo">230</span>            mem[i + 6] = g;<a name="line.230"></a>
-<span class="sourceLineNo">231</span>            mem[i + 7] = h;<a name="line.231"></a>
-<span class="sourceLineNo">232</span>        }<a name="line.232"></a>
-<span class="sourceLineNo">233</span><a name="line.233"></a>
-<span class="sourceLineNo">234</span>        if (flag) {           /* second pass makes all of seed affect all of mem */<a name="line.234"></a>
-<span class="sourceLineNo">235</span>            for (i = 0; i &lt; SIZE; i += 8) {<a name="line.235"></a>
-<span class="sourceLineNo">236</span>                a += mem[i];<a name="line.236"></a>
-<span class="sourceLineNo">237</span>                b += mem[i + 1];<a name="line.237"></a>
-<span class="sourceLineNo">238</span>                c += mem[i + 2];<a name="line.238"></a>
-<span class="sourceLineNo">239</span>                d += mem[i + 3];<a name="line.239"></a>
-<span class="sourceLineNo">240</span>                e += mem[i + 4];<a name="line.240"></a>
-<span class="sourceLineNo">241</span>                f += mem[i + 5];<a name="line.241"></a>
-<span class="sourceLineNo">242</span>                g += mem[i + 6];<a name="line.242"></a>
-<span class="sourceLineNo">243</span>                h += mem[i + 7];<a name="line.243"></a>
-<span class="sourceLineNo">244</span>                a ^= b &lt;&lt; 11;<a name="line.244"></a>
-<span class="sourceLineNo">245</span>                d += a;<a name="line.245"></a>
-<span class="sourceLineNo">246</span>                b += c;<a name="line.246"></a>
-<span class="sourceLineNo">247</span>                b ^= c &gt;&gt;&gt; 2;<a name="line.247"></a>
-<span class="sourceLineNo">248</span>                e += b;<a name="line.248"></a>
-<span class="sourceLineNo">249</span>                c += d;<a name="line.249"></a>
-<span class="sourceLineNo">250</span>                c ^= d &lt;&lt; 8;<a name="line.250"></a>
-<span class="sourceLineNo">251</span>                f += c;<a name="line.251"></a>
-<span class="sourceLineNo">252</span>                d += e;<a name="line.252"></a>
-<span class="sourceLineNo">253</span>                d ^= e &gt;&gt;&gt; 16;<a name="line.253"></a>
-<span class="sourceLineNo">254</span>                g += d;<a name="line.254"></a>
-<span class="sourceLineNo">255</span>                e += f;<a name="line.255"></a>
-<span class="sourceLineNo">256</span>                e ^= f &lt;&lt; 10;<a name="line.256"></a>
-<span class="sourceLineNo">257</span>                h += e;<a name="line.257"></a>
-<span class="sourceLineNo">258</span>                f += g;<a name="line.258"></a>
-<span class="sourceLineNo">259</span>                f ^= g &gt;&gt;&gt; 4;<a name="line.259"></a>
-<span class="sourceLineNo">260</span>                a += f;<a name="line.260"></a>
-<span class="sourceLineNo">261</span>                g += h;<a name="line.261"></a>
-<span class="sourceLineNo">262</span>                g ^= h &lt;&lt; 8;<a name="line.262"></a>
-<span class="sourceLineNo">263</span>                b += g;<a name="line.263"></a>
-<span class="sourceLineNo">264</span>                h += a;<a name="line.264"></a>
-<span class="sourceLineNo">265</span>                h ^= a &gt;&gt;&gt; 9;<a name="line.265"></a>
-<span class="sourceLineNo">266</span>                c += h;<a name="line.266"></a>
-<span class="sourceLineNo">267</span>                a += b;<a name="line.267"></a>
-<span class="sourceLineNo">268</span>                mem[i] = a;<a name="line.268"></a>
-<span class="sourceLineNo">269</span>                mem[i + 1] = b;<a name="line.269"></a>
-<span class="sourceLineNo">270</span>                mem[i + 2] = c;<a name="line.270"></a>
-<span class="sourceLineNo">271</span>                mem[i + 3] = d;<a name="line.271"></a>
-<span class="sourceLineNo">272</span>                mem[i + 4] = e;<a name="line.272"></a>
-<span class="sourceLineNo">273</span>                mem[i + 5] = f;<a name="line.273"></a>
-<span class="sourceLineNo">274</span>                mem[i + 6] = g;<a name="line.274"></a>
-<span class="sourceLineNo">275</span>                mem[i + 7] = h;<a name="line.275"></a>
-<span class="sourceLineNo">276</span>            }<a name="line.276"></a>
-<span class="sourceLineNo">277</span>        }<a name="line.277"></a>
-<span class="sourceLineNo">278</span><a name="line.278"></a>
-<span class="sourceLineNo">279</span>        regen();<a name="line.279"></a>
-<span class="sourceLineNo">280</span>        count = SIZE;<a name="line.280"></a>
-<span class="sourceLineNo">281</span>    }<a name="line.281"></a>
-<span class="sourceLineNo">282</span><a name="line.282"></a>
-<span class="sourceLineNo">283</span>    public final int nextInt() {<a name="line.283"></a>
-<span class="sourceLineNo">284</span>        if (0 == count--) {<a name="line.284"></a>
-<span class="sourceLineNo">285</span>            regen();<a name="line.285"></a>
-<span class="sourceLineNo">286</span>            count = SIZE - 1;<a name="line.286"></a>
-<span class="sourceLineNo">287</span>        }<a name="line.287"></a>
-<span class="sourceLineNo">288</span>        return results[count];<a name="line.288"></a>
-<span class="sourceLineNo">289</span>    }<a name="line.289"></a>
-<span class="sourceLineNo">290</span>    /**<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     * Generates and returns a block of 256 pseudo-random int values.<a name="line.291"></a>
-<span class="sourceLineNo">292</span>     * @return a freshly-allocated array of 256 pseudo-random ints, with all bits possible<a name="line.292"></a>
-<span class="sourceLineNo">293</span>     */<a name="line.293"></a>
-<span class="sourceLineNo">294</span>    public final int[] nextBlock()<a name="line.294"></a>
-<span class="sourceLineNo">295</span>    {<a name="line.295"></a>
-<span class="sourceLineNo">296</span>        regen();<a name="line.296"></a>
-<span class="sourceLineNo">297</span>        final int[] block = new int[SIZE];<a name="line.297"></a>
-<span class="sourceLineNo">298</span>        System.arraycopy(results, 0, block, 0, SIZE);<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        count = 0;<a name="line.299"></a>
-<span class="sourceLineNo">300</span>        return block;<a name="line.300"></a>
-<span class="sourceLineNo">301</span>    }<a name="line.301"></a>
-<span class="sourceLineNo">302</span><a name="line.302"></a>
-<span class="sourceLineNo">303</span>    /**<a name="line.303"></a>
-<span class="sourceLineNo">304</span>     * Generates enough pseudo-random int values to fill {@code data} and assigns them to it.<a name="line.304"></a>
-<span class="sourceLineNo">305</span>     */<a name="line.305"></a>
-<span class="sourceLineNo">306</span>    public final void setBlock(final int[] data)<a name="line.306"></a>
-<span class="sourceLineNo">307</span>    {<a name="line.307"></a>
-<span class="sourceLineNo">308</span>        int len, i;<a name="line.308"></a>
-<span class="sourceLineNo">309</span>        if(data == null || (len = data.length) == 0) return;<a name="line.309"></a>
-<span class="sourceLineNo">310</span>        for (i = 0; len &gt; 256; i += 256, len -= 256) {<a name="line.310"></a>
-<span class="sourceLineNo">311</span>            regen();<a name="line.311"></a>
-<span class="sourceLineNo">312</span>            System.arraycopy(results, 0, data, i, 256);<a name="line.312"></a>
-<span class="sourceLineNo">313</span>        }<a name="line.313"></a>
-<span class="sourceLineNo">314</span>        regen();<a name="line.314"></a>
-<span class="sourceLineNo">315</span>        System.arraycopy(results, 0, data, i, len);<a name="line.315"></a>
-<span class="sourceLineNo">316</span>        count = len &amp; 255;<a name="line.316"></a>
-<span class="sourceLineNo">317</span>    }<a name="line.317"></a>
-<span class="sourceLineNo">318</span><a name="line.318"></a>
-<span class="sourceLineNo">319</span>    /**<a name="line.319"></a>
-<span class="sourceLineNo">320</span>     * Generates enough pseudo-random float values between 0f and 1f to fill {@code data} and assigns them to it.<a name="line.320"></a>
-<span class="sourceLineNo">321</span>     * Inclusive on 0f, exclusive on 1f. Intended for cases where you need some large source of randomness to be checked<a name="line.321"></a>
-<span class="sourceLineNo">322</span>     * later repeatedly, such as how permutation tables are used in Simplex noise.<a name="line.322"></a>
-<span class="sourceLineNo">323</span>     */<a name="line.323"></a>
-<span class="sourceLineNo">324</span>    public final void setBlock(final float[] data)<a name="line.324"></a>
-<span class="sourceLineNo">325</span>    {<a name="line.325"></a>
-<span class="sourceLineNo">326</span>        int len, n;<a name="line.326"></a>
-<span class="sourceLineNo">327</span>        if(data == null || (len = data.length) == 0) return;<a name="line.327"></a>
-<span class="sourceLineNo">328</span>        for (int i = 0; i &lt; len; i++) {<a name="line.328"></a>
-<span class="sourceLineNo">329</span>            data[i] = NumberTools.intBitsToFloat(((n = nextInt()) &gt;&gt;&gt; 9 ^ (n &amp; 0x7fffff)) | 0x3f800000) - 1f;<a name="line.329"></a>
-<span class="sourceLineNo">330</span>        }<a name="line.330"></a>
-<span class="sourceLineNo">331</span>    }<a name="line.331"></a>
-<span class="sourceLineNo">332</span><a name="line.332"></a>
-<span class="sourceLineNo">333</span>    /**<a name="line.333"></a>
-<span class="sourceLineNo">334</span>     * Generates enough pseudo-random float values between -1f and 1f to fill {@code data} and assigns them to it.<a name="line.334"></a>
-<span class="sourceLineNo">335</span>     * Inclusive on -1f, exclusive on 1f. Intended for cases where you need some large source of randomness to be<a name="line.335"></a>
-<span class="sourceLineNo">336</span>     * checked later repeatedly, such as how permutation tables are used in Simplex noise.<a name="line.336"></a>
-<span class="sourceLineNo">337</span>     */<a name="line.337"></a>
-<span class="sourceLineNo">338</span>    public final void setSignedBlock(final float[] data)<a name="line.338"></a>
-<span class="sourceLineNo">339</span>    {<a name="line.339"></a>
-<span class="sourceLineNo">340</span>        int len, n;<a name="line.340"></a>
-<span class="sourceLineNo">341</span>        if(data == null || (len = data.length) == 0) return;<a name="line.341"></a>
-<span class="sourceLineNo">342</span>        for (int i = 0; i &lt; len; i++) {<a name="line.342"></a>
-<span class="sourceLineNo">343</span>            data[i] = NumberTools.intBitsToFloat(((n = nextInt()) &gt;&gt;&gt; 9 ^ (n &amp; 0x7fffff)) | 0x40000000) - 3f;<a name="line.343"></a>
-<span class="sourceLineNo">344</span>        }<a name="line.344"></a>
-<span class="sourceLineNo">345</span>    }<a name="line.345"></a>
-<span class="sourceLineNo">346</span><a name="line.346"></a>
-<span class="sourceLineNo">347</span>    @Override<a name="line.347"></a>
-<span class="sourceLineNo">348</span>    public final int next( int bits ) {<a name="line.348"></a>
-<span class="sourceLineNo">349</span>        return nextInt() &gt;&gt;&gt; 32 - bits;<a name="line.349"></a>
-<span class="sourceLineNo">350</span>    }<a name="line.350"></a>
-<span class="sourceLineNo">351</span><a name="line.351"></a>
-<span class="sourceLineNo">352</span>    /**<a name="line.352"></a>
-<span class="sourceLineNo">353</span>     * Using this method, any algorithm that needs to efficiently generate more<a name="line.353"></a>
-<span class="sourceLineNo">354</span>     * than 32 bits of random data can interface with this randomness source.<a name="line.354"></a>
-<span class="sourceLineNo">355</span>     * &lt;p&gt;<a name="line.355"></a>
-<span class="sourceLineNo">356</span>     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).<a name="line.356"></a>
-<span class="sourceLineNo">357</span>     *<a name="line.357"></a>
-<span class="sourceLineNo">358</span>     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)<a name="line.358"></a>
-<span class="sourceLineNo">359</span>     */<a name="line.359"></a>
-<span class="sourceLineNo">360</span>    @Override<a name="line.360"></a>
-<span class="sourceLineNo">361</span>    public long nextLong() {<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        return (nextInt() &amp; 0xffffffffL) | (nextInt() &amp; 0xffffffffL) &lt;&lt; 32;<a name="line.362"></a>
-<span class="sourceLineNo">363</span>    }<a name="line.363"></a>
-<span class="sourceLineNo">364</span><a name="line.364"></a>
+<span class="sourceLineNo">151</span>        for (i = 0; i &lt; 4; ++i) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            a ^= b &lt;&lt; 11;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            d += a;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>            b += c;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>            b ^= c &gt;&gt;&gt; 2;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>            e += b;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>            c += d;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>            c ^= d &lt;&lt; 8;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            f += c;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>            d += e;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>            d ^= e &gt;&gt;&gt; 16;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>            g += d;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>            e += f;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>            e ^= f &lt;&lt; 10;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>            h += e;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>            f += g;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>            f ^= g &gt;&gt;&gt; 4;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>            a += f;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>            g += h;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>            g ^= h &lt;&lt; 8;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>            b += g;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>            h += a;<a name="line.172"></a>
+<span class="sourceLineNo">173</span>            h ^= a &gt;&gt;&gt; 9;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>            c += h;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>            a += b;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        }<a name="line.176"></a>
+<span class="sourceLineNo">177</span><a name="line.177"></a>
+<span class="sourceLineNo">178</span>        for (i = 0; i &lt; 256; i += 8) {              /* fill in mem[] with messy stuff */<a name="line.178"></a>
+<span class="sourceLineNo">179</span>            if (flag) {<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                a += results[i];<a name="line.180"></a>
+<span class="sourceLineNo">181</span>                b += results[i + 1];<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                c += results[i + 2];<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                d += results[i + 3];<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                e += results[i + 4];<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                f += results[i + 5];<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                g += results[i + 6];<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                h += results[i + 7];<a name="line.187"></a>
+<span class="sourceLineNo">188</span>            }<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            a ^= b &lt;&lt; 11;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>            d += a;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>            b += c;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>            b ^= c &gt;&gt;&gt; 2;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>            e += b;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            c += d;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            c ^= d &lt;&lt; 8;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>            f += c;<a name="line.196"></a>
+<span class="sourceLineNo">197</span>            d += e;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            d ^= e &gt;&gt;&gt; 16;<a name="line.198"></a>
+<span class="sourceLineNo">199</span>            g += d;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>            e += f;<a name="line.200"></a>
+<span class="sourceLineNo">201</span>            e ^= f &lt;&lt; 10;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>            h += e;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>            f += g;<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            f ^= g &gt;&gt;&gt; 4;<a name="line.204"></a>
+<span class="sourceLineNo">205</span>            a += f;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>            g += h;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>            g ^= h &lt;&lt; 8;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>            b += g;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>            h += a;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>            h ^= a &gt;&gt;&gt; 9;<a name="line.210"></a>
+<span class="sourceLineNo">211</span>            c += h;<a name="line.211"></a>
+<span class="sourceLineNo">212</span>            a += b;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>            mem[i] = a;<a name="line.213"></a>
+<span class="sourceLineNo">214</span>            mem[i + 1] = b;<a name="line.214"></a>
+<span class="sourceLineNo">215</span>            mem[i + 2] = c;<a name="line.215"></a>
+<span class="sourceLineNo">216</span>            mem[i + 3] = d;<a name="line.216"></a>
+<span class="sourceLineNo">217</span>            mem[i + 4] = e;<a name="line.217"></a>
+<span class="sourceLineNo">218</span>            mem[i + 5] = f;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>            mem[i + 6] = g;<a name="line.219"></a>
+<span class="sourceLineNo">220</span>            mem[i + 7] = h;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        }<a name="line.221"></a>
+<span class="sourceLineNo">222</span><a name="line.222"></a>
+<span class="sourceLineNo">223</span>        if (flag) {           /* second pass makes all of seed affect all of mem */<a name="line.223"></a>
+<span class="sourceLineNo">224</span>            for (i = 0; i &lt; 256; i += 8) {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>                a += mem[i];<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                b += mem[i + 1];<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                c += mem[i + 2];<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                d += mem[i + 3];<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                e += mem[i + 4];<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                f += mem[i + 5];<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                g += mem[i + 6];<a name="line.231"></a>
+<span class="sourceLineNo">232</span>                h += mem[i + 7];<a name="line.232"></a>
+<span class="sourceLineNo">233</span>                a ^= b &lt;&lt; 11;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>                d += a;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>                b += c;<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                b ^= c &gt;&gt;&gt; 2;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                e += b;<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                c += d;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                c ^= d &lt;&lt; 8;<a name="line.239"></a>
+<span class="sourceLineNo">240</span>                f += c;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>                d += e;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>                d ^= e &gt;&gt;&gt; 16;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>                g += d;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>                e += f;<a name="line.244"></a>
+<span class="sourceLineNo">245</span>                e ^= f &lt;&lt; 10;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                h += e;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                f += g;<a name="line.247"></a>
+<span class="sourceLineNo">248</span>                f ^= g &gt;&gt;&gt; 4;<a name="line.248"></a>
+<span class="sourceLineNo">249</span>                a += f;<a name="line.249"></a>
+<span class="sourceLineNo">250</span>                g += h;<a name="line.250"></a>
+<span class="sourceLineNo">251</span>                g ^= h &lt;&lt; 8;<a name="line.251"></a>
+<span class="sourceLineNo">252</span>                b += g;<a name="line.252"></a>
+<span class="sourceLineNo">253</span>                h += a;<a name="line.253"></a>
+<span class="sourceLineNo">254</span>                h ^= a &gt;&gt;&gt; 9;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>                c += h;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>                a += b;<a name="line.256"></a>
+<span class="sourceLineNo">257</span>                mem[i] = a;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>                mem[i + 1] = b;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>                mem[i + 2] = c;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>                mem[i + 3] = d;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>                mem[i + 4] = e;<a name="line.261"></a>
+<span class="sourceLineNo">262</span>                mem[i + 5] = f;<a name="line.262"></a>
+<span class="sourceLineNo">263</span>                mem[i + 6] = g;<a name="line.263"></a>
+<span class="sourceLineNo">264</span>                mem[i + 7] = h;<a name="line.264"></a>
+<span class="sourceLineNo">265</span>            }<a name="line.265"></a>
+<span class="sourceLineNo">266</span>        }<a name="line.266"></a>
+<span class="sourceLineNo">267</span><a name="line.267"></a>
+<span class="sourceLineNo">268</span>        regen();<a name="line.268"></a>
+<span class="sourceLineNo">269</span>        count = 256;<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    }<a name="line.270"></a>
+<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">272</span>    public final int nextInt() {<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        if (0 == count--) {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            regen();<a name="line.274"></a>
+<span class="sourceLineNo">275</span>            count = 255;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        }<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        return results[count];<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    }<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    /**<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * Generates and returns a block of 256 pseudo-random int values.<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * @return a freshly-allocated array of 256 pseudo-random ints, with all bits possible<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     */<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    public final int[] nextBlock()<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    {<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        regen();<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        final int[] block = new int[256];<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        System.arraycopy(results, 0, block, 0, 256);<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        count = 0;<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        return block;<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    }<a name="line.290"></a>
+<span class="sourceLineNo">291</span><a name="line.291"></a>
+<span class="sourceLineNo">292</span>    /**<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     * Generates enough pseudo-random int values to fill {@code data} and assigns them to it.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     */<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    public final void fillBlock(final int[] data)<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        int len, i;<a name="line.297"></a>
+<span class="sourceLineNo">298</span>        if(data == null || (len = data.length) == 0) return;<a name="line.298"></a>
+<span class="sourceLineNo">299</span>        for (i = 0; len &gt; 256; i += 256, len -= 256) {<a name="line.299"></a>
+<span class="sourceLineNo">300</span>            regen();<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            System.arraycopy(results, 0, data, i, 256);<a name="line.301"></a>
+<span class="sourceLineNo">302</span>        }<a name="line.302"></a>
+<span class="sourceLineNo">303</span>        regen();<a name="line.303"></a>
+<span class="sourceLineNo">304</span>        System.arraycopy(results, 0, data, i, len);<a name="line.304"></a>
+<span class="sourceLineNo">305</span>        count = len &amp; 255;<a name="line.305"></a>
+<span class="sourceLineNo">306</span>    }<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>    /**<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * Generates enough pseudo-random float values between 0f and 1f to fill {@code data} and assigns them to it.<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * Inclusive on 0f, exclusive on 1f. Intended for cases where you need some large source of randomness to be checked<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * later repeatedly, such as how permutation tables are used in Simplex noise.<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     */<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    public final void fillFloats(final float[] data)<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    {<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        int len, n;<a name="line.315"></a>
+<span class="sourceLineNo">316</span>        if(data == null || (len = data.length) == 0) return;<a name="line.316"></a>
+<span class="sourceLineNo">317</span>        for (int i = 0; i &lt; len; i++) {<a name="line.317"></a>
+<span class="sourceLineNo">318</span>            data[i] = NumberTools.intBitsToFloat(((n = nextInt()) &gt;&gt;&gt; 9 ^ (n &amp; 0x7fffff)) | 0x3f800000) - 1f;<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        }<a name="line.319"></a>
+<span class="sourceLineNo">320</span>    }<a name="line.320"></a>
+<span class="sourceLineNo">321</span><a name="line.321"></a>
+<span class="sourceLineNo">322</span>    /**<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * Generates enough pseudo-random float values between -1f and 1f to fill {@code data} and assigns them to it.<a name="line.323"></a>
+<span class="sourceLineNo">324</span>     * Inclusive on -1f, exclusive on 1f. Intended for cases where you need some large source of randomness to be<a name="line.324"></a>
+<span class="sourceLineNo">325</span>     * checked later repeatedly, such as how permutation tables are used in Simplex noise.<a name="line.325"></a>
+<span class="sourceLineNo">326</span>     */<a name="line.326"></a>
+<span class="sourceLineNo">327</span>    public final void fillSignedFloats(final float[] data)<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    {<a name="line.328"></a>
+<span class="sourceLineNo">329</span>        int len, n;<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        if(data == null || (len = data.length) == 0) return;<a name="line.330"></a>
+<span class="sourceLineNo">331</span>        for (int i = 0; i &lt; len; i++) {<a name="line.331"></a>
+<span class="sourceLineNo">332</span>            data[i] = NumberTools.intBitsToFloat(((n = nextInt()) &gt;&gt;&gt; 9 ^ (n &amp; 0x7fffff)) | 0x40000000) - 3f;<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        }<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    }<a name="line.334"></a>
+<span class="sourceLineNo">335</span><a name="line.335"></a>
+<span class="sourceLineNo">336</span>    @Override<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    public final int next( int bits ) {<a name="line.337"></a>
+<span class="sourceLineNo">338</span>        return nextInt() &gt;&gt;&gt; 32 - bits;<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    }<a name="line.339"></a>
+<span class="sourceLineNo">340</span><a name="line.340"></a>
+<span class="sourceLineNo">341</span>    /**<a name="line.341"></a>
+<span class="sourceLineNo">342</span>     * Using this method, any algorithm that needs to efficiently generate more<a name="line.342"></a>
+<span class="sourceLineNo">343</span>     * than 32 bits of random data can interface with this randomness source.<a name="line.343"></a>
+<span class="sourceLineNo">344</span>     * &lt;p&gt;<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     *<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     */<a name="line.348"></a>
+<span class="sourceLineNo">349</span>    @Override<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    public long nextLong() {<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        return (nextInt() &amp; 0xffffffffL) | (nextInt() &amp; 0xffffffffL) &lt;&lt; 32;<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    }<a name="line.352"></a>
+<span class="sourceLineNo">353</span><a name="line.353"></a>
+<span class="sourceLineNo">354</span><a name="line.354"></a>
+<span class="sourceLineNo">355</span>    /**<a name="line.355"></a>
+<span class="sourceLineNo">356</span>     * Produces another RandomnessSource, but the new one will not produce the same data as this one.<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     * This is meant to be a "more-secure" generator, so this helps reduce the ability to guess future<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * results from a given sequence of output.<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * @return another RandomnessSource with the same implementation but no guarantees as to generation<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     */<a name="line.360"></a>
+<span class="sourceLineNo">361</span>    @Override<a name="line.361"></a>
+<span class="sourceLineNo">362</span>    public RandomnessSource copy() {<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        return new Isaac32RNG(results);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    }<a name="line.364"></a>
 <span class="sourceLineNo">365</span><a name="line.365"></a>
-<span class="sourceLineNo">366</span>    /**<a name="line.366"></a>
-<span class="sourceLineNo">367</span>     * Produces another RandomnessSource, but the new one will not produce the same data as this one.<a name="line.367"></a>
-<span class="sourceLineNo">368</span>     * This is meant to be a "more-secure" generator, so this helps reduce the ability to guess future<a name="line.368"></a>
-<span class="sourceLineNo">369</span>     * results from a given sequence of output.<a name="line.369"></a>
-<span class="sourceLineNo">370</span>     * @return another RandomnessSource with the same implementation but no guarantees as to generation<a name="line.370"></a>
-<span class="sourceLineNo">371</span>     */<a name="line.371"></a>
-<span class="sourceLineNo">372</span>    @Override<a name="line.372"></a>
-<span class="sourceLineNo">373</span>    public RandomnessSource copy() {<a name="line.373"></a>
-<span class="sourceLineNo">374</span>        return new Isaac32RNG(results);<a name="line.374"></a>
-<span class="sourceLineNo">375</span>    }<a name="line.375"></a>
-<span class="sourceLineNo">376</span><a name="line.376"></a>
-<span class="sourceLineNo">377</span>    @Override<a name="line.377"></a>
-<span class="sourceLineNo">378</span>    public boolean equals(Object o) {<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        if (this == o) return true;<a name="line.379"></a>
-<span class="sourceLineNo">380</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.380"></a>
-<span class="sourceLineNo">381</span><a name="line.381"></a>
-<span class="sourceLineNo">382</span>        Isaac32RNG isaac32RNG = (Isaac32RNG) o;<a name="line.382"></a>
-<span class="sourceLineNo">383</span><a name="line.383"></a>
-<span class="sourceLineNo">384</span>        if (count != isaac32RNG.count) return false;<a name="line.384"></a>
-<span class="sourceLineNo">385</span>        if (a != isaac32RNG.a) return false;<a name="line.385"></a>
-<span class="sourceLineNo">386</span>        if (b != isaac32RNG.b) return false;<a name="line.386"></a>
-<span class="sourceLineNo">387</span>        if (c != isaac32RNG.c) return false;<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        if (!Arrays.equals(results, isaac32RNG.results)) return false;<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        return Arrays.equals(mem, isaac32RNG.mem);<a name="line.389"></a>
+<span class="sourceLineNo">366</span>    @Override<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    public boolean equals(Object o) {<a name="line.367"></a>
+<span class="sourceLineNo">368</span>        if (this == o) return true;<a name="line.368"></a>
+<span class="sourceLineNo">369</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.369"></a>
+<span class="sourceLineNo">370</span><a name="line.370"></a>
+<span class="sourceLineNo">371</span>        Isaac32RNG isaac32RNG = (Isaac32RNG) o;<a name="line.371"></a>
+<span class="sourceLineNo">372</span><a name="line.372"></a>
+<span class="sourceLineNo">373</span>        if (count != isaac32RNG.count) return false;<a name="line.373"></a>
+<span class="sourceLineNo">374</span>        if (a != isaac32RNG.a) return false;<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        if (b != isaac32RNG.b) return false;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>        if (c != isaac32RNG.c) return false;<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        if (!Arrays.equals(results, isaac32RNG.results)) return false;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        return Arrays.equals(mem, isaac32RNG.mem);<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    }<a name="line.379"></a>
+<span class="sourceLineNo">380</span><a name="line.380"></a>
+<span class="sourceLineNo">381</span>    @Override<a name="line.381"></a>
+<span class="sourceLineNo">382</span>    public int hashCode() {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>        int result = count;<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        result = 31 * result + CrossHash.Wisp.hash(results);<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        result = 31 * result + CrossHash.Wisp.hash(mem);<a name="line.385"></a>
+<span class="sourceLineNo">386</span>        result = 31 * result + a;<a name="line.386"></a>
+<span class="sourceLineNo">387</span>        result = 31 * result + b;<a name="line.387"></a>
+<span class="sourceLineNo">388</span>        result = 31 * result + c;<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        return result;<a name="line.389"></a>
 <span class="sourceLineNo">390</span>    }<a name="line.390"></a>
 <span class="sourceLineNo">391</span><a name="line.391"></a>
 <span class="sourceLineNo">392</span>    @Override<a name="line.392"></a>
-<span class="sourceLineNo">393</span>    public int hashCode() {<a name="line.393"></a>
-<span class="sourceLineNo">394</span>        int result = count;<a name="line.394"></a>
-<span class="sourceLineNo">395</span>        result = 31 * result + CrossHash.Wisp.hash(results);<a name="line.395"></a>
-<span class="sourceLineNo">396</span>        result = 31 * result + CrossHash.Wisp.hash(mem);<a name="line.396"></a>
-<span class="sourceLineNo">397</span>        result = 31 * result + a;<a name="line.397"></a>
-<span class="sourceLineNo">398</span>        result = 31 * result + b;<a name="line.398"></a>
-<span class="sourceLineNo">399</span>        result = 31 * result + c;<a name="line.399"></a>
-<span class="sourceLineNo">400</span>        return result;<a name="line.400"></a>
-<span class="sourceLineNo">401</span>    }<a name="line.401"></a>
-<span class="sourceLineNo">402</span><a name="line.402"></a>
-<span class="sourceLineNo">403</span>    @Override<a name="line.403"></a>
-<span class="sourceLineNo">404</span>    public String toString()<a name="line.404"></a>
-<span class="sourceLineNo">405</span>    {<a name="line.405"></a>
-<span class="sourceLineNo">406</span>        return "Isaac32RNG with a hidden state (id is " + System.identityHashCode(this) + ')';<a name="line.406"></a>
-<span class="sourceLineNo">407</span>    }<a name="line.407"></a>
-<span class="sourceLineNo">408</span><a name="line.408"></a>
-<span class="sourceLineNo">409</span>}<a name="line.409"></a>
+<span class="sourceLineNo">393</span>    public String toString()<a name="line.393"></a>
+<span class="sourceLineNo">394</span>    {<a name="line.394"></a>
+<span class="sourceLineNo">395</span>        return "Isaac32RNG with a hidden state (id is " + System.identityHashCode(this) + ')';<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    }<a name="line.396"></a>
+<span class="sourceLineNo">397</span><a name="line.397"></a>
+<span class="sourceLineNo">398</span>}<a name="line.398"></a>
 
 
 

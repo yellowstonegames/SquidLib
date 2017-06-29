@@ -150,7 +150,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
     private RandomXS128 gdxRandom = new RandomXS128(0xFEDCBA987654321L);
-    private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L, 0x1234567890L);
+    private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L);
     private long seed;
     private int ctr = 0;
     private boolean keepGoing = true;
@@ -189,14 +189,12 @@ public class HashVisualizer extends ApplicationAdapter {
         public MicroRandom()
         {
             this((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
-                    ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L),
-                    (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
-                            ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
+                    ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
         }
 
-        public MicroRandom(long seed0, long seed1) {
-            state0 = seed0 * 0x62E2AC0DL + 0x85157AF5;
-            state1 = seed1 * 0x85157AF5L - 0x62E2AC0DL;
+        public MicroRandom(final long seed) {
+            state0 = seed * 0x62E2AC0DL + 0x85157AF5;
+            state1 = seed * 0x85157AF5L - 0x62E2AC0DL;
         }
 
         public void setState(final long seed)
@@ -226,7 +224,7 @@ public class HashVisualizer extends ApplicationAdapter {
          */
         @Override
         public RandomnessSource copy() {
-            MicroRandom mr = new MicroRandom(1L, 1L);
+            MicroRandom mr = new MicroRandom(1L);
             mr.state0 = state0;
             mr.state1 = state1;
             mr.mul = mul;
