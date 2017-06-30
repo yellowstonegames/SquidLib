@@ -23,7 +23,7 @@ import java.util.Scanner;
  * Created by Tommy Ettinger on 1/10/2017.
  */
 public class DataDemo extends ApplicationAdapter {
-    private static String ROOT_DIR = "squidlib-extra/"; // "squidlib-extra/" if you're running this file from the parent project and "" if you're running from the squidlib-extra project directly
+    private static final String ROOT_DIR = "squidlib-extra/"; // "squidlib-extra/" if you're running this file from the parent project and "" if you're running from the squidlib-extra project directly
 
     @Override
     @SuppressWarnings("unchecked")
