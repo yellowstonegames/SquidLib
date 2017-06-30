@@ -127,9 +127,9 @@ public class TextStorage {
         else
         {
             if (compress)
-                preferences.putString(outerName, Garbler.garble(LZSEncoding.compressToUTF16(mapConverter.stringify(contents)), garbleKey));
+                preferences.putString(outerName, Garbler.garble32(LZSEncoding.compressToUTF16(mapConverter.stringify(contents)), garbleKey));
             else
-                preferences.putString(outerName, Garbler.garble(mapConverter.stringify(contents), garbleKey));
+                preferences.putString(outerName, Garbler.garble32(mapConverter.stringify(contents), garbleKey));
         }
         preferences.flush();
         return this;
@@ -152,9 +152,9 @@ public class TextStorage {
         else
         {
             if (compress)
-                return Garbler.garble(LZSEncoding.compressToUTF16(mapConverter.stringify(contents)), garbleKey);
+                return Garbler.garble32(LZSEncoding.compressToUTF16(mapConverter.stringify(contents)), garbleKey);
             else
-                return Garbler.garble(mapConverter.stringify(contents), garbleKey);
+                return Garbler.garble32(mapConverter.stringify(contents), garbleKey);
         }
     }
 
@@ -210,9 +210,9 @@ public class TextStorage {
         else
         {
             if (compress)
-                got = LZSEncoding.decompressFromUTF16(Garbler.degarble(preferences.getString(outerName), garbleKey));
+                got = LZSEncoding.decompressFromUTF16(Garbler.degarble32(preferences.getString(outerName), garbleKey));
             else
-                got = Garbler.degarble(preferences.getString(outerName), garbleKey);
+                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);
         }
         if(got == null) return null;
         om = mapConverter.restore(got);
@@ -250,9 +250,9 @@ public class TextStorage {
         else
         {
             if (compress)
-                got = LZSEncoding.decompressFromUTF16(Garbler.degarble(preferences.getString(outerName), garbleKey));
+                got = LZSEncoding.decompressFromUTF16(Garbler.degarble32(preferences.getString(outerName), garbleKey));
             else
-                got = Garbler.degarble(preferences.getString(outerName), garbleKey);
+                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);
         }
         if(got == null) return null;
         om = mapConverter.restore(got);

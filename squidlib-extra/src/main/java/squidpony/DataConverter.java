@@ -2,7 +2,6 @@ package squidpony;
 
 import com.badlogic.gdx.utils.JsonWriter;
 import squidpony.store.json.JsonConverter;
-
 /**
  * Augmented version of LibGDX's Json class that knows how to handle various data types common in SquidLib.
  * This includes OrderedMap, which notably allows non-String keys (LibGDX's default Map serializer requires keys to be
@@ -15,7 +14,7 @@ public class DataConverter extends JsonConverter {
     /**
      * Creates a new DataConverter using "minimal" output type, so it omits double quotes whenever possible but gives
      * up compatibility with most other JSON readers. Give the constructor
-     * {@link com.badlogic.gdx.utils.JsonWriter.OutputType#json} if you need full compatibility.
+     * {@link JsonWriter.OutputType#json} if you need full compatibility.
      */
     public DataConverter() {
         super();

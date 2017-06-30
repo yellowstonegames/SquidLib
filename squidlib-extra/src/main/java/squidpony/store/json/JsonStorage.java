@@ -124,9 +124,9 @@ public class JsonStorage {
         else
         {
             if (compress)
-                preferences.putString(outerName, Garbler.garble(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey));
+                preferences.putString(outerName, Garbler.garble32(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey));
             else
-                preferences.putString(outerName, Garbler.garble(json.toJson(contents, StringStringMap.class), garbleKey));
+                preferences.putString(outerName, Garbler.garble32(json.toJson(contents, StringStringMap.class), garbleKey));
         }
         preferences.flush();
         return this;
@@ -147,9 +147,9 @@ public class JsonStorage {
         else
         {
             if (compress)
-                return Garbler.garble(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey);
+                return Garbler.garble32(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey);
             else
-                return Garbler.garble(json.toJson(contents, StringStringMap.class), garbleKey);
+                return Garbler.garble32(json.toJson(contents, StringStringMap.class), garbleKey);
 
         }
     }
@@ -202,9 +202,9 @@ public class JsonStorage {
         else
         {
             if (compress)
-                got = LZSEncoding.decompressFromUTF16(Garbler.degarble(preferences.getString(outerName), garbleKey));
+                got = LZSEncoding.decompressFromUTF16(Garbler.degarble32(preferences.getString(outerName), garbleKey));
             else
-                got = Garbler.degarble(preferences.getString(outerName), garbleKey);
+                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);
         }
         if(got == null) return null;
         om = json.fromJson(StringStringMap.class, got);
