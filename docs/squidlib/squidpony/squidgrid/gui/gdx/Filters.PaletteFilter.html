@@ -121,11 +121,15 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.html#line.363">Filters.PaletteFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.html#line.404">Filters.PaletteFilter</a>
 extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="class in squidpony.squidgrid.gui.gdx">Filter</a>&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 <div class="block">A Filter that is constructed with a group of colors and forces any color it is told to alter to exactly
  the color it was constructed with that has the closest red, green, and blue components. A convenient way to
- use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.
+ use this is to pass in one of the color series from SColor, such as <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#RED_SERIES"><code>SColor.RED_SERIES</code></a> or
+ <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#ACHROMATIC_SERIES"><code>SColor.ACHROMATIC_SERIES</code></a>. This can also be used to enforce usage of a limited color palette such as
+ one of DawnBringer's popular pixel art palettes, <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#DAWNBRINGER_16"><code>SColor.DAWNBRINGER_16</code></a> and
+ <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#DAWNBRINGER_32"><code>SColor.DAWNBRINGER_32</code></a>. Beyond 32 colors, the palettes <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#VARIED_PALETTE"><code>SColor.VARIED_PALETTE</code></a> with 56 colors
+ and <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#COLOR_WHEEL_PALETTE"><code>SColor.COLOR_WHEEL_PALETTE</code></a> with 189 colors can be used.
 
  Preview using BLUE_GREEN_SERIES foreground, ACHROMATIC_SERIES background: http://i.imgur.com/2HdZpC9.png</div>
 </li>
@@ -166,10 +170,9 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#PaletteFilter-float:A-float:A-float:A-float:A-">PaletteFilter</a></span>(float[]&nbsp;r,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#PaletteFilter-float:A-float:A-float:A-">PaletteFilter</a></span>(float[]&nbsp;r,
              float[]&nbsp;g,
-             float[]&nbsp;b,
-             float[]&nbsp;a)</code>
+             float[]&nbsp;b)</code>
 <div class="block">Sets up a PaletteFilter with the exact colors to use as individual components; the lengths of each given
  array should be identical.</div>
 </td>
@@ -218,16 +221,15 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="PaletteFilter-float:A-float:A-float:A-float:A-">
+<a name="PaletteFilter-float:A-float:A-float:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteFilter</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.373">PaletteFilter</a>(float[]&nbsp;r,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.413">PaletteFilter</a>(float[]&nbsp;r,
                      float[]&nbsp;g,
-                     float[]&nbsp;b,
-                     float[]&nbsp;a)</pre>
+                     float[]&nbsp;b)</pre>
 <div class="block">Sets up a PaletteFilter with the exact colors to use as individual components; the lengths of each given
  array should be identical.</div>
 <dl>
@@ -235,7 +237,6 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <dd><code>r</code> - the red components to use</dd>
 <dd><code>g</code> - the green components to use</dd>
 <dd><code>b</code> - the blue components to use</dd>
-<dd><code>a</code> - the opacity components to use</dd>
 </dl>
 </li>
 </ul>
@@ -245,9 +246,11 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PaletteFilter</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.388">PaletteFilter</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colors)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.427">PaletteFilter</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colors)</pre>
 <div class="block">Sets up a PaletteFilter with the exact colors to use as Colors. A convenient way to
- use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.</div>
+ use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.
+ The alpha component of each color in the palette is ignored, since when a color is requested for
+ filtering, its alpha is respected and only its red, green, and blue components are changed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>colors</code> - the Colors to use</dd>
@@ -268,7 +271,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <ul class="blockListLast">
 <li class="blockList">
 <h4>alter</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.399">alter</a>(float&nbsp;r,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.437">alter</a>(float&nbsp;r,
                                              float&nbsp;g,
                                              float&nbsp;b,
                                              float&nbsp;a)</pre>

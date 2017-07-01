@@ -1836,7 +1836,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>SquidPanel</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.131">SquidPanel</a>(int&nbsp;gridWidth,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.129">SquidPanel</a>(int&nbsp;gridWidth,
                   int&nbsp;gridHeight,
                   <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
                   squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center)</pre>
@@ -1850,8 +1850,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <dd><code>gridWidth</code> - the number of cells horizontally</dd>
 <dd><code>gridHeight</code> - the number of cells vertically</dd>
 <dd><code>factory</code> - the factory to use for cell rendering</dd>
-<dd><code>center</code> - The color center to use. Can be <code>null</code>, but then must be set later on with
-          <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setColorCenter-squidpony.IColorCenter-"><code>setColorCenter(IColorCenter)</code></a>.</dd>
+<dd><code>center</code> - the color center to use. Can be <code>null</code>, which will use a default</dd>
 </dl>
 </li>
 </ul>
@@ -1869,16 +1868,19 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
                   float&nbsp;yOffset)</pre>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
  are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
-
+ <br>
  If the TextCellFactory has not yet been initialized, then it will be sized at 12x12 px per cell. If it is null
- then a default one will be created and initialized.</div>
+ then a default one will be created and initialized. The xOffset and yOffset arguments are measured in pixels or
+ whatever sub-cell unit of measure your game uses (world coordinates, in libGDX parlance), and change where the
+ SquidPanel starts drawing by simply adding to the initial x and y coordinates. 0 and 0 are usually fine.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>gridWidth</code> - the number of cells horizontally</dd>
 <dd><code>gridHeight</code> - the number of cells vertically</dd>
 <dd><code>factory</code> - the factory to use for cell rendering</dd>
-<dd><code>center</code> - The color center to use. Can be <code>null</code>, but then must be set later on with
-          <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setColorCenter-squidpony.IColorCenter-"><code>setColorCenter(IColorCenter)</code></a>.</dd>
+<dd><code>center</code> - the color center to use. Can be <code>null</code>, which will use a default</dd>
+<dd><code>xOffset</code> - the x offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)</dd>
+<dd><code>yOffset</code> - the y offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)</dd>
 </dl>
 </li>
 </ul>
@@ -1888,7 +1890,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SquidPanel</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.167">SquidPanel</a>(int&nbsp;gridWidth,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.176">SquidPanel</a>(int&nbsp;gridWidth,
                   int&nbsp;gridHeight,
                   <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;factory,
                   squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;center,
@@ -1896,17 +1898,27 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
                   float&nbsp;yOffset,
                   char[][]&nbsp;actualMap)</pre>
 <div class="block">Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
- are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
-
+ are being used, a TextCellFactory is still needed to perform sizing and other utility functions. Importantly,
+ this constructor takes a 2D char array argument that can be sized differently than the displayed area. The
+ displayed area is gridWidth by gridHeight in cells, but the actualMap argument can be much larger, and only a
+ portion will be displayed at a time. This requires some special work with the Camera and Viewports to get working
+ correctly; in the squidlib module's examples, EverythingDemo may be a good place to see how this can be done.
+ You can pass null for actualMap, which will simply create a char array to use internally that is exactly
+ gridWidth by gridHeight, in cells.
+ <br>
  If the TextCellFactory has not yet been initialized, then it will be sized at 12x12 px per cell. If it is null
- then a default one will be created and initialized.</div>
+ then a default one will be created and initialized. The xOffset and yOffset arguments are measured in pixels or
+ whatever sub-cell unit of measure your game uses (world coordinates, in libGDX parlance), and change where the
+ SquidPanel starts drawing by simply adding to the initial x and y coordinates. 0 and 0 are usually fine.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>gridWidth</code> - the number of cells horizontally</dd>
 <dd><code>gridHeight</code> - the number of cells vertically</dd>
 <dd><code>factory</code> - the factory to use for cell rendering</dd>
-<dd><code>center</code> - The color center to use. Can be <code>null</code>, but then must be set later on with
-          <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setColorCenter-squidpony.IColorCenter-"><code>setColorCenter(IColorCenter)</code></a>.</dd>
+<dd><code>center</code> - the color center to use. Can be <code>null</code>, which will use a default</dd>
+<dd><code>xOffset</code> - the x offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)</dd>
+<dd><code>yOffset</code> - the y offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)</dd>
+<dd><code>actualMap</code> - will often be a different size than gridWidth by gridHeight, which enables camera scrolling</dd>
 </dl>
 </li>
 </ul>
@@ -1924,7 +1936,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.208">put</a>(char[][]&nbsp;chars)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.216">put</a>(char[][]&nbsp;chars)</pre>
 <div class="block">Places the given characters into the grid starting at 0,0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1938,7 +1950,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.213">put</a>(char[][]&nbsp;chars,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.221">put</a>(char[][]&nbsp;chars,
                 com.badlogic.gdx.graphics.Color[][]&nbsp;foregrounds)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1952,7 +1964,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.226">put</a>(char[][]&nbsp;chars,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.234">put</a>(char[][]&nbsp;chars,
                 int[][]&nbsp;indices,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;palette)</pre>
 </li>
@@ -1963,7 +1975,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.230">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.238">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 char[][]&nbsp;chars)</pre>
 </li>
@@ -1974,7 +1986,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.234">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.242">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 char[][]&nbsp;chars,
                 com.badlogic.gdx.graphics.Color[][]&nbsp;foregrounds)</pre>
@@ -1986,7 +1998,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.244">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.252">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 char[][]&nbsp;chars,
                 int[][]&nbsp;indices,
@@ -1999,7 +2011,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.254">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.262">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 com.badlogic.gdx.graphics.Color[][]&nbsp;foregrounds)</pre>
 </li>
@@ -2010,7 +2022,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.264">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.272">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 int[][]&nbsp;indices,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;palette)</pre>
@@ -2022,7 +2034,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.274">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.282">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 char[][]&nbsp;chars,
                 com.badlogic.gdx.graphics.Color&nbsp;foreground)</pre>
@@ -2034,7 +2046,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.296">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.304">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string)</pre>
 <div class="block">Puts the given string horizontally with the first character at the given offset.
@@ -2057,7 +2069,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.301">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.309">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 squidpony.panel.IColoredString&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;cs)</pre>
 <dl>
@@ -2072,7 +2084,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.312">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.320">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string,
                 com.badlogic.gdx.graphics.Color&nbsp;foreground)</pre>
@@ -2088,7 +2100,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.326">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.334">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string,
                 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -2101,7 +2113,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.338">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.346">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 char[][]&nbsp;chars,
                 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -2114,7 +2126,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.361">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.369">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string,
                 boolean&nbsp;vertical)</pre>
@@ -2139,7 +2151,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.377">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.385">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string,
                 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -2164,7 +2176,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.404">put</a>(int&nbsp;xOffset,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.412">put</a>(int&nbsp;xOffset,
                 int&nbsp;yOffset,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string,
                 com.badlogic.gdx.graphics.Color&nbsp;foreground,
@@ -2194,7 +2206,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>erase</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.453">erase</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.461">erase</a>()</pre>
 <div class="block">Erases the entire panel, leaving only a transparent space.</div>
 </li>
 </ul>
@@ -2204,7 +2216,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.459">clear</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.467">clear</a>(int&nbsp;x,
                   int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -2218,7 +2230,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.464">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.472">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <dl>
@@ -2233,7 +2245,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.468">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.476">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 float&nbsp;encodedColor)</pre>
 </li>
@@ -2244,7 +2256,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.472">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.480">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 float&nbsp;encodedColor,
                 float&nbsp;colorMultiplier)</pre>
@@ -2256,7 +2268,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.476">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.484">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 float&nbsp;encodedColor,
                 float&nbsp;colorMultiplier,
@@ -2269,7 +2281,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.480">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.488">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 com.badlogic.gdx.graphics.Color&nbsp;color,
                 float&nbsp;colorMultiplier)</pre>
@@ -2281,7 +2293,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.484">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.492">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 com.badlogic.gdx.graphics.Color&nbsp;color,
                 float&nbsp;mixAmount,
@@ -2294,7 +2306,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.489">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.497">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 char&nbsp;c)</pre>
 <dl>
@@ -2309,7 +2321,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.500">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.508">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 int&nbsp;code)</pre>
 <div class="block">Takes a unicode codepoint for input.</div>
@@ -2327,7 +2339,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.504">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.512">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 int&nbsp;c,
                 com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
@@ -2339,7 +2351,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.508">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.516">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 int&nbsp;index,
                 <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;palette)</pre>
@@ -2351,7 +2363,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.512">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.520">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 char&nbsp;c,
                 int&nbsp;index,
@@ -2364,7 +2376,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.525">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.533">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 char&nbsp;c,
                 com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
@@ -2386,7 +2398,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.540">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.548">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 char&nbsp;c,
                 float&nbsp;encodedColor)</pre>
@@ -2406,7 +2418,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.559">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.567">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 char&nbsp;c,
                 float&nbsp;encodedColor,
@@ -2430,7 +2442,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.580">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.588">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 char&nbsp;c,
                 float&nbsp;encodedColor,
@@ -2457,7 +2469,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.594">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.602">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 char&nbsp;c,
                 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2474,7 +2486,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.612">put</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.620">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 char&nbsp;c,
                 com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -2496,7 +2508,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>cellWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.621">cellWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.629">cellWidth</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>cellWidth</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -2509,7 +2521,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>cellHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.626">cellHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.634">cellHeight</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>cellHeight</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -2522,7 +2534,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>gridHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.631">gridHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.639">gridHeight</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>gridHeight</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -2535,7 +2547,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>gridWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.636">gridWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.644">gridWidth</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>gridWidth</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -2548,7 +2560,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getTextCellFactory</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.643">getTextCellFactory</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.651">getTextCellFactory</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextCellFactory</code></a> backing <code>this</code>.</dd>
@@ -2561,7 +2573,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setTextSize</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.654">setTextSize</a>(float&nbsp;wide,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.662">setTextSize</a>(float&nbsp;wide,
                               float&nbsp;high)</pre>
 <div class="block">Sets the size of the text in this SquidPanel (but not the size of the cells) to the given width and height in
  pixels (which may be stretched by viewports later on, if your program uses them).</div>
@@ -2580,7 +2592,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.662">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.670">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  float&nbsp;parentAlpha)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -2594,7 +2606,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>drawActor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.699">drawActor</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.707">drawActor</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                       float&nbsp;parentAlpha,
                       <a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</pre>
 <div class="block">Draws one AnimatedEntity, specifically the Actor it contains. Batch must be between start() and end()</div>
@@ -2612,7 +2624,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>drawActor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.716">drawActor</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.724">drawActor</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                       float&nbsp;parentAlpha,
                       com.badlogic.gdx.scenes.scene2d.Actor&nbsp;ac)</pre>
 <div class="block">Draws one AnimatedEntity, specifically the Actor it contains. Batch must be between start() and end()</div>
@@ -2630,7 +2642,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setDefaultForeground</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.725">setDefaultForeground</a>(com.badlogic.gdx.graphics.Color&nbsp;defaultForeground)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.733">setDefaultForeground</a>(com.badlogic.gdx.graphics.Color&nbsp;defaultForeground)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setDefaultForeground</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -2643,7 +2655,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getDefaultForegroundColor</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.730">getDefaultForegroundColor</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.738">getDefaultForegroundColor</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getDefaultForegroundColor</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -2656,7 +2668,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getAnimatedEntityByCell</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.734">getAnimatedEntityByCell</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.742">getAnimatedEntityByCell</a>(int&nbsp;x,
                                               int&nbsp;y)</pre>
 </li>
 </ul>
@@ -2666,7 +2678,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.751">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.759">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    char&nbsp;c,
                                    com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
@@ -2687,7 +2699,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.775">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.783">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    char&nbsp;c,
@@ -2711,7 +2723,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.806">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.814">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
                                    com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
@@ -2732,7 +2744,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.821">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.829">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
@@ -2756,7 +2768,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.840">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.848">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
@@ -2780,7 +2792,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.855">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.863">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
@@ -2806,7 +2818,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>directionMarker</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.875">directionMarker</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.883">directionMarker</a>(int&nbsp;x,
                                       int&nbsp;y,
                                       boolean&nbsp;doubleWidth,
                                       <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
@@ -2831,7 +2843,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>directionMarker</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.884">directionMarker</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.892">directionMarker</a>(int&nbsp;x,
                                       int&nbsp;y,
                                       boolean&nbsp;doubleWidth,
                                       com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
@@ -2843,7 +2855,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.902">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.910">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    char&nbsp;c,
                                    int&nbsp;index,
@@ -2866,7 +2878,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.916">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.924">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
                                    int&nbsp;index,
@@ -2889,7 +2901,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.929">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.937">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture)</pre>
 <div class="block">Create an AnimatedEntity at position x, y, using a TextureRegion with no color modifications, which will be
@@ -2909,7 +2921,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.952">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.960">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
                                    com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
@@ -2931,7 +2943,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.975">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.983">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture)</pre>
@@ -2953,7 +2965,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1003">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1011">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
@@ -2977,7 +2989,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1028">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1036">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
@@ -3001,7 +3013,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1041">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1049">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;texture,
@@ -3026,7 +3038,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1067">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1075">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    boolean&nbsp;stretch,
@@ -3051,7 +3063,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>animateActor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1097">animateActor</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1105">animateActor</a>(int&nbsp;x,
                                    int&nbsp;y,
                                    boolean&nbsp;doubleWidth,
                                    boolean&nbsp;stretch,
@@ -3078,7 +3090,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>cellToActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1121">cellToActor</a>(int&nbsp;x,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1129">cellToActor</a>(int&nbsp;x,
                                                          int&nbsp;y)</pre>
 <div class="block">Created an Actor from the contents of the given x,y position on the grid.</div>
 <dl>
@@ -3095,7 +3107,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>cellToActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1135">cellToActor</a>(int&nbsp;x,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1143">cellToActor</a>(int&nbsp;x,
                                                          int&nbsp;y,
                                                          boolean&nbsp;doubleWidth)</pre>
 <div class="block">Created an Actor from the contents of the given x,y position on the grid; deleting
@@ -3116,7 +3128,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>createActor</h4>
-<pre>protected&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1140">createActor</a>(int&nbsp;x,
+<pre>protected&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1148">createActor</a>(int&nbsp;x,
                                                             int&nbsp;y,
                                                             char&nbsp;name,
                                                             com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -3129,7 +3141,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>createActor</h4>
-<pre>protected&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1148">createActor</a>(int&nbsp;x,
+<pre>protected&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1156">createActor</a>(int&nbsp;x,
                                                             int&nbsp;y,
                                                             char&nbsp;name,
                                                             float&nbsp;encodedColor,
@@ -3142,7 +3154,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>adjustX</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1156">adjustX</a>(float&nbsp;x,
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1164">adjustX</a>(float&nbsp;x,
                      boolean&nbsp;doubleWidth)</pre>
 </li>
 </ul>
@@ -3152,7 +3164,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>adjustY</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1164">adjustY</a>(float&nbsp;y)</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1172">adjustY</a>(float&nbsp;y)</pre>
 </li>
 </ul>
 <a name="recallActor-com.badlogic.gdx.scenes.scene2d.Actor-boolean-">
@@ -3161,7 +3173,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>recallActor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1182">recallActor</a>(com.badlogic.gdx.scenes.scene2d.Actor&nbsp;a,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1190">recallActor</a>(com.badlogic.gdx.scenes.scene2d.Actor&nbsp;a,
                         boolean&nbsp;restoreSym)</pre>
 </li>
 </ul>
@@ -3171,7 +3183,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>recallActor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1202">recallActor</a>(com.badlogic.gdx.scenes.scene2d.Actor&nbsp;a,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1210">recallActor</a>(com.badlogic.gdx.scenes.scene2d.Actor&nbsp;a,
                         boolean&nbsp;restoreSym,
                         int&nbsp;nextX,
                         int&nbsp;nextY)</pre>
@@ -3183,7 +3195,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>recallActor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1220">recallActor</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1228">recallActor</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</pre>
 </li>
 </ul>
 <a name="recallActor-squidpony.squidgrid.gui.gdx.AnimatedEntity-int-int-">
@@ -3192,7 +3204,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>recallActor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1236">recallActor</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1244">recallActor</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
                         int&nbsp;nextX,
                         int&nbsp;nextY)</pre>
 </li>
@@ -3203,7 +3215,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>fixPosition</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1251">fixPosition</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1259">fixPosition</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</pre>
 </li>
 </ul>
 <a name="fixPositions--">
@@ -3212,7 +3224,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>fixPositions</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1255">fixPositions</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1263">fixPositions</a>()</pre>
 </li>
 </ul>
 <a name="bump-squidpony.squidgrid.gui.gdx.AnimatedEntity-squidpony.squidgrid.Direction-float-">
@@ -3221,7 +3233,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>bump</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1269">bump</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1277">bump</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
                  squidpony.squidgrid.Direction&nbsp;direction,
                  float&nbsp;duration)</pre>
 <div class="block">Start a bumping animation in the given direction that will last duration seconds.</div>
@@ -3239,7 +3251,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>bump</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1297">bump</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1305">bump</a>(int&nbsp;x,
                  int&nbsp;y,
                  squidpony.squidgrid.Direction&nbsp;direction,
                  float&nbsp;duration)</pre>
@@ -3259,7 +3271,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>bump</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1332">bump</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1340">bump</a>(int&nbsp;x,
                  int&nbsp;y,
                  squidpony.squidgrid.Direction&nbsp;direction)</pre>
 <div class="block">Starts a bumping animation in the direction provided.</div>
@@ -3277,7 +3289,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>bump</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1341">bump</a>(squidpony.squidmath.Coord&nbsp;location,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1349">bump</a>(squidpony.squidmath.Coord&nbsp;location,
                  squidpony.squidgrid.Direction&nbsp;direction)</pre>
 <div class="block">Starts a bumping animation in the direction provided.</div>
 <dl>
@@ -3293,7 +3305,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>slide</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1352">slide</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1360">slide</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
                   int&nbsp;newX,
                   int&nbsp;newY,
                   float&nbsp;duration)</pre>
@@ -3314,7 +3326,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>slide</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1381">slide</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1389">slide</a>(int&nbsp;x,
                   int&nbsp;y,
                   int&nbsp;newX,
                   int&nbsp;newY,
@@ -3337,7 +3349,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>slide</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1430">slide</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1438">slide</a>(int&nbsp;x,
                   int&nbsp;y,
                   <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                   com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -3367,7 +3379,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>slide</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1460">slide</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1468">slide</a>(int&nbsp;x,
                   int&nbsp;y,
                   <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                   com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -3401,7 +3413,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>slide</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1501">slide</a>(squidpony.squidmath.Coord&nbsp;start,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1509">slide</a>(squidpony.squidmath.Coord&nbsp;start,
                   squidpony.squidmath.Coord&nbsp;end)</pre>
 <div class="block">Starts a movement animation for the object at the given grid location at the default speed.</div>
 <dl>
@@ -3417,7 +3429,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>slide</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1512">slide</a>(squidpony.squidmath.Coord&nbsp;start,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1520">slide</a>(squidpony.squidmath.Coord&nbsp;start,
                   squidpony.squidgrid.Direction&nbsp;direction)</pre>
 <div class="block">Starts a movement animation for the object at the given grid location at the default speed for one grid square in
  the direction provided.</div>
@@ -3434,7 +3446,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>slide</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1524">slide</a>(squidpony.squidmath.Coord&nbsp;start,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1532">slide</a>(squidpony.squidmath.Coord&nbsp;start,
                   squidpony.squidmath.Coord&nbsp;end,
                   float&nbsp;duration)</pre>
 <div class="block">Starts a sliding movement animation for the object at the given location at the provided speed. The duration is
@@ -3453,7 +3465,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>wiggle</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1534">wiggle</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1542">wiggle</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
                    float&nbsp;duration)</pre>
 <div class="block">Starts an wiggling animation for the object at the given location for the given duration in seconds.</div>
 <dl>
@@ -3469,7 +3481,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>wiggle</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1573">wiggle</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1581">wiggle</a>(int&nbsp;x,
                    int&nbsp;y,
                    float&nbsp;duration)</pre>
 <div class="block">Starts an wiggling animation for the object at the given location for the given duration in seconds.</div>
@@ -3487,7 +3499,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>tint</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1617">tint</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1625">tint</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae,
                  com.badlogic.gdx.graphics.Color&nbsp;color,
                  float&nbsp;duration)</pre>
 <div class="block">Starts a tint animation for <code>ae</code> for the given <code>duration</code> in seconds.</div>
@@ -3505,7 +3517,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>tint</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1645">tint</a>(float&nbsp;delay,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1653">tint</a>(float&nbsp;delay,
                  int&nbsp;x,
                  int&nbsp;y,
                  com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -3528,7 +3540,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>tint</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1661">tint</a>(float&nbsp;delay,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1669">tint</a>(float&nbsp;delay,
                  int&nbsp;x,
                  int&nbsp;y,
                  com.badlogic.gdx.graphics.Color&nbsp;color,
@@ -3554,7 +3566,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>tint</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1700">tint</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1708">tint</a>(int&nbsp;x,
                  int&nbsp;y,
                  com.badlogic.gdx.graphics.Color&nbsp;color,
                  float&nbsp;duration)</pre>
@@ -3575,7 +3587,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>fade</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1717">fade</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1725">fade</a>(int&nbsp;x,
                  int&nbsp;y,
                  com.badlogic.gdx.graphics.Color&nbsp;color,
                  float&nbsp;duration)</pre>
@@ -3598,7 +3610,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>summon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1745">summon</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1753">summon</a>(int&nbsp;x,
                    int&nbsp;y,
                    char&nbsp;glyph,
                    com.badlogic.gdx.graphics.Color&nbsp;startColor,
@@ -3628,7 +3640,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>summon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1764">summon</a>(int&nbsp;startX,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1772">summon</a>(int&nbsp;startX,
                    int&nbsp;startY,
                    int&nbsp;endX,
                    int&nbsp;endY,
@@ -3660,7 +3672,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>summon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1783">summon</a>(int&nbsp;startX,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1791">summon</a>(int&nbsp;startX,
                    int&nbsp;startY,
                    int&nbsp;endX,
                    int&nbsp;endY,
@@ -3692,7 +3704,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>summon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1803">summon</a>(int&nbsp;startX,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1811">summon</a>(int&nbsp;startX,
                    int&nbsp;startY,
                    int&nbsp;endX,
                    int&nbsp;endY,
@@ -3726,7 +3738,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>summon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1825">summon</a>(int&nbsp;startX,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1833">summon</a>(int&nbsp;startX,
                    int&nbsp;startY,
                    int&nbsp;endX,
                    int&nbsp;endY,
@@ -3763,7 +3775,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>summon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1848">summon</a>(float&nbsp;delay,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1856">summon</a>(float&nbsp;delay,
                    int&nbsp;startX,
                    int&nbsp;startY,
                    int&nbsp;endX,
@@ -3802,7 +3814,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>burst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1893">burst</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1901">burst</a>(int&nbsp;x,
                   int&nbsp;y,
                   boolean&nbsp;eightWay,
                   char&nbsp;glyph,
@@ -3832,7 +3844,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>burst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1916">burst</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1924">burst</a>(int&nbsp;x,
                   int&nbsp;y,
                   boolean&nbsp;eightWay,
                   char&nbsp;glyph,
@@ -3863,7 +3875,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>burst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1941">burst</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1949">burst</a>(int&nbsp;x,
                   int&nbsp;y,
                   boolean&nbsp;eightWay,
                   char&nbsp;glyph,
@@ -3898,7 +3910,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>burst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1968">burst</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1976">burst</a>(int&nbsp;x,
                   int&nbsp;y,
                   int&nbsp;distance,
                   boolean&nbsp;eightWay,
@@ -3935,7 +3947,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>burst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.1995">burst</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2003">burst</a>(int&nbsp;x,
                   int&nbsp;y,
                   boolean&nbsp;eightWay,
                   char&nbsp;glyph,
@@ -3972,7 +3984,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>burst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2022">burst</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2030">burst</a>(int&nbsp;x,
                   int&nbsp;y,
                   int&nbsp;distance,
                   boolean&nbsp;eightWay,
@@ -4011,7 +4023,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>burst</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2050">burst</a>(float&nbsp;delay,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2058">burst</a>(float&nbsp;delay,
                   int&nbsp;x,
                   int&nbsp;y,
                   int&nbsp;distance,
@@ -4052,7 +4064,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>hasActiveAnimations</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2079">hasActiveAnimations</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2087">hasActiveAnimations</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>hasActiveAnimations</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -4065,7 +4077,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getAnimatedEntities</h4>
-<pre>public&nbsp;squidpony.squidmath.OrderedSet&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2087">getAnimatedEntities</a>()</pre>
+<pre>public&nbsp;squidpony.squidmath.OrderedSet&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2095">getAnimatedEntities</a>()</pre>
 </li>
 </ul>
 <a name="removeAnimatedEntity-squidpony.squidgrid.gui.gdx.AnimatedEntity-">
@@ -4074,7 +4086,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAnimatedEntity</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2091">removeAnimatedEntity</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2099">removeAnimatedEntity</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/AnimatedEntity.html" title="class in squidpony.squidgrid.gui.gdx">AnimatedEntity</a>&nbsp;ae)</pre>
 </li>
 </ul>
 <a name="getBacker--">
@@ -4083,7 +4095,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getBacker</h4>
-<pre>public&nbsp;squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2097">getBacker</a>()</pre>
+<pre>public&nbsp;squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2105">getBacker</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBacker</code>&nbsp;in interface&nbsp;<code>squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -4096,7 +4108,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getColorCenter</h4>
-<pre>public&nbsp;squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2104">getColorCenter</a>()</pre>
+<pre>public&nbsp;squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2112">getColorCenter</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The current color center. Never <code>null</code>.</dd>
@@ -4109,7 +4121,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setColorCenter</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2120">setColorCenter</a>(squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2128">setColorCenter</a>(squidpony.IColorCenter&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;scc)</pre>
 <div class="block">Use this method if you use your own <code>IColorCenter</code> and want this
  panel not to allocate its own colors (or fill
  <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getSCC--"><code>DefaultResources.getSCC()</code></a> but instead to the provided center.</div>
@@ -4131,7 +4143,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getAt</h4>
-<pre>public&nbsp;char&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2129">getAt</a>(int&nbsp;x,
+<pre>public&nbsp;char&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2137">getAt</a>(int&nbsp;x,
                   int&nbsp;y)</pre>
 </li>
 </ul>
@@ -4141,7 +4153,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getColorAt</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2133">getColorAt</a>(int&nbsp;x,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2141">getColorAt</a>(int&nbsp;x,
                                                   int&nbsp;y)</pre>
 </li>
 </ul>
@@ -4151,7 +4163,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getLightingColor</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2138">getLightingColor</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2146">getLightingColor</a>()</pre>
 </li>
 </ul>
 <a name="setLightingColor-com.badlogic.gdx.graphics.Color-">
@@ -4160,7 +4172,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setLightingColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2142">setLightingColor</a>(com.badlogic.gdx.graphics.Color&nbsp;lightingColor)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2150">setLightingColor</a>(com.badlogic.gdx.graphics.Color&nbsp;lightingColor)</pre>
 </li>
 </ul>
 <a name="clampDuration-float-">
@@ -4169,7 +4181,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>clampDuration</h4>
-<pre>protected&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2147">clampDuration</a>(float&nbsp;duration)</pre>
+<pre>protected&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2155">clampDuration</a>(float&nbsp;duration)</pre>
 </li>
 </ul>
 <a name="getGridOffsetX--">
@@ -4178,7 +4190,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getGridOffsetX</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2160">getGridOffsetX</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2168">getGridOffsetX</a>()</pre>
 <div class="block">The X offset that the whole panel's internals will be rendered at. If the <code>gridWidth</code> of this SquidPanel is
  less than the actual size of the char[][] it renders, then you can use gridOffsetX to start rendering at a
  different position</div>
@@ -4194,7 +4206,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setGridOffsetX</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2168">setGridOffsetX</a>(int&nbsp;gridOffsetX)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2176">setGridOffsetX</a>(int&nbsp;gridOffsetX)</pre>
 <div class="block">Sets the X offset that the whole panel's internals will be rendered at.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -4208,7 +4220,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getGridOffsetY</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2176">getGridOffsetY</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2184">getGridOffsetY</a>()</pre>
 <div class="block">The Y offset that the whole panel's internals will be rendered at.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -4222,7 +4234,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setGridOffsetY</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2184">setGridOffsetY</a>(int&nbsp;gridOffsetY)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2192">setGridOffsetY</a>(int&nbsp;gridOffsetY)</pre>
 <div class="block">Sets the Y offset that the whole panel's internals will be rendered at.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -4236,7 +4248,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getGridWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2192">getGridWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2200">getGridWidth</a>()</pre>
 <div class="block">The number of cells along the x-axis that will be rendered of this panel.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -4250,7 +4262,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setGridWidth</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2200">setGridWidth</a>(int&nbsp;gridWidth)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2208">setGridWidth</a>(int&nbsp;gridWidth)</pre>
 <div class="block">Sets the number of cells along the x-axis that will be rendered of this panel to gridWidth.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -4264,7 +4276,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getGridHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2208">getGridHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2216">getGridHeight</a>()</pre>
 <div class="block">The number of cells along the y-axis that will be rendered of this panel</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -4278,7 +4290,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setGridHeight</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2216">setGridHeight</a>(int&nbsp;gridHeight)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2224">setGridHeight</a>(int&nbsp;gridHeight)</pre>
 <div class="block">Sets the number of cells along the y-axis that will be rendered of this panel to gridHeight.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -4292,7 +4304,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getTotalWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2227">getTotalWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2235">getTotalWidth</a>()</pre>
 <div class="block">Gets the total number of cells along the x-axis that this stores; this is usually equivalent to
  <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getGridWidth--"><code>getGridWidth()</code></a>, but not if the constructor
  <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#SquidPanel-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.IColorCenter-float-float-char:A:A-"><code>SquidPanel(int, int, TextCellFactory, IColorCenter, float, float, char[][])</code></a> was used to set a
@@ -4309,7 +4321,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getTotalHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2238">getTotalHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2246">getTotalHeight</a>()</pre>
 <div class="block">Gets the total number of cells along the y-axis that this stores; this is usually equivalent to
  <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getGridHeight--"><code>getGridHeight()</code></a>, but not if the constructor
  <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#SquidPanel-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.IColorCenter-float-float-char:A:A-"><code>SquidPanel(int, int, TextCellFactory, IColorCenter, float, float, char[][])</code></a> was used to set a
@@ -4326,7 +4338,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setPosition</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2250">setPosition</a>(float&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2258">setPosition</a>(float&nbsp;x,
                         float&nbsp;y)</pre>
 <div class="block">Sets the position of the actor's bottom left corner.</div>
 <dl>
@@ -4344,7 +4356,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getxOffset</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2255">getxOffset</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2263">getxOffset</a>()</pre>
 </li>
 </ul>
 <a name="setOffsetX-float-">
@@ -4353,7 +4365,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setOffsetX</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2259">setOffsetX</a>(float&nbsp;xOffset)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2267">setOffsetX</a>(float&nbsp;xOffset)</pre>
 </li>
 </ul>
 <a name="getyOffset--">
@@ -4362,7 +4374,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getyOffset</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2263">getyOffset</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2271">getyOffset</a>()</pre>
 </li>
 </ul>
 <a name="setOffsetY-float-">
@@ -4371,7 +4383,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setOffsetY</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2267">setOffsetY</a>(float&nbsp;yOffset)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2275">setOffsetY</a>(float&nbsp;yOffset)</pre>
 </li>
 </ul>
 <a name="setOffsets-float-float-">
@@ -4380,7 +4392,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setOffsets</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2271">setOffsets</a>(float&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2279">setOffsets</a>(float&nbsp;x,
                        float&nbsp;y)</pre>
 </li>
 </ul>
@@ -4390,7 +4402,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getOnlyRenderEven</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2291">getOnlyRenderEven</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2299">getOnlyRenderEven</a>()</pre>
 <div class="block">Gets the status of a boolean flag used for rendering thin maps; it will almost always be false unless it
  was set to true with <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setOnlyRenderEven-boolean-"><code>setOnlyRenderEven(boolean)</code></a>.
  <br>
@@ -4414,7 +4426,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setOnlyRenderEven</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2311">setOnlyRenderEven</a>(boolean&nbsp;onlyRenderEven)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2319">setOnlyRenderEven</a>(boolean&nbsp;onlyRenderEven)</pre>
 <div class="block">Sets the status of a boolean flag used for rendering thin maps; it should almost always be the default,
  which is false, unless you are using a thin-wall map, and then this should be true only if this
  SquidPanel is used for the background layer.
@@ -4439,7 +4451,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getSnapshot</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2322">getSnapshot</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2330">getSnapshot</a>()</pre>
 <div class="block">Gets a "snapshot" of the data represented by this SquidPanel; stores the dimensions, the char data, and the color
  data in a way that can be set back to a SquidPanel using <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#setFromSnapshot-java.lang.String-int-int-int-int-"><code>setFromSnapshot(String, int, int, int, int)</code></a> or
  its overload that takes a StringBuilder. The actual contents of the returned StringBuilder are unlikely to be
@@ -4456,7 +4468,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>getSnapshot</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2340">getSnapshot</a>(int&nbsp;startX,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2348">getSnapshot</a>(int&nbsp;startX,
                                  int&nbsp;startY,
                                  int&nbsp;width,
                                  int&nbsp;height)</pre>
@@ -4484,7 +4496,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setFromSnapshot</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2363">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2371">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot)</pre>
 <div class="block">Given a "snapshot" from <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
  SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.</div>
 <dl>
@@ -4501,7 +4513,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setFromSnapshot</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2376">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2384">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot,
                                   int&nbsp;putX,
                                   int&nbsp;putY)</pre>
 <div class="block">Given a "snapshot" from <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
@@ -4523,7 +4535,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setFromSnapshot</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2393">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2401">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;snapshot,
                                   int&nbsp;putX,
                                   int&nbsp;putY,
                                   int&nbsp;limitWidth,
@@ -4551,7 +4563,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setFromSnapshot</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2431">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2439">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot)</pre>
 <div class="block">Given a "snapshot" from <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
  SquidPanel from 0,0 (inclusive) up to the dimensions stored in the snapshot to match the snapshot's data.
  <br>
@@ -4570,7 +4582,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockList">
 <li class="blockList">
 <h4>setFromSnapshot</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2446">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2454">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot,
                                   int&nbsp;putX,
                                   int&nbsp;putY)</pre>
 <div class="block">Given a "snapshot" from <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getSnapshot-int-int-int-int-"><code>getSnapshot(int, int, int, int)</code></a>, this assigns the chars and colors in this
@@ -4594,7 +4606,7 @@ implements squidpony.panel.ISquidPanel&lt;com.badlogic.gdx.graphics.Color&gt;</p
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setFromSnapshot</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2467">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.2475">setFromSnapshot</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;snapshot,
                                   int&nbsp;putX,
                                   int&nbsp;putY,
                                   int&nbsp;limitWidth,

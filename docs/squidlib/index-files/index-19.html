@@ -127,6 +127,10 @@
 <dd>
 <div class="block">Sets up a SaturationFilter with the desired saturation multiplier.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/Filters.SaturationValueFilter.html#SaturationValueFilter-float-float-">SaturationValueFilter(float, float)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/Filters.SaturationValueFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.SaturationValueFilter</a></dt>
+<dd>
+<div class="block">Sets up a SaturationValueFilter with the desired saturation and value multipliers.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#SAWTOOTH_OAK">SAWTOOTH_OAK</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Color constant</div>
@@ -767,12 +771,12 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#SquidLayers--">SquidLayers()</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
-<div class="block">Create a new SquidLayers widget with the default <b>square</b> font, 40 cells wide and high, with a size of
- 12x12 pixels for each cell.</div>
+<div class="block">Create a new SquidLayers widget with a default stretchable font, 40 cells wide and 40 cells high,
+ and 12x12 pixels for each cell.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#SquidLayers-int-int-">SquidLayers(int, int)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
-<div class="block">Create a new SquidLayers widget with the default <b>square</b> font, the given number of cells for gridWidth
+<div class="block">Create a new SquidLayers widget with a default stretchable font, the given number of cells for gridWidth
  and gridHeight, and 12x12 pixels for each cell.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#SquidLayers-int-int-int-int-">SquidLayers(int, int, int, int)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
@@ -821,8 +825,10 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#SquidLayers-int-int-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.squidgrid.gui.gdx.SquidColorCenter-squidpony.squidgrid.gui.gdx.SquidColorCenter-char:A:A-">SquidLayers(int, int, int, int, TextCellFactory, SquidColorCenter, SquidColorCenter, char[][])</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Create a new SquidLayers widget with the given TextCellFactory, the given number of cells for gridWidth
- and gridHeight, the size in pixels for each cell given by cellWidth and cellHeight, and the given
- SquidColorCenters for background and foreground.</div>
+ and gridHeight, the size in pixels for each cell given by cellWidth and cellHeight, the given
+ SquidColorCenters for background and foreground, and the given 2D char array for an area map that may be
+ sized differently than gridWidth by gridHeight (it is usually larger than gridWidth by gridHeight, which
+ allows camera scrolling across the map).</div>
 </dd>
 <dt><a href="../squidpony/squidgrid/gui/gdx/SquidMessageBox.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">SquidMessageBox</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
 <dd>

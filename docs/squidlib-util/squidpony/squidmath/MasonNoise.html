@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -462,15 +462,27 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
      int&nbsp;seed)</code>&nbsp;</td>
 </tr>
 <tr id="i26" class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MasonNoise.html#noiseArc-double-double-int-">noiseArc</a></span>(double&nbsp;x,
+        double&nbsp;y,
+        int&nbsp;seed)</code>&nbsp;</td>
+</tr>
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MasonNoise.html#noiseArc-float-float-int-">noiseArc</a></span>(float&nbsp;x,
+        float&nbsp;y,
+        int&nbsp;seed)</code>&nbsp;</td>
+</tr>
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MasonNoise.html#randomInt-long-">randomInt</a></span>(long&nbsp;state)</code>&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MasonNoise.html#randomInt-long-long-">randomInt</a></span>(long&nbsp;state,
          long&nbsp;jump)</code>&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MasonNoise.html#randomize-long-long-">randomize</a></span>(long&nbsp;state,
          long&nbsp;jump)</code>&nbsp;</td>
@@ -1040,13 +1052,24 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
                            int&nbsp;seed)</pre>
 </li>
 </ul>
+<a name="noiseArc-double-double-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>noiseArc</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1087">noiseArc</a>(double&nbsp;x,
+                              double&nbsp;y,
+                              int&nbsp;seed)</pre>
+</li>
+</ul>
 <a name="randomize-long-long-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>randomize</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1087">randomize</a>(long&nbsp;state,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1091">randomize</a>(long&nbsp;state,
                               long&nbsp;jump)</pre>
 </li>
 </ul>
@@ -1056,7 +1079,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>randomInt</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1100">randomInt</a>(long&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1104">randomInt</a>(long&nbsp;state,
                             long&nbsp;jump)</pre>
 </li>
 </ul>
@@ -1066,7 +1089,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>randomInt</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1111">randomInt</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1115">randomInt</a>(long&nbsp;state)</pre>
 </li>
 </ul>
 <a name="noise-float-float-int-">
@@ -1075,9 +1098,20 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1165">noise</a>(float&nbsp;x,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1188">noise</a>(float&nbsp;x,
                           float&nbsp;y,
                           int&nbsp;seed)</pre>
+</li>
+</ul>
+<a name="noiseArc-float-float-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>noiseArc</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1209">noiseArc</a>(float&nbsp;x,
+                             float&nbsp;y,
+                             int&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="addNoiseField-float:A:A-float-float-float-float-int-float-float-">
@@ -1086,7 +1120,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>addNoiseField</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1197">addNoiseField</a>(float[][]&nbsp;target,
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1237">addNoiseField</a>(float[][]&nbsp;target,
                                  float&nbsp;startX,
                                  float&nbsp;startY,
                                  float&nbsp;endX,
@@ -1102,7 +1136,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>addNoiseField</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1258">addNoiseField</a>(float[][][]&nbsp;target,
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1298">addNoiseField</a>(float[][][]&nbsp;target,
                                  float&nbsp;startX,
                                  float&nbsp;startY,
                                  float&nbsp;startZ,
@@ -1120,7 +1154,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1393">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1433">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            int&nbsp;seed)</pre>
@@ -1132,7 +1166,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1396">noise</a>(float&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1436">noise</a>(float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z,
                            int&nbsp;seed)</pre>
@@ -1144,7 +1178,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1509">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1549">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w,
@@ -1157,7 +1191,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1512">noise</a>(float&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1552">noise</a>(float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z,
                            float&nbsp;w,
@@ -1170,7 +1204,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1589">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1629">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w,
@@ -1185,7 +1219,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1594">noise</a>(float&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MasonNoise.html#line.1634">noise</a>(float&nbsp;x,
                            float&nbsp;y,
                            float&nbsp;z,
                            float&nbsp;w,

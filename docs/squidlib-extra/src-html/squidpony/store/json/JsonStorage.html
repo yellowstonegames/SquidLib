@@ -132,9 +132,9 @@
 <span class="sourceLineNo">124</span>        else<a name="line.124"></a>
 <span class="sourceLineNo">125</span>        {<a name="line.125"></a>
 <span class="sourceLineNo">126</span>            if (compress)<a name="line.126"></a>
-<span class="sourceLineNo">127</span>                preferences.putString(outerName, Garbler.garble(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey));<a name="line.127"></a>
+<span class="sourceLineNo">127</span>                preferences.putString(outerName, Garbler.garble32(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey));<a name="line.127"></a>
 <span class="sourceLineNo">128</span>            else<a name="line.128"></a>
-<span class="sourceLineNo">129</span>                preferences.putString(outerName, Garbler.garble(json.toJson(contents, StringStringMap.class), garbleKey));<a name="line.129"></a>
+<span class="sourceLineNo">129</span>                preferences.putString(outerName, Garbler.garble32(json.toJson(contents, StringStringMap.class), garbleKey));<a name="line.129"></a>
 <span class="sourceLineNo">130</span>        }<a name="line.130"></a>
 <span class="sourceLineNo">131</span>        preferences.flush();<a name="line.131"></a>
 <span class="sourceLineNo">132</span>        return this;<a name="line.132"></a>
@@ -155,9 +155,9 @@
 <span class="sourceLineNo">147</span>        else<a name="line.147"></a>
 <span class="sourceLineNo">148</span>        {<a name="line.148"></a>
 <span class="sourceLineNo">149</span>            if (compress)<a name="line.149"></a>
-<span class="sourceLineNo">150</span>                return Garbler.garble(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey);<a name="line.150"></a>
+<span class="sourceLineNo">150</span>                return Garbler.garble32(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey);<a name="line.150"></a>
 <span class="sourceLineNo">151</span>            else<a name="line.151"></a>
-<span class="sourceLineNo">152</span>                return Garbler.garble(json.toJson(contents, StringStringMap.class), garbleKey);<a name="line.152"></a>
+<span class="sourceLineNo">152</span>                return Garbler.garble32(json.toJson(contents, StringStringMap.class), garbleKey);<a name="line.152"></a>
 <span class="sourceLineNo">153</span><a name="line.153"></a>
 <span class="sourceLineNo">154</span>        }<a name="line.154"></a>
 <span class="sourceLineNo">155</span>    }<a name="line.155"></a>
@@ -210,9 +210,9 @@
 <span class="sourceLineNo">202</span>        else<a name="line.202"></a>
 <span class="sourceLineNo">203</span>        {<a name="line.203"></a>
 <span class="sourceLineNo">204</span>            if (compress)<a name="line.204"></a>
-<span class="sourceLineNo">205</span>                got = LZSEncoding.decompressFromUTF16(Garbler.degarble(preferences.getString(outerName), garbleKey));<a name="line.205"></a>
+<span class="sourceLineNo">205</span>                got = LZSEncoding.decompressFromUTF16(Garbler.degarble32(preferences.getString(outerName), garbleKey));<a name="line.205"></a>
 <span class="sourceLineNo">206</span>            else<a name="line.206"></a>
-<span class="sourceLineNo">207</span>                got = Garbler.degarble(preferences.getString(outerName), garbleKey);<a name="line.207"></a>
+<span class="sourceLineNo">207</span>                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);<a name="line.207"></a>
 <span class="sourceLineNo">208</span>        }<a name="line.208"></a>
 <span class="sourceLineNo">209</span>        if(got == null) return null;<a name="line.209"></a>
 <span class="sourceLineNo">210</span>        om = json.fromJson(StringStringMap.class, got);<a name="line.210"></a>

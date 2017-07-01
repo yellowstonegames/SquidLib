@@ -985,14 +985,14 @@
 <span class="sourceLineNo">977</span>                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) &lt;&lt; (i - 1);<a name="line.977"></a>
 <span class="sourceLineNo">978</span>                        if ((i &amp; 3) == 3) {<a name="line.978"></a>
 <span class="sourceLineNo">979</span>                            partialRiverData.zoom(stx, sty).connect8way();<a name="line.979"></a>
-<span class="sourceLineNo">980</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.4));<a name="line.980"></a>
+<span class="sourceLineNo">980</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));<a name="line.980"></a>
 <span class="sourceLineNo">981</span>                            partialLakeData.zoom(stx, sty).connect8way();<a name="line.981"></a>
-<span class="sourceLineNo">982</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.55));<a name="line.982"></a>
+<span class="sourceLineNo">982</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));<a name="line.982"></a>
 <span class="sourceLineNo">983</span>                        } else {<a name="line.983"></a>
 <span class="sourceLineNo">984</span>                            partialRiverData.zoom(stx, sty).connect8way().thin();<a name="line.984"></a>
-<span class="sourceLineNo">985</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.5));<a name="line.985"></a>
+<span class="sourceLineNo">985</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));<a name="line.985"></a>
 <span class="sourceLineNo">986</span>                            partialLakeData.zoom(stx, sty).connect8way().thin();<a name="line.986"></a>
-<span class="sourceLineNo">987</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.7));<a name="line.987"></a>
+<span class="sourceLineNo">987</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));<a name="line.987"></a>
 <span class="sourceLineNo">988</span>                        }<a name="line.988"></a>
 <span class="sourceLineNo">989</span>                    }<a name="line.989"></a>
 <span class="sourceLineNo">990</span>                }<a name="line.990"></a>
@@ -1012,7 +1012,7 @@
 <span class="sourceLineNo">1004</span>     * &lt;a href="http://i.imgur.com/wth01QD.png" &gt;Example map, showing distortion&lt;/a&gt;<a name="line.1004"></a>
 <span class="sourceLineNo">1005</span>     */<a name="line.1005"></a>
 <span class="sourceLineNo">1006</span>    public static class SphereMap extends WorldMapGenerator {<a name="line.1006"></a>
-<span class="sourceLineNo">1007</span>        protected static final double terrainFreq = 2.0, terrainRidgedFreq = 2.4, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;<a name="line.1007"></a>
+<span class="sourceLineNo">1007</span>        protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;<a name="line.1007"></a>
 <span class="sourceLineNo">1008</span>        private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,<a name="line.1008"></a>
 <span class="sourceLineNo">1009</span>                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,<a name="line.1009"></a>
 <span class="sourceLineNo">1010</span>                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1010"></a>
@@ -1149,7 +1149,7 @@
 <span class="sourceLineNo">1141</span>            waterModifier = (waterMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;<a name="line.1141"></a>
 <span class="sourceLineNo">1142</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1142"></a>
 <span class="sourceLineNo">1143</span><a name="line.1143"></a>
-<span class="sourceLineNo">1144</span>            double p, q,<a name="line.1144"></a>
+<span class="sourceLineNo">1144</span>            double p,<a name="line.1144"></a>
 <span class="sourceLineNo">1145</span>                    ps, pc,<a name="line.1145"></a>
 <span class="sourceLineNo">1146</span>                    qs, qc,<a name="line.1146"></a>
 <span class="sourceLineNo">1147</span>                    h, temp,<a name="line.1147"></a>
@@ -1293,14 +1293,14 @@
 <span class="sourceLineNo">1285</span>                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) &lt;&lt; (i - 1);<a name="line.1285"></a>
 <span class="sourceLineNo">1286</span>                        if ((i &amp; 3) == 3) {<a name="line.1286"></a>
 <span class="sourceLineNo">1287</span>                            partialRiverData.zoom(stx, sty).connect8way();<a name="line.1287"></a>
-<span class="sourceLineNo">1288</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.4));<a name="line.1288"></a>
+<span class="sourceLineNo">1288</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));<a name="line.1288"></a>
 <span class="sourceLineNo">1289</span>                            partialLakeData.zoom(stx, sty).connect8way();<a name="line.1289"></a>
-<span class="sourceLineNo">1290</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.55));<a name="line.1290"></a>
+<span class="sourceLineNo">1290</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));<a name="line.1290"></a>
 <span class="sourceLineNo">1291</span>                        } else {<a name="line.1291"></a>
 <span class="sourceLineNo">1292</span>                            partialRiverData.zoom(stx, sty).connect8way().thin();<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.5));<a name="line.1293"></a>
+<span class="sourceLineNo">1293</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));<a name="line.1293"></a>
 <span class="sourceLineNo">1294</span>                            partialLakeData.zoom(stx, sty).connect8way().thin();<a name="line.1294"></a>
-<span class="sourceLineNo">1295</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.7));<a name="line.1295"></a>
+<span class="sourceLineNo">1295</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));<a name="line.1295"></a>
 <span class="sourceLineNo">1296</span>                        }<a name="line.1296"></a>
 <span class="sourceLineNo">1297</span>                    }<a name="line.1297"></a>
 <span class="sourceLineNo">1298</span>                }<a name="line.1298"></a>
