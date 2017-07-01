@@ -102,10 +102,18 @@ public class ImageSquidPanel extends SquidPanel {
     }
     /**
      * Builds a panel with the given grid size and all other parameters determined by the factory. Even if sprite images
-     * are being used, a TextCellFactory is still needed to perform sizing and other utility functions.
-     *
+     * are being used, a TextCellFactory is still needed to perform sizing and other utility functions. Importantly,
+     * this constructor takes a 2D char array argument that can be sized differently than the displayed area. The
+     * displayed area is gridWidth by gridHeight in cells, but the actualMap argument can be much larger, and only a
+     * portion will be displayed at a time. This requires some special work with the Camera and Viewports to get working
+     * correctly; in the squidlib module's examples, EverythingDemo may be a good place to see how this can be done.
+     * You can pass null for actualMap, which will simply create a char array to use internally that is exactly
+     * gridWidth by gridHeight, in cells.
+     * <br>
      * If the TextCellFactory has not yet been initialized, then it will be sized at 12x12 px per cell. If it is null
-     * then a default one will be created and initialized.
+     * then a default one will be created and initialized. The xOffset and yOffset arguments are measured in pixels or
+     * whatever sub-cell unit of measure your game uses (world coordinates, in libGDX parlance), and change where the
+     * SquidPanel starts drawing by simply adding to the initial x and y coordinates. 0 and 0 are usually fine.
      *
      * @param gridWidth the number of cells horizontally
      * @param gridHeight the number of cells vertically
@@ -113,6 +121,9 @@ public class ImageSquidPanel extends SquidPanel {
      * @param center
      * 			The color center to use. Can be {@code null}, but then must be set later on with
      *          {@link #setColorCenter(IColorCenter)}.
+     * @param xOffset the x offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)
+     * @param yOffset the y offset to start rendering at, in pixels (or some other sub-cell measurement your game uses)
+     * @param actualMap will often be a different size than gridWidth by gridHeight, which enables camera scrolling
      */
     public ImageSquidPanel(int gridWidth, int gridHeight, TextCellFactory factory, IColorCenter<Color> center,
                            float xOffset, float yOffset, char[][] actualMap) {

@@ -8631,6 +8631,123 @@ public class SColor extends Color {
      */
     public static final SColor CW_RICH_ROSE = new SColor(0xbd1a57, "CW Rich Rose");
 
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #000000; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <p>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_BLACK = new SColor(0x000000, "CW Black");
+
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #1F1F1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1F1F1F; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #1F1F1F; color: #1F1F1F'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #1F1F1F; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #1F1F1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1F1F1F; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #1F1F1F'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_ALMOST_BLACK = new SColor(0x1F1F1F, "CW Almost Black");
+
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #3F3F3F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3F3F3F; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #3F3F3F; color: #3F3F3F'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #3F3F3F; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #3F3F3F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3F3F3F; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #3F3F3F'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_GRAY_BLACK = new SColor(0x3F3F3F, "CW Gray Black");
+
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #5F5F5F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5F5F5F; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #5F5F5F; color: #5F5F5F'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #5F5F5F; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #5F5F5F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5F5F5F; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #5F5F5F'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_DARK_GRAY = new SColor(0x5F5F5F, "CW Dark Gray");
+
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #7F7F7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F7F7F; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #7F7F7F; color: #7F7F7F'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #7F7F7F; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #7F7F7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F7F7F; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #7F7F7F'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_GRAY = new SColor(0x7F7F7F, "CW Gray");
+
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #9F9F9F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9F9F9F; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #9F9F9F; color: #9F9F9F'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #9F9F9F; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #9F9F9F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9F9F9F; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #9F9F9F'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_LIGHT_GRAY = new SColor(0x9F9F9F, "CW Light Gray");
+
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #BFBFBF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFBFBF; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #BFBFBF; color: #BFBFBF'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #BFBFBF; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #BFBFBF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFBFBF; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #BFBFBF'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_GRAY_WHITE = new SColor(0xBFBFBF, "CW Gray White");
+
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #DFDFDF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DFDFDF; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #DFDFDF; color: #DFDFDF'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #DFDFDF; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #DFDFDF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DFDFDF; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #DFDFDF'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_ALMOST_WHITE = new SColor(0xDFDFDF, "CW Almost White");
+
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #FFFFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFFF; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #FFFFFF; color: #FFFFFF'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #FFFFFF; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #FFFFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFFF; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <p>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+    public static final SColor CW_WHITE = new SColor(0XFFFFFF, "CW White");
+
+
 
 
     /**
@@ -8797,17 +8914,20 @@ public class SColor extends Color {
             DB_ARMY_GREEN, DB_COMPOST};
 
     /**
-     * A predefined palette of 180 colors derived from 20 hand-picked hues on the color wheel, with 9 variations on
-     * saturation and value per hue. Not all of these colors are especially distinguishable from each other; this mainly
-     * applies to the darkened colors (DARK_, DRAB_, and RICH_) and sometimes the saturated colors (FLUSH_, BRIGHT_, and
-     * RICH_). The precise meanings of the terms used: CW_ is the base color wheel color with medium saturation and
-     * value, CW_FADED_ is desaturated, CW_FLUSH_ is saturated, CW_LIGHT_ has value increased, CW_PALE_ has value
-     * increased and is desaturated, CW_BRIGHT_ has value increased and is saturated, CW_DARK_ has value decreased,
-     * CW_DRAB_ has value decreased and is desaturated, and CW_RICH_ has value decreased and is saturated.
+     * A predefined palette of 189 colors derived from 20 hand-picked hues on the color wheel, with 9 variations on
+     * saturation and value per hue, along with 9 grayscale colors from black to white. Not all of these colors are
+     * especially distinguishable from each other; this mainly applies to the darkened colors (DARK_, DRAB_, and
+     * RICH_) and sometimes the saturated colors (FLUSH_, BRIGHT_, and RICH_). The precise meanings of the terms used:
+     * CW_ is the base color wheel color with medium saturation and value, CW_FADED_ is desaturated, CW_FLUSH_ is
+     * saturated, CW_LIGHT_ has value increased, CW_PALE_ has value increased and is desaturated, CW_BRIGHT_ has value
+     * increased and is saturated, CW_DARK_ has value decreased, CW_DRAB_ has value decreased and is desaturated, and
+     * CW_RICH_ has value decreased and is saturated.
      * <br>
      * The array is organized into 20 hue blocks of 9 colors each, going from mid-value to light-value to dark-value
      * before moving to the next hue block. It starts at red, moves on to orange, yellow, green, blue, purple, and comes
-     * almost all the way back around to red.
+     * almost all the way back around to red. It ends with 9 grayscale colors, from black to white, ordered by
+     * brightness. The grayscale colors use different names, going from darkest to lightest: CW_BLACK, CW_ALMOST_BLACK,
+     * CW_GRAY_BLACK, CW_DARK_GRAY, CW_GRAY, CW_LIGHT_GRAY, CW_GRAY_WHITE, CW_ALMOST_WHITE, and CW_WHITE.
      */
     public static final SColor[] COLOR_WHEEL_PALETTE = {
             CW_RED, CW_FADED_RED, CW_FLUSH_RED, CW_LIGHT_RED, CW_PALE_RED, CW_BRIGHT_RED, CW_DARK_RED, CW_DRAB_RED, CW_RICH_RED,
@@ -8829,7 +8949,8 @@ public class SColor extends Color {
             CW_VIOLET, CW_FADED_VIOLET, CW_FLUSH_VIOLET, CW_LIGHT_VIOLET, CW_PALE_VIOLET, CW_BRIGHT_VIOLET, CW_DARK_VIOLET, CW_DRAB_VIOLET, CW_RICH_VIOLET,
             CW_PURPLE, CW_FADED_PURPLE, CW_FLUSH_PURPLE, CW_LIGHT_PURPLE, CW_PALE_PURPLE, CW_BRIGHT_PURPLE, CW_DARK_PURPLE, CW_DRAB_PURPLE, CW_RICH_PURPLE,
             CW_MAGENTA, CW_FADED_MAGENTA, CW_FLUSH_MAGENTA, CW_LIGHT_MAGENTA, CW_PALE_MAGENTA, CW_BRIGHT_MAGENTA, CW_DARK_MAGENTA, CW_DRAB_MAGENTA, CW_RICH_MAGENTA,
-            CW_ROSE, CW_FADED_ROSE, CW_FLUSH_ROSE, CW_LIGHT_ROSE, CW_PALE_ROSE, CW_BRIGHT_ROSE, CW_DARK_ROSE, CW_DRAB_ROSE, CW_RICH_ROSE
+            CW_ROSE, CW_FADED_ROSE, CW_FLUSH_ROSE, CW_LIGHT_ROSE, CW_PALE_ROSE, CW_BRIGHT_ROSE, CW_DARK_ROSE, CW_DRAB_ROSE, CW_RICH_ROSE,
+            CW_BLACK, CW_ALMOST_BLACK, CW_GRAY_BLACK, CW_DARK_GRAY, CW_GRAY, CW_LIGHT_GRAY, CW_GRAY_WHITE, CW_ALMOST_WHITE, CW_WHITE,
     };
 
 
@@ -8932,7 +9053,8 @@ public class SColor extends Color {
             CW_VIOLET, CW_FADED_VIOLET, CW_FLUSH_VIOLET, CW_LIGHT_VIOLET, CW_PALE_VIOLET, CW_BRIGHT_VIOLET, CW_DARK_VIOLET, CW_DRAB_VIOLET, CW_RICH_VIOLET,
             CW_PURPLE, CW_FADED_PURPLE, CW_FLUSH_PURPLE, CW_LIGHT_PURPLE, CW_PALE_PURPLE, CW_BRIGHT_PURPLE, CW_DARK_PURPLE, CW_DRAB_PURPLE, CW_RICH_PURPLE,
             CW_MAGENTA, CW_FADED_MAGENTA, CW_FLUSH_MAGENTA, CW_LIGHT_MAGENTA, CW_PALE_MAGENTA, CW_BRIGHT_MAGENTA, CW_DARK_MAGENTA, CW_DRAB_MAGENTA, CW_RICH_MAGENTA,
-            CW_ROSE, CW_FADED_ROSE, CW_FLUSH_ROSE, CW_LIGHT_ROSE, CW_PALE_ROSE, CW_BRIGHT_ROSE, CW_DARK_ROSE, CW_DRAB_ROSE, CW_RICH_ROSE
+            CW_ROSE, CW_FADED_ROSE, CW_FLUSH_ROSE, CW_LIGHT_ROSE, CW_PALE_ROSE, CW_BRIGHT_ROSE, CW_DARK_ROSE, CW_DRAB_ROSE, CW_RICH_ROSE,
+            CW_BLACK, CW_ALMOST_BLACK, CW_GRAY_BLACK, CW_DARK_GRAY, CW_GRAY, CW_LIGHT_GRAY, CW_GRAY_WHITE, CW_ALMOST_WHITE, CW_WHITE,
     };
     /**
      * This array is loaded with all of the colors defined in SColor, in

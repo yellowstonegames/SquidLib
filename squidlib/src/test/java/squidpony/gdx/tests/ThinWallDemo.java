@@ -130,8 +130,8 @@ public class ThinWallDemo extends ApplicationAdapter {
         // gotta have a random number generator. We can pass a seed as a long or String to an RNG.
         rng = new StatefulRNG(0xBADBEEFB0BBL);
 
-        fgCenter = DefaultResources.getSCC();
-        bgCenter = DefaultResources.getSCC();
+        fgCenter = new SquidColorCenter(new Filters.SaturationValueFilter(1.3f, 0.95f));
+        bgCenter = new SquidColorCenter(new Filters.SaturationValueFilter(0.8f, 0.8f));
         playerMarkColors = fgCenter.rainbow(64);
         monsterMarkColors = fgCenter.rainbow(0.75f, 0.65f, 64);
         //playerMarkColors = fgCenter.loopingGradient(SColor.HAN_PURPLE, SColor.PSYCHEDELIC_PURPLE, 64);

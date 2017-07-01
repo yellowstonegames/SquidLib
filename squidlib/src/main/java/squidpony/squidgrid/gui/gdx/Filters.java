@@ -1,9 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
-
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.IFilter;
 import squidpony.squidmath.LightRNG;
 
@@ -305,6 +303,9 @@ public class Filters {
 
     /**
      * A Filter that multiplies the saturation of any color requested from it by a number given during construction.
+     * When desaturating, you may want to prefer {@link SaturationValueFilter}, because reducing saturation increases
+     * perceived brightness (value), and desaturating an ocean-blue color will make it look like ice if the value
+     * isn't decreased as well. This class is perfectly fine for increasing saturation, in general.
      */
     public static class SaturationFilter extends Filter<Color> {
         private SquidColorCenter globalSCC;
@@ -335,6 +336,42 @@ public class Filters {
     }
 
     /**
+     * A Filter that multiplies the saturation and the value of any color requested from it by different numbers given
+     * during construction.
+     */
+    public static class SaturationValueFilter extends Filter<Color> {
+        private SquidColorCenter globalSCC;
+        /**
+         * Sets up a SaturationValueFilter with the desired saturation and value multipliers. Using a multiplier of 0f for
+         * saturation, as you would expect, makes the image grayscale. Using a multiplier of 0f for value makes all
+         * colors identicaly black; this is probably not a good idea. Using a multiplier of 0.5 for saturation will
+         * make the image "muted", with no truly bright colors, while 1.0f for saturation makes no change, and and any
+         * numbers higher than 1.0f for saturation will make the image more saturated, with the exception of colors that
+         * were already grayscale or close to it. Using 0.5f for value will darken the image significantly, 1.0f for
+         * value will keep it the same for brightness, and higher than 1.0f will lighten it. This clamps the result, so
+         * there's no need to worry about using too high of a saturation or value multiplier.
+         *
+         * @param saturation the amount to multiply each requested color's saturation by; 1.0f means "no change"
+         * @param value      the amount to multiply each requested color's value (lightness) by; 1.0f means "no change"
+         */
+        public SaturationValueFilter(float saturation, float value) {
+            globalSCC = DefaultResources.getSCC();
+
+            state = new float[]{saturation, value};
+        }
+
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            return globalSCC.getHSV(
+                    globalSCC.getHue(r, g, b),
+                    Math.max(0f, Math.min((globalSCC.getSaturation(r, g, b) * state[0]), 1f)),
+                    Math.max(0f, Math.min((globalSCC.getValue(r, g, b) * state[1]), 1f)),
+                    a);
+        }
+
+    }
+
+    /**
      * A Filter that is constructed with a palette of colors and randomly increases or decreases the red, green, and
      * blue components of any color it is told to alter. Good for a "glitchy screen" effect.
      */
@@ -356,7 +393,11 @@ public class Filters {
     /**
      * A Filter that is constructed with a group of colors and forces any color it is told to alter to exactly
      * the color it was constructed with that has the closest red, green, and blue components. A convenient way to
-     * use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.
+     * use this is to pass in one of the color series from SColor, such as {@link SColor#RED_SERIES} or
+     * {@link SColor#ACHROMATIC_SERIES}. This can also be used to enforce usage of a limited color palette such as
+     * one of DawnBringer's popular pixel art palettes, {@link SColor#DAWNBRINGER_16} and
+     * {@link SColor#DAWNBRINGER_32}. Beyond 32 colors, the palettes {@link SColor#VARIED_PALETTE} with 56 colors
+     * and {@link SColor#COLOR_WHEEL_PALETTE} with 189 colors can be used.
      *
      * Preview using BLUE_GREEN_SERIES foreground, ACHROMATIC_SERIES background: http://i.imgur.com/2HdZpC9.png
      */
@@ -368,30 +409,27 @@ public class Filters {
          * @param r the red components to use
          * @param g the green components to use
          * @param b the blue components to use
-         * @param a the opacity components to use
          */
-        public PaletteFilter(float[] r, float[] g, float[] b, float[] a) {
-            state = new float[Math.min(r.length, Math.min(g.length, Math.min(b.length,
-                    a.length))) * 4];
+        public PaletteFilter(float[] r, float[] g, float[] b) {
+            state = new float[Math.min(r.length, Math.min(g.length, b.length)) * 3];
             for (int i = 0; i < state.length / 4; i++) {
-                state[i * 4] = MathUtils.clamp(r[i], 0f, 1f);
-                state[i * 4 + 1] = MathUtils.clamp(g[i], 0f, 1f);
-                state[i * 4 + 2] = MathUtils.clamp(b[i], 0f, 1f);
-                state[i * 4 + 3] = MathUtils.clamp(a[i], 0f, 1f);
+                state[i * 3] = MathUtils.clamp(r[i], 0f, 1f);
+                state[i * 3 + 1] = MathUtils.clamp(g[i], 0f, 1f);
+                state[i * 3 + 2] = MathUtils.clamp(b[i], 0f, 1f);
             }
         }/**
          * Sets up a PaletteFilter with the exact colors to use as Colors. A convenient way to
          * use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.
-         *
+         * The alpha component of each color in the palette is ignored, since when a color is requested for
+         * filtering, its alpha is respected and only its red, green, and blue components are changed.
          * @param colors the Colors to use
          */
         public PaletteFilter(Color[] colors) {
-            state = new float[colors.length * 4];
+            state = new float[colors.length * 3];
             for (int i = 0; i < colors.length; i++) {
-                state[i * 4] = colors[i].r;
-                state[i * 4 + 1] = colors[i].g;
-                state[i * 4 + 2] = colors[i].b;
-                state[i * 4 + 3] = colors[i].a;
+                state[i * 3] = colors[i].r;
+                state[i * 3 + 1] = colors[i].g;
+                state[i * 3 + 2] = colors[i].b;
             }
         }
 
