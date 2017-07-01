@@ -977,14 +977,14 @@ public abstract class WorldMapGenerator {
                                 sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
                         if ((i & 3) == 3) {
                             partialRiverData.zoom(stx, sty).connect8way();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.4));
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
                             partialLakeData.zoom(stx, sty).connect8way();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.55));
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
                         } else {
                             partialRiverData.zoom(stx, sty).connect8way().thin();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.5));
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
                             partialLakeData.zoom(stx, sty).connect8way().thin();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.7));
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
                         }
                     }
                 }
@@ -1004,7 +1004,7 @@ public abstract class WorldMapGenerator {
      * <a href="http://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
      */
     public static class SphereMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 2.0, terrainRidgedFreq = 2.4, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
+        protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -1141,7 +1141,7 @@ public abstract class WorldMapGenerator {
             waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
-            double p, q,
+            double p,
                     ps, pc,
                     qs, qc,
                     h, temp,
@@ -1285,14 +1285,14 @@ public abstract class WorldMapGenerator {
                                 sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
                         if ((i & 3) == 3) {
                             partialRiverData.zoom(stx, sty).connect8way();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.4));
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
                             partialLakeData.zoom(stx, sty).connect8way();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.55));
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
                         } else {
                             partialRiverData.zoom(stx, sty).connect8way().thin();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().separatedRegionZCurve(0.5));
+                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
                             partialLakeData.zoom(stx, sty).connect8way().thin();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().separatedRegionZCurve(0.7));
+                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
                         }
                     }
                 }

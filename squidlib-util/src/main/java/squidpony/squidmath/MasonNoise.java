@@ -1084,6 +1084,10 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         return noise((float)x, (float)y, seed);
     }
 
+    public static double noiseArc(final double x, final double y, final int seed) {
+        return noiseArc((float)x, (float)y, seed);
+    }
+
     public static float randomize(long state, final long jump)
     {
         state = (((state = (state - jump) * jump) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
@@ -1161,6 +1165,25 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         return ( 7f + ( x3 - 7f ) * x ) * x3;
     }
 
+    private static float arclerp(final float x)
+    {
+        //(fn [x] (let [inv (bit-or 1 (int (* x -1.9999999999999998))) ix (- (* inv x) (bit-shift-right inv 1))] (- 0.5 (* inv (sqrt (- 0.25 (* ix ix)))))))
+        return (x > 0.5f) ? 0.5f + (float) Math.sqrt(0.25f - (1f - x) * (1f - x)) : 0.5f - (float) Math.sqrt(0.25f - x * x);
+        //(+ 0.5 (sqrt (- 0.25 (* (- 1.0 x) (- 1.0 x)))))
+        //(- 0.5 (sqrt (- 0.25 (* x x))))
+    }
+    /*
+     * Linearly interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    private static float interpolate(final float start, final float end, final float a)
+    {
+        return (1f - a) * start + a * end;
+    }
+
     private static final long xJump = 0x9E3779BE3779B9L, yJump = 0xBFDAE4FFDAE4F7L, zJump = 0xF35692B35692B5L;
     public static float noise(final float x, final float y, final int seed) {
         //final float xy = x * 2.2731f - y, yx = y * 2.3417f - x;
@@ -1171,21 +1194,38 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         */final int
                 xx0 = fastFloor(x), yy0 = fastFloor(y),
                 //xy0 = fastFloor(xy), yx0 = fastFloor(yx),
-                rxx0 = randomInt(xx0, xJump + seed), ryy0 = randomInt(yy0, xJump + seed),
-                rxx1 = randomInt(xx0 + 1, xJump + seed), ryy1 = randomInt(yy0 + 1, xJump + seed);
+                rxx0 = randomInt(xx0, xJump + seed), ryy0 = randomInt(yy0, yJump + seed),
+                rxx1 = randomInt(xx0 + 1, xJump + seed), ryy1 = randomInt(yy0 + 1, yJump + seed);
         //rxy0 = randomInt(xy0, xJump), ryx0 = randomInt(yx0, yJump),
         //rxy1 = randomInt(xy0 + 1, xJump), ryx1 = randomInt(yx0 + 1, yJump);
         final float dx = querp(x - xx0), dy = querp(y - yy0),
                 //dxy = querp(xy - xy0), dyx = querp(yx - yx0),
-                rx0y0 = (rxx0 * ryy0 >> 16) * (1f - dx) * (1f - dy),
-                rx0y1 = (rxx0 * ryy1 >> 16) * (1f - dx) * dy,
-                rx1y0 = (rxx1 * ryy0 >> 16) * dx * (1f - dy),
-                rx1y1 = (rxx1 * ryy1 >> 16) * dx * dy/*,
-                rax0y0 = (rxy0 + ryx0 >> 16) * (1f - dxy) * (1f - dyx),
-                rax0y1 = (rxy0 + ryx1 >> 16) * (1f - dxy) * dyx,
-                rax1y0 = (rxy1 + ryx0 >> 16) * dxy * (1f - dyx),
-                rax1y1 = (rxy1 + ryx1 >> 16) * dxy * dyx*/;
-        return NumberTools.bounce((rx0y0 + rx1y0 + rx0y1 + rx1y1) /* * 0.625f + (rax0y0 + rax1y0 + rax0y1 + rax1y1) * 0.375f*/ + 163840f);
+                rx0y0 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + BirdRNG.splitMix32(yy0))),
+                rx0y1 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + BirdRNG.splitMix32(yy0 + 1))),
+                rx1y0 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + 1 + BirdRNG.splitMix32(yy0))),
+                rx1y1 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + 1 + BirdRNG.splitMix32(yy0 + 1)));
+        return interpolate(interpolate(rx0y0, rx1y0, dx), interpolate(rx0y1, rx1y1, dx), dy) * 2f - 1f;
+    }
+    public static float noiseArc(final float x, final float y, final int seed) {
+        //final float xy = x * 2.2731f - y, yx = y * 2.3417f - x;
+        /*final float ra = randomize(seed, xJump),
+                angle = (ra + 2.3f) * Math.signum(ra),
+                xx = x * angle + y * angle * -0.3157f,
+                yy = y * angle + x * angle * -0.3157f;
+        */final int
+                xx0 = fastFloor(x), yy0 = fastFloor(y);
+                //xy0 = fastFloor(xy), yx0 = fastFloor(yx),
+                //rxx0 = randomInt(xx0, xJump + seed), ryy0 = randomInt(yy0, yJump + seed),
+                //rxx1 = randomInt(xx0 + 1, xJump + seed), ryy1 = randomInt(yy0 + 1, yJump + seed);
+        //rxy0 = randomInt(xy0, xJump), ryx0 = randomInt(yx0, yJump),
+        //rxy1 = randomInt(xy0 + 1, xJump), ryx1 = randomInt(yx0 + 1, yJump);
+        final float dx = arclerp(x - xx0), dy = arclerp(y - yy0),
+                //dxy = querp(xy - xy0), dyx = querp(yx - yx0),
+                rx0y0 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + BirdRNG.splitMix32(yy0))),
+                rx0y1 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + BirdRNG.splitMix32(yy0 + 1))),
+                rx1y0 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + 1 + BirdRNG.splitMix32(yy0))),
+                rx1y1 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + 1 + BirdRNG.splitMix32(yy0 + 1)));
+        return interpolate(interpolate(rx0y0, rx1y0, dx), interpolate(rx0y1, rx1y1, dx), dy) * 2f - 1f;
     }
 
     private static final IntVLA columns = new IntVLA(128), // x
