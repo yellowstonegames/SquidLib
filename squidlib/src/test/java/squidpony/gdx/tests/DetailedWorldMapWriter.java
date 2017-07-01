@@ -3,15 +3,15 @@ package squidpony.gdx.tests;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.FakeLanguageGen;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.*;
 
@@ -20,7 +20,7 @@ import squidpony.squidmath.*;
  * It seems to mostly work now, though it only generates one view of the map that it renders (but biome, moisture, heat,
  * and height maps can all be requested from it).
  */
-public class DetailedWorldMapDemo extends ApplicationAdapter {
+public class DetailedWorldMapWriter extends ApplicationAdapter {
     public static final int
         Desert                 = 0 ,
         Savanna                = 1 ,
@@ -36,11 +36,17 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    //private static final int width = 314 * 4, height = 400;
-    private static final int width = 650, height = 650;
+    private static final int width = 314 * 6, height = 600;
+
+    //private static final int width = 800, height = 800;
 
     private SpriteBatch batch;
-    private SquidPanel display;//, overlay;
+    //private SquidPanel display;//, overlay;
+    private FakeLanguageGen lang = FakeLanguageGen.SIMPLISH;
+    private Pixmap pm;
+    Texture pt;
+    private int counter = 0;
+    private Color tempColor = Color.WHITE.cpy();
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
     private Stage stage;
@@ -298,13 +304,19 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        display = new SquidPanel(width, height, cellWidth, cellHeight);
+        //display = new SquidPanel(width, height, cellWidth, cellHeight);
         view = new StretchViewport(width*cellWidth, height*cellHeight);
         stage = new Stage(view, batch);
-        seed = 0xDEBACL;
-        rng = new StatefulRNG(seed);
-        //world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Scaled3D(WhirlingNoise.instance, 0.78, 0.78, 0.78), 0.75);
-        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.0);
+        if(!Gdx.files.local("out/worlds/").exists())
+            Gdx.files.local("out/worlds/").mkdirs();
+        pm = new Pixmap(width, height, Pixmap.Format.RGB888);
+        pm.setBlending(Pixmap.Blending.None);
+        pt = new Texture(pm);
+        rng = new StatefulRNG();
+        seed = rng.getState();
+        //world = new WorldMapGenerator.TilingMap(seed, width, height, SeededNoise.instance, 0.75);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Scaled3D(WhirlingNoise.instance, 0.78, 0.78, 0.78), 1.1);
+        world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -349,11 +361,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         }));
         generate(seed);
         rng.setState(seed);
-        Gdx.input.setInputProcessor(input);
-        display.setPosition(0, 0);
-        stage.addActor(display);
-        Gdx.graphics.setContinuousRendering(false);
-        Gdx.graphics.requestRendering();
+        //Gdx.input.setInputProcessor(input);
+        //display.setPosition(0, 0);
+        //stage.addActor(display);
+        //Gdx.graphics.setContinuousRendering(false);
+        //Gdx.graphics.requestRendering();
     }
 
     public void zoomIn() {
@@ -386,8 +398,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
 
     public void putMap() {
-        // uncomment next line to generate maps as quickly as possible
-        //generate(rng.nextLong());
+        String name = lang.word(rng, true); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
+        while (Gdx.files.local("out/worlds/" + name + ".png").exists())
+            name = lang.word(rng, true);
+
+        generate(CrossHash.Wisp.hash64(name));
+        //display.erase();
         int hc, tc;
         int[][] heightCodeData = world.heightCodeData;
         double[][] heightData = world.heightData;
@@ -404,12 +420,18 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         case 1:
                         case 2:
                         case 3:
-                            display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
+                            Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, ice,
                                     (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
+                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
+                            //display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
+                            //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
                             continue PER_CELL;
                         case 4:
-                            display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
+                            Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(lightIce, ice,
                                     (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
+                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
+                            //display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
+                            //        (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
                             continue PER_CELL;
                     }
                 }
@@ -418,8 +440,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 1:
                     case 2:
                     case 3:
-                        display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
+                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
+                        pm.drawPixel(x, y, Color.rgba8888(tempColor));
+                        //display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
+                        //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
                         break;
                     default:
                         /*
@@ -431,17 +456,27 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                     + shadingData[x][y] * 13) * 0.03125f);
                         */
 
-
-                        display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
-                                BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
-                                (float) //(((heightData[x][y] - lowers[hc]) / (differences[hc])) * 11 +
-                                        shadingData[x][y]// * 21) * 0.03125f
-                                ));
+                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
+                                BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]], (float) shadingData[x][y]));
+                        pm.drawPixel(x, y, Color.rgba8888(tempColor));
+                        //display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
+                        //        BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
+                        //        (float) //(((heightData[x][y] - lowers[hc]) / (differences[hc])) * 11 +
+                        //                shadingData[x][y]// * 21) * 0.03125f
+                        //        ));
 
                         //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
                 }
             }
         }
+        batch.begin();
+        pt.draw(pm, 0, 0);
+        batch.draw(pt, 0, 0);
+        batch.end();
+        PixmapIO.writePNG(Gdx.files.local("out/worlds/" + name + ".png"), pm);
+        if(++counter >= 64)
+            Gdx.app.exit();
+
     }
     @Override
     public void render() {
@@ -458,7 +493,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             input.next();
         }
         // stage has its own batch and must be explicitly told to draw().
-        stage.draw();
+        //stage.draw();
     }
 
     @Override
@@ -473,12 +508,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         config.title = "SquidLib Demo: Detailed World Map";
         config.width = width * cellWidth;
         config.height = height * cellHeight;
-        config.foregroundFPS = 20;
+        config.foregroundFPS = 60;
         //config.fullscreen = true;
-        config.backgroundFPS = -1;
+        config.backgroundFPS = 30;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
-        new LwjglApplication(new DetailedWorldMapDemo(), config);
+        new LwjglApplication(new DetailedWorldMapWriter(), config);
     }
 }

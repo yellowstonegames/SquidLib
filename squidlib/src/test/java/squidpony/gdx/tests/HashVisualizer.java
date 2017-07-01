@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 30, noiseMode = 76;
+    private int hashMode = 43, rngMode = 30, noiseMode = 69;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
@@ -145,7 +145,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 4;
 
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
@@ -2802,11 +2802,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Seeded Slick 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
-                                        20.0, 20.0, 20.0, 12) * 0.5
-                                        + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
-                                        40.0, 40.0, 20.0, 1234)
-                                        + */slick2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
+                                bright = (float)(
+                                        slick2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
                                         123456) * 0.5 + 0.5);
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
@@ -2991,6 +2988,16 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 70:
+                        Gdx.graphics.setTitle("Mason 2D Standard Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(
+                                        MasonNoise.noise(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
+                                                123456) * 0.5 + 0.5);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        /*
                         Gdx.graphics.setTitle("Mason 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         ArrayTools.fill(fillField[0], 0f);
                         ArrayTools.fill(fillField[1], 0f);
@@ -3009,9 +3016,19 @@ public class HashVisualizer extends ApplicationAdapter {
                                         floatGet(fillField[0][x][y] * 0.25f + 0.5f, fillField[1][x][y] * 0.25f + 0.5f, fillField[2][x][y] * 0.25f + 0.5f, 1f)
                                 );
                             }
-                        }
+                        }*/
                         break;
                     case 71:
+                        Gdx.graphics.setTitle("Mason 2D Arc Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(
+                                        MasonNoise.noiseArc(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
+                                                123456) * 0.5 + 0.5);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        /*
                         Gdx.graphics.setTitle("Mason 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         ArrayTools.fill(fillField[0], 0f);
                         MasonNoise.addNoiseField(fillField[0], 10f + ctr * 0.05125f, 20f + ctr * 0.05125f, 512f * 0.0625f + 10f + ctr * 0.05125f, 512f * 0.0625f + 20f + ctr * 0.05125f, -12345,  3.5f, 1.08f);
@@ -3026,6 +3043,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 );
                             }
                         }
+                        */
                         break;
                     case 72:
                         Gdx.graphics.setTitle("Mason 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
