@@ -3734,31 +3734,32 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
-     * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
-     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
-     * request too many cells (too high of a value for fraction), it will start to overlap, however.
-     * Does not restrict the size of the returned array other than only using up to {@code fraction * size()} cells.
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
+     * scattering of chosen cells with a count that matches the given {@code fraction} of the total amount of "on" cells
+     * in this. This is pseudo-random with a fixed seed, but is relatively good at avoiding overlap (not as good as
+     * {@link #separatedZCurve(double)}, but much faster). If you request too many cells (too high of a value for
+     * fraction), it will start to overlap, however. Does not restrict the size of the returned array other than only
+     * using up to {@code fraction * size()} cells.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return a freshly-allocated Coord array containing the quasi-random cells
      */
-    public Coord[] quasiRandomSeparated(double fraction)
+    public Coord[] mixedRandomSeparated(double fraction)
     {
-        return quasiRandomSeparated(fraction, -1);
+        return mixedRandomSeparated(fraction, -1);
     }
 
     /**
-     * Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
-     * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
-     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
-     * request too many cells (too high of a value for fraction), it will start to overlap, however.
-     * Restricts the total size of the returned array to a maximum of {@code limit} (minimum is 0 if no cells are "on").
-     * If limit is negative, this will not restrict the size.
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
+     * scattering of chosen cells with a count that matches the given {@code fraction} of the total amount of "on" cells
+     * in this. This is pseudo-random with a fixed seed, but is relatively good at avoiding overlap (not as good as
+     * {@link #separatedZCurve(double, int)}, but much faster). If you request too many cells (too high of a value
+     * for fraction), it will start to overlap, however. Restricts the total size of the returned array to a maximum of
+     * {@code limit} (minimum is 0 if no cells are "on"). If limit is negative, this will not restrict the size.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum size of the array to return
-     * @return a freshly-allocated Coord array containing the quasi-random cells
+     * @return a freshly-allocated Coord array containing the pseudo-random cells
      */
-    public Coord[] quasiRandomSeparated(double fraction, int limit)
+    public Coord[] mixedRandomSeparated(double fraction, int limit)
     {
         if(fraction < 0)
             return new Coord[0];
@@ -3803,35 +3804,31 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
 
     /**
-     * Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
-     * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
-     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
-     * request too many cells (too high of a value for fraction), it will start to overlap, however.
-     * Does not restrict the count of "on" cells after this returns other than by only using up to
-     * {@code fraction * size()} cells.
-     * <br>
-     * Uses a different algorithm than {@link #quasiRandomSeparated(double)}, hoping that it will be faster.
+     * Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
+     * choosing cells so that the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells
+     * in this. This is pseudo-random with a fixed seed, but is relatively good at avoiding overlap (not as good as
+     * {@link #separatedRegionZCurve(double)}, but much faster).  If you request too many cells (too high of a
+     * value for fraction), it will start to overlap, however. Does not restrict the count of "on" cells after this
+     * returns other than by only using up to {@code fraction * size()} cells.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return this for chaining
      */
-    public GreasedRegion quasiRandomRegion(double fraction) {
-        return quasiRandomRegion(fraction, -1);
+    public GreasedRegion mixedRandomRegion(double fraction) {
+        return mixedRandomRegion(fraction, -1);
     }
     /**
-     * Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
-     * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
-     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
-     * request too many cells (too high of a value for fraction), it will start to overlap, however.
-     * Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0 if no
-     * cells are "on"). If limit is negative, this will not restrict the count.
-     * <br>
-     * Used a different algorithm than {@link #quasiRandomSeparated(double)}, but now that method changed to match the
-     * algorithm this uses ({@link VanDerCorputQRNG#weakDetermine(int)}).
+     * Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
+     * choosing cells so that the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells
+     * in this. This is pseudo-random with a fixed seed, but is relatively good at avoiding overlap (not as good as
+     * {@link #separatedRegionZCurve(double, int)}, but much faster).  If you request too many cells (too high of a
+     * value for fraction), it will start to overlap, however. Restricts the total count of "on" cells after this
+     * returns to a maximum of {@code limit} (minimum is 0 if no cells are "on"). If limit is negative, this will not
+     * restrict the count.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum count of "on" cells to keep
      * @return this for chaining
      */
-    public GreasedRegion quasiRandomRegion(double fraction, int limit) {
+    public GreasedRegion mixedRandomRegion(double fraction, int limit) {
         int ct = 0, idx, run = 0;
         for (int i = 0; i < width * ySections; i++) {
             ct += Long.bitCount(data[i]);
@@ -3892,6 +3889,178 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return this;
     }
+
+    /**
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
+     * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
+     * request too many cells (too high of a value for fraction), it will start to overlap, however.
+     * Does not restrict the size of the returned array other than only using up to {@code fraction * size()} cells.
+     * <br>
+     * For some time, this method used a different implementation that was not actually quasi-random; that version is
+     * still available as {@link #mixedRandomSeparated(double)}, but the current quasi- version should have much better
+     * behavior regarding overlap (similar to the ZCurve methods, but faster).
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @return a freshly-allocated Coord array containing the quasi-random cells
+     */
+    public Coord[] quasiRandomSeparated(double fraction)
+    {
+        return quasiRandomSeparated(fraction, -1);
+    }
+
+    /**
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a quasi-random scattering of chosen cells
+     * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
+     * request too many cells (too high of a value for fraction), it will start to overlap, however.
+     * Restricts the total size of the returned array to a maximum of {@code limit} (minimum is 0 if no cells are "on").
+     * If limit is negative, this will not restrict the size.
+     * <br>
+     * For some time, this method used a different implementation that was not actually quasi-random; that version is
+     * still available as {@link #mixedRandomSeparated(double, int)}, but the current quasi- version should have much
+     * better behavior regarding overlap (similar to the ZCurve methods, but faster).
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @param limit the maximum size of the array to return
+     * @return a freshly-allocated Coord array containing the quasi-random cells
+     */
+    public Coord[] quasiRandomSeparated(double fraction, int limit)
+    {
+        if(fraction < 0)
+            return new Coord[0];
+        if(fraction > 1)
+            fraction = 1;
+        int ct = 0, tmp, total, ic;
+        long t, w;
+        int[] counts = new int[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            tmp = Long.bitCount(data[i]);
+            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+        }
+        total = ct;
+        ct *= fraction;// (int)(fraction * ct);
+        if(limit >= 0 && limit < ct)
+            ct = limit;
+        Coord[] vl = new Coord[ct];
+        EACH_QUASI:
+        for (int i = 0; i < ct; i++)
+        {
+            tmp = (int)(VanDerCorputQRNG.determine2(i ^ i >>> 1) * total);
+            for (int s = 0; s < ySections; s++) {
+                for (int x = 0; x < width; x++) {
+                    if ((ic = counts[x * ySections + s]) > tmp) {
+                        t = data[x * ySections + s];
+                        w = Long.lowestOneBit(t);
+                        for (--ic; w != 0; ic--) {
+                            if (ic == tmp) {
+                                vl[i] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                                continue EACH_QUASI;
+                            }
+                            t ^= w;
+                            w = Long.lowestOneBit(t);
+                        }
+                    }
+                }
+            }
+        }
+        return vl;
+    }
+
+
+
+    /**
+     * Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
+     * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
+     * request too many cells (too high of a value for fraction), it will start to overlap, however.
+     * Does not restrict the count of "on" cells after this returns other than by only using up to
+     * {@code fraction * size()} cells.
+     * <br>
+     * For some time, this method used a different implementation that was not actually quasi-random; that version is
+     * still available as {@link #mixedRandomRegion(double)}, but the current quasi- version should have much better
+     * behavior regarding overlap (similar to the ZCurve methods, but faster).
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @return this for chaining
+     */
+    public GreasedRegion quasiRandomRegion(double fraction) {
+        return quasiRandomRegion(fraction, -1);
+    }
+    /**
+     * Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
+     * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
+     * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
+     * request too many cells (too high of a value for fraction), it will start to overlap, however.
+     * Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0 if no
+     * cells are "on"). If limit is negative, this will not restrict the count.
+     * <br>
+     * For some time, this method used a different implementation that was not actually quasi-random; that version is
+     * still available as {@link #mixedRandomRegion(double, int)}, but the current quasi- version should have much
+     * better behavior regarding overlap (similar to the ZCurve methods, but faster).
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @param limit the maximum count of "on" cells to keep
+     * @return this for chaining
+     */
+    public GreasedRegion quasiRandomRegion(double fraction, int limit) {
+        int ct = 0, idx, run = 0;
+        for (int i = 0; i < width * ySections; i++) {
+            ct += Long.bitCount(data[i]);
+        }
+        if (ct <= limit)
+            return this;
+        if (ct <= 0)
+            return empty();
+        if (limit < 0)
+            limit = (int) (fraction * ct);
+        if(limit <= 0)
+            return empty();
+        int[] order = new int[limit];
+        for (int i = 0, m = 0; i < limit; i++, m++) {
+            idx = (int) (VanDerCorputQRNG.determine2(m ^ m >>> 1) * ct);
+            BIG:
+            while (true) {
+                for (int j = 0; j < i; j++) {
+                    if (order[j] == idx) {
+                        idx = (int) (VanDerCorputQRNG.determine2(++m ^ m >>> 1) * ct);
+                        continue BIG;
+                    }
+                }
+                break;
+            }
+            order[i] = idx;
+        }
+        idx = 0;
+        Arrays.sort(order);
+        long t, w;
+        ALL:
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
+                if ((t = data[x * ySections + s]) != 0) {
+                    w = Long.lowestOneBit(t);
+                    while (w != 0) {
+                        if (run++ == order[idx]) {
+                            if (++idx >= limit) {
+                                data[x * ySections + s] &= (w<<1)-1;
+                                for (int rx = x+1; rx < width; rx++) {
+                                    data[rx * ySections + s] = 0;
+                                }
+                                for (int rs = s+1; rs < ySections; rs++) {
+                                    for (int rx = 0; rx < width; rx++) {
+                                        data[rx * ySections + rs] = 0;
+                                    }
+                                }
+                                break ALL;
+                            }
+                        } else {
+                            data[x * ySections + s] ^= w;
+                        }
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return this;
+    }
+
     /**
      * Modifies this GreasedRegion so it contains a random subset of its previous contents, choosing cells so that the
      * distance between any two "on" cells is at least {@code minimumDistance}, with at least one cell as "on" if any
@@ -4284,6 +4453,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return  (highest == Integer.lowestOneBit(n)) ? highest : highest << 1;
     }
 
+    /**
+     * Like {@link #nth(int)}, this gets the Coord at a given index along a path through the GreasedRegion, but unlike
+     * nth(), this traverses the path in a zig-zag pattern called the Z-Order Curve. This method is often not very fast
+     * compared to nth(), but this different path can help if iteration needs to seem less regular while still covering
+     * all "on" cells in the GresedRegion eventually.
+     * @param index the distance along the Z-order curve to travel, only counting "on" cells in this GreasedRegion.
+     * @return the Coord at the given distance, or the Coord with x and y both -1 if index is too high or low
+     */
     public Coord nthZCurve(final int index)
     {
         int ct = -1, x, y, s, d, max = nextPowerOfTwo(width) * nextPowerOfTwo(height);
@@ -4307,6 +4484,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return Coord.get(-1, -1);
     }
+    /**
+     * Like {@link #nth(int)}, this finds a given index along a path through the GreasedRegion, but unlike nth(), this
+     * traverses the path in a zig-zag pattern called the Z-Order Curve, and unlike {@link #nthZCurve(int)}, this does
+     * not return a Coord and instead produces a "tight"-encoded int. This method is often not very fast compared to
+     * nth(), but this different path can help if iteration needs to seem less regular while still covering all "on"
+     * cells in the GresedRegion eventually, and the tight encoding may be handy if you need to use ints.
+     * @param index the distance along the Z-order curve to travel, only counting "on" cells in this GreasedRegion.
+     * @return the "tight" encoded point at the given distance, or -1 if index is too high or low
+     */
 
     public int nthZCurveTight(final int index)
     {
@@ -4337,12 +4523,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
      * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
      * request too many cells (too high of a value for fraction), it will start to overlap, however. Contrast with
-     * {@link #quasiRandomSeparated(double, int)}, which tends to overlap more frequently. This method seems to work
+     * {@link #mixedRandomSeparated(double, int)}, which tends to overlap more frequently. This method seems to work
      * well because it chooses quasi-random points by their index in the Z-Order Curve as opposed to the simpler
-     * approach quasiRandomSeparated uses to traverse points (which just runs through the "on" cells a column at a time,
+     * approach mixedRandomSeparated uses to traverse points (which just runs through the "on" cells a column at a time,
      * not caring if two points are in adjacent cells as long as they are in different columns). Testing with a dungeon
-     * layout of mostly-on cells, this method has no overlap with a fraction of 0.4, while quasiRandomSeparated has
-     * overlap as early as 0.15 for fraction, and it only gets worse at higher values.
+     * layout of mostly-on cells, this method has no overlap with a fraction of 0.4, while mixedRandomSeparated has
+     * overlap as early as 0.15 for fraction, and it only gets worse at higher values. A change to the algorithm used by
+     * {@link #quasiRandomSeparated(double)} has it overlapping at the same rate as this method, though it should be
+     * much faster. This method can be especially slow, since each Z-Order traversal may need to try many cells that are
+     * outside the GreasedRegion but are on the Z-Order Curve.
      * Does not restrict the size of the returned array other than only using up to {@code fraction * size()} cells.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return a freshly-allocated Coord array containing the quasi-random cells
@@ -4357,12 +4546,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * with a count that matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
      * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
      * request too many cells (too high of a value for fraction), it will start to overlap, however. Contrast with
-     * {@link #quasiRandomSeparated(double, int)}, which tends to overlap more frequently. This method seems to work
+     * {@link #mixedRandomSeparated(double, int)}, which tends to overlap more frequently. This method seems to work
      * well because it chooses quasi-random points by their index in the Z-Order Curve as opposed to the simpler
-     * approach quasiRandomSeparated uses to traverse points (which just runs through the "on" cells a column at a time,
+     * approach mixedRandomSeparated uses to traverse points (which just runs through the "on" cells a column at a time,
      * not caring if two points are in adjacent cells as long as they are in different columns). Testing with a dungeon
-     * layout of mostly-on cells, this method has no overlap with a fraction of 0.4, while quasiRandomSeparated has
-     * overlap as early as 0.15 for fraction, and it only gets worse at higher values.
+     * layout of mostly-on cells, this method has no overlap with a fraction of 0.4, while mixedRandomSeparated has
+     * overlap as early as 0.15 for fraction, and it only gets worse at higher values. A change to the algorithm used by
+     * {@link #quasiRandomSeparated(double, int)} has it overlapping at the same rate as this method, though it should
+     * be much faster. This method can be especially slow, since each Z-Order traversal may need to try many cells that
+     * are outside the GreasedRegion but are on the Z-Order Curve.
      * Restricts the total size of the returned array to a maximum of {@code limit} (minimum is 0 if no cells are "on").
      * If limit is negative, this will not restrict the size.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
@@ -4392,12 +4584,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
      * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
      * request too many cells (too high of a value for fraction), it will start to overlap, however. Contrast with
-     * {@link #quasiRandomRegion(double)}, which tends to overlap more frequently. This method seems to work
+     * {@link #mixedRandomRegion(double)}, which tends to overlap more frequently. This method seems to work
      * well because it chooses quasi-random points by their index in the Z-Order Curve as opposed to the simpler
-     * approach quasiRandomRegion uses to traverse points (which just runs through the "on" cells a column at a time,
+     * approach mixedRandomRegion uses to traverse points (which just runs through the "on" cells a column at a time,
      * not caring if two points are in adjacent cells as long as they are in different columns). Testing with a dungeon
-     * layout of mostly-on cells, this method has no overlap with a fraction of 0.4, while quasiRandomRegion has
-     * overlap as early as 0.15 for fraction, and it only gets worse at higher values.
+     * layout of mostly-on cells, this method has no overlap with a fraction of 0.4, while mixedRandomRegion has
+     * overlap as early as 0.15 for fraction, and it only gets worse at higher values. A change to the algorithm used by
+     * {@link #quasiRandomRegion(double)} has it overlapping at the same rate as this method, though it should be much
+     * faster. This method can be especially slow, since each Z-Order traversal may need to try many cells that are
+     * outside the GreasedRegion but are on the Z-Order Curve.
      * Does not restrict the size of the returned array other than only using up to {@code fraction * size()} cells.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return this, after modifications, for chaining
@@ -4412,12 +4607,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells in this. This is quasi-
      * random instead of pseudo-random because it is somewhat less likely to produce nearby cells in the result. If you
      * request too many cells (too high of a value for fraction), it will start to overlap, however. Contrast with
-     * {@link #quasiRandomRegion(double, int)}, which tends to overlap more frequently. This method seems to work
+     * {@link #mixedRandomRegion(double, int)}, which tends to overlap more frequently. This method seems to work
      * well because it chooses quasi-random points by their index in the Z-Order Curve as opposed to the simpler
-     * approach quasiRandomRegion uses to traverse points (which just runs through the "on" cells a column at a time,
+     * approach mixedRandomRegion uses to traverse points (which just runs through the "on" cells a column at a time,
      * not caring if two points are in adjacent cells as long as they are in different columns). Testing with a dungeon
-     * layout of mostly-on cells, this method has no overlap with a fraction of 0.4, while quasiRandomRegion has
-     * overlap as early as 0.15 for fraction, and it only gets worse at higher values.
+     * layout of mostly-on cells, this method has no overlap with a fraction of 0.4, while mixedRandomRegion has
+     * overlap as early as 0.15 for fraction, and it only gets worse at higher values. A change to the algorithm used by
+     * {@link #quasiRandomRegion(double, int)} has it overlapping at the same rate as this method, though it should be
+     * much faster. This method can be especially slow, since each Z-Order traversal may need to try many cells that
+     * are outside the GreasedRegion but are on the Z-Order Curve.
      * Restricts the total size of the returned array to a maximum of {@code limit} (minimum is 0 if no cells are "on").
      * If limit is negative, this will not restrict the size.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
