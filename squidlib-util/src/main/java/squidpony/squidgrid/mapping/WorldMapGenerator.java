@@ -322,7 +322,7 @@ public abstract class WorldMapGenerator {
         //workingData.allOn();
                 //.empty().insertRectangle(8, 8, width - 16, height - 16);
         riverData.empty().refill(heightCodeData, 6, 100);
-        riverData.separatedRegionZCurve(0.0036);
+        riverData.quasiRandomRegion(0.0036);
         int[] starts = riverData.asTightEncoded();
         int len = starts.length, currentPos, choice, adjX, adjY, currX, currY, tcx, tcy, stx, sty, sbx, sby;
         riverData.clear();
