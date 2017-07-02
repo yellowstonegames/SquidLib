@@ -1,5 +1,18 @@
 The font is licensed under SIL OFL Version 1.1.
+This covers the files in this distribution:
+* Iosevka-distance.png
+* Iosevka-Slab-distance.png
+* Iosevka-Light-distance.png
+* Iosevka-Slab-Light-distance.png
+* Iosevka-Slab-msdf.png
+* Iosevka-distance.fnt
+* Iosevka-Slab-distance.fnt
+* Iosevka-Light-distance.fnt
+* Iosevka-Slab-Light-distance.fnt
+* Iosevka-Slab-msdf.fnt
+
 The support code is licensed under Berkeley Software Distribution license.
+The support code is not included in this distribution. It was used to prepare the aforementioned files.
 
 ---
 ---

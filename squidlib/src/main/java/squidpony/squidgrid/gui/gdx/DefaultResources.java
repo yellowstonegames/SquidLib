@@ -64,6 +64,7 @@ public class DefaultResources implements LifecycleListener {
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
             distanceSciFi = null, distanceOrbit = null, distanceLean = null, distanceSlab = null,
+            distanceLeanLight = null, distanceSlabLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
             msdfDejaVu = null, msdfDejaVuItalic = null;
     private TextureAtlas iconAtlas = null;
@@ -97,6 +98,10 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldOrbitTexture = "Orbitron-distance.png",
             distanceFieldLean = "Iosevka-distance.fnt",
             distanceFieldLeanTexture = "Iosevka-distance.png",
+            distanceFieldLeanLight = "Iosevka-Light-distance.fnt",
+            distanceFieldLeanLightTexture = "Iosevka-Light-distance.png",
+            distanceFieldSlabLight = "Iosevka-Slab-Light-distance.fnt",
+            distanceFieldSlabLightTexture = "Iosevka-Slab-Light-distance.png",
             distanceFieldSlab = "Iosevka-Slab-distance.fnt",
             distanceFieldSlabTexture = "Iosevka-Slab-distance.png",
             crispSlab = "Iosevka-Slab-msdf.fnt",
@@ -587,7 +592,9 @@ public class DefaultResources implements LifecycleListener {
      * ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a
      * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
      * deserves an award."</a> You may want to try using both this sans-serif version of Iosevka and the slab-serif
-     * version SquidLib has, {@link #getStretchableSlabFont()}, though they have subtly different sizes.
+     * version SquidLib has, {@link #getStretchableSlabFont()}, though they have subtly different sizes. There are
+     * also versions of Iosevka that use a Light weight, available by {@link #getStretchableLeanLightFont()} and
+     * {@link #getStretchableSlabLightFont()}.
      * <br>
      * Preview: http://i.imgur.com/sm0ULbU.png
      * <br>
@@ -630,7 +637,9 @@ public class DefaultResources implements LifecycleListener {
      * ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a
      * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
      * deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
-     * version SquidLib has, {@link #getStretchableLeanFont()}, though they have subtly different sizes.
+     * version SquidLib has, {@link #getStretchableLeanFont()}, though they have subtly different sizes. There are
+     * also versions of Iosevka that use a Light weight, available by {@link #getStretchableLeanLightFont()} and
+     * {@link #getStretchableSlabLightFont()}.
      * <br>
      * Preview: http://i.imgur.com/5kb697p.png
      * <br>
@@ -658,6 +667,95 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.distanceSlab != null)
             return instance.distanceSlab.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
+     * and a very thin, geometric style, that should scale cleanly to many sizes. Caches the result for later calls. The
+     * font used is Iosevka (at Light weight), an open-source (SIL Open Font License) typeface by Belleve Invis (see
+     * https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
+     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also
+     * circled letters and digits and the necessary box drawing characters. The high glyph count means the part of the
+     * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
+     * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect
+     * ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a
+     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
+     * deserves an award."</a> You may want to try using both this sans-serif version of Iosevka and the slab-serif
+     * version SquidLib has, {@link #getStretchableSlabLightFont()}, though they have subtly different sizes. There are
+     * also versions of Iosevka that do not use this Light weight, available by {@link #getStretchableLeanFont()} and
+     * {@link #getStretchableSlabFont()}.
+     * <br>
+     * Preview: http://i.imgur.com/edKimT4.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Light-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Light-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Light.ttf
+     */
+    public static TextCellFactory getStretchableLeanLightFont()
+    {
+        initialize();
+        if(instance.distanceLeanLight == null)
+        {
+            try {
+                instance.distanceLeanLight = new TextCellFactory()
+                        .fontDistanceField(distanceFieldLeanLight, distanceFieldLeanLightTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceLeanLight != null)
+            return instance.distanceLeanLight.copy();
+        return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
+     * and a very thin, slab-serif geometric style, that should scale cleanly to many sizes. Caches the result for later
+     * calls. The font used is Iosevka with Slab style at Light weight, an open-source (SIL Open Font License) typeface
+     * by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to
+     * Iosevka's special build process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and
+     * Cyrillic, but also circled letters and digits and the necessary box drawing characters. The high glyph count
+     * means the part of the image for each glyph is smaller, though, so this may look slightly pixelated if it starts
+     * small and is resized to much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate
+     * multiple of that aspect ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an
+     * aside, Luc Devroye (a true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A
+     * tour de force that deserves an award."</a> You may want to try using both this version of Iosevka with slab
+     * serifs and the other version SquidLib has, {@link #getStretchableLeanLightFont()}, though they have subtly
+     * different sizes. There are also versions of Iosevka that do not use this Light weight, available by
+     * {@link #getStretchableLeanFont()} and {@link #getStretchableSlabFont()}.
+     * <br>
+     * Preview: http://i.imgur.com/B5eSGfj.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Light-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Light-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab-Light.ttf
+     */
+    public static TextCellFactory getStretchableSlabLightFont()
+    {
+        initialize();
+        if(instance.distanceSlabLight == null)
+        {
+            try {
+                instance.distanceSlabLight = new TextCellFactory()
+                        .fontDistanceField(distanceFieldSlabLight, distanceFieldSlabLightTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceSlabLight != null)
+            return instance.distanceSlabLight.copy();
         return null;
     }
 
@@ -1276,6 +1374,22 @@ public class DefaultResources implements LifecycleListener {
         if(distanceDejaVu != null) {
             distanceDejaVu.dispose();
             distanceDejaVu = null;
+        }
+        if(distanceLean != null) {
+            distanceLean.dispose();
+            distanceLean = null;
+        }
+        if(distanceSlab != null) {
+            distanceSlab.dispose();
+            distanceSlab = null;
+        }
+        if(distanceLeanLight != null) {
+            distanceLeanLight.dispose();
+            distanceLeanLight = null;
+        }
+        if(distanceSlabLight != null) {
+            distanceSlabLight.dispose();
+            distanceSlabLight = null;
         }
         if(distanceSciFi != null) {
             distanceSciFi.dispose();
