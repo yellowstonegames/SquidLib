@@ -3463,6 +3463,195 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return scattered;
     }
 
+    /**
+     * Modifies this GreasedRegion so the only cells still "on" have a neighbor upwards when this is called.
+     * Up is defined as negative y. Neighbors are "on" cells exactly one cell away.
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion neighborUp()
+    {
+        if(width < 2 || ySections <= 0)
+            return this;
+        for (int a = ySections - 1; a >= 0; a--) {
+            if(a > 0) {
+                for (int i = a; i < width * ySections; i+= ySections) {
+                    data[i] &= (data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63);
+                }
+            }
+            else {
+                for (int i = a; i < width * ySections; i+= ySections) {
+                    data[i] &= (data[i] << 1);
+                }
+            }
+
+        }
+        return this;
+    }
+
+    /**
+     * Modifies this GreasedRegion so the only cells still "on" have a neighbor downwards when this is called.
+     * Down is defined as positive y. Neighbors are "on" cells exactly one cell away.
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion neighborDown()
+    {
+        if(width < 2 || ySections <= 0)
+            return this;
+        for (int a = 0; a < ySections; a++) {
+            if(a < ySections - 1) {
+                for (int i = a; i < width * ySections; i+= ySections) {
+                    data[i] &= (data[i] >>> 1) | ((data[i + 1] & 1L) << 63);
+                }
+            }
+            else {
+                for (int i = a; i < width * ySections; i+= ySections) {
+                    data[i] &= (data[i] >>> 1);
+                }
+            }
+
+        }
+        return this;
+    }
+
+    /**
+     * Modifies this GreasedRegion so the only cells still "on" have a neighbor to the left when this is called.
+     * Left is defined as negative x. Neighbors are "on" cells exactly one cell away.
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion neighborLeft()
+    {
+        if(width < 2 || ySections <= 0)
+            return this;
+        for (int a = 0; a < ySections; a++) {
+            for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
+                data[i] &= data[i - ySections];
+            }
+            data[a] = 0L;
+        }
+        return this;
+    }
+
+    /**
+     * Modifies this GreasedRegion so the only cells still "on" have a neighbor to the right when this is called.
+     * Right is defined as positive x. Neighbors are "on" cells exactly one cell away.
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion neighborRight()
+    {
+        if(width < 2 || ySections <= 0)
+            return this;
+        for (int a = 0; a < ySections; a++) {
+            for (int i = a; i < (width - 1) * ySections; i+= ySections) {
+                data[i] &= data[i + ySections];
+            }
+            data[(width-1)*ySections+a] = 0L;
+        }
+        return this;
+    }
+
+    /**
+     * Modifies this GreasedRegion so the only cells still "on" have a neighbor upwards and to the left when this is
+     * called. Up is defined as negative y, left as negative x. Neighbors are "on" cells exactly one cell away.
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion neighborUpLeft()
+    {
+        if(width < 2 || ySections <= 0)
+            return this;
+        for (int a = ySections - 1; a >= 0; a--) {
+            if(a > 0) {
+                for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
+                    data[i] &= (data[i - ySections] << 1) | ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63);
+                }
+                data[a] = 0L;
+            }
+            else {
+                for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
+                    data[i] &= (data[i - ySections] << 1);
+                }
+                data[a] = 0L;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Modifies this GreasedRegion so the only cells still "on" have a neighbor upwards and to the right when this is
+     * called. Up is defined as negative y, right as positive x. Neighbors are "on" cells exactly one cell away.
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion neighborUpRight()
+    {
+        if(width < 2 || ySections <= 0)
+            return this;
+        for (int a = ySections - 1; a >= 0; a--) {
+            if(a > 0) {
+                for (int i = a; i < (width - 1) * ySections; i+= ySections) {
+                    data[i] &= (data[i + ySections] << 1) | ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63);
+                }
+                data[(width-1)*ySections+a] = 0L;
+            }
+            else {
+                for (int i = a; i < (width - 1) * ySections; i+= ySections) {
+                    data[i] &= (data[i + ySections] << 1);
+                }
+                data[(width-1)*ySections+a] = 0L;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Modifies this GreasedRegion so the only cells still "on" have a neighbor downwards and to the left when this is
+     * called. Down is defined as positive y, left as negative x. Neighbors are "on" cells exactly one cell away.
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion neighborDownLeft()
+    {
+        if(width < 2 || ySections <= 0)
+            return this;
+        for (int a = 0; a < ySections; a++) {
+            if(a < ySections - 1) {
+                for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
+                    data[i] &= (data[i - ySections] >>> 1) | ((data[i - ySections + 1] & 1L) << 63);
+                }
+                data[a] = 0L;
+            }
+            else {
+                for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
+                    data[i] &= (data[i - ySections] >>> 1);
+                }
+                data[a] = 0L;
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Modifies this GreasedRegion so the only cells still "on" have a neighbor downwards and to the right when this is
+     * called. Down is defined as positive y, right as positive x. Neighbors are "on" cells exactly one cell away.
+     * @return this, after modifications, for chaining
+     */
+    public GreasedRegion neighborDownRight()
+    {
+        if(width < 2 || ySections <= 0)
+            return this;
+        for (int a = 0; a < ySections; a++) {
+            if(a < ySections - 1) {
+                for (int i = a; i < (width - 1) * ySections; i+= ySections) {
+                    data[i] &= (data[i + ySections] >>> 1) | ((data[i + ySections + 1] & 1L) << 63);
+                }
+                data[(width-1)*ySections+a] = 0L;
+            }
+            else {
+                for (int i = a; i < (width - 1) * ySections; i+= ySections) {
+                    data[i] &= (data[i + ySections] >>> 1);
+                }
+                data[(width-1)*ySections+a] = 0L;
+            }
+        }
+        return this;
+    }
 
     public GreasedRegion removeIsolated()
     {
@@ -3478,8 +3667,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return this;
     }
 
+    /**
+     * Returns true if any cell is "on" in both this GreasedRegion and in other; returns false otherwise. For example,
+     * if (1,1) is "on" in this and (1,1) is "on" in other, this would return true, regardless of other cells.
+     * @param other another GreasedRegion; its size does not have to match this GreasedRegion's size
+     * @return true if this shares any "on" cells with other
+     */
     public boolean intersects(GreasedRegion other)
     {
+        if(other == null)
+            return false;
         for (int x = 0; x < width && x < other.width; x++) {
             for (int y = 0; y < ySections && y < other.ySections; y++) {
                 if((data[x * ySections + y] & other.data[x * ySections + y]) != 0)
