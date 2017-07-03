@@ -1642,6 +1642,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
+     * Fills this GreasedRegion's data into the given 2D char array, modifying it and returning it, with "on" cells
+     * filled with the char parameter {@code on} and "off" cells with the parameter {@code off}.
+     * @param chars a 2D char array that will be modified; must not be null, nor can it contain null elements
+     * @param on the char to use for "on" cells
+     * @param off the char to use for "off" cells
+     * @return a 2D char array that represents this GreasedRegion's data
+     */
+    public char[][] intoChars(char[][] chars, char on, char off)
+    {
+        for (int x = 0; x < width && x < chars.length; x++) {
+            for (int y = 0; y < height && y < chars[x].length; y++) {
+                chars[x][y] = (data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0 ? on : off;
+            }
+        }
+        return chars;
+    }
+
+    /**
      * Returns this GreasedRegion's data as a 2D char array,  [width][height] in size, with "on" cells filled with the
      * char parameter on and "off" cells with the parameter off.
      * @param on the char to use for "on" cells
@@ -3464,8 +3482,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Modifies this GreasedRegion so the only cells still "on" have a neighbor upwards when this is called.
-     * Up is defined as negative y. Neighbors are "on" cells exactly one cell away.
+     * Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards when this is called.
+     * Up is defined as negative y. Neighbors are "on" cells exactly one cell away. A cell can have a neighbor
+     * without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
     public GreasedRegion neighborUp()
@@ -3475,12 +3494,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int a = ySections - 1; a >= 0; a--) {
             if(a > 0) {
                 for (int i = a; i < width * ySections; i+= ySections) {
-                    data[i] &= (data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63);
+                    data[i] = (data[i] << 1) | ((data[i - 1] & 0x8000000000000000L) >>> 63);
                 }
             }
             else {
                 for (int i = a; i < width * ySections; i+= ySections) {
-                    data[i] &= (data[i] << 1);
+                    data[i] = (data[i] << 1);
                 }
             }
 
@@ -3489,8 +3508,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Modifies this GreasedRegion so the only cells still "on" have a neighbor downwards when this is called.
-     * Down is defined as positive y. Neighbors are "on" cells exactly one cell away.
+     * Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards when this is called.
+     * Down is defined as positive y. Neighbors are "on" cells exactly one cell away. A cell can have a neighbor
+     * without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
     public GreasedRegion neighborDown()
@@ -3500,12 +3520,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int a = 0; a < ySections; a++) {
             if(a < ySections - 1) {
                 for (int i = a; i < width * ySections; i+= ySections) {
-                    data[i] &= (data[i] >>> 1) | ((data[i + 1] & 1L) << 63);
+                    data[i] = (data[i] >>> 1) | ((data[i + 1] & 1L) << 63);
                 }
             }
             else {
                 for (int i = a; i < width * ySections; i+= ySections) {
-                    data[i] &= (data[i] >>> 1);
+                    data[i] = (data[i] >>> 1);
                 }
             }
 
@@ -3514,8 +3534,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Modifies this GreasedRegion so the only cells still "on" have a neighbor to the left when this is called.
-     * Left is defined as negative x. Neighbors are "on" cells exactly one cell away.
+     * Modifies this GreasedRegion so the only cells that will be "on" have a neighbor to the left when this is called.
+     * Left is defined as negative x. Neighbors are "on" cells exactly one cell away. A cell can have a neighbor
+     * without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
     public GreasedRegion neighborLeft()
@@ -3524,7 +3545,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return this;
         for (int a = 0; a < ySections; a++) {
             for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                data[i] &= data[i - ySections];
+                data[i] = data[i - ySections];
             }
             data[a] = 0L;
         }
@@ -3532,8 +3553,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Modifies this GreasedRegion so the only cells still "on" have a neighbor to the right when this is called.
-     * Right is defined as positive x. Neighbors are "on" cells exactly one cell away.
+     * Modifies this GreasedRegion so the only cells that will be "on" have a neighbor to the right when this is called.
+     * Right is defined as positive x. Neighbors are "on" cells exactly one cell away. A cell can have a neighbor
+     * without itself being on; this is useful when finding the "shadow" cast away from "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
     public GreasedRegion neighborRight()
@@ -3542,7 +3564,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return this;
         for (int a = 0; a < ySections; a++) {
             for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                data[i] &= data[i + ySections];
+                data[i] = data[i + ySections];
             }
             data[(width-1)*ySections+a] = 0L;
         }
@@ -3550,8 +3572,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Modifies this GreasedRegion so the only cells still "on" have a neighbor upwards and to the left when this is
-     * called. Up is defined as negative y, left as negative x. Neighbors are "on" cells exactly one cell away.
+     * Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards and to the left when this
+     * is called. Up is defined as negative y, left as negative x. Neighbors are "on" cells exactly one cell away. A
+     * cell can have a neighbor without itself being on; this is useful when finding the "shadow" cast away from "on"
+     * cells in one direction.
      * @return this, after modifications, for chaining
      */
     public GreasedRegion neighborUpLeft()
@@ -3561,13 +3585,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int a = ySections - 1; a >= 0; a--) {
             if(a > 0) {
                 for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                    data[i] &= (data[i - ySections] << 1) | ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63);
+                    data[i] = (data[i - ySections] << 1) | ((data[i - ySections - 1] & 0x8000000000000000L) >>> 63);
                 }
                 data[a] = 0L;
             }
             else {
                 for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                    data[i] &= (data[i - ySections] << 1);
+                    data[i] = (data[i - ySections] << 1);
                 }
                 data[a] = 0L;
             }
@@ -3576,8 +3600,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Modifies this GreasedRegion so the only cells still "on" have a neighbor upwards and to the right when this is
-     * called. Up is defined as negative y, right as positive x. Neighbors are "on" cells exactly one cell away.
+     * Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards and to the right when
+     * this is called. Up is defined as negative y, right as positive x. Neighbors are "on" cells exactly one cell away.
+     * A cell can have a neighbor without itself being on; this is useful when finding the "shadow" cast away from
+     * "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
     public GreasedRegion neighborUpRight()
@@ -3587,13 +3613,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int a = ySections - 1; a >= 0; a--) {
             if(a > 0) {
                 for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                    data[i] &= (data[i + ySections] << 1) | ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63);
+                    data[i] = (data[i + ySections] << 1) | ((data[i + ySections - 1] & 0x8000000000000000L) >>> 63);
                 }
                 data[(width-1)*ySections+a] = 0L;
             }
             else {
                 for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                    data[i] &= (data[i + ySections] << 1);
+                    data[i] = (data[i + ySections] << 1);
                 }
                 data[(width-1)*ySections+a] = 0L;
             }
@@ -3602,8 +3628,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Modifies this GreasedRegion so the only cells still "on" have a neighbor downwards and to the left when this is
-     * called. Down is defined as positive y, left as negative x. Neighbors are "on" cells exactly one cell away.
+     * Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards and to the left when
+     * this is called. Down is defined as positive y, left as negative x. Neighbors are "on" cells exactly one cell
+     * away. A cell can have a neighbor without itself being on; this is useful when finding the "shadow" cast away from
+     * "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
     public GreasedRegion neighborDownLeft()
@@ -3613,13 +3641,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int a = 0; a < ySections; a++) {
             if(a < ySections - 1) {
                 for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                    data[i] &= (data[i - ySections] >>> 1) | ((data[i - ySections + 1] & 1L) << 63);
+                    data[i] = (data[i - ySections] >>> 1) | ((data[i - ySections + 1] & 1L) << 63);
                 }
                 data[a] = 0L;
             }
             else {
                 for (int i = ySections * (width - 1) + a; i >= ySections; i-= ySections) {
-                    data[i] &= (data[i - ySections] >>> 1);
+                    data[i] = (data[i - ySections] >>> 1);
                 }
                 data[a] = 0L;
             }
@@ -3628,8 +3656,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Modifies this GreasedRegion so the only cells still "on" have a neighbor downwards and to the right when this is
-     * called. Down is defined as positive y, right as positive x. Neighbors are "on" cells exactly one cell away.
+     * Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards and to the right when
+     * this is called. Down is defined as positive y, right as positive x. Neighbors are "on" cells exactly one cell
+     * away. A cell can have a neighbor without itself being on; this is useful when finding the "shadow" cast away from
+     * "on" cells in one direction.
      * @return this, after modifications, for chaining
      */
     public GreasedRegion neighborDownRight()
@@ -3639,13 +3669,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int a = 0; a < ySections; a++) {
             if(a < ySections - 1) {
                 for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                    data[i] &= (data[i + ySections] >>> 1) | ((data[i + ySections + 1] & 1L) << 63);
+                    data[i] = (data[i + ySections] >>> 1) | ((data[i + ySections + 1] & 1L) << 63);
                 }
                 data[(width-1)*ySections+a] = 0L;
             }
             else {
                 for (int i = a; i < (width - 1) * ySections; i+= ySections) {
-                    data[i] &= (data[i + ySections] >>> 1);
+                    data[i] = (data[i + ySections] >>> 1);
                 }
                 data[(width-1)*ySections+a] = 0L;
             }

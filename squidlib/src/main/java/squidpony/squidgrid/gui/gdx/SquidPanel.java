@@ -79,7 +79,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     /**
      * Creates a bare-bones panel with all default values for text rendering.
-     *
+     * <br>
+     * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
+     * does not render correctly:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
+     * </ul>
      * @param gridWidth the number of cells horizontally
      * @param gridHeight the number of cells vertically
      */
@@ -89,7 +95,13 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     /**
      * Creates a panel with the given grid and cell size. Uses a default square font.
-     *
+     * <br>
+     * This uses a default font that is not supplied in the JAR library of SquidLib; you need two files to use it if it
+     * does not render correctly:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Zodiac-Square-12x12.png</li>
+     * </ul>
      * @param gridWidth the number of cells horizontally
      * @param gridHeight the number of cells vertically
      * @param cellWidth the number of horizontal pixels in each cell

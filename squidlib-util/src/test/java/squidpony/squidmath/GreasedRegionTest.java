@@ -359,8 +359,8 @@ public class GreasedRegionTest {
     @Test
     public void testCA()
     {
-        RNG rng = new RNG(0x1337BEEFB0BBL);
-        GreasedRegion current = new GreasedRegion(rng, 0.55, 64, 64);
+        RNG rng = new RNG(0x1337BEEFAAAAAAAAL);
+        GreasedRegion current = new GreasedRegion(rng, 0.52, 64, 64);
         System.out.println(current + "\n\n");
         CellularAutomaton ca = new CellularAutomaton(current);
         if(PRINTING) {

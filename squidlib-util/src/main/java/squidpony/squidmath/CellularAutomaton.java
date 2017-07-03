@@ -67,4 +67,35 @@ public class CellularAutomaton {
         GreasedRegion.sumInto(sums, neighbors);
         return current.refill(sums, 0, 5);
     }
+
+    /**
+     * Runs one step of the simulation called Conway's Game of Life, which has relatively simple rules:
+     * <ul>
+     *     <li>Any "on" cell with fewer than two "on" neighbors becomes "off."</li>
+     *     <li>Any "on" cell with two or three "on" neighbors (no more than three) stays "on."</li>
+     *     <li>Any "on" cell with more than three "on" neighbors becomes "off."</li>
+     *     <li>Any "off" cell with exactly three "on" neighbors becomes "on."</li>
+     * </ul>
+     * These rules can bring about complex multi-step patterns in many cases, eventually stabilizing to predictable
+     * patterns in most cases. Filling the whole state of this CellularAutomaton won't produce interesting patterns
+     * most of the time, even if the fill is randomized; you might have better results by using known patterns. Some
+     * key well-known patterns are covered on <a href="https://en.wikipedia.org/wiki/Conway's_Game_of_Life">Wikipedia's
+     * detailed article on Conway's Game of Life</a>.
+     * @return a direct reference to the changed GreasedRegion this considers its main state, {@link #current}
+     */
+    public GreasedRegion runGameOfLife()
+    {
+        neighbors[0].remake(current).neighborUp();
+        neighbors[1].remake(current).neighborDown();
+        neighbors[2].remake(current).neighborLeft();
+        neighbors[3].remake(current).neighborRight();
+        neighbors[4].remake(current).neighborUpLeft();
+        neighbors[5].remake(current).neighborUpRight();
+        neighbors[6].remake(current).neighborDownLeft();
+        neighbors[7].remake(current).neighborDownRight();
+        neighbors[8].remake(current);
+        ArrayTools.fill(sums, 0);
+        GreasedRegion.sumInto(sums, neighbors);
+        return current.refill(sums,3).or(neighbors[0].refill(sums, 4).and(neighbors[8]));
+    }
 }
