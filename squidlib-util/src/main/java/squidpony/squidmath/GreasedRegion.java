@@ -4934,7 +4934,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
      * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
      * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
-     * produce number between 0 and 16 in a cell.
+     * produce any number between 0 and 16 in a cell.
      * @param regions an array or vararg of GreasedRegions; must all have the same width and height
      * @return a 2D int array with the same width and height as the regions, where an int cell equals the number of given GreasedRegions that had an "on" cell at that position
      */
@@ -4958,7 +4958,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Generates a 2D int array from a List of GreasedRegions, starting at all 0 and adding 1 to the int at
      * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
      * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
-     * produce number between 0 and 16 in a cell.
+     * produce any number between 0 and 16 in a cell.
      * @param regions a List of GreasedRegions; must all have the same width and height
      * @return a 2D int array with the same width and height as the regions, where an int cell equals the number of given GreasedRegions that had an "on" cell at that position
      */
@@ -4983,7 +4983,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Generates a 2D double array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the double at
      * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
      * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
-     * produce number between 0 and 16 in a cell.
+     * produce any number between 0 and 16 in a cell.
      * @param regions an array or vararg of GreasedRegions; must all have the same width and height
      * @return a 2D double array with the same width and height as the regions, where an double cell equals the number of given GreasedRegions that had an "on" cell at that position
      */
@@ -5007,7 +5007,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Generates a 2D double array from a List of GreasedRegions, starting at all 0 and adding 1 to the double at
      * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
      * this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
-     * produce number between 0 and 16 in a cell.
+     * produce any number between 0 and 16 in a cell.
      * @param regions a List of GreasedRegions; must all have the same width and height
      * @return a 2D double array with the same width and height as the regions, where an double cell equals the number of given GreasedRegions that had an "on" cell at that position
      */
@@ -5084,7 +5084,63 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return numbers;
     }
 
+    /**
+     * Adds to an existing 2D int array with an array or vararg of GreasedRegions, adding 1 to the int in existing at
+     * a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+     * this method, it can increment by any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+     * increase the value in existing by any number between 0 and 16 in a cell.
+     * @param existing a non-null 2D int array that will have each cell incremented by the sum of the GreasedRegions
+     * @param regions an array or vararg of GreasedRegions; must all have the same width and height
+     * @return existing, after modification, where an int cell will be changed by the number of given GreasedRegions that had an "on" cell at that position
+     */
+    public static int[][] sumInto(int[][] existing, GreasedRegion... regions)
+    {
+        if(regions == null || regions.length <= 0 || existing == null || existing.length == 0 || existing[0].length == 0)
+            return existing;
+        int w = existing.length, h = existing[0].length, l = regions.length, ys;
+        for (int i = 0; i < l; i++) {
+            GreasedRegion region = regions[i];
+            ys = region.ySections;
+            for (int x = 0; x < w && x < region.width; x++) {
+                for (int y = 0; y < h && y < region.height; y++) {
+                    existing[x][y] += (region.data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1 : 0;
+                }
+            }
+        }
+        return existing;
+    }
 
+
+    /**
+     * Adds to an existing 2D double array with an array or vararg of GreasedRegions, adding 1 to the double in existing
+     * at a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+     * this method, it can increment by any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+     * increase the value in existing by any number between 0 and 16 in a cell.
+     * @param existing a non-null 2D double array that will have each cell incremented by the sum of the GreasedRegions
+     * @param regions an array or vararg of GreasedRegions; must all have the same width and height
+     * @return existing, after modification, where a double cell will be changed by the number of given GreasedRegions that had an "on" cell at that position
+     */
+    public static double[][] sumIntoDouble(double[][] existing, GreasedRegion... regions)
+    {
+        if(regions == null || regions.length <= 0 || existing == null || existing.length == 0 || existing[0].length == 0)
+            return existing;
+        int w = existing.length, h = existing[0].length, l = regions.length, ys = regions[0].ySections;
+        for (int i = 0; i < l; i++) {
+            for (int x = 0; x < w && x < regions[i].width; x++) {
+                for (int y = 0; y < h && y < regions[i].height; y++) {
+                    existing[x][y] += (regions[i].data[x * ys + (y >> 6)] & (1L << (y & 63))) != 0 ? 1.0 : 0.0;
+                }
+            }
+        }
+        return existing;
+    }
+
+    /**
+     * Discouraged from active use; slower than {@link squidpony.squidai.DijkstraMap} and has less features.
+     * @param map a 2D char array where '#' is a wall
+     * @param goals an array or vararg of Coord to get the distances toward
+     * @return a 2D double array of distances from a cell to the nearest goal
+     */
     public static double[][] dijkstraScan(char[][] map, Coord... goals)
     {
         if(map == null || map.length <= 0 || map[0].length <= 0 || goals == null || goals.length <= 0)
@@ -5104,7 +5160,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
         return numbers;
     }
-
+    /**
+     * Discouraged from active use; slower than {@link squidpony.squidai.DijkstraMap} and has less features.
+     * @param map a 2D char array where '#' is a wall
+     * @param goals an array or vararg of Coord to get the distances toward
+     * @return a 2D double array of distances from a cell to the nearest goal
+     */
     public static double[][] dijkstraScan8way(char[][] map, Coord... goals)
     {
         if(map == null || map.length <= 0 || map[0].length <= 0 || goals == null || goals.length <= 0)

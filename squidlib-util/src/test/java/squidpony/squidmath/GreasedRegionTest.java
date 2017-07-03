@@ -356,5 +356,40 @@ public class GreasedRegionTest {
         midCross.zoom(30, 33);
         printRegion(midCross);
     }
+    @Test
+    public void testCA()
+    {
+        RNG rng = new RNG(0x1337BEEFB0BBL);
+        GreasedRegion current = new GreasedRegion(rng, 0.55, 64, 64);
+        System.out.println(current + "\n\n");
+        CellularAutomaton ca = new CellularAutomaton(current);
+        if(PRINTING) {
+            System.out.println(ca.runBasicSmoothing());
+            System.out.println();
+            System.out.println(ca.runBasicSmoothing());
+            System.out.println();
+            System.out.println(ca.runBasicSmoothing());
+            System.out.println();
+            System.out.println(ca.runBasicSmoothing());
+            System.out.println();
+            System.out.println(ca.runBasicSmoothing());
+            System.out.println();
+            System.out.println(ca.runBasicSmoothing()
+                    .translate(-1, -1).translate(2, 2).translate(-1, -1));
+            System.out.println();
+        }
+        int count = 0, t;
+        for(GreasedRegion gr : ca.current.split())
+        {
+            if((t = gr.size()) > count)
+            {
+                count = t;
+                current = gr;
+            }
+        }
+        if(PRINTING)
+            System.out.println(current);
+    }
+
 }
 
