@@ -142,16 +142,17 @@ public class HashVisualizer extends ApplicationAdapter {
 
     // 0 commonly used hashes
     // 1 variants on Storm and other hashes
-    // 3 artistic visualizations of hash functions
+    // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 3;
 
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
     private RandomXS128 gdxRandom = new RandomXS128(0xFEDCBA987654321L);
     private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L);
     private long seed;
+    private CellularAutomaton ca = new CellularAutomaton(512, 512);
     private int ctr = 0;
     private boolean keepGoing = true;
 
@@ -495,6 +496,19 @@ public class HashVisualizer extends ApplicationAdapter {
         Noise.seamless3D(seamless[1], 123456, 1, SeededNoise.instance);
         Noise.seamless3D(seamless[2], -9999, 1, SeededNoise.instance);
         */
+
+        ArrayTools.fill(display.colors, -0x1.fffffep126f); // white as a float
+        ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
+                .insert(250, 249).insert(251, 249)
+                .insert(125, 125).insert(125, 126).insert(124, 125)
+                .insert(125, 124).insert(126, 124)
+                .insert(375, 375).insert(375, 376).insert(374, 375)
+                .insert(375, 374).insert(376, 374)
+                .insert(125, 375).insert(125, 376).insert(124, 375)
+                .insert(125, 374).insert(126, 374)
+                .insert(375, 125).insert(375, 126).insert(374, 125)
+                .insert(375, 124).insert(376, 124);
+
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -669,9 +683,23 @@ public class HashVisualizer extends ApplicationAdapter {
                                 hashMode++;
                                 hashMode %= 66;
                                 break;
-                            default:
+                            case 2:
                                 hashMode++;
                                 hashMode %= 28;
+                            default:
+                                ArrayTools.fill(display.colors, -0x1.fffffep126f); // white as a float
+                                ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
+                                        .insert(250, 249).insert(251, 249)
+                                        .insert(125, 125).insert(125, 126).insert(124, 125)
+                                        .insert(125, 124).insert(126, 124)
+                                        .insert(375, 375).insert(375, 376).insert(374, 375)
+                                        .insert(375, 374).insert(376, 374)
+                                        .insert(125, 375).insert(125, 376).insert(124, 375)
+                                        .insert(125, 374).insert(126, 374)
+                                        .insert(375, 125).insert(375, 126).insert(374, 125)
+                                        .insert(375, 124).insert(376, 124);
+                                //hashMode++;
+                                //hashMode %= 29;
                         }
                         putMap();
                         //Gdx.graphics.requestRendering();
@@ -3624,7 +3652,7 @@ public class HashVisualizer extends ApplicationAdapter {
                 }
             }
             break;
-            default: {
+            case 2: {
                 switch (hashMode) {
                     case 0:
                         for (int x = 0; x < width; x++) {
@@ -3946,6 +3974,13 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                 }
             }
+            break;
+            default: // artistic, just one
+            {
+                Gdx.graphics.setTitle("Conway's Game Of Life at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                ca.current.intoChars(display.contents, ' ', '\0');
+                ca.runGameOfLife();
+            }
         }
         //colorFactory.clearCache();
     }
@@ -3953,7 +3988,7 @@ public class HashVisualizer extends ApplicationAdapter {
     @Override
     public void render() {
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         // not sure if this is always needed...
         Gdx.gl.glDisable(GL20.GL_BLEND);
