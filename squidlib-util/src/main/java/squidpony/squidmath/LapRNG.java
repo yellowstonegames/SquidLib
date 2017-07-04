@@ -22,13 +22,13 @@ import java.io.Serializable;
 public class LapRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * Constructs a LapRNG with a random internal state, using {@link Math#random()} four times to get enough bits.
+     * Constructs a LapRNG with a random internal state, using {@link Math#random()} three times to get enough bits and
+     * passing responsibility off to {@link #LapRNG(int, int, int)}.
      */
     public LapRNG(){
-        this((long)((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
-                        ^ (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000000L),
-                (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
-                        ^ (long)((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
+        this((int) ((Math.random() * 2.0 - 1.0) * 0x80000000),
+                (int) ((Math.random() * 2.0 - 1.0) * 0x80000000),
+                (int) ((Math.random() * 2.0 - 1.0) * 0x80000000));
     }
 
     /**
@@ -84,12 +84,12 @@ public class LapRNG implements RandomnessSource, Serializable {
      * right in this case because LapRNG only has a period of 2 to the 65. Anything more than 65 bits of state isn't
      * strictly necessary, though giving more should allow different, non-overlapping sequences to be produced.
      * You can obtain the state that this ends up using with {@link #getState0()} and {@link #getState1()}.
-     * @param seed0 any int, will not be used verbatim
-     * @param seed1 any int, will not be used verbatim
-     * @param seed2 any int, will not be used verbatim
+     * @param seed0 any int, will not be used verbatim; should probably not be 0
+     * @param seed1 any int, will not be used verbatim; should probably not be 0
+     * @param seed2 any int, will not be used verbatim; should probably not be 0
      */
     public LapRNG(final int seed0, final int seed1, final int seed2) {
-        state0 = (seed0 * 0xBFL + seed1 * 0x1FL * seed2 << 24) ^ 0x8329C6EB9E6AD3E3L;
+        state0 = (seed0 * 8219L + seed1 * 4999L * seed2 << 20) ^ 0x8329C6EB9E6AD3E3L;
         state1 = (seed1 * 0x8329C6EB9E6AD3E3L ^ seed2 - 0xC6BC279692B5C483L) + seed0 * 0x9E3779B97F4A7C15L;
     }
 
@@ -142,7 +142,6 @@ public class LapRNG implements RandomnessSource, Serializable {
      */
     @Override
     public final long nextLong() {
-        //return (state1 += state0 ^ (state0 += 0xD43779B97F4A7C13L) >> 24);
         return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
 
         //return (state0 += (((state1 += 0xC6BC279692B5C483L) >>> 59) + 124) * 0x632AE59B79B4E319L);
