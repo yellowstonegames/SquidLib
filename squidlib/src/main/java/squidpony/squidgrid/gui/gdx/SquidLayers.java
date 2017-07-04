@@ -1071,6 +1071,20 @@ public class SquidLayers extends Group {
     }
 
     /**
+     * Put a string at the given x, y position, with the given foreground Color.
+     *
+     * @param x               in grid cells.
+     * @param y               in grid cells.
+     * @param s               the string to print
+     * @param foreground      the Color to use
+     * @return this, for chaining
+     */
+    public SquidLayers putString(int x, int y, String s, Color foreground) {
+        foregroundPanel.put(x, y, s, foreground);
+        return this;
+    }
+
+    /**
      * Put a string at the given x, y position, with the given index for foreground color that gets looked up in the
      * default palette.
      *
@@ -1098,7 +1112,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putString(int x, int y, String s, int foregroundIndex, int backgroundIndex) {
         foregroundPanel.put(x, y, s, palette.get(foregroundIndex));
-        for (int i = x; i < s.length() && i < getTotalWidth(); i++) {
+        for (int i = x; i < x + s.length() && i < getTotalWidth(); i++) {
             backgroundPanel.put(i, y, palette.get(backgroundIndex));
         }
         return this;
@@ -1118,7 +1132,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putString(int x, int y, String s, ArrayList<Color> alternatePalette, int foregroundIndex, int backgroundIndex) {
         foregroundPanel.put(x, y, s, alternatePalette.get(foregroundIndex));
-        for (int i = x; i < s.length() && i < getTotalWidth(); i++) {
+        for (int i = x; i < x + s.length() && i < getTotalWidth(); i++) {
             backgroundPanel.put(i, y, alternatePalette.get(backgroundIndex));
         }
         return this;
@@ -1137,7 +1151,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers putString(int x, int y, String s, Color foreground, Color background) {
         foregroundPanel.put(x, y, s, foreground);
-        for (int i = x; i < s.length() && i < getTotalWidth(); i++) {
+        for (int i = x; i < x + s.length() && i < getTotalWidth(); i++) {
             backgroundPanel.put(i, y, background);
         }
         return this;
