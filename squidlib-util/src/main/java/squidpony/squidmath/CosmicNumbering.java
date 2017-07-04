@@ -156,7 +156,7 @@ public class CosmicNumbering implements Serializable {
         final int len = vector.length;
         double mag = 0.0;
         for (int i = 0; i < len; i++) {
-            mag += Math.abs(vector[i] = NumberTools.randomDoubleCurved(seed += 0x8E3779B9));
+            mag += Math.abs(vector[i] = NumberTools.randomFloatCurved(seed += 0x8E3779B9));
         }
         if(mag == 0)
         {

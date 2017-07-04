@@ -238,18 +238,43 @@ public class NumberTools {
      * {@link #intBitsToFloat(int)} or something functionally equivalent on GWT, multiplies the floats, and sets the
      * sign pseudo-randomly based on an unused bit from earlier.
      * <br>
-     * Consider calling this with {@code NumberTools.randomDoubleCurved(seed += 0x3C6EF372)} for an optimal period of 2
-     * to the 31 when repeatedly called, but {@code NumberTools.randomDoubleCurved(++seed)} will also work just fine.
+     * Consider calling this with {@code NumberTools.randomFloatCurved(seed += 0x3C6EF372)} for an optimal period of 2
+     * to the 31 when repeatedly called, but {@code NumberTools.randomFloatCurved(++seed)} will also work just fine.
      * @param seed any int to be used as a seed
      * @return a pseudo-random double from -1.0 (exclusive) to 1.0 (exclusive), distributed on a curve centered on 0.0
      */
-    public static double randomDoubleCurved(int seed)
+    public static float randomFloatCurved(int seed)
     {
         seed ^= seed >>> (4 + (seed >>> 28));
         float a = Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000);
         seed += 0x9E3779B9;
         seed ^= seed >>> (4 + (seed >>> 28));
-        return  (a - 1.0) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000) - 1.0) * (seed >> 31 | 1);
+        return  (a - 1f) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000) - 1f) * (seed >> 31 | 1);
+    }
+
+    /**
+     * A different kind of determine-like method that expects to be given a random long and produces a random float with
+     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach but not equal -1f and 1f.
+     * @param start a long, usually random, such as one produced by any RandomnessSource
+     * @return a deterministic float between -1f and 1f, both exclusive, that is very likely to be close to 0f
+     */
+    public static float formCurvedFloat(final long start) {
+        return (NumberTools.intBitsToFloat((int)start >>> 9 | 0x3F800000) - 1f)
+                * (NumberTools.intBitsToFloat((int)(start >>> 40) | 0x3F800000) - 1f)
+                * (start >> 63 | 1L);
+    }
+
+    /**
+     * A different kind of determine-like method that expects to be given random ints and produces a random float with
+     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach but not equal -1f and 1f.
+     * @param start1 an int, usually random, such as one produced by any RandomnessSource
+     * @param start2 an int, usually random, such as one produced by any RandomnessSource
+     * @return a deterministic float between -1f and 1f, both exclusive, that is very likely to be close to 0f
+     */
+    public static float formCurvedFloat(final int start1, final int start2) {
+        return (NumberTools.intBitsToFloat(start1 >>> 9 | 0x3F800000) - 1f)
+                * (NumberTools.intBitsToFloat(start2 >>> 8 | 0x3F800000) - 1f)
+                * (start2 >> 31 | 1);
     }
 
     static int hashWisp(final float[] data)
