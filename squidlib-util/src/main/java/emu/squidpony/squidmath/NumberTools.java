@@ -154,8 +154,6 @@ public class NumberTools {
         wia.set(0, (((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000);
         return (wfa.get(0) - 1f) * (seed >> 31 | 1);
     }
-
-
     public static float randomFloatCurved(int seed)
     {
         seed ^= seed >>> (4 + (seed >>> 28));
@@ -165,20 +163,39 @@ public class NumberTools {
         wia.set(1, ((((seed *= 277803737) >>> 22) ^ seed) >>> 9) | 0x3f800000);
         return (wfa.get(0) - 1f) * (wfa.get(1) - 1f) * (seed >> 31 | 1);
     }
-
     public static float formCurvedFloat(final long start) {
-        wia.set(0, (int)start >>> 9 | 0x3F800000);
-        wia.set(1, (int)(start >>> 40) | 0x3F800000);
-        return (wfa.get(0) - 1f) * (wfa.get(1) - 1f) * (start >> 63 | 1L);
+        return    intBitsToFloat((int)start >>> 9    | 0x3E800000)
+                + intBitsToFloat((int)(start >>> 41) | 0x3E800000)
+                + intBitsToFloat(((int)start >>> 6    & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat(((int)(start >>> 38) & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat(((int)start >>> 3    & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat(((int)(start >>> 35) & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat(((int)start          & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat(((int)(start >>> 32) & 0x7FFFFF) | 0x3E800000)
+                - 3f;
     }
-
     public static float formCurvedFloat(final int start1, final int start2) {
-        wia.set(0, start1 >>> 9 | 0x3F800000);
-        wia.set(1, start2 >>> 8 | 0x3F800000);
-        return (wfa.get(0) - 1f) * (wfa.get(1) - 1f) * (start2 >> 31 | 1);
+        return    intBitsToFloat(start1 >>> 9 | 0x3E800000)
+                + intBitsToFloat(start2 >>> 9 | 0x3E800000)
+                + intBitsToFloat((start1 >>> 6 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start2 >>> 6 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start1 >>> 3 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start2 >>> 3 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start1       & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start2       & 0x7FFFFF) | 0x3E800000)
+                - 3f;
     }
-
-
+    public static float formCurvedFloat(final int start) {
+        return intBitsToFloat(start >>> 9 | 0x3E800000)
+                + intBitsToFloat((start >>> 8 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start >>> 7 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start >>> 6 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start >>> 5 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start >>> 3 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start >>> 1 & 0x7FFFFF) | 0x3E800000)
+                + intBitsToFloat((start       & 0x7FFFFF) | 0x3E800000)
+                - 3f;
+    }
     static int hashWisp(final float[] data) {
         if (data == null)
             return 0;
@@ -190,7 +207,6 @@ public class NumberTools {
         }
         return result * (a | 1) ^ (result >>> 11 | result << 21);
     }
-
     static int hashWisp(final double[] data)
     {
         if (data == null)
