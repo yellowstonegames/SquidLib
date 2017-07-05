@@ -1586,6 +1586,13 @@ public class SquidLayers extends Group {
         }
     }
 
+    /**
+     * Gets a SquidPanel from this SquidLayers and returns a direct reference. Layer 0 is the background, layer 1 or 2
+     * is the foreground, and any values 3 or higher are extra SquidPanels added via {@link #addExtraLayer()}.
+     * If the layer is not found, this returns the foreground SquidPanel.
+     * @param layer 0 for background, 1 or 2 for foreground, 3 for any extra layers; defaults to foreground
+     * @return the corresponding SquidPanel as a direct reference
+     */
     public SquidPanel getLayer(int layer) {
         SquidPanel p = foregroundPanel;
         switch (layer) {
