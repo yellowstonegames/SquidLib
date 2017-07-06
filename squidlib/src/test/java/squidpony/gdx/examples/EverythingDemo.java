@@ -109,7 +109,7 @@ public class EverythingDemo extends ApplicationAdapter {
      * The pixel height of a cell
      */
     private int cellHeight;
-    private VisualInput input;
+    private SquidInput input;
     private double counter;
     private boolean[][] seen;
     private int health = 7;
@@ -359,7 +359,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // You can also set up a series of future moves by clicking within FOV range, using mouseMoved to determine the
         // path to the mouse position with a DijkstraMap (called playerToCursor), and using touchUp to actually trigger
         // the event when someone clicks.
-        input = new VisualInput(new SquidInput.KeyHandler() {
+        input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
@@ -531,11 +531,11 @@ public class EverythingDemo extends ApplicationAdapter {
             }
         }));
         //set this to true to test visual input on desktop
-        input.forceButtons = false;
+        //input.forceButtons = true;
         //actions to give names to in the visual input menu
-        input.init("filter", "??? help?", "quit");
+        //input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
-        Gdx.input.setInputProcessor(new InputMultiplexer(stage, messageStage, input));
+        Gdx.input.setInputProcessor(new InputMultiplexer(input, messageStage));
         //subCell.setOffsetY(messages.getGridHeight() * cellHeight);
         // and then add display and messages, our two visual components, to the list of things that act in Stage.
         stage.addActor(display);
@@ -989,12 +989,12 @@ public class EverythingDemo extends ApplicationAdapter {
         // message box should be given updated bounds since I don't think it will do this automatically
         messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-        input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
+        //input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
         currentZoomX = cellWidth / currentZoomX;
         currentZoomY = cellHeight / currentZoomY;
-        input.update(width, height, false);
         messageViewport.update(width, height, false);
         messageViewport.setScreenBounds(0, 0, width, (int)messages.getHeight());
+        //input.update(width, height, false);
         viewport.update(width, height, false);
         viewport.setScreenBounds(0, (int)messages.getHeight(), width, height - (int)messages.getHeight());
     }

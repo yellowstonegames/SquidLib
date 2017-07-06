@@ -254,28 +254,23 @@ public class NumberTools {
 
     /**
      * A different kind of determine-like method that expects to be given a random long and produces a random float with
-     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach but not equal -1f and 1f.
+     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
      * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
      * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.
      * @param start a long, usually random, such as one produced by any RandomnessSource
      * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f
      */
     public static float formCurvedFloat(final long start) {
-        return    intBitsToFloat((int)start >>> 9    | 0x3E800000)
-                + intBitsToFloat((int)(start >>> 41) | 0x3E800000)
-                + intBitsToFloat(((int)start >>> 6    & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat(((int)(start >>> 38) & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat(((int)start >>> 3    & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat(((int)(start >>> 35) & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat(((int)start          & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat(((int)(start >>> 32) & 0x7FFFFF) | 0x3E800000)
-                - 3f;
+        return   (intBitsToFloat((int)start >>> 9 | 0x3F000000)
+                + intBitsToFloat(((int)~start & 0x007FFFFF) | 0x3F000000)
+                + intBitsToFloat((int) (start >>> 41) | 0x3F000000)
+                + intBitsToFloat(((int) (~start >>> 32) & 0x007FFFFF) | 0x3F000000)
+                - 3f);
     }
 
     /**
-     /**
      * A different kind of determine-like method that expects to be given random ints and produces a random float with
-     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach but not equal -1f and 1f.
+     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
      * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
      * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.
      * @param start1 an int usually random, such as one produced by any RandomnessSource
@@ -283,34 +278,26 @@ public class NumberTools {
      * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f
      */
     public static float formCurvedFloat(final int start1, final int start2) {
-        return    intBitsToFloat(start1 >>> 9 | 0x3E800000)
-                + intBitsToFloat(start2 >>> 9 | 0x3E800000)
-                + intBitsToFloat((start1 >>> 6 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start2 >>> 6 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start1 >>> 3 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start2 >>> 3 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start1       & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start2       & 0x7FFFFF) | 0x3E800000)
-                - 3f;
+        return   (intBitsToFloat(start1 >>> 9 | 0x3F000000)
+                + intBitsToFloat((~start1 & 0x007FFFFF) | 0x3F000000)
+                + intBitsToFloat(start2 >>> 9 | 0x3F000000)
+                + intBitsToFloat((~start2 & 0x007FFFFF) | 0x3F000000)
+                - 3f);
     }
     /**
      * A different kind of determine-like method that expects to be given a random int and produces a random float with
-     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach but not equal -1f and 1f.
+     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
      * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
      * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.
      * @param start an int, usually random, such as one produced by any RandomnessSource
      * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f
      */
     public static float formCurvedFloat(final int start) {
-        return intBitsToFloat(start >>> 9 | 0x3E800000)
-                + intBitsToFloat((start >>> 8 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start >>> 7 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start >>> 6 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start >>> 5 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start >>> 3 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start >>> 1 & 0x7FFFFF) | 0x3E800000)
-                + intBitsToFloat((start       & 0x7FFFFF) | 0x3E800000)
-                - 3f;
+        return   (intBitsToFloat(start >>> 9 | 0x3F000000)
+                + intBitsToFloat((start & 0x007FFFFF) | 0x3F000000)
+                + intBitsToFloat(((start << 18 & 0x007FFFFF) ^ ~start >>> 14) | 0x3F000000)
+                + intBitsToFloat(((start << 13 & 0x007FFFFF) ^ ~start >>> 19) | 0x3F000000)
+                - 3f);
     }
 
     static int hashWisp(final float[] data)
