@@ -161,11 +161,11 @@ public class SquidMouse extends InputAdapter {
     }
 
 	protected int translateX(int screenX) {
-		return MathUtils.clamp(MathUtils.floor((screenX + offsetX) / cellWidth), 0, (int)(gridWidth - 1)); //MathUtils.floor((offsetX * 0f) / cellWidth)
+		return MathUtils.floor((screenX + offsetX) / cellWidth);
 	}
 
 	protected int translateY(int screenY) {
-		return MathUtils.clamp(MathUtils.floor((screenY + offsetY) / cellHeight), 0, (int)(gridHeight - 1)); //MathUtils.floor((offsetY * 0f) / cellHeight)
+		return MathUtils.floor((screenY + offsetY) / cellHeight);
 	}
 
     public boolean onGrid(int screenX, int screenY)
@@ -179,22 +179,30 @@ public class SquidMouse extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return processor.touchDown(translateX(screenX), translateY(screenY), pointer, button);
+        if(onGrid(screenX, screenY))
+            return processor.touchDown(translateX(screenX), translateY(screenY), pointer, button);
+        return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return processor.touchUp(translateX(screenX), translateY(screenY), pointer, button);
+        if(onGrid(screenX, screenY))
+            return processor.touchUp(translateX(screenX), translateY(screenY), pointer, button);
+        return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return processor.touchDragged(translateX(screenX), translateY(screenY), pointer);
+        if(onGrid(screenX, screenY))
+            return processor.touchDragged(translateX(screenX), translateY(screenY), pointer);
+        return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return processor.mouseMoved(translateX(screenX), translateY(screenY));
+        if(onGrid(screenX, screenY))
+            return processor.mouseMoved(translateX(screenX), translateY(screenY));
+        return false;
     }
 
     @Override

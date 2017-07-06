@@ -226,8 +226,8 @@ public class EverythingDemo extends ApplicationAdapter {
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
         // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
-        cellWidth = 11 * INTERNAL_ZOOM;
-        cellHeight = 24 * INTERNAL_ZOOM;
+        cellWidth = 12 * INTERNAL_ZOOM;
+        cellHeight = 25 * INTERNAL_ZOOM;
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
         // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
         // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
@@ -261,8 +261,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1.05f,cellHeight * 1.1f);
-        display.setTextSize(cellWidth * 1.05f, cellHeight  * 1.1f);
+        messages.setTextSize(cellWidth * 1.0f,cellHeight * 1.1f);
+        display.setTextSize(cellWidth * 1.0f, cellHeight  * 1.1f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
@@ -880,7 +880,7 @@ public class EverythingDemo extends ApplicationAdapter {
             // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
             if (!display.hasActiveAnimations()) {
                 ++framesWithoutAnimation;
-                if (framesWithoutAnimation >= 3) {
+                if (framesWithoutAnimation >= 2) {
                     framesWithoutAnimation = 0;
                     switch (phase) {
                         case WAIT:
@@ -922,7 +922,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // (because with no animations running the last phase must have ended), or start a new animation soon.
         else if (!display.hasActiveAnimations()) {
             ++framesWithoutAnimation;
-            if (framesWithoutAnimation >= 3) {
+            if (framesWithoutAnimation >= 2) {
                 framesWithoutAnimation = 0;
                 switch (phase) {
                     case WAIT:
