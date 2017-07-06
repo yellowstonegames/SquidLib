@@ -1,6 +1,7 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
+import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.Direction;
 
 import java.io.Serializable;
@@ -222,6 +223,19 @@ public class AStarSearch implements Serializable {
         }
         return deq;
     }
+
+	public void changeCellWeight(int x, int y, double d) {
+		map[x][y] = d;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
     /**
      * Finds the g value (start to current) for the given location.
      *
@@ -320,10 +334,9 @@ public class AStarSearch implements Serializable {
         return smallest;
     }
 
-    @Override
-    public String toString() {
-        final int width = map.length;
-        final int height = width == 0 ? 0 : map[0].length;
+	@Override
+	@GwtIncompatible // because of the call to getProperty (since gwt 2.7)
+	public String toString() {
         final StringBuilder result = new StringBuilder(width * height);
         int maxLen = 0;
 		/*

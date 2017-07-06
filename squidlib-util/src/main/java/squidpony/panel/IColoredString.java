@@ -19,7 +19,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	/**
 	 * A convenience alias for {@code append(c, null)}.
 	 * 
-	 * @param c the char to appe
+	 * @param c the char to append
 	 */
 	void append(/* @Nullable */ char c);
 
@@ -89,6 +89,13 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	void replaceColor(/* @Nullable */ T old, /* @Nullable */ T new_);
 
 	/**
+	 * Set {@code color} in all buckets.
+	 * 
+	 * @param color
+	 */
+	void setColor(/*@Nullable*/ T color);
+
+	/**
 	 * Deletes all content after index {@code len} (if any).
 	 * 
 	 * @param len
@@ -141,6 +148,14 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 *             If {@code index} equals or is greater to {@link #length()}.
 	 */
 	/* @Nullable */ T colorAt(int index);
+
+	/**
+	 * @param index
+	 * @return The character at {@code index}, if any.
+	 * @throws NoSuchElementException
+	 *             If {@code index} equals or is greater to {@link #length()}.
+	 */
+	char charAt(int index);
 
 	/**
 	 * @return The length of text.
@@ -339,6 +354,18 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 					it.add(new Bucket<T>(bucket.getText(), new_));
 				}
 				/* else leave untouched */
+			}
+		}
+
+		@Override
+		public void setColor(T color) {
+			final ListIterator<Bucket<T>> it = fragments.listIterator();
+			while (it.hasNext()) {
+				final Bucket<T> next = it.next();
+				if (!equals(color, next.getColor())) {
+					it.remove();
+					it.add(next.setColor(color));
+				}
 			}
 		}
 
@@ -653,8 +680,24 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				final String ftext = next.text;
 				final int flen = ftext.length();
 				final int nextl = now + flen;
-				if (index <= nextl)
+				if (index < nextl)
 					return next.color;
+				now += flen;
+			}
+			throw new NoSuchElementException("Color at index " + index + " in " + this);
+		}
+
+		@Override
+		public char charAt(int index) {
+			final ListIterator<IColoredString.Bucket<T>> it = fragments.listIterator();
+			int now = 0;
+			while (it.hasNext()) {
+				final IColoredString.Bucket<T> next = it.next();
+				final String ftext = next.text;
+				final int flen = ftext.length();
+				final int nextl = now + flen;
+				if (index < nextl)
+					return ftext.charAt(index - now);
 				now += flen;
 			}
 			throw new NoSuchElementException("Character at index " + index + " in " + this);
@@ -721,6 +764,18 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			}
 			return result;
 		}
+
+		/** Some tests */
+		public static void main(String[] args) {
+			final IColoredString<Object> salutCestHgames = IColoredString.Impl.create();
+			salutCestHgames.append("Salut", new Object());
+			salutCestHgames.append(" ", new Object());
+			salutCestHgames.append("c'est", new Object());
+			salutCestHgames.append(" ", new Object());
+			salutCestHgames.append("hgames", new Object());
+			for (int i = 0; i < salutCestHgames.length(); i++)
+				System.out.println(salutCestHgames.charAt(i));
+		}
 	}
 
 	/**
@@ -760,6 +815,10 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				return this;
 			else
 				return new Bucket<>(text.substring(0, l), color);
+		}
+
+		public Bucket<T> setColor(T t) {
+			return color == t ? this : new Bucket<T>(text, t);
 		}
 
 		/**
