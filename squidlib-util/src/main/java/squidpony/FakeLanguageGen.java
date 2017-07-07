@@ -254,111 +254,114 @@ public class FakeLanguageGen implements Serializable {
                                     'z', 'ź', 'ż', 'ž',
                             },
                     };
-    private static final OrderedMap<String, String> openVowels = new OrderedMap<>(16, 0.875f),
-            openCons = new OrderedMap<>(64, 0.875f), midCons = new OrderedMap<>(64, 0.875f), closeCons = new OrderedMap<>(64, 0.875f);
+    private static final OrderedMap<String, String> openVowels,
+            openCons, midCons, closeCons;
 
     static {
 
         registry.add(null);
+        
+        openVowels = Maker.makeOM(
+        "a", "a aa ae ai au ea ia oa ua",
+        "e", "e ae ea ee ei eo eu ie ue",
+        "i", "i ai ei ia ie io iu oi ui",
+        "o", "o eo io oa oi oo ou",
+        "u", "u au eu iu ou ua ue ui");
 
-        openVowels.put("a", "a aa ae ai au ea ia oa ua");
-        openVowels.put("e", "e ae ea ee ei eo eu ie ue");
-        openVowels.put("i", "i ai ei ia ie io iu oi ui");
-        openVowels.put("o", "o eo io oa oi oo ou");
-        openVowels.put("u", "u au eu iu ou ua ue ui");
+        openCons = Maker.makeOM(
+                "b", "b bl br by bw bh",
+                "bh", "bh",
+        "c", "c cl cr cz cth sc scl",
+        "ch", "ch ch chw",
+        "d", "d dr dz dy dw dh",
+        "dh", "dh",
+        "f", "f fl fr fy fw sf",
+        "g", "g gl gr gw gy gn",
+        "h", "bh cth ch ch chw dh h hm hy hw kh khl khw ph phl phr sh shl shqu shk shp shm shn shr shw shpl th th thr thl thw",
+        "j", "j j",
+        "k", "k kr kl ky kn sk skl shk",
+        "kh", "kh khl khw",
+        "l", "bl cl fl gl kl khl l pl phl scl skl spl sl shl shpl tl thl vl zl",
+        "m", "hm m mr mw my sm smr shm",
+        "n", "gn kn n nw ny pn sn shn",
+        "p", "p pl pr py pw pn sp spr spl shp shpl ph phl phr",
+        "ph", "ph phl phr",
+        "q", "q",
+        "qu", "qu squ shqu",
+        "r", "br cr dr fr gr kr mr pr phr r str spr smr shr tr thr vr wr zvr",
+        "s", "s sc scl sf sk skl st str sp spr spl sl sm smr sn sw sy squ ts sh shl shqu shk shp shm shn shr shw shpl",
+        "sh", "sh shl shqu shk shp shm shn shr shw shpl",
+        "t", "st str t ts tr tl ty tw tl",
+        "th", "cth th thr thl thw",
+        "tl", "tl",
+        "v", "v vr vy zv zvr vl",
+        "w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr zw",
+        "x", "x",
+        "y", "by dy fy gy hy ky my ny py sy ty vy y zy",
+        "z", "cz dz z zv zvr zl zy zw");
 
-        openCons.put("b", "b bl br by bw bh");
-        openCons.put("bh", "bh");
-        openCons.put("c", "c cl cr cz cth sc scl");
-        openCons.put("ch", "ch ch chw");
-        openCons.put("d", "d dr dz dy dw dh");
-        openCons.put("dh", "dh");
-        openCons.put("f", "f fl fr fy fw sf");
-        openCons.put("g", "g gl gr gw gy gn");
-        openCons.put("h", "bh cth ch ch chw dh h hm hy hw kh khl khw ph phl phr sh shl shqu shk shp shm shn shr shw shpl th th thr thl thw");
-        openCons.put("j", "j j");
-        openCons.put("k", "k kr kl ky kn sk skl shk");
-        openCons.put("kh", "kh khl khw");
-        openCons.put("l", "bl cl fl gl kl khl l pl phl scl skl spl sl shl shpl tl thl vl zl");
-        openCons.put("m", "hm m mr mw my sm smr shm");
-        openCons.put("n", "gn kn n nw ny pn sn shn");
-        openCons.put("p", "p pl pr py pw pn sp spr spl shp shpl ph phl phr");
-        openCons.put("ph", "ph phl phr");
-        openCons.put("q", "q");
-        openCons.put("qu", "qu squ shqu");
-        openCons.put("r", "br cr dr fr gr kr mr pr phr r str spr smr shr tr thr vr wr zvr");
-        openCons.put("s", "s sc scl sf sk skl st str sp spr spl sl sm smr sn sw sy squ ts sh shl shqu shk shp shm shn shr shw shpl");
-        openCons.put("sh", "sh shl shqu shk shp shm shn shr shw shpl");
-        openCons.put("t", "st str t ts tr tl ty tw tl");
-        openCons.put("th", "cth th thr thl thw");
-        openCons.put("tl", "tl");
-        openCons.put("v", "v vr vy zv zvr vl");
-        openCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr zw");
-        openCons.put("x", "x");
-        openCons.put("y", "by dy fy gy hy ky my ny py sy ty vy y zy");
-        openCons.put("z", "cz dz z zv zvr zl zy zw");
+        midCons = Maker.makeOM(
+                "b", "lb rb bj bl br lbr rbl skbr scbr zb bq bdh dbh bbh lbh rbh bb",
+        "bh", "bbh dbh lbh rbh",
+        "c", "lc lsc rc rsc cl cqu cr ct lcr rcl sctr scdr scbr scpr msc mscr nsc nscr ngscr ndscr cc",
+        "ch", "lch rch rch",
+        "d", "ld ld rd rd skdr scdr dr dr dr rdr ldr zd zdr ndr ndscr ndskr ndst dq ldh rdh dbh bdh ddh dd",
+        "dh", "bdh ddh ldh rdh",
+        "f", "lf rf fl fr fl fr fl fr lfr rfl ft ff",
+        "g", "lg lg rg rg gl gr gl gr gl gr lgr rgl zg zgr ngr ngl ngscr ngskr gq gg",
+        "h", "lch lph lth lsh rch rph rsh rth phl phr lphr rphl shl shr lshr rshl msh mshr zth bbh dbh lbh rbh bdh ddh ldh rdh",
+        "j", "bj lj rj",
+        "k", "lk lsk rk rsk kl kr lkr rkl sktr skdr skbr skpr tk zk zkr msk mskr nsk nskr ngskr ndskr kq kk",
+        "kh", "lkh rkh",
+        "l", "lb lc lch ld lf lg lj lk lm ln lp lph ls lst lt lth lsc lsk lsp lv lz lsh bl lbr rbl cl lcr rcl fl lfr rfl gl lgr rgl kl lkr rkl pl lpr rpl phl lphr rphl shl lshr rshl sl rsl lsl ldr ltr lx ngl nsl msl nsl ll lth tl ltl rtl vl",
+        "m", "lm rm zm msl msc mscr msh mshr mst msp msk mskr mm",
+        "n", "ln rn nx zn zn ndr nj ntr ntr ngr ngl nsl nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp nn",
+        "p", "lp lsp rp rsp pl pr lpr rpl skpr scpr zp msp nsp lph rph phl phr lphr rphl pq pp",
+        "ph", "lph lph rph rph phl phr lphr rphl",
+        "q", "bq dq gq kq pq tq",
+        "qu", "cqu lqu rqu",
+        "r", "rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rsc rsk rsp rv rz br br br lbr rbl cr cr cr lcr rcl fr fr fr lfr rfl gr gr gr lgr rgl kr kr kr lkr rkl pr pr pr lpr rpl phr phr phr lphr rphl shr shr shr lshr rshl rsl sktr sctr skdr scdr skbr scbr skpr scpr dr dr dr rdr ldr tr tr tr rtr ltr vr rx zr zdr ztr zgr zkr ntr ntr ndr ngr mscr mshr mskr nscr ngscr ndscr nskr ngskr ndskr rr",
+        "s", "ls lst lsc lsk lsp rs rst rsc rsk rsp sl rsl lsl sktr sctr skdr scdr skbr scbr skpr scpr nsl msl msc mscr mst msp msk mskr nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp lsh rsh sh shl shqu shk shp shm shn shr shw shpl lshr rshl msh mshr ss",
+        "sh", "lsh rsh sh shl shqu shk shp shm shn shr shw shpl lshr rshl msh mshr",
+        "t", "ct ft lst lt rst rt sktr sctr tk tr rtr ltr zt ztr ntr ntr mst nst ndst tq ltl rtl tt",
+        "th", "lth rth zth cth",
+        "tl", "ltl rtl",
+        "v", "lv rv vv vl vr",
+        "w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr wy zw",
+        "x", "nx rx lx",
+        "y", "by dy fy gy hy ky my ny py sy ty vy wy zy",
+        "z", "lz rz zn zd zt zg zk zm zn zp zb zr zdr ztr zgr zkr zth zz");
 
-        midCons.put("b", "lb rb bj bl br lbr rbl skbr scbr zb bq bdh dbh bbh lbh rbh bb");
-        midCons.put("bh", "bbh dbh lbh rbh");
-        midCons.put("c", "lc lsc rc rsc cl cqu cr ct lcr rcl sctr scdr scbr scpr msc mscr nsc nscr ngscr ndscr cc");
-        midCons.put("ch", "lch rch rch");
-        midCons.put("d", "ld ld rd rd skdr scdr dr dr dr rdr ldr zd zdr ndr ndscr ndskr ndst dq ldh rdh dbh bdh ddh dd");
-        midCons.put("dh", "bdh ddh ldh rdh");
-        midCons.put("f", "lf rf fl fr fl fr fl fr lfr rfl ft ff");
-        midCons.put("g", "lg lg rg rg gl gr gl gr gl gr lgr rgl zg zgr ngr ngl ngscr ngskr gq gg");
-        midCons.put("h", "lch lph lth lsh rch rph rsh rth phl phr lphr rphl shl shr lshr rshl msh mshr zth bbh dbh lbh rbh bdh ddh ldh rdh");
-        midCons.put("j", "bj lj rj");
-        midCons.put("k", "lk lsk rk rsk kl kr lkr rkl sktr skdr skbr skpr tk zk zkr msk mskr nsk nskr ngskr ndskr kq kk");
-        midCons.put("kh", "lkh rkh");
-        midCons.put("l", "lb lc lch ld lf lg lj lk lm ln lp lph ls lst lt lth lsc lsk lsp lv lz lsh bl lbr rbl cl lcr rcl fl lfr rfl gl lgr rgl kl lkr rkl pl lpr rpl phl lphr rphl shl lshr rshl sl rsl lsl ldr ltr lx ngl nsl msl nsl ll lth tl ltl rtl vl");
-        midCons.put("m", "lm rm zm msl msc mscr msh mshr mst msp msk mskr mm");
-        midCons.put("n", "ln rn nx zn zn ndr nj ntr ntr ngr ngl nsl nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp nn");
-        midCons.put("p", "lp lsp rp rsp pl pr lpr rpl skpr scpr zp msp nsp lph rph phl phr lphr rphl pq pp");
-        midCons.put("ph", "lph lph rph rph phl phr lphr rphl");
-        midCons.put("q", "bq dq gq kq pq tq");
-        midCons.put("qu", "cqu lqu rqu");
-        midCons.put("r", "rb rc rch rd rf rg rj rk rm rn rp rph rs rsh rst rt rth rsc rsk rsp rv rz br br br lbr rbl cr cr cr lcr rcl fr fr fr lfr rfl gr gr gr lgr rgl kr kr kr lkr rkl pr pr pr lpr rpl phr phr phr lphr rphl shr shr shr lshr rshl rsl sktr sctr skdr scdr skbr scbr skpr scpr dr dr dr rdr ldr tr tr tr rtr ltr vr rx zr zdr ztr zgr zkr ntr ntr ndr ngr mscr mshr mskr nscr ngscr ndscr nskr ngskr ndskr rr");
-        midCons.put("s", "ls lst lsc lsk lsp rs rst rsc rsk rsp sl rsl lsl sktr sctr skdr scdr skbr scbr skpr scpr nsl msl msc mscr mst msp msk mskr nsl nsc nscr ngscr ndscr nsk nskr ngskr ndskr nst ndst nsp lsh rsh sh shl shqu shk shp shm shn shr shw shpl lshr rshl msh mshr ss");
-        midCons.put("sh", "lsh rsh sh shl shqu shk shp shm shn shr shw shpl lshr rshl msh mshr");
-        midCons.put("t", "ct ft lst lt rst rt sktr sctr tk tr rtr ltr zt ztr ntr ntr mst nst ndst tq ltl rtl tt");
-        midCons.put("th", "lth rth zth cth");
-        midCons.put("tl", "ltl rtl");
-        midCons.put("v", "lv rv vv vl vr");
-        midCons.put("w", "bw chw dw fw gw hw khw mw nw pw sw shw tw thw w wr wy zw");
-        midCons.put("x", "nx rx lx");
-        midCons.put("y", "by dy fy gy hy ky my ny py sy ty vy wy zy");
-        midCons.put("z", "lz rz zn zd zt zg zk zm zn zp zb zr zdr ztr zgr zkr zth zz");
-
-        closeCons.put("b", "b lb rb bs bz mb mbs bh bh lbh rbh mbh bb");
-        closeCons.put("bh", "bh lbh rbh mbh");
-        closeCons.put("c", "c ck cks lc rc cs cz ct cz cth sc");
-        closeCons.put("ch", "ch lch rch tch pch kch mch nch");
-        closeCons.put("d", "d ld rd ds dz dt dsh dth gd nd nds dh dh ldh rdh ndh dd");
-        closeCons.put("dh", "dh ldh rdh ndh");
-        closeCons.put("f", "f lf rf fs fz ft fsh ft fth ff");
-        closeCons.put("g", "g lg rg gs gz gd gsh gth ng ngs gg");
-        closeCons.put("h", "cth ch lch rch tch pch kch mch nch dsh dth fsh fth gsh gth h hs ksh kth psh pth ph ph ph ph ph ph lph rph phs pht phth");
-        closeCons.put("j", "j");
-        closeCons.put("k", "ck cks kch k lk rk ks kz kt ksh kth nk nks sk");
-        closeCons.put("kh", "kh");
-        closeCons.put("l", "lb lc lch ld lf lg lk l ls lz lp lph ll");
-        closeCons.put("m", "mch m ms mb mt mp mbs mps mz sm mm");
-        closeCons.put("n", "nch n ns nd nt nk nds nks nz ng ngs nn");
-        closeCons.put("p", "pch mp mps p lp rp ps pz pt psh pth sp sp ph lph rph phs pht phth");
-        closeCons.put("ph", "ph lph rph phs pht phth");
-        closeCons.put("q", "q");
-        closeCons.put("qu", "");
-        closeCons.put("r", "rb rc rch rd rf rg rk rp rph r rs rz");
-        closeCons.put("s", "bs cks cs ds fs gs hs ks ls ms mbs mps ns nds nks ngs ps phs rs s st sp st sp sc sk sm ts lsh rsh sh shk shp msh ss");
-        closeCons.put("sh", "lsh rsh sh shk shp msh");
-        closeCons.put("t", "ct ft tch dt ft kt mt nt pt pht st st t ts tz tt");
-        closeCons.put("th", "cth dth fth gth kth pth phth th ths");
-        closeCons.put("tl", "tl");
-        closeCons.put("v", "v");
-        closeCons.put("w", "");
-        closeCons.put("x", "x");
-        closeCons.put("y", "");
-        closeCons.put("z", "bz cz dz fz gz kz lz mz nz pz rz tz z zz");
+        closeCons = Maker.makeOM("b", "b lb rb bs bz mb mbs bh bh lbh rbh mbh bb",
+        "bh", "bh lbh rbh mbh",
+        "c", "c ck cks lc rc cs cz ct cz cth sc",
+        "ch", "ch lch rch tch pch kch mch nch",
+        "d", "d ld rd ds dz dt dsh dth gd nd nds dh dh ldh rdh ndh dd",
+        "dh", "dh ldh rdh ndh",
+        "f", "f lf rf fs fz ft fsh ft fth ff",
+        "g", "g lg rg gs gz gd gsh gth ng ngs gg",
+        "h", "cth ch lch rch tch pch kch mch nch dsh dth fsh fth gsh gth h hs ksh kth psh pth ph ph ph ph ph ph lph rph phs pht phth",
+        "j", "j",
+        "k", "ck cks kch k lk rk ks kz kt ksh kth nk nks sk",
+        "kh", "kh",
+        "l", "lb lc lch ld lf lg lk l ls lz lp lph ll",
+        "m", "mch m ms mb mt mp mbs mps mz sm mm",
+        "n", "nch n ns nd nt nk nds nks nz ng ngs nn",
+        "p", "pch mp mps p lp rp ps pz pt psh pth sp sp ph lph rph phs pht phth",
+        "ph", "ph lph rph phs pht phth",
+        "q", "q",
+        "qu", "",
+        "r", "rb rc rch rd rf rg rk rp rph r rs rz",
+        "s", "bs cks cs ds fs gs hs ks ls ms mbs mps ns nds nks ngs ps phs rs s st sp st sp sc sk sm ts lsh rsh sh shk shp msh ss",
+        "sh", "lsh rsh sh shk shp msh",
+        "t", "ct ft tch dt ft kt mt nt pt pht st st t ts tz tt",
+        "th", "cth dth fth gth kth pth phth th ths",
+        "tl", "tl",
+        "v", "v",
+        "w", "",
+        "x", "x",
+        "y", "",
+        "z", "bz cz dz fz gz kz lz mz nz pz rz tz z zz");
     }
 
     /*
@@ -406,6 +409,17 @@ public class FakeLanguageGen implements Serializable {
         return this;
     }
 
+    private static FakeLanguageGen lovecraft() {
+        return new FakeLanguageGen(
+                new String[]{"a", "i", "o", "e", "u", "a", "i", "o", "e", "u", "ia", "ai", "aa", "ei"},
+                new String[]{},
+                new String[]{"s", "t", "k", "n", "y", "p", "k", "l", "g", "gl", "th", "sh", "ny", "ft", "hm", "zvr", "cth"},
+                new String[]{"h", "gl", "gr", "nd", "mr", "vr", "kr"},
+                new String[]{"l", "p", "s", "t", "n", "k", "g", "x", "rl", "th", "gg", "gh", "ts", "lt", "rk", "kh", "sh", "ng", "shk"},
+                new String[]{"aghn", "ulhu", "urath", "oigor", "alos", "'yeh", "achtal", "elt", "ikhet", "adzek", "agd"},
+                new String[]{"'", "-"}, new int[]{1, 2, 3}, new double[]{6, 7, 2},
+                0.4, 0.31, 0.07, 0.04, null, true);
+    }
     /**
      * Ia! Ia! Cthulhu Rl'yeh ftaghn! Useful for generating cultist ramblings or unreadable occult texts. You may want
      * to consider mixing this with multiple other languages using {@link #mixAll(Object...)}; using some very different
@@ -414,14 +428,51 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Zvrugg pialuk, ya'as irlemrugle'eith iposh hmo-es nyeighi, glikreirk shaivro'ei!
      */
-    public static final FakeLanguageGen LOVECRAFT = new FakeLanguageGen(
-            new String[]{"a", "i", "o", "e", "u", "a", "i", "o", "e", "u", "ia", "ai", "aa", "ei"},
-            new String[]{},
-            new String[]{"s", "t", "k", "n", "y", "p", "k", "l", "g", "gl", "th", "sh", "ny", "ft", "hm", "zvr", "cth"},
-            new String[]{"h", "gl", "gr", "nd", "mr", "vr", "kr"},
-            new String[]{"l", "p", "s", "t", "n", "k", "g", "x", "rl", "th", "gg", "gh", "ts", "lt", "rk", "kh", "sh", "ng", "shk"},
-            new String[]{"aghn", "ulhu", "urath", "oigor", "alos", "'yeh", "achtal", "elt", "ikhet", "adzek", "agd"},
-            new String[]{"'", "-"}, new int[]{1, 2, 3}, new double[]{6, 7, 2}, 0.4, 0.31, 0.07, 0.04, null, true).register();
+    public static final FakeLanguageGen LOVECRAFT = lovecraft().register();
+    private static FakeLanguageGen english() {
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                        "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                        "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
+                        "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
+                        "au", "ai", "ai", "ou", "ea", "ie", "io", "ei",
+                },
+                new String[]{"u", "u", "oa", "oo", "oo", "oo", "ee", "ee", "ee", "ee",},
+                new String[]{
+                        "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gl", "gr", "h", "j", "k", "l", "m", "n",
+                        "p", "pl", "pr", "qu", "r", "s", "sh", "sk", "st", "sp", "sl", "sm", "sn", "t", "tr", "th", "thr", "v", "w", "y", "z",
+                        "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gr", "h", "j", "k", "l", "m", "n",
+                        "p", "pl", "pr", "r", "s", "sh", "st", "sp", "sl", "t", "tr", "th", "w", "y",
+                        "b", "br", "c", "ch", "d", "dr", "f", "g", "h", "j", "l", "m", "n",
+                        "p", "r", "s", "sh", "st", "sl", "t", "tr", "th",
+                        "b", "d", "f", "g", "h", "l", "m", "n",
+                        "p", "r", "s", "sh", "t", "th",
+                        "b", "d", "f", "g", "h", "l", "m", "n",
+                        "p", "r", "s", "sh", "t", "th",
+                        "r", "s", "t", "l", "n",
+                        "str", "spr", "spl", "wr", "kn", "kn", "gn",
+                },
+                new String[]{"x", "cst", "bs", "ff", "lg", "g", "gs",
+                        "ll", "ltr", "mb", "mn", "mm", "ng", "ng", "ngl", "nt", "ns", "nn", "ps", "mbl", "mpr",
+                        "pp", "ppl", "ppr", "rr", "rr", "rr", "rl", "rtn", "ngr", "ss", "sc", "rst", "tt", "tt", "ts", "ltr", "zz"
+                },
+                new String[]{"b", "rb", "bb", "c", "rc", "ld", "d", "ds", "dd", "f", "ff", "lf", "rf", "rg", "gs", "ch", "lch", "rch", "tch",
+                        "ck", "ck", "lk", "rk", "l", "ll", "lm", "m", "rm", "mp", "n", "nk", "nch", "nd", "ng", "ng", "nt", "ns", "lp", "rp",
+                        "p", "r", "rn", "rts", "s", "s", "s", "s", "ss", "ss", "st", "ls", "t", "t", "ts", "w", "wn", "x", "ly", "lly", "z",
+                        "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "t", "w",
+                },
+                new String[]{"ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
+                        "ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
+                        "ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
+                        "ay", "ay", "ey", "oy", "ay", "ay", "ey", "oy",
+                        "ough", "aught", "ant", "ont", "oe", "ance", "ell", "eal", "oa", "urt", "ut", "iom", "ion", "ion", "ision", "ation", "ation", "ition",
+                        "ough", "aught", "ant", "ont", "oe", "ance", "ell", "eal", "oa", "urt", "ut", "iom", "ion", "ion", "ision", "ation", "ation", "ition",
+                        "ily", "ily", "ily", "adly", "owly", "oorly", "ardly", "iedly",
+                },
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{10, 11, 4, 1},
+                0.22, 0.1, 0.0, 0.22, englishSanityChecks, true);
+    }
     /**
      * Imitation English; may seem closer to Dutch in some generated text, and is not exactly the best imitation.
      * Should seem pretty fake to many readers; does not filter out dictionary words but does perform basic vulgarity
@@ -430,72 +481,31 @@ public class FakeLanguageGen implements Serializable {
      * Mont tiste frot; mousation hauddes?
      * Lily wrely stiebes; flarrousseal gapestist.
      */
-    public static final FakeLanguageGen ENGLISH = new FakeLanguageGen(
-            new String[]{
-                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
-                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
-                    "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
-                    "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
-                    "au", "ai", "ai", "ou", "ea", "ie", "io", "ei",
-            },
-            new String[]{"u", "u", "oa", "oo", "oo", "oo", "ee", "ee", "ee", "ee",},
-            new String[]{
-                    "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gl", "gr", "h", "j", "k", "l", "m", "n",
-                    "p", "pl", "pr", "qu", "r", "s", "sh", "sk", "st", "sp", "sl", "sm", "sn", "t", "tr", "th", "thr", "v", "w", "y", "z",
-                    "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gr", "h", "j", "k", "l", "m", "n",
-                    "p", "pl", "pr", "r", "s", "sh", "st", "sp", "sl", "t", "tr", "th", "w", "y",
-                    "b", "br", "c", "ch", "d", "dr", "f", "g", "h", "j", "l", "m", "n",
-                    "p", "r", "s", "sh", "st", "sl", "t", "tr", "th",
-                    "b", "d", "f", "g", "h", "l", "m", "n",
-                    "p", "r", "s", "sh", "t", "th",
-                    "b", "d", "f", "g", "h", "l", "m", "n",
-                    "p", "r", "s", "sh", "t", "th",
-                    "r", "s", "t", "l", "n",
-                    "str", "spr", "spl", "wr", "kn", "kn", "gn",
-            },
-            new String[]{"x", "cst", "bs", "ff", "lg", "g", "gs",
-                    "ll", "ltr", "mb", "mn", "mm", "ng", "ng", "ngl", "nt", "ns", "nn", "ps", "mbl", "mpr",
-                    "pp", "ppl", "ppr", "rr", "rr", "rr", "rl", "rtn", "ngr", "ss", "sc", "rst", "tt", "tt", "ts", "ltr", "zz"
-            },
-            new String[]{"b", "rb", "bb", "c", "rc", "ld", "d", "ds", "dd", "f", "ff", "lf", "rf", "rg", "gs", "ch", "lch", "rch", "tch",
-                    "ck", "ck", "lk", "rk", "l", "ll", "lm", "m", "rm", "mp", "n", "nk", "nch", "nd", "ng", "ng", "nt", "ns", "lp", "rp",
-                    "p", "r", "rn", "rts", "s", "s", "s", "s", "ss", "ss", "st", "ls", "t", "t", "ts", "w", "wn", "x", "ly", "lly", "z",
-                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "t", "w",
-            },
-            new String[]{"ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
-                    "ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
-                    "ate", "ite", "ism", "ist", "er", "er", "er", "ed", "ed", "ed", "es", "es", "ied", "y", "y", "y", "y",
-                    "ay", "ay", "ey", "oy", "ay", "ay", "ey", "oy",
-                    "ough", "aught", "ant", "ont", "oe", "ance", "ell", "eal", "oa", "urt", "ut", "iom", "ion", "ion", "ision", "ation", "ation", "ition",
-                    "ough", "aught", "ant", "ont", "oe", "ance", "ell", "eal", "oa", "urt", "ut", "iom", "ion", "ion", "ision", "ation", "ation", "ition",
-                    "ily", "ily", "ily", "adly", "owly", "oorly", "ardly", "iedly",
-            },
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{10, 11, 4, 1}, 0.22, 0.1, 0.0, 0.22, englishSanityChecks, true).register();
+    public static final FakeLanguageGen ENGLISH = english().register();
+
+    private static FakeLanguageGen greekRomanized(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "i", "i", "au", "ai", "ai", "oi", "oi",
+                        "ia", "io", "u", "u", "eo", "ei", "o", "o", "ou", "oi", "y", "y", "y", "y"},
+                new String[]{"ui", "ui", "ei", "ei"},
+                new String[]{"rh", "s", "z", "t", "t", "k", "ch", "n", "th", "kth", "m", "p", "ps", "b", "l", "kr",
+                        "g", "phth", "d", "t", "k", "ch", "n", "ph", "ph", "k",},
+                new String[]{"lph", "pl", "l", "l", "kr", "nch", "nx", "ps"},
+                new String[]{"s", "p", "t", "ch", "n", "m", "s", "p", "t", "ch", "n", "m", "b", "g", "st", "rst",
+                        "rt", "sp", "rk", "ph", "x", "z", "nk", "ng", "th", "d", "k", "n", "n",},
+                new String[]{"os", "os", "os", "is", "is", "us", "um", "eum", "ium", "iam", "us", "um", "es",
+                        "anes", "eros", "or", "or", "ophon", "on", "on", "ikon", "otron", "ik",},
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 7, 4, 1}, 0.45, 0.45, 0.0, 0.2, null, true);
+    }
+
     /**
      * Imitation ancient Greek, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
      * <br>
      * Psuilas alor; aipeomarta le liaspa...
      */
-    public static final FakeLanguageGen GREEK_ROMANIZED = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "i", "i", "au", "ai", "ai", "oi", "oi",
-                    "ia", "io", "u", "u", "eo", "ei", "o", "o", "ou", "oi", "y", "y", "y", "y"},
-            new String[]{"ui", "ui", "ei", "ei"},
-            new String[]{"rh", "s", "z", "t", "t", "k", "ch", "n", "th", "kth", "m", "p", "ps", "b", "l", "kr",
-                    "g", "phth", "d", "t", "k", "ch", "n", "ph", "ph", "k",},
-            new String[]{"lph", "pl", "l", "l", "kr", "nch", "nx", "ps"},
-            new String[]{"s", "p", "t", "ch", "n", "m", "s", "p", "t", "ch", "n", "m", "b", "g", "st", "rst",
-                    "rt", "sp", "rk", "ph", "x", "z", "nk", "ng", "th", "d", "k", "n", "n",},
-            new String[]{"os", "os", "os", "is", "is", "us", "um", "eum", "ium", "iam", "us", "um", "es",
-                    "anes", "eros", "or", "or", "ophon", "on", "on", "ikon", "otron", "ik",},
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 7, 4, 1}, 0.45, 0.45, 0.0, 0.2, null, true).register();
-    /**
-     * Imitation ancient Greek, using the original Greek alphabet. People may try to translate it and get gibberish.
-     * Make sure the font you use to render this supports the Greek alphabet! In the GDX display module, the "smooth"
-     * fonts support all the Greek you need for this.
-     * <br>
-     * Ψυιλασ αλορ; αιπεομαρτα λε λιασπα...
-     */
-    public static final FakeLanguageGen GREEK_AUTHENTIC = new FakeLanguageGen(
+    public static final FakeLanguageGen GREEK_ROMANIZED = greekRomanized().register();
+    private static FakeLanguageGen greekAuthentic(){
+        return new FakeLanguageGen(
             new String[]{"α", "α", "α", "α", "α", "ο", "ο", "ε", "ε", "ε", "ι", "ι", "ι", "ι", "ι", "αυ", "αι", "αι", "οι", "οι",
                     "ια", "ιο", "ου", "ου", "εο", "ει", "ω", "ω", "ωυ", "ωι", "υ", "υ", "υ", "υ"},
             new String[]{"υι", "υι", "ει", "ει"},
@@ -506,75 +516,104 @@ public class FakeLanguageGen implements Serializable {
                     "ρτ", "σπ", "ρκ", "φ", "ξ", "ζ", "γκ", "γγ", "θ", "δ", "κ", "ν", "ν",},
             new String[]{"ος", "ος", "ος", "ις", "ις", "υς", "υμ", "ευμ", "ιυμ", "ιαμ", "υς", "υμ", "ες",
                     "ανες", "ερος", "ορ", "ορ", "οφον", "ον", "ον", "ικον", "οτρον", "ικ",},
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 7, 4, 1}, 0.45, 0.45, 0.0, 0.2, null, true).register();
+            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 7, 4, 1}, 0.45, 0.45, 0.0, 0.2, null, true);
+    }
+    /**
+     * Imitation ancient Greek, using the original Greek alphabet. People may try to translate it and get gibberish.
+     * Make sure the font you use to render this supports the Greek alphabet! In the GDX display module, most
+     * fonts support all the Greek you need for this.
+     * <br>
+     * Ψυιλασ αλορ; αιπεομαρτα λε λιασπα...
+     */
+    public static final FakeLanguageGen GREEK_AUTHENTIC = greekAuthentic().register();
 
+    private static FakeLanguageGen french(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "ai", "oi", "oui", "au", "œu", "ou"
+                },
+                new String[]{
+                        "ai", "aie", "aou", "eau", "oi", "oui", "oie", "eu", "eu",
+                        "à", "â", "ai", "aî", "aï", "aie", "aou", "aoû", "au", "ay", "e", "é", "ée", "è",
+                        "ê", "eau", "ei", "eî", "eu", "eû", "i", "î", "ï", "o", "ô", "oe", "oê", "oë", "œu",
+                        "oi", "oie", "oï", "ou", "oû", "oy", "u", "û", "ue",
+                        "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "ai", "ai", "eau", "oi", "oi", "oui", "eu", "au", "au", "ei", "ei", "oe", "oe", "ou", "ou", "ue"
+                },
+                new String[]{"tr", "ch", "m", "b", "b", "br", "j", "j", "j", "j", "g", "t", "t", "t", "c", "d", "f", "f", "h", "n", "l", "l",
+                        "s", "s", "s", "r", "r", "r", "v", "v", "p", "pl", "pr", "bl", "br", "dr", "gl", "gr"},
+                new String[]{"cqu", "gu", "qu", "rqu", "nt", "ng", "ngu", "mb", "ll", "nd", "ndr", "nct", "st",
+                        "xt", "mbr", "pl", "g", "gg", "ggr", "gl", "bl", "j", "gn",
+                        "m", "m", "mm", "v", "v", "f", "f", "f", "ff", "b", "b", "bb", "d", "d", "dd", "s", "s", "s", "ss", "ss", "ss",
+                        "cl", "cr", "ng", "ç", "ç", "rç", "rd", "lg", "rg"},
+                new String[]{"rt", "ch", "m", "b", "b", "lb", "t", "t", "t", "t", "c", "d", "f", "f", "n", "n", "l", "l",
+                        "s", "s", "s", "r", "r", "p", "rd", "ff", "ss", "ll"
+                },
+                new String[]{"e", "e", "e", "e", "e", "é", "é", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es", "es",
+                        "e", "e", "e", "e", "e", "é", "é", "er", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es",
+                        "e", "e", "e", "e", "e", "é", "é", "é", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es",
+                        "ent", "em", "en", "en", "aim", "ain", "an", "oin", "ien", "iere", "ors", "anse",
+                        "ombs", "ommes", "ancs", "ends", "œufs", "erfs", "ongs", "aps", "ats", "ives", "ui", "illes",
+                        "aen", "aon", "am", "an", "eun", "ein", "age", "age", "uile", "uin", "um", "un", "un", "un",
+                        "aille", "ouille", "eille", "ille", "eur", "it", "ot", "oi", "oi", "oi", "aire", "om", "on", "on",
+                        "im", "in", "in", "ien", "ien", "ine", "ion", "il", "eil", "oin", "oint", "iguïté", "ience", "incte",
+                        "ang", "ong", "acré", "eau", "ouche", "oux", "oux", "ect", "ecri", "agne", "uer", "aix", "eth", "ut", "ant",
+                        "anc", "anc", "anche", "ioche", "eaux", "ive", "eur", "ancois", "ecois", "ente", "enri",
+                        "arc", "oc", "ouis", "arche", "ique", "ique", "ique", "oque", "arque", "uis", "este", "oir", "oir"
+                },
+                new String[]{}, new int[]{1, 2, 3}, new double[]{15, 7, 2}, 0.35, 1.0, 0.0, 0.4, null, true);
+    }
     /**
      * Imitation modern French, using the (many) accented vowels that are present in the language. Translating it
-     * will produce gibberish if it produces anything at all. In the GDX display module, the "smooth" and "unicode"
+     * will produce gibberish if it produces anything at all. In the GDX display module, most
      * fonts support all the accented characters you need for this.
      * <br>
      * Bœurter; ubi plaqua se saigui ef brafeur?
      */
-    public static final FakeLanguageGen FRENCH = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "ai", "oi", "oui", "au", "œu", "ou"
-            },
-            new String[]{
-                    "ai", "aie", "aou", "eau", "oi", "oui", "oie", "eu", "eu",
-                    "à", "â", "ai", "aî", "aï", "aie", "aou", "aoû", "au", "ay", "e", "é", "ée", "è",
-                    "ê", "eau", "ei", "eî", "eu", "eû", "i", "î", "ï", "o", "ô", "oe", "oê", "oë", "œu",
-                    "oi", "oie", "oï", "ou", "oû", "oy", "u", "û", "ue",
-                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "u", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "ai", "ai", "eau", "oi", "oi", "oui", "eu", "au", "au", "ei", "ei", "oe", "oe", "ou", "ou", "ue"
-            },
-            new String[]{"tr", "ch", "m", "b", "b", "br", "j", "j", "j", "j", "g", "t", "t", "t", "c", "d", "f", "f", "h", "n", "l", "l",
-                    "s", "s", "s", "r", "r", "r", "v", "v", "p", "pl", "pr", "bl", "br", "dr", "gl", "gr"},
-            new String[]{"cqu", "gu", "qu", "rqu", "nt", "ng", "ngu", "mb", "ll", "nd", "ndr", "nct", "st",
-                    "xt", "mbr", "pl", "g", "gg", "ggr", "gl", "bl", "j", "gn",
-                    "m", "m", "mm", "v", "v", "f", "f", "f", "ff", "b", "b", "bb", "d", "d", "dd", "s", "s", "s", "ss", "ss", "ss",
-                    "cl", "cr", "ng", "ç", "ç", "rç", "rd", "lg", "rg"},
-            new String[]{"rt", "ch", "m", "b", "b", "lb", "t", "t", "t", "t", "c", "d", "f", "f", "n", "n", "l", "l",
-                    "s", "s", "s", "r", "r", "p", "rd", "ff", "ss", "ll"
-            },
-            new String[]{"e", "e", "e", "e", "e", "é", "é", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es", "es",
-                    "e", "e", "e", "e", "e", "é", "é", "er", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es",
-                    "e", "e", "e", "e", "e", "é", "é", "é", "er", "er", "er", "er", "er", "es", "es", "es", "es", "es",
-                    "ent", "em", "en", "en", "aim", "ain", "an", "oin", "ien", "iere", "ors", "anse",
-                    "ombs", "ommes", "ancs", "ends", "œufs", "erfs", "ongs", "aps", "ats", "ives", "ui", "illes",
-                    "aen", "aon", "am", "an", "eun", "ein", "age", "age", "uile", "uin", "um", "un", "un", "un",
-                    "aille", "ouille", "eille", "ille", "eur", "it", "ot", "oi", "oi", "oi", "aire", "om", "on", "on",
-                    "im", "in", "in", "ien", "ien", "ine", "ion", "il", "eil", "oin", "oint", "iguïté", "ience", "incte",
-                    "ang", "ong", "acré", "eau", "ouche", "oux", "oux", "ect", "ecri", "agne", "uer", "aix", "eth", "ut", "ant",
-                    "anc", "anc", "anche", "ioche", "eaux", "ive", "eur", "ancois", "ecois", "ente", "enri",
-                    "arc", "oc", "ouis", "arche", "ique", "ique", "ique", "oque", "arque", "uis", "este", "oir", "oir"
-            },
-            new String[]{}, new int[]{1, 2, 3}, new double[]{15, 7, 2}, 0.35, 1.0, 0.0, 0.4, null, true).register();
+    public static final FakeLanguageGen FRENCH = french().register();
 
+    private static FakeLanguageGen russianRomanized(){
+        return new FakeLanguageGen(
+                new String[]{"a", "e", "e", "i", "i", "o", "u", "ie", "y", "e", "iu", "ia", "y", "a", "a", "o", "u"},
+                new String[]{},
+                new String[]{"b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f", "kh", "ts",
+                        "b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f", "kh", "ts",
+                        "b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f",
+                        "zh", "m", "n", "z", "ch", "sh", "shch",
+                        "br", "sk", "tr", "bl", "gl", "kr", "gr"},
+                new String[]{"bl", "br", "pl", "dzh", "tr", "gl", "gr", "kr"},
+                new String[]{"b", "v", "g", "d", "zh", "z", "k", "l", "m", "n", "p", "r", "s", "t", "f", "kh", "ts", "ch", "sh",
+                        "v", "f", "sk", "sk", "sk", "s", "b", "d", "d", "n", "r", "r"},
+                new String[]{"odka", "odna", "usk", "ask", "usky", "ad", "ar", "ovich", "ev", "ov", "of", "agda", "etsky", "ich", "on", "akh", "iev", "ian"},
+                new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, englishSanityChecks, true);
+    }
     /**
      * Imitation modern Russian, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
      * <br>
      * Zhydotuf ruts pitsas, gogutiar shyskuchebab - gichapofeglor giunuz ieskaziuzhin.
      */
-    public static final FakeLanguageGen RUSSIAN_ROMANIZED = new FakeLanguageGen(
-            new String[]{"a", "e", "e", "i", "i", "o", "u", "ie", "y", "e", "iu", "ia", "y", "a", "a", "o", "u"},
-            new String[]{},
-            new String[]{"b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f", "kh", "ts",
-                    "b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f", "kh", "ts",
-                    "b", "v", "g", "d", "k", "l", "p", "r", "s", "t", "f",
-                    "zh", "m", "n", "z", "ch", "sh", "shch",
-                    "br", "sk", "tr", "bl", "gl", "kr", "gr"},
-            new String[]{"bl", "br", "pl", "dzh", "tr", "gl", "gr", "kr"},
-            new String[]{"b", "v", "g", "d", "zh", "z", "k", "l", "m", "n", "p", "r", "s", "t", "f", "kh", "ts", "ch", "sh",
-                    "v", "f", "sk", "sk", "sk", "s", "b", "d", "d", "n", "r", "r"},
-            new String[]{"odka", "odna", "usk", "ask", "usky", "ad", "ar", "ovich", "ev", "ov", "of", "agda", "etsky", "ich", "on", "akh", "iev", "ian"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, englishSanityChecks, true).register();
+    public static final FakeLanguageGen RUSSIAN_ROMANIZED = russianRomanized().register();
 
-
+    private static FakeLanguageGen russianAuthentic(){
+        return new FakeLanguageGen(
+                new String[]{"а", "е", "ё", "и", "й", "о", "у", "ъ", "ы", "э", "ю", "я", "ы", "а", "а", "о", "у"},
+                new String[]{},
+                new String[]{"б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф", "х", "ц",
+                        "б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф", "х", "ц",
+                        "б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф",
+                        "ж", "м", "н", "з", "ч", "ш", "щ",
+                        "бр", "ск", "тр", "бл", "гл", "кр", "гр"},
+                new String[]{"бл", "бр", "пл", "дж", "тр", "гл", "гр", "кр"},
+                new String[]{"б", "в", "г", "д", "ж", "з", "к", "л", "м", "н", "п", "р", "с", "т", "ф", "х", "ц", "ч", "ш",
+                        "в", "ф", "ск", "ск", "ск", "с", "б", "д", "д", "н", "р", "р"},
+                new String[]{"одка", "одна", "уск", "аск", "ускы", "ад", "ар", "овйч", "ев", "ов", "оф", "агда", "ёцкы", "йч", "он", "ах", "ъв", "ян"},
+                new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, null, true);
+    }
     /**
      * Imitation modern Russian, using the authentic Cyrillic alphabet used in Russia and other countries.
      * Make sure the font you use to render this supports the Cyrillic alphabet!
@@ -582,45 +621,137 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Жыдотуф руц пйцас, гогутяр шыскучэбаб - гйчапофёглор гюнуз ъсказюжин.
      */
-    public static final FakeLanguageGen RUSSIAN_AUTHENTIC = new FakeLanguageGen(
-            new String[]{"а", "е", "ё", "и", "й", "о", "у", "ъ", "ы", "э", "ю", "я", "ы", "а", "а", "о", "у"},
-            new String[]{},
-            new String[]{"б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф", "х", "ц",
-                    "б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф", "х", "ц",
-                    "б", "в", "г", "д", "к", "л", "п", "р", "с", "т", "ф",
-                    "ж", "м", "н", "з", "ч", "ш", "щ",
-                    "бр", "ск", "тр", "бл", "гл", "кр", "гр"},
-            new String[]{"бл", "бр", "пл", "дж", "тр", "гл", "гр", "кр"},
-            new String[]{"б", "в", "г", "д", "ж", "з", "к", "л", "м", "н", "п", "р", "с", "т", "ф", "х", "ц", "ч", "ш",
-                    "в", "ф", "ск", "ск", "ск", "с", "б", "д", "д", "н", "р", "р"},
-            new String[]{"одка", "одна", "уск", "аск", "ускы", "ад", "ар", "овйч", "ев", "ов", "оф", "агда", "ёцкы", "йч", "он", "ах", "ъв", "ян"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{4, 5, 6, 5, 3, 1}, 0.1, 0.2, 0.0, 0.12, null, true).register();
+    public static final FakeLanguageGen RUSSIAN_AUTHENTIC = russianAuthentic().register();
 
+    private static FakeLanguageGen japaneseRomanized(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "e", "e", "i", "i", "i", "i", "o", "o", "o", "u", "ou", "u", "ai", "ai"},
+                new String[]{},
+                new String[]{"k", "ky", "s", "sh", "t", "ts", "ch", "n", "ny", "h", "f", "hy", "m", "my", "y", "r", "ry", "g",
+                        "gy", "z", "j", "d", "b", "by", "p", "py",
+                        "k", "t", "n", "s", "k", "t", "d", "s", "sh", "sh", "g", "r", "b",
+                        "k", "t", "n", "s", "k", "t", "b", "s", "sh", "sh", "g", "r", "b",
+                        "k", "t", "n", "s", "k", "t", "z", "s", "sh", "sh", "ch", "ry", "ts"
+                },
+                new String[]{"k", "ky", "s", "sh", "t", "ts", "ch", "n", "ny", "h", "f", "hy", "m", "my", "y", "r", "ry", "g",
+                        "gy", "z", "j", "d", "b", "by", "p", "py",
+                        "k", "t", "d", "s", "k", "t", "d", "s", "sh", "sh", "y", "j", "p", "r", "d",
+                        "k", "t", "b", "s", "k", "t", "b", "s", "sh", "sh", "y", "j", "p", "r", "d",
+                        "k", "t", "z", "s", "f", "g", "z", "b", "d", "ts", "sh", "m",
+                        "k", "t", "z", "s", "f", "g", "z", "b", "d", "ts", "sh", "m",
+                        "nn", "nn", "nd", "nz", "mm", "kk", "tt", "ss", "ssh", "tch"},
+                new String[]{"n"},
+                new String[]{"ima", "aki", "aka", "ita", "en", "izen", "achi", "uke", "aido", "outsu", "uki", "oku", "aku", "oto", "okyo"},
+                new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 3}, 0.3, 0.9, 0.0, 0.07, japaneseSanityChecks, true);
+    }
     /**
      * Imitation Japanese, romanized to use the Latin alphabet. Likely to seem pretty fake to many readers.
      * <br>
      * Narurehyounan nikase keho...
      */
-    public static final FakeLanguageGen JAPANESE_ROMANIZED = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a", "e", "e", "i", "i", "i", "i", "o", "o", "o", "u", "ou", "u", "ai", "ai"},
-            new String[]{},
-            new String[]{"k", "ky", "s", "sh", "t", "ts", "ch", "n", "ny", "h", "f", "hy", "m", "my", "y", "r", "ry", "g",
-                    "gy", "z", "j", "d", "b", "by", "p", "py",
-                    "k", "t", "n", "s", "k", "t", "d", "s", "sh", "sh", "g", "r", "b",
-                    "k", "t", "n", "s", "k", "t", "b", "s", "sh", "sh", "g", "r", "b",
-                    "k", "t", "n", "s", "k", "t", "z", "s", "sh", "sh", "ch", "ry", "ts"
-            },
-            new String[]{"k", "ky", "s", "sh", "t", "ts", "ch", "n", "ny", "h", "f", "hy", "m", "my", "y", "r", "ry", "g",
-                    "gy", "z", "j", "d", "b", "by", "p", "py",
-                    "k", "t", "d", "s", "k", "t", "d", "s", "sh", "sh", "y", "j", "p", "r", "d",
-                    "k", "t", "b", "s", "k", "t", "b", "s", "sh", "sh", "y", "j", "p", "r", "d",
-                    "k", "t", "z", "s", "f", "g", "z", "b", "d", "ts", "sh", "m",
-                    "k", "t", "z", "s", "f", "g", "z", "b", "d", "ts", "sh", "m",
-                    "nn", "nn", "nd", "nz", "mm", "kk", "tt", "ss", "ssh", "tch"},
-            new String[]{"n"},
-            new String[]{"ima", "aki", "aka", "ita", "en", "izen", "achi", "uke", "aido", "outsu", "uki", "oku", "aku", "oto", "okyo"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 3}, 0.3, 0.9, 0.0, 0.07, japaneseSanityChecks, true).register();
+    public static final FakeLanguageGen JAPANESE_ROMANIZED = japaneseRomanized().register();
 
+    private static FakeLanguageGen swahili(){
+        return new FakeLanguageGen(
+                new String[]{"a", "i", "o", "e", "u",
+                        "a", "a", "i", "o", "o", "e", "u",
+                        "a", "a", "i", "o", "o", "u",
+                        "a", "a", "i", "i", "o",
+                        "a", "a", "a", "a", "a",
+                        "a", "i", "o", "e", "u",
+                        "a", "a", "i", "o", "o", "e", "u",
+                        "a", "a", "i", "o", "o", "u",
+                        "a", "a", "i", "i", "o",
+                        "a", "a", "a", "a", "a",
+                        "aa", "aa", "ue", "uo", "ii", "ea"},
+                new String[]{},
+                new String[]{
+                        "b", "h", "j", "l", "s", "y", "m", "n",
+                        "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                        "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                        "b", "h", "j", "l", "s", "y", "m", "n",
+                        "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                        "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                        "b", "h", "j", "l", "s", "y", "m", "n",
+                        "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                        "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                        "b", "h", "j", "l", "s", "y", "m", "n",
+                        "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                        "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                        "nb", "nj", "ns", "nz",
+                        "nb", "nch", "nj", "ns", "ny", "nz",
+                        "nb", "nch", "nf", "ng", "nj", "nk", "np", "ns", "nz",
+                        "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nz",
+                        "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nv", "nw", "nz",
+
+                        "mb", "ms", "my", "mz",
+                        "mb", "mch", "ms", "my", "mz",
+                        "mb", "mch", "mk", "mp", "ms", "my", "mz",
+                        "mb", "mch", "md", "mk", "mp", "ms", "mt", "my", "mz",
+                        "mb", "mch", "md", "mf", "mg", "mj", "mk", "mp", "ms", "mt", "mv", "mw", "my", "mz",
+                        "sh", "sh", "sh", "ny", "kw",
+                        "dh", "th", "sh", "ny",
+                        "dh", "th", "sh", "gh", "r", "ny",
+                        "dh", "th", "sh", "gh", "r", "ny",
+                },
+                new String[]{
+                        "b", "h", "j", "l", "s", "y", "m", "n",
+                        "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                        "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                        "b", "h", "j", "l", "s", "y", "m", "n",
+                        "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                        "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                        "b", "h", "j", "l", "s", "y", "m", "n",
+                        "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                        "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                        "b", "h", "j", "l", "s", "y", "m", "n",
+                        "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
+                        "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
+                        "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+
+                        "nb", "nj", "ns", "nz",
+                        "nb", "nch", "nj", "ns", "ny", "nz",
+                        "nb", "nch", "nf", "ng", "nj", "nk", "np", "ns", "nz",
+                        "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nz",
+                        "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nw", "nz",
+
+                        "mb", "ms", "my", "mz",
+                        "mb", "mch", "ms", "my", "mz",
+                        "mb", "mch", "mk", "mp", "ms", "my", "mz",
+                        "mb", "mch", "md", "mk", "mp", "ms", "mt", "my", "mz",
+                        "mb", "mch", "md", "mf", "mg", "mj", "mk", "mp", "ms", "mt", "mw", "my", "mz",
+                        "sh", "sh", "sh", "ny", "kw",
+                        "dh", "th", "sh", "ny",
+                        "dh", "th", "sh", "gh", "r", "ny",
+                        "dh", "th", "sh", "gh", "r", "ny",
+                        "ng", "ng", "ng", "ng", "ng"
+                },
+                new String[]{""},
+                new String[]{"-@"},
+                new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 8, 6, 9, 2, 2}, 0.2, 1.0, 0.0, 0.12, null, true);
+    }
     /**
      * Swahili is one of the more commonly-spoken languages in sub-Saharan Africa, and serves mainly as a shared language
      * that is often learned after becoming fluent in one of many other (vaguely-similar) languages of the area. An
@@ -640,106 +771,47 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Kondueyu; ma mpiyamdabota mise-mise nizakwaja alamsa amja, homa nkajupomba.
      */
-    public static final FakeLanguageGen SWAHILI = new FakeLanguageGen(
-            new String[]{"a", "i", "o", "e", "u",
-                    "a", "a", "i", "o", "o", "e", "u",
-                    "a", "a", "i", "o", "o", "u",
-                    "a", "a", "i", "i", "o",
-                    "a", "a", "a", "a", "a",
-                    "a", "i", "o", "e", "u",
-                    "a", "a", "i", "o", "o", "e", "u",
-                    "a", "a", "i", "o", "o", "u",
-                    "a", "a", "i", "i", "o",
-                    "a", "a", "a", "a", "a",
-                    "aa", "aa", "ue", "uo", "ii", "ea"},
-            new String[]{},
-            new String[]{
-                    "b", "h", "j", "l", "s", "y", "m", "n",
-                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
-                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
+    public static final FakeLanguageGen SWAHILI = swahili().register();
 
-                    "b", "h", "j", "l", "s", "y", "m", "n",
-                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
-                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
-
-                    "b", "h", "j", "l", "s", "y", "m", "n",
-                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
-                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
-
-                    "b", "h", "j", "l", "s", "y", "m", "n",
-                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
-                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
-
-                    "nb", "nj", "ns", "nz",
-                    "nb", "nch", "nj", "ns", "ny", "nz",
-                    "nb", "nch", "nf", "ng", "nj", "nk", "np", "ns", "nz",
-                    "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nz",
-                    "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nv", "nw", "nz",
-
-                    "mb", "ms", "my", "mz",
-                    "mb", "mch", "ms", "my", "mz",
-                    "mb", "mch", "mk", "mp", "ms", "my", "mz",
-                    "mb", "mch", "md", "mk", "mp", "ms", "mt", "my", "mz",
-                    "mb", "mch", "md", "mf", "mg", "mj", "mk", "mp", "ms", "mt", "mv", "mw", "my", "mz",
-                    "sh", "sh", "sh", "ny", "kw",
-                    "dh", "th", "sh", "ny",
-                    "dh", "th", "sh", "gh", "r", "ny",
-                    "dh", "th", "sh", "gh", "r", "ny",
-            },
-            new String[]{
-                    "b", "h", "j", "l", "s", "y", "m", "n",
-                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
-                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
-
-                    "b", "h", "j", "l", "s", "y", "m", "n",
-                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
-                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
-
-                    "b", "h", "j", "l", "s", "y", "m", "n",
-                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
-                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
-
-                    "b", "h", "j", "l", "s", "y", "m", "n",
-                    "b", "ch", "h", "j", "l", "s", "y", "z", "m", "n",
-                    "b", "ch", "f", "g", "h", "j", "k", "l", "p", "s", "y", "z", "m", "n",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "y", "z", "m", "n", "kw",
-                    "b", "ch", "d", "f", "g", "h", "j", "k", "l", "p", "s", "t", "v", "w", "y", "z", "m", "n", "kw",
-
-                    "nb", "nj", "ns", "nz",
-                    "nb", "nch", "nj", "ns", "ny", "nz",
-                    "nb", "nch", "nf", "ng", "nj", "nk", "np", "ns", "nz",
-                    "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nz",
-                    "nb", "nch", "nd", "nf", "ng", "nj", "nk", "np", "ns", "nt", "nw", "nz",
-
-                    "mb", "ms", "my", "mz",
-                    "mb", "mch", "ms", "my", "mz",
-                    "mb", "mch", "mk", "mp", "ms", "my", "mz",
-                    "mb", "mch", "md", "mk", "mp", "ms", "mt", "my", "mz",
-                    "mb", "mch", "md", "mf", "mg", "mj", "mk", "mp", "ms", "mt", "mw", "my", "mz",
-                    "sh", "sh", "sh", "ny", "kw",
-                    "dh", "th", "sh", "ny",
-                    "dh", "th", "sh", "gh", "r", "ny",
-                    "dh", "th", "sh", "gh", "r", "ny",
-                    "ng", "ng", "ng", "ng", "ng"
-            },
-            new String[]{""},
-            new String[]{"-@"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 8, 6, 9, 2, 2}, 0.2, 1.0, 0.0, 0.12, null, true).register();
-
+    private static FakeLanguageGen somali(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "a", "a", "aa", "aa", "aa",
+                        "e", "e", "ee",
+                        "i", "i", "i", "i", "ii",
+                        "o", "o", "o", "oo",
+                        "u", "u", "u", "uu", "uu",
+                },
+                new String[]{},
+                new String[]{"b", "t", "j", "x", "kh", "d", "r", "s", "sh", "dh", "c", "g", "f", "q", "k", "l", "m",
+                        "n", "w", "h", "y",
+                        "x", "g", "b", "d", "s", "m", "dh", "n", "r",
+                        "g", "b", "s", "dh",
+                },
+                new String[]{
+                        "bb", "gg", "dd", "bb", "dd", "rr", "ddh", "cc", "gg", "ff", "ll", "mm", "nn",
+                        "bb", "gg", "dd", "bb", "dd", "gg",
+                        "bb", "gg", "dd", "bb", "dd", "gg",
+                        "cy", "fk", "ft", "nt", "rt", "lt", "qm", "rdh", "rsh", "lq",
+                        "my", "gy", "by", "lkh", "rx", "md", "bd", "dg", "fd", "mf",
+                        "dh", "dh", "dh", "dh",
+                },
+                new String[]{
+                        "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n", "h",
+                        "x", "g", "b", "d", "s", "m", "q", "n", "r",
+                        "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n", "h",
+                        "x", "g", "b", "d", "s", "m", "q", "n", "r",
+                        "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n",
+                        "g", "b", "d", "s", "q", "n", "r",
+                        "b", "t", "x", "kh", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
+                        "g", "b", "d", "s", "r", "n",
+                        "b", "t", "kh", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
+                        "g", "b", "d", "s", "r", "n",
+                        "b", "t", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
+                        "g", "b", "d", "s", "r", "n",
+                },
+                new String[]{"aw", "ow", "ay", "ey", "oy", "ay", "ay"},
+                new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 1}, 0.25, 0.3, 0.0, 0.08, null, true);
+    }
     /**
      * Imitation Somali, using the Latin alphabet. Due to uncommon word structure, unusual allowed combinations of
      * letters, and no common word roots with most familiar languages, this may seem like an unidentifiable or "alien"
@@ -753,43 +825,363 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Libor cat naqoxekh dhuugad gisiqir?
      */
-    public static final FakeLanguageGen SOMALI = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a", "a", "a", "a", "aa", "aa", "aa",
-                    "e", "e", "ee",
-                    "i", "i", "i", "i", "ii",
-                    "o", "o", "o", "oo",
-                    "u", "u", "u", "uu", "uu",
-            },
-            new String[]{},
-            new String[]{"b", "t", "j", "x", "kh", "d", "r", "s", "sh", "dh", "c", "g", "f", "q", "k", "l", "m",
-                    "n", "w", "h", "y",
-                    "x", "g", "b", "d", "s", "m", "dh", "n", "r",
-                    "g", "b", "s", "dh",
-            },
-            new String[]{
-                    "bb", "gg", "dd", "bb", "dd", "rr", "ddh", "cc", "gg", "ff", "ll", "mm", "nn",
-                    "bb", "gg", "dd", "bb", "dd", "gg",
-                    "bb", "gg", "dd", "bb", "dd", "gg",
-                    "cy", "fk", "ft", "nt", "rt", "lt", "qm", "rdh", "rsh", "lq",
-                    "my", "gy", "by", "lkh", "rx", "md", "bd", "dg", "fd", "mf",
-                    "dh", "dh", "dh", "dh",
-            },
-            new String[]{
-                    "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n", "h",
-                    "x", "g", "b", "d", "s", "m", "q", "n", "r",
-                    "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n", "h",
-                    "x", "g", "b", "d", "s", "m", "q", "n", "r",
-                    "b", "t", "j", "x", "kh", "d", "r", "s", "sh", "c", "g", "f", "q", "k", "l", "m", "n",
-                    "g", "b", "d", "s", "q", "n", "r",
-                    "b", "t", "x", "kh", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
-                    "g", "b", "d", "s", "r", "n",
-                    "b", "t", "kh", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
-                    "g", "b", "d", "s", "r", "n",
-                    "b", "t", "d", "r", "s", "sh", "g", "f", "q", "k", "l", "m", "n",
-                    "g", "b", "d", "s", "r", "n",
-            },
-            new String[]{"aw", "ow", "ay", "ey", "oy", "ay", "ay"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 4, 5, 4, 1}, 0.25, 0.3, 0.0, 0.08, null, true).register();
+    public static final FakeLanguageGen SOMALI = somali().register();
+    private static FakeLanguageGen hindi(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",
+                        "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",
+                        "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",
+                        "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",
+                        "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",
+                        "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",
+                        "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",
+                        "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",
+                        "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
+                        "aĕ", "aĕ", "aĕ", "aĕ", "aĕ", "āĕ", "āĕ", "iĕ", "iĕ", "iĕ", "īĕ", "īĕ",
+                        "uĕ", "uĕ", "ūĕ", "aiĕ", "aiĕ", "oĕ", "oĕ", "oĕ", "auĕ",
+                        //"aĭ", "aĭ", "aĭ", "aĭ", "aĭ", "āĭ", "āĭ", "iĭ", "iĭ", "iĭ", "īĭ", "īĭ",
+                        //"uĭ", "uĭ", "ūĭ", "aiĭ", "aiĭ", "oĭ", "oĭ", "oĭ", "auĭ",
+                },
+                new String[]{"á", "í", "ú", "ó", "á", "í", "ú", "ó",
+                },
+                new String[]{
+                        "k", "k", "k", "k", "k", "k", "k", "k", "kŗ", "kŕ", "kļ",
+                        "c", "c", "c", "c", "c", "c", "cŗ", "cŕ", "cļ",
+                        "ţ", "t", "t", "t", "t", "t", "t", "t", "t", "t", "tŗ", "tŕ", "tŗ", "tŕ",
+                        "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "pŗ", "pŕ", "pļ", "pĺ", "pŗ", "pŕ", "p", "p",
+                        "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "khŗ", "khŕ", "khļ", "khĺ",
+                        "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "chŗ", "chŕ", "chļ", "chĺ",
+                        "ţh", "th", "th", "th", "th", "th", "th", "th", "th", "th", "thŗ", "thŕ", "thļ", "thĺ",
+                        "ph", "ph", "ph", "ph", "ph", "ph", "ph", "phŗ", "phŕ", "phļ", "phĺ",
+                        "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
+                        "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
+                        "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
+                        "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
+                        "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
+                        "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
+                        "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
+                        "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",
+                        "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",
+                        "ń", "ņ", "n", "m", "h", "y", "r", "l", "v", "ş", "s",
+                        "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",
+                        "ń", "ņ", "n", "m", "h", "y", "r", "l", "v", "ş", "s",
+                        "g", "đ", "d", "b", "gh", "đh", "dh", "bh", "n", "m", "v", "s",
+                        "g", "đ", "d", "b", "g", "d", "b", "dh", "bh", "n", "m", "v",
+                        "g", "đ", "d", "b", "g", "d", "b", "dh", "bh", "n", "m", "v",
+                },
+                new String[]{
+                        "k", "k", "k", "k", "k", "nk", "rk",
+                        "k", "k", "k", "k", "k", "nk", "rk",
+                        "k", "k", "k", "k", "k", "nk", "rk",
+                        "k", "k", "k", "k", "k", "nk", "rk",
+                        "k", "k", "k", "k", "k", "nk", "rk",
+                        "k", "k", "k", "k", "k", "nk", "rk",
+                        "k", "k", "k", "k", "k", "nk", "rk",
+                        "k", "k", "k", "k", "k", "nk", "rk",
+                        "kŗ", "kŗ", "kŗ", "kŗ", "kŗ", "nkŗ", "rkŗ",
+                        "kŕ", "kŕ", "kŕ", "kŕ", "kŕ", "nkŕ", "rkŕ",
+                        "kļ", "kļ", "kļ", "kļ", "kļ", "nkļ", "rkļ",
+
+                        "c", "c", "c", "c", "c", "c", "cŗ", "cŕ", "cļ",
+                        "ţ", "t", "t", "t", "t", "t", "nt", "rt",
+                        "ţ", "t", "t", "t", "t", "nt", "rt",
+                        "ţ", "t", "t", "t", "t", "nt", "rt",
+                        "ţ", "t", "t", "t", "t", "nt", "rt",
+                        "ţ", "t", "t", "t", "t", "nt", "rt",
+                        "ţ", "t", "t", "t", "t", "nt", "rt",
+                        "ţ", "t", "t", "t", "t", "nt", "rt",
+                        "ţ", "t", "t", "t", "t", "nt", "rt",
+                        "ţ", "t", "t", "t", "t", "nt", "rt",
+                        "tŗ", "tŗ", "tŗ", "tŗ", "tŗ", "ntŗ", "rtŗ",
+                        "tŕ", "tŕ", "tŕ", "tŕ", "tŕ", "ntŕ", "rtŕ",
+                        "tŗ", "tŗ", "tŗ", "tŗ", "tŗ", "ntŗ", "rtŗ",
+                        "tŕ", "tŕ", "tŕ", "tŕ", "tŕ", "ntŕ", "rtŕ",
+
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "pŗ", "pŗ", "pŗ", "pŗ", "pŗ", "npŗ", "rpŗ",
+                        "pŕ", "pŕ", "pŕ", "pŕ", "pŕ", "npŕ", "rpŕ",
+                        "pļ", "pļ", "pļ", "pļ", "pļ", "npļ", "rpļ",
+                        "pĺ", "pĺ", "pĺ", "pĺ", "pĺ", "npĺ", "rpĺ",
+                        "pŗ", "pŗ", "pŗ", "pŗ", "pŗ", "npŗ", "rpŗ",
+                        "pŕ", "pŕ", "pŕ", "pŕ", "pŕ", "npŕ", "rpŕ",
+                        "p", "p", "p", "p", "p", "np", "rp",
+                        "p", "p", "p", "p", "p", "np", "rp",
+
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
+                        "khŗ", "khŗ", "khŗ", "khŗ", "khŗ", "nkhŗ", "rkhŗ",
+                        "khŕ", "khŕ", "khŕ", "khŕ", "khŕ", "nkhŕ", "rkhŕ",
+                        "khļ", "khļ", "khļ", "khļ", "khļ", "nkhļ", "rkhļ",
+                        "khĺ", "khĺ", "khĺ", "khĺ", "khĺ", "nkhĺ", "rkhĺ",
+
+                        "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "chŗ", "chŕ", "chļ", "chĺ",
+                        "ţh", "th", "th", "th", "th", "th", "nth", "rth",
+                        "th", "th", "th", "th", "th", "nth", "rth",
+                        "th", "th", "th", "th", "th", "nth", "rth",
+                        "th", "th", "th", "th", "th", "nth", "rth",
+                        "th", "th", "th", "th", "th", "nth", "rth",
+                        "th", "th", "th", "th", "th", "nth", "rth",
+                        "th", "th", "th", "th", "th", "nth", "rth",
+                        "th", "th", "th", "th", "th", "nth", "rth",
+                        "th", "th", "th", "th", "th", "nth", "rth",
+                        "thŗ", "thŗ", "thŗ", "thŗ", "thŗ", "nthŗ", "rthŗ",
+                        "thŕ", "thŕ", "thŕ", "thŕ", "thŕ", "nthŕ", "rthŕ",
+                        "thļ", "thļ", "thļ", "thļ", "thļ", "nthļ", "rthļ",
+                        "thĺ", "thĺ", "thĺ", "thĺ", "thĺ", "nthĺ", "rthĺ",
+
+                        "ph", "ph", "ph", "ph", "ph", "nph", "rph",
+                        "ph", "ph", "ph", "ph", "ph", "nph", "rph",
+                        "ph", "ph", "ph", "ph", "ph", "nph", "rph",
+                        "ph", "ph", "ph", "ph", "ph", "nph", "rph",
+                        "ph", "ph", "ph", "ph", "ph", "nph", "rph",
+                        "ph", "ph", "ph", "ph", "ph", "nph", "rph",
+                        "ph", "ph", "ph", "ph", "ph", "nph", "rph",
+                        "phŗ", "phŗ", "phŗ", "phŗ", "phŗ", "nphŗ", "rphŗ",
+                        "phŕ", "phŕ", "phŕ", "phŕ", "phŕ", "nphŕ", "rphŕ",
+                        "phļ", "phļ", "phļ", "phļ", "phļ", "nphļ", "rphļ",
+                        "phĺ", "phĺ", "phĺ", "phĺ", "phĺ", "nphĺ", "rphĺ",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ś", "ś", "ś", "ś", "ś", "nś", "rś",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ś", "ś", "ś", "ś", "ś", "nś", "rś",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ś", "ś", "ś", "ś", "ś", "nś", "rś",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ś", "ś", "ś", "ś", "ś", "nś", "rś",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ś", "ś", "ś", "ś", "ś", "nś", "rś",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ś", "ś", "ś", "ś", "ś", "nś", "rś",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ś", "ś", "ś", "ś", "ś", "nś", "rś",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ś", "ś", "ś", "ś", "ś", "nś", "rś",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "j", "j", "j", "j", "j", "nj", "rj",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+
+                        "ń", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "h", "y", "y", "y", "y", "y", "ny", "ry",
+                        "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
+                        "ş", "ş", "ş", "ş", "ş", "nş", "rş",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
+                        "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+                        "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "v", "v", "v", "v", "v", "nv", "rv",
+                        "s", "s", "s", "s", "s", "ns", "rs",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+                        "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "v", "v", "v", "v", "v", "nv", "rv",
+
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "g", "g", "g", "g", "g", "ng", "rg",
+                        "d", "d", "d", "d", "d", "nd", "rd",
+                        "b", "b", "b", "b", "b", "nb", "rb",
+                        "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
+                        "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
+                        "n", "m", "m", "m", "m", "m", "nm", "rm",
+                        "v", "v", "v", "v", "v", "nv", "rv",
+                },
+                new String[]{"t", "d", "m", "r", "dh", "b", "t", "d", "m", "r", "dh", "bh", "nt", "nt", "nk", "ş"},
+                new String[]{"it", "it", "ati", "adva", "aş", "arma", "ardha", "abi", "ab", "aya"},
+                new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{1, 2, 3, 3, 1}, 0.15, 0.75, 0.0, 0.12, null, true);
+    }
     /**
      * Imitation Hindi, romanized to use the Latin alphabet using accented glyphs similar to the IAST standard.
      * Most fonts do not support the glyphs that IAST-standard romanization of Hindi needs, so this uses alternate
@@ -803,361 +1195,47 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Darvāga yar; ghađhinopŕauka āĕrdur, conśaigaijo śabhodhaĕđū jiviđaudu.
      */
-    public static final FakeLanguageGen HINDI_ROMANIZED = new FakeLanguageGen(
-            new String[]{
-                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",
-                    "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
-                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",
-                    "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
-                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",
-                    "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
-                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "ī",
-                    "u", "u", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
-                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",
-                    "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
-                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",
-                    "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
-                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",
-                    "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
-                    "a", "a", "a", "a", "a", "a", "ā", "ā", "i", "i", "i", "i", "ī", "i", "i", "ī", "ī",
-                    "u", "u", "u", "ū", "u", "ū", "u", "ū", "e", "ai", "ai", "o", "o", "o", "au",
-                    "aĕ", "aĕ", "aĕ", "aĕ", "aĕ", "āĕ", "āĕ", "iĕ", "iĕ", "iĕ", "īĕ", "īĕ",
-                    "uĕ", "uĕ", "ūĕ", "aiĕ", "aiĕ", "oĕ", "oĕ", "oĕ", "auĕ",
-                    //"aĭ", "aĭ", "aĭ", "aĭ", "aĭ", "āĭ", "āĭ", "iĭ", "iĭ", "iĭ", "īĭ", "īĭ",
-                    //"uĭ", "uĭ", "ūĭ", "aiĭ", "aiĭ", "oĭ", "oĭ", "oĭ", "auĭ",
-            },
-            new String[]{"á", "í", "ú", "ó", "á", "í", "ú", "ó",
-            },
-            new String[]{
-                    "k", "k", "k", "k", "k", "k", "k", "k", "kŗ", "kŕ", "kļ",
-                    "c", "c", "c", "c", "c", "c", "cŗ", "cŕ", "cļ",
-                    "ţ", "t", "t", "t", "t", "t", "t", "t", "t", "t", "tŗ", "tŕ", "tŗ", "tŕ",
-                    "p", "p", "p", "p", "p", "p", "p", "p", "p", "p", "pŗ", "pŕ", "pļ", "pĺ", "pŗ", "pŕ", "p", "p",
-                    "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "kh", "khŗ", "khŕ", "khļ", "khĺ",
-                    "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "chŗ", "chŕ", "chļ", "chĺ",
-                    "ţh", "th", "th", "th", "th", "th", "th", "th", "th", "th", "thŗ", "thŕ", "thļ", "thĺ",
-                    "ph", "ph", "ph", "ph", "ph", "ph", "ph", "phŗ", "phŕ", "phļ", "phĺ",
-                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
-                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
-                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
-                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
-                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
-                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
-                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "jh", "đh", "dh", "bh",
-                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",
-                    "ń", "ñ", "ņ", "n", "m", "h", "y", "r", "l", "v", "ś", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",
-                    "ń", "ņ", "n", "m", "h", "y", "r", "l", "v", "ş", "s",
-                    "g", "j", "đ", "d", "b", "gh", "đh", "dh", "bh",
-                    "ń", "ņ", "n", "m", "h", "y", "r", "l", "v", "ş", "s",
-                    "g", "đ", "d", "b", "gh", "đh", "dh", "bh", "n", "m", "v", "s",
-                    "g", "đ", "d", "b", "g", "d", "b", "dh", "bh", "n", "m", "v",
-                    "g", "đ", "d", "b", "g", "d", "b", "dh", "bh", "n", "m", "v",
-            },
-            new String[]{
-                    "k", "k", "k", "k", "k", "nk", "rk",
-                    "k", "k", "k", "k", "k", "nk", "rk",
-                    "k", "k", "k", "k", "k", "nk", "rk",
-                    "k", "k", "k", "k", "k", "nk", "rk",
-                    "k", "k", "k", "k", "k", "nk", "rk",
-                    "k", "k", "k", "k", "k", "nk", "rk",
-                    "k", "k", "k", "k", "k", "nk", "rk",
-                    "k", "k", "k", "k", "k", "nk", "rk",
-                    "kŗ", "kŗ", "kŗ", "kŗ", "kŗ", "nkŗ", "rkŗ",
-                    "kŕ", "kŕ", "kŕ", "kŕ", "kŕ", "nkŕ", "rkŕ",
-                    "kļ", "kļ", "kļ", "kļ", "kļ", "nkļ", "rkļ",
+    public static final FakeLanguageGen HINDI_ROMANIZED = hindi().register();
 
-                    "c", "c", "c", "c", "c", "c", "cŗ", "cŕ", "cļ",
-                    "ţ", "t", "t", "t", "t", "t", "nt", "rt",
-                    "ţ", "t", "t", "t", "t", "nt", "rt",
-                    "ţ", "t", "t", "t", "t", "nt", "rt",
-                    "ţ", "t", "t", "t", "t", "nt", "rt",
-                    "ţ", "t", "t", "t", "t", "nt", "rt",
-                    "ţ", "t", "t", "t", "t", "nt", "rt",
-                    "ţ", "t", "t", "t", "t", "nt", "rt",
-                    "ţ", "t", "t", "t", "t", "nt", "rt",
-                    "ţ", "t", "t", "t", "t", "nt", "rt",
-                    "tŗ", "tŗ", "tŗ", "tŗ", "tŗ", "ntŗ", "rtŗ",
-                    "tŕ", "tŕ", "tŕ", "tŕ", "tŕ", "ntŕ", "rtŕ",
-                    "tŗ", "tŗ", "tŗ", "tŗ", "tŗ", "ntŗ", "rtŗ",
-                    "tŕ", "tŕ", "tŕ", "tŕ", "tŕ", "ntŕ", "rtŕ",
-
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "pŗ", "pŗ", "pŗ", "pŗ", "pŗ", "npŗ", "rpŗ",
-                    "pŕ", "pŕ", "pŕ", "pŕ", "pŕ", "npŕ", "rpŕ",
-                    "pļ", "pļ", "pļ", "pļ", "pļ", "npļ", "rpļ",
-                    "pĺ", "pĺ", "pĺ", "pĺ", "pĺ", "npĺ", "rpĺ",
-                    "pŗ", "pŗ", "pŗ", "pŗ", "pŗ", "npŗ", "rpŗ",
-                    "pŕ", "pŕ", "pŕ", "pŕ", "pŕ", "npŕ", "rpŕ",
-                    "p", "p", "p", "p", "p", "np", "rp",
-                    "p", "p", "p", "p", "p", "np", "rp",
-
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "kh", "kh", "kh", "kh", "kh", "nkh", "rkh",
-                    "khŗ", "khŗ", "khŗ", "khŗ", "khŗ", "nkhŗ", "rkhŗ",
-                    "khŕ", "khŕ", "khŕ", "khŕ", "khŕ", "nkhŕ", "rkhŕ",
-                    "khļ", "khļ", "khļ", "khļ", "khļ", "nkhļ", "rkhļ",
-                    "khĺ", "khĺ", "khĺ", "khĺ", "khĺ", "nkhĺ", "rkhĺ",
-
-                    "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "ch", "chŗ", "chŕ", "chļ", "chĺ",
-                    "ţh", "th", "th", "th", "th", "th", "nth", "rth",
-                    "th", "th", "th", "th", "th", "nth", "rth",
-                    "th", "th", "th", "th", "th", "nth", "rth",
-                    "th", "th", "th", "th", "th", "nth", "rth",
-                    "th", "th", "th", "th", "th", "nth", "rth",
-                    "th", "th", "th", "th", "th", "nth", "rth",
-                    "th", "th", "th", "th", "th", "nth", "rth",
-                    "th", "th", "th", "th", "th", "nth", "rth",
-                    "th", "th", "th", "th", "th", "nth", "rth",
-                    "thŗ", "thŗ", "thŗ", "thŗ", "thŗ", "nthŗ", "rthŗ",
-                    "thŕ", "thŕ", "thŕ", "thŕ", "thŕ", "nthŕ", "rthŕ",
-                    "thļ", "thļ", "thļ", "thļ", "thļ", "nthļ", "rthļ",
-                    "thĺ", "thĺ", "thĺ", "thĺ", "thĺ", "nthĺ", "rthĺ",
-
-                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",
-                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",
-                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",
-                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",
-                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",
-                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",
-                    "ph", "ph", "ph", "ph", "ph", "nph", "rph",
-                    "phŗ", "phŗ", "phŗ", "phŗ", "phŗ", "nphŗ", "rphŗ",
-                    "phŕ", "phŕ", "phŕ", "phŕ", "phŕ", "nphŕ", "rphŕ",
-                    "phļ", "phļ", "phļ", "phļ", "phļ", "nphļ", "rphļ",
-                    "phĺ", "phĺ", "phĺ", "phĺ", "phĺ", "nphĺ", "rphĺ",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "jh", "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ñ", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ś", "ś", "ś", "ś", "ś", "nś", "rś",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "j", "j", "j", "j", "j", "nj", "rj",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-
-                    "ń", "ņ", "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "h", "y", "y", "y", "y", "y", "ny", "ry",
-                    "r", "l", "v", "v", "v", "v", "v", "nv", "rv",
-                    "ş", "ş", "ş", "ş", "ş", "nş", "rş",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "gh", "gh", "gh", "gh", "gh", "ngh", "rgh",
-                    "đh", "đh", "đh", "đh", "đh", "nđh", "rđh",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-                    "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "v", "v", "v", "v", "v", "nv", "rv",
-                    "s", "s", "s", "s", "s", "ns", "rs",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-                    "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "v", "v", "v", "v", "v", "nv", "rv",
-
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "đ", "đ", "đ", "đ", "đ", "nđ", "rđ",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "g", "g", "g", "g", "g", "ng", "rg",
-                    "d", "d", "d", "d", "d", "nd", "rd",
-                    "b", "b", "b", "b", "b", "nb", "rb",
-                    "dh", "dh", "dh", "dh", "dh", "ndh", "rdh",
-                    "bh", "bh", "bh", "bh", "bh", "nbh", "rbh",
-                    "n", "m", "m", "m", "m", "m", "nm", "rm",
-                    "v", "v", "v", "v", "v", "nv", "rv",
-            },
-            new String[]{"t", "d", "m", "r", "dh", "b", "t", "d", "m", "r", "dh", "bh", "nt", "nt", "nk", "ş"},
-            new String[]{"it", "it", "ati", "adva", "aş", "arma", "ardha", "abi", "ab", "aya"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{1, 2, 3, 3, 1}, 0.15, 0.75, 0.0, 0.12, null, true).register();
-
+    private static FakeLanguageGen arabic(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "a", "aa", "aa", "aa", "ai", "au",
+                        "a", "i", "u", "a", "i", "u",
+                        "i", "i", "i", "i", "i", "ii", "ii", "ii",
+                        "u", "u", "u", "uu", "uu",
+                },
+                new String[]{},
+                new String[]{"gh", "b", "t", "th", "j", "kh", "khr", "d", "dh", "r", "z", "s", "sh", "shw",
+                        "zh", "khm", "g", "f", "q", "k", "l", "m", "n", "h", "w",
+                        "q", "k", "q", "k", "b", "d", "f", "l", "z", "zh", "h", "h", "kh", "j", "s", "sh", "shw", "r",
+                        "q", "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                        "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                        "al-", "al-", "ibn-",
+                },
+                new String[]{
+                        "kk", "kk", "kk", "kk", "kk", "dd", "dd", "dd", "dd",
+                        "nj", "mj", "bj", "mj", "bj", "mj", "bj", "dj", "dtj", "dhj",
+                        "nz", "nzh", "mz", "mzh", "rz", "rzh", "bz", "dz", "tz",
+                        "s-h", "sh-h", "shw-h", "tw", "bn", "fq", "hz", "hl", "khm",
+                        "lb", "lz", "lj", "lf", "ll", "lk", "lq", "lg", "ln"
+                },
+                new String[]{
+                        "gh", "b", "t", "th", "j", "kh", "khr", "d", "dh", "r", "z", "s", "sh", "shw", "dt", "jj",
+                        "zh", "khm", "g", "f", "q", "k", "l", "m", "n", "h", "w",
+                        "k", "q", "k", "b", "d", "f", "l", "z", "zh", "h", "h", "kh", "j", "s", "sh", "shw", "r",
+                        "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                        "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                        "b", "t", "th", "j", "kh", "khr", "d", "dh", "r", "z", "s", "sh", "shw", "dt", "jj",
+                        "zh", "g", "f", "q", "k", "l", "m", "n", "h", "w",
+                        "k", "q", "k", "b", "d", "f", "l", "z", "zh", "h", "h", "kh", "j", "s", "sh", "shw", "r",
+                        "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                        "k", "f", "l", "z", "h", "h", "j", "s", "r",
+                },
+                new String[]{"aagh", "aagh", "ari", "ari", "aiid", "uuq", "ariid", "adih", "ateh", "adesh", "amiit", "it",
+                        "iit", "akhmen", "akhmed", "ani", "abiib", "iib", "uuni", "iiz", "aqarii", "adiiq",
+                },
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{6, 5, 5, 1}, 0.55, 0.65, 0.0, 0.15, arabicSanityChecks, true);
+    }
     /**
      * Imitation Arabic, using mostly the Latin alphabet but with some Greek letters for tough transliteration topics.
      * It's hard to think of a more different (widely-spoken) language to romanize than Arabic. Written Arabic does not
@@ -1180,43 +1258,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Hiijakki al-aafusiib rihit, ibn-ullukh aj shwisari!
      */
-    public static final FakeLanguageGen ARABIC_ROMANIZED = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a", "a", "a", "aa", "aa", "aa", "ai", "au",
-                    "a", "i", "u", "a", "i", "u",
-                    "i", "i", "i", "i", "i", "ii", "ii", "ii",
-                    "u", "u", "u", "uu", "uu",
-            },
-            new String[]{},
-            new String[]{"gh", "b", "t", "th", "j", "kh", "khr", "d", "dh", "r", "z", "s", "sh", "shw",
-                    "zh", "khm", "g", "f", "q", "k", "l", "m", "n", "h", "w",
-                    "q", "k", "q", "k", "b", "d", "f", "l", "z", "zh", "h", "h", "kh", "j", "s", "sh", "shw", "r",
-                    "q", "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
-                    "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
-                    "al-", "al-", "ibn-",
-            },
-            new String[]{
-                    "kk", "kk", "kk", "kk", "kk", "dd", "dd", "dd", "dd",
-                    "nj", "mj", "bj", "mj", "bj", "mj", "bj", "dj", "dtj", "dhj",
-                    "nz", "nzh", "mz", "mzh", "rz", "rzh", "bz", "dz", "tz",
-                    "s-h", "sh-h", "shw-h", "tw", "bn", "fq", "hz", "hl", "khm",
-                    "lb", "lz", "lj", "lf", "ll", "lk", "lq", "lg", "ln"
-            },
-            new String[]{
-                    "gh", "b", "t", "th", "j", "kh", "khr", "d", "dh", "r", "z", "s", "sh", "shw", "dt", "jj",
-                    "zh", "khm", "g", "f", "q", "k", "l", "m", "n", "h", "w",
-                    "k", "q", "k", "b", "d", "f", "l", "z", "zh", "h", "h", "kh", "j", "s", "sh", "shw", "r",
-                    "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
-                    "k", "f", "l", "z", "h", "h", "j", "s", "r",
-                    "b", "t", "th", "j", "kh", "khr", "d", "dh", "r", "z", "s", "sh", "shw", "dt", "jj",
-                    "zh", "g", "f", "q", "k", "l", "m", "n", "h", "w",
-                    "k", "q", "k", "b", "d", "f", "l", "z", "zh", "h", "h", "kh", "j", "s", "sh", "shw", "r",
-                    "k", "q", "k", "f", "l", "z", "h", "h", "j", "s", "r",
-                    "k", "f", "l", "z", "h", "h", "j", "s", "r",
-            },
-            new String[]{"aagh", "aagh", "ari", "ari", "aiid", "uuq", "ariid", "adih", "ateh", "adesh", "amiit", "it",
-                    "iit", "akhmen", "akhmed", "ani", "abiib", "iib", "uuni", "iiz", "aqarii", "adiiq",
-            },
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{6, 5, 5, 1}, 0.55, 0.65, 0.0, 0.15, arabicSanityChecks, true).register();
+    public static final FakeLanguageGen ARABIC_ROMANIZED = arabic().register();
     /*
     public static final FakeLanguageGen ARABIC_ROMANIZED = new FakeLanguageGen(
             new String[]{"a", "a", "a", "a", "a", "a", "ā", "ā", "ā", "ai", "au",
@@ -1256,6 +1298,23 @@ public class FakeLanguageGen implements Serializable {
             },
             new String[]{}, new int[]{1, 2, 3, 4}, new double[]{6, 5, 5, 1}, 0.55, 0.65, 0.0, 0.15, arabicSanityChecks, true);
             */
+
+    private static FakeLanguageGen inuktitut(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "aa", "aa", "aa", "aa", "i", "i", "i", "ii", "ii", "u", "u", "u", "uu", "uu", "ai", "ia", "iu", "ua", "ui"},
+                new String[]{},
+                new String[]{"p", "t", "k", "q", "s", "l", "h", "v", "j", "g", "r", "m", "n",
+                        "t", "t", "t", "t", "k", "k", "q", "q", "n", "n", "n", "n", "g", "l"},
+                new String[]{"pp", "tt", "kk", "pk", "tk", "gk", "kp", "kt", "kg", "pq", "tq", "gq", "ss", "ll", "rr", "mm",
+                        "nn", "nng", "ng", "ng",
+                        "ll", "nn", "nn", "nn",},
+                new String[]{"n", "t", "q", "k", "n", "t", "q", "k", "n", "t", "q", "k", "n", "t", "q", "k", "p", "s", "m", "g", "g", "ng", "ng", "ng"},
+                new String[]{"itut", "uit", "uq", "iuq", "iaq", "aq", "it", "aat", "aak", "aan", "ait", "ik", "uut", "un", "unnun",
+                        "ung", "ang", "ing", "iin", "iit", "iik", "in",
+                        "uq", "iaq", "aq", "ik", "it", "uit", "ut", "ut", "at", "un", "in"
+                },
+                new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 4, 6, 5, 4}, 0.45, 0.0, 0.0, 0.25, null, true);
+    }
     /**
      * Imitation text from an approximation of one of the Inuktitut languages spoken by various people of the Arctic and
      * nearby areas. This is likely to be hard to pronounce. Inuktitut is the name accepted in Canada for one language
@@ -1266,20 +1325,60 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Ugkangungait ninaaq ipkutuilluuq um aitqiinnaitunniak tillingaat.
      */
-    public static final FakeLanguageGen INUKTITUT = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a", "a", "aa", "aa", "aa", "aa", "i", "i", "i", "ii", "ii", "u", "u", "u", "uu", "uu", "ai", "ia", "iu", "ua", "ui"},
-            new String[]{},
-            new String[]{"p", "t", "k", "q", "s", "l", "h", "v", "j", "g", "r", "m", "n",
-                    "t", "t", "t", "t", "k", "k", "q", "q", "n", "n", "n", "n", "g", "l"},
-            new String[]{"pp", "tt", "kk", "pk", "tk", "gk", "kp", "kt", "kg", "pq", "tq", "gq", "ss", "ll", "rr", "mm",
-                    "nn", "nng", "ng", "ng",
-                    "ll", "nn", "nn", "nn",},
-            new String[]{"n", "t", "q", "k", "n", "t", "q", "k", "n", "t", "q", "k", "n", "t", "q", "k", "p", "s", "m", "g", "g", "ng", "ng", "ng"},
-            new String[]{"itut", "uit", "uq", "iuq", "iaq", "aq", "it", "aat", "aak", "aan", "ait", "ik", "uut", "un", "unnun",
-                    "ung", "ang", "ing", "iin", "iit", "iik", "in",
-                    "uq", "iaq", "aq", "ik", "it", "uit", "ut", "ut", "at", "un", "in"
-            },
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 4, 6, 5, 4}, 0.45, 0.0, 0.0, 0.25, null, true).register();
+    public static final FakeLanguageGen INUKTITUT = inuktitut().register();
+
+    private static FakeLanguageGen norse(){
+        return new FakeLanguageGen(
+                new String[]{"a","a","a","á","á","au","e","e","e","é","é","ei","ey","i","i","í","í","y","y","ý","ý",
+                        "o","o","o","ó","ó","u","u","u","ú","ú","æ","æ","æ","ö","ö",},
+                new String[]{},
+                new String[]{"b","bl","br","bj","d","dr","dj","ð","ðl","ðr","f","fl","flj","fr","fn","fj","g","gn","gj","h",
+                        "hj","hl","hr","hv","j","k","kl","kr","kn","kj","l","lj","m","mj","n","nj","p","pl","pr","pj","r",
+                        "rj","s","sj","sl","sn","sp","st","str","skr","skj","sþ","sð","t","tj","v","vl","vr","vj","þ","þl","þr",
+
+                        "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+                        "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+                        "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+                        "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+                        "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+
+                        "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",
+                        "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",
+                        "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",
+                        "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",
+                },
+                new String[]{"bd","bf","bg","bk","bl","bp","br","bt","bv","bm","bn","bð","bj",
+                        "db","df","dg","dk","dl","dp","dr","dt","dv","dm","dn","dð","dþ","dj","ndk","ndb","ndg","ndl","nds","nds",
+                        "ðl","ðr","ðk","ðj","ðg","ðd","ðb","ðp","ðs",
+                        "fb","fd","fg","fk","fl","fp","fr","fs","ft","fv","fm","fn","fð","fj",
+                        "gb","gd","gf","gk","gl","gp","gr","gt","gv","gm","gn","gð","gj",
+                        "h","hj","hl","hr","hv",
+                        "kb","kd","kf","kp","kv","km","kn","kð","kl","kr","nkj","nkr","nkl",
+                        "lbr","ldr","lfr","lg","lgr","lj","lkr","ln","ls","ltr","lv","lð","lðr","lþ",
+                        "mb","md","mk","mg","ml","mp","mr","ms","mt","mv","mð","mþ","mj",
+                        "nb","nl","np","nr","nv","nð","nþ","nj",
+                        "ngl","ngb","ngd","ngk","ngp","ngt","ngv","ngm","ngð","ngþ","ngr",
+                        "mbd","mbg","mbs","mbt","ldg","ldn","ldk","lds","rðn","rðl","gðs","gðr",
+                        "pb","pd","pg","pk","pl","pr","ps","psj","pð","pj",
+                        "rl","rbr","rdr","rg","rgr","rkr","rpr","rs","rts","rtr","rv","rj",
+                        "sb","sbr","sd","sdr","sf","sfj","sg","skr","skl","sm","sn","str","sv","sð","sþ","sj",
+                        "tr","tn","tb","td","tg","tv","tf","tj","tk","tm","tp",},
+                new String[]{"kk","ll","nn","pp","tt","kk","ll","nn","pp","tt",
+                        "bs","ds","gs","x","rn","gn","gt","gs","ks","kt","nt","nd","nk","nt","ng","ngs","ns",
+                        "ps","pk","pt","pts","lb","ld","lf","lk","lm","lp","lps","lt",
+                        "rn","rb","rd","rk","rp","rt","rm","rð","rþ","sk","sp","st","ts",
+                        "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
+                        "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
+                        "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
+
+                        "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",
+                        "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",
+                        "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",
+                },
+                new String[]{"etta","eþa","uinn","ing","ard","eign","ef","efs","eg","ir","ir","ir","ir","ír","ír","ar","ar",
+                        "ar","ár","or","or","ór","ör","on","on","ón","onn","unn","ung","ut","ett","att","ot"},
+                new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 5, 4, 3, 1}, 0.25, 0.5, 0.0, 0.08, genericSanityChecks, true);
+    }
     /**
      * Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules. Not
      * to be confused with the language(s) of Norway, where the Norwegian languages are called norsk, and are further
@@ -1291,56 +1390,28 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Leyrk tjör stomri kna snó æd ðrépdápá, prygso?
      */
-    public static final FakeLanguageGen NORSE = new FakeLanguageGen(
-            new String[]{"a","a","a","á","á","au","e","e","e","é","é","ei","ey","i","i","í","í","y","y","ý","ý",
-                    "o","o","o","ó","ó","u","u","u","ú","ú","æ","æ","æ","ö","ö",},
-            new String[]{},
-            new String[]{"b","bl","br","bj","d","dr","dj","ð","ðl","ðr","f","fl","flj","fr","fn","fj","g","gn","gj","h",
-                    "hj","hl","hr","hv","j","k","kl","kr","kn","kj","l","lj","m","mj","n","nj","p","pl","pr","pj","r",
-                    "rj","s","sj","sl","sn","sp","st","str","skr","skj","sþ","sð","t","tj","v","vl","vr","vj","þ","þl","þr",
+    public static final FakeLanguageGen NORSE = norse().register();
 
-                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
-                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
-                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
-                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
-                    "d","f","fl","g","gl","gr","k","h","hr","n","k","l","m","mj","n","r","s","st","t","þ","ð",
+    private static FakeLanguageGen nahuatl(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "i", "o", "o", "o", "e", "e", "eo", "oa", "ea"},
+                new String[]{},
+                new String[]{"ch", "c", "h", "m", "l", "n", "p", "t", "tl", "tz", "x", "y", "z", "hu", "cu",
+                        "l", "l", "l", "p", "p", "t", "t", "t", "t", "t", "tl", "tl", "tz", "z", "x", "hu"},
+                new String[]{"zp", "ztl", "zc", "zt", "zl", "ct", "cl", "pl", "mt", "mc", "mch", "cz", "tc", "lc",
+                        "hu", "hu", "hu", "cu"},
+                new String[]{
+                        "ch", "c", "h", "m", "l", "n", "p", "t", "tl", "tz", "x", "y", "z",
+                        "l", "l", "l", "l", "p", "t", "t", "t", "tl", "tl", "tz", "tz", "z", "x"
+                },
+                new String[]{"otl", "eotl", "ili", "itl", "atl", "atli", "oca", "itli", "oatl", "al", "ico", "acual",
+                        "ote", "ope", "oli", "ili", "acan", "ato", "atotl", "ache", "oc", "aloc", "ax", "itziz", "iz"
+                },
+                new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 4, 5, 4, 3, 1}, 0.3, 0.2, 0.0, 0.3, genericSanityChecks, true)
+                .addModifiers(new Modifier("c([ie])", "qu$1"),
+                        new Modifier("z([ie])", "c$1"));
+    }
 
-                    "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",
-                    "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",
-                    "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",
-                    "d","d","f","f","fl","g","g","g","gl","gr","k","h","hr","n","k","kl","l","n","r","r","s","st","t","t",
-            },
-            new String[]{"bd","bf","bg","bk","bl","bp","br","bt","bv","bm","bn","bð","bj",
-                    "db","df","dg","dk","dl","dp","dr","dt","dv","dm","dn","dð","dþ","dj","ndk","ndb","ndg","ndl","nds","nds",
-                    "ðl","ðr","ðk","ðj","ðg","ðd","ðb","ðp","ðs",
-                    "fb","fd","fg","fk","fl","fp","fr","fs","ft","fv","fm","fn","fð","fj",
-                    "gb","gd","gf","gk","gl","gp","gr","gt","gv","gm","gn","gð","gj",
-                    "h","hj","hl","hr","hv",
-                    "kb","kd","kf","kp","kv","km","kn","kð","kl","kr","nkj","nkr","nkl",
-                    "lbr","ldr","lfr","lg","lgr","lj","lkr","ln","ls","ltr","lv","lð","lðr","lþ",
-                    "mb","md","mk","mg","ml","mp","mr","ms","mt","mv","mð","mþ","mj",
-                    "nb","nl","np","nr","nv","nð","nþ","nj",
-                    "ngl","ngb","ngd","ngk","ngp","ngt","ngv","ngm","ngð","ngþ","ngr",
-                    "mbd","mbg","mbs","mbt","ldg","ldn","ldk","lds","rðn","rðl","gðs","gðr",
-                    "pb","pd","pg","pk","pl","pr","ps","psj","pð","pj",
-                    "rl","rbr","rdr","rg","rgr","rkr","rpr","rs","rts","rtr","rv","rj",
-                    "sb","sbr","sd","sdr","sf","sfj","sg","skr","skl","sm","sn","str","sv","sð","sþ","sj",
-                    "tr","tn","tb","td","tg","tv","tf","tj","tk","tm","tp",},
-            new String[]{"kk","ll","nn","pp","tt","kk","ll","nn","pp","tt",
-                    "bs","ds","gs","x","rn","gn","gt","gs","ks","kt","nt","nd","nk","nt","ng","ngs","ns",
-                    "ps","pk","pt","pts","lb","ld","lf","lk","lm","lp","lps","lt",
-                    "rn","rb","rd","rk","rp","rt","rm","rð","rþ","sk","sp","st","ts",
-                    "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
-                    "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
-                    "b","d","ð","f","g","gn","h","k","nk","l","m","n","ng","p","r","s","sp","st","sþ","sð","t","v","þ",
-
-                    "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",
-                    "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",
-                    "b","b","b","d","d","d","f","f","f","g","g","k","k","nk","l","n","ng","p","p","r","r","r","s","s","st","t","t",
-            },
-            new String[]{"etta","eþa","uinn","ing","ard","eign","ef","efs","eg","ir","ir","ir","ir","ír","ír","ar","ar",
-                    "ar","ár","or","or","ór","ör","on","on","ón","onn","unn","ung","ut","ett","att","ot"},
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 5, 4, 3, 1}, 0.25, 0.5, 0.0, 0.08, genericSanityChecks, true).register();
     /**
      * Imitation text from an approximation of the language spoken by the Aztec people and also over a million
      * contemporary people in parts of Mexico. This is may be hard to pronounce, since it uses "tl" as a normal
@@ -1348,23 +1419,27 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Olcoletl latl palitz ach; xatatli tzotloca amtitl, xatloatzoatl tealitozaztitli otamtax?
      */
-    public static final FakeLanguageGen NAHUATL = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "i", "o", "o", "o", "e", "e", "eo", "oa", "ea"},
-            new String[]{},
-            new String[]{"ch", "c", "h", "m", "l", "n", "p", "t", "tl", "tz", "x", "y", "z", "hu", "cu",
-                    "l", "l", "l", "p", "p", "t", "t", "t", "t", "t", "tl", "tl", "tz", "z", "x", "hu"},
-            new String[]{"zp", "ztl", "zc", "zt", "zl", "ct", "cl", "pl", "mt", "mc", "mch", "cz", "tc", "lc",
-                    "hu", "hu", "hu", "cu"},
-            new String[]{
-                    "ch", "c", "h", "m", "l", "n", "p", "t", "tl", "tz", "x", "y", "z",
-                    "l", "l", "l", "l", "p", "t", "t", "t", "tl", "tl", "tz", "tz", "z", "x"
-            },
-            new String[]{"otl", "eotl", "ili", "itl", "atl", "atli", "oca", "itli", "oatl", "al", "ico", "acual",
-                    "ote", "ope", "oli", "ili", "acan", "ato", "atotl", "ache", "oc", "aloc", "ax", "itziz", "iz"
-            },
-            new String[]{}, new int[]{1, 2, 3, 4, 5, 6}, new double[]{3, 4, 5, 4, 3, 1}, 0.3, 0.2, 0.0, 0.3, genericSanityChecks, true)
-            .addModifiers(new Modifier("c([ie])", "qu$1"),
-                    new Modifier("z([ie])", "c$1")).register();
+    public static final FakeLanguageGen NAHUATL = nahuatl().register();
+
+    private static FakeLanguageGen mongolian(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "a", "a", "aa", "aa", "e", "i", "i", "i", "i", "i", "i", "i", "i", "ii",
+                        "o", "o", "o", "o", "oo", "u", "u", "u", "u", "u", "u", "u", "u", "uu", "uu", "ai", "ai"},
+                new String[]{},
+                new String[]{"g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "j", "j", "j", "j",
+                        "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "y", "y"},
+                new String[]{},
+                new String[]{"g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "gh", "j", "j", "j",
+                        "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "g", "n",
+                        "g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "gh", "j", "j", "j", "n",
+                        "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "y", "y",
+                        "ng", "ng", "ng", "ngh", "ngh", "lj", "gch", "sd", "rl", "bl", "sd", "st", "md", "mg", "gd", "gd",
+                        "sv", "rg", "rg", "mr", "tn", "tg", "ds", "dh", "dm", "gts", "rh", "lb", "gr", "gy", "rgh"},
+                new String[]{"ei", "ei", "ei", "uulj", "iig", "is", "is", "an", "aan", "iis", "alai", "ai", "aj", "ali"
+                },
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 9, 3, 1}, 0.3, 0.2, 0.0, 0.07, null, true);
+    }
+
     /**
      * Imitation text from an approximation of one of the languages spoken in the 13th-century Mongol Empire. Can be
      * hard to pronounce. This is closest to Middle Mongolian, and is probably not the best way to approximate modern
@@ -1373,22 +1448,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Ghamgarg zilijuub lirgh arghar zunghichuh naboogh.
      */
-    public static final FakeLanguageGen MONGOLIAN = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a", "a", "a", "a", "aa", "aa", "e", "i", "i", "i", "i", "i", "i", "i", "i", "ii",
-                    "o", "o", "o", "o", "oo", "u", "u", "u", "u", "u", "u", "u", "u", "uu", "uu", "ai", "ai"},
-            new String[]{},
-            new String[]{"g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "j", "j", "j", "j",
-                    "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "y", "y"},
-            new String[]{},
-            new String[]{"g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "gh", "j", "j", "j",
-                    "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "g", "n",
-                    "g", "m", "n", "g", "m", "n", "g", "m", "n", "n", "n", "ch", "gh", "ch", "gh", "gh", "gh", "j", "j", "j", "n",
-                    "s", "s", "s", "t", "ts", "kh", "r", "r", "l", "h", "h", "h", "h", "h", "b", "b", "b", "b", "z", "z", "y", "y",
-                    "ng", "ng", "ng", "ngh", "ngh", "lj", "gch", "sd", "rl", "bl", "sd", "st", "md", "mg", "gd", "gd",
-                    "sv", "rg", "rg", "mr", "tn", "tg", "ds", "dh", "dm", "gts", "rh", "lb", "gr", "gy", "rgh"},
-            new String[]{"ei", "ei", "ei", "uulj", "iig", "is", "is", "an", "aan", "iis", "alai", "ai", "aj", "ali"
-            },
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 9, 3, 1}, 0.3, 0.2, 0.0, 0.07, null, true).register();
+    public static final FakeLanguageGen MONGOLIAN = mongolian().register();
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
@@ -1409,6 +1469,49 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen FANCY_FANTASY_NAME = FANTASY_NAME.addAccents(0.47, 0.07).register();
 
+    private static FakeLanguageGen goblin(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a",
+                        "e", "e",
+                        "i", "i", "i",
+                        "o", "o", "o", "o",
+                        "u", "u", "u", "u", "u", "u", "u",
+                },
+                new String[]{},
+                new String[]{"b", "g", "d", "m", "h", "n", "r", "v", "sh", "p", "w", "y", "f", "br", "dr", "gr", "pr", "fr",
+                        "br", "dr", "gr", "pr", "fr", "bl", "dw", "gl", "gw", "pl", "fl", "hr",
+                        "b", "g", "d", "m", "h", "n", "r", "b", "g", "d", "m", "h", "n", "r",
+                        "b", "g", "d", "m", "r", "b", "g", "d", "r",
+                },
+                new String[]{
+                        "br", "gr", "dr", "pr", "fr", "rb", "rd", "rg", "rp", "rf",
+                        "br", "gr", "dr", "rb", "rd", "rg",
+                        "mb", "mg", "md", "mp", "mf", "bm", "gm", "dm", "pm", "fm",
+                        "mb", "mg", "md", "bm", "gm", "dm",
+                        "bl", "gl", "dw", "pl", "fl", "lb", "ld", "lg", "lp", "lf",
+                        "bl", "gl", "dw", "lb", "ld", "lg",
+                        "nb", "ng", "nd", "np", "nf", "bn", "gn", "dn", "pn", "fn",
+                        "nb", "ng", "nd", "bn", "gn", "dn",
+                        "my", "gy", "by", "py", "mw", "gw", "bw", "pw",
+                        "bg", "gb", "bd", "db", "bf", "fb",
+                        "gd", "dg", "gp", "pg", "gf", "fg",
+                        "dp", "pd", "df", "fd",
+                        "pf", "fp",
+                        "bg", "gb", "bd", "db", "gd", "dg",
+                        "bg", "gb", "bd", "db", "gd", "dg",
+                        "bg", "gb", "bd", "db", "gd", "dg",
+                        "bg", "gb", "bd", "db", "gd", "dg",
+                        "bg", "gb", "bd", "db", "gd", "dg",
+                },
+                new String[]{
+                        "b", "g", "d", "m", "n", "r", "sh", "p", "f",
+                        "b", "g", "d", "m", "n", "r", "b", "g", "d", "m", "n", "r", "sh",
+                        "b", "g", "d", "m", "r", "b", "g", "d", "r",
+                        "rb", "rd", "rg", "rp", "rf", "lb", "ld", "lg", "lp", "lf",
+                },
+                new String[]{},
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{3, 7, 5, 1}, 0.1, 0.15, 0.0, 0.0, genericSanityChecks, true);
+    }
     /**
      * Fantasy language that might be suitable for stealthy humanoids, such as goblins, or as a secret language used
      * by humans who want to avoid notice. Uses no "hard" sounds like "t" and "k", but also tries to avoid the flowing
@@ -1417,47 +1520,41 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Gwabdip dwupdagorg moglab yurufrub.
      */
-    public static final FakeLanguageGen GOBLIN = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a",
-                    "e", "e",
-                    "i", "i", "i",
-                    "o", "o", "o", "o",
-                    "u", "u", "u", "u", "u", "u", "u",
-            },
-            new String[]{},
-            new String[]{"b", "g", "d", "m", "h", "n", "r", "v", "sh", "p", "w", "y", "f", "br", "dr", "gr", "pr", "fr",
-                    "br", "dr", "gr", "pr", "fr", "bl", "dw", "gl", "gw", "pl", "fl", "hr",
-                    "b", "g", "d", "m", "h", "n", "r", "b", "g", "d", "m", "h", "n", "r",
-                    "b", "g", "d", "m", "r", "b", "g", "d", "r",
-            },
-            new String[]{
-                    "br", "gr", "dr", "pr", "fr", "rb", "rd", "rg", "rp", "rf",
-                    "br", "gr", "dr", "rb", "rd", "rg",
-                    "mb", "mg", "md", "mp", "mf", "bm", "gm", "dm", "pm", "fm",
-                    "mb", "mg", "md", "bm", "gm", "dm",
-                    "bl", "gl", "dw", "pl", "fl", "lb", "ld", "lg", "lp", "lf",
-                    "bl", "gl", "dw", "lb", "ld", "lg",
-                    "nb", "ng", "nd", "np", "nf", "bn", "gn", "dn", "pn", "fn",
-                    "nb", "ng", "nd", "bn", "gn", "dn",
-                    "my", "gy", "by", "py", "mw", "gw", "bw", "pw",
-                    "bg", "gb", "bd", "db", "bf", "fb",
-                    "gd", "dg", "gp", "pg", "gf", "fg",
-                    "dp", "pd", "df", "fd",
-                    "pf", "fp",
-                    "bg", "gb", "bd", "db", "gd", "dg",
-                    "bg", "gb", "bd", "db", "gd", "dg",
-                    "bg", "gb", "bd", "db", "gd", "dg",
-                    "bg", "gb", "bd", "db", "gd", "dg",
-                    "bg", "gb", "bd", "db", "gd", "dg",
-            },
-            new String[]{
-                    "b", "g", "d", "m", "n", "r", "sh", "p", "f",
-                    "b", "g", "d", "m", "n", "r", "b", "g", "d", "m", "n", "r", "sh",
-                    "b", "g", "d", "m", "r", "b", "g", "d", "r",
-                    "rb", "rd", "rg", "rp", "rf", "lb", "ld", "lg", "lp", "lf",
-            },
-            new String[]{},
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{3, 7, 5, 1}, 0.1, 0.15, 0.0, 0.0, genericSanityChecks, true).register();
+    public static final FakeLanguageGen GOBLIN = goblin().register();
+
+    private static FakeLanguageGen elf(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "ai", "ai", "ai", "ea", "ea", "ea", "ia", "ae"
+                },
+                new String[]{
+                        "ai", "ai", "ae", "ea", "ia", "ie",
+                        "â", "â", "ai", "âi", "aî", "aï", "î", "î", "ï", "ï", "îe", "iê", "ïe", "iê",
+                        "e", "ë", "ë", "ëa", "ê", "êa", "eâ", "ei", "eî", "o", "ô",
+                        "a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
+                        "ai", "ai", "ai", "ai", "ai", "ei", "ei", "ei", "ea", "ea", "ea", "ea",
+                        "ie", "ie", "ie", "ie", "ie", "ia", "ia", "ia", "ia"
+                },
+                new String[]{"l", "r", "n", "m", "th", "v", "s", "sh", "z", "f", "p", "h", "y", "c",
+                        "l", "r", "n", "m", "th", "v", "f", "y",
+                        "l", "r", "n", "m", "th", "v", "f",
+                        "l", "r", "n", "th", "l", "r", "n", "th",
+                        "l", "r", "n", "l", "r", "n", "l", "r", "n",
+                        "pl", "fy", "ly", "cl", "fr", "pr", "qu",
+                },
+                new String[]{"rm", "ln", "lv", "lth", "ml", "mv", "nv", "vr", "rv", "ny", "mn", "nm", "ns", "nth"},
+                new String[]{
+                        "l", "r", "n", "m", "th", "s",
+                        "l", "r", "n", "th", "l", "r", "n", "th",
+                        "l", "r", "n", "l", "r", "n", "l", "r", "n",
+                        "r", "n", "r", "n", "r", "n", "n", "n", "n", "n"
+                },
+                new String[]{},
+                new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 6, 6, 3, 1}, 0.4, 0.3, 0.0, 0.0, genericSanityChecks, true);
+    }
 
     /**
      * Fantasy language that tries to imitate the various languages spoken by elves in J.R.R. Tolkien's works, using
@@ -1468,37 +1565,61 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Il ilthiê arel enya; meâlelail theasor arôreisa.
      */
-    public static final FakeLanguageGen ELF = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "ai", "ai", "ai", "ea", "ea", "ea", "ia", "ae"
-            },
-            new String[]{
-                    "ai", "ai", "ae", "ea", "ia", "ie",
-                    "â", "â", "ai", "âi", "aî", "aï", "î", "î", "ï", "ï", "îe", "iê", "ïe", "iê",
-                    "e", "ë", "ë", "ëa", "ê", "êa", "eâ", "ei", "eî", "o", "ô",
-                    "a", "a", "a", "e", "e", "e", "i", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "a", "a", "e", "e", "i", "o", "a", "a", "a", "e", "e", "e", "i", "i", "o",
-                    "ai", "ai", "ai", "ai", "ai", "ei", "ei", "ei", "ea", "ea", "ea", "ea",
-                    "ie", "ie", "ie", "ie", "ie", "ia", "ia", "ia", "ia"
-            },
-            new String[]{"l", "r", "n", "m", "th", "v", "s", "sh", "z", "f", "p", "h", "y", "c",
-                    "l", "r", "n", "m", "th", "v", "f", "y",
-                    "l", "r", "n", "m", "th", "v", "f",
-                    "l", "r", "n", "th", "l", "r", "n", "th",
-                    "l", "r", "n", "l", "r", "n", "l", "r", "n",
-                    "pl", "fy", "ly", "cl", "fr", "pr", "qu",
-            },
-            new String[]{"rm", "ln", "lv", "lth", "ml", "mv", "nv", "vr", "rv", "ny", "mn", "nm", "ns", "nth"},
-            new String[]{
-                    "l", "r", "n", "m", "th", "s",
-                    "l", "r", "n", "th", "l", "r", "n", "th",
-                    "l", "r", "n", "l", "r", "n", "l", "r", "n",
-                    "r", "n", "r", "n", "r", "n", "n", "n", "n", "n"
-            },
-            new String[]{},
-            new String[]{}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 6, 6, 3, 1}, 0.4, 0.3, 0.0, 0.0, genericSanityChecks, true).register();
+    public static final FakeLanguageGen ELF = elf().register();
+
+    private static FakeLanguageGen demonic(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a",
+                        "e",
+                        "i", "i",
+                        "o", "o", "o", "o", "o",
+                        "u", "u", "u", "u", "u",
+                },
+                new String[]{},
+                new String[]{
+                        "b", "bh", "d", "dh", "t", "tl", "ts", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r", "v", "y",
+                        "br", "bhr", "dr", "dhr", "tr", "tsr", "kr", "khr", "gr", "ghr", "fr", "shr", "vr",
+                        "bl", "bhl", "tsl", "kl", "chl", "khl", "gl", "ghl", "fl", "sl", "zl", "vl",
+                        "dz", "chf", "sf", "shf", "zv", "st", "sk",
+                        "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
+                        "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
+                        "x", "x", "x", "gh", "gh", "ghr",
+                        "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
+                        "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
+                        "x", "x", "x", "gh", "gh", "ghr",
+                        "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
+                        "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
+                        "x", "x", "x", "gh", "gh", "ghr",
+                },
+                new String[]{},
+                new String[]{
+                        "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
+                        "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
+                        "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
+                        "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
+                        "rb", "rbs", "rbh", "rd", "rds", "rdh", "rt", "rts", "rk", "rks", "rch", "rkh", "rg", "rsh", "rv", "rz",
+                        "lt", "lts", "lk", "lch", "lkh", "lg", "ls", "lz", "lx",
+                        "bs", "ds", "ts", "lts", "ks", "khs", "gs", "fs", "rs", "rx",
+                        "bs", "ds", "ts", "lts", "ks", "khs", "gs", "fs", "rs", "rx",
+                        "rbs", "rds", "rts", "rks", "rkhs", "rgs", "rfs", "rs", "rx",
+                        "lbs", "lds", "lts", "lks", "lkhs", "lgs", "lfs",
+                        "rdz", "rvz", "gz", "rgz", "vd", "kt",
+                        "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
+                        "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
+                        "x", "x", "x", "gh", "gh", "gh", "rgh",
+                        "ts", "ts", "ks", "ks", "khs",
+                        "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
+                        "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
+                        "x", "x", "x", "gh", "gh", "gh", "rgh",
+                        "ts", "ts", "ks", "ks", "khs",
+                        "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
+                        "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
+                        "x", "x", "x", "gh", "gh", "gh", "rgh",
+                        "ts", "ts", "ks", "ks", "khs",
+                },
+                new String[]{},
+                new String[]{"'"}, new int[]{1, 2, 3}, new double[]{6, 7, 3}, 0.05, 0.08, 0.11, 0.0, null, true);
+    }
     /**
      * Fantasy language that might be suitable for a language spoken by demons, aggressive warriors, or people who seek
      * to emulate or worship similar groups. The tendency here is for DEMONIC to be the language used by creatures that
@@ -1510,57 +1631,34 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Vrirvoks xatughat ogz; olds xu'oz xorgogh!
      */
-    public static final FakeLanguageGen DEMONIC = new FakeLanguageGen(
-            new String[]{"a", "a", "a", "a",
-                    "e",
-                    "i", "i",
-                    "o", "o", "o", "o", "o",
-                    "u", "u", "u", "u", "u",
-            },
-            new String[]{},
-            new String[]{
-                    "b", "bh", "d", "dh", "t", "tl", "ts", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r", "v", "y",
-                    "br", "bhr", "dr", "dhr", "tr", "tsr", "kr", "khr", "gr", "ghr", "fr", "shr", "vr",
-                    "bl", "bhl", "tsl", "kl", "chl", "khl", "gl", "ghl", "fl", "sl", "zl", "vl",
-                    "dz", "chf", "sf", "shf", "zv", "st", "sk",
-                    "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
-                    "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
-                    "x", "x", "x", "gh", "gh", "ghr",
-                    "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
-                    "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
-                    "x", "x", "x", "gh", "gh", "ghr",
-                    "t", "t", "t", "ts", "ts", "k", "k", "k", "kh", "kh", "kh", "kh", "khr", "kl", "kl", "kr", "kr",
-                    "z", "z", "z", "v", "v", "v", "zv", "zv", "vr", "vr", "vl", "vl", "dz", "sk", "sk", "sh", "shr",
-                    "x", "x", "x", "gh", "gh", "ghr",
-            },
-            new String[]{},
-            new String[]{
-                    "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
-                    "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
-                    "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
-                    "b", "bh", "d", "dh", "t", "lt", "k", "ch", "kh", "g", "gh", "f", "x", "s", "sh", "z", "r",
-                    "rb", "rbs", "rbh", "rd", "rds", "rdh", "rt", "rts", "rk", "rks", "rch", "rkh", "rg", "rsh", "rv", "rz",
-                    "lt", "lts", "lk", "lch", "lkh", "lg", "ls", "lz", "lx",
-                    "bs", "ds", "ts", "lts", "ks", "khs", "gs", "fs", "rs", "rx",
-                    "bs", "ds", "ts", "lts", "ks", "khs", "gs", "fs", "rs", "rx",
-                    "rbs", "rds", "rts", "rks", "rkhs", "rgs", "rfs", "rs", "rx",
-                    "lbs", "lds", "lts", "lks", "lkhs", "lgs", "lfs",
-                    "rdz", "rvz", "gz", "rgz", "vd", "kt",
-                    "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
-                    "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
-                    "x", "x", "x", "gh", "gh", "gh", "rgh",
-                    "ts", "ts", "ks", "ks", "khs",
-                    "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
-                    "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
-                    "x", "x", "x", "gh", "gh", "gh", "rgh",
-                    "ts", "ts", "ks", "ks", "khs",
-                    "t", "t", "t", "rt", "lt", "k", "k", "k", "k", "k", "kh", "kh", "kh", "kh", "kh", "rkh", "lk", "rk", "rk",
-                    "z", "z", "z", "z", "v", "rv", "rv", "dz", "ks", "sk", "sh",
-                    "x", "x", "x", "gh", "gh", "gh", "rgh",
-                    "ts", "ts", "ks", "ks", "khs",
-            },
-            new String[]{},
-            new String[]{"'"}, new int[]{1, 2, 3}, new double[]{6, 7, 3}, 0.05, 0.08, 0.11, 0.0, null, true).register();
+    public static final FakeLanguageGen DEMONIC = demonic().register();
+
+    private static FakeLanguageGen infernal(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "à", "á", "â", "ä",
+                        "e", "e", "e", "e", "e", "e", "e", "e", "è", "é", "ê", "ë",
+                        "i", "i", "i", "i", "ì", "í", "î", "ï",
+                        "o", "o", "ò", "ó", "ô", "ö",
+                        "u", "u", "ù", "ú", "û", "ü",
+                },
+                new String[]{"æ", "ai", "aî", "i", "i", "î", "ï", "ia", "iâ", "ie", "iê", "eu", "eû", "u", "u", "û", "ü"},
+                new String[]{"b", "br", "d", "dr", "h", "m", "z", "k", "l", "ph", "t", "n", "y", "th", "s", "sh",
+                        "m", "m", "m", "z", "z", "l", "l", "l", "k", "k", "b", "d", "h", "h", "y", "th", "th", "s", "sh",
+                },
+                new String[]{
+                        "mm", "mm", "mm", "lb", "dd", "dd", "dd", "ddr", "bb", "bb", "bb", "bbr", "lz", "sm", "zr",
+                        "thsh", "lkh", "shm", "mh", "mh",
+                },
+                new String[]{
+                        "b", "d", "h", "m", "n", "z", "k", "l", "ph", "t", "th", "s", "sh", "kh",
+                        "h", "m", "n", "z", "l", "ph", "t", "th", "s",
+                        "h", "h", "h", "m", "m", "n", "n", "n", "n", "n", "l", "l", "l", "l", "l", "t", "t", "t",
+                        "th", "th", "s", "s", "z", "z", "z", "z",
+                },
+                new String[]{"ael", "im", "on", "oth", "et", "eus", "iel", "an", "is", "ub", "ez", "ath", "esh", "ekh", "uth", "ut"},
+                new String[]{"'"}, new int[]{1, 2, 3, 4}, new double[]{3, 5, 9, 4}, 0.75, 0.35, 0.17, 0.07, genericSanityChecks, true);
+    }
     /**
      * Fantasy language that might be suitable for a language spoken by fiends, users of witchcraft, or people who seek
      * to emulate or worship similar groups. The tendency here is for DEMONIC to be the language used by creatures that
@@ -1576,31 +1674,53 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Zézîzûth eke'iez áhìphon; úhiah îbbëphéh haîtemheû esmez...
      */
-    public static final FakeLanguageGen INFERNAL = new FakeLanguageGen(
-            new String[]{
-                    "a", "a", "a", "à", "á", "â", "ä",
-                    "e", "e", "e", "e", "e", "e", "e", "e", "è", "é", "ê", "ë",
-                    "i", "i", "i", "i", "ì", "í", "î", "ï",
-                    "o", "o", "ò", "ó", "ô", "ö",
-                    "u", "u", "ù", "ú", "û", "ü",
-            },
-            new String[]{"æ", "ai", "aî", "i", "i", "î", "ï", "ia", "iâ", "ie", "iê", "eu", "eû", "u", "u", "û", "ü"},
-            new String[]{"b", "br", "d", "dr", "h", "m", "z", "k", "l", "ph", "t", "n", "y", "th", "s", "sh",
-                    "m", "m", "m", "z", "z", "l", "l", "l", "k", "k", "b", "d", "h", "h", "y", "th", "th", "s", "sh",
-            },
-            new String[]{
-                    "mm", "mm", "mm", "lb", "dd", "dd", "dd", "ddr", "bb", "bb", "bb", "bbr", "lz", "sm", "zr",
-                    "thsh", "lkh", "shm", "mh", "mh",
-            },
-            new String[]{
-                    "b", "d", "h", "m", "n", "z", "k", "l", "ph", "t", "th", "s", "sh", "kh",
-                    "h", "m", "n", "z", "l", "ph", "t", "th", "s",
-                    "h", "h", "h", "m", "m", "n", "n", "n", "n", "n", "l", "l", "l", "l", "l", "t", "t", "t",
-                    "th", "th", "s", "s", "z", "z", "z", "z",
-            },
-            new String[]{"ael", "im", "on", "oth", "et", "eus", "iel", "an", "is", "ub", "ez", "ath", "esh", "ekh", "uth", "ut"},
-            new String[]{"'"}, new int[]{1, 2, 3, 4}, new double[]{3, 5, 9, 4}, 0.75, 0.35, 0.17, 0.07, genericSanityChecks, true).register();
+    public static final FakeLanguageGen INFERNAL = infernal().register();
 
+    private static FakeLanguageGen simplish(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                        "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                        "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
+                        "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
+                        "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
+                        "ai", "ai", "ea", "io", "oi", "ia", "io", "eo"
+                },
+                new String[]{"u", "u", "oa"},
+                new String[]{
+                        "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gl", "gr", "h", "j", "k", "l", "m", "n",
+                        "p", "pl", "pr", "r", "s", "sh", "sk", "st", "sp", "sl", "sm", "sn", "t", "tr", "th", "v", "w", "y", "z",
+                        "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gr", "h", "j", "k", "l", "m", "n",
+                        "p", "pl", "pr", "r", "s", "sh", "st", "sp", "sl", "t", "tr", "th", "w", "y",
+                        "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+                        "p", "r", "s", "sh", "t", "th",
+                        "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+                        "p", "r", "s", "sh", "t", "th",
+                        "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+                        "p", "r", "s", "sh", "t", "th",
+                        "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
+                        "p", "r", "s", "sh", "t", "th",
+                        "b", "d", "f", "g", "h", "l", "m", "n",
+                        "p", "r", "s", "sh", "t", "th",
+                        "b", "d", "f", "g", "h", "l", "m", "n",
+                        "p", "r", "s", "sh", "t", "th",
+                        "r", "s", "t", "l", "n",
+                },
+                new String[]{"ch", "j", "w", "y", "v", "w", "y", "w", "y", "ch",
+                        "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                },
+                new String[]{"bs", "lt", "mb", "ng", "ng", "nt", "ns", "ps", "mp", "rt", "rg", "sk", "rs", "ts", "lk", "ct",
+                        "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t", "th", "z",
+                        "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                        "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                        "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                        "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                        "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                        "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
+                },
+                new String[]{},
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{7, 18, 6, 1}, 0.26, 0.12, 0.0, 0.0, genericSanityChecks, true);
+    }
     /**
      * English-like language that omits complex spelling and doesn't include any of the uncommon word endings of English
      * like "ought" or "ation." A good choice when you want something that doesn't use any non-US-keyboard letters,
@@ -1610,49 +1730,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Fledan pranam, simig bag chaimer, drefar, woshash is sasik.
      */
-    public static final FakeLanguageGen SIMPLISH = new FakeLanguageGen(
-            new String[]{
-                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
-                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
-                    "a", "a", "a", "a", "o", "o", "o", "e", "e", "e", "e", "e", "i", "i", "i", "i", "u",
-                    "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
-                    "a", "a", "a", "o", "o", "e", "e", "e", "i", "i", "i", "u",
-                    "ai", "ai", "ea", "io", "oi", "ia", "io", "eo"
-            },
-            new String[]{"u", "u", "oa"},
-            new String[]{
-                    "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gl", "gr", "h", "j", "k", "l", "m", "n",
-                    "p", "pl", "pr", "r", "s", "sh", "sk", "st", "sp", "sl", "sm", "sn", "t", "tr", "th", "v", "w", "y", "z",
-                    "b", "bl", "br", "c", "cl", "cr", "ch", "d", "dr", "f", "fl", "fr", "g", "gr", "h", "j", "k", "l", "m", "n",
-                    "p", "pl", "pr", "r", "s", "sh", "st", "sp", "sl", "t", "tr", "th", "w", "y",
-                    "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
-                    "p", "r", "s", "sh", "t", "th",
-                    "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
-                    "p", "r", "s", "sh", "t", "th",
-                    "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
-                    "p", "r", "s", "sh", "t", "th",
-                    "b", "c", "ch", "d", "f", "g", "h", "j", "k", "l", "m", "n",
-                    "p", "r", "s", "sh", "t", "th",
-                    "b", "d", "f", "g", "h", "l", "m", "n",
-                    "p", "r", "s", "sh", "t", "th",
-                    "b", "d", "f", "g", "h", "l", "m", "n",
-                    "p", "r", "s", "sh", "t", "th",
-                    "r", "s", "t", "l", "n",
-            },
-            new String[]{"ch", "j", "w", "y", "v", "w", "y", "w", "y", "ch",
-                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
-            },
-            new String[]{"bs", "lt", "mb", "ng", "ng", "nt", "ns", "ps", "mp", "rt", "rg", "sk", "rs", "ts", "lk", "ct",
-                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t", "th", "z",
-                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
-                    "b", "c", "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
-                    "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
-                    "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
-                    "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
-                    "d", "f", "g", "k", "l", "m", "n", "p", "r", "s", "sh", "t",
-            },
-            new String[]{},
-            new String[]{}, new int[]{1, 2, 3, 4}, new double[]{7, 18, 6, 1}, 0.26, 0.12, 0.0, 0.0, genericSanityChecks, true).register();
+    public static final FakeLanguageGen SIMPLISH = simplish().register();
 
     /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
