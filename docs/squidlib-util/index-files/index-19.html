@@ -199,11 +199,6 @@
 <dd>
 <div class="block">Gets a seemingly-random double from two inputs as longs.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#randomDoubleCurved-int-">randomDoubleCurved(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
-<dd>
-<div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
- strong central bias (around 0.0).</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#randomElement-squidpony.squidmath.RNG-">randomElement(RNG)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/BundleBiMap.html#randomElement-squidpony.squidmath.RNG-">randomElement(RNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BundleBiMap.html" title="class in squidpony.squidmath">BundleBiMap</a></dt>
@@ -252,6 +247,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ZapRNG.html#randomFloat-long-long-">randomFloat(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath">ZapRNG</a></dt>
 <dd>
 <div class="block">Gets a seemingly-random float from two inputs as longs.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#randomFloatCurved-int-">randomFloatCurved(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
+ strong central bias (around 0.0).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonUtility.html#randomFloor-char:A:A-">randomFloor(char[][])</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonUtility.html" title="class in squidpony.squidgrid.mapping">DungeonUtility</a></dt>
 <dd>
@@ -2088,6 +2088,23 @@
  to create a thread, starting the thread causes the object's
  <code>run</code> method to be called in that separately executing
  thread.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CellularAutomaton.html#runBasicSmoothing--">runBasicSmoothing()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CellularAutomaton.html" title="class in squidpony.squidmath">CellularAutomaton</a></dt>
+<dd>
+<div class="block">Reduces the sharpness of corners by only considering a cell on if the previous version has 5 of the 9 cells in
+ the containing 3x3 area as "on." Typically, this method is run repeatedly.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CellularAutomaton.html#runGameOfLife--">runGameOfLife()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CellularAutomaton.html" title="class in squidpony.squidmath">CellularAutomaton</a></dt>
+<dd>
+<div class="block">Runs one step of the simulation called Conway's Game of Life, which has relatively simple rules:
+ 
+     Any "on" cell with fewer than two "on" neighbors becomes "off."
+     Any "on" cell with two or three "on" neighbors (no more than three) stays "on."
+     Any "on" cell with more than three "on" neighbors becomes "off."
+     Any "off" cell with exactly three "on" neighbors becomes "on."
+ 
+ These rules can bring about complex multi-step patterns in many cases, eventually stabilizing to predictable
+ patterns in most cases.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#RUSSIAN_AUTHENTIC">RUSSIAN_AUTHENTIC</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>

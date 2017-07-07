@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -202,6 +202,28 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToRawIntBits-float-">floatToRawIntBits</a></span>(float&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#formCurvedFloat-int-">formCurvedFloat</a></span>(int&nbsp;start)</code>
+<div class="block">A different kind of determine-like method that expects to be given a random int and produces a random float with
+ a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#formCurvedFloat-int-int-">formCurvedFloat</a></span>(int&nbsp;start1,
+               int&nbsp;start2)</code>
+<div class="block">A different kind of determine-like method that expects to be given random ints and produces a random float with
+ a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#formCurvedFloat-long-">formCurvedFloat</a></span>(long&nbsp;start)</code>
+<div class="block">A different kind of determine-like method that expects to be given a random long and produces a random float with
+ a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static byte</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#getSelectedByte-double-int-">getSelectedByte</a></span>(double&nbsp;value,
                int&nbsp;whichByte)</code>
@@ -209,7 +231,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  return byte 0 (least significant), 1, 2, and so on up to 7 (most significant).</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static byte</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#getSelectedByte-float-int-">getSelectedByte</a></span>(float&nbsp;value,
                int&nbsp;whichByte)</code>
@@ -217,50 +239,50 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  return byte 0 (least significant), 1, 2, or 3 (most significant).</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-">intBitsToFloat</a></span>(int&nbsp;bits)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#longBitsToDouble-long-">longBitsToDouble</a></span>(long&nbsp;bits)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomDouble-int-">randomDouble</a></span>(int&nbsp;seed)</code>
 <div class="block">Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
  twice through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a> algorithm, derived from PCG-Random.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>static double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomDoubleCurved-int-">randomDoubleCurved</a></span>(int&nbsp;seed)</code>
-<div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
- strong central bias (around 0.0).</div>
-</td>
-</tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomFloat-int-">randomFloat</a></span>(int&nbsp;seed)</code>
 <div class="block">Generates a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive) using the given int seed, passing
  it once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a> algorithm, derived from PCG-Random.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomFloatCurved-int-">randomFloatCurved</a></span>(int&nbsp;seed)</code>
+<div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
+ strong central bias (around 0.0).</div>
+</td>
+</tr>
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomSignedFloat-int-">randomSignedFloat</a></span>(int&nbsp;seed)</code>
 <div class="block">Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
  it once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a> algorithm, derived from PCG-Random.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setExponent-double-int-">setExponent</a></span>(double&nbsp;value,
            int&nbsp;exponentBits)</code>
 <div class="block">Makes a modified version of value that uses the specified bits (up to 12) for its exponent and sign.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setSelectedByte-double-int-byte-">setSelectedByte</a></span>(double&nbsp;value,
                int&nbsp;whichByte,
@@ -269,7 +291,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  a double, then returns the double produced by the bit change.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setSelectedByte-float-int-byte-">setSelectedByte</a></span>(float&nbsp;value,
                int&nbsp;whichByte,
@@ -650,13 +672,13 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="randomDoubleCurved-int-">
+<a name="randomFloatCurved-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
-<h4>randomDoubleCurved</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.246">randomDoubleCurved</a>(int&nbsp;seed)</pre>
+<h4>randomFloatCurved</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.246">randomFloatCurved</a>(int&nbsp;seed)</pre>
 <div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
  strong central bias (around 0.0). Uses the given int seed, passing it twice through the (very high-quality and
  rather fast) <a href="../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath"><code>PintRNG</code></a> algorithm, derived from PCG-Random. This produces a pair of random ints, which this
@@ -664,13 +686,72 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
  <a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-"><code>intBitsToFloat(int)</code></a> or something functionally equivalent on GWT, multiplies the floats, and sets the
  sign pseudo-randomly based on an unused bit from earlier.
  <br>
- Consider calling this with <code>NumberTools.randomDoubleCurved(seed += 0x3C6EF372)</code> for an optimal period of 2
- to the 31 when repeatedly called, but <code>NumberTools.randomDoubleCurved(++seed)</code> will also work just fine.</div>
+ Consider calling this with <code>NumberTools.randomFloatCurved(seed += 0x3C6EF372)</code> for an optimal period of 2
+ to the 31 when repeatedly called, but <code>NumberTools.randomFloatCurved(++seed)</code> will also work just fine.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seed</code> - any int to be used as a seed</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a pseudo-random double from -1.0 (exclusive) to 1.0 (exclusive), distributed on a curve centered on 0.0</dd>
+</dl>
+</li>
+</ul>
+<a name="formCurvedFloat-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>formCurvedFloat</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.263">formCurvedFloat</a>(long&nbsp;start)</pre>
+<div class="block">A different kind of determine-like method that expects to be given a random long and produces a random float with
+ a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
+ The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
+ 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - a long, usually random, such as one produced by any RandomnessSource</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f</dd>
+</dl>
+</li>
+</ul>
+<a name="formCurvedFloat-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>formCurvedFloat</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.280">formCurvedFloat</a>(int&nbsp;start1,
+                                    int&nbsp;start2)</pre>
+<div class="block">A different kind of determine-like method that expects to be given random ints and produces a random float with
+ a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
+ The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
+ 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start1</code> - an int usually random, such as one produced by any RandomnessSource</dd>
+<dd><code>start2</code> - an int usually random, such as one produced by any RandomnessSource</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f</dd>
+</dl>
+</li>
+</ul>
+<a name="formCurvedFloat-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>formCurvedFloat</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.295">formCurvedFloat</a>(int&nbsp;start)</pre>
+<div class="block">A different kind of determine-like method that expects to be given a random int and produces a random float with
+ a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
+ The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
+ 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - an int, usually random, such as one produced by any RandomnessSource</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f</dd>
 </dl>
 </li>
 </ul>

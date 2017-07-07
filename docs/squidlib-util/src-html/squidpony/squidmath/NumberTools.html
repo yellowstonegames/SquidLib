@@ -246,45 +246,93 @@
 <span class="sourceLineNo">238</span>     * {@link #intBitsToFloat(int)} or something functionally equivalent on GWT, multiplies the floats, and sets the<a name="line.238"></a>
 <span class="sourceLineNo">239</span>     * sign pseudo-randomly based on an unused bit from earlier.<a name="line.239"></a>
 <span class="sourceLineNo">240</span>     * &lt;br&gt;<a name="line.240"></a>
-<span class="sourceLineNo">241</span>     * Consider calling this with {@code NumberTools.randomDoubleCurved(seed += 0x3C6EF372)} for an optimal period of 2<a name="line.241"></a>
-<span class="sourceLineNo">242</span>     * to the 31 when repeatedly called, but {@code NumberTools.randomDoubleCurved(++seed)} will also work just fine.<a name="line.242"></a>
+<span class="sourceLineNo">241</span>     * Consider calling this with {@code NumberTools.randomFloatCurved(seed += 0x3C6EF372)} for an optimal period of 2<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * to the 31 when repeatedly called, but {@code NumberTools.randomFloatCurved(++seed)} will also work just fine.<a name="line.242"></a>
 <span class="sourceLineNo">243</span>     * @param seed any int to be used as a seed<a name="line.243"></a>
 <span class="sourceLineNo">244</span>     * @return a pseudo-random double from -1.0 (exclusive) to 1.0 (exclusive), distributed on a curve centered on 0.0<a name="line.244"></a>
 <span class="sourceLineNo">245</span>     */<a name="line.245"></a>
-<span class="sourceLineNo">246</span>    public static double randomDoubleCurved(int seed)<a name="line.246"></a>
+<span class="sourceLineNo">246</span>    public static float randomFloatCurved(int seed)<a name="line.246"></a>
 <span class="sourceLineNo">247</span>    {<a name="line.247"></a>
 <span class="sourceLineNo">248</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.248"></a>
 <span class="sourceLineNo">249</span>        float a = Float.intBitsToFloat((((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000);<a name="line.249"></a>
 <span class="sourceLineNo">250</span>        seed += 0x9E3779B9;<a name="line.250"></a>
 <span class="sourceLineNo">251</span>        seed ^= seed &gt;&gt;&gt; (4 + (seed &gt;&gt;&gt; 28));<a name="line.251"></a>
-<span class="sourceLineNo">252</span>        return  (a - 1.0) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000) - 1.0) * (seed &gt;&gt; 31 | 1);<a name="line.252"></a>
+<span class="sourceLineNo">252</span>        return  (a - 1f) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) &gt;&gt;&gt; 22 ^ seed) &gt;&gt;&gt; 9) | 0x3f800000) - 1f) * (seed &gt;&gt; 31 | 1);<a name="line.252"></a>
 <span class="sourceLineNo">253</span>    }<a name="line.253"></a>
 <span class="sourceLineNo">254</span><a name="line.254"></a>
-<span class="sourceLineNo">255</span>    static int hashWisp(final float[] data)<a name="line.255"></a>
-<span class="sourceLineNo">256</span>    {<a name="line.256"></a>
-<span class="sourceLineNo">257</span>        if (data == null)<a name="line.257"></a>
-<span class="sourceLineNo">258</span>            return 0;<a name="line.258"></a>
-<span class="sourceLineNo">259</span>        int result = 0x9E3779B9, a = 0x632BE5AB;<a name="line.259"></a>
-<span class="sourceLineNo">260</span>        final int len = data.length;<a name="line.260"></a>
-<span class="sourceLineNo">261</span>        for (int i = 0; i &lt; len; i++) {<a name="line.261"></a>
-<span class="sourceLineNo">262</span>            result += (a ^= 0x85157AF5 * Float.floatToIntBits(data[i]));<a name="line.262"></a>
-<span class="sourceLineNo">263</span>        }<a name="line.263"></a>
-<span class="sourceLineNo">264</span>        return result * (a | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.264"></a>
-<span class="sourceLineNo">265</span>    }<a name="line.265"></a>
-<span class="sourceLineNo">266</span><a name="line.266"></a>
-<span class="sourceLineNo">267</span>    static int hashWisp(final double[] data)<a name="line.267"></a>
-<span class="sourceLineNo">268</span>    {<a name="line.268"></a>
-<span class="sourceLineNo">269</span>        if (data == null)<a name="line.269"></a>
-<span class="sourceLineNo">270</span>            return 0;<a name="line.270"></a>
-<span class="sourceLineNo">271</span>        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;<a name="line.271"></a>
-<span class="sourceLineNo">272</span>        final int len = data.length;<a name="line.272"></a>
-<span class="sourceLineNo">273</span>        double t;<a name="line.273"></a>
-<span class="sourceLineNo">274</span>        for (int i = 0; i &lt; len; i++) {<a name="line.274"></a>
-<span class="sourceLineNo">275</span>            result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));<a name="line.275"></a>
-<span class="sourceLineNo">276</span>        }<a name="line.276"></a>
-<span class="sourceLineNo">277</span>        return (int)((result = (result * (a | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37))) ^ (result &gt;&gt;&gt; 32));<a name="line.277"></a>
-<span class="sourceLineNo">278</span>    }<a name="line.278"></a>
-<span class="sourceLineNo">279</span>}<a name="line.279"></a>
+<span class="sourceLineNo">255</span>    /**<a name="line.255"></a>
+<span class="sourceLineNo">256</span>     * A different kind of determine-like method that expects to be given a random long and produces a random float with<a name="line.256"></a>
+<span class="sourceLineNo">257</span>     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>     * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or<a name="line.258"></a>
+<span class="sourceLineNo">259</span>     * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.<a name="line.259"></a>
+<span class="sourceLineNo">260</span>     * @param start a long, usually random, such as one produced by any RandomnessSource<a name="line.260"></a>
+<span class="sourceLineNo">261</span>     * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f<a name="line.261"></a>
+<span class="sourceLineNo">262</span>     */<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    public static float formCurvedFloat(final long start) {<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        return   (intBitsToFloat((int)start &gt;&gt;&gt; 9 | 0x3F000000)<a name="line.264"></a>
+<span class="sourceLineNo">265</span>                + intBitsToFloat(((int)~start &amp; 0x007FFFFF) | 0x3F000000)<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                + intBitsToFloat((int) (start &gt;&gt;&gt; 41) | 0x3F000000)<a name="line.266"></a>
+<span class="sourceLineNo">267</span>                + intBitsToFloat(((int) (~start &gt;&gt;&gt; 32) &amp; 0x007FFFFF) | 0x3F000000)<a name="line.267"></a>
+<span class="sourceLineNo">268</span>                - 3f);<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    }<a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>    /**<a name="line.271"></a>
+<span class="sourceLineNo">272</span>     * A different kind of determine-like method that expects to be given random ints and produces a random float with<a name="line.272"></a>
+<span class="sourceLineNo">273</span>     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * @param start1 an int usually random, such as one produced by any RandomnessSource<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     * @param start2 an int usually random, such as one produced by any RandomnessSource<a name="line.277"></a>
+<span class="sourceLineNo">278</span>     * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f<a name="line.278"></a>
+<span class="sourceLineNo">279</span>     */<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    public static float formCurvedFloat(final int start1, final int start2) {<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        return   (intBitsToFloat(start1 &gt;&gt;&gt; 9 | 0x3F000000)<a name="line.281"></a>
+<span class="sourceLineNo">282</span>                + intBitsToFloat((~start1 &amp; 0x007FFFFF) | 0x3F000000)<a name="line.282"></a>
+<span class="sourceLineNo">283</span>                + intBitsToFloat(start2 &gt;&gt;&gt; 9 | 0x3F000000)<a name="line.283"></a>
+<span class="sourceLineNo">284</span>                + intBitsToFloat((~start2 &amp; 0x007FFFFF) | 0x3F000000)<a name="line.284"></a>
+<span class="sourceLineNo">285</span>                - 3f);<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    }<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    /**<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     * A different kind of determine-like method that expects to be given a random int and produces a random float with<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     * @param start an int, usually random, such as one produced by any RandomnessSource<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     */<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    public static float formCurvedFloat(final int start) {<a name="line.295"></a>
+<span class="sourceLineNo">296</span>        return   (intBitsToFloat(start &gt;&gt;&gt; 9 | 0x3F000000)<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                + intBitsToFloat((start &amp; 0x007FFFFF) | 0x3F000000)<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                + intBitsToFloat(((start &lt;&lt; 18 &amp; 0x007FFFFF) ^ ~start &gt;&gt;&gt; 14) | 0x3F000000)<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                + intBitsToFloat(((start &lt;&lt; 13 &amp; 0x007FFFFF) ^ ~start &gt;&gt;&gt; 19) | 0x3F000000)<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                - 3f);<a name="line.300"></a>
+<span class="sourceLineNo">301</span>    }<a name="line.301"></a>
+<span class="sourceLineNo">302</span><a name="line.302"></a>
+<span class="sourceLineNo">303</span>    static int hashWisp(final float[] data)<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    {<a name="line.304"></a>
+<span class="sourceLineNo">305</span>        if (data == null)<a name="line.305"></a>
+<span class="sourceLineNo">306</span>            return 0;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>        int result = 0x9E3779B9, a = 0x632BE5AB;<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        final int len = data.length;<a name="line.308"></a>
+<span class="sourceLineNo">309</span>        for (int i = 0; i &lt; len; i++) {<a name="line.309"></a>
+<span class="sourceLineNo">310</span>            result += (a ^= 0x85157AF5 * Float.floatToIntBits(data[i]));<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        }<a name="line.311"></a>
+<span class="sourceLineNo">312</span>        return result * (a | 1) ^ (result &gt;&gt;&gt; 11 | result &lt;&lt; 21);<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    }<a name="line.313"></a>
+<span class="sourceLineNo">314</span><a name="line.314"></a>
+<span class="sourceLineNo">315</span>    static int hashWisp(final double[] data)<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>        if (data == null)<a name="line.317"></a>
+<span class="sourceLineNo">318</span>            return 0;<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;<a name="line.319"></a>
+<span class="sourceLineNo">320</span>        final int len = data.length;<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        double t;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>        for (int i = 0; i &lt; len; i++) {<a name="line.322"></a>
+<span class="sourceLineNo">323</span>            result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));<a name="line.323"></a>
+<span class="sourceLineNo">324</span>        }<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        return (int)((result = (result * (a | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37))) ^ (result &gt;&gt;&gt; 32));<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    }<a name="line.326"></a>
+<span class="sourceLineNo">327</span>}<a name="line.327"></a>
 
 
 

@@ -4808,6 +4808,23 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#mixedRandomSeparated-double-">mixedRandomSeparated</a></span>(double&nbsp;fraction)</code>
+<div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
+ scattering of chosen cells with a count that matches the given <code>fraction</code> of the total amount of "on" cells
+ in this.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#mixedRandomSeparated-double-int-">mixedRandomSeparated</a></span>(double&nbsp;fraction,
+                    int&nbsp;limit)</code>
+<div class="block">Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
+ scattering of chosen cells with a count that matches the given <code>fraction</code> of the total amount of "on" cells
+ in this.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPacker.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CoordPacker.html#mooreToCoord-int-">mooreToCoord</a></span>(int&nbsp;moore)</code>
 <div class="block">Takes a distance to travel along the 16x16 Hilbert curve and returns a Coord representing the position
@@ -4874,7 +4891,10 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
-<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#nthZCurve-int-">nthZCurve</a></span>(int&nbsp;index)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#nthZCurve-int-">nthZCurve</a></span>(int&nbsp;index)</code>
+<div class="block">Like <a href="../../../squidpony/squidmath/GreasedRegion.html#nth-int-"><code>GreasedRegion.nth(int)</code></a>, this gets the Coord at a given index along a path through the GreasedRegion, but unlike
+ nth(), this traverses the path in a zig-zag pattern called the Z-Order Curve.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>[]</code></td>
@@ -5366,12 +5386,16 @@
 <tr class="rowColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#dijkstraScan-char:A:A-squidpony.squidmath.Coord...-">dijkstraScan</a></span>(char[][]&nbsp;map,
-            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;goals)</code>&nbsp;</td>
+            <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;goals)</code>
+<div class="block">Discouraged from active use; slower than <a href="../../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>DijkstraMap</code></a> and has less features.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#dijkstraScan8way-char:A:A-squidpony.squidmath.Coord...-">dijkstraScan8way</a></span>(char[][]&nbsp;map,
-                <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;goals)</code>&nbsp;</td>
+                <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;goals)</code>
+<div class="block">Discouraged from active use; slower than <a href="../../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai"><code>DijkstraMap</code></a> and has less features.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>double</code></td>

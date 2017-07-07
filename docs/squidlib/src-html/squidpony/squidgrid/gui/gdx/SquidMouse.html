@@ -169,11 +169,11 @@
 <span class="sourceLineNo">161</span>    }<a name="line.161"></a>
 <span class="sourceLineNo">162</span><a name="line.162"></a>
 <span class="sourceLineNo">163</span>        protected int translateX(int screenX) {<a name="line.163"></a>
-<span class="sourceLineNo">164</span>                return MathUtils.clamp(MathUtils.floor((screenX + offsetX) / cellWidth), 0, (int)(gridWidth - 1)); //MathUtils.floor((offsetX * 0f) / cellWidth)<a name="line.164"></a>
+<span class="sourceLineNo">164</span>                return MathUtils.floor((screenX + offsetX) / cellWidth);<a name="line.164"></a>
 <span class="sourceLineNo">165</span>        }<a name="line.165"></a>
 <span class="sourceLineNo">166</span><a name="line.166"></a>
 <span class="sourceLineNo">167</span>        protected int translateY(int screenY) {<a name="line.167"></a>
-<span class="sourceLineNo">168</span>                return MathUtils.clamp(MathUtils.floor((screenY + offsetY) / cellHeight), 0, (int)(gridHeight - 1)); //MathUtils.floor((offsetY * 0f) / cellHeight)<a name="line.168"></a>
+<span class="sourceLineNo">168</span>                return MathUtils.floor((screenY + offsetY) / cellHeight);<a name="line.168"></a>
 <span class="sourceLineNo">169</span>        }<a name="line.169"></a>
 <span class="sourceLineNo">170</span><a name="line.170"></a>
 <span class="sourceLineNo">171</span>    public boolean onGrid(int screenX, int screenY)<a name="line.171"></a>
@@ -187,29 +187,37 @@
 <span class="sourceLineNo">179</span><a name="line.179"></a>
 <span class="sourceLineNo">180</span>    @Override<a name="line.180"></a>
 <span class="sourceLineNo">181</span>    public boolean touchDown(int screenX, int screenY, int pointer, int button) {<a name="line.181"></a>
-<span class="sourceLineNo">182</span>        return processor.touchDown(translateX(screenX), translateY(screenY), pointer, button);<a name="line.182"></a>
-<span class="sourceLineNo">183</span>    }<a name="line.183"></a>
-<span class="sourceLineNo">184</span><a name="line.184"></a>
-<span class="sourceLineNo">185</span>    @Override<a name="line.185"></a>
-<span class="sourceLineNo">186</span>    public boolean touchUp(int screenX, int screenY, int pointer, int button) {<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        return processor.touchUp(translateX(screenX), translateY(screenY), pointer, button);<a name="line.187"></a>
-<span class="sourceLineNo">188</span>    }<a name="line.188"></a>
-<span class="sourceLineNo">189</span><a name="line.189"></a>
-<span class="sourceLineNo">190</span>    @Override<a name="line.190"></a>
-<span class="sourceLineNo">191</span>    public boolean touchDragged(int screenX, int screenY, int pointer) {<a name="line.191"></a>
-<span class="sourceLineNo">192</span>        return processor.touchDragged(translateX(screenX), translateY(screenY), pointer);<a name="line.192"></a>
-<span class="sourceLineNo">193</span>    }<a name="line.193"></a>
-<span class="sourceLineNo">194</span><a name="line.194"></a>
-<span class="sourceLineNo">195</span>    @Override<a name="line.195"></a>
-<span class="sourceLineNo">196</span>    public boolean mouseMoved(int screenX, int screenY) {<a name="line.196"></a>
-<span class="sourceLineNo">197</span>        return processor.mouseMoved(translateX(screenX), translateY(screenY));<a name="line.197"></a>
-<span class="sourceLineNo">198</span>    }<a name="line.198"></a>
-<span class="sourceLineNo">199</span><a name="line.199"></a>
-<span class="sourceLineNo">200</span>    @Override<a name="line.200"></a>
-<span class="sourceLineNo">201</span>    public boolean scrolled(int amount) {<a name="line.201"></a>
-<span class="sourceLineNo">202</span>        return processor.scrolled(amount);<a name="line.202"></a>
-<span class="sourceLineNo">203</span>    }<a name="line.203"></a>
-<span class="sourceLineNo">204</span>}<a name="line.204"></a>
+<span class="sourceLineNo">182</span>        if(onGrid(screenX, screenY))<a name="line.182"></a>
+<span class="sourceLineNo">183</span>            return processor.touchDown(translateX(screenX), translateY(screenY), pointer, button);<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        return false;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>    @Override<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    public boolean touchUp(int screenX, int screenY, int pointer, int button) {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        if(onGrid(screenX, screenY))<a name="line.189"></a>
+<span class="sourceLineNo">190</span>            return processor.touchUp(translateX(screenX), translateY(screenY), pointer, button);<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        return false;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    }<a name="line.192"></a>
+<span class="sourceLineNo">193</span><a name="line.193"></a>
+<span class="sourceLineNo">194</span>    @Override<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    public boolean touchDragged(int screenX, int screenY, int pointer) {<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        if(onGrid(screenX, screenY))<a name="line.196"></a>
+<span class="sourceLineNo">197</span>            return processor.touchDragged(translateX(screenX), translateY(screenY), pointer);<a name="line.197"></a>
+<span class="sourceLineNo">198</span>        return false;<a name="line.198"></a>
+<span class="sourceLineNo">199</span>    }<a name="line.199"></a>
+<span class="sourceLineNo">200</span><a name="line.200"></a>
+<span class="sourceLineNo">201</span>    @Override<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    public boolean mouseMoved(int screenX, int screenY) {<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        if(onGrid(screenX, screenY))<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            return processor.mouseMoved(translateX(screenX), translateY(screenY));<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        return false;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    }<a name="line.206"></a>
+<span class="sourceLineNo">207</span><a name="line.207"></a>
+<span class="sourceLineNo">208</span>    @Override<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    public boolean scrolled(int amount) {<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        return processor.scrolled(amount);<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    }<a name="line.211"></a>
+<span class="sourceLineNo">212</span>}<a name="line.212"></a>
 
 
 

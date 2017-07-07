@@ -368,6 +368,21 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> declared as <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CellularAutomaton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CellularAutomaton.html#current">current</a></span></code>
+<div class="block">Returned directly by some methods, but you may want to change this at some other point.</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that return <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -653,6 +668,75 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#mixedRandomRegion-double-">mixedRandomRegion</a></span>(double&nbsp;fraction)</code>
+<div class="block">Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
+ choosing cells so that the <a href="../../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells
+ in this.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#mixedRandomRegion-double-int-">mixedRandomRegion</a></span>(double&nbsp;fraction,
+                 int&nbsp;limit)</code>
+<div class="block">Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
+ choosing cells so that the <a href="../../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells
+ in this.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#neighborDown--">neighborDown</a></span>()</code>
+<div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards when this is called.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#neighborDownLeft--">neighborDownLeft</a></span>()</code>
+<div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards and to the left when
+ this is called.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#neighborDownRight--">neighborDownRight</a></span>()</code>
+<div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor downwards and to the right when
+ this is called.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#neighborLeft--">neighborLeft</a></span>()</code>
+<div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor to the left when this is called.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#neighborRight--">neighborRight</a></span>()</code>
+<div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor to the right when this is called.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#neighborUp--">neighborUp</a></span>()</code>
+<div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards when this is called.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#neighborUpLeft--">neighborUpLeft</a></span>()</code>
+<div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards and to the left when this
+ is called.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#neighborUpRight--">neighborUpRight</a></span>()</code>
+<div class="block">Modifies this GreasedRegion so the only cells that will be "on" have a neighbor upwards and to the right when
+ this is called.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#not--">not</a></span>()</code>
 <div class="block">Negates this GreasedRegion, turning "on" to "off" and "off" to "on."</div>
 </td>
@@ -919,6 +1003,27 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CellularAutomaton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CellularAutomaton.html#runBasicSmoothing--">runBasicSmoothing</a></span>()</code>
+<div class="block">Reduces the sharpness of corners by only considering a cell on if the previous version has 5 of the 9 cells in
+ the containing 3x3 area as "on." Typically, this method is run repeatedly.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CellularAutomaton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CellularAutomaton.html#runGameOfLife--">runGameOfLife</a></span>()</code>
+<div class="block">Runs one step of the simulation called Conway's Game of Life, which has relatively simple rules:
+ 
+     Any "on" cell with fewer than two "on" neighbors becomes "off."
+     Any "on" cell with two or three "on" neighbors (no more than three) stays "on."
+     Any "on" cell with more than three "on" neighbors becomes "off."
+     Any "off" cell with exactly three "on" neighbors becomes "on."
+ 
+ These rules can bring about complex multi-step patterns in many cases, eventually stabilizing to predictable
+ patterns in most cases.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#separatedRegionZCurve-double-">separatedRegionZCurve</a></span>(double&nbsp;fraction)</code>
 <div class="block">Modifies this GreasedRegion so it contains a quasi-random subset of its previous contents, choosing cells so that
  the <a href="../../../squidpony/squidmath/GreasedRegion.html#size--"><code>size()</code></a> matches the given <code>fraction</code> of the total amount of "on" cells in this.</div>
@@ -1174,7 +1279,9 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#intersects-squidpony.squidmath.GreasedRegion-">intersects</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#intersects-squidpony.squidmath.GreasedRegion-">intersects</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
+<div class="block">Returns true if any cell is "on" in both this GreasedRegion and in other; returns false otherwise.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
@@ -1216,7 +1323,7 @@
 <div class="block">Generates a 2D int array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
- produce number between 0 and 16 in a cell.</div>
+ produce any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1225,7 +1332,27 @@
 <div class="block">Generates a 2D double array from an array or vararg of GreasedRegions, starting at all 0 and adding 1 to the double at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
- produce number between 0 and 16 in a cell.</div>
+ produce any number between 0 and 16 in a cell.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int[][]</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sumInto-int:A:A-squidpony.squidmath.GreasedRegion...-">sumInto</a></span>(int[][]&nbsp;existing,
+       <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</code>
+<div class="block">Adds to an existing 2D int array with an array or vararg of GreasedRegions, adding 1 to the int in existing at
+ a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+ this method, it can increment by any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+ increase the value in existing by any number between 0 and 16 in a cell.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#sumIntoDouble-double:A:A-squidpony.squidmath.GreasedRegion...-">sumIntoDouble</a></span>(double[][]&nbsp;existing,
+             <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>...&nbsp;regions)</code>
+<div class="block">Adds to an existing 2D double array with an array or vararg of GreasedRegions, adding 1 to the double in existing
+ at a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
+ this method, it can increment by any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
+ increase the value in existing by any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -1274,7 +1401,7 @@
 <div class="block">Generates a 2D int array from a List of GreasedRegions, starting at all 0 and adding 1 to the int at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
- produce number between 0 and 16 in a cell.</div>
+ produce any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -1283,7 +1410,7 @@
 <div class="block">Generates a 2D double array from a List of GreasedRegions, starting at all 0 and adding 1 to the double at
  a position once for every GreasedRegion that has that cell as "on." This means if you give 8 GreasedRegions to
  this method, it can produce any number between 0 and 8 in a cell; if you give 16 GreasedRegions, then it can
- produce number between 0 and 16 in a cell.</div>
+ produce any number between 0 and 16 in a cell.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -1301,6 +1428,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/CellularAutomaton.html#CellularAutomaton-squidpony.squidmath.GreasedRegion-">CellularAutomaton</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;current)</code>
+<div class="block">Stores a direct reference to <code>current</code> as this object's <a href="../../../squidpony/squidmath/CellularAutomaton.html#current"><code>CellularAutomaton.current</code></a> field, and initializes the other
+ necessary fields.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#GreasedRegion-squidpony.squidmath.GreasedRegion-">GreasedRegion</a></span>(<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;other)</code>
 <div class="block">Copy constructor that takes another GreasedRegion and copies all of its data into this new one.</div>
 </td>

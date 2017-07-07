@@ -256,12 +256,12 @@ public class FOV implements Serializable {
                 int ctr = 0;
                 boolean started = false;
                 for (Direction d : ccw) {
-                    ctr %= 4;
+                    ctr &= 3;
                     ++ctr;
-                    if (angle <= Math.PI / 2.0 * ctr + span / 2.0)
+                    if (angle2 <= Math.PI * 0.5 * ctr + span2 * 0.5)
                         started = true;
                     if (started) {
-                        if(ctr < 4 && angle < Math.PI / 2.0 * (ctr - 1) - span / 2.0)
+                        if(ctr < 4 && angle2 < Math.PI * 0.5 * (ctr - 1) - span2 * 0.5)
                             break;
                         light = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle2, span2);
                         light = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle2, span2);
@@ -363,7 +363,66 @@ public class FOV implements Serializable {
         return light;
     }
 
+    /**
+     * Reuses the existing light 2D array and fills it with a straight-line bouncing path of light that reflects its way
+     * through the given resistanceMap from startX, startY until it uses up the given distance. The angle the path
+     * takes is given in degrees, and the angle used can change as obstacles are hit (reflecting backwards if it hits a
+     * corner pointing directly into or away from its path). This can be used something like an LOS method, but because
+     * the path can be traveled back over, an array or Queue becomes somewhat more complex, and the decreasing numbers
+     * for a straight line that stack may make more sense for how this could be used (especially with visual effects).
+     * This currently allows the path to pass through single-cell wall-like obstacles without changing direction, e.g.
+     * it passes through pillars, but will bounce if it hits a bigger wall.
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
+     * @param distance the distance the light will extend to
+     * @param angle in degrees, the angle to start the path traveling in
+     * @return the given light parameter, after modifications
+     */
+    public static double[][] bouncingLine(double[][] resistanceMap, double[][] light, int startX, int startY, double distance, double angle)
+    {
+        double rad = Math.max(1, distance);
+        double decay = 1.0 / rad;
+        ArrayTools.fill(light, 0);
+        light[startX][startY] = 1;//make the starting space full power
+        angle = Math.toRadians((angle > 360.0 || angle < 0.0)
+                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
+        float s = (float) Math.sin(angle),
+                c = (float) Math.cos(angle);
+        double deteriorate = 1.0;
+        int dx, dy, width = resistanceMap.length, height = resistanceMap[0].length;
+        for (int d = 1; d <= rad; ) {
+            dx = startX + Math.round(c * d);
+            if(dx < 0 || dx > width)
+                break;
+            dy = startY + Math.round(s * d);
+            if(dy < 0 || dy > height)
+                break;
+            deteriorate -= decay;
+            //check if it's within the lightable area and light if needed
+            if (deteriorate > 0.0) {
+                light[dx][dy] = Math.min(light[dx][dy] + deteriorate, 1.0);
+                if (resistanceMap[dx][dy] >= 1 && deteriorate > decay)
+                {
+                    startX = dx;
+                    startY = dy;
+                    d = 1;
+                    double flipX = resistanceMap[startX + Math.round(-c * d)][dy],
+                            flipY = resistanceMap[dx][startY + Math.round(-s * d)];
+                    if(flipX >= 1.0)
+                        s = -s;
+                    if(flipY >= 1.0)
+                        c = -c;
+                }
+                else ++d;
 
+            }
+            else break;
+        }
+
+        return light;
+    }
     /**
 	 * @param width
 	 *            The width that {@link #light} should have.

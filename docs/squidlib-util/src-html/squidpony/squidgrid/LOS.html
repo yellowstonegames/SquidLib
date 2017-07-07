@@ -520,8 +520,8 @@
 <span class="sourceLineNo">512</span><a name="line.512"></a>
 <span class="sourceLineNo">513</span>        Coord end = Coord.get(targetx, targety);<a name="line.513"></a>
 <span class="sourceLineNo">514</span>        //find out which direction to step, on each axis<a name="line.514"></a>
-<span class="sourceLineNo">515</span>        int stepX = (int) Math.signum(targetx - startx),<a name="line.515"></a>
-<span class="sourceLineNo">516</span>                stepY = (int) Math.signum(targety - starty);<a name="line.516"></a>
+<span class="sourceLineNo">515</span>        int stepX = targetx == startx ? 0 : (targetx - startx &gt;&gt; 31 | 1), // signum with less converting to/from float<a name="line.515"></a>
+<span class="sourceLineNo">516</span>                stepY = targety == starty ? 0 : (targety - starty &gt;&gt; 31 | 1);<a name="line.516"></a>
 <span class="sourceLineNo">517</span><a name="line.517"></a>
 <span class="sourceLineNo">518</span>        int deltaY = Math.abs(targetx - startx),<a name="line.518"></a>
 <span class="sourceLineNo">519</span>                deltaX = Math.abs(targety - starty);<a name="line.519"></a>
