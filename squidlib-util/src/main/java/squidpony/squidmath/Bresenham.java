@@ -80,9 +80,9 @@ public class Bresenham {
         int ay = Math.abs(dy) << 1;
         int az = Math.abs(dz) << 1;
 
-        int signx = (int) Math.signum(dx);
-        int signy = (int) Math.signum(dy);
-        int signz = (int) Math.signum(dz);
+        int signx = dx == 0 ? 0 : (dx >> 31 | 1); // signum with less converting to/from float
+        int signy = dy == 0 ? 0 : (dy >> 31 | 1); // signum with less converting to/from float
+        int signz = dz == 0 ? 0 : (dz >> 31 | 1); // signum with less converting to/from float
 
         int x = startx;
         int y = starty;
@@ -214,8 +214,8 @@ public class Bresenham {
         int ax = Math.abs(dx) << 1;
         int ay = Math.abs(dy) << 1;
 
-        int signx = (int) Math.signum(dx);
-        int signy = (int) Math.signum(dy);
+        int signx = dx == 0 ? 0 : (dx >> 31 | 1); // signum with less converting to/from float
+        int signy = dy == 0 ? 0 : (dy >> 31 | 1); // signum with less converting to/from float
 
         int x = startx;
         int y = starty;
@@ -305,8 +305,8 @@ public class Bresenham {
         int dx = endx - startx;
         int dy = endy - starty;
 
-        int signx = (int) Math.signum(dx);
-        int signy = (int) Math.signum(dy);
+        int signx = dx == 0 ? 0 : (dx >> 31 | 1); // signum with less converting to/from float
+        int signy = dy == 0 ? 0 : (dy >> 31 | 1); // signum with less converting to/from float
 
         int ax = (dx = Math.abs(dx)) << 1;
         int ay = (dy = Math.abs(dy)) << 1;

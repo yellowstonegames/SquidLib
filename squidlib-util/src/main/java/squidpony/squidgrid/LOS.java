@@ -512,8 +512,8 @@ public class LOS {
 
         Coord end = Coord.get(targetx, targety);
         //find out which direction to step, on each axis
-        int stepX = (int) Math.signum(targetx - startx),
-                stepY = (int) Math.signum(targety - starty);
+        int stepX = targetx == startx ? 0 : (targetx - startx >> 31 | 1), // signum with less converting to/from float
+                stepY = targety == starty ? 0 : (targety - starty >> 31 | 1);
 
         int deltaY = Math.abs(targetx - startx),
                 deltaX = Math.abs(targety - starty);
