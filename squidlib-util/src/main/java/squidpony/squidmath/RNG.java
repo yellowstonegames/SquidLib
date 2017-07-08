@@ -510,8 +510,8 @@ public class RNG implements Serializable {
      *
      * @param startX the inclusive starting x position
      * @param startY the inclusive starting y position
-     * @param width  the width of the space to place Coords in
-     * @param height the height of the space to place Coords in
+     * @param width  the width of the space to place Coords in, extending from startX
+     * @param height the height of the space to place Coords in, extending from startY
      * @return an array containing {@code width * height} Coord items in random order, inside the given bounds
      */
     public Coord[] getRandomUniqueCells(final int startX, final int startY, final int width, final int height) {
@@ -527,8 +527,8 @@ public class RNG implements Serializable {
      *
      * @param startX the inclusive starting x position
      * @param startY the inclusive starting y position
-     * @param width  the width of the space to place Coords in
-     * @param height the height of the space to place Coords in
+     * @param width  the width of the space to place Coords in, extending from startX
+     * @param height the height of the space to place Coords in, extending from startY
      * @param size   the size of the array to return; only matters if it is smaller than {@code width * height}
      * @return an array containing {@code Math.min(width * height, size)} Coord items in random order, inside the given bounds
      */
@@ -547,8 +547,8 @@ public class RNG implements Serializable {
      *
      * @param startX the inclusive starting x position
      * @param startY the inclusive starting y position
-     * @param width  the width of the space to place Coords in
-     * @param height the height of the space to place Coords in
+     * @param width  the width of the space to place Coords in, extending from startX
+     * @param height the height of the space to place Coords in, extending from startY
      * @param dest   a Coord array that will be modified to contain randomly-ordered Coords, but will not be resized
      * @return dest, now with up to its first {@code width * height} items assigned to random Coords inside the given bounds
      */
@@ -556,10 +556,11 @@ public class RNG implements Serializable {
                                         final Coord[] dest) {
         if (width <= 0 || height <= 0 || dest == null || dest.length <= 0)
             return dest;
-        for (int i = 0; i < dest.length; i++) {
-            dest[i] = Coord.get(startX + i % width, startY + i / width);
+        int[] o = randomOrdering(width * height);
+        for (int i = 0; i < o.length && i < dest.length; i++) {
+            dest[i] = Coord.get(startX + o[i] % width, startY + o[i] / width);
         }
-        return shuffleInPlace(dest);
+        return dest;
     }
 
     /**
