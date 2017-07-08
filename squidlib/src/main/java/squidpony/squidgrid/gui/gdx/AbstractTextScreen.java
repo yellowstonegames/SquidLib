@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import squidpony.panel.IColoredString;
+import squidpony.squidmath.IntVLA;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -77,8 +78,8 @@ public abstract class AbstractTextScreen<T extends Color> extends AbstractSquidS
         final List<IColoredString<T>> tsave = text;
         text = new ArrayList<>(tsave.size() * 2);
         final int[] asave = alignment;
-        final /* @Nullable */ List<Integer> newAlignments = asave == null ? null
-                : new ArrayList<Integer>(asave.length * 2);
+        final /* @Nullable */ IntVLA newAlignments = asave == null ? null
+                : new IntVLA(asave.length * 2);
         int i = 0;
         for (IColoredString<T> t : tsave) {
 			/* Wrap line */
@@ -100,9 +101,20 @@ public abstract class AbstractTextScreen<T extends Color> extends AbstractSquidS
             }
             i++;
         }
-        alignment = newAlignments == null ? null : toIntArray(newAlignments);
+        alignment = newAlignments == null ? null : newAlignments.toArray();
     }
 
+    /**
+     * Not usually needed; may be deleted in a future version.
+     * You can usually avoid boxed Integers with either {@link IntVLA} in squidlib-util or the variety of classes in
+     * libGDX that specialize in ints and can convert to primitive int arrays. {@link com.badlogic.gdx.utils.IntArray},
+     * {@link com.badlogic.gdx.utils.IntSet}, {@link com.badlogic.gdx.utils.IntMap},
+     * {@link com.badlogic.gdx.utils.IntIntMap}, {@link com.badlogic.gdx.utils.ObjectIntMap}, and so on.
+     * @param l a Collection of boxed Integers
+     * @return an int array
+     * @deprecated Prefer using primitive-specific classes as mentioned in the full JavaDocs for this method
+     */
+    @Deprecated
     protected int[] toIntArray(Collection<Integer> l) {
         final int[] result = new int[l.size()];
         int j = 0;
@@ -118,13 +130,12 @@ public abstract class AbstractTextScreen<T extends Color> extends AbstractSquidS
         if (text != null) {
 			/* Show text */
             final Iterator<? extends IColoredString<?>> it = text.iterator();
-            final String eol = System.getProperty("line.separator");
-            buf.append(eol);
+            buf.append('\n');
             while (it.hasNext()) {
                 final IColoredString<?> ics = it.next();
                 buf.append(ics == null ? "" : ics.present());
                 if (it.hasNext())
-                    buf.append(eol);
+                    buf.append('\n');
             }
         }
         return buf.toString();

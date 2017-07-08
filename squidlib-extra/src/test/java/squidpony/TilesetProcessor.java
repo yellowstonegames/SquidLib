@@ -76,7 +76,6 @@ public class TilesetProcessor extends ApplicationAdapter {
         config.height = 128;
         new LwjglApplication(new squidpony.TilesetProcessor(), config);
     }
-    private static final String EOL = System.getProperty("line.separator");
 
     private static void initializeTileArray(StringBuilder java, String fieldName, OldTile[] ts_tiles) {
         final int len = ts_tiles.length;
@@ -91,17 +90,17 @@ public class TilesetProcessor extends ApplicationAdapter {
             /* Build new Tile */
             java.append(" new Tile(");
             java.append(source.a_constraint);
-            java.append(",");
+            java.append(',');
             java.append(source.b_constraint);
-            java.append(",");
+            java.append(',');
             java.append(source.c_constraint);
-            java.append(",");
+            java.append(',');
             java.append(source.d_constraint);
-            java.append(",");
+            java.append(',');
             java.append(source.e_constraint);
-            java.append(",");
+            java.append(',');
             java.append(source.f_constraint);
-            java.append(EOL);
+            java.append('\n');
             GreasedRegion gr = new GreasedRegion(source.data, '.');
             appendln(java, 4,"," + gr.serializeToString() + ");");
         }
@@ -169,7 +168,7 @@ public class TilesetProcessor extends ApplicationAdapter {
 
     private static StringBuilder appendln(StringBuilder buf, String s) {
         buf.append(s);
-        buf.append(EOL);
+        buf.append('\n');
         return buf;
     }
 
