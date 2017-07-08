@@ -17,8 +17,8 @@ public class RNGFeatureTest {
     public static final boolean PRINTING = false;
     @Test
     public void testUniqueCells(){
-        int width = 31, height = 19;
-        Coord[] unique = rng.getRandomUniqueCells(0, 0, width, height);
+        int width = 21, height = 16;
+        Coord[] unique = rng.getRandomUniqueCells(0, 0, width, height, width * height / 4);
         OrderedSet<Coord> set = new OrderedSet<>(unique);
         int ctr = 0;
         for (Coord coord : unique) {
@@ -32,6 +32,6 @@ public class RNGFeatureTest {
             }
         }
         // using a Set to test for uniqueness
-        assertTrue(set.size() == width * height);
+        assertTrue(set.size() == width * height / 4);
     }
 }
