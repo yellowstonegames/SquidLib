@@ -1251,7 +1251,7 @@ public class DungeonUtility {
                         case '#':
                             portion[i][j] = (costs.containsKey('#'))
                                     ? costs.get('#')
-                                    : squidpony.squidai.DijkstraMap.WALL;
+                                    : -1;
                             break;
                         default:
                             portion[i][j] = defaultValue;

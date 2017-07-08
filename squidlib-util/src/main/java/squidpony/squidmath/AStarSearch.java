@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
-import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.Direction;
 
 import java.io.Serializable;
@@ -335,7 +334,6 @@ public class AStarSearch implements Serializable {
     }
 
 	@Override
-	@GwtIncompatible // because of the call to getProperty (since gwt 2.7)
 	public String toString() {
         final StringBuilder result = new StringBuilder(width * height);
         int maxLen = 0;
@@ -352,7 +350,6 @@ public class AStarSearch implements Serializable {
                     maxLen = locLen;
             }
         }
-        final String eol = System.getProperty("line.separator");
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 final long v = Math.round(map[x][y]);
@@ -367,7 +364,7 @@ public class AStarSearch implements Serializable {
                 result.append(s);
             }
             if (y < height - 1)
-                result.append(eol);
+                result.append('\n');
         }
         return result.toString();
     }
