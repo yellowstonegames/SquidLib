@@ -556,11 +556,10 @@ public class RNG implements Serializable {
                                         final Coord[] dest) {
         if (width <= 0 || height <= 0 || dest == null || dest.length <= 0)
             return dest;
-        int[] o = randomOrdering(width * height);
-        for (int i = 0; i < o.length && i < dest.length; i++) {
-            dest[i] = Coord.get(startX + o[i] / width, startY + o[i] % width);
+        for (int i = 0; i < dest.length; i++) {
+            dest[i] = Coord.get(startX + i % width, startY + i / width);
         }
-        return dest;
+        return shuffleInPlace(dest);
     }
 
     /**
