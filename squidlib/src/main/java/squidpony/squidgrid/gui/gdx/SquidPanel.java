@@ -477,7 +477,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     @Override
 	public void clear(int x, int y) {
-        put(x, y, 0f);
+        put(x, y, ' ', 0f);
     }
 
     @Override
