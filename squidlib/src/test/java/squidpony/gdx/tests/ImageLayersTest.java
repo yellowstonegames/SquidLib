@@ -13,10 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.gui.gdx.AnimatedEntity;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.ImageSquidPanel;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.*;
@@ -31,7 +28,7 @@ public class ImageLayersTest extends ApplicationAdapter{
     SquidLayers layers;
     ImageSquidPanel imagePanel;
     char[][] map, displayedMap;
-    int[][] indicesFG, indicesBG;
+    Color[][] fgColors, bgColors;
     StatefulRNG rng;
     Stage stage;
     SpriteBatch batch;
@@ -80,8 +77,8 @@ public class ImageLayersTest extends ApplicationAdapter{
         gen.addDoors(15, true);
         map = gen.generate();
         displayedMap = DungeonUtility.closeDoors(map);
-        indicesBG = DungeonUtility.generateBGPaletteIndices(map);
-        indicesFG = DungeonUtility.generatePaletteIndices(map);
+        fgColors = MapUtility.generateDefaultColors(map);
+        bgColors = MapUtility.generateDefaultBGColors(map);
         resMap = DungeonUtility.generateResistances(map);
         GreasedRegion packed = new GreasedRegion(gen.getBareDungeon(), '.');
         Coord[] points = packed.quasiRandomSeparated(0.142);
@@ -90,8 +87,7 @@ public class ImageLayersTest extends ApplicationAdapter{
         things = new OrderedMap<>(points.length);
         AnimatedEntity ent;
         for (int i = 0; i < points.length; i++) {
-            ent = layers.animateActor(points[i].x, points[i].y, regions.get(rng.nextInt(totalRegions)),
-                    i, colors);
+            ent = layers.animateActor(points[i].x, points[i].y, regions.get(rng.nextInt(totalRegions)), colors.get(i));
             things.put(points[i], ent);
             ent.actor.setUserObject(i);
         }
@@ -122,7 +118,7 @@ public class ImageLayersTest extends ApplicationAdapter{
         for (int i = 0; i < things.size(); i++) {
             pt = things.keyAt(i);
             ent = layers.animateActor(pt.x, pt.y, regions.get(rng.nextInt(totalRegions)),
-                    i, colors);
+                    colors.get(i));
             things.put(pt, ent);
             ent.actor.setUserObject(i);
         }
@@ -174,7 +170,7 @@ public class ImageLayersTest extends ApplicationAdapter{
 
         }
 
-        layers.put(0, 0, displayedMap, indicesFG, indicesBG);
+        layers.put(0, 0, displayedMap, fgColors, bgColors);
         stage.draw();
         batch.begin();
         int sz = things.size();

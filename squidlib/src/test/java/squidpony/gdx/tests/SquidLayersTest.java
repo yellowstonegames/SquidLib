@@ -30,7 +30,8 @@ public class SquidLayersTest extends ApplicationAdapter{
 
     private SquidLayers layers;
     private char[][] map, displayedMap;
-    private int[][] indicesFG, indicesBG, lightness;
+    private int[][] lightness;
+    Color[][] fgColors, bgColors;
     private FOV fov;
     private TextCellFactory tcf;
     private StatefulRNG rng;
@@ -74,8 +75,8 @@ public class SquidLayersTest extends ApplicationAdapter{
         map = org.generate();
         map = gen.generate(map, org.getEnvironment());
         displayedMap = DungeonUtility.hashesToLines(map, true);
-        indicesBG = DungeonUtility.generateBGPaletteIndices(map);
-        indicesFG = DungeonUtility.generatePaletteIndices(map);
+        fgColors = MapUtility.generateDefaultColors(map);
+        bgColors = MapUtility.generateDefaultBGColors(map);
         resMap = DungeonUtility.generateResistances(map);
         GreasedRegion packed = new GreasedRegion(gen.getBareDungeon(), '.');
         points = packed.randomPortion(rng, 15);
@@ -138,8 +139,8 @@ public class SquidLayersTest extends ApplicationAdapter{
         //layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                layers.put(x, y, displayedMap[x][y], SColor.LIMITED_PALETTE[indicesFG[x][y]].toFloatBits(),
-                        SColor.LIMITED_PALETTE[indicesBG[x][y]].toFloatBits(), Math.max(0.2f, colorful[0][x][y]), colorful[1][x][y]);
+                layers.put(x, y, displayedMap[x][y], fgColors[x][y].toFloatBits(),
+                        bgColors[x][y].toFloatBits(), Math.max(0.2f, colorful[0][x][y]), colorful[1][x][y]);
             }
         }
         stage.getViewport().apply(false);

@@ -107,7 +107,6 @@ public class ThinWallDemo extends ApplicationAdapter {
      */
     private static final int cellHeight = 24 * INTERNAL_ZOOM;
     private VisualInput input;
-    private double counter;
     private boolean[][] seen;
     private int health = 9;
     private SquidColorCenter fgCenter, bgCenter;
@@ -175,7 +174,6 @@ public class ThinWallDemo extends ApplicationAdapter {
         messages.appendWrappingMessage("You are the purple '@', and enemies are red. Click/tap a cell to move. " +
                 "Use ? for help, q to quit. " +
                 "Click the top or bottom border of this box to scroll.");
-        counter = 0;
 
         dungeonGen = new ThinDungeonGenerator(width, height, rng, ROOM_WALL_RETRACT, CORRIDOR_WALL_RETRACT, CAVE_WALL_RETRACT);
         //dungeonGen = new ThinDungeonGenerator(width, height, rng, ROOM_WALL_EXPAND, CORRIDOR_WALL_EXPAND, CAVE_WALL_EXPAND);
@@ -255,20 +253,12 @@ public class ThinWallDemo extends ApplicationAdapter {
         toCursor = new IntVLA(10);
         awaitedMoves = new IntVLA(10);
         playerToCursor = new CustomDijkstraMap(decoDungeon, adjacency, rng);
-
-        final int[][] initialColors = DungeonUtility.generatePaletteIndices(lineDungeon),
-                initialBGColors = DungeonUtility.generateBGPaletteIndices(lineDungeon);
-        colors = new Color[overlapWidth][overlapHeight];
-        bgColors = new Color[overlapWidth][overlapHeight];
-        ArrayList<Color> palette = display.getPalette();
         bgColor = SColor.DARK_SLATE_GRAY;
-        for (int i = 0; i < overlapWidth; i++) {
-            for (int j = 0; j < overlapHeight; j++) {
-                colors[i][j] = palette.get(initialColors[i][j]);
-                bgColors[i][j] = palette.get(initialBGColors[i][j]);
-            }
-        }
-        lights = DungeonUtility.generateLightnessModifiers(lineDungeon, counter);
+
+        colors = MapUtility.generateDefaultColors(decoDungeon);
+        bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
+
         seen = new boolean[overlapWidth][overlapHeight];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -658,11 +648,11 @@ public class ThinWallDemo extends ApplicationAdapter {
                 // and 1.0), with 1.0 being almost pure white at +215 lightness and 0.0 being rather dark at -105.
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
-                    display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
+                    display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], colors[i][j], bgColors[i][j],
                             lights[i][j] + (int) (-105 + 250 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
-                    display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]), -140);
+                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -140);
                 }
             }
         }
@@ -682,11 +672,8 @@ public class ThinWallDemo extends ApplicationAdapter {
         // not sure if this is always needed...
         //Gdx.gl.glEnable(GL20.GL_BLEND);
 
-        // used as the z-axis when generating Simplex noise to make water seem to "move"
-        counter += Gdx.graphics.getDeltaTime() * 15;
-        // this does the standard lighting for walls, floors, etc. but also uses counter to do the Simplex noise thing.
-        lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
-        //textFactory.configureShader(batch);
+        // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
 
         // you done bad. you done real bad.
         if (health <= 0) {

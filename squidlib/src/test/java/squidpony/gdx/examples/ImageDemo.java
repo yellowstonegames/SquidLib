@@ -25,11 +25,11 @@ public class ImageDemo extends ApplicationAdapter {
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
-    private int[][] colors, bgColors, lights;
+    private Color[][] colors, bgColors;
+    private int[][] lights;
     private int width, height;
     private int cellWidth, cellHeight;
     private SquidInput input;
-    private double counter;
     private static final Color bgColor = SColor.DARK_SLATE_GRAY;
     private HashMap<Coord, AnimatedEntity> creatures;
     private Stage stage;
@@ -44,7 +44,6 @@ public class ImageDemo extends ApplicationAdapter {
         display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
-        counter = 0;
         lrng = new LightRNG(0x1337BEEF);
         rng = new RNG(lrng);
 
@@ -66,13 +65,13 @@ public class ImageDemo extends ApplicationAdapter {
             Coord monPos = dungeonGen.utility.randomFloor(placement);
             placement[monPos.x][monPos.y] = 'M';
             if(rng.nextBoolean())
-                creatures.put(monPos, display.animateActor(monPos.x, monPos.y, "M!", 11, true));
+                creatures.put(monPos, display.animateActor(monPos.x, monPos.y, "M!", SColor.RED, true));
             else
                 creatures.put(monPos, display.animateActor(monPos.x, monPos.y, DefaultResources.getTentacle(), true, false));
         }
-        colors = DungeonUtility.generatePaletteIndices(bareDungeon);
-        bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
-        lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
+        colors = MapUtility.generateDefaultColors(bareDungeon);
+        bgColors = MapUtility.generateDefaultBGColors(bareDungeon);
+        lights = MapUtility.generateLightnessModifiers(bareDungeon, System.currentTimeMillis() * 0.08);
 
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -116,10 +115,8 @@ public class ImageDemo extends ApplicationAdapter {
         // not sure if this is always needed...
         Gdx.gl.glEnable(GL20.GL_BLEND);
 
-        // used as the z-axis when generating Simplex noise to make water seem to "move"
-        counter += Gdx.graphics.getDeltaTime() * 15;
-        // this does the standard lighting for walls, floors, etc. but also uses counter to do the Simplex noise thing.
-        lights = DungeonUtility.generateLightnessModifiers(bareDungeon, counter);
+        // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
+        lights = MapUtility.generateLightnessModifiers(bareDungeon, System.currentTimeMillis() * 0.08);
 
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
