@@ -32,7 +32,7 @@ public class GreasedRegionTest {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
-    public static final boolean PRINTING = true;
+    public static final boolean PRINTING = false;
     public static void print2D(int[][] data)
     {
         if(!PRINTING)
@@ -361,7 +361,8 @@ public class GreasedRegionTest {
     {
         RNG rng = new RNG(0x1337BEEFAAAAAAAAL);
         GreasedRegion current = new GreasedRegion(rng, 0.52, 64, 64);
-        System.out.println(current + "\n\n");
+        if(PRINTING)
+            System.out.println(current + "\n\n");
         CellularAutomaton ca = new CellularAutomaton(current);
         if(PRINTING) {
             System.out.println(ca.runBasicSmoothing());

@@ -34,7 +34,8 @@ public class SquidAIDemo extends ApplicationAdapter {
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
     private double[][] res;
-    private int[][] colors, bgColors, lights;
+    private Color[][] colors, bgColors;
+    private int[][] lights;
     private LOS los;
     private int width, height;
     private int cellWidth, cellHeight;
@@ -95,14 +96,14 @@ public class SquidAIDemo extends ApplicationAdapter {
             Coord monPos = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
 
-            teamRed.add(display.animateActor(monPos.x, monPos.y, "50", 11, true));
+            teamRed.add(display.animateActor(monPos.x, monPos.y, "50", SColor.RED, true));
             redHealth.add(50);
             redPlaces.add(monPos);
 
             Coord monPosBlue = dungeonGen.utility.randomCell(placement);
             placement = CoordPacker.removePacked(placement, monPosBlue.x, monPosBlue.y);
 
-            teamBlue.add(display.animateActor(monPosBlue.x, monPosBlue.y, "50", 25, true));
+            teamBlue.add(display.animateActor(monPosBlue.x, monPosBlue.y, "50", SColor.COLUMBIA_BLUE, true));
             blueHealth.add(50);
             bluePlaces.add(monPosBlue);
         }
@@ -150,9 +151,9 @@ public class SquidAIDemo extends ApplicationAdapter {
         dijkstraAlert();
 
         awaitedMoves = new ArrayList<>(10);
-        colors = DungeonUtility.generatePaletteIndices(bareDungeon);
-        bgColors = DungeonUtility.generateBGPaletteIndices(bareDungeon);
-        lights = DungeonUtility.generateLightnessModifiers(bareDungeon);
+        colors = MapUtility.generateDefaultColors(bareDungeon);
+        bgColors = MapUtility.generateDefaultBGColors(bareDungeon);
+        lights = MapUtility.generateLightnessModifiers(bareDungeon);
 
         // just quit if we get a Q.
         input = new SquidInput(new SquidInput.KeyHandler() {

@@ -110,7 +110,6 @@ public class EverythingDemo extends ApplicationAdapter {
      */
     private int cellHeight;
     private SquidInput input;
-    private double counter;
     private boolean[][] seen;
     private int health = 7;
     private SquidColorCenter fgCenter, bgCenter;
@@ -278,7 +277,6 @@ public class EverythingDemo extends ApplicationAdapter {
         //subCell.setPosition(0, messages.getHeight());
         messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
                 " Click the top or bottom border of this box to scroll.");
-        counter = 0;
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
@@ -303,7 +301,7 @@ public class EverythingDemo extends ApplicationAdapter {
             Coord monPos = placement.singleRandom(rng);
             placement = placement.remove(monPos);
             monsters.put(monPos, i, new Monster(display.animateActor(monPos.x, monPos.y, 'Я',
-                    fgCenter.filter(display.getPalette().get(11))), 0));
+                    fgCenter.filter(SColor.LIMITED_PALETTE[11])), 0));
         }
         // your choice of FOV matters here.
         fov = new FOV(FOV.RIPPLE_TIGHT);
@@ -331,19 +329,10 @@ public class EverythingDemo extends ApplicationAdapter {
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(pl);
         playerToCursor.scan(null);
-        final int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
-                initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
-        colors = new Color[totalWidth][totalHeight];
-        bgColors = new Color[totalWidth][totalHeight];
-        ArrayList<Color> palette = display.getPalette();
         bgColor = SColor.DARK_SLATE_GRAY;
-        for (int i = 0; i < totalWidth; i++) {
-            for (int j = 0; j < totalHeight; j++) {
-                colors[i][j] = palette.get(initialColors[i][j]);
-                bgColors[i][j] = palette.get(initialBGColors[i][j]);
-            }
-        }
-        lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
+        colors = MapUtility.generateDefaultColors(decoDungeon);
+        bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
         seen = new boolean[decoDungeon.length][decoDungeon[0].length];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -846,11 +835,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // not sure if this is always needed...
         //Gdx.gl.glEnable(GL20.GL_BLEND);
 
-        // used as the z-axis when generating Simplex noise to make water seem to "move"
-        counter += Gdx.graphics.getDeltaTime() * 15;
-        // this does the standard lighting for walls, floors, etc. but also uses counter to do the Simplex noise thing.
-        lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
-        //textFactory.configureShader(batch);
+        // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
 
         // you done bad. you done real bad.
         if (health <= 0) {

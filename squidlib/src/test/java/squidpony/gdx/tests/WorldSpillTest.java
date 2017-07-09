@@ -15,9 +15,8 @@ import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.mapping.SpillWorldMap;
-import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
 
 /**
@@ -26,14 +25,13 @@ import squidpony.squidmath.StatefulRNG;
 public class WorldSpillTest extends ApplicationAdapter{
     public static final int gridWidth = 192, gridHeight = 128, cellWidth = 4, cellHeight = 4;
 
-    SquidLayers layers;
+    SquidPanel display;
     char[][] map, displayedMap;
-    int[][] indicesBG;
     SpillWorldMap swm;
-    GreasedRegion land;
     StatefulRNG rng;
     Stage stage;
     SpriteBatch batch;
+    float landColor, oceanColor, lightestColor;
     @Override
     public void create() {
         super.create();
@@ -41,19 +39,16 @@ public class WorldSpillTest extends ApplicationAdapter{
         swm = new SpillWorldMap(gridWidth, gridHeight, FakeLanguageGen.FANTASY_NAME.word(rng, true));
         displayedMap = ArrayTools.fill(' ', gridWidth, gridHeight);
         map = swm.generate(0, false, true, 0.0, 1.4);
-        land = new GreasedRegion(swm.heightMap, 0, 0xffff);
-        indicesBG = land.writeIntsInto(ArrayTools.fill(27, gridWidth, gridHeight), 20);
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                swm.heightMap[x][y] = swm.heightMap[x][y] * 3 - 150;
-            }
-        }
-        layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableDejaVuFont());
-        layers.setLightingColor(SColor.WHITE);
+        landColor = SColor.LIME_GREEN.toFloatBits();
+        oceanColor = SColor.CERULEAN.toFloatBits();
+        lightestColor = SColor.CW_ALMOST_WHITE.toFloatBits();
+
+        display = new SquidPanel(gridWidth, gridHeight,
+                DefaultResources.getStretchableDejaVuFont().width(cellWidth).height(cellHeight).initBySize());
+        display.setLightingColor(SColor.WHITE);
         batch = new SpriteBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
-        stage.addActor(layers);
+        stage.addActor(display);
         stage.addListener(new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -62,6 +57,7 @@ public class WorldSpillTest extends ApplicationAdapter{
                 return true;
             }
         });
+        refresh();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -69,14 +65,16 @@ public class WorldSpillTest extends ApplicationAdapter{
     {
         swm = new SpillWorldMap(gridWidth, gridHeight, FakeLanguageGen.FANTASY_NAME.word(rng, true));
         map = swm.generate(0, false, true, 0.0, 1.4);
-        land.empty().refill(swm.heightMap, 0, 0xffff);
-        ArrayTools.fill(indicesBG, 27);
-        land.writeIntsInto(indicesBG, 20);
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                swm.heightMap[x][y] = swm.heightMap[x][y] * 3 - 150;
+                display.colors[x][y] =
+                        (swm.heightMap[x][y] >= 0) ? SColor.lerpFloatColors(landColor, lightestColor,
+                        (swm.heightMap[x][y] * 3 + 106) * 0.001953125f)
+                : SColor.lerpFloatColors(oceanColor, lightestColor, 50 * 0.001953125f);
             }
         }
+        ArrayTools.fill(display.contents, '\0');
+
     }
 
     @Override
@@ -90,7 +88,6 @@ public class WorldSpillTest extends ApplicationAdapter{
         super.render();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        layers.put(0, 0, displayedMap, indicesBG, indicesBG, swm.heightMap);
         stage.getViewport().apply(false);
         stage.draw();
         stage.act();

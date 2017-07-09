@@ -148,6 +148,38 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/GDXMarkup.html#GDXMarkup--">GDXMarkup()</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/GDXMarkup.html" title="class in squidpony.squidgrid.gui.gdx">GDXMarkup</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColors-char:A:A-">generateDefaultBGColors(char[][])</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/MapUtility.html" title="class in squidpony.squidgrid.gui.gdx">MapUtility</a></dt>
+<dd>
+<div class="block">Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the
+ chars in map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColors-char:A:A-char-com.badlogic.gdx.graphics.Color-char-com.badlogic.gdx.graphics.Color-">generateDefaultBGColors(char[][], char, Color, char, Color)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/MapUtility.html" title="class in squidpony.squidgrid.gui.gdx">MapUtility</a></dt>
+<dd>
+<div class="block">Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the
+ chars in map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColors-char:A:A-">generateDefaultColors(char[][])</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/MapUtility.html" title="class in squidpony.squidgrid.gui.gdx">MapUtility</a></dt>
+<dd>
+<div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColors-char:A:A-char-com.badlogic.gdx.graphics.Color-char-com.badlogic.gdx.graphics.Color-">generateDefaultColors(char[][], char, Color, char, Color)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/MapUtility.html" title="class in squidpony.squidgrid.gui.gdx">MapUtility</a></dt>
+<dd>
+<div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-">generateLightnessModifiers(char[][])</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/MapUtility.html" title="class in squidpony.squidgrid.gui.gdx">MapUtility</a></dt>
+<dd>
+<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-">generateLightnessModifiers(char[][], double)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/MapUtility.html" title="class in squidpony.squidgrid.gui.gdx">MapUtility</a></dt>
+<dd>
+<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
+ animation frame if rippling water and waving grass using <code>SeededNoise</code> are desired.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-char-char-">generateLightnessModifiers(char[][], double, char, char)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/MapUtility.html" title="class in squidpony.squidgrid.gui.gdx">MapUtility</a></dt>
+<dd>
+<div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
+ animation frame if rippling water and waving grass using <code>SeededNoise</code> are desired.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html#get-long-">get(long)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html#get-float-float-float-float-">get(float, float, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a></dt>
@@ -394,10 +426,6 @@
 <dd>
 <div class="block">Gets the status of a boolean flag used for rendering thin maps; it will almost always be false unless it
  was set to true with <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html#setOnlyRenderEven-boolean-"><code>SquidPanel.setOnlyRenderEven(boolean)</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#getPalette--">getPalette()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
-<dd>
-<div class="block">Gets the current palette used when no other is specified.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.html#getPanelBuilder--">getPanelBuilder()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/AbstractSquidScreen.html" title="class in squidpony.squidgrid.gui.gdx">AbstractSquidScreen</a></dt>
 <dd>

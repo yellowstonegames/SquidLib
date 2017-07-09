@@ -97,7 +97,6 @@ public class RotationDemo extends ApplicationAdapter {
      */
     private static final int cellHeight = 28 * INTERNAL_ZOOM;
     private VisualInput input;
-    private double counter;
     private boolean[][] seen;
     private int health = 9;
     private SquidColorCenter fgCenter, bgCenter;
@@ -165,7 +164,6 @@ public class RotationDemo extends ApplicationAdapter {
         messages.appendWrappingMessage("You are the purple '^', and enemies are red. Click a cell to turn and move. " +
                 "Use ? for help, f to change colors, q to quit. " +
                 "Click the top or bottom border of this box to scroll.");
-        counter = 0;
 
         dungeonGen = new SectionDungeonGenerator(width, height, rng);
         dungeonGen.addWater(0, 25, 6);
@@ -250,20 +248,11 @@ public class RotationDemo extends ApplicationAdapter {
         toCursor = new IntVLA(10);
         awaitedMoves = new IntVLA(10);
         playerToCursor = new CustomDijkstraMap(decoDungeon, adjacency, rng);
-
-        final int[][] initialColors = DungeonUtility.generatePaletteIndices(decoDungeon),
-                initialBGColors = DungeonUtility.generateBGPaletteIndices(decoDungeon);
-        colors = new Color[width][height];
-        bgColors = new Color[width][height];
-        ArrayList<Color> palette = display.getPalette();
         bgColor = SColor.DARK_SLATE_GRAY;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                colors[i][j] = palette.get(initialColors[i][j]);
-                bgColors[i][j] = palette.get(initialBGColors[i][j]);
-            }
-        }
-        lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
+
+        colors = MapUtility.generateDefaultColors(decoDungeon);
+        bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
         seen = new boolean[width][height];
         /*
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
@@ -649,11 +638,8 @@ public class RotationDemo extends ApplicationAdapter {
         // not sure if this is always needed...
         //Gdx.gl.glEnable(GL20.GL_BLEND);
 
-        // used as the z-axis when generating Simplex noise to make water seem to "move"
-        counter += Gdx.graphics.getDeltaTime() * 15;
-        // this does the standard lighting for walls, floors, etc. but also uses counter to do the Simplex noise thing.
-        lights = DungeonUtility.generateLightnessModifiers(decoDungeon, counter);
-        //textFactory.configureShader(batch);
+        // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
 
         // you done bad. you done real bad.
         if (health <= 0) {

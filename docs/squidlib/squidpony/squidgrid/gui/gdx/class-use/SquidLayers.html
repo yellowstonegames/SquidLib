@@ -184,18 +184,11 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-java.util.ArrayList-int:A:A-int:A:A-int:A:A-">put</a></span>(int&nbsp;x,
+<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-com.badlogic.gdx.graphics.Color:A:A-com.badlogic.gdx.graphics.Color:A:A-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
    char[][]&nbsp;c,
-   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;alternatePalette,
-   int[][]&nbsp;foregroundIndex,
-   int[][]&nbsp;backgroundIndex,
-   int[][]&nbsp;backgroundLightness)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (255 will make the
- background equal the background panel's <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
- as-is, and values in between will be linearly interpolated between those two extremes).</div>
-</td>
+   com.badlogic.gdx.graphics.Color[][]&nbsp;foreground,
+   com.badlogic.gdx.graphics.Color[][]&nbsp;background)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
@@ -205,72 +198,13 @@
    com.badlogic.gdx.graphics.Color[][]&nbsp;foregrounds,
    com.badlogic.gdx.graphics.Color[][]&nbsp;backgrounds,
    int[][]&nbsp;backgroundLightness)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (255 will make the
- background equal the background panel's <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
+<div class="block">Place a 2@ char array c into the foreground, with foreground colors specified by a 2D Color array, background
+ colors with another 2D Color array, and lightness variations for the background in a 2D int array (255 will make
+ the background equal the background panel's <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
  as-is, and values in between will be linearly interpolated between those two extremes).</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-int:A:A-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char[][]&nbsp;c,
-   int[][]&nbsp;foregroundIndex)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-int:A:A-java.util.ArrayList-int:A:A-java.util.ArrayList-int:A:A-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char[][]&nbsp;c,
-   int[][]&nbsp;foregroundIndex,
-   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;fgPalette,
-   int[][]&nbsp;backgroundIndex,
-   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;bgPalette,
-   int[][]&nbsp;backgroundLightness)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (255 will make the
- background equal the background panel's <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
- as-is, and values in between will be linearly interpolated between those two extremes).</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-int:A:A-int:A:A-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char[][]&nbsp;c,
-   int[][]&nbsp;foregroundIndex,
-   int[][]&nbsp;backgroundIndex)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char:A:A-int:A:A-int:A:A-int:A:A-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char[][]&nbsp;c,
-   int[][]&nbsp;foregroundIndex,
-   int[][]&nbsp;backgroundIndex,
-   int[][]&nbsp;backgroundLightness)</code>
-<div class="block">Place a char[][] c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (255 will make the
- background equal the background panel's <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
- as-is, and values in between will be linearly interpolated between those two extremes).</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-java.util.ArrayList-int-int-int-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char&nbsp;c,
-   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;alternatePalette,
-   int&nbsp;foregroundIndex,
-   int&nbsp;backgroundIndex,
-   int&nbsp;backgroundLightness)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (0 is no change, 100 is
- very bright, -100 is very dark, anything past -150 or 150 will make the background almost fully black or white).</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
@@ -279,18 +213,17 @@
 <div class="block">Place a char c into the foreground, with a foreground color as a libGDX Color (or SColor).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
    char&nbsp;c,
    com.badlogic.gdx.graphics.Color&nbsp;foreground,
    com.badlogic.gdx.graphics.Color&nbsp;background)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into the default palette, and a
- background color specified in the same way.</div>
+<div class="block">Place a char c into the foreground, with a specified foreground color and background color.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-int-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
@@ -304,7 +237,7 @@
  linearly interpolated between those two extremes).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-int-com.badlogic.gdx.graphics.Color-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
@@ -319,7 +252,7 @@
  linearly interpolated between those two extremes).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-float-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
@@ -328,7 +261,7 @@
 <div class="block">Place a char c into the foreground, with a foreground color as a packed float.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-float-float-float-float-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
@@ -343,7 +276,7 @@
  lightness, mixBackground used on its own for 1 lightness, and values in between mixing the two).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-float-float-int-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
@@ -357,7 +290,7 @@
  linearly interpolated between those two extremes).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-float-float-int-float-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
@@ -372,57 +305,7 @@
  those two extremes).</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-int-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char&nbsp;c,
-   int&nbsp;foregroundIndex)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into the default palette.</div>
-</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-int-java.util.ArrayList-int-java.util.ArrayList-int-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char&nbsp;c,
-   int&nbsp;foregroundIndex,
-   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;fgPalette,
-   int&nbsp;backgroundIndex,
-   <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;bgPalette,
-   int&nbsp;backgroundLightness)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into alternatePalette, a
- background color specified in the same way, and a lightness variation for the background (255 will make the
- background equal the background panel's <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
- as-is, and values in between will be linearly interpolated between those two extremes).</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-int-int-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char&nbsp;c,
-   int&nbsp;foregroundIndex,
-   int&nbsp;backgroundIndex)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into the default palette, and a
- background color specified in the same way.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-int-int-int-">put</a></span>(int&nbsp;x,
-   int&nbsp;y,
-   char&nbsp;c,
-   int&nbsp;foregroundIndex,
-   int&nbsp;backgroundIndex,
-   int&nbsp;backgroundLightness)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into the default palette, a
- background color specified in the same way, and a lightness variation for the background (255 will make the
- background equal the background panel's <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#getLightingColor--"><code>SquidPanel.getLightingColor()</code></a>, -255 will use the background
- as-is, and values in between will be linearly interpolated between those two extremes).</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putBoxedString-int-int-java.lang.String-">putBoxedString</a></span>(int&nbsp;x,
               int&nbsp;y,
@@ -431,33 +314,22 @@
  of anything that was below or adjacent to the string's new position.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putInto-int-int-int-char-">putInto</a></span>(int&nbsp;layer,
        int&nbsp;x,
        int&nbsp;y,
        char&nbsp;c)</code>
-<div class="block">Place a char c into the specified layer, with a color specified by an index into alternatePalette.</div>
+<div class="block">Place a char c into the specified layer, using the specified layer's default foreground color.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putInto-int-int-int-char:A:A-">putInto</a></span>(int&nbsp;layer,
        int&nbsp;x,
        int&nbsp;y,
        char[][]&nbsp;c)</code>
-<div class="block">Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putInto-int-int-int-char:A:A-java.util.ArrayList-int:A:A-">putInto</a></span>(int&nbsp;layer,
-       int&nbsp;x,
-       int&nbsp;y,
-       char[][]&nbsp;c,
-       <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;alternatePalette,
-       int[][]&nbsp;colorIndex)</code>
-<div class="block">Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.</div>
+<div class="block">Place a 2D char array c into the specified layer, using the specified layer's default foreground color.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -467,28 +339,7 @@
        int&nbsp;y,
        char[][]&nbsp;c,
        com.badlogic.gdx.graphics.Color[][]&nbsp;colors)</code>
-<div class="block">Place a char c[][] into the specified layer, with a color specified by an index into alternatePalette.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putInto-int-int-int-char:A:A-int:A:A-">putInto</a></span>(int&nbsp;layer,
-       int&nbsp;x,
-       int&nbsp;y,
-       char[][]&nbsp;c,
-       int[][]&nbsp;colorIndex)</code>
-<div class="block">Place a char c[][] into the specified layer, with a color specified by an index into the default palette.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putInto-int-int-int-char-java.util.ArrayList-int-">putInto</a></span>(int&nbsp;layer,
-       int&nbsp;x,
-       int&nbsp;y,
-       char&nbsp;c,
-       <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;alternatePalette,
-       int&nbsp;colorIndex)</code>
-<div class="block">Place a char c into the specified layer, with a color specified by an index into alternatePalette.</div>
+<div class="block">Place a 2D char array c into the specified layer, using the matching Color from the given 2D Color array.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -498,37 +349,15 @@
        int&nbsp;y,
        char&nbsp;c,
        com.badlogic.gdx.graphics.Color&nbsp;color)</code>
-<div class="block">Place a char c into the foreground, with a foreground color specified by an index into the default palette.</div>
+<div class="block">Place a char c into the specified layer with the specified Color.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putInto-int-int-int-char-int-">putInto</a></span>(int&nbsp;layer,
-       int&nbsp;x,
-       int&nbsp;y,
-       char&nbsp;c,
-       int&nbsp;colorIndex)</code>
-<div class="block">Place a char c into the specified layer, with a color specified by an index into the default palette.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putString-int-int-java.lang.String-">putString</a></span>(int&nbsp;x,
          int&nbsp;y,
          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</code>
-<div class="block">Put a string at the given x, y position, using the default color.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putString-int-int-java.lang.String-java.util.ArrayList-int-int-">putString</a></span>(int&nbsp;x,
-         int&nbsp;y,
-         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
-         <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;alternatePalette,
-         int&nbsp;foregroundIndex,
-         int&nbsp;backgroundIndex)</code>
-<div class="block">Put a string at the given x, y position, with the given indices for foreground and background color that look up
- their index in alternatePalette.</div>
+<div class="block">Put a string at the given x, y position, using the default foreground color.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -547,29 +376,7 @@
          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
          com.badlogic.gdx.graphics.Color&nbsp;foreground,
          com.badlogic.gdx.graphics.Color&nbsp;background)</code>
-<div class="block">Put a string at the given x, y position, with the given indices for foreground and background color that look up
- their index in alternatePalette.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putString-int-int-java.lang.String-int-">putString</a></span>(int&nbsp;x,
-         int&nbsp;y,
-         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
-         int&nbsp;foregroundIndex)</code>
-<div class="block">Put a string at the given x, y position, with the given index for foreground color that gets looked up in the
- default palette.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SquidLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#putString-int-int-java.lang.String-int-int-">putString</a></span>(int&nbsp;x,
-         int&nbsp;y,
-         <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
-         int&nbsp;foregroundIndex,
-         int&nbsp;backgroundIndex)</code>
-<div class="block">Put a string at the given x, y position, with the given indices for foreground and background color that look up
- their index in the default palette.</div>
+<div class="block">Put a string at the given x, y position, with the given foreground and background Colors.</div>
 </td>
 </tr>
 <tr class="altColor">

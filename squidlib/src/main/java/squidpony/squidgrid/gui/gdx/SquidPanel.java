@@ -21,7 +21,6 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.StatefulRNG;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
@@ -243,10 +242,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 			put(0, 0, chars, foregrounds);
 	}
 
-    public void put(char[][] chars, int[][] indices, ArrayList<Color> palette) {
-        put(0, 0, chars, indices, palette);
-    }
-
     public void put(int xOffset, int yOffset, char[][] chars) {
         put(xOffset, yOffset, chars, defaultForeground);
     }
@@ -261,31 +256,11 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         }
     }
 
-    public void put(int xOffset, int yOffset, char[][] chars, int[][] indices, ArrayList<Color> palette) {
-        for (int x = xOffset; x < xOffset + chars.length; x++) {
-            for (int y = yOffset; y < yOffset + chars[0].length; y++) {
-                if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    put(x, y, chars[x - xOffset][y - yOffset], palette.get(indices[x - xOffset][y - yOffset]));
-                }
-            }
-        }
-    }
-
     public void put(int xOffset, int yOffset, Color[][] foregrounds) {
         for (int x = xOffset; x < xOffset + foregrounds.length; x++) {
             for (int y = yOffset; y < yOffset + foregrounds[0].length; y++) {
                 if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
                     put(x, y, '\0', foregrounds[x - xOffset][y - yOffset]);
-                }
-            }
-        }
-    }
-
-    public void put(int xOffset, int yOffset, int[][] indices, ArrayList<Color> palette) {
-        for (int x = xOffset; x < xOffset + indices.length; x++) {
-            for (int y = yOffset; y < yOffset + indices[0].length; y++) {
-                if (x >= 0 && y >= 0 && x < gridWidth && y < gridHeight) {//check for valid input
-                    put(x, y, '\0', palette.get(indices[x - xOffset][y - yOffset]));
                 }
             }
         }
@@ -523,14 +498,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
 
     public void put(int x, int y, int c, Color color) {
         put(x, y, String.valueOf(Character.toChars(c)), color);
-    }
-
-    public void put(int x, int y, int index, ArrayList<Color> palette) {
-        put(x, y, palette.get(index));
-    }
-
-    public void put(int x, int y, char c, int index, ArrayList<Color> palette) {
-        put(x, y, c, palette.get(index));
     }
 
     /**
@@ -909,33 +876,6 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
         AnimatedEntity ae = new AnimatedEntity(a, x, y, doubleWidth);
         animatedEntities.add(ae);
         return ae;
-    }
-    /**
-     * Create an AnimatedEntity at position x, y, using the char c with a color looked up by index in palette.
-     * @param x
-     * @param y
-     * @param c
-     * @param index
-     * @param palette
-     * @return
-     */
-    public AnimatedEntity animateActor(int x, int y, char c, int index, ArrayList<Color> palette)
-    {
-        return animateActor(x, y, c, palette.get(index));
-    }
-
-    /**
-     * Create an AnimatedEntity at position x, y, using the String s with a color looked up by index in palette.
-     * @param x
-     * @param y
-     * @param s
-     * @param index
-     * @param palette
-     * @return
-     */
-    public AnimatedEntity animateActor(int x, int y, String s, int index, ArrayList<Color> palette)
-    {
-        return animateActor(x, y, s, palette.get(index));
     }
 
     /**

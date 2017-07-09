@@ -108,7 +108,7 @@ public class ZoneDemo extends ApplicationAdapter {
 
         bgColors = new Color[width][height];
         recolorZones();
-        lights = DungeonUtility.generateLightnessModifiers(bareDungeon);
+        lights = MapUtility.generateLightnessModifiers(bareDungeon);
 
         // just quit if we get a Q.
         input = new SquidInput(new SquidInput.KeyHandler() {

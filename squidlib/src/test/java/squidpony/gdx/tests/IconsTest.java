@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.gdx.AnimatedEntity;
 import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.MapUtility;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
@@ -32,7 +33,7 @@ public class IconsTest extends ApplicationAdapter{
     int gridWidth, gridHeight, cellWidth, cellHeight;
     SquidLayers layers;
     char[][] map, displayedMap;
-    int[][] indicesFG, indicesBG;
+    Color[][] fgColors, bgColors;
     StatefulRNG rng;
     Stage stage;
     SpriteBatch batch;
@@ -71,8 +72,8 @@ public class IconsTest extends ApplicationAdapter{
         DungeonGenerator gen = new DungeonGenerator(gridWidth, gridHeight, rng);
         map = gen.generate();
         displayedMap = DungeonUtility.hashesToLines(map);
-        indicesBG = DungeonUtility.generateBGPaletteIndices(map);
-        indicesFG = DungeonUtility.generatePaletteIndices(map);
+        fgColors = MapUtility.generateDefaultColors(map);
+        bgColors = MapUtility.generateDefaultBGColors(map);
         resMap = DungeonUtility.generateResistances(map);
         short[] packed = CoordPacker.pack(gen.getBareDungeon(), '.');
         Coord[] points = CoordPacker.fractionPacked(packed, 7);
@@ -82,7 +83,7 @@ public class IconsTest extends ApplicationAdapter{
         AnimatedEntity ent;
         for (int i = 0; i < points.length; i++) {
             ent = layers.animateActor(points[i].x, points[i].y, regions.get(rng.nextInt(totalRegions)),
-                    i, colors);
+                    colors.get(i));
             things.put(points[i], ent);
             ent.actor.setUserObject(i);
         }
@@ -108,7 +109,7 @@ public class IconsTest extends ApplicationAdapter{
         for (int i = 0; i < things.size(); i++) {
             pt = things.keyAt(i);
             ent = layers.animateActor(pt.x, pt.y, regions.get(rng.nextInt(totalRegions)),
-                    i, colors);
+                    colors.get(i));
             things.put(pt, ent);
             ent.actor.setUserObject(i);
         }
@@ -160,7 +161,7 @@ public class IconsTest extends ApplicationAdapter{
 
         }
 
-        layers.put(0, 0, displayedMap, indicesFG, indicesBG);
+        layers.put(0, 0, displayedMap, fgColors, bgColors);
         stage.draw();
         batch.begin();
         int sz = things.size();

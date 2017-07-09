@@ -29,7 +29,8 @@ public class BasicDemo2 extends ApplicationAdapter {
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
-    private int[][] colorIndices, bgColorIndices, baseLightness;
+    private Color[][] colors, bgColors;
+    private int[][] baseLightness;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
     //We're displaying 24 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
@@ -169,9 +170,9 @@ public class BasicDemo2 extends ApplicationAdapter {
         //same size as decoDungeon that store simple indexes into a common list of colors, using the colors that looks
         // up as the colors for the cell with the same x and y.
         bgColor = SColor.DARK_SLATE_GRAY;
-        display.alterPalette(3, SColor.DB_GRAPHITE);
-        colorIndices = DungeonUtility.generatePaletteIndices(decoDungeon);
-        bgColorIndices = DungeonUtility.generateBGPaletteIndices(decoDungeon);
+        SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
+        colors = MapUtility.generateDefaultColors(decoDungeon);
+        bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
         baseLightness = ArrayTools.fill(40, gridWidth, gridHeight);
         // this creates an array of sentence builders, where each imitates one or more languages or linguistic styles.
         // this serves to demonstrate the large amount of glyphs SquidLib supports.
@@ -416,29 +417,29 @@ public class BasicDemo2 extends ApplicationAdapter {
                 if(visible[i][j] > 0.1) {
                     int bright = baseLightness[i][j] + (int) (-105 +
                             180 * (visible[i][j] * (1.0 + 0.2 * SeededNoise.noise(i * 0.2, j * 0.2, (int) (System.currentTimeMillis() & 0xffffff) * 0.001, 10000))));
-                    display.put(i, j, lineDungeon[i][j], colorIndices[i][j], bgColorIndices[i][j], bright);
+                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], bright);
                 }else if(seen.contains(i, j))
-                    display.put(i, j, lineDungeon[i][j], colorIndices[i][j], bgColorIndices[i][j], -80);
+                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -80);
                 else
-                    display.put(i, j, ' ', 0);
+                    display.put(i, j, ' ', SColor.BLACK);
             }
         }
         Coord pt;
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.put(pt.x, pt.y, line[i+1], 23, bgColorIndices[pt.x][pt.y], 130);
+            display.put(pt.x, pt.y, line[i+1], SColor.CW_RICH_AZURE, bgColors[pt.x][pt.y], 130);
         }
-        //places the player as an '@' at his position in orange (6 is an index into SColor.LIMITED_PALETTE).
-        display.put(player.x, player.y, '@', 6);
+        //places the player as an '@' at his position in orange.
+        display.put(player.x, player.y, '@', SColor.SAFETY_ORANGE);
         //this helps compatibility with the HTML target, which doesn't support String.format()
         char[] spaceArray = new char[gridWidth];
         Arrays.fill(spaceArray, ' ');
         String spaces = String.valueOf(spaceArray);
 
         for (int i = 0; i < 6; i++) {
-            display.putString(0, gridHeight + i + 1, spaces, 0, 1);
-            display.putString(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], 0, 1);
+            display.putString(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.CREAM);
+            display.putString(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.CREAM);
         }
     }
     @Override
