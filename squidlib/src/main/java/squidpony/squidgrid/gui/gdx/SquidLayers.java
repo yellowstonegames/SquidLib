@@ -13,11 +13,13 @@ import squidpony.squidmath.OrderedSet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static com.badlogic.gdx.math.MathUtils.clamp;
 
 /**
- * A helper class to make using multiple SquidPanels easier.
+ * A helper class to make using multiple SquidPanels easier. The first entry in the palette list is
+ * used as the default background and the second entry is used as the default foreground.
  * <br>
  * There is some useful documentation in this class' getPalette method (honestly, I don't know where else to put
  * documentation specifically about this class' default palette)..
@@ -417,62 +419,8 @@ public class SquidLayers extends Group {
     }
 
     private void initPalettes() {
-        palette = new ArrayList<>(256);
+        palette = new ArrayList<>(SColor.LIMITED_PALETTE.length);
         Collections.addAll(palette, SColor.LIMITED_PALETTE);
-        /*
-        palette.add(SColor.PURE_DARK_GRAY);
-        palette.add(SColor.CREAM);
-        palette.add(SColor.FLATTERY_BROWN);
-        palette.add(SColor.SILVER_GREY);
-        palette.add(SColor.RUST);
-        palette.add(SColor.PALE_CORNFLOWER_BLUE);
-        palette.add(SColor.INTERNATIONAL_ORANGE);
-
-        palette.add(SColor.WHITE);
-        palette.add(SColor.LIGHT_GRAY);
-        palette.add(SColor.DARK_GRAY);
-
-        palette.add(SColor.RED_INCENSE);
-        palette.add(SColor.RED);
-        palette.add(SColor.COCHINEAL_RED);
-
-        palette.add(SColor.PEACH_ORANGE);
-        palette.add(SColor.ORANGE_PEEL);
-        palette.add(SColor.TANGERINE);
-
-        palette.add(SColor.LEMON_CHIFFON);
-        palette.add(SColor.CORN);
-        palette.add(SColor.GOLDEN_YELLOW);
-
-        palette.add(SColor.TEA_GREEN);
-        palette.add(SColor.LIME_GREEN);
-        palette.add(SColor.GREEN_BAMBOO);
-
-        palette.add(SColor.CYAN);
-        palette.add(SColor.OCEAN_BLUE);
-        palette.add(SColor.MIDORI);
-
-        palette.add(SColor.COLUMBIA_BLUE);
-        palette.add(SColor.ROYAL_BLUE);
-        palette.add(SColor.PERSIAN_BLUE);
-
-        palette.add(SColor.LAVENDER_BLUE);
-        palette.add(SColor.DARK_VIOLET);
-        palette.add(SColor.INDIGO);
-
-        palette.add(SColor.CARNATION_PINK);
-        palette.add(SColor.HOT_MAGENTA);
-        palette.add(SColor.LIGHT_MAROON);
-
-        palette.add(SColor.TAN);
-        palette.add(SColor.DARK_TAN);
-        palette.add(SColor.PALE_BROWN);
-
-        palette.add(SColor.STEAMED_CHESTNUT);
-        palette.add(SColor.DARK_CHESTNUT);
-        palette.add(SColor.SAPPANWOOD_INCENSE);
-
-         */
     }
 
     /**
@@ -491,6 +439,20 @@ public class SquidLayers extends Group {
         addActor(sp);
         extraPanels.add(sp);
         return this;
+    }
+
+    /**
+     * Sets the internal palette to contain the same colors in the same order as the one provided.
+     *
+     * The first entry will be used as the default background and the second entry will be used as
+     * the default foreground.
+     *
+     * @param palette the ordered list of Color objects to use as the new palette
+     */
+    public void setPalette(List<Color> palette) {
+        this.palette.clear();
+        this.palette.addAll(palette);
+        this.palette.trimToSize();
     }
 
     /**
