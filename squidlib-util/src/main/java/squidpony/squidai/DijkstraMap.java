@@ -2901,12 +2901,12 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findPathPreScanned(Coord target) {
         path.clear();
-        if (!initialized || goals == null || goals.isEmpty()) return path;
+        if (!initialized || goals == null || goals.isEmpty()) return new ArrayList<>();
         Coord currentPos = target;
         if(gradientMap[currentPos.x][currentPos.y] <= FLOOR)
             path.add(currentPos);
         else
-            return path;
+            return new ArrayList<>();
         RNG rng2 = new StatefulRNG(0xf00d);
         while (true) {
             if (frustration > 2000) {
