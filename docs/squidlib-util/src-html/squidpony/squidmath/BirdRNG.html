@@ -97,7 +97,7 @@
 <span class="sourceLineNo">089</span>                choice += (state[i] ^= splitMix32(seed[s] + i * 0x9E3779B9));<a name="line.89"></a>
 <span class="sourceLineNo">090</span>            }<a name="line.90"></a>
 <span class="sourceLineNo">091</span>        } else {<a name="line.91"></a>
-<span class="sourceLineNo">092</span>            for (int i = 0, s = 0; s &lt; len; s++, i = (i + 1) &amp; 31) {<a name="line.92"></a>
+<span class="sourceLineNo">092</span>            for (int i = 0, s = 0; s &lt; len; s++, i = (i + 1) &amp; 63) {<a name="line.92"></a>
 <span class="sourceLineNo">093</span>                choice += (state[i] ^= seed[s]);<a name="line.93"></a>
 <span class="sourceLineNo">094</span>            }<a name="line.94"></a>
 <span class="sourceLineNo">095</span>        }<a name="line.95"></a>
@@ -154,7 +154,7 @@
 <span class="sourceLineNo">146</span>                    choice += (state[i] = seed[i]);<a name="line.146"></a>
 <span class="sourceLineNo">147</span>                }<a name="line.147"></a>
 <span class="sourceLineNo">148</span>            } else {<a name="line.148"></a>
-<span class="sourceLineNo">149</span>                for (int i = 0, s = 0; s &lt; len; s++, i = (i + 1) &amp; 31) {<a name="line.149"></a>
+<span class="sourceLineNo">149</span>                for (int i = 0, s = 0; s &lt; len; s++, i = (i + 1) &amp; 63) {<a name="line.149"></a>
 <span class="sourceLineNo">150</span>                    choice += (state[i] ^= seed[s]);<a name="line.150"></a>
 <span class="sourceLineNo">151</span>                }<a name="line.151"></a>
 <span class="sourceLineNo">152</span>            }<a name="line.152"></a>
@@ -163,58 +163,59 @@
 <span class="sourceLineNo">155</span><a name="line.155"></a>
 <span class="sourceLineNo">156</span>    @Override<a name="line.156"></a>
 <span class="sourceLineNo">157</span>    public final long nextLong() {<a name="line.157"></a>
-<span class="sourceLineNo">158</span>        return (long)nextInt() &lt;&lt; 32 ^ nextInt();<a name="line.158"></a>
-<span class="sourceLineNo">159</span>        //final int c = (choice + 0xB9A2842F), d = (choice += 0x7345085E);<a name="line.159"></a>
-<span class="sourceLineNo">160</span>        //return (long) (state[c &amp; 63] += (state[c &gt;&gt;&gt; 27] + 0x9296FE47 + d &gt;&gt;&gt; 1)) &lt;&lt; 32 ^<a name="line.160"></a>
-<span class="sourceLineNo">161</span>        //        (state[d &amp; 63] + (state[d &gt;&gt;&gt; 27] + 0x9296FE47 + c &gt;&gt;&gt; 1));<a name="line.161"></a>
-<span class="sourceLineNo">162</span>        // (state[(choice += 0x8A532AEF) &amp; 31] += (state[choice &gt;&gt;&gt; 28] += choice | 0x941CCBAD) &gt;&gt;&gt; 1)<a name="line.162"></a>
-<span class="sourceLineNo">163</span>    }<a name="line.163"></a>
-<span class="sourceLineNo">164</span>    public final int nextInt() {<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        return (state[choice &amp; 63] += (state[choice &gt;&gt;&gt; 27] + 0x9296FE47 &gt;&gt;&gt; 1) + (choice += 0xB9A2842F));<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    }<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    @Override<a name="line.167"></a>
-<span class="sourceLineNo">168</span>    public final int next(final int bits) {<a name="line.168"></a>
-<span class="sourceLineNo">169</span>        return  nextInt() &gt;&gt;&gt; (32 - bits);<a name="line.169"></a>
-<span class="sourceLineNo">170</span>    }<a name="line.170"></a>
-<span class="sourceLineNo">171</span><a name="line.171"></a>
-<span class="sourceLineNo">172</span>    /**<a name="line.172"></a>
-<span class="sourceLineNo">173</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.173"></a>
-<span class="sourceLineNo">174</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.174"></a>
-<span class="sourceLineNo">175</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.175"></a>
-<span class="sourceLineNo">176</span>     *<a name="line.176"></a>
-<span class="sourceLineNo">177</span>     * @return a copy of this RandomnessSource<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     */<a name="line.178"></a>
-<span class="sourceLineNo">179</span>    @Override<a name="line.179"></a>
-<span class="sourceLineNo">180</span>    public RandomnessSource copy() {<a name="line.180"></a>
-<span class="sourceLineNo">181</span>        BirdRNG hr = new BirdRNG(state);<a name="line.181"></a>
-<span class="sourceLineNo">182</span>        hr.choice = choice;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        return hr;<a name="line.183"></a>
-<span class="sourceLineNo">184</span>    }<a name="line.184"></a>
-<span class="sourceLineNo">185</span><a name="line.185"></a>
-<span class="sourceLineNo">186</span>    @Override<a name="line.186"></a>
-<span class="sourceLineNo">187</span>    public String toString() {<a name="line.187"></a>
-<span class="sourceLineNo">188</span>        return "BirdRNG{" +<a name="line.188"></a>
-<span class="sourceLineNo">189</span>                "state=" + StringKit.hex(state) +<a name="line.189"></a>
-<span class="sourceLineNo">190</span>                ", choice=" + choice +<a name="line.190"></a>
-<span class="sourceLineNo">191</span>                '}';<a name="line.191"></a>
-<span class="sourceLineNo">192</span>    }<a name="line.192"></a>
-<span class="sourceLineNo">193</span><a name="line.193"></a>
-<span class="sourceLineNo">194</span>    @Override<a name="line.194"></a>
-<span class="sourceLineNo">195</span>    public boolean equals(Object o) {<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        if (this == o) return true;<a name="line.196"></a>
-<span class="sourceLineNo">197</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.197"></a>
-<span class="sourceLineNo">198</span><a name="line.198"></a>
-<span class="sourceLineNo">199</span>        BirdRNG birdRNG = (BirdRNG) o;<a name="line.199"></a>
-<span class="sourceLineNo">200</span><a name="line.200"></a>
-<span class="sourceLineNo">201</span>        return choice == birdRNG.choice &amp;&amp; Arrays.equals(state, birdRNG.state);<a name="line.201"></a>
-<span class="sourceLineNo">202</span>    }<a name="line.202"></a>
-<span class="sourceLineNo">203</span><a name="line.203"></a>
-<span class="sourceLineNo">204</span>    @Override<a name="line.204"></a>
-<span class="sourceLineNo">205</span>    public int hashCode() {<a name="line.205"></a>
-<span class="sourceLineNo">206</span>        return 31 * choice + CrossHash.Wisp.hash(state);<a name="line.206"></a>
-<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
-<span class="sourceLineNo">208</span>}<a name="line.208"></a>
-<span class="sourceLineNo">209</span><a name="line.209"></a>
+<span class="sourceLineNo">158</span>        return (long)(state[(choice += 0xB9A2842F) &amp; 63] += (state[choice &gt;&gt;&gt; 27] &gt;&gt;&gt; 1) + choice)<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                &lt;&lt; 32 ^ (state[(choice += 0xB9A2842F) &amp; 63] += (state[choice &gt;&gt;&gt; 27] &gt;&gt;&gt; 1) + choice);<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        //final int c = (choice + 0xB9A2842F), d = (choice += 0x7345085E);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        //return (long) (state[c &amp; 63] += (state[c &gt;&gt;&gt; 27] + 0x9296FE47 + d &gt;&gt;&gt; 1)) &lt;&lt; 32 ^<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        //        (state[d &amp; 63] + (state[d &gt;&gt;&gt; 27] + 0x9296FE47 + c &gt;&gt;&gt; 1));<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        // (state[(choice += 0x8A532AEF) &amp; 31] += (state[choice &gt;&gt;&gt; 28] += choice | 0x941CCBAD) &gt;&gt;&gt; 1)<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    }<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    public final int nextInt() {<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        return (state[(choice += 0xB9A2842F) &amp; 63] += (state[choice &gt;&gt;&gt; 27] &gt;&gt;&gt; 1) + choice);<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    }<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    @Override<a name="line.168"></a>
+<span class="sourceLineNo">169</span>    public final int next(final int bits) {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        return (state[(choice += 0xB9A2842F) &amp; 63] += (state[choice &gt;&gt;&gt; 27] &gt;&gt;&gt; 1) + choice) &gt;&gt;&gt; (32 - bits);<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     *<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @return a copy of this RandomnessSource<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    @Override<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    public RandomnessSource copy() {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        BirdRNG hr = new BirdRNG(state);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        hr.choice = choice;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        return hr;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>    @Override<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    public String toString() {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        return "BirdRNG{" +<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                "state=" + StringKit.hex(state) +<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                ", choice=" + choice +<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                '}';<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    }<a name="line.193"></a>
+<span class="sourceLineNo">194</span><a name="line.194"></a>
+<span class="sourceLineNo">195</span>    @Override<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    public boolean equals(Object o) {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        if (this == o) return true;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.198"></a>
+<span class="sourceLineNo">199</span><a name="line.199"></a>
+<span class="sourceLineNo">200</span>        BirdRNG birdRNG = (BirdRNG) o;<a name="line.200"></a>
+<span class="sourceLineNo">201</span><a name="line.201"></a>
+<span class="sourceLineNo">202</span>        return choice == birdRNG.choice &amp;&amp; Arrays.equals(state, birdRNG.state);<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    }<a name="line.203"></a>
+<span class="sourceLineNo">204</span><a name="line.204"></a>
+<span class="sourceLineNo">205</span>    @Override<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    public int hashCode() {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        return 31 * choice + CrossHash.Wisp.hash(state);<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    }<a name="line.208"></a>
+<span class="sourceLineNo">209</span>}<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
 
 
 

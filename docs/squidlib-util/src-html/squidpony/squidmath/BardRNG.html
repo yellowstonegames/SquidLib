@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.util.Arrays;<a name="line.6"></a>
+<span class="sourceLineNo">007</span><a name="line.7"></a>
+<span class="sourceLineNo">008</span>/**<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * Another one of the highest-quality 32-bit-math generators present in this library, complete with a very long period<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * and over 4096 bits of state (4128 if you include a necessary counter). While BardRNG does not have a fast lookahead<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * or lookbehind and the state may be a burden if multiple instances are needed, those are its most significant flaws.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * Speed is slightly better than BirdRNG and should be more reliable at obtaining optimizations from HotSpot, but this<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * is nowhere near the speed of FlapRNG (probably closer to HerdRNG). While it is similar to LongPeriodRNG and BirdRNG<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * in that it has a lot of state, BardRNG is faster on int generation and should be comparable on long generation. It<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * does not slow down significantly if used as a RandomnessSource for an RNG, while BirdRNG and sometimes LongPeriodRNG<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * will suffer from the indirection of calling {@link #next(int)}. BardRNG currently passes the PractRand suite of RNG<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * quality testing with no anomalies, failure or otherwise, given 64MB of random ints. This is better than BirdRNG,<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * which still has anomalies of varying severity. It may be able to pass DIEHARDER, but that wouldn't be much of a<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * surprise because BardRNG has so much state, and that tends to make passing that test suite easier.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * &lt;br&gt;<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * Created by Tommy Ettinger on 6/14/2017.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> */<a name="line.22"></a>
+<span class="sourceLineNo">023</span>public class BardRNG implements RandomnessSource, Serializable {<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    /*<a name="line.24"></a>
+<span class="sourceLineNo">025</span>// Thanks umireon! This is CC0 licensed code in this comment block.<a name="line.25"></a>
+<span class="sourceLineNo">026</span>// https://github.com/umireon/my-random-stuff/blob/master/xorshift/splitmix32.c<a name="line.26"></a>
+<span class="sourceLineNo">027</span>// Written in 2016 by Kaito Udagawa<a name="line.27"></a>
+<span class="sourceLineNo">028</span>// Released under CC0 &lt;http://creativecommons.org/publicdomain/zero/1.0/&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>// [1]: Guy L. Steele, Jr., Doug Lea, and Christine H. Flood. 2014. Fast splittable pseudorandom number generators. In Proceedings of the 2014 ACM International Conference on Object Oriented Programming Systems Languages &amp; Applications (OOPSLA '14). ACM, New York, NY, USA, 453-472.<a name="line.29"></a>
+<span class="sourceLineNo">030</span>uint32_t splitmix32(uint32_t *x) {<a name="line.30"></a>
+<span class="sourceLineNo">031</span>  uint32_t z = (*x += 0x9e3779b9);<a name="line.31"></a>
+<span class="sourceLineNo">032</span>  z = (z ^ (z &gt;&gt; 16)) * 0x85ebca6b;<a name="line.32"></a>
+<span class="sourceLineNo">033</span>  z = (z ^ (z &gt;&gt; 13)) * 0xc2b2ae35;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>  return z ^ (z &gt;&gt; 16);<a name="line.34"></a>
+<span class="sourceLineNo">035</span>}<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     */<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * Call this with {@code splitMix32(z += 0x9E3779B9)}, where z is an int to use as state.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * 0x9E3779B9 can be changed for any odd int if the same number is used across calls.<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * @param z int, must be changed with each call; {@code splitMix32(z += 0x9E3779B9)} is recommended<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * @return a pseudo-random int<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     */<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    public static int splitMix32(int z) {<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        z = (z ^ (z &gt;&gt;&gt; 16)) * 0x85EBCA6B;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        z = (z ^ (z &gt;&gt;&gt; 13)) * 0xC2B2AE35;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        return z ^ (z &gt;&gt;&gt; 16);<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    }<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    /**<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * Call this with {@code splitMix32(z += 0x9E3779B97F4A7C15L)}, where z is a long to use as state.<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * 0x9E3779B97F4A7C15L can be changed for any odd long if the same number is used across calls.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * @param z long, must be changed with each call; {@code splitMix32(z += 0x9E3779B97F4A7C15L)} is recommended<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * @return a pseudo-random long<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     */<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    public static long splitMix64(long z) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        return z ^ (z &gt;&gt;&gt; 31);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    }<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>    private static final long serialVersionUID = 1L;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    private final int[] state = new int[128];<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    private int choice = 0;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    public BardRNG() {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        this((int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    }<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>    public BardRNG(final int seed) {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        setState(seed);<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    }<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span><a name="line.73"></a>
+<span class="sourceLineNo">074</span>    public BardRNG(final long seed) {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        setState(seed);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    public BardRNG(final int[] seed) {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        int len;<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        if (seed == null || (len = seed.length) == 0) {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            for (int i = 0; i &lt; 128; i++) {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                choice += (state[i] = splitMix32(0x632D978F + i * 0x9E3779B9));<a name="line.82"></a>
+<span class="sourceLineNo">083</span>            }<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        } else if (len &lt; 128) {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            for (int i = 0, s = 0; i &lt; 128; i++, s++) {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                if(s == len) s = 0;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>                choice += (state[i] ^= splitMix32(seed[s] + i * 0x9E3779B9));<a name="line.87"></a>
+<span class="sourceLineNo">088</span>            }<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        } else {<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            for (int i = 0, s = 0; s &lt; len; s++, i = (i + 1) &amp; 127) {<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                choice += (state[i] ^= seed[s]);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>            }<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        }<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    }<a name="line.94"></a>
+<span class="sourceLineNo">095</span><a name="line.95"></a>
+<span class="sourceLineNo">096</span>    /**<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * Uses the given String or other CharSequence as the basis for the 64 ints this uses as state, assigning choice to<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * be the sum of the rest of state.<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * Internally, this gets a 32-bit hash for seed with 48 different variations on the {@link CrossHash.Mist} hashing<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * algorithm and 16 variations on the {@link CrossHash.Storm} algorithm, and uses one for each int in state. This<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * tolerates null and empty-String values for seed.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * @param seed a String or other CharSequence; may be null<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     */<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    public BardRNG(final CharSequence seed)<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    {<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        for (int i = 0; i &lt; 48; i++) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            choice += (state[i] = CrossHash.Mist.predefined[i].hash(seed));<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            choice += (state[64+i] = CrossHash.Mist.predefined[i].hash(seed));<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        }<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        for (int i = 48; i &lt; 64; i++) {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>            choice += (state[i] = CrossHash.Storm.predefined[i &amp; 15].hash(seed));<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            choice += (state[64 + i] = CrossHash.Storm.predefined[i &amp; 15].hash(seed));<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    }<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>    public void setState(final int seed) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        choice = 0;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        for (int i = 0; i &lt; 128; i++) {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            choice += (state[i] = splitMix32(seed + i * 0x9E3779B9));<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        }<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>    public void setState(final long seed) {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        choice = 0;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        for (int i = 0; i &lt; 128; i++) {<a name="line.125"></a>
+<span class="sourceLineNo">126</span>            choice += (state[i] = (int)splitMix64(seed + i * 0x9E3779B9));<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        }<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>    public void setState(final int[] seed)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        int len;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        if (seed == null || (len = seed.length) == 0) {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            for (int i = 0; i &lt; 128; i++) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                choice += (state[i] = splitMix32(0x632D978F + i * 0x9E3779B9));<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            }<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        } else if (len &lt; 128) {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            for (int i = 0, s = 0; i &lt; 128; i++, s++) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                if(s == len) s = 0;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                choice += (state[i] ^= splitMix32(seed[s] + i * 0x9E3779B9));<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            }<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        } else {<a name="line.142"></a>
+<span class="sourceLineNo">143</span>            if (len == 128) {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                choice = 0;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                for (int i = 0; i &lt; 128; i++) {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                    choice += (state[i] = seed[i]);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                }<a name="line.147"></a>
+<span class="sourceLineNo">148</span>            } else {<a name="line.148"></a>
+<span class="sourceLineNo">149</span>                for (int i = 0, s = 0; s &lt; len; s++, i = (i + 1) &amp; 127) {<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                    choice += (state[i] ^= seed[s]);<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                }<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            }<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        }<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span>    @Override<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    public final long nextLong() {<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        final int c2 = (choice += 0x7345085E), c = c2 - 0xB9A2842F;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        return (long)(state[c * 0x85157AF5 &gt;&gt;&gt; 25] += (c &gt;&gt;&gt; (c &gt;&gt;&gt; 28)) * 0x632BE5AB) &lt;&lt; 32 ^<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                (state[c2 * 0x85157AF5 &gt;&gt;&gt; 25] += (c2 &gt;&gt;&gt; (c2 &gt;&gt;&gt; 28)) * 0x632BE5AB);<a name="line.160"></a>
+<span class="sourceLineNo">161</span>    }<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    public final int nextInt() {<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        final int c = (choice += 0xB9A2842F);<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        return (state[c * 0x85157AF5 &gt;&gt;&gt; 25] += (c &gt;&gt;&gt; (c &gt;&gt;&gt; 28)) * 0x632BE5AB);<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    }<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    @Override<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    public final int next(final int bits) {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        final int c = (choice += 0xB9A2842F);<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        return (state[c * 0x85157AF5 &gt;&gt;&gt; 25] += (c &gt;&gt;&gt; (c &gt;&gt;&gt; 28)) * 0x632BE5AB)<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                &gt;&gt;&gt; (32 - bits);<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     *<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @return a copy of this RandomnessSource<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    @Override<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    public RandomnessSource copy() {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        BardRNG hr = new BardRNG(state);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        hr.choice = choice;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        return hr;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span>    @Override<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    public String toString() {<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        return "BardRNG{" +<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                "state=" + StringKit.hex(state) +<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                ", choice=" + StringKit.hex(choice) +<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                '}';<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    }<a name="line.193"></a>
+<span class="sourceLineNo">194</span><a name="line.194"></a>
+<span class="sourceLineNo">195</span>    @Override<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    public boolean equals(Object o) {<a name="line.196"></a>
+<span class="sourceLineNo">197</span>        if (this == o) return true;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.198"></a>
+<span class="sourceLineNo">199</span><a name="line.199"></a>
+<span class="sourceLineNo">200</span>        BardRNG bardRNG = (BardRNG) o;<a name="line.200"></a>
+<span class="sourceLineNo">201</span><a name="line.201"></a>
+<span class="sourceLineNo">202</span>        return choice == bardRNG.choice &amp;&amp; Arrays.equals(state, bardRNG.state);<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    }<a name="line.203"></a>
+<span class="sourceLineNo">204</span><a name="line.204"></a>
+<span class="sourceLineNo">205</span>    @Override<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    public int hashCode() {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        return 31 * choice + CrossHash.Wisp.hash(state);<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    }<a name="line.208"></a>
+<span class="sourceLineNo">209</span>}<a name="line.209"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

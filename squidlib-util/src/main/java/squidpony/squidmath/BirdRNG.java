@@ -89,7 +89,7 @@ uint32_t splitmix32(uint32_t *x) {
                 choice += (state[i] ^= splitMix32(seed[s] + i * 0x9E3779B9));
             }
         } else {
-            for (int i = 0, s = 0; s < len; s++, i = (i + 1) & 31) {
+            for (int i = 0, s = 0; s < len; s++, i = (i + 1) & 63) {
                 choice += (state[i] ^= seed[s]);
             }
         }
@@ -146,7 +146,7 @@ uint32_t splitmix32(uint32_t *x) {
                     choice += (state[i] = seed[i]);
                 }
             } else {
-                for (int i = 0, s = 0; s < len; s++, i = (i + 1) & 31) {
+                for (int i = 0, s = 0; s < len; s++, i = (i + 1) & 63) {
                     choice += (state[i] ^= seed[s]);
                 }
             }
@@ -155,18 +155,19 @@ uint32_t splitmix32(uint32_t *x) {
 
     @Override
     public final long nextLong() {
-        return (long)nextInt() << 32 ^ nextInt();
+        return (long)(state[(choice += 0xB9A2842F) & 63] += (state[choice >>> 27] >>> 1) + choice)
+                << 32 ^ (state[(choice += 0xB9A2842F) & 63] += (state[choice >>> 27] >>> 1) + choice);
         //final int c = (choice + 0xB9A2842F), d = (choice += 0x7345085E);
         //return (long) (state[c & 63] += (state[c >>> 27] + 0x9296FE47 + d >>> 1)) << 32 ^
         //        (state[d & 63] + (state[d >>> 27] + 0x9296FE47 + c >>> 1));
         // (state[(choice += 0x8A532AEF) & 31] += (state[choice >>> 28] += choice | 0x941CCBAD) >>> 1)
     }
     public final int nextInt() {
-        return (state[choice & 63] += (state[choice >>> 27] + 0x9296FE47 >>> 1) + (choice += 0xB9A2842F));
+        return (state[(choice += 0xB9A2842F) & 63] += (state[choice >>> 27] >>> 1) + choice);
     }
     @Override
     public final int next(final int bits) {
-        return  nextInt() >>> (32 - bits);
+        return (state[(choice += 0xB9A2842F) & 63] += (state[choice >>> 27] >>> 1) + choice) >>> (32 - bits);
     }
 
     /**

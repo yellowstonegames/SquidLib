@@ -2909,12 +2909,12 @@
 <span class="sourceLineNo">2901</span>     */<a name="line.2901"></a>
 <span class="sourceLineNo">2902</span>    public ArrayList&lt;Coord&gt; findPathPreScanned(Coord target) {<a name="line.2902"></a>
 <span class="sourceLineNo">2903</span>        path.clear();<a name="line.2903"></a>
-<span class="sourceLineNo">2904</span>        if (!initialized || goals == null || goals.isEmpty()) return path;<a name="line.2904"></a>
+<span class="sourceLineNo">2904</span>        if (!initialized || goals == null || goals.isEmpty()) return new ArrayList&lt;&gt;();<a name="line.2904"></a>
 <span class="sourceLineNo">2905</span>        Coord currentPos = target;<a name="line.2905"></a>
 <span class="sourceLineNo">2906</span>        if(gradientMap[currentPos.x][currentPos.y] &lt;= FLOOR)<a name="line.2906"></a>
 <span class="sourceLineNo">2907</span>            path.add(currentPos);<a name="line.2907"></a>
 <span class="sourceLineNo">2908</span>        else<a name="line.2908"></a>
-<span class="sourceLineNo">2909</span>            return path;<a name="line.2909"></a>
+<span class="sourceLineNo">2909</span>            return new ArrayList&lt;&gt;();<a name="line.2909"></a>
 <span class="sourceLineNo">2910</span>        RNG rng2 = new StatefulRNG(0xf00d);<a name="line.2910"></a>
 <span class="sourceLineNo">2911</span>        while (true) {<a name="line.2911"></a>
 <span class="sourceLineNo">2912</span>            if (frustration &gt; 2000) {<a name="line.2912"></a>

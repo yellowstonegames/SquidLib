@@ -518,8 +518,8 @@
 <span class="sourceLineNo">510</span>     *<a name="line.510"></a>
 <span class="sourceLineNo">511</span>     * @param startX the inclusive starting x position<a name="line.511"></a>
 <span class="sourceLineNo">512</span>     * @param startY the inclusive starting y position<a name="line.512"></a>
-<span class="sourceLineNo">513</span>     * @param width  the width of the space to place Coords in<a name="line.513"></a>
-<span class="sourceLineNo">514</span>     * @param height the height of the space to place Coords in<a name="line.514"></a>
+<span class="sourceLineNo">513</span>     * @param width  the width of the space to place Coords in, extending from startX<a name="line.513"></a>
+<span class="sourceLineNo">514</span>     * @param height the height of the space to place Coords in, extending from startY<a name="line.514"></a>
 <span class="sourceLineNo">515</span>     * @return an array containing {@code width * height} Coord items in random order, inside the given bounds<a name="line.515"></a>
 <span class="sourceLineNo">516</span>     */<a name="line.516"></a>
 <span class="sourceLineNo">517</span>    public Coord[] getRandomUniqueCells(final int startX, final int startY, final int width, final int height) {<a name="line.517"></a>
@@ -535,8 +535,8 @@
 <span class="sourceLineNo">527</span>     *<a name="line.527"></a>
 <span class="sourceLineNo">528</span>     * @param startX the inclusive starting x position<a name="line.528"></a>
 <span class="sourceLineNo">529</span>     * @param startY the inclusive starting y position<a name="line.529"></a>
-<span class="sourceLineNo">530</span>     * @param width  the width of the space to place Coords in<a name="line.530"></a>
-<span class="sourceLineNo">531</span>     * @param height the height of the space to place Coords in<a name="line.531"></a>
+<span class="sourceLineNo">530</span>     * @param width  the width of the space to place Coords in, extending from startX<a name="line.530"></a>
+<span class="sourceLineNo">531</span>     * @param height the height of the space to place Coords in, extending from startY<a name="line.531"></a>
 <span class="sourceLineNo">532</span>     * @param size   the size of the array to return; only matters if it is smaller than {@code width * height}<a name="line.532"></a>
 <span class="sourceLineNo">533</span>     * @return an array containing {@code Math.min(width * height, size)} Coord items in random order, inside the given bounds<a name="line.533"></a>
 <span class="sourceLineNo">534</span>     */<a name="line.534"></a>
@@ -555,8 +555,8 @@
 <span class="sourceLineNo">547</span>     *<a name="line.547"></a>
 <span class="sourceLineNo">548</span>     * @param startX the inclusive starting x position<a name="line.548"></a>
 <span class="sourceLineNo">549</span>     * @param startY the inclusive starting y position<a name="line.549"></a>
-<span class="sourceLineNo">550</span>     * @param width  the width of the space to place Coords in<a name="line.550"></a>
-<span class="sourceLineNo">551</span>     * @param height the height of the space to place Coords in<a name="line.551"></a>
+<span class="sourceLineNo">550</span>     * @param width  the width of the space to place Coords in, extending from startX<a name="line.550"></a>
+<span class="sourceLineNo">551</span>     * @param height the height of the space to place Coords in, extending from startY<a name="line.551"></a>
 <span class="sourceLineNo">552</span>     * @param dest   a Coord array that will be modified to contain randomly-ordered Coords, but will not be resized<a name="line.552"></a>
 <span class="sourceLineNo">553</span>     * @return dest, now with up to its first {@code width * height} items assigned to random Coords inside the given bounds<a name="line.553"></a>
 <span class="sourceLineNo">554</span>     */<a name="line.554"></a>
@@ -566,7 +566,7 @@
 <span class="sourceLineNo">558</span>            return dest;<a name="line.558"></a>
 <span class="sourceLineNo">559</span>        int[] o = randomOrdering(width * height);<a name="line.559"></a>
 <span class="sourceLineNo">560</span>        for (int i = 0; i &lt; o.length &amp;&amp; i &lt; dest.length; i++) {<a name="line.560"></a>
-<span class="sourceLineNo">561</span>            dest[i] = Coord.get(startX + o[i] / width, startY + o[i] % width);<a name="line.561"></a>
+<span class="sourceLineNo">561</span>            dest[i] = Coord.get(startX + o[i] % width, startY + o[i] / width);<a name="line.561"></a>
 <span class="sourceLineNo">562</span>        }<a name="line.562"></a>
 <span class="sourceLineNo">563</span>        return dest;<a name="line.563"></a>
 <span class="sourceLineNo">564</span>    }<a name="line.564"></a>

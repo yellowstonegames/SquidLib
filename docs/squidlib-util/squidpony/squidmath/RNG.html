@@ -1037,8 +1037,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>startX</code> - the inclusive starting x position</dd>
 <dd><code>startY</code> - the inclusive starting y position</dd>
-<dd><code>width</code> - the width of the space to place Coords in</dd>
-<dd><code>height</code> - the height of the space to place Coords in</dd>
+<dd><code>width</code> - the width of the space to place Coords in, extending from startX</dd>
+<dd><code>height</code> - the height of the space to place Coords in, extending from startY</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array containing <code>width * height</code> Coord items in random order, inside the given bounds</dd>
 </dl>
@@ -1062,8 +1062,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>startX</code> - the inclusive starting x position</dd>
 <dd><code>startY</code> - the inclusive starting y position</dd>
-<dd><code>width</code> - the width of the space to place Coords in</dd>
-<dd><code>height</code> - the height of the space to place Coords in</dd>
+<dd><code>width</code> - the width of the space to place Coords in, extending from startX</dd>
+<dd><code>height</code> - the height of the space to place Coords in, extending from startY</dd>
 <dd><code>size</code> - the size of the array to return; only matters if it is smaller than <code>width * height</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array containing <code>Math.min(width * height, size)</code> Coord items in random order, inside the given bounds</dd>
@@ -1089,8 +1089,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>startX</code> - the inclusive starting x position</dd>
 <dd><code>startY</code> - the inclusive starting y position</dd>
-<dd><code>width</code> - the width of the space to place Coords in</dd>
-<dd><code>height</code> - the height of the space to place Coords in</dd>
+<dd><code>width</code> - the width of the space to place Coords in, extending from startX</dd>
+<dd><code>height</code> - the height of the space to place Coords in, extending from startY</dd>
 <dd><code>dest</code> - a Coord array that will be modified to contain randomly-ordered Coords, but will not be resized</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>dest, now with up to its first <code>width * height</code> items assigned to random Coords inside the given bounds</dd>

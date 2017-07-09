@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -269,20 +269,34 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#changeCellWeight-int-int-double-">changeCellWeight</a></span>(int&nbsp;x,
+                int&nbsp;y,
+                double&nbsp;d)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#f-int-int-">f</a></span>(int&nbsp;x,
  int&nbsp;y)</code>
 <div class="block">Combines g and h to get the estimated distance from start to goal going on the current route.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#g-int-int-">g</a></span>(int&nbsp;x,
  int&nbsp;y)</code>
 <div class="block">Finds the g value (start to current) for the given location.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#getHeight--">getHeight</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#getWidth--">getWidth</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#h-int-int-">h</a></span>(int&nbsp;x,
  int&nbsp;y)</code>
@@ -290,14 +304,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  using the current calculation type.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#path-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">path</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;start,
     <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;target)</code>
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Queue.html?is-external=true" title="class or interface in java.util">Queue</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#path-int-int-int-int-">path</a></span>(int&nbsp;startx,
     int&nbsp;starty,
@@ -306,11 +320,11 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <div class="block">Finds an A* path to the target from the start.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>protected <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#smallestF--">smallestF</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/AStarSearch.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -518,13 +532,42 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="changeCellWeight-int-int-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>changeCellWeight</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.226">changeCellWeight</a>(int&nbsp;x,
+                             int&nbsp;y,
+                             double&nbsp;d)</pre>
+</li>
+</ul>
+<a name="getWidth--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getWidth</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.230">getWidth</a>()</pre>
+</li>
+</ul>
+<a name="getHeight--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHeight</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.234">getHeight</a>()</pre>
+</li>
+</ul>
 <a name="g-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>g</h4>
-<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.234">g</a>(int&nbsp;x,
+<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.247">g</a>(int&nbsp;x,
                    int&nbsp;y)</pre>
 <div class="block">Finds the g value (start to current) for the given location.
 
@@ -543,7 +586,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>h</h4>
-<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.262">h</a>(int&nbsp;x,
+<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.275">h</a>(int&nbsp;x,
                    int&nbsp;y)</pre>
 <div class="block">Returns the heuristic distance from the current cell to the goal location\
  using the current calculation type.</div>
@@ -562,7 +605,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>f</h4>
-<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.289">f</a>(int&nbsp;x,
+<pre>protected&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.302">f</a>(int&nbsp;x,
                    int&nbsp;y)</pre>
 <div class="block">Combines g and h to get the estimated distance from start to goal going on the current route.</div>
 <dl>
@@ -582,7 +625,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>smallestF</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.300">smallestF</a>()</pre>
+<pre>protected&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.313">smallestF</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the current open point with the smallest F</dd>
@@ -595,7 +638,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.324">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/AStarSearch.html#line.337">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
