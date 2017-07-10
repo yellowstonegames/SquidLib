@@ -293,7 +293,7 @@ public class TextPanel<T extends Color> {
 	 * @param text
 	 */
 	public void init(float width, float maxHeight, Collection<? extends IColoredString<T>> text) {
-        this.text = new ArrayList<>(text);
+        this.text = new ArrayList<IColoredString<T>>(text);
 
         scrollPane.setWidth(width);
         textActor.setWidth(width);
