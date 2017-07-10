@@ -255,8 +255,8 @@ public class ThinWallDemo extends ApplicationAdapter {
         playerToCursor = new CustomDijkstraMap(decoDungeon, adjacency, rng);
         bgColor = SColor.DARK_SLATE_GRAY;
 
-        colors = MapUtility.generateDefaultColors(decoDungeon);
-        bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
+        colors = MapUtility.generateDefaultColors(lineDungeon);
+        bgColors = MapUtility.generateDefaultBGColors(lineDungeon);
         lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
 
         seen = new boolean[overlapWidth][overlapHeight];
@@ -421,7 +421,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                 decoDungeon[newX][newY] = '/';
                 lineDungeon[newX][newY] = '/';
                 // changes to the map mean the resistances for FOV need to be regenerated.
-                res = DungeonUtility.generateResistances(decoDungeon);
+                res = DungeonUtility.generateResistances(lineDungeon);
                 // recalculate FOV, store it in fovmap for the render to use.
                 fovmap = fov.calculateFOV(res, currentX, currentY, 12, Radius.SQUARE);
             } else {
@@ -443,7 +443,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                         decoDungeon[newX][newY - 1] = '/';
                         lineDungeon[newX][newY - 1] = '/';
                     }
-                    res = DungeonUtility.generateResistances(decoDungeon);
+                    res = DungeonUtility.generateResistances(lineDungeon);
                 }
                 // recalculate FOV, store it in fovmap for the render to use.
                 fovmap = fov.calculateFOV(res, newX, newY, 12, Radius.SQUARE);

@@ -1150,11 +1150,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             x &= -2;
             y &= -2;
         }
-        if(x < 0 || y < 0 || x >= contents.length || y >= contents[x].length)
-            return;
         String n;
-        if (restoreSym && (n = a.getName()) != null && !n.isEmpty())
-            contents[x][y] = a.getName().charAt(0);
+        if(restoreSym && x >= 0 && y >= 0 && x < contents.length && y < contents[x].length
+                && (n = a.getName()) != null && !n.isEmpty())
+        {
+                contents[x][y] = n.charAt(0);
+        }
         removeActor(a);
         autoActors.remove(a);
     }
@@ -1168,11 +1169,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
             nextX &= -2;
             nextY &= -2;
         }
-        if(nextX < 0 || nextY < 0 || nextX >= contents.length || nextY >= contents[nextX].length)
-            return;
         String n;
-        if (restoreSym && (n = a.getName()) != null && !n.isEmpty())
-            contents[nextX][nextY] = a.getName().charAt(0);
+        if(restoreSym && nextX >= 0 && nextY >= 0 && nextX < contents.length && nextY < contents[nextX].length
+                && (n = a.getName()) != null && !n.isEmpty())
+        {
+            contents[nextX][nextY] = n.charAt(0);
+        }
         removeActor(a);
         autoActors.remove(a);
     }
