@@ -6,10 +6,7 @@ import squidpony.squidgrid.mapping.locks.Edge;
 import squidpony.squidgrid.mapping.locks.IRoomLayout;
 import squidpony.squidgrid.mapping.locks.Room;
 import squidpony.squidgrid.mapping.locks.util.Rect2I;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.IntVLA;
-import squidpony.squidmath.PoissonDisk;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.*;
 
@@ -78,17 +75,60 @@ public class MixedGenerator implements IDungeonGenerator {
     protected int totalPoints;
 
     /**
-     * Internal use.
+     * Mainly for internal use; this can be used with {@link #MixedGenerator(int, int, RNG)} to get its room positions.
+     * This was the default for generating a List of Coord if no other collection of Coord was supplied to the
+     * constructor, but it has been swapped out for {@link #cleanPoints(int, int, RNG)}, which produces a cleaner layout
+     * of rooms with less overlap. If you want the exact old behavior while only supplying a width and height as ints as
+     * well as an RNG, construct a MixedGenerator with
+     * {@code new MixedGenerator(width, height, rng, basicPoints(width, height, rng))}.
+     * <br>
+     * <a href="https://gist.githubusercontent.com/tommyettinger/be0ed51858cb492bc7e8cda43a04def1/raw/dae9d8e4f45dd3a3577bdd5f58b419ea5f9ed570/PoissonDungeon.txt">Preview map.</a>
      * @param width dungeon width in cells
      * @param height dungeon height in cells
      * @param rng rng to use
      * @return evenly spaced Coord points in a list made by PoissonDisk, trimmed down so they aren't all used
      * @see PoissonDisk used to make the list
      */
-    protected static List<Coord> basicPoints(int width, int height, RNG rng)
+    public static List<Coord> basicPoints(int width, int height, RNG rng)
     {
         return PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
                 8.5f * (width + height) / 120f, width, height, 35, rng);
+    }
+    /**
+     * Mainly for internal use; this is used by {@link #MixedGenerator(int, int, RNG)} to get its room positions.
+     * It produces a cleaner layout of rooms that should have less overlap between rooms and corridors; a good approach
+     * is to favor {@link #putWalledBoxRoomCarvers(int)} and {@link #putWalledRoundRoomCarvers(int)} more than you might
+     * otherwise consider in place of caves, since caves may be larger than you would expect here. The exact technique
+     * used here is to get points from the Halton sequence (formed by two different van der Corput sequences, which
+     * {@link VanDerCorputQRNG} produces), but to sometimes stop short on the way to the next point and instead use a
+     * Coord that is likely to be close to either the start or end but is only rarely in the middle (this avoids
+     * clumping, though it still happens with caves).
+     * <br>
+     * <a href="https://gist.githubusercontent.com/tommyettinger/be0ed51858cb492bc7e8cda43a04def1/raw/dae9d8e4f45dd3a3577bdd5f58b419ea5f9ed570/HaltonImproved.txt">Preview map.</a>
+     * @param width dungeon width in cells
+     * @param height dungeon height in cells
+     * @param rng rng to use
+     * @return erratically-positioned but generally separated Coord points to pass to a MixedGenerator constructor
+     * @see VanDerCorputQRNG used to get separated positions
+     */
+    public static List<Coord> cleanPoints(int width, int height, RNG rng)
+    {
+        width -= 2;
+        height -= 2;
+        float mx = rng.nextFloat(), my = rng.nextFloat(), dist;
+        int index = 11 + rng.next(4), sz = width * height / 103, nx, ny;
+        Coord current = Coord.get((int)(((VanDerCorputQRNG.determine2(index) + mx) % 1.0) * width + 1),
+                (int)(((VanDerCorputQRNG.determine(7, index) + my) % 1.0) * height + 1));
+        List<Coord> list = new ArrayList<>(sz);
+        list.add(current);
+        for (int i = 0; i < sz; i++) {
+            nx = (int) (((VanDerCorputQRNG.determine2(++index) + mx) % 1.0) * width + 1);
+            ny = (int) (((VanDerCorputQRNG.determine(3, index) + my) % 1.0) * height + 1);
+            dist = (NumberTools.formCurvedFloat(rng.nextInt()) + 2f) % 2f * 0.5f;
+            current = Coord.get((int) ((nx - current.x) * dist) + current.x, (int) ((ny - current.y) * dist) + current.y);
+            list.add(current);
+        }
+        return list;
     }
 
     /**
@@ -104,7 +144,7 @@ public class MixedGenerator implements IDungeonGenerator {
      * @see PoissonDisk used to ensure spacing for the points.
      */
     public MixedGenerator(int width, int height, RNG rng) {
-        this(width, height, rng, basicPoints(width, height, rng));
+        this(width, height, rng, cleanPoints(width, height, rng));
     }
 
     /**
