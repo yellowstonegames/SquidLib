@@ -3,7 +3,6 @@ package squidpony.examples;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
-import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
@@ -92,12 +91,12 @@ public class DungeonGeneratorTest {
         dungeonGenerator.addBoulders(5);
         dungeonGenerator.addTraps(2);
 
-        //MixedGenerator mix = new MixedGenerator(width, height, rng);
-        //mix.putCaveCarvers(3);
-        //mix.putWalledBoxRoomCarvers(2);
-        //mix.putWalledRoundRoomCarvers(2);
-        //dungeonGenerator.generate(mix.generate());
-        dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        MixedGenerator mix = new MixedGenerator(width, height, rng);
+        mix.putCaveCarvers(1);
+        mix.putWalledBoxRoomCarvers(7);
+        mix.putWalledRoundRoomCarvers(5);
+        dungeonGenerator.generate(mix.generate());
+        //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
         char[][] dungeon = dungeonGenerator.getDungeon();
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
