@@ -13,7 +13,13 @@ import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.*;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.WhirlingNoise;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
@@ -300,6 +306,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         }
     }
 
+    private String date, path;
 
     @Override
     public void create() {
@@ -307,15 +314,17 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //display = new SquidPanel(width, height, cellWidth, cellHeight);
         view = new StretchViewport(width*cellWidth, height*cellHeight);
         stage = new Stage(view, batch);
-        if(!Gdx.files.local("out/worlds/").exists())
-            Gdx.files.local("out/worlds/").mkdirs();
+        date = DateFormat.getDateInstance().format(new Date());
+        path = "out/worlds/" + date + "/";
+        if(!Gdx.files.local(path).exists())
+            Gdx.files.local(path).mkdirs();
         pm = new Pixmap(width, height, Pixmap.Format.RGB888);
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
-        rng = new StatefulRNG();
+        rng = new StatefulRNG(CrossHash.Wisp.hash64(date));
         seed = rng.getState();
         //world = new WorldMapGenerator.TilingMap(seed, width, height, SeededNoise.instance, 0.75);
-        world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Scaled3D(WhirlingNoise.instance, 0.78, 0.78, 0.78), 1.1);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 1.0);
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -399,7 +408,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     public void putMap() {
         String name = lang.word(rng, true); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
-        while (Gdx.files.local("out/worlds/" + name + ".png").exists())
+        while (Gdx.files.local(path + name + ".png").exists())
             name = lang.word(rng, true);
 
         generate(CrossHash.Wisp.hash64(name));
@@ -473,7 +482,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pt.draw(pm, 0, 0);
         batch.draw(pt, 0, 0);
         batch.end();
-        PixmapIO.writePNG(Gdx.files.local("out/worlds/" + name + ".png"), pm);
+        PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
         if(++counter >= 64)
             Gdx.app.exit();
 

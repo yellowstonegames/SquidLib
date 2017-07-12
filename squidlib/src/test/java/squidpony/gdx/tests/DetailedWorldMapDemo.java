@@ -36,8 +36,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    //private static final int width = 314 * 4, height = 400;
-    private static final int width = 650, height = 650;
+    private static final int width = 314 * 5, height = 500;
+    //private static final int width = 650, height = 650;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -303,8 +303,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
-        //world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Scaled3D(WhirlingNoise.instance, 0.78, 0.78, 0.78), 0.75);
-        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.0);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
+        //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.9);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
