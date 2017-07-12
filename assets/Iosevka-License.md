@@ -1,5 +1,5 @@
 The font is licensed under SIL OFL Version 1.1.
-This covers the files in this distribution:
+This covers the files in this distribution, when present:
 * Iosevka-distance.png
 * Iosevka-Slab-distance.png
 * Iosevka-Light-distance.png
