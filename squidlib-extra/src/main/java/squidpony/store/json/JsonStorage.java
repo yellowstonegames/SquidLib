@@ -1,9 +1,9 @@
 package squidpony.store.json;
 
-import blazing.chain.LZSEncoding;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.JsonWriter;
+import squidpony.LZSPlus;
 import squidpony.StringStringMap;
 import squidpony.annotation.Beta;
 import squidpony.Garbler;
@@ -21,7 +21,7 @@ public class JsonStorage {
     public final JsonConverter json;
     protected StringStringMap contents;
     public boolean compress = true;
-    public String garbleKey = null;
+    public int[] garbleKey = null;
 
     /**
      * Please don't use this constructor if possible; it simply calls {@link #JsonStorage(String)} with the constant
@@ -31,7 +31,7 @@ public class JsonStorage {
      */
     public JsonStorage()
     {
-        this("nameless", null);
+        this("nameless", new int[0]);
     }
 
     /**
@@ -55,7 +55,7 @@ public class JsonStorage {
      */
     public JsonStorage(final String fileName)
     {
-        this(fileName, null);
+        this(fileName, new int[0]);
     }
 
     /**
@@ -86,7 +86,41 @@ public class JsonStorage {
         preferences = Gdx.app.getPreferences(storageName);
         json = new JsonConverter(JsonWriter.OutputType.minimal);
         contents = new StringStringMap(16, 0.2f);
-        garbleKey = garble;
+        garbleKey = Garbler.makeKeyArray(5, garble);
+    }
+    /**
+     * Creates a JsonStorage with the given fileName to save using Preferences from libGDX. The name should generally
+     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,
+     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
+     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly
+     * to games or applications other than your own; you should avoid values for fileName that might overlap with
+     * another game's Preferences values. This constructor also allows you to specify a "garble" int array; if this is
+     * non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic
+     * methods. If garble is null or empty, it is ignored.
+     * <br>
+     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a
+     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when
+     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.
+     * <br>
+     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,
+     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller
+     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in
+     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.
+     * The custom char[][] representation is about half the normal size by omitting commas after each char.
+     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.
+     * @param garble an int array that will be used as a key to obfuscate the saved output if non-null
+     */
+    public JsonStorage(final String fileName, final int[] garble) {
+        storageName = fileName;
+        preferences = Gdx.app.getPreferences(storageName);
+        json = new JsonConverter(JsonWriter.OutputType.minimal);
+        contents = new StringStringMap(16, 0.2f);
+        if (garble == null || garble.length == 0)
+            garbleKey = null;
+        else {
+            garbleKey = new int[garble.length];
+            System.arraycopy(garble, 0, garbleKey, 0, garble.length);
+        }
     }
 
     /**
@@ -117,14 +151,14 @@ public class JsonStorage {
     {
         if(garbleKey == null) {
             if (compress)
-                preferences.putString(outerName, LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)));
+                preferences.putString(outerName, LZSPlus.compress(json.toJson(contents, StringStringMap.class)));
             else
                 preferences.putString(outerName, json.toJson(contents, StringStringMap.class));
         }
         else
         {
             if (compress)
-                preferences.putString(outerName, Garbler.garble32(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey));
+                preferences.putString(outerName, LZSPlus.compress(json.toJson(contents, StringStringMap.class), garbleKey));
             else
                 preferences.putString(outerName, Garbler.garble32(json.toJson(contents, StringStringMap.class), garbleKey));
         }
@@ -140,14 +174,14 @@ public class JsonStorage {
     public String show() {
         if (garbleKey == null) {
             if (compress)
-                return LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class));
+                return LZSPlus.compress(json.toJson(contents, StringStringMap.class));
             else
                 return json.toJson(contents, StringStringMap.class);
         }
         else
         {
             if (compress)
-                return Garbler.garble32(LZSEncoding.compressToUTF16(json.toJson(contents, StringStringMap.class)), garbleKey);
+                return LZSPlus.compress(json.toJson(contents, StringStringMap.class), garbleKey);
             else
                 return Garbler.garble32(json.toJson(contents, StringStringMap.class), garbleKey);
 
@@ -195,14 +229,14 @@ public class JsonStorage {
         String got;
         if(garbleKey == null) {
             if (compress)
-                got = LZSEncoding.decompressFromUTF16(preferences.getString(outerName));
+                got = LZSPlus.decompress(preferences.getString(outerName));
             else
                 got = preferences.getString(outerName);
         }
         else
         {
             if (compress)
-                got = LZSEncoding.decompressFromUTF16(Garbler.degarble32(preferences.getString(outerName), garbleKey));
+                got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);
             else
                 got = Garbler.degarble32(preferences.getString(outerName), garbleKey);
         }

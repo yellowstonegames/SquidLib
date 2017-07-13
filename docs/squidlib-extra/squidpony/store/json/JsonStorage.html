@@ -145,7 +145,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/json/JsonStorage.html#contents">contents</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/json/JsonStorage.html#garbleKey">garbleKey</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -186,6 +186,12 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/store/json/JsonStorage.html#JsonStorage-java.lang.String-int:A-">JsonStorage</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
+           int[]&nbsp;garble)</code>
+<div class="block">Creates a JsonStorage with the given fileName to save using Preferences from libGDX.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/store/json/JsonStorage.html#JsonStorage-java.lang.String-java.lang.String-">JsonStorage</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garble)</code>
 <div class="block">Creates a JsonStorage with the given fileName to save using Preferences from libGDX.</div>
@@ -328,7 +334,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>garbleKey</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.24">garbleKey</a></pre>
+<pre>public&nbsp;int[] <a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.24">garbleKey</a></pre>
 </li>
 </ul>
 </li>
@@ -387,7 +393,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <a name="JsonStorage-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>JsonStorage</h4>
 <pre>public&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.83">JsonStorage</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
@@ -417,6 +423,39 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="JsonStorage-java.lang.String-int:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>JsonStorage</h4>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.113">JsonStorage</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fileName,
+                   int[]&nbsp;garble)</pre>
+<div class="block">Creates a JsonStorage with the given fileName to save using Preferences from libGDX. The name should generally
+ be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,
+ semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
+ not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly
+ to games or applications other than your own; you should avoid values for fileName that might overlap with
+ another game's Preferences values. This constructor also allows you to specify a "garble" int array; if this is
+ non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic
+ methods. If garble is null or empty, it is ignored.
+ <br>
+ To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a
+ String outerName when you call <a href="../../../squidpony/store/json/JsonStorage.html#store-java.lang.String-"><code>store(String)</code></a>, and can further distinguish data under the outerName when
+ you call <a href="../../../squidpony/store/json/JsonStorage.html#put-java.lang.String-java.lang.Object-"><code>put(String, Object)</code></a> to put each individual item into the saved storage with its own innerName.
+ <br>
+ Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,
+ IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller
+ serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in
+ JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.
+ The custom char[][] representation is about half the normal size by omitting commas after each char.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fileName</code> - the valid file name to create or open from Preferences; typically the name of the game/app.</dd>
+<dd><code>garble</code> - an int array that will be used as a key to obfuscate the saved output if non-null</dd>
+</dl>
+</li>
+</ul>
 </li>
 </ul>
 <!-- ============ METHOD DETAIL ========== -->
@@ -431,7 +470,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;<a href="../../../squidpony/store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.100">put</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName,
+<pre>public&nbsp;<a href="../../../squidpony/store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.134">put</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName,
                        <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <div class="block">Prepares to store the Object <code>o</code> to be retrieved with <code>innerName</code> in the current group of objects.
  Does not write to a permanent location until <a href="../../../squidpony/store/json/JsonStorage.html#store-java.lang.String-"><code>store(String)</code></a> is called. The innerName used to store an
@@ -451,7 +490,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>store</h4>
-<pre>public&nbsp;<a href="../../../squidpony/store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.116">store</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outerName)</pre>
+<pre>public&nbsp;<a href="../../../squidpony/store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.150">store</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outerName)</pre>
 <div class="block">Actually stores all objects that had previously been prepared with <a href="../../../squidpony/store/json/JsonStorage.html#put-java.lang.String-java.lang.Object-"><code>put(String, Object)</code></a>, with
  <code>outerName</code> used as a key to retrieve any object in the current group. Flushes the preferences, making the
  changes permanent (until overwritten), but does not change the current group (you may want to call this method
@@ -472,7 +511,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>show</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.140">show</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.174">show</a>()</pre>
 <div class="block">Gets a String representation of the data that would be saved when <a href="../../../squidpony/store/json/JsonStorage.html#store-java.lang.String-"><code>store(String)</code></a> is called. This can be
  useful for finding particularly problematic objects that require unnecessary space when serialized.</div>
 <dl>
@@ -487,7 +526,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;<a href="../../../squidpony/store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.161">clear</a>()</pre>
+<pre>public&nbsp;<a href="../../../squidpony/store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.195">clear</a>()</pre>
 <div class="block">Clears the current group of objects; recommended if you intend to store under multiple outerName keys.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -501,7 +540,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;<a href="../../../squidpony/store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.174">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName)</pre>
+<pre>public&nbsp;<a href="../../../squidpony/store/json/JsonStorage.html" title="class in squidpony.store.json">JsonStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.208">remove</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName)</pre>
 <div class="block">Removes one object from the current group by the <code>innerName</code> it was prepared with using
  <a href="../../../squidpony/store/json/JsonStorage.html#put-java.lang.String-java.lang.Object-"><code>put(String, Object)</code></a>. This does not affect already-stored objects unless <a href="../../../squidpony/store/json/JsonStorage.html#store-java.lang.String-"><code>store(String)</code></a> is called
  after this, in which case the new version of the current group, without the object this removed, is stored.</div>
@@ -519,7 +558,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.192">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outerName,
+<pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.226">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outerName,
                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName,
                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)</pre>
 <div class="block">Gets an object from the storage by the given <code>outerName</code> key from <a href="../../../squidpony/store/json/JsonStorage.html#store-java.lang.String-"><code>store(String)</code></a> and
@@ -544,7 +583,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>preferencesSize</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.222">preferencesSize</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/store/json/JsonStorage.html#line.256">preferencesSize</a>()</pre>
 <div class="block">Gets the approximate size of the currently-stored preferences. This assumes UTF-16 storage, which is the case for
  GWT's LocalStorage. Since GWT is restricted to the size the browser permits for LocalStorage, and this limit can
  be rather small (about 5 MB, sometimes more but not reliably), this method is especially useful there, but it may
