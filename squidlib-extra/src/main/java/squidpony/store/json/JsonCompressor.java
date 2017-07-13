@@ -1,10 +1,10 @@
 package squidpony.store.json;
 
-import blazing.chain.LZSEncoding;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.SerializationException;
+import squidpony.LZSPlus;
 
 import java.io.InputStream;
 import java.io.Reader;
@@ -42,7 +42,7 @@ public class JsonCompressor extends Json {
      */
     @Override
     public String toJson(Object object, Class knownType, Class elementType) {
-        return LZSEncoding.compressToUTF16(super.toJson(object, knownType, elementType));
+        return LZSPlus.compress(super.toJson(object, knownType, elementType));
     }
 
     /**
@@ -126,7 +126,7 @@ public class JsonCompressor extends Json {
      */
     @Override
     public <T> T fromJson(Class<T> type, FileHandle file) {
-        return super.fromJson(type, LZSEncoding.decompressFromUTF16(file.readString("UTF-8")));
+        return super.fromJson(type, LZSPlus.decompress(file.readString("UTF-8")));
     }
 
     /**
@@ -137,7 +137,7 @@ public class JsonCompressor extends Json {
      */
     @Override
     public <T> T fromJson(Class<T> type, Class elementType, FileHandle file) {
-        return super.fromJson(type, elementType, LZSEncoding.decompressFromUTF16(file.readString("UTF-8")));
+        return super.fromJson(type, elementType, LZSPlus.decompress(file.readString("UTF-8")));
     }
 
     /**
@@ -174,7 +174,7 @@ public class JsonCompressor extends Json {
      */
     @Override
     public <T> T fromJson(Class<T> type, String json) {
-        return super.fromJson(type, LZSEncoding.decompressFromUTF16(json));
+        return super.fromJson(type, LZSPlus.decompress(json));
     }
 
     /**
@@ -185,6 +185,6 @@ public class JsonCompressor extends Json {
      */
     @Override
     public <T> T fromJson(Class<T> type, Class elementType, String json) {
-        return super.fromJson(type, elementType, LZSEncoding.decompressFromUTF16(json));
+        return super.fromJson(type, elementType, LZSPlus.decompress(json));
     }
 }

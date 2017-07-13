@@ -55,7 +55,6 @@ project.sourceCompatibility = 1.7
 dependencies {
 	compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.github.tommyettinger:regexodus:0.1.9"
-    compile "com.github.tommyettinger:blazingchain:1.4.4.1"
 	testCompile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
 	testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 	testCompile 'junit:junit:4.12'

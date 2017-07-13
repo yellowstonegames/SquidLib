@@ -70,6 +70,32 @@ public class SquidStorage extends JsonStorage {
         super(fileName, garble);
     }
     /**
+     * Creates a SquidStorage with the given fileName to save using Preferences from libGDX. The name should generally
+     * be the name of this game or application, and must be a valid name for a file (so no slashes, backslashes, colons,
+     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
+     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly
+     * to games or applications other than your own; you should avoid values for fileName that might overlap with
+     * another game's Preferences values. This constructor also allows you to specify a "garble" int array; if this is
+     * non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic
+     * methods. If garble is null or empty, it is ignored.
+     * <br>
+     * To organize saved data into sub-sections, you specify logical units (like different players' saved games) with a
+     * String outerName when you call {@link #store(String)}, and can further distinguish data under the outerName when
+     * you call {@link #put(String, Object)} to put each individual item into the saved storage with its own innerName.
+     * <br>
+     * Calling this also sets up custom serializers for several important types in SquidLib; char[][], OrderedMap,
+     * IntDoubleOrderedMap, FakeLanguageGen, GreasedRegion, and notably Pattern from RegExodus all have smaller
+     * serialized representations than the default. OrderedMap allows non-String keys, which gets around a limitation in
+     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.
+     * The custom char[][] representation is about half the normal size by omitting commas after each char.
+     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.
+     * @param garble a String that will be used as a key to obfuscate the saved output if non-null
+     */
+    public SquidStorage(final String fileName, final int[] garble)
+    {
+        super(fileName, garble);
+    }
+    /**
      * Prepares to store the Object {@code o} to be retrieved with {@code innerName} in the current group of objects.
      * Does not write to a permanent location until {@link #store(String)} is called. The innerName used to store an
      * object is required to get it back again, and can also be used to remove it before storing (or storing again).

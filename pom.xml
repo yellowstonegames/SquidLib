@@ -68,7 +68,6 @@
         <gdx.version>1.9.6</gdx.version>
         <junit.version>4.11</junit.version>
         <regexodus.version>0.1.9</regexodus.version>
-        <blazingchain.version>1.4.4.1</blazingchain.version>
     </properties>
 
     <prerequisites>

@@ -9,7 +9,6 @@
     <source path="squidpony"/>
     <inherits name="squidlib-util" />
     <inherits name="regexodus"/>
-    <inherits name="blazing.chain"/>
     <extend-configuration-property name="gdx.reflect.include" value="java.util.SortedSet" />
     <extend-configuration-property name="gdx.reflect.include" value="java.util.EnumMap" />
     <extend-configuration-property name="gdx.reflect.include" value="regexodus.Pattern" />
