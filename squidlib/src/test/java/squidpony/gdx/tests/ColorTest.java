@@ -86,37 +86,77 @@ public class ColorTest extends ApplicationAdapter {
 //        String[] names = {"Red", null, "Orange", "Apricot", "Gold", "Yellow", "Chartreuse", "Lime", "Honeydew", null,
 //                "Green", null, null, "Jade", "Seafoam", null, "Cyan", "Azure", null, "Blue", null, "Sapphire",
 //                "Indigo", null, "Violet", null, "Purple", null, "Magenta", null, "Rose", null};
+//        OrderedMap<String, Float> satMods = Maker.makeOM("Red", 0f,
+//                "Orange", 0.025f,
+//                "Apricot", -0.1f,
+//                "Gold", 0.05f,
+//                "Yellow", 0.025f,
+//                "Chartreuse", 0.025f,
+//                "Lime", 0.075f,
+//                "Honeydew", -0.12f,
+//                "Green", 0f,
+//                "Jade", -0.13f,
+//                "Seafoam", -0.05f,
+//                "Cyan", 0.075f,
+//                "Azure", -0.05f,
+//                "Blue", 0f,
+//                "Sapphire", 0.025f,
+//                "Indigo", 0.1f,
+//                "Violet", 0.04f,
+//                "Purple", -0.05f,
+//                "Magenta", 0.035f,
+//                "Rose", 0.05f);
+//        OrderedMap<String, Float> valMods = Maker.makeOM("Red", 0.01f,
+//                "Orange", 0.02f,
+//                "Apricot", 0.035f,
+//                "Gold", -0.005f,
+//                "Yellow", 0.04f,
+//                "Chartreuse", 0.01f,
+//                "Lime", 0.01f,
+//                "Honeydew", 0.04f,
+//                "Green", -0.01f,
+//                "Jade", -0.04f,
+//                "Seafoam", 0.03f,
+//                "Cyan", -0.01f,
+//                "Azure", -0.03f,
+//                "Blue", -0.01f,
+//                "Sapphire", -0.02f,
+//                "Indigo", -0.03f,
+//                "Violet", -0.02f,
+//                "Purple", -0.01f,
+//                "Magenta", -0.02f,
+//                "Rose", -0.03f);
 //        for (int i = 0; i < 32; i++) {
 //            String nm = names[i];
 //            if(nm == null)
 //                continue;
-//            Color baseColor = scc.getHSV(i * 0.03125f, 0.725f, 0.925f);
+//            Color baseColor = scc.getHSV(i * 0.03125f, 0.825f + satMods.getOrDefault(nm, 0f), 0.925f + valMods.getOrDefault(nm, 0f));
 //            System.out.println(template.replace("Name", "CW " + nm)
 //                    .replace("NAME", "CW_" + nm.toUpperCase())
 //                    .replace("FEDCBA", baseColor.toString().substring(0, 6)));
 //            System.out.println(template.replace("Name", "CW Faded " + nm)
 //                    .replace("NAME", "CW_FADED_" + nm.toUpperCase())
-//                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.1f), 0.4f).toString().substring(0, 6)));
+//                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.15f), 0.5f).toString().substring(0, 6)));
 //            System.out.println(template.replace("Name", "CW Flush " + nm)
 //                    .replace("NAME", "CW_FLUSH_" + nm.toUpperCase())
-//                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.1f), 0.4f).toString().substring(0, 6)));
+//                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.05f), 0.5f).toString().substring(0, 6)));
 //
 //            System.out.println(template.replace("Name", "CW Light " + nm)
 //                    .replace("NAME", "CW_LIGHT_" + nm.toUpperCase())
-//                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.3f), 0.1f).toString().substring(0, 6)));
+//                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.4f), 0.1f).toString().substring(0, 6)));
 //            System.out.println(template.replace("Name", "CW Pale " + nm)
 //                    .replace("NAME", "CW_PALE_" + nm.toUpperCase())
-//                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.4f), 0.5f).toString().substring(0, 6)));
+//                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.55f), 0.3f).toString().substring(0, 6)));
 //            System.out.println(template.replace("Name", "CW Bright " + nm)
 //                    .replace("NAME", "CW_BRIGHT_" + nm.toUpperCase())
-//                    .replace("FEDCBA", scc.saturate(scc.light(baseColor, 0.2f), 0.3f).toString().substring(0, 6)));
+//                    .replace("FEDCBA", scc.saturate(scc.light(baseColor, 0.35f), 0.5f).toString().substring(0, 6)));
 //
 //            System.out.println(template.replace("Name", "CW Dark " + nm)
 //                    .replace("NAME", "CW_DARK_" + nm.toUpperCase())
-//                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.3f), 0.1f).toString().substring(0, 6)));
+//                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.25f), 0.2f).toString().substring(0, 6)));
 //            System.out.println(template.replace("Name", "CW Drab " + nm)
 //                    .replace("NAME", "CW_DRAB_" + nm.toUpperCase())
-//                    .replace("FEDCBA", scc.desaturate(scc.dim(baseColor, 0.2f), 0.3f).toString().substring(0, 6)));
+//                    .replace("FEDCBA", scc.desaturate(scc.dim(baseColor, 0.2f), 0.4f).toString().substring(0, 6)));
 //            System.out.println(template.replace("Name", "CW Rich " + nm)
 //                    .replace("NAME", "CW_RICH_" + nm.toUpperCase())
 //                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.2f), 0.5f).toString().substring(0, 6)));
