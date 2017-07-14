@@ -233,7 +233,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
-        textFactory = DefaultResources.getCrispSlabFont()//.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        textFactory = DefaultResources.getStretchableSlabFont()//.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize();
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
@@ -260,8 +260,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1.0f,cellHeight * 1.1f);
-        display.setTextSize(cellWidth * 1.0f, cellHeight  * 1.1f);
+        messages.setTextSize(cellWidth * 1.1f,cellHeight * 1.1f);
+        display.setTextSize(cellWidth * 1.1f, cellHeight  * 1.1f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
@@ -975,7 +975,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // message box should be given updated bounds since I don't think it will do this automatically
         messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-        //input.reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0, width, height);
+        input.getMouse().reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0);
         currentZoomX = cellWidth / currentZoomX;
         currentZoomY = cellHeight / currentZoomY;
         messageViewport.update(width, height, false);

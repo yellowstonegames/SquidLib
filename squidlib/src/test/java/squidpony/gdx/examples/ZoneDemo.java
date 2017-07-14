@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-
+import squidpony.ArrayTools;
 import squidpony.ColoredStringList;
 import squidpony.GwtCompatibility;
 import squidpony.squidai.ZOI;
@@ -17,7 +17,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.OrganicMapGenerator;
+import squidpony.squidgrid.mapping.MixedGenerator;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
@@ -49,11 +49,11 @@ public class ZoneDemo extends ApplicationAdapter {
     @Override
     public void create () {
         batch = new SpriteBatch();
-        width = 80;
-        height = 50;
+        width = 65;
+        height = 65;
 
-        cellWidth = 16 * INTERNAL_ZOOM;
-        cellHeight = 16 * INTERNAL_ZOOM;
+        cellWidth = 14 * INTERNAL_ZOOM;
+        cellHeight = 14 * INTERNAL_ZOOM;
         TextCellFactory tcf = DefaultResources.getStretchableSquareFont().addSwap('.', ' ');
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
         //tcf.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f));
@@ -63,7 +63,7 @@ public class ZoneDemo extends ApplicationAdapter {
         display.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
         stage = new Stage(new StretchViewport(screenWidth, screenHeight), batch);
 
-        rng = new RNG(0xBABABADAL);
+        rng = new RNG(0xBABABADAAAAAAAL);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
 //        dungeonGen.addWater(10);
@@ -73,8 +73,13 @@ public class ZoneDemo extends ApplicationAdapter {
         serpent.putWalledBoxRoomCarvers(2);
         serpent.putWalledRoundRoomCarvers(2);
         serpent.putCaveCarvers(4);
-        OrganicMapGenerator organic = new OrganicMapGenerator(0.55, 0.65, width, height, rng);
-        bareDungeon = dungeonGen.generate(organic.generate());
+        MixedGenerator mixed = new MixedGenerator(width, height, rng);
+        mixed.putWalledBoxRoomCarvers(9);
+        mixed.putWalledRoundRoomCarvers(6);
+        mixed.putCaveCarvers(2);
+        //OrganicMapGenerator organic = new OrganicMapGenerator(0.55, 0.65, width, height, rng);
+        bareDungeon = dungeonGen.generate(mixed.generate());
+
         //bareDungeon = DungeonUtility.closeDoors(bareDungeon);
 
         //lineDungeon = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(bareDungeon));
@@ -235,10 +240,9 @@ public class ZoneDemo extends ApplicationAdapter {
             postMove();
         }
 
-        // stage has its own batch and must be explicitly told to draw(). this also causes it to act().
+        // stage has its own batch and must be explicitly told to draw().
         stage.getViewport().apply(true);
         stage.draw();
-        stage.act();
         // display does not draw all AnimatedEntities by default.
         batch.begin();
         for(AnimatedEntity mon : display.getAnimatedEntities(2)) {
