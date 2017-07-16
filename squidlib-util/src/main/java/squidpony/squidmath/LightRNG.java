@@ -49,7 +49,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
     /** 2 raised to the 24, -1. */
     private static final long FLOAT_MASK = ( 1L << 24 ) - 1;
     /** 2 raised to the -24. */
-    private static final double NORM_24 = 1. / ( 1L << 24 );
+    private static final float NORM_24 = 1f / (1 << 24);
 
 	private static final long serialVersionUID = -374415589203474497L;
 
@@ -174,7 +174,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
      * @return a random float at least equal to 0.0 and less than 1.0
      */
     public float nextFloat() {
-        return (float)( ( nextLong() & FLOAT_MASK ) * NORM_24 );
+        return ( nextLong() & FLOAT_MASK ) * NORM_24;
     }
 
     /**
@@ -267,38 +267,6 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
         state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
         return state ^ (state >>> 31);
     }
-    /**
-     * Gets a pseudo-random int from the given state as an int; the state should change with each call.
-     * This can be done easily with {@code determine32(++state)} or {@code determine32(state += 12345)}, where 12345
-     * can be any odd number (it should stay the same across calls that should have random-seeming results). Uses a
-     * different algorithm than LightRNG, but only changed slightly so it doesn't use 64-bit math.
-     * @param state must be changed with each call; {@code determine32(++state)} will work fine
-     * @return a pseudo-random int
-     */
-    public static int determine32(int state)
-    {
-        state = ((state *= 0x9E3779B9) ^ (state >>> 16)) * 0x85EBCA6B;
-        state = (state ^ (state >>> 13)) * 0xC2B2AE35;
-        return state ^ (state >>> 16);
-    }
-    /**
-     * Gets a pseudo-random int between 0 and the given bound, using the given state as a basis, as an int; the state
-     * should change with each call. This can be done easily with {@code determineBounded32(++state)} or
-     * {@code determineBounded32(state += 12345)}, where 12345 can be any odd number (it should stay the same across
-     * calls that should have random-seeming results). The bound should be between -32768 and 32767 (both inclusive);
-     * more significant bounds won't usually work well.
-     * Uses a different algorithm than LightRNG, but only changed slightly so it doesn't use 64-bit math.
-     * @param state must be changed with each call; {@code determine32(++state)} will work fine
-     * @param bound the outer exclusive limit on the random number; should be between -32768 and 32767 (both inclusive)
-     * @return a pseudo-random int, between 0 (inclusive) and bound (exclusive)
-     */
-    public static int determineBounded32(int state, int bound)
-    {
-        state = ((state *= 0x9E3779B9) ^ (state >>> 16)) * 0x85EBCA6B;
-        state = (state ^ (state >>> 13)) * 0xC2B2AE35;
-        return ((bound * ((state ^ (state >>> 16)) & 0x7FFF)) >> 15);
-    }
-
     public static long determine(final int a, final int b)
     {
         long state = 0x9E3779B97F4A7C15L + (a & 0xFFFFFFFFL) + ((long)b << 32);
