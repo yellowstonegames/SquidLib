@@ -422,6 +422,28 @@
 <dd>
 <div class="block">Data allocated in the previous calls to the public API, if any.</div>
 </dd>
+<dt><a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Light32RNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">Based on the same SplitMix algorithm <a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> uses, but a 32-bit variant, this RandomnessSource has 63 bits
+ of state and should have a period of 2 to the 63.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#Light32RNG--">Light32RNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
+<dd>
+<div class="block">Constructs a Light32RNG with a random state, using two calls to Math.random().</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#Light32RNG-int-int-">Light32RNG(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
+<dd>
+<div class="block">Constructs a Light32RNG with the exact state A given and a similar state B (the least significant bit of state B
+ will always be 1 internally, so even values for state B will be incremented and odd values will be kept as-is).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#Light32RNG-int-">Light32RNG(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
+<dd>
+<div class="block">Takes 32 bits of state and uses it to randomly fill the 63 bits of state this uses.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#Light32RNG-long-">Light32RNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
+<dd>
+<div class="block">Constructs a Light32RNG using a long that combines the two parts of state, as from <a href="../squidpony/squidmath/Light32RNG.html#getState--"><code>Light32RNG.getState()</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#lightBrightnesses">lightBrightnesses</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Elias.html#lightMap-double-double-double-double-">lightMap(double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Elias.html" title="class in squidpony.squidmath">Elias</a></dt>

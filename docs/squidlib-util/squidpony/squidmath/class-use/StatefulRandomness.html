@@ -118,38 +118,45 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></span></code>
+<div class="block">Based on the same SplitMix algorithm <a href="../../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> uses, but a 32-bit variant, this RandomnessSource has 63 bits
+ of state and should have a period of 2 to the 63.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></span></code>
 <div class="block">This is a SplittableRandom-style generator, meant to have a tiny state
  that permits storing many different generators with low overhead.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/NLFSR.html" title="class in squidpony.squidmath">NLFSR</a></span></code>
 <div class="block">A Non-Linear Feedback Shift Register that may be used like a StatefulRandomness but is not truly random.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath">PermutedRNG</a></span></code>
 <div class="block">This is a RandomnessSource in the PCG-Random family.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></span></code>
 <div class="block">A different kind of RandomnessSource that operates internally on ints, which may have significant advantages on GWT
  since that toolchain has to emulate longs (slowly) for almost any math with them.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></span></code>
 <div class="block">Like PintRNG (uses int math primarily, making it good with GWT and 32-bit machines) and FlapRNG, but with a longer
  period than either, plus this implements StatefulRandomness.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></span></code>
 <div class="block">A quasi-random number generator that goes through one of many sub-random sequences found by J.G.</div>

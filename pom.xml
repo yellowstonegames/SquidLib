@@ -54,10 +54,10 @@
     </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.version>3.3</maven.compiler.version>
-        <maven.javadoc.version>2.10.3</maven.javadoc.version>
+        <maven.compiler.version>3.6.1</maven.compiler.version>
+        <maven.javadoc.version>2.10.4</maven.javadoc.version>
         <maven.resources.version>2.7</maven.resources.version>
-        <maven.source.version>2.4</maven.source.version>
+        <maven.source.version>3.0.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
         <maven.jxr.version>2.5</maven.jxr.version>
         <maven.pmd.version>3.5</maven.pmd.version>
@@ -226,9 +226,12 @@
                         <link>http://docs.oracle.com/javase/7/docs/api/</link>
                         <link>http://docs.oracle.com/javase/6/docs/api/</link>
                         <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
+                        <link>http://squidpony.github.io/SquidLib/squidlib-util/</link>
+                        <link>http://squidpony.github.io/SquidLib/squidlib/</link>
+                        <link>http://squidpony.github.io/SquidLib/squidlib-extra/</link>
                     </links>
                     <linksource>true</linksource>
-                    <detectOfflineLinks>false</detectOfflineLinks>
+                    <detectOfflineLinks>true</detectOfflineLinks>
                     <excludePackageNames>*emu*</excludePackageNames>
                     <!--<additionalparam>-Xdoclint:none</additionalparam>-->
                 </configuration>

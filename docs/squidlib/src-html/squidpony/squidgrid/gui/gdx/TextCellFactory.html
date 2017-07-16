@@ -399,11 +399,11 @@
 <span class="sourceLineNo">391</span>        if (Gdx.files.internal(texturePath).exists()) {<a name="line.391"></a>
 <span class="sourceLineNo">392</span>            Gdx.app.debug("font", "Using internal font texture at " + texturePath);<a name="line.392"></a>
 <span class="sourceLineNo">393</span>            tex = new Texture(Gdx.files.internal(texturePath), true);<a name="line.393"></a>
-<span class="sourceLineNo">394</span>            tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);<a name="line.394"></a>
+<span class="sourceLineNo">394</span>            tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);<a name="line.394"></a>
 <span class="sourceLineNo">395</span>        } else if (Gdx.files.classpath(texturePath).exists()) {<a name="line.395"></a>
 <span class="sourceLineNo">396</span>            Gdx.app.debug("font", "Using classpath font texture at " + texturePath);<a name="line.396"></a>
 <span class="sourceLineNo">397</span>            tex = new Texture(Gdx.files.classpath(texturePath), true);<a name="line.397"></a>
-<span class="sourceLineNo">398</span>            tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);<a name="line.398"></a>
+<span class="sourceLineNo">398</span>            tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);<a name="line.398"></a>
 <span class="sourceLineNo">399</span>        } else {<a name="line.399"></a>
 <span class="sourceLineNo">400</span>            bmpFont = DefaultResources.getIncludedFont();<a name="line.400"></a>
 <span class="sourceLineNo">401</span>            Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");<a name="line.401"></a>
@@ -437,11 +437,11 @@
 <span class="sourceLineNo">429</span>        if (Gdx.files.internal(texturePath).exists()) {<a name="line.429"></a>
 <span class="sourceLineNo">430</span>            Gdx.app.debug("font", "Using internal font texture at " + texturePath);<a name="line.430"></a>
 <span class="sourceLineNo">431</span>            tex = new Texture(Gdx.files.internal(texturePath), true);<a name="line.431"></a>
-<span class="sourceLineNo">432</span>            tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);<a name="line.432"></a>
+<span class="sourceLineNo">432</span>            tex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);<a name="line.432"></a>
 <span class="sourceLineNo">433</span>        } else if (Gdx.files.classpath(texturePath).exists()) {<a name="line.433"></a>
 <span class="sourceLineNo">434</span>            Gdx.app.debug("font", "Using classpath font texture at " + texturePath);<a name="line.434"></a>
 <span class="sourceLineNo">435</span>            tex = new Texture(Gdx.files.classpath(texturePath), true);<a name="line.435"></a>
-<span class="sourceLineNo">436</span>            tex.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);<a name="line.436"></a>
+<span class="sourceLineNo">436</span>            tex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);<a name="line.436"></a>
 <span class="sourceLineNo">437</span>        } else {<a name="line.437"></a>
 <span class="sourceLineNo">438</span>            bmpFont = DefaultResources.getIncludedFont();<a name="line.438"></a>
 <span class="sourceLineNo">439</span>            Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");<a name="line.439"></a>
@@ -1776,7 +1776,7 @@
 <span class="sourceLineNo">1768</span>            }<a name="line.1768"></a>
 <span class="sourceLineNo">1769</span>            else if (distanceField) {<a name="line.1769"></a>
 <span class="sourceLineNo">1770</span>                batch.setShader(shader);<a name="line.1770"></a>
-<span class="sourceLineNo">1771</span>                shader.setUniformf("u_smoothing", 0.2f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));<a name="line.1771"></a>
+<span class="sourceLineNo">1771</span>                shader.setUniformf("u_smoothing", 0.35f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));<a name="line.1771"></a>
 <span class="sourceLineNo">1772</span>            }<a name="line.1772"></a>
 <span class="sourceLineNo">1773</span>        }<a name="line.1773"></a>
 <span class="sourceLineNo">1774</span>    }<a name="line.1774"></a>

@@ -57,7 +57,7 @@
 <span class="sourceLineNo">049</span>    /** 2 raised to the 24, -1. */<a name="line.49"></a>
 <span class="sourceLineNo">050</span>    private static final long FLOAT_MASK = ( 1L &lt;&lt; 24 ) - 1;<a name="line.50"></a>
 <span class="sourceLineNo">051</span>    /** 2 raised to the -24. */<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    private static final double NORM_24 = 1. / ( 1L &lt;&lt; 24 );<a name="line.52"></a>
+<span class="sourceLineNo">052</span>    private static final float NORM_24 = 1f / (1 &lt;&lt; 24);<a name="line.52"></a>
 <span class="sourceLineNo">053</span><a name="line.53"></a>
 <span class="sourceLineNo">054</span>        private static final long serialVersionUID = -374415589203474497L;<a name="line.54"></a>
 <span class="sourceLineNo">055</span><a name="line.55"></a>
@@ -182,7 +182,7 @@
 <span class="sourceLineNo">174</span>     * @return a random float at least equal to 0.0 and less than 1.0<a name="line.174"></a>
 <span class="sourceLineNo">175</span>     */<a name="line.175"></a>
 <span class="sourceLineNo">176</span>    public float nextFloat() {<a name="line.176"></a>
-<span class="sourceLineNo">177</span>        return (float)( ( nextLong() &amp; FLOAT_MASK ) * NORM_24 );<a name="line.177"></a>
+<span class="sourceLineNo">177</span>        return ( nextLong() &amp; FLOAT_MASK ) * NORM_24;<a name="line.177"></a>
 <span class="sourceLineNo">178</span>    }<a name="line.178"></a>
 <span class="sourceLineNo">179</span><a name="line.179"></a>
 <span class="sourceLineNo">180</span>    /**<a name="line.180"></a>
@@ -275,54 +275,22 @@
 <span class="sourceLineNo">267</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.267"></a>
 <span class="sourceLineNo">268</span>        return state ^ (state &gt;&gt;&gt; 31);<a name="line.268"></a>
 <span class="sourceLineNo">269</span>    }<a name="line.269"></a>
-<span class="sourceLineNo">270</span>    /**<a name="line.270"></a>
-<span class="sourceLineNo">271</span>     * Gets a pseudo-random int from the given state as an int; the state should change with each call.<a name="line.271"></a>
-<span class="sourceLineNo">272</span>     * This can be done easily with {@code determine32(++state)} or {@code determine32(state += 12345)}, where 12345<a name="line.272"></a>
-<span class="sourceLineNo">273</span>     * can be any odd number (it should stay the same across calls that should have random-seeming results). Uses a<a name="line.273"></a>
-<span class="sourceLineNo">274</span>     * different algorithm than LightRNG, but only changed slightly so it doesn't use 64-bit math.<a name="line.274"></a>
-<span class="sourceLineNo">275</span>     * @param state must be changed with each call; {@code determine32(++state)} will work fine<a name="line.275"></a>
-<span class="sourceLineNo">276</span>     * @return a pseudo-random int<a name="line.276"></a>
-<span class="sourceLineNo">277</span>     */<a name="line.277"></a>
-<span class="sourceLineNo">278</span>    public static int determine32(int state)<a name="line.278"></a>
+<span class="sourceLineNo">270</span>    public static long determine(final int a, final int b)<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    {<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        long state = 0x9E3779B97F4A7C15L + (a &amp; 0xFFFFFFFFL) + ((long)b &lt;&lt; 32);<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        state = ((state &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.273"></a>
+<span class="sourceLineNo">274</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        return state ^ (state &gt;&gt;&gt; 31);<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    }<a name="line.276"></a>
+<span class="sourceLineNo">277</span><a name="line.277"></a>
+<span class="sourceLineNo">278</span>    public static int determineBounded(long state, final int bound)<a name="line.278"></a>
 <span class="sourceLineNo">279</span>    {<a name="line.279"></a>
-<span class="sourceLineNo">280</span>        state = ((state *= 0x9E3779B9) ^ (state &gt;&gt;&gt; 16)) * 0x85EBCA6B;<a name="line.280"></a>
-<span class="sourceLineNo">281</span>        state = (state ^ (state &gt;&gt;&gt; 13)) * 0xC2B2AE35;<a name="line.281"></a>
-<span class="sourceLineNo">282</span>        return state ^ (state &gt;&gt;&gt; 16);<a name="line.282"></a>
+<span class="sourceLineNo">280</span>        state = (((state *= 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        return (int)((bound * ((state ^ (state &gt;&gt;&gt; 31)) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.282"></a>
 <span class="sourceLineNo">283</span>    }<a name="line.283"></a>
-<span class="sourceLineNo">284</span>    /**<a name="line.284"></a>
-<span class="sourceLineNo">285</span>     * Gets a pseudo-random int between 0 and the given bound, using the given state as a basis, as an int; the state<a name="line.285"></a>
-<span class="sourceLineNo">286</span>     * should change with each call. This can be done easily with {@code determineBounded32(++state)} or<a name="line.286"></a>
-<span class="sourceLineNo">287</span>     * {@code determineBounded32(state += 12345)}, where 12345 can be any odd number (it should stay the same across<a name="line.287"></a>
-<span class="sourceLineNo">288</span>     * calls that should have random-seeming results). The bound should be between -32768 and 32767 (both inclusive);<a name="line.288"></a>
-<span class="sourceLineNo">289</span>     * more significant bounds won't usually work well.<a name="line.289"></a>
-<span class="sourceLineNo">290</span>     * Uses a different algorithm than LightRNG, but only changed slightly so it doesn't use 64-bit math.<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     * @param state must be changed with each call; {@code determine32(++state)} will work fine<a name="line.291"></a>
-<span class="sourceLineNo">292</span>     * @param bound the outer exclusive limit on the random number; should be between -32768 and 32767 (both inclusive)<a name="line.292"></a>
-<span class="sourceLineNo">293</span>     * @return a pseudo-random int, between 0 (inclusive) and bound (exclusive)<a name="line.293"></a>
-<span class="sourceLineNo">294</span>     */<a name="line.294"></a>
-<span class="sourceLineNo">295</span>    public static int determineBounded32(int state, int bound)<a name="line.295"></a>
-<span class="sourceLineNo">296</span>    {<a name="line.296"></a>
-<span class="sourceLineNo">297</span>        state = ((state *= 0x9E3779B9) ^ (state &gt;&gt;&gt; 16)) * 0x85EBCA6B;<a name="line.297"></a>
-<span class="sourceLineNo">298</span>        state = (state ^ (state &gt;&gt;&gt; 13)) * 0xC2B2AE35;<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        return ((bound * ((state ^ (state &gt;&gt;&gt; 16)) &amp; 0x7FFF)) &gt;&gt; 15);<a name="line.299"></a>
-<span class="sourceLineNo">300</span>    }<a name="line.300"></a>
-<span class="sourceLineNo">301</span><a name="line.301"></a>
-<span class="sourceLineNo">302</span>    public static long determine(final int a, final int b)<a name="line.302"></a>
-<span class="sourceLineNo">303</span>    {<a name="line.303"></a>
-<span class="sourceLineNo">304</span>        long state = 0x9E3779B97F4A7C15L + (a &amp; 0xFFFFFFFFL) + ((long)b &lt;&lt; 32);<a name="line.304"></a>
-<span class="sourceLineNo">305</span>        state = ((state &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.305"></a>
-<span class="sourceLineNo">306</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.306"></a>
-<span class="sourceLineNo">307</span>        return state ^ (state &gt;&gt;&gt; 31);<a name="line.307"></a>
-<span class="sourceLineNo">308</span>    }<a name="line.308"></a>
-<span class="sourceLineNo">309</span><a name="line.309"></a>
-<span class="sourceLineNo">310</span>    public static int determineBounded(long state, final int bound)<a name="line.310"></a>
-<span class="sourceLineNo">311</span>    {<a name="line.311"></a>
-<span class="sourceLineNo">312</span>        state = (((state *= 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.312"></a>
-<span class="sourceLineNo">313</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.313"></a>
-<span class="sourceLineNo">314</span>        return (int)((bound * ((state ^ (state &gt;&gt;&gt; 31)) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.314"></a>
-<span class="sourceLineNo">315</span>    }<a name="line.315"></a>
-<span class="sourceLineNo">316</span><a name="line.316"></a>
-<span class="sourceLineNo">317</span>}<a name="line.317"></a>
+<span class="sourceLineNo">284</span><a name="line.284"></a>
+<span class="sourceLineNo">285</span>}<a name="line.285"></a>
 
 
 

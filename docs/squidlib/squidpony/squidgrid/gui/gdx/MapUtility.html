@@ -191,7 +191,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-">generateLightnessModifiers</a></span>(char[][]&nbsp;map,
                           double&nbsp;frame)</code>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>SeededNoise</code> are desired.</div>
+ animation frame if rippling water and waving grass using <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath"><code>SeededNoise</code></a> are desired.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -201,7 +201,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                           char&nbsp;deepLiquid,
                           char&nbsp;shallowLiquid)</code>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>SeededNoise</code> are desired.</div>
+ animation frame if rippling water and waving grass using <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath"><code>SeededNoise</code></a> are desired.</div>
 </td>
 </tr>
 </table>
@@ -276,7 +276,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                                                                         char&nbsp;shallowChar,
                                                                         com.badlogic.gdx.graphics.Color&nbsp;shallowColor)</pre>
 <div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
- This overload also takes a char that corresponds to deep non-water lakes (which <code>SectionDungeonGenerator</code>
+ This overload also takes a char that corresponds to deep non-water lakes (which <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>
  can produce) and a Color to use for that deep liquid, as well as a char for shallow lakes and a Color for that
  shallow liquid.
  This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the colors this
@@ -289,9 +289,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the Color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the Color to use for shallow parts of non-water lakes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D array of Colors with the same size as map, that can be used for the corresponding chars</dd>
@@ -333,7 +333,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                                                                           com.badlogic.gdx.graphics.Color&nbsp;shallowColor)</pre>
 <div class="block">Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the
  chars in map. This overload also takes a char that corresponds to deep non-water lakes (which
- <code>SectionDungeonGenerator</code> can produce) and a Color to use for that deep liquid, as well as a char for
+ <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a> can produce) and a Color to use for that deep liquid, as well as a char for
  shallow lakes and a Color for that shallow liquid.
  This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the
  colors this returns will also change. Most backgrounds will be black. but deep water ('~') will be dark
@@ -347,9 +347,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters (this gets their background color)</dd>
-<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>deepColor</code> - the Color to use for deep parts of non-water lakes</dd>
-<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <code>SectionDungeonGenerator</code></dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a></dd>
 <dd><code>shallowColor</code> - the Color to use for shallow parts of non-water lakes</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D array of background Colors with the same size as map, that can be used for the corresponding chars</dd>
@@ -381,7 +381,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.359">generateLightnessModifiers</a>(char[][]&nbsp;map,
                                                  double&nbsp;frame)</pre>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>SeededNoise</code> are desired. It may make sense to
+ animation frame if rippling water and waving grass using <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath"><code>SeededNoise</code></a> are desired. It may make sense to
  pass some fraction of the current time, as given by <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/System.html?is-external=true#currentTimeMillis--" title="class or interface in java.lang"><code>System.currentTimeMillis()</code></a>, instead of a frame.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -404,7 +404,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
                                                  char&nbsp;deepLiquid,
                                                  char&nbsp;shallowLiquid)</pre>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
- animation frame if rippling water and waving grass using <code>SeededNoise</code> are desired. It may make sense to
+ animation frame if rippling water and waving grass using <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/SeededNoise.html?is-external=true" title="class or interface in squidpony.squidmath"><code>SeededNoise</code></a> are desired. It may make sense to
  pass some fraction of the current time, as given by <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/System.html?is-external=true#currentTimeMillis--" title="class or interface in java.lang"><code>System.currentTimeMillis()</code></a>, instead of a frame.
  Also allows additional chars to be treated like deep and shallow water regarding the ripple animation.</div>
 <dl>

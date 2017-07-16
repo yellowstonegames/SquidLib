@@ -172,7 +172,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>squidpony.squidmath.StatefulRNG</code></td>
+<td class="colFirst"><code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath">StatefulRNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/StarterKit.html#rng">rng</a></span></code>
 <div class="block">Almost all of SquidLib comes into contact with randomness at some point, so this is a good place to show one
  way of handling that randomness.</div>
@@ -418,11 +418,11 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;squidpony.squidmath.StatefulRNG <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.85">rng</a></pre>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath">StatefulRNG</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.85">rng</a></pre>
 <div class="block">Almost all of SquidLib comes into contact with randomness at some point, so this is a good place to show one
  way of handling that randomness. StatefulRNG can be "seeded" at the start to set the initial state, like any
- other RNG, but it can also have the current state acquired later with <code>StatefulRNG.getState()</code> or have the
- current state set in-place with <code>StatefulRNG.setState(long)</code> (note, this doesn't create a new RNG, like you
+ other RNG, but it can also have the current state acquired later with <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/StatefulRNG.html?is-external=true#getState--" title="class or interface in squidpony.squidmath"><code>StatefulRNG.getState()</code></a> or have the
+ current state set in-place with <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/StatefulRNG.html?is-external=true#setState-long-" title="class or interface in squidpony.squidmath"><code>StatefulRNG.setState(long)</code></a> (note, this doesn't create a new RNG, like you
  would have to do to re-seed with java.util.Random). This can be useful to get a snapshot of the random sequence
  where you might want to take an action, undo it back to the snapshot, and try again. It can also be useful for
  saving the game and reloading it exactly, though the optional serialization in squidlib-extra also does this.

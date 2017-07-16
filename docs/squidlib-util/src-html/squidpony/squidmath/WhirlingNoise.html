@@ -10,8 +10,8 @@
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import squidpony.annotation.Beta;<a name="line.3"></a>
 <span class="sourceLineNo">004</span><a name="line.4"></a>
-<span class="sourceLineNo">005</span>import static squidpony.squidmath.LightRNG.determine32;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import static squidpony.squidmath.LightRNG.determineBounded32;<a name="line.6"></a>
+<span class="sourceLineNo">005</span>import static squidpony.squidmath.Light32RNG.determine;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import static squidpony.squidmath.LightRNG.determineBounded;<a name="line.6"></a>
 <span class="sourceLineNo">007</span><a name="line.7"></a>
 <span class="sourceLineNo">008</span>/**<a name="line.8"></a>
 <span class="sourceLineNo">009</span> * Another experimental noise class. Extends PerlinNoise and should have similar quality, but can be faster and has less<a name="line.9"></a>
@@ -259,7 +259,7 @@
 <span class="sourceLineNo">251</span>     * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.251"></a>
 <span class="sourceLineNo">252</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly<a name="line.252"></a>
 <span class="sourceLineNo">253</span>     * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because<a name="line.253"></a>
-<span class="sourceLineNo">254</span>     * it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather good distribution<a name="line.254"></a>
+<span class="sourceLineNo">254</span>     * it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good distribution<a name="line.254"></a>
 <span class="sourceLineNo">255</span>     * and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.255"></a>
 <span class="sourceLineNo">256</span>     *<a name="line.256"></a>
 <span class="sourceLineNo">257</span>     * @param x X input; works well if between 0.0 and 1.0, but anything is accepted<a name="line.257"></a>
@@ -284,7 +284,7 @@
 <span class="sourceLineNo">276</span>     * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.276"></a>
 <span class="sourceLineNo">277</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.<a name="line.277"></a>
 <span class="sourceLineNo">278</span>     * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks<a name="line.278"></a>
-<span class="sourceLineNo">279</span>     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather good<a name="line.279"></a>
+<span class="sourceLineNo">279</span>     * because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good<a name="line.279"></a>
 <span class="sourceLineNo">280</span>     * distribution and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.280"></a>
 <span class="sourceLineNo">281</span>     * @param x X input<a name="line.281"></a>
 <span class="sourceLineNo">282</span>     * @param y Y input<a name="line.282"></a>
@@ -310,7 +310,7 @@
 <span class="sourceLineNo">302</span>     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.302"></a>
 <span class="sourceLineNo">303</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.<a name="line.303"></a>
 <span class="sourceLineNo">304</span>     * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks<a name="line.304"></a>
-<span class="sourceLineNo">305</span>     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather good<a name="line.305"></a>
+<span class="sourceLineNo">305</span>     * because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good<a name="line.305"></a>
 <span class="sourceLineNo">306</span>     * distribution and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.306"></a>
 <span class="sourceLineNo">307</span>     * @param x X input<a name="line.307"></a>
 <span class="sourceLineNo">308</span>     * @param y Y input<a name="line.308"></a>
@@ -339,7 +339,7 @@
 <span class="sourceLineNo">331</span>     * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.331"></a>
 <span class="sourceLineNo">332</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly<a name="line.332"></a>
 <span class="sourceLineNo">333</span>     * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because<a name="line.333"></a>
-<span class="sourceLineNo">334</span>     * it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather good distribution<a name="line.334"></a>
+<span class="sourceLineNo">334</span>     * it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good distribution<a name="line.334"></a>
 <span class="sourceLineNo">335</span>     * and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.335"></a>
 <span class="sourceLineNo">336</span>     *<a name="line.336"></a>
 <span class="sourceLineNo">337</span>     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted<a name="line.337"></a>
@@ -354,7 +354,7 @@
 <span class="sourceLineNo">346</span>     * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.346"></a>
 <span class="sourceLineNo">347</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly<a name="line.347"></a>
 <span class="sourceLineNo">348</span>     * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because<a name="line.348"></a>
-<span class="sourceLineNo">349</span>     * it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather good distribution<a name="line.349"></a>
+<span class="sourceLineNo">349</span>     * it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good distribution<a name="line.349"></a>
 <span class="sourceLineNo">350</span>     * and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.350"></a>
 <span class="sourceLineNo">351</span>     *<a name="line.351"></a>
 <span class="sourceLineNo">352</span>     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted<a name="line.352"></a>
@@ -375,7 +375,7 @@
 <span class="sourceLineNo">367</span>        double x0 = xin - X0; // The x,y distances from the cell origin<a name="line.367"></a>
 <span class="sourceLineNo">368</span>        double y0 = yin - Y0;<a name="line.368"></a>
 <span class="sourceLineNo">369</span>        // For the 2D case, the simplex shape is an equilateral triangle.<a name="line.369"></a>
-<span class="sourceLineNo">370</span>        // determine32 which simplex we are in.<a name="line.370"></a>
+<span class="sourceLineNo">370</span>        // determine which simplex we are in.<a name="line.370"></a>
 <span class="sourceLineNo">371</span>        int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)<a name="line.371"></a>
 <span class="sourceLineNo">372</span>        // coords<a name="line.372"></a>
 <span class="sourceLineNo">373</span>        if (x0 &gt; y0) {<a name="line.373"></a>
@@ -413,9 +413,9 @@
 <span class="sourceLineNo">405</span>        int gi1 = (hash &gt;&gt;&gt;= 4) &amp; 15;<a name="line.405"></a>
 <span class="sourceLineNo">406</span>        int gi2 = (hash &gt;&gt;&gt; 4) &amp; 15;<a name="line.406"></a>
 <span class="sourceLineNo">407</span>        */<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        int gi0 = determineBounded32(seed + i + determine32(j), 16);<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        int gi1 = determineBounded32(seed + i + i1 + determine32(j + j1), 16);<a name="line.409"></a>
-<span class="sourceLineNo">410</span>        int gi2 = determineBounded32(seed + i + 1 + determine32(j + 1), 16);<a name="line.410"></a>
+<span class="sourceLineNo">408</span>        int gi0 = determineBounded(seed + i + determine(j), 16);<a name="line.408"></a>
+<span class="sourceLineNo">409</span>        int gi1 = determineBounded(seed + i + i1 + determine(j + j1), 16);<a name="line.409"></a>
+<span class="sourceLineNo">410</span>        int gi2 = determineBounded(seed + i + 1 + determine(j + 1), 16);<a name="line.410"></a>
 <span class="sourceLineNo">411</span><a name="line.411"></a>
 <span class="sourceLineNo">412</span>        // Calculate the contribution from the three corners<a name="line.412"></a>
 <span class="sourceLineNo">413</span>        double t0 = 0.5 - x0 * x0 - y0 * y0;<a name="line.413"></a>
@@ -470,7 +470,7 @@
 <span class="sourceLineNo">462</span>        float x0 = xin - X0; // The x,y distances from the cell origin<a name="line.462"></a>
 <span class="sourceLineNo">463</span>        float y0 = yin - Y0;<a name="line.463"></a>
 <span class="sourceLineNo">464</span>        // For the 2D case, the simplex shape is an equilateral triangle.<a name="line.464"></a>
-<span class="sourceLineNo">465</span>        // determine32 which simplex we are in.<a name="line.465"></a>
+<span class="sourceLineNo">465</span>        // determine which simplex we are in.<a name="line.465"></a>
 <span class="sourceLineNo">466</span>        int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)<a name="line.466"></a>
 <span class="sourceLineNo">467</span>        // coords<a name="line.467"></a>
 <span class="sourceLineNo">468</span>        if (x0 &gt; y0) {<a name="line.468"></a>
@@ -508,9 +508,9 @@
 <span class="sourceLineNo">500</span>        int gi1 = (hash &gt;&gt;&gt;= 4) &amp; 15;<a name="line.500"></a>
 <span class="sourceLineNo">501</span>        int gi2 = (hash &gt;&gt;&gt; 4) &amp; 15;<a name="line.501"></a>
 <span class="sourceLineNo">502</span>        */<a name="line.502"></a>
-<span class="sourceLineNo">503</span>        int gi0 = determineBounded32(i + determine32(j), 16);<a name="line.503"></a>
-<span class="sourceLineNo">504</span>        int gi1 = determineBounded32(i + i1 + determine32(j + j1), 16);<a name="line.504"></a>
-<span class="sourceLineNo">505</span>        int gi2 = determineBounded32(i + 1 + determine32(j + 1), 16);<a name="line.505"></a>
+<span class="sourceLineNo">503</span>        int gi0 = determineBounded(i + determine(j), 16);<a name="line.503"></a>
+<span class="sourceLineNo">504</span>        int gi1 = determineBounded(i + i1 + determine(j + j1), 16);<a name="line.504"></a>
+<span class="sourceLineNo">505</span>        int gi2 = determineBounded(i + 1 + determine(j + 1), 16);<a name="line.505"></a>
 <span class="sourceLineNo">506</span><a name="line.506"></a>
 <span class="sourceLineNo">507</span>        // Calculate the contribution from the three corners<a name="line.507"></a>
 <span class="sourceLineNo">508</span>        float t0 = 0.5f - x0 * x0 - y0 * y0;<a name="line.508"></a>
@@ -546,7 +546,7 @@
 <span class="sourceLineNo">538</span>     * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.538"></a>
 <span class="sourceLineNo">539</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.<a name="line.539"></a>
 <span class="sourceLineNo">540</span>     * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks<a name="line.540"></a>
-<span class="sourceLineNo">541</span>     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather<a name="line.541"></a>
+<span class="sourceLineNo">541</span>     * because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather<a name="line.541"></a>
 <span class="sourceLineNo">542</span>     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.542"></a>
 <span class="sourceLineNo">543</span>     * @param xin X input<a name="line.543"></a>
 <span class="sourceLineNo">544</span>     * @param yin Y input<a name="line.544"></a>
@@ -561,7 +561,7 @@
 <span class="sourceLineNo">553</span>     * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.553"></a>
 <span class="sourceLineNo">554</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.<a name="line.554"></a>
 <span class="sourceLineNo">555</span>     * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks<a name="line.555"></a>
-<span class="sourceLineNo">556</span>     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather<a name="line.556"></a>
+<span class="sourceLineNo">556</span>     * because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather<a name="line.556"></a>
 <span class="sourceLineNo">557</span>     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.557"></a>
 <span class="sourceLineNo">558</span>     * @param xin X input<a name="line.558"></a>
 <span class="sourceLineNo">559</span>     * @param yin Y input<a name="line.559"></a>
@@ -588,7 +588,7 @@
 <span class="sourceLineNo">580</span>        double z0 = zin - Z0;<a name="line.580"></a>
 <span class="sourceLineNo">581</span>        // For the 3D case, the simplex shape is a slightly irregular<a name="line.581"></a>
 <span class="sourceLineNo">582</span>        // tetrahedron.<a name="line.582"></a>
-<span class="sourceLineNo">583</span>        // determine32 which simplex we are in.<a name="line.583"></a>
+<span class="sourceLineNo">583</span>        // determine which simplex we are in.<a name="line.583"></a>
 <span class="sourceLineNo">584</span>        int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k)<a name="line.584"></a>
 <span class="sourceLineNo">585</span>        // coords<a name="line.585"></a>
 <span class="sourceLineNo">586</span>        int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k)<a name="line.586"></a>
@@ -675,10 +675,10 @@
 <span class="sourceLineNo">667</span>        int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;<a name="line.667"></a>
 <span class="sourceLineNo">668</span>        int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;<a name="line.668"></a>
 <span class="sourceLineNo">669</span>        */<a name="line.669"></a>
-<span class="sourceLineNo">670</span>        int gi0 = determineBounded32(seed + i + determine32(j + determine32(k)), 92);<a name="line.670"></a>
-<span class="sourceLineNo">671</span>        int gi1 = determineBounded32(seed + i + i1 + determine32(j + j1 + determine32(k + k1)), 92);<a name="line.671"></a>
-<span class="sourceLineNo">672</span>        int gi2 = determineBounded32(seed + i + i2 + determine32(j + j2 + determine32(k + k2)), 92);<a name="line.672"></a>
-<span class="sourceLineNo">673</span>        int gi3 = determineBounded32(seed + i + 1 + determine32(j + 1 + determine32(k + 1)), 92);<a name="line.673"></a>
+<span class="sourceLineNo">670</span>        int gi0 = determineBounded(seed + i + determine(j + determine(k)), 92);<a name="line.670"></a>
+<span class="sourceLineNo">671</span>        int gi1 = determineBounded(seed + i + i1 + determine(j + j1 + determine(k + k1)), 92);<a name="line.671"></a>
+<span class="sourceLineNo">672</span>        int gi2 = determineBounded(seed + i + i2 + determine(j + j2 + determine(k + k2)), 92);<a name="line.672"></a>
+<span class="sourceLineNo">673</span>        int gi3 = determineBounded(seed + i + 1 + determine(j + 1 + determine(k + 1)), 92);<a name="line.673"></a>
 <span class="sourceLineNo">674</span><a name="line.674"></a>
 <span class="sourceLineNo">675</span>        /*<a name="line.675"></a>
 <span class="sourceLineNo">676</span>        int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),<a name="line.676"></a>
@@ -760,7 +760,7 @@
 <span class="sourceLineNo">752</span>        float z0 = zin - Z0;<a name="line.752"></a>
 <span class="sourceLineNo">753</span>        // For the 3D case, the simplex shape is a slightly irregular<a name="line.753"></a>
 <span class="sourceLineNo">754</span>        // tetrahedron.<a name="line.754"></a>
-<span class="sourceLineNo">755</span>        // determine32 which simplex we are in.<a name="line.755"></a>
+<span class="sourceLineNo">755</span>        // determine which simplex we are in.<a name="line.755"></a>
 <span class="sourceLineNo">756</span>        int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k)<a name="line.756"></a>
 <span class="sourceLineNo">757</span>        // coords<a name="line.757"></a>
 <span class="sourceLineNo">758</span>        int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k)<a name="line.758"></a>
@@ -848,10 +848,10 @@
 <span class="sourceLineNo">840</span>        int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;<a name="line.840"></a>
 <span class="sourceLineNo">841</span>        */<a name="line.841"></a>
 <span class="sourceLineNo">842</span><a name="line.842"></a>
-<span class="sourceLineNo">843</span>        int gi0 = determineBounded32(i + determine32(j + determine32(k)), 92);<a name="line.843"></a>
-<span class="sourceLineNo">844</span>        int gi1 = determineBounded32(i + i1 + determine32(j + j1 + determine32(k + k1)), 92);<a name="line.844"></a>
-<span class="sourceLineNo">845</span>        int gi2 = determineBounded32(i + i2 + determine32(j + j2 + determine32(k + k2)), 92);<a name="line.845"></a>
-<span class="sourceLineNo">846</span>        int gi3 = determineBounded32(i + 1 + determine32(j + 1 + determine32(k + 1)), 92);<a name="line.846"></a>
+<span class="sourceLineNo">843</span>        int gi0 = determineBounded(i + determine(j + determine(k)), 92);<a name="line.843"></a>
+<span class="sourceLineNo">844</span>        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 92);<a name="line.844"></a>
+<span class="sourceLineNo">845</span>        int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2)), 92);<a name="line.845"></a>
+<span class="sourceLineNo">846</span>        int gi3 = determineBounded(i + 1 + determine(j + 1 + determine(k + 1)), 92);<a name="line.846"></a>
 <span class="sourceLineNo">847</span><a name="line.847"></a>
 <span class="sourceLineNo">848</span>        /*<a name="line.848"></a>
 <span class="sourceLineNo">849</span>        int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),<a name="line.849"></a>
@@ -905,7 +905,7 @@
 <span class="sourceLineNo">897</span>     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.897"></a>
 <span class="sourceLineNo">898</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this<a name="line.898"></a>
 <span class="sourceLineNo">899</span>     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in<a name="line.899"></a>
-<span class="sourceLineNo">900</span>     * chunks because it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather<a name="line.900"></a>
+<span class="sourceLineNo">900</span>     * chunks because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather<a name="line.900"></a>
 <span class="sourceLineNo">901</span>     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.901"></a>
 <span class="sourceLineNo">902</span>     * @param x X input<a name="line.902"></a>
 <span class="sourceLineNo">903</span>     * @param y Y input<a name="line.903"></a>
@@ -921,7 +921,7 @@
 <span class="sourceLineNo">913</span>     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.913"></a>
 <span class="sourceLineNo">914</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this<a name="line.914"></a>
 <span class="sourceLineNo">915</span>     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in<a name="line.915"></a>
-<span class="sourceLineNo">916</span>     * chunks because it uses a pseudo-random function (curiously, {@link LightRNG#determine32(int)}, which has rather<a name="line.916"></a>
+<span class="sourceLineNo">916</span>     * chunks because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather<a name="line.916"></a>
 <span class="sourceLineNo">917</span>     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.<a name="line.917"></a>
 <span class="sourceLineNo">918</span>     * @param x X input<a name="line.918"></a>
 <span class="sourceLineNo">919</span>     * @param y Y input<a name="line.919"></a>
@@ -1016,11 +1016,11 @@
 <span class="sourceLineNo">1008</span>        double z4 = z0 - 1.0 + 4.0 * G4;<a name="line.1008"></a>
 <span class="sourceLineNo">1009</span>        double w4 = w0 - 1.0 + 4.0 * G4;<a name="line.1009"></a>
 <span class="sourceLineNo">1010</span><a name="line.1010"></a>
-<span class="sourceLineNo">1011</span>        int gi0 = determineBounded32(seed + i + determine32(j + determine32(k + determine32(l))), 32);<a name="line.1011"></a>
-<span class="sourceLineNo">1012</span>        int gi1 = determineBounded32(seed + i + i1 + determine32(j + j1 + determine32(k + k1 + determine32(l + l1))), 32);<a name="line.1012"></a>
-<span class="sourceLineNo">1013</span>        int gi2 = determineBounded32(seed + i + i2 + determine32(j + j2 + determine32(k + k2 + determine32(l + l2))), 32);<a name="line.1013"></a>
-<span class="sourceLineNo">1014</span>        int gi3 = determineBounded32(seed + i + i3 + determine32(j + j3 + determine32(k + k3 + determine32(l + l3))), 32);<a name="line.1014"></a>
-<span class="sourceLineNo">1015</span>        int gi4 = determineBounded32(seed + i + 1 + determine32(j + 1 + determine32(k + 1 + determine32(l + 1))), 32);<a name="line.1015"></a>
+<span class="sourceLineNo">1011</span>        int gi0 = determineBounded(seed + i + determine(j + determine(k + determine(l))), 32);<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>        int gi1 = determineBounded(seed + i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1))), 32);<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>        int gi2 = determineBounded(seed + i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2))), 32);<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span>        int gi3 = determineBounded(seed + i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3))), 32);<a name="line.1014"></a>
+<span class="sourceLineNo">1015</span>        int gi4 = determineBounded(seed + i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1))), 32);<a name="line.1015"></a>
 <span class="sourceLineNo">1016</span><a name="line.1016"></a>
 <span class="sourceLineNo">1017</span>        // Noise contributions from the five corners are n0 to n4<a name="line.1017"></a>
 <span class="sourceLineNo">1018</span><a name="line.1018"></a>

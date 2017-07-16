@@ -109,11 +109,11 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>@Beta
+<pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/annotation/Beta.html?is-external=true" title="class or interface in squidpony.annotation">@Beta</a>
 public class <a href="../../../src-html/squidpony/store/text/TextStorage.html#line.20">TextStorage</a>
 extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Helps games store information in libGDX's Preferences class as Strings, then get it back out. Does not use JSON,
- instead using a customized and customizable manual serialization style based around <code>StringConvert</code>.
+ instead using a customized and customizable manual serialization style based around <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony"><code>StringConvert</code></a>.
  Created by Tommy Ettinger on 9/16/2016.</div>
 </li>
 </ul>
@@ -138,7 +138,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/TextStorage.html#compress">compress</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected squidpony.squidmath.OrderedMap&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/TextStorage.html#contents">contents</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -146,7 +146,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/TextStorage.html#garbleKey">garbleKey</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;</code></td>
+<td class="colFirst"><code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony">StringConvert</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/TextStorage.html#mapConverter">mapConverter</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -230,7 +230,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/TextStorage.html#get-java.lang.String-java.lang.String-squidpony.StringConvert-java.lang.Class-">get</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outerName,
    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName,
-   squidpony.StringConvert&lt;?&gt;&nbsp;converter,
+   <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony">StringConvert</a>&lt;?&gt;&nbsp;converter,
    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)</code>
 <div class="block">Gets an object from the storage by the given <code>outerName</code> key from <a href="../../../squidpony/store/text/TextStorage.html#store-java.lang.String-"><code>store(String)</code></a> and
  <code>innerName</code> key from <a href="../../../squidpony/store/text/TextStorage.html#put-java.lang.String-T-squidpony.StringConvert-"><code>put(String, Object, StringConvert)</code></a>, and uses the class given by <code>type</code>
@@ -247,7 +247,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../squidpony/store/text/TextStorage.html" title="class in squidpony.store.text">TextStorage</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/store/text/TextStorage.html#put-java.lang.String-T-squidpony.StringConvert-">put</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName,
    T&nbsp;o,
-   squidpony.StringConvert&nbsp;converter)</code>
+   <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony">StringConvert</a>&nbsp;converter)</code>
 <div class="block">Prepares to store the Object <code>o</code> to be retrieved with <code>innerName</code> in the current group of objects.</div>
 </td>
 </tr>
@@ -317,7 +317,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>contents</h4>
-<pre>protected&nbsp;squidpony.squidmath.OrderedMap&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../../../src-html/squidpony/store/text/TextStorage.html#line.23">contents</a></pre>
+<pre>protected&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../../../src-html/squidpony/store/text/TextStorage.html#line.23">contents</a></pre>
 </li>
 </ul>
 <a name="mapConverter">
@@ -326,7 +326,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>mapConverter</h4>
-<pre>public final&nbsp;squidpony.StringConvert&lt;squidpony.squidmath.OrderedMap&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../../../src-html/squidpony/store/text/TextStorage.html#line.24">mapConverter</a></pre>
+<pre>public final&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony">StringConvert</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../../../src-html/squidpony/store/text/TextStorage.html#line.24">mapConverter</a></pre>
 </li>
 </ul>
 <a name="compress">
@@ -487,7 +487,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>put</h4>
 <pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../squidpony/store/text/TextStorage.html" title="class in squidpony.store.text">TextStorage</a>&nbsp;<a href="../../../src-html/squidpony/store/text/TextStorage.html#line.142">put</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName,
                            T&nbsp;o,
-                           squidpony.StringConvert&nbsp;converter)</pre>
+                           <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony">StringConvert</a>&nbsp;converter)</pre>
 <div class="block">Prepares to store the Object <code>o</code> to be retrieved with <code>innerName</code> in the current group of objects.
  Does not write to a permanent location until <a href="../../../squidpony/store/text/TextStorage.html#store-java.lang.String-"><code>store(String)</code></a> is called. The innerName used to store an
  object is required to get it back again, and can also be used to remove it before storing (or storing again).</div>
@@ -578,7 +578,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <h4>get</h4>
 <pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../../src-html/squidpony/store/text/TextStorage.html#line.239">get</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outerName,
                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;innerName,
-                 squidpony.StringConvert&lt;?&gt;&nbsp;converter,
+                 <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringConvert.html?is-external=true" title="class or interface in squidpony">StringConvert</a>&lt;?&gt;&nbsp;converter,
                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;T&gt;&nbsp;type)</pre>
 <div class="block">Gets an object from the storage by the given <code>outerName</code> key from <a href="../../../squidpony/store/text/TextStorage.html#store-java.lang.String-"><code>store(String)</code></a> and
  <code>innerName</code> key from <a href="../../../squidpony/store/text/TextStorage.html#put-java.lang.String-T-squidpony.StringConvert-"><code>put(String, Object, StringConvert)</code></a>, and uses the class given by <code>type</code>
@@ -590,8 +590,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>outerName</code> - the key used to store the group of objects with <a href="../../../squidpony/store/text/TextStorage.html#store-java.lang.String-"><code>store(String)</code></a></dd>
 <dd><code>innerName</code> - the key used to store the specific object with <a href="../../../squidpony/store/text/TextStorage.html#put-java.lang.String-T-squidpony.StringConvert-"><code>put(String, Object, StringConvert)</code></a></dd>
-<dd><code>converter</code> - a StringConvert, such as one from <code>Converters</code> or found with
-                  <code>StringConvert.get(CharSequence)</code>, to deserialize the data</dd>
+<dd><code>converter</code> - a StringConvert, such as one from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/Converters.html?is-external=true" title="class or interface in squidpony"><code>Converters</code></a> or found with
+                  <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringConvert.html?is-external=true#get-java.lang.CharSequence-" title="class or interface in squidpony"><code>StringConvert.get(CharSequence)</code></a>, to deserialize the data</dd>
 <dd><code>type</code> - the class of the value; for a class like RNG, use <code>RNG.class</code>, but changed to fit</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the retrieved value if successful, or null otherwise</dd>
