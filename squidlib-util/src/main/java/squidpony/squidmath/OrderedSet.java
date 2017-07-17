@@ -435,26 +435,42 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             rehash(needed);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public boolean addAll(Collection<? extends K> c) {
+        int n = c.size();
         // The resulting collection will be at least c.size() big
         if (f <= .5)
-            ensureCapacity(c.size()); // The resulting collection will be sized
+            ensureCapacity(n); // The resulting collection will be sized
             // for c.size() elements
         else
-            tryCapacity(size() + c.size()); // The resulting collection will be
-        // tentatively sized for size() +
-        // c.size() elements
+            tryCapacity(size() + n); // The resulting collection will be
+        // tentatively sized for size() + c.size() elements
         boolean retVal = false;
         final Iterator<? extends K> i = c.iterator();
-        int n = c.size();
         while (n-- != 0)
             if (add(i.next()))
                 retVal = true;
         return retVal;
     }
+
+    public boolean addAll(K[] a) {
+        if(a == null)
+            return false;
+        int n = a.length;
+        // The resulting collection will be at least a.length big
+        if (f <= .5)
+            ensureCapacity(n); // The resulting collection will be sized
+            // for a.length elements
+        else
+            tryCapacity(size() + n); // The resulting collection will be
+        // tentatively sized for size() + a.length elements
+        boolean retVal = false;
+        for (int i = 0; i < n; i++) {
+            if(add(a[i]))
+                retVal = true;
+        }
+        return retVal;
+    }
+
 
     public boolean add(final K k) {
         int pos;
@@ -2082,5 +2098,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     {
         return alter(getAt(index), replacement);
     }
+
 
 }

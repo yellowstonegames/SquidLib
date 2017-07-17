@@ -147,12 +147,12 @@ public class BundleBundleBiMap<E1, E2>
     {
         if(e1 == null || e2 == null) return false;
         int len = elements1.size;
-        elements1.addAllIfAbsent(e1);
+        elements1.putAll(e1);
         for (int i = len; i < elements1.size; i++) {
             mm1.add(new IntVLA(4));
         }
         len = elements2.size;
-        elements2.addAllIfAbsent(e2);
+        elements2.putAll(e2);
         for (int i = len; i < elements2.size; i++) {
             mm2.add(new IntVLA(4));
         }
@@ -184,12 +184,12 @@ public class BundleBundleBiMap<E1, E2>
     {
         if(e1 == null || e2 == null) return false;
         int len = elements1.size;
-        elements1.addAllIfAbsent(e1);
+        elements1.putAll(e1);
         for (int i = len; i < elements1.size; i++) {
             mm1.add(new IntVLA(4));
         }
         len = elements2.size;
-        elements2.addAllIfAbsent(e2);
+        elements2.putAll(e2);
         for (int i = len; i < elements2.size; i++) {
             mm2.add(new IntVLA(4));
         }
@@ -225,12 +225,12 @@ public class BundleBundleBiMap<E1, E2>
     {
         if(e1 == null || e2 == null) return false;
         int len = elements1.size;
-        elements1.addAllIfAbsent(e1);
+        elements1.putAll(e1);
         for (int i = len; i < elements1.size; i++) {
             mm1.add(new IntVLA(4));
         }
         len = elements2.size;
-        elements2.addAllIfAbsent(e2);
+        elements2.putAll(e2);
         for (int i = len; i < elements2.size; i++) {
             mm2.add(new IntVLA(4));
         }
@@ -263,12 +263,12 @@ public class BundleBundleBiMap<E1, E2>
     {
         if(e1 == null || e2 == null) return false;
         int len = elements1.size;
-        elements1.addAllIfAbsent(e1);
+        elements1.putAll(e1);
         for (int i = len; i < elements1.size; i++) {
             mm1.add(new IntVLA(4));
         }
         len = elements2.size;
-        elements2.addAllIfAbsent(e2);
+        elements2.putAll(e2);
         for (int i = len; i < elements2.size; i++) {
             mm2.add(new IntVLA(4));
         }
