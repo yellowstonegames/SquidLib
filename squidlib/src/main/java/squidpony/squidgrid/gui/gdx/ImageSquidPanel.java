@@ -25,7 +25,7 @@ import java.util.Collection;
  */
 public class ImageSquidPanel extends SquidPanel {
 
-    public final IntMap<TextureRegion> imageMap;
+    public IntMap<TextureRegion> imageMap;
 
     /**
      * Creates a bare-bones panel with all default values for text rendering.
