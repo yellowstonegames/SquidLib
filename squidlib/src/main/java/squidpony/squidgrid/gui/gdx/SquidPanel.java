@@ -42,14 +42,14 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
     protected int animationCount = 0;
     protected Color defaultForeground = Color.WHITE;
     protected IColorCenter<Color> scc;
-    protected final int cellWidth, cellHeight;
+    protected int cellWidth, cellHeight;
     protected int gridWidth, gridHeight, gridOffsetX = 0, gridOffsetY = 0;
     /**
      * The 2D array of chars that this will render, using x,y indexing.
      * Full-block cells that are completely filled with their color will be the char at Unicode codepoint 0,
      * usually represented with {@code '\0'}.
      */
-    public final char[][] contents;
+    public char[][] contents;
     /**
      * The 2D array of floats representing colors in a way that libGDX can efficiently use, ABGR-packed.
      * Most use won't directly involve this field, but there are various techniques SquidLib uses to boost
@@ -58,12 +58,12 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * {@link SColor#lerpFloatColors(float, float, float)} if you expect to smoothly mix these float colors,
      * which avoids creating intermediate Color objects. There are more methods like that in SColor.
      */
-    public final float[][] colors;
+    public float[][] colors;
     protected Color lightingColor = SColor.WHITE, tmpColor = new Color();
-    protected final TextCellFactory textFactory;
+    protected TextCellFactory textFactory;
     protected float xOffset, yOffset, lightingFloat = NumberUtils.intToFloatColor(0xffffffff);
-    public final OrderedSet<AnimatedEntity> animatedEntities;
-    public final OrderedSet<Actor> autoActors;
+    public OrderedSet<AnimatedEntity> animatedEntities;
+    public OrderedSet<Actor> autoActors;
     /**
      * For thin-wall maps, where only cells where x and y are both even numbers have backgrounds displayed.
      * Should be false when using this SquidPanel for anything that isn't specifically a background of a map
