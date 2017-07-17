@@ -180,12 +180,12 @@ public class BundleBiMap<E, S>
     {
         if(e == null) return false;
         int len = elements.size;
-        elements.addAllIfAbsent(e);
+        elements.putAll(e);
         for (int i = len; i < elements.size; i++) {
             mm.add(new IntVLA(4));
         }
 
-        elements.addAllIfAbsent(e);
+        elements.putAll(e);
         int[][] bundle = new int[][]{elements.getArray(e)};
         if(!bm.put(bundle, s))
             return false;
@@ -208,7 +208,7 @@ public class BundleBiMap<E, S>
     {
         if(e == null || variation == null) return false;
         int len = elements.size;
-        elements.addAllIfAbsent(e);
+        elements.putAll(e);
         for (int i = len; i < elements.size; i++) {
             mm.add(new IntVLA(4));
         }
@@ -233,7 +233,7 @@ public class BundleBiMap<E, S>
     {
         if(e == null) return false;
         int len = elements.size;
-        elements.addAllIfAbsent(e);
+        elements.putAll(e);
         for (int i = len; i < elements.size; i++) {
             mm.add(new IntVLA(4));
         }
@@ -259,7 +259,7 @@ public class BundleBiMap<E, S>
     {
         if(e == null || variation == null) return false;
         int len = elements.size;
-        elements.addAllIfAbsent(e);
+        elements.putAll(e);
         for (int i = len; i < elements.size; i++) {
             mm.add(new IntVLA(4));
         }

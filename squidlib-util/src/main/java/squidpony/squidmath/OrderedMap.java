@@ -394,7 +394,34 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             rehash(n / 2);
         return oldValue;
     }
-    /** {@inheritDoc} */
+
+    /**
+     * Puts the first key in keyArray with the first value in valueArray, then the second in each and so on.
+     * The entries are all appended to the end of the iteration order, unless a key was already present. Then,
+     * its value is changed at the existing position in the iteration order.
+     * If the lengths of the two arrays are not equal, this puts a number of entries equal to the lesser length.
+     * If either array is null, this returns without performing any changes.
+     * @param keyArray an array of K keys that should usually have the same length as valueArray
+     * @param valueArray an array of V values that should usually have the same length as keyArray
+     */
+    public void putAll(final K[] keyArray, final V[] valueArray)
+    {
+        if(keyArray == null || valueArray == null)
+            return;
+        for (int i = 0; i < keyArray.length && i < valueArray.length; i++)
+            put(keyArray[i], valueArray[i]);
+
+    }
+
+    /**
+     * Puts all key-value pairs in the Map m into this OrderedMap.
+     * The entries are all appended to the end of the iteration order, unless a key was already present. Then,
+     * its value is changed at the existing position in the iteration order. This can take any kind of Map,
+     * including unordered HashMap objects; if the Map does not have stable ordering, the order in which entries
+     * will be appended is not stable either. For this reason, OrderedMap, LinkedHashMap, and TreeMap (or other
+     * SortedMap implementations) will work best when order matters.
+     * @param m a Map that should have the same or compatible K key and V value types; OrderedMap and TreeMap work best
+     */
     public void putAll(Map<? extends K, ? extends V> m) {
         if (f <= .5)
             ensureCapacity(m.size()); // The resulting map will be sized for
@@ -2872,4 +2899,75 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         return alterCarefully(keyAt(index), replacement);
     }
 
+    /**
+     * If the specified key is not already associated with a value (or is mapped
+     * to {@code null}) associates it with the given value and returns
+     * {@code null}, else returns the current value.
+     *
+     * @param key   key with which the specified value is to be associated
+     * @param value value to be associated with the specified key
+     * @return the previous value associated with the specified key, or
+     * {@code null} if there was no mapping for the key.
+     * (A {@code null} return can also indicate that the map
+     * previously associated {@code null} with the key.)
+     */
+    public V putIfAbsent(K key, V value) {
+        V v = get(key);
+        if(v == null)
+            v = put(key, value);
+        return v;
+    }
+
+    /**
+     * Removes the entry for the specified key only if it is currently
+     * mapped to the specified value.
+     *
+     * @param key   key with which the specified value is associated
+     * @param value value expected to be associated with the specified key
+     * @return {@code true} if the value was removed
+     */
+    public boolean remove(Object key, Object value) {
+        if (containsKey(key) && Objects.equals(get(key), value)) {
+            remove(key);
+            return true;
+        } else
+            return false;
+    }
+
+    /**
+     * Replaces the entry for the specified key only if currently
+     * mapped to the specified value. The position in the iteration
+     * order is retained.
+     *
+     * @param key      key with which the specified value is associated
+     * @param oldValue value expected to be associated with the specified key
+     * @param newValue value to be associated with the specified key
+     * @return {@code true} if the value was replaced
+     */
+    public boolean replace(K key, V oldValue, V newValue) {
+        if (containsKey(key) && Objects.equals(get(key), value)) {
+            put(key, newValue);
+            return true;
+        } else
+            return false;
+    }
+
+    /**
+     * Replaces the entry for the specified key only if it is
+     * currently mapped to some value. Preserves the existing key's
+     * position in the iteration order.
+     *
+     * @param key   key with which the specified value is associated
+     * @param value value to be associated with the specified key
+     * @return the previous value associated with the specified key, or
+     * {@code null} if there was no mapping for the key.
+     * (A {@code null} return can also indicate that the map
+     * previously associated {@code null} with the key.)
+     */
+    public V replace(K key, V value) {
+        if (containsKey(key)) {
+            return put(key, value);
+        } else
+            return null;
+    }
 }

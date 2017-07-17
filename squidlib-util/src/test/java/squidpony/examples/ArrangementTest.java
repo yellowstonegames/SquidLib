@@ -11,7 +11,7 @@ public class ArrangementTest {
         RNG random = new RNG(0x13AFBEEFBA77L);
         GreasedRegion gr = new GreasedRegion(256, 256);
         gr.refill(random, 0.25, 256, 256).quasiRandomRegion(0.5, 512);
-        points.addAllIfAbsent(gr);
+        points.putAll(gr);
         Coord pt;
         int idx;
         for (int i = 0; i < points.size(); i++) {
