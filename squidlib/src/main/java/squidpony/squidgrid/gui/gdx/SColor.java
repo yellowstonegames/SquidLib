@@ -8894,6 +8894,8 @@ public class SColor extends Color {
      * http://www.pixeljoint.com/forum/forum_posts.asp?TID=12795 , and since then used in lots of pixel art.
      * Some useful previews can be seen here https://github.com/geoffb/dawnbringer-palettes , and the order
      * this array uses is the same as the previews at the bottom of that page.
+     * <br>
+     * <a href="http://i.imgur.com/iFJXQTx.png">Preview of all 16 colors, with names</a>
      */
     public static final SColor[] DAWNBRINGER_16 = {DB_MIDNIGHT, DB_DARK_LEATHER, DB_DEEP_OCEAN, DB_LEAD, DB_EARTH,
             DB_FOREST, DB_LOBSTER, DB_DRAB, DB_CADET_BLUE, DB_TAWNY_BROWN, DB_IRON, DB_PEA_SOUP, DB_PUTTY,
@@ -8905,6 +8907,8 @@ public class SColor extends Color {
      * http://www.pixeljoint.com/forum/forum_posts.asp?TID=16247 , and since then used in lots of pixel art.
      * Some useful previews can be seen here https://github.com/geoffb/dawnbringer-palettes , and the order
      * this array uses is the same as the previews at the bottom of that page.
+     * <br>
+     * <a href="http://i.imgur.com/2xSFryj.png">Preview of all 32 colors, with names</a>
      */
     public static final SColor[] DAWNBRINGER_32 = {DB_BLACK, DB_INK, DB_SEAL_BROWN, DB_CHESTNUT, DB_CAPPUCCINO,
             DB_PUMPKIN, DB_FAWN, DB_NUDE, DB_DAFFODIL, DB_KEY_LIME, DB_SHAMROCK, DB_JUNGLE, DB_OLIVE, DB_MUD,
@@ -8927,6 +8931,8 @@ public class SColor extends Color {
      * almost all the way back around to red. It ends with 9 grayscale colors, from black to white, ordered by
      * brightness. The grayscale colors use different names, going from darkest to lightest: CW_BLACK, CW_ALMOST_BLACK,
      * CW_GRAY_BLACK, CW_DARK_GRAY, CW_GRAY, CW_LIGHT_GRAY, CW_GRAY_WHITE, CW_ALMOST_WHITE, and CW_WHITE.
+     * <br>
+     * <a href="http://i.imgur.com/bEGyIFf.png">Preview of all 189 colors, with names</a>
      */
     public static final SColor[] COLOR_WHEEL_PALETTE = {
             CW_RED, CW_FADED_RED, CW_FLUSH_RED, CW_LIGHT_RED, CW_PALE_RED, CW_BRIGHT_RED, CW_DARK_RED, CW_DRAB_RED, CW_RICH_RED,

@@ -73,9 +73,10 @@ public interface IColorCenter<T> {
      *
      * @param hue The hue of the desired color from 0.0 (red, inclusive) towards orange, then
      *            yellow, and eventually to purple before looping back to almost the same red
-     *            (1.0, exclusive)
+     *            (1.0, exclusive). Values outside this range should be treated as wrapping
+     *            around, so 1.1f and -0.9f would be the same as 0.1f .
      * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)
-     *                   to 1.0 (a bright color, exclusive)
+     *                   to 1.0 (a bright color, inclusive)
      * @param value the value (essentially lightness) of the color from 0.0 (black,
      *                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high
      *                   for HDR colors.
@@ -361,12 +362,11 @@ public interface IColorCenter<T> {
             }
             else
             {
-                float h = hue * 6f;
-                if ( h >= 6 ) h = 0;      //H must be < 1
-                int i = (int)h;             //Or ... var_i = floor( var_h )
-                float a = value * ( 1 - saturation );
-                float b = value * ( 1 - saturation * ( h - i ) );
-                float c = value * ( 1 - saturation * ( 1 - ( h - i ) ) );
+                float h = ((hue + 6f) % 1f) * 6f; // allows negative hue to wrap
+                int i = (int)h;
+                float a = value * (1 - saturation);
+                float b = value * (1 - saturation * (h - i));
+                float c = value * (1 - saturation * (1 - (h - i)));
 
                 switch (i)
                 {
@@ -491,16 +491,16 @@ public interface IColorCenter<T> {
             }
             else                                    //Chromatic data...
             {
-                float rDelta = ( ( ( max - r ) / 6f ) + ( delta / 2f ) ) / delta;
-                float gDelta = ( ( ( max - g ) / 6f ) + ( delta / 2f ) ) / delta;
-                float bDelta = ( ( ( max - b ) / 6f ) + ( delta / 2f ) ) / delta;
+                float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;
+                float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;
+                float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;
 
-                if       ( r == max ) hue = bDelta - gDelta;
-                else if ( g == max ) hue = ( 1f / 3f ) + rDelta - bDelta;
-                else                 hue = ( 2f / 3f ) + gDelta - rDelta;
+                if       (r == max) hue = bDelta - gDelta;
+                else if (g == max) hue = (1f / 3f) + rDelta - bDelta;
+                else                 hue = (2f / 3f) + gDelta - rDelta;
 
-                if ( hue < 0 ) hue += 1f;
-                else if ( hue > 1 ) hue -= 1;
+                if (hue < 0) hue += 1f;
+                else if (hue > 1) hue -= 1;
             }
             return hue;
         }

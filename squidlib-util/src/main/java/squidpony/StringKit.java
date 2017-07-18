@@ -1010,4 +1010,123 @@ public class StringKit {
     public static String hexHash(long... array) {
         return hex(CrossHash.hash64(array));
     }
+
+    /**
+     * If text is shorter than the given minimumLength, returns a String with text padded on the right with spaces until
+     * it reaches that length; otherwise it simply returns text.
+     * @param text the text to pad if necessary
+     * @param minimumLength the minimum length of String to return
+     * @return text, potentially padded with spaces to reach the given minimum length
+     */
+    public static String padRight(String text, int minimumLength)
+    {
+        if(text.length() < minimumLength)
+            return padRightStrict(text, ' ', minimumLength);
+        return text;
+    }
+
+    /**
+     * If text is shorter than the given minimumLength, returns a String with text padded on the right with padChar
+     * until it reaches that length; otherwise it simply returns text.
+     * @param text the text to pad if necessary
+     * @param padChar the char to use to pad text, if necessary
+     * @param minimumLength the minimum length of String to return
+     * @return text, potentially padded with padChar to reach the given minimum length
+     */
+    public static String padRight(String text, char padChar, int minimumLength)
+    {
+        if(text.length() < minimumLength)
+            return padRightStrict(text, padChar, minimumLength);
+        return text;
+    }
+
+    /**
+     * Constructs a String with exactly the given totalLength by taking text (or a substring of it) and padding it on
+     * its right side with spaces until totalLength is reached. If text is longer than totalLength, this only uses the
+     * portion of text needed to fill totalLength, and no more.
+     * @param text the String to pad if necessary, or truncate if too long
+     * @param totalLength the exact length of String to return
+     * @return a String with exactly totalLength for its length, made from text and possibly extra spaces
+     */
+    public static String padRightStrict(String text, int totalLength) {
+        return padRightStrict(text, ' ', totalLength);
+    }
+
+    /**
+     * Constructs a String with exactly the given totalLength by taking text (or a substring of it) and padding it on
+     * its right side with padChar until totalLength is reached. If text is longer than totalLength, this only uses the
+     * portion of text needed to fill totalLength, and no more.
+     * @param text the String to pad if necessary, or truncate if too long
+     * @param padChar the char to use to fill any remaining length
+     * @param totalLength the exact length of String to return
+     * @return a String with exactly totalLength for its length, made from text and possibly padChar
+     */
+    public static String padRightStrict(String text, char padChar, int totalLength) {
+        char[] c = new char[totalLength];
+        int len = text.length();
+        text.getChars(0, Math.min(len, totalLength), c, 0);
+        for (int i = len; i < totalLength; i++) {
+            c[i] = padChar;
+        }
+        return String.valueOf(c);
+    }
+
+    /**
+     * If text is shorter than the given minimumLength, returns a String with text padded on the left with spaces until
+     * it reaches that length; otherwise it simply returns text.
+     * @param text the text to pad if necessary
+     * @param minimumLength the minimum length of String to return
+     * @return text, potentially padded with spaces to reach the given minimum length
+     */
+    public static String padLeft(String text, int minimumLength)
+    {
+        if(text.length() < minimumLength)
+            return padLeftStrict(text, ' ', minimumLength);
+        return text;
+    }
+    /**
+     * If text is shorter than the given minimumLength, returns a String with text padded on the left with padChar until
+     * it reaches that length; otherwise it simply returns text.
+     * @param text the text to pad if necessary
+     * @param padChar the char to use to pad text, if necessary
+     * @param minimumLength the minimum length of String to return
+     * @return text, potentially padded with padChar to reach the given minimum length
+     */
+    public static String padLeft(String text, char padChar, int minimumLength)
+    {
+        if(text.length() < minimumLength)
+            return padLeftStrict(text, padChar, minimumLength);
+        return text;
+    }
+
+    /**
+     * Constructs a String with exactly the given totalLength by taking text (or a substring of it) and padding it on
+     * its left side with spaces until totalLength is reached. If text is longer than totalLength, this only uses the
+     * portion of text needed to fill totalLength, and no more.
+     * @param text the String to pad if necessary, or truncate if too long
+     * @param totalLength the exact length of String to return
+     * @return a String with exactly totalLength for its length, made from text and possibly extra spaces
+     */
+    public static String padLeftStrict(String text, int totalLength) {
+        return padLeftStrict(text, ' ', totalLength);
+    }
+
+    /**
+     * Constructs a String with exactly the given totalLength by taking text (or a substring of it) and padding it on
+     * its left side with padChar until totalLength is reached. If text is longer than totalLength, this only uses the
+     * portion of text needed to fill totalLength, and no more.
+     * @param text the String to pad if necessary, or truncate if too long
+     * @param padChar the char to use to fill any remaining length
+     * @param totalLength the exact length of String to return
+     * @return a String with exactly totalLength for its length, made from text and possibly padChar
+     */
+    public static String padLeftStrict(String text, char padChar, int totalLength) {
+        char[] c = new char[totalLength];
+        int len = text.length();
+        text.getChars(0, Math.min(len, totalLength), c, Math.max(0, totalLength - len));
+        for (int i = totalLength - len - 1; i >= 0; i--) {
+            c[i] = padChar;
+        }
+        return String.valueOf(c);
+    }
 }
