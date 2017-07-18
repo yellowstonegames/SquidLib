@@ -8,10 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SquidColorCenter;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.StringKit;
+import squidpony.squidgrid.gui.gdx.*;
 
 /**
  * Created by Tommy Ettinger on 12/27/2016.
@@ -20,20 +18,20 @@ public class ColorTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static int gridWidth = 32;
+    private static int gridWidth = 140;
     /**
      * In number of cells
      */
-    private static int gridHeight = 6;
+    private static int gridHeight = 27;
 
     /**
      * The pixel width of a cell
      */
-    private static int cellWidth = 20;
+    private static int cellWidth = 8;
     /**
      * The pixel height of a cell
      */
-    private static int cellHeight = 20;
+    private static int cellHeight = 16;
 
     private static int totalWidth = gridWidth * cellWidth, totalHeight = gridHeight * cellHeight;
 
@@ -41,29 +39,36 @@ public class ColorTest extends ApplicationAdapter {
     private SpriteBatch batch;
     private Viewport viewport;
     private TextCellFactory tcf;
-    private SquidPanel display;
+    private SquidLayers display;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        tcf = DefaultResources.getStretchableFont().width(cellWidth).height(cellHeight).initBySize();
+        tcf = DefaultResources.getStretchableSlabFont();//.width(cellWidth).height(cellHeight).initBySize();
         viewport = new StretchViewport(totalWidth, totalHeight);
-        display = new SquidPanel(gridWidth, gridHeight, tcf).setTextSize(cellWidth, cellHeight);
+        display = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight, tcf).setTextSize(9, 17);
         stage = new Stage(viewport, batch);
         SquidColorCenter scc = DefaultResources.getSCC();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyUp(int keycode) {
-                if(keycode == Input.Keys.Q)
+                if(keycode == Input.Keys.Q || keycode == Input.Keys.ESCAPE)
                     Gdx.app.exit();
                 return true;
             }
         });
         Gdx.graphics.setTitle("SquidLib Demo: Colors");
-        for (int h = 0; h < gridWidth; h++) {
-            for (int v = 0; v < 6; v++) {
-                display.put(h, v, scc.getHSV(h * (1f / gridWidth), 0.75f, (8 - v) / 8f));
+//        for (int i = 0; i < 32; i++) {
+//            SColor db = SColor.DAWNBRINGER_32[i];
+//            display.putString(0, i, "                                ", db, db);
+//            display.putString(1, i, db.name, scc.invert(db), db);
+//        }
+        for (int h = 0; h < 7; h++) {
+            for (int v = 0; v < 27; v++) {
+                SColor cw = SColor.COLOR_WHEEL_PALETTE[h * 27 + v];
+                display.putString(h * 20, v, StringKit.padRightStrict(cw.name.substring(3), 20), scc.invert(cw), cw);
+                //display.put(h, v, scc.getHSV(h * (1f / gridWidth), 0.75f, (8 - v) / 8f));
             }
         }
 
@@ -184,8 +189,8 @@ public class ColorTest extends ApplicationAdapter {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Demo: Colors";
-        config.x = 0;
-        config.y = 0;
+        config.width = totalWidth;
+        config.height = totalHeight;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);

@@ -38,7 +38,6 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
     	super(filterEffect);
     }
 
-    private final Color tmpColor = new Color();
     @Override
     protected Color create(int red, int green, int blue, int opacity) {
         if (filter == null)
@@ -357,6 +356,13 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
         return lerp(a, b, DefaultResources.getGuiRandom().nextFloat());
     }
 
+    public Color invert(Color start)
+    {
+        float v = getValue(start);
+        return v > 0.65f
+                ? getHSV((getHue(start) + 0.45f), 1f - getSaturation(start) * 0.85f, v * 0.1f, start.a)
+                : getHSV((getHue(start) + 0.45f), 1f - getSaturation(start) * 1.15f, 1f, start.a);
+    }
     /**
      * Finds a 16-step gradient going from fromColor to toColor, both included in the gradient.
      * @param fromColor the color to start with, included in the gradient
