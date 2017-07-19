@@ -1010,6 +1010,10 @@ public abstract class WorldMapGenerator {
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
         public final Noise3D terrain, terrainRidged, heat, moisture, otherRidged;
+        public final double[][] xPositions,
+                yPositions,
+                zPositions;
+
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
@@ -1104,6 +1108,9 @@ public abstract class WorldMapGenerator {
          */
         public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise3D noiseGenerator, double octaveMultiplier) {
             super(initialSeed, mapWidth, mapHeight);
+            xPositions = new double[width][height];
+            yPositions = new double[width][height];
+            zPositions = new double[width][height];
             terrain = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
             terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
             heat = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
@@ -1162,6 +1169,9 @@ public abstract class WorldMapGenerator {
                 for (int x = 0, xt = 0; x < width; x++) {
                     ps = trigTable[xt++] * qc;//Math.sin(p);
                     pc = trigTable[xt++] * qc;//Math.cos(p);
+                    xPositions[x][y] = pc;
+                    yPositions[x][y] = ps;
+                    zPositions[x][y] = qs;
                     h = terrain.getNoiseWithSeed(pc +
                                     terrainRidged.getNoiseWithSeed(pc, ps, qs,seedA + seedB),
                             ps, qs, seedA);

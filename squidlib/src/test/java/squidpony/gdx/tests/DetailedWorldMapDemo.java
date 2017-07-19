@@ -19,6 +19,7 @@ import squidpony.squidmath.*;
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
  * It seems to mostly work now, though it only generates one view of the map that it renders (but biome, moisture, heat,
  * and height maps can all be requested from it).
+ * Currently, clouds are in progress, and look like <a href="http://i.imgur.com/Uq7Whzp.gifv">this preview</a>.
  */
 public class DetailedWorldMapDemo extends ApplicationAdapter {
     public static final int
@@ -47,15 +48,17 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private WorldMapGenerator world;
+    private WorldMapGenerator.SphereMap world;
     private final double[][] shadingData = new double[width][height];
     private final int[][]
             heatCodeData = new int[width][height],
-            moistureCodeData = new int[width][height],
+            //moistureCodeData = new int[width][height],
             biomeUpperCodeData = new int[width][height],
             biomeLowerCodeData = new int[width][height];
+    private Noise.Noise4D cloudNoise, cloudNoise2;
+    private final float[][][] cloudData = new float[128][128][128];
+    private int counter = 0;
     private long ttg = 0; // time to generate
-
     public static final double
             coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0
             colderValueLower = 0.15,   colderValueUpper = 0.31,  // 1
@@ -151,6 +154,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float wetter = SColor.floatGetI(20, 70, 255);
     private static float wettest = SColor.floatGetI(0, 0, 100);
 
+    private static float cloudFull = SColor.floatGet(0xffffffff);
+
     private static float[] biomeColors = {
             desert,
             savanna,
@@ -207,7 +212,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
 
     protected void makeBiomes() {
-        final WorldMapGenerator world = this.world;
+        final WorldMapGenerator.SphereMap world = this.world;
         final int[][] heightCodeData = world.heightCodeData;
         final double[][] heatData = world.heatData, moistureData = world.moistureData, heightData = world.heightData;
         int hc, mc, heightCode;
@@ -250,7 +255,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 }
 
                 heatCodeData[x][y] = hc;
-                moistureCodeData[x][y] = mc;
+                //moistureCodeData[x][y] = mc;
                 biomeUpperCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
 
                 if (moist >= (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)) {
@@ -292,6 +297,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                     NumberTools.bounce((high + moist) * (4.1 + high - hot)) * 0.5 + 0.5; // * (7.5 + moist * 1.9 - hot * 0.9)
             }
         }
+        int seedA = (int) LightRNG.determine(seed),
+                seedB = Light32RNG.determine(seedA),
+                seedC = Light32RNG.determine(seedA + seedB);
+        counter = Light32RNG.determine(seedA + seedB + seedC) >>> 16;
+        Noise.seamless3D(cloudData, seedC, 3);
     }
 
 
@@ -304,6 +314,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
         world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
+        //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
+        cloudNoise = new Noise.Layered4D(SeededNoise.instance, 2, 3.8);
+        cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.9);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -352,7 +365,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.input.setInputProcessor(input);
         display.setPosition(0, 0);
         stage.addActor(display);
-        Gdx.graphics.setContinuousRendering(false);
+        Gdx.graphics.setContinuousRendering(true);
         Gdx.graphics.requestRendering();
     }
 
@@ -391,11 +404,28 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         int hc, tc;
         int[][] heightCodeData = world.heightCodeData;
         double[][] heightData = world.heightData;
+        double xp, yp, zp;
+        float cloud, shown, cloudLight;
         for (int y = 0; y < height; y++) {
             PER_CELL:
             for (int x = 0; x < width; x++) {
                 hc = heightCodeData[x][y];
                 tc = heatCodeData[x][y];
+                //cloud = (float) cloudNoise2.getNoiseWithSeed(xp = world.xPositions[x][y], yp = world.yPositions[x][y],
+                //        zp = world.zPositions[x][y], counter * 0.04, (int) seed) * 0.06f;
+                //cloud = (float) Math.min(1f, cloudNoise.getNoiseWithSeed(xp + cloud, yp + cloud, zp + cloud, counter * 0.015, (int) seed) * 1.6f - 0.07f);
+                cloud = Math.min(1f,
+                        cloudData[(int) (world.xPositions[x][y] * 109 + counter * 1.7) & 127]
+                        [(int) (world.yPositions[x][y] * 109) & 127]
+                        [(int) (world.zPositions[x][y] * 109) & 127] * 1.1f +
+                        cloudData[(int) (world.xPositions[x][y] * 119) & 127]
+                                [(int) (world.yPositions[x][y] * 119 + counter * 1.7) & 127]
+                                [(int) (world.zPositions[x][y] * 119) & 127] * 1.4f);
+                cloudLight = Math.min(1f, 1f +
+                        cloudData[(int) (world.xPositions[x][y] * 233) & 127]
+                                [(int) (world.yPositions[x][y] * 233) & 127]
+                                [(int) (world.zPositions[x][y] * 233 + counter * 2.3) & 127] * 0.64f);
+                cloudLight = SColor.floatGet(cloudLight, cloudLight, cloudLight, 1f);
                 if(tc == 0)
                 {
                     switch (hc)
@@ -404,12 +434,18 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         case 1:
                         case 2:
                         case 3:
-                            display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
-                                    (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
+                            shown = SColor.lerpFloatColors(shallowColor, ice,
+                                    (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0)));
+                            if(cloud > 0.0)
+                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+                            display.put(x, y, shown);
                             continue PER_CELL;
                         case 4:
-                            display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
-                                    (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
+                            shown = SColor.lerpFloatColors(lightIce, ice,
+                                    (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1)));
+                            if(cloud > 0.0)
+                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+                            display.put(x, y, shown);
                             continue PER_CELL;
                     }
                 }
@@ -418,8 +454,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 1:
                     case 2:
                     case 3:
-                        display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
-                                (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
+                        shown = SColor.lerpFloatColors(deepColor, coastalColor,
+                                (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0)));
+                        if(cloud > 0.0)
+                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+                        display.put(x, y, shown);
                         break;
                     default:
                         /*
@@ -430,13 +469,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                             System.out.println("RIVER x=" + x + ",y=" + y + ':' + (((heightData[x][y] - lowers[hc]) / (differences[hc])) * 19
                                     + shadingData[x][y] * 13) * 0.03125f);
                         */
-
-
-                        display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
+                        shown = SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
                                 BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
-                                (float) //(((heightData[x][y] - lowers[hc]) / (differences[hc])) * 11 +
-                                        shadingData[x][y]// * 21) * 0.03125f
-                                ));
+                                (float) shadingData[x][y]);
+                        if(cloud > 0.0)
+                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+                        display.put(x, y, shown);
 
                         //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
                 }
@@ -451,6 +489,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
+        ++counter;
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
 
         // if we are waiting for the player's input and get input, process it.
@@ -473,7 +512,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         config.title = "SquidLib Demo: Detailed World Map";
         config.width = width * cellWidth;
         config.height = height * cellHeight;
-        config.foregroundFPS = 20;
+        config.foregroundFPS = 60;
         //config.fullscreen = true;
         config.backgroundFPS = -1;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
