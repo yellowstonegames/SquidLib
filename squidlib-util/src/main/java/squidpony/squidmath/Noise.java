@@ -1602,17 +1602,67 @@ public class Noise {
                 }
             }
         }
-        //if(octaves > 1) {
-            i_s = 1.0 / ((1<<octaves) - 1.0);
+        i_s = 1.0 / ((1<<octaves) - 1.0);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                for (int z = 0; z < depth; z++) {
+                    total += (fill[z][x][y] *= i_s);
+                }
+            }
+        }
+        return fill;
+    }
+
+    /**
+     * Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+     * boundaries. This overload doesn't care what you use for x, y, or z axes, it uses the exact size of fill fully.
+     * Allows a seed to change the generated noise.
+     * @param fill a 3D array of double; must be rectangular, so it's a good idea to create with {@code new double[depth][width][height]} or something similar
+     * @param seed an int seed that affects the noise produced, with different seeds producing very different noise
+     * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
+     * @return {@code fill}, after assigning it with seamless-bounded noise
+     */
+    public static float[][][] seamless3D(final float[][][] fill, final int seed, final int octaves) {
+        final int depth, height, width;
+        if(fill == null || (depth = fill.length) <= 0 || (width = fill[0].length) <= 0 || (height = fill[0][0].length) <= 0
+                || octaves <= 0 || octaves >= 63)
+            return fill;
+        final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height, i_d = 6.283185307179586 / depth;
+        int s = 1<<(octaves-1), seed2 = seed;
+        double p, q, r,
+                ps, pc,
+                qs, qc,
+                rs, rc, i_s = 0.5 / s;
+        for (int o = 0; o < octaves; o++, s>>=1) {
+            seed2 = PintRNG.determine(seed2);
+            i_s *= 2.0;
             for (int x = 0; x < width; x++) {
+                p = x * i_w;
+                ps = Math.sin(p) * i_s;
+                pc = Math.cos(p) * i_s;
                 for (int y = 0; y < height; y++) {
+                    q = y * i_h;
+                    qs = Math.sin(q) * i_s;
+                    qc = Math.cos(q) * i_s;
                     for (int z = 0; z < depth; z++) {
-                        total += (fill[z][x][y] *= i_s);
+                        r = z * i_d;
+                        rs = Math.sin(r) * i_s;
+                        rc = Math.cos(r) * i_s;
+                        fill[z][x][y] += SeededNoise.noise(pc, ps, qc, qs, rc, rs, seed2) * s;
                     }
                 }
             }
-        //}
+        }
+        i_s = 1.0 / ((1<<octaves) - 1.0);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                for (int z = 0; z < depth; z++) {
+                    fill[z][x][y] *= i_s;
+                }
+            }
+        }
         return fill;
+
     }
 
 }
