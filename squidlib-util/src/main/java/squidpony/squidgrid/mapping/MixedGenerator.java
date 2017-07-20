@@ -99,12 +99,11 @@ public class MixedGenerator implements IDungeonGenerator {
      * It produces a cleaner layout of rooms that should have less overlap between rooms and corridors; a good approach
      * is to favor {@link #putWalledBoxRoomCarvers(int)} and {@link #putWalledRoundRoomCarvers(int)} more than you might
      * otherwise consider in place of caves, since caves may be larger than you would expect here. The exact technique
-     * used here is to get points from the Halton sequence (formed by two different van der Corput sequences, which
-     * {@link VanDerCorputQRNG} produces), but to sometimes stop short on the way to the next point and instead use a
-     * Coord that is likely to be close to either the start or end but is only rarely in the middle (this avoids
-     * clumping, though it still happens with caves).
+     * used here is to get points from a Halton-like sequence, formed using {@link VanDerCorputQRNG} to get a van der
+     * Corput sequence, for the x axis and a Weyl sequence (or something like one, here it's the non-integer part after
+     * multiplying 5.179610631848751 by the index) for the y axis. MixedGenerator will connect these points in pairs.
      * <br>
-     * <a href="https://gist.githubusercontent.com/tommyettinger/be0ed51858cb492bc7e8cda43a04def1/raw/dae9d8e4f45dd3a3577bdd5f58b419ea5f9ed570/HaltonImproved.txt">Preview map.</a>
+     * <a href="https://gist.githubusercontent.com/tommyettinger/b1d00b1b69441b3e689e743b7f005006/raw/95d875b328bfbd5adc3a2465644410ab33dd0096/TenDungeons.txt">Preview maps, with and without box drawing characters.</a>
      * @param width dungeon width in cells
      * @param height dungeon height in cells
      * @param rng rng to use
@@ -115,18 +114,17 @@ public class MixedGenerator implements IDungeonGenerator {
     {
         width -= 2;
         height -= 2;
-        float mx = rng.nextFloat(), my = rng.nextFloat(), dist;
-        int index = 11 + rng.next(4), sz = width * height / 103, nx, ny;
-        Coord current = Coord.get((int)(((VanDerCorputQRNG.determine2(index) + mx) % 1.0) * width + 1),
-                (int)(((VanDerCorputQRNG.determine(7, index) + my) % 1.0) * height + 1));
+        float mx = rng.nextFloat(), my = rng.nextFloat();
+        int index = 10 + rng.next(4), sz = width * height / 97;
         List<Coord> list = new ArrayList<>(sz);
-        list.add(current);
+        list.add(Coord.get((int)(((VanDerCorputQRNG.determine2(index) + mx) % 1.0) * width + 1),
+                (int) (((index * 5.179610631848751 + my) % 1.0) * height + 1)));
         for (int i = 0; i < sz; i++) {
-            nx = (int) (((VanDerCorputQRNG.determine2(++index) + mx) % 1.0) * width + 1);
-            ny = (int) (((VanDerCorputQRNG.determine(3, index) + my) % 1.0) * height + 1);
-            dist = (NumberTools.formCurvedFloat(rng.nextInt()) + 2f) % 2f * 0.5f;
-            current = Coord.get((int) ((nx - current.x) * dist) + current.x, (int) ((ny - current.y) * dist) + current.y);
-            list.add(current);
+            //ny = (int) (((VanDerCorputQRNG.determine(3, index) + my) % 1.0) * height + 1);
+//            dist = (NumberTools.formCurvedFloat(index * 0x9E3779B9 >>> 1) + 1f) % 1f;
+//            current = Coord.get((int) ((nx - current.x) * dist) + current.x, (int) ((ny - current.y) * dist) + current.y);
+            list.add(Coord.get((int) (((VanDerCorputQRNG.determine2(++index) + mx) % 1.0) * width + 1),
+                    (int) (((index * 5.179610631848751 + my) % 1.0) * height + 1)));
         }
         return list;
     }

@@ -12,7 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Sample output: {@code
+ * Sample output: <pre>
  * ┌─────────────────┐     ┌─────────────┐   ┌─────┐ ┌───────┐   ┌─────┐
  * │ ~ ~ ~ ~ ~ ~ ~ ~ └─┐   │ . . . . . . └───┤ . . │ │ . . . │   │ . . │
  * │ ~ ~ ~ ~ ~ ~ ~ ~ ~ │   │ . . . . . . . . │ . . │ │ . . ──┴─┬─┘ . . │
@@ -73,36 +73,38 @@ import java.io.IOException;
  * │ . . │ │ . ^ . . . . ^ ^ . . . . . │ . . . . . . . . . │     │ ^ . │
  * └─────┘ └─────────────┐ . . . . . . + . . . . . . . . . │     │ . . │
  *                       └─────────────┴───────────────────┘     └─────┘
- * }
+ * </pre>
  * Created by Tommy Ettinger on 4/8/2015.
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 70, height = 70, depth = 16;
+    public static int width = 110, height = 40, depth = 16;
 
     public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
         StatefulRNG rng = new StatefulRNG(2252637788195L);
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
-
+        char[][] dungeon;
         dungeonGenerator.addDoors(15, true);
         dungeonGenerator.addWater(15);
         dungeonGenerator.addGrass(10);
         dungeonGenerator.addBoulders(5);
         dungeonGenerator.addTraps(2);
-
         MixedGenerator mix = new MixedGenerator(width, height, rng);
         mix.putCaveCarvers(1);
-        mix.putWalledBoxRoomCarvers(7);
-        mix.putWalledRoundRoomCarvers(5);
+        mix.putWalledBoxRoomCarvers(9);
+        mix.putWalledRoundRoomCarvers(7);
         dungeonGenerator.generate(mix.generate());
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
-        char[][] dungeon = dungeonGenerator.getDungeon();
+        dungeon = dungeonGenerator.getDungeon();
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
-        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
-                DungeonUtility.hashesToLines(dungeon, true)));
+        dungeonGenerator.setDungeon(//DungeonUtility.linesToHashes(
+                DungeonUtility.hashesToLines(dungeon, true));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 

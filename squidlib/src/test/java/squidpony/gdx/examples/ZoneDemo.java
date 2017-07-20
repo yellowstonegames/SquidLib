@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.ArrayTools;
 import squidpony.ColoredStringList;
 import squidpony.GwtCompatibility;
 import squidpony.squidai.ZOI;
@@ -49,11 +48,11 @@ public class ZoneDemo extends ApplicationAdapter {
     @Override
     public void create () {
         batch = new SpriteBatch();
-        width = 65;
-        height = 65;
+        width = 50;
+        height = 30;
 
-        cellWidth = 14 * INTERNAL_ZOOM;
-        cellHeight = 14 * INTERNAL_ZOOM;
+        cellWidth = 25 * INTERNAL_ZOOM;
+        cellHeight = 25 * INTERNAL_ZOOM;
         TextCellFactory tcf = DefaultResources.getStretchableSquareFont().addSwap('.', ' ');
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
         //tcf.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f));
@@ -306,5 +305,4 @@ public class ZoneDemo extends ApplicationAdapter {
         stage.setScrollFocus(null);
         current = null;
     }
-
 }
