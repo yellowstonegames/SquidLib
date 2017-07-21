@@ -200,6 +200,11 @@ public class DefaultResources implements LifecycleListener {
 
     private static DefaultResources instance = null;
 
+    static BitmapFont copyFont(BitmapFont font)
+    {
+        return new BitmapFont(new BitmapFont.BitmapFontData(font.getData().getFontFile(), false),
+                font.getRegions(), font.usesIntegerPositions());
+    }
     private DefaultResources()
     {
         if(Gdx.app == null)
@@ -228,7 +233,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.arial15;
+        return copyFont(instance.arial15);
     }
     /**
      * Returns a 12x12px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
@@ -251,7 +256,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.square1;
+        return copyFont(instance.square1);
     }
     /**
      * Returns a 24x24px, stretched but curvaceous font as an embedded resource. Caches it for later calls.
@@ -274,7 +279,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.square2;
+        return copyFont(instance.square2);
     }
     /**
      * Returns a 6x12px, narrow and curving font as an embedded resource. Caches it for later calls.
@@ -297,7 +302,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.narrow1;
+        return copyFont(instance.narrow1);
     }
 
     /**
@@ -321,7 +326,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.narrow2;
+        return copyFont(instance.narrow2);
     }
     /**
      * Returns a 12x24px, narrow and curving font as an embedded resource. Caches it for later calls.
@@ -344,7 +349,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.narrow3;
+        return copyFont(instance.narrow3);
     }
 
     /**
@@ -370,7 +375,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.smooth1;
+        return copyFont(instance.smooth1);
     }
     /**
      * Returns a 12x24px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
@@ -395,7 +400,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.smooth2;
+        return copyFont(instance.smooth2);
     }
     /**
      * Returns a 6x16px, narrow and curving font with a lot of unicode chars as an embedded resource. Caches it for later calls.
@@ -418,7 +423,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.unicode1;
+        return copyFont(instance.unicode1);
     }
 
     /**
@@ -442,7 +447,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.unicode2;
+        return copyFont(instance.unicode2);
     }
     /**
      * Returns a 25x25px, very smooth and generally good-looking font (based on Inconsolata) as an embedded resource.
@@ -469,7 +474,7 @@ public class DefaultResources implements LifecycleListener {
             } catch (Exception e) {
             }
         }
-        return instance.smoothSquare;
+        return copyFont(instance.smoothSquare);
     }
 
     /**
