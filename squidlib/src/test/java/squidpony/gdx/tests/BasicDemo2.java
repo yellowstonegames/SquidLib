@@ -79,7 +79,8 @@ public class BasicDemo2 extends ApplicationAdapter {
         batch = new SpriteBatch();
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + bonusHeight) * cellHeight), batch);
-        // the font will try to load CM-Custom as an embedded bitmap font with a distance field effect.
+        // the font will try to load Iosevka Slab as an embedded bitmap font with a distance field effect.
+        // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(gridWidth, gridHeight + bonusHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableSlabFont());

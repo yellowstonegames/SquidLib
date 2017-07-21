@@ -81,300 +81,300 @@
 <span class="sourceLineNo">073</span>     *<a name="line.73"></a>
 <span class="sourceLineNo">074</span>     * @param hue The hue of the desired color from 0.0 (red, inclusive) towards orange, then<a name="line.74"></a>
 <span class="sourceLineNo">075</span>     *            yellow, and eventually to purple before looping back to almost the same red<a name="line.75"></a>
-<span class="sourceLineNo">076</span>     *            (1.0, exclusive)<a name="line.76"></a>
-<span class="sourceLineNo">077</span>     * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)<a name="line.77"></a>
-<span class="sourceLineNo">078</span>     *                   to 1.0 (a bright color, exclusive)<a name="line.78"></a>
-<span class="sourceLineNo">079</span>     * @param value the value (essentially lightness) of the color from 0.0 (black,<a name="line.79"></a>
-<span class="sourceLineNo">080</span>     *                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high<a name="line.80"></a>
-<span class="sourceLineNo">081</span>     *                   for HDR colors.<a name="line.81"></a>
-<span class="sourceLineNo">082</span>     * @param opacity the alpha component as a float; 0.0f is clear, 1.0f is opaque.<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     * @return a possibly transparent color<a name="line.83"></a>
-<span class="sourceLineNo">084</span>     */<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    T getHSV(float hue, float saturation, float value, float opacity);<a name="line.85"></a>
-<span class="sourceLineNo">086</span><a name="line.86"></a>
-<span class="sourceLineNo">087</span>    /**<a name="line.87"></a>
-<span class="sourceLineNo">088</span>     *<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     * @param hue The hue of the desired color from 0.0 (red, inclusive) towards orange, then<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     *            yellow, and eventually to purple before looping back to almost the same red<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     *            (1.0, exclusive)<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     *                   to 1.0 (a bright color, exclusive)<a name="line.93"></a>
-<span class="sourceLineNo">094</span>     * @param value the value (essentially lightness) of the color from 0.0 (black,<a name="line.94"></a>
-<span class="sourceLineNo">095</span>     *                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high<a name="line.95"></a>
-<span class="sourceLineNo">096</span>     *                   for HDR colors.<a name="line.96"></a>
-<span class="sourceLineNo">097</span>     * @return an opaque color<a name="line.97"></a>
-<span class="sourceLineNo">098</span>     */<a name="line.98"></a>
-<span class="sourceLineNo">099</span>    T getHSV(float hue, float saturation, float value);<a name="line.99"></a>
-<span class="sourceLineNo">100</span><a name="line.100"></a>
-<span class="sourceLineNo">101</span>        /**<a name="line.101"></a>
-<span class="sourceLineNo">102</span>         * @return Opaque white.<a name="line.102"></a>
-<span class="sourceLineNo">103</span>         */<a name="line.103"></a>
-<span class="sourceLineNo">104</span>        T getWhite();<a name="line.104"></a>
-<span class="sourceLineNo">105</span><a name="line.105"></a>
-<span class="sourceLineNo">106</span>        /**<a name="line.106"></a>
-<span class="sourceLineNo">107</span>         * @return Opaque black.<a name="line.107"></a>
-<span class="sourceLineNo">108</span>         */<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        T getBlack();<a name="line.109"></a>
-<span class="sourceLineNo">110</span><a name="line.110"></a>
-<span class="sourceLineNo">111</span>        /**<a name="line.111"></a>
-<span class="sourceLineNo">112</span>         * @return The fully transparent color.<a name="line.112"></a>
-<span class="sourceLineNo">113</span>         */<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        T getTransparent();<a name="line.114"></a>
-<span class="sourceLineNo">115</span><a name="line.115"></a>
-<span class="sourceLineNo">116</span>        /**<a name="line.116"></a>
-<span class="sourceLineNo">117</span>         * @param rng an RNG from SquidLib.<a name="line.117"></a>
-<span class="sourceLineNo">118</span>         * @param opacity<a name="line.118"></a>
-<span class="sourceLineNo">119</span>         *            The alpha component. In-between 0 (inclusive) and 256<a name="line.119"></a>
-<span class="sourceLineNo">120</span>         *            (exclusive). Larger values mean more opacity; 0 is clear.<a name="line.120"></a>
-<span class="sourceLineNo">121</span>         * @return A random color, except for the alpha component.<a name="line.121"></a>
-<span class="sourceLineNo">122</span>         */<a name="line.122"></a>
-<span class="sourceLineNo">123</span>        T getRandom(RNG rng, int opacity);<a name="line.123"></a>
-<span class="sourceLineNo">124</span><a name="line.124"></a>
-<span class="sourceLineNo">125</span>        /**<a name="line.125"></a>
-<span class="sourceLineNo">126</span>         * @param c a concrete color<a name="line.126"></a>
-<span class="sourceLineNo">127</span>         * @return The red component. For screen colors, in-between 0 (inclusive) and 256 (exclusive).<a name="line.127"></a>
-<span class="sourceLineNo">128</span>         */<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        int getRed(T c);<a name="line.129"></a>
-<span class="sourceLineNo">130</span><a name="line.130"></a>
-<span class="sourceLineNo">131</span>        /**<a name="line.131"></a>
-<span class="sourceLineNo">132</span>         * @param c a concrete color<a name="line.132"></a>
-<span class="sourceLineNo">133</span>         * @return The green component. For screen colors, in-between 0 (inclusive) and 256<a name="line.133"></a>
-<span class="sourceLineNo">134</span>         *         (exclusive).<a name="line.134"></a>
-<span class="sourceLineNo">135</span>         */<a name="line.135"></a>
-<span class="sourceLineNo">136</span>        int getGreen(T c);<a name="line.136"></a>
-<span class="sourceLineNo">137</span><a name="line.137"></a>
-<span class="sourceLineNo">138</span>        /**<a name="line.138"></a>
-<span class="sourceLineNo">139</span>         * @param c a concrete color<a name="line.139"></a>
-<span class="sourceLineNo">140</span>         * @return The blue component. For screen colors, in-between 0 (inclusive) and 256 (exclusive).<a name="line.140"></a>
-<span class="sourceLineNo">141</span>         */<a name="line.141"></a>
-<span class="sourceLineNo">142</span>        int getBlue(T c);<a name="line.142"></a>
-<span class="sourceLineNo">143</span><a name="line.143"></a>
-<span class="sourceLineNo">144</span>        /**<a name="line.144"></a>
-<span class="sourceLineNo">145</span>         * @param c a concrete color<a name="line.145"></a>
-<span class="sourceLineNo">146</span>         * @return The alpha component. In-between 0 (inclusive) and 256<a name="line.146"></a>
-<span class="sourceLineNo">147</span>         *         (exclusive).<a name="line.147"></a>
-<span class="sourceLineNo">148</span>         */<a name="line.148"></a>
-<span class="sourceLineNo">149</span>        int getAlpha(T c);<a name="line.149"></a>
-<span class="sourceLineNo">150</span><a name="line.150"></a>
-<span class="sourceLineNo">151</span>    /**<a name="line.151"></a>
-<span class="sourceLineNo">152</span>     *<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     * @param c a concrete color<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     * eventually to purple before looping back to almost the same red (1.0, exclusive)<a name="line.155"></a>
-<span class="sourceLineNo">156</span>     */<a name="line.156"></a>
-<span class="sourceLineNo">157</span>    float getHue(T c);<a name="line.157"></a>
-<span class="sourceLineNo">158</span><a name="line.158"></a>
-<span class="sourceLineNo">159</span>    /**<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     *<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * @param c a concrete color<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     * bright color, exclusive)<a name="line.163"></a>
-<span class="sourceLineNo">164</span>     */<a name="line.164"></a>
-<span class="sourceLineNo">165</span>    float getSaturation(T c);<a name="line.165"></a>
-<span class="sourceLineNo">166</span><a name="line.166"></a>
-<span class="sourceLineNo">167</span>    /**<a name="line.167"></a>
-<span class="sourceLineNo">168</span>     *<a name="line.168"></a>
-<span class="sourceLineNo">169</span>     * @param c a concrete color<a name="line.169"></a>
-<span class="sourceLineNo">170</span>     * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to<a name="line.170"></a>
-<span class="sourceLineNo">171</span>     * 1.0 (inclusive) for screen colors or arbitrarily high for HDR colors.<a name="line.171"></a>
-<span class="sourceLineNo">172</span>     */<a name="line.172"></a>
-<span class="sourceLineNo">173</span>    float getValue(T c);<a name="line.173"></a>
-<span class="sourceLineNo">174</span><a name="line.174"></a>
-<span class="sourceLineNo">175</span>    /**<a name="line.175"></a>
-<span class="sourceLineNo">176</span>     * @param c<a name="line.176"></a>
-<span class="sourceLineNo">177</span>     * @return The color that {@code this} shows when {@code c} is requested. May be {@code c} itself.<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     */<a name="line.178"></a>
-<span class="sourceLineNo">179</span>    T filter(T c);<a name="line.179"></a>
-<span class="sourceLineNo">180</span><a name="line.180"></a>
-<span class="sourceLineNo">181</span>        /**<a name="line.181"></a>
-<span class="sourceLineNo">182</span>         * @param ics<a name="line.182"></a>
-<span class="sourceLineNo">183</span>         * @return {@code ics} filtered according to {@link #filter(Object)}. May be<a name="line.183"></a>
-<span class="sourceLineNo">184</span>         *         {@code ics} itself if unchanged.<a name="line.184"></a>
-<span class="sourceLineNo">185</span>         */<a name="line.185"></a>
-<span class="sourceLineNo">186</span>        IColoredString&lt;T&gt; filter(IColoredString&lt;T&gt; ics);<a name="line.186"></a>
-<span class="sourceLineNo">187</span><a name="line.187"></a>
-<span class="sourceLineNo">188</span>        /**<a name="line.188"></a>
-<span class="sourceLineNo">189</span>         * Gets a copy of t and modifies it to make a shade of gray with the same brightness.<a name="line.189"></a>
-<span class="sourceLineNo">190</span>         * The doAlpha parameter causes the alpha to be considered in the calculation of brightness and also changes the<a name="line.190"></a>
-<span class="sourceLineNo">191</span>         * returned alpha of the color.<a name="line.191"></a>
-<span class="sourceLineNo">192</span>         * Not related to reified types or any usage of "reify."<a name="line.192"></a>
-<span class="sourceLineNo">193</span>         * @param t a T to copy; only the copy will be modified<a name="line.193"></a>
-<span class="sourceLineNo">194</span>         * @param doAlpha<a name="line.194"></a>
-<span class="sourceLineNo">195</span>         *            Whether to include (and hereby change) the alpha component.<a name="line.195"></a>
-<span class="sourceLineNo">196</span>         * @return A monochromatic variation of {@code t}.<a name="line.196"></a>
-<span class="sourceLineNo">197</span>         */<a name="line.197"></a>
-<span class="sourceLineNo">198</span>        T greify(/*@Nullable*/ T t, boolean doAlpha);<a name="line.198"></a>
-<span class="sourceLineNo">199</span><a name="line.199"></a>
-<span class="sourceLineNo">200</span>    /**<a name="line.200"></a>
-<span class="sourceLineNo">201</span>     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.<a name="line.201"></a>
-<span class="sourceLineNo">202</span>     * @param start the initial color T<a name="line.202"></a>
-<span class="sourceLineNo">203</span>     * @param end the "target" color T<a name="line.203"></a>
-<span class="sourceLineNo">204</span>     * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end<a name="line.204"></a>
-<span class="sourceLineNo">205</span>     * @return a new T between start and end<a name="line.205"></a>
-<span class="sourceLineNo">206</span>     */<a name="line.206"></a>
-<span class="sourceLineNo">207</span>    T lerp(T start, T end, float change);<a name="line.207"></a>
-<span class="sourceLineNo">208</span>    /**<a name="line.208"></a>
-<span class="sourceLineNo">209</span>     * Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).<a name="line.209"></a>
-<span class="sourceLineNo">210</span>     * Keeps alpha the same; if you want alpha to be considered (and brightness to be calculated differently), then<a name="line.210"></a>
-<span class="sourceLineNo">211</span>     * you can use greify() in this class instead.<a name="line.211"></a>
-<span class="sourceLineNo">212</span>     * @param color the color T to desaturate (will not be modified)<a name="line.212"></a>
-<span class="sourceLineNo">213</span>     * @return the grayscale version of color<a name="line.213"></a>
-<span class="sourceLineNo">214</span>     */<a name="line.214"></a>
-<span class="sourceLineNo">215</span>    T desaturated(T color);<a name="line.215"></a>
-<span class="sourceLineNo">216</span><a name="line.216"></a>
-<span class="sourceLineNo">217</span>    /**<a name="line.217"></a>
-<span class="sourceLineNo">218</span>     * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).<a name="line.218"></a>
-<span class="sourceLineNo">219</span>     * Alpha is left unchanged.<a name="line.219"></a>
-<span class="sourceLineNo">220</span>     * @param color the color T to desaturate<a name="line.220"></a>
-<span class="sourceLineNo">221</span>     * @param degree a float between 0.0f and 1.0f; more makes it less colorful<a name="line.221"></a>
-<span class="sourceLineNo">222</span>     * @return the desaturated (and if a filter is used, also filtered) new color T<a name="line.222"></a>
-<span class="sourceLineNo">223</span>     */<a name="line.223"></a>
-<span class="sourceLineNo">224</span>    T desaturate(T color, float degree);<a name="line.224"></a>
-<span class="sourceLineNo">225</span><a name="line.225"></a>
-<span class="sourceLineNo">226</span>    /**<a name="line.226"></a>
-<span class="sourceLineNo">227</span>     * Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.<a name="line.227"></a>
-<span class="sourceLineNo">228</span>     * Leaves alpha unchanged.<a name="line.228"></a>
-<span class="sourceLineNo">229</span>     * @param color the color T to saturate (will not be modified)<a name="line.229"></a>
-<span class="sourceLineNo">230</span>     * @return the saturated version of color<a name="line.230"></a>
-<span class="sourceLineNo">231</span>     */<a name="line.231"></a>
-<span class="sourceLineNo">232</span>    T saturated(T color);<a name="line.232"></a>
-<span class="sourceLineNo">233</span><a name="line.233"></a>
+<span class="sourceLineNo">076</span>     *            (1.0, exclusive). Values outside this range should be treated as wrapping<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     *            around, so 1.1f and -0.9f would be the same as 0.1f .<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     *                   to 1.0 (a bright color, inclusive)<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * @param value the value (essentially lightness) of the color from 0.0 (black,<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     *                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     *                   for HDR colors.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @param opacity the alpha component as a float; 0.0f is clear, 1.0f is opaque.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * @return a possibly transparent color<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    T getHSV(float hue, float saturation, float value, float opacity);<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>    /**<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     *<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * @param hue The hue of the desired color from 0.0 (red, inclusive) towards orange, then<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     *            yellow, and eventually to purple before looping back to almost the same red<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     *            (1.0, exclusive)<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     *                   to 1.0 (a bright color, exclusive)<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @param value the value (essentially lightness) of the color from 0.0 (black,<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     *                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     *                   for HDR colors.<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * @return an opaque color<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    T getHSV(float hue, float saturation, float value);<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>        /**<a name="line.102"></a>
+<span class="sourceLineNo">103</span>         * @return Opaque white.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>         */<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        T getWhite();<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>        /**<a name="line.107"></a>
+<span class="sourceLineNo">108</span>         * @return Opaque black.<a name="line.108"></a>
+<span class="sourceLineNo">109</span>         */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        T getBlack();<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>        /**<a name="line.112"></a>
+<span class="sourceLineNo">113</span>         * @return The fully transparent color.<a name="line.113"></a>
+<span class="sourceLineNo">114</span>         */<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        T getTransparent();<a name="line.115"></a>
+<span class="sourceLineNo">116</span><a name="line.116"></a>
+<span class="sourceLineNo">117</span>        /**<a name="line.117"></a>
+<span class="sourceLineNo">118</span>         * @param rng an RNG from SquidLib.<a name="line.118"></a>
+<span class="sourceLineNo">119</span>         * @param opacity<a name="line.119"></a>
+<span class="sourceLineNo">120</span>         *            The alpha component. In-between 0 (inclusive) and 256<a name="line.120"></a>
+<span class="sourceLineNo">121</span>         *            (exclusive). Larger values mean more opacity; 0 is clear.<a name="line.121"></a>
+<span class="sourceLineNo">122</span>         * @return A random color, except for the alpha component.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>         */<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        T getRandom(RNG rng, int opacity);<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>        /**<a name="line.126"></a>
+<span class="sourceLineNo">127</span>         * @param c a concrete color<a name="line.127"></a>
+<span class="sourceLineNo">128</span>         * @return The red component. For screen colors, in-between 0 (inclusive) and 256 (exclusive).<a name="line.128"></a>
+<span class="sourceLineNo">129</span>         */<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        int getRed(T c);<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>        /**<a name="line.132"></a>
+<span class="sourceLineNo">133</span>         * @param c a concrete color<a name="line.133"></a>
+<span class="sourceLineNo">134</span>         * @return The green component. For screen colors, in-between 0 (inclusive) and 256<a name="line.134"></a>
+<span class="sourceLineNo">135</span>         *         (exclusive).<a name="line.135"></a>
+<span class="sourceLineNo">136</span>         */<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        int getGreen(T c);<a name="line.137"></a>
+<span class="sourceLineNo">138</span><a name="line.138"></a>
+<span class="sourceLineNo">139</span>        /**<a name="line.139"></a>
+<span class="sourceLineNo">140</span>         * @param c a concrete color<a name="line.140"></a>
+<span class="sourceLineNo">141</span>         * @return The blue component. For screen colors, in-between 0 (inclusive) and 256 (exclusive).<a name="line.141"></a>
+<span class="sourceLineNo">142</span>         */<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        int getBlue(T c);<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>        /**<a name="line.145"></a>
+<span class="sourceLineNo">146</span>         * @param c a concrete color<a name="line.146"></a>
+<span class="sourceLineNo">147</span>         * @return The alpha component. In-between 0 (inclusive) and 256<a name="line.147"></a>
+<span class="sourceLineNo">148</span>         *         (exclusive).<a name="line.148"></a>
+<span class="sourceLineNo">149</span>         */<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        int getAlpha(T c);<a name="line.150"></a>
+<span class="sourceLineNo">151</span><a name="line.151"></a>
+<span class="sourceLineNo">152</span>    /**<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     *<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * @param c a concrete color<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * eventually to purple before looping back to almost the same red (1.0, exclusive)<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     */<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    float getHue(T c);<a name="line.158"></a>
+<span class="sourceLineNo">159</span><a name="line.159"></a>
+<span class="sourceLineNo">160</span>    /**<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     *<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * @param c a concrete color<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * bright color, exclusive)<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     */<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    float getSaturation(T c);<a name="line.166"></a>
+<span class="sourceLineNo">167</span><a name="line.167"></a>
+<span class="sourceLineNo">168</span>    /**<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     *<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * @param c a concrete color<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     * 1.0 (inclusive) for screen colors or arbitrarily high for HDR colors.<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     */<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    float getValue(T c);<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>    /**<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param c<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @return The color that {@code this} shows when {@code c} is requested. May be {@code c} itself.<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    T filter(T c);<a name="line.180"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>        /**<a name="line.182"></a>
+<span class="sourceLineNo">183</span>         * @param ics<a name="line.183"></a>
+<span class="sourceLineNo">184</span>         * @return {@code ics} filtered according to {@link #filter(Object)}. May be<a name="line.184"></a>
+<span class="sourceLineNo">185</span>         *         {@code ics} itself if unchanged.<a name="line.185"></a>
+<span class="sourceLineNo">186</span>         */<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        IColoredString&lt;T&gt; filter(IColoredString&lt;T&gt; ics);<a name="line.187"></a>
+<span class="sourceLineNo">188</span><a name="line.188"></a>
+<span class="sourceLineNo">189</span>        /**<a name="line.189"></a>
+<span class="sourceLineNo">190</span>         * Gets a copy of t and modifies it to make a shade of gray with the same brightness.<a name="line.190"></a>
+<span class="sourceLineNo">191</span>         * The doAlpha parameter causes the alpha to be considered in the calculation of brightness and also changes the<a name="line.191"></a>
+<span class="sourceLineNo">192</span>         * returned alpha of the color.<a name="line.192"></a>
+<span class="sourceLineNo">193</span>         * Not related to reified types or any usage of "reify."<a name="line.193"></a>
+<span class="sourceLineNo">194</span>         * @param t a T to copy; only the copy will be modified<a name="line.194"></a>
+<span class="sourceLineNo">195</span>         * @param doAlpha<a name="line.195"></a>
+<span class="sourceLineNo">196</span>         *            Whether to include (and hereby change) the alpha component.<a name="line.196"></a>
+<span class="sourceLineNo">197</span>         * @return A monochromatic variation of {@code t}.<a name="line.197"></a>
+<span class="sourceLineNo">198</span>         */<a name="line.198"></a>
+<span class="sourceLineNo">199</span>        T greify(/*@Nullable*/ T t, boolean doAlpha);<a name="line.199"></a>
+<span class="sourceLineNo">200</span><a name="line.200"></a>
+<span class="sourceLineNo">201</span>    /**<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * @param start the initial color T<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * @param end the "target" color T<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * @return a new T between start and end<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     */<a name="line.207"></a>
+<span class="sourceLineNo">208</span>    T lerp(T start, T end, float change);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    /**<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     * Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * Keeps alpha the same; if you want alpha to be considered (and brightness to be calculated differently), then<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * you can use greify() in this class instead.<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     * @param color the color T to desaturate (will not be modified)<a name="line.213"></a>
+<span class="sourceLineNo">214</span>     * @return the grayscale version of color<a name="line.214"></a>
+<span class="sourceLineNo">215</span>     */<a name="line.215"></a>
+<span class="sourceLineNo">216</span>    T desaturated(T color);<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>    /**<a name="line.218"></a>
+<span class="sourceLineNo">219</span>     * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).<a name="line.219"></a>
+<span class="sourceLineNo">220</span>     * Alpha is left unchanged.<a name="line.220"></a>
+<span class="sourceLineNo">221</span>     * @param color the color T to desaturate<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * @param degree a float between 0.0f and 1.0f; more makes it less colorful<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * @return the desaturated (and if a filter is used, also filtered) new color T<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     */<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    T desaturate(T color, float degree);<a name="line.225"></a>
+<span class="sourceLineNo">226</span><a name="line.226"></a>
+<span class="sourceLineNo">227</span>    /**<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * Leaves alpha unchanged.<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     * @param color the color T to saturate (will not be modified)<a name="line.230"></a>
+<span class="sourceLineNo">231</span>     * @return the saturated version of color<a name="line.231"></a>
+<span class="sourceLineNo">232</span>     */<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    T saturated(T color);<a name="line.233"></a>
 <span class="sourceLineNo">234</span><a name="line.234"></a>
-<span class="sourceLineNo">235</span>    /**<a name="line.235"></a>
-<span class="sourceLineNo">236</span>     * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and<a name="line.236"></a>
-<span class="sourceLineNo">237</span>     * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this does<a name="line.237"></a>
-<span class="sourceLineNo">238</span>     * not necessarily return a specific color, but most implementations will treat a hue of 0 as red.<a name="line.238"></a>
-<span class="sourceLineNo">239</span>     * @param color the color T to saturate<a name="line.239"></a>
-<span class="sourceLineNo">240</span>     * @param degree a float between 0.0f and 1.0f; more makes it more colorful<a name="line.240"></a>
-<span class="sourceLineNo">241</span>     * @return the saturated (and if a filter is used, also filtered) new color<a name="line.241"></a>
-<span class="sourceLineNo">242</span>     */<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    public T saturate(T color, float degree);<a name="line.243"></a>
-<span class="sourceLineNo">244</span><a name="line.244"></a>
-<span class="sourceLineNo">245</span>        /**<a name="line.245"></a>
-<span class="sourceLineNo">246</span>         * Finds a gradient with 16 steps going from fromColor to toColor,<a name="line.246"></a>
-<span class="sourceLineNo">247</span>         * both included in the gradient.<a name="line.247"></a>
-<span class="sourceLineNo">248</span>         * @param fromColor the color to start with, included in the gradient<a name="line.248"></a>
-<span class="sourceLineNo">249</span>         * @param toColor the color to end on, included in the gradient<a name="line.249"></a>
-<span class="sourceLineNo">250</span>         * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps<a name="line.250"></a>
-<span class="sourceLineNo">251</span>         */<a name="line.251"></a>
-<span class="sourceLineNo">252</span>        public ArrayList&lt;T&gt; gradient(T fromColor, T toColor);<a name="line.252"></a>
-<span class="sourceLineNo">253</span><a name="line.253"></a>
-<span class="sourceLineNo">254</span>        /**<a name="line.254"></a>
-<span class="sourceLineNo">255</span>         * Finds a gradient with the specified number of steps going from fromColor to toColor,<a name="line.255"></a>
-<span class="sourceLineNo">256</span>         * both included in the gradient.<a name="line.256"></a>
-<span class="sourceLineNo">257</span>         * @param fromColor the color to start with, included in the gradient<a name="line.257"></a>
-<span class="sourceLineNo">258</span>         * @param toColor the color to end on, included in the gradient<a name="line.258"></a>
-<span class="sourceLineNo">259</span>         * @param steps the number of elements to use in the gradient<a name="line.259"></a>
-<span class="sourceLineNo">260</span>         * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps<a name="line.260"></a>
-<span class="sourceLineNo">261</span>         */<a name="line.261"></a>
-<span class="sourceLineNo">262</span>        public ArrayList&lt;T&gt; gradient(T fromColor, T toColor, int steps);<a name="line.262"></a>
-<span class="sourceLineNo">263</span><a name="line.263"></a>
-<span class="sourceLineNo">264</span>        /**<a name="line.264"></a>
-<span class="sourceLineNo">265</span>         * A skeletal implementation of {@link IColorCenter}.<a name="line.265"></a>
-<span class="sourceLineNo">266</span>         * <a name="line.266"></a>
-<span class="sourceLineNo">267</span>         * @author smelC<a name="line.267"></a>
-<span class="sourceLineNo">268</span>         * <a name="line.268"></a>
-<span class="sourceLineNo">269</span>         * @param &lt;T&gt; a concrete color type<a name="line.269"></a>
-<span class="sourceLineNo">270</span>         */<a name="line.270"></a>
-<span class="sourceLineNo">271</span>        abstract class Skeleton&lt;T&gt; implements IColorCenter&lt;T&gt; {<a name="line.271"></a>
-<span class="sourceLineNo">272</span><a name="line.272"></a>
-<span class="sourceLineNo">273</span>                private final Map&lt;Long, T&gt; cache = new HashMap&lt;&gt;(256);<a name="line.273"></a>
-<span class="sourceLineNo">274</span><a name="line.274"></a>
-<span class="sourceLineNo">275</span>                protected /*Nullable*/ IFilter&lt;T&gt; filter;<a name="line.275"></a>
-<span class="sourceLineNo">276</span><a name="line.276"></a>
-<span class="sourceLineNo">277</span>                /**<a name="line.277"></a>
-<span class="sourceLineNo">278</span>                 * @param filter<a name="line.278"></a>
-<span class="sourceLineNo">279</span>                 *                      The filter to use, or {@code null} for no filter.<a name="line.279"></a>
-<span class="sourceLineNo">280</span>                 */<a name="line.280"></a>
-<span class="sourceLineNo">281</span>                protected Skeleton(/*Nullable*/ IFilter&lt;T&gt; filter) {<a name="line.281"></a>
-<span class="sourceLineNo">282</span>                        this.filter = filter;<a name="line.282"></a>
-<span class="sourceLineNo">283</span>                }<a name="line.283"></a>
-<span class="sourceLineNo">284</span><a name="line.284"></a>
-<span class="sourceLineNo">285</span>        /**<a name="line.285"></a>
-<span class="sourceLineNo">286</span>         * It clears the cache. You may need to do this to limit the cache to the colors used in a specific section.<a name="line.286"></a>
-<span class="sourceLineNo">287</span>                 * This is also useful if a Filter changes what colors it should return on a frame-by-frame basis; in that case,<a name="line.287"></a>
-<span class="sourceLineNo">288</span>                 * you can call clearCache() at the start or end of a frame to ensure the next frame gets different colors.<a name="line.288"></a>
-<span class="sourceLineNo">289</span>         */<a name="line.289"></a>
-<span class="sourceLineNo">290</span>        public void clearCache()<a name="line.290"></a>
-<span class="sourceLineNo">291</span>        {<a name="line.291"></a>
-<span class="sourceLineNo">292</span>            cache.clear();<a name="line.292"></a>
-<span class="sourceLineNo">293</span>        }<a name="line.293"></a>
-<span class="sourceLineNo">294</span><a name="line.294"></a>
-<span class="sourceLineNo">295</span>                /**<a name="line.295"></a>
-<span class="sourceLineNo">296</span>                 * The actual cache is not public, but there are cases where you may want to know how many different colors are<a name="line.296"></a>
-<span class="sourceLineNo">297</span>                 * actually used in a frame or a section of the game. If the cache was emptied (which might be from calling<a name="line.297"></a>
-<span class="sourceLineNo">298</span>                 * {@link #clearCache()}), some colors were requested, then this is called, the returned int should be the<a name="line.298"></a>
-<span class="sourceLineNo">299</span>                 * count of distinct colors this IColorCenter had created and cached; duplicates won't be counted twice.<a name="line.299"></a>
-<span class="sourceLineNo">300</span>                 * @return<a name="line.300"></a>
-<span class="sourceLineNo">301</span>                 */<a name="line.301"></a>
-<span class="sourceLineNo">302</span>                public int cacheSize()<a name="line.302"></a>
-<span class="sourceLineNo">303</span>                {<a name="line.303"></a>
-<span class="sourceLineNo">304</span>                        return cache.size();<a name="line.304"></a>
-<span class="sourceLineNo">305</span>                }<a name="line.305"></a>
-<span class="sourceLineNo">306</span><a name="line.306"></a>
-<span class="sourceLineNo">307</span>        /**<a name="line.307"></a>
-<span class="sourceLineNo">308</span>         * You may want to copy colors between IColorCenter instances that have different create() methods -- and as<a name="line.308"></a>
-<span class="sourceLineNo">309</span>         * such, will have different values for the same keys in the cache. This allows you to copy the cache from other<a name="line.309"></a>
-<span class="sourceLineNo">310</span>         * into this Skeleton, but using this Skeleton's create() method.<a name="line.310"></a>
-<span class="sourceLineNo">311</span>         * @param other another Skeleton of the same type that will have its cache copied into this Skeleton<a name="line.311"></a>
-<span class="sourceLineNo">312</span>         */<a name="line.312"></a>
-<span class="sourceLineNo">313</span>        public void copyCache(Skeleton&lt;T&gt; other)<a name="line.313"></a>
-<span class="sourceLineNo">314</span>        {<a name="line.314"></a>
-<span class="sourceLineNo">315</span>            for (Map.Entry&lt;Long, T&gt; k : other.cache.entrySet())<a name="line.315"></a>
-<span class="sourceLineNo">316</span>            {<a name="line.316"></a>
-<span class="sourceLineNo">317</span>                cache.put(k.getKey(), create(getRed(k.getValue()), getGreen(k.getValue()), getBlue(k.getValue()),<a name="line.317"></a>
-<span class="sourceLineNo">318</span>                        getAlpha(k.getValue())));<a name="line.318"></a>
-<span class="sourceLineNo">319</span>            }<a name="line.319"></a>
-<span class="sourceLineNo">320</span>        }<a name="line.320"></a>
-<span class="sourceLineNo">321</span><a name="line.321"></a>
-<span class="sourceLineNo">322</span>                /**<a name="line.322"></a>
-<span class="sourceLineNo">323</span>                 * If you're changing the filter, you should likely call<a name="line.323"></a>
-<span class="sourceLineNo">324</span>                 * {@link #clearCache()}.<a name="line.324"></a>
-<span class="sourceLineNo">325</span>                 * <a name="line.325"></a>
-<span class="sourceLineNo">326</span>                 * @param filter<a name="line.326"></a>
-<span class="sourceLineNo">327</span>                 *            The filter to use, or {@code null} to turn filtering OFF.<a name="line.327"></a>
-<span class="sourceLineNo">328</span>                 * @return {@code this}<a name="line.328"></a>
-<span class="sourceLineNo">329</span>                 */<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                public Skeleton&lt;T&gt; setFilter(IFilter&lt;T&gt; filter) {<a name="line.330"></a>
-<span class="sourceLineNo">331</span>                        this.filter = filter;<a name="line.331"></a>
-<span class="sourceLineNo">332</span>                        return this;<a name="line.332"></a>
-<span class="sourceLineNo">333</span>                }<a name="line.333"></a>
-<span class="sourceLineNo">334</span><a name="line.334"></a>
-<span class="sourceLineNo">335</span>                protected transient Long tempValue;<a name="line.335"></a>
-<span class="sourceLineNo">336</span><a name="line.336"></a>
-<span class="sourceLineNo">337</span>        @Override<a name="line.337"></a>
-<span class="sourceLineNo">338</span>        public T get(int red, int green, int blue, int opacity) {<a name="line.338"></a>
-<span class="sourceLineNo">339</span>            tempValue = getUniqueIdentifier(red, green, blue, opacity);<a name="line.339"></a>
-<span class="sourceLineNo">340</span>            T t = cache.get(tempValue);<a name="line.340"></a>
-<span class="sourceLineNo">341</span>            if (t == null) {<a name="line.341"></a>
-<span class="sourceLineNo">342</span>                                /* Miss */<a name="line.342"></a>
-<span class="sourceLineNo">343</span>                t = create(red, green, blue, opacity);<a name="line.343"></a>
-<span class="sourceLineNo">344</span>                                /* Put in cache */<a name="line.344"></a>
-<span class="sourceLineNo">345</span>                cache.put(tempValue, t);<a name="line.345"></a>
-<span class="sourceLineNo">346</span>            }<a name="line.346"></a>
-<span class="sourceLineNo">347</span>            return t;<a name="line.347"></a>
-<span class="sourceLineNo">348</span>        }<a name="line.348"></a>
-<span class="sourceLineNo">349</span><a name="line.349"></a>
-<span class="sourceLineNo">350</span>                @Override<a name="line.350"></a>
-<span class="sourceLineNo">351</span>                public T get(int red, int green, int blue) {<a name="line.351"></a>
-<span class="sourceLineNo">352</span>                        return get(red, green, blue, 255);<a name="line.352"></a>
-<span class="sourceLineNo">353</span>                }<a name="line.353"></a>
-<span class="sourceLineNo">354</span><a name="line.354"></a>
-<span class="sourceLineNo">355</span>        @Override<a name="line.355"></a>
-<span class="sourceLineNo">356</span>        public T getHSV(float hue, float saturation, float value, float opacity) {<a name="line.356"></a>
-<span class="sourceLineNo">357</span>            if ( saturation &lt; 0.0001 )                       //HSV from 0 to 1<a name="line.357"></a>
-<span class="sourceLineNo">358</span>            {<a name="line.358"></a>
-<span class="sourceLineNo">359</span>                return get(Math.round(value * 255), Math.round(value * 255), Math.round(value * 255),<a name="line.359"></a>
-<span class="sourceLineNo">360</span>                        Math.round(opacity * 255));<a name="line.360"></a>
-<span class="sourceLineNo">361</span>            }<a name="line.361"></a>
-<span class="sourceLineNo">362</span>            else<a name="line.362"></a>
-<span class="sourceLineNo">363</span>            {<a name="line.363"></a>
-<span class="sourceLineNo">364</span>                float h = hue * 6f;<a name="line.364"></a>
-<span class="sourceLineNo">365</span>                if ( h &gt;= 6 ) h = 0;      //H must be &lt; 1<a name="line.365"></a>
-<span class="sourceLineNo">366</span>                int i = (int)h;             //Or ... var_i = floor( var_h )<a name="line.366"></a>
-<span class="sourceLineNo">367</span>                float a = value * ( 1 - saturation );<a name="line.367"></a>
-<span class="sourceLineNo">368</span>                float b = value * ( 1 - saturation * ( h - i ) );<a name="line.368"></a>
-<span class="sourceLineNo">369</span>                float c = value * ( 1 - saturation * ( 1 - ( h - i ) ) );<a name="line.369"></a>
+<span class="sourceLineNo">235</span><a name="line.235"></a>
+<span class="sourceLineNo">236</span>    /**<a name="line.236"></a>
+<span class="sourceLineNo">237</span>     * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this does<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     * not necessarily return a specific color, but most implementations will treat a hue of 0 as red.<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * @param color the color T to saturate<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * @param degree a float between 0.0f and 1.0f; more makes it more colorful<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * @return the saturated (and if a filter is used, also filtered) new color<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     */<a name="line.243"></a>
+<span class="sourceLineNo">244</span>    public T saturate(T color, float degree);<a name="line.244"></a>
+<span class="sourceLineNo">245</span><a name="line.245"></a>
+<span class="sourceLineNo">246</span>        /**<a name="line.246"></a>
+<span class="sourceLineNo">247</span>         * Finds a gradient with 16 steps going from fromColor to toColor,<a name="line.247"></a>
+<span class="sourceLineNo">248</span>         * both included in the gradient.<a name="line.248"></a>
+<span class="sourceLineNo">249</span>         * @param fromColor the color to start with, included in the gradient<a name="line.249"></a>
+<span class="sourceLineNo">250</span>         * @param toColor the color to end on, included in the gradient<a name="line.250"></a>
+<span class="sourceLineNo">251</span>         * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps<a name="line.251"></a>
+<span class="sourceLineNo">252</span>         */<a name="line.252"></a>
+<span class="sourceLineNo">253</span>        public ArrayList&lt;T&gt; gradient(T fromColor, T toColor);<a name="line.253"></a>
+<span class="sourceLineNo">254</span><a name="line.254"></a>
+<span class="sourceLineNo">255</span>        /**<a name="line.255"></a>
+<span class="sourceLineNo">256</span>         * Finds a gradient with the specified number of steps going from fromColor to toColor,<a name="line.256"></a>
+<span class="sourceLineNo">257</span>         * both included in the gradient.<a name="line.257"></a>
+<span class="sourceLineNo">258</span>         * @param fromColor the color to start with, included in the gradient<a name="line.258"></a>
+<span class="sourceLineNo">259</span>         * @param toColor the color to end on, included in the gradient<a name="line.259"></a>
+<span class="sourceLineNo">260</span>         * @param steps the number of elements to use in the gradient<a name="line.260"></a>
+<span class="sourceLineNo">261</span>         * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps<a name="line.261"></a>
+<span class="sourceLineNo">262</span>         */<a name="line.262"></a>
+<span class="sourceLineNo">263</span>        public ArrayList&lt;T&gt; gradient(T fromColor, T toColor, int steps);<a name="line.263"></a>
+<span class="sourceLineNo">264</span><a name="line.264"></a>
+<span class="sourceLineNo">265</span>        /**<a name="line.265"></a>
+<span class="sourceLineNo">266</span>         * A skeletal implementation of {@link IColorCenter}.<a name="line.266"></a>
+<span class="sourceLineNo">267</span>         * <a name="line.267"></a>
+<span class="sourceLineNo">268</span>         * @author smelC<a name="line.268"></a>
+<span class="sourceLineNo">269</span>         * <a name="line.269"></a>
+<span class="sourceLineNo">270</span>         * @param &lt;T&gt; a concrete color type<a name="line.270"></a>
+<span class="sourceLineNo">271</span>         */<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        abstract class Skeleton&lt;T&gt; implements IColorCenter&lt;T&gt; {<a name="line.272"></a>
+<span class="sourceLineNo">273</span><a name="line.273"></a>
+<span class="sourceLineNo">274</span>                private final Map&lt;Long, T&gt; cache = new HashMap&lt;&gt;(256);<a name="line.274"></a>
+<span class="sourceLineNo">275</span><a name="line.275"></a>
+<span class="sourceLineNo">276</span>                protected /*Nullable*/ IFilter&lt;T&gt; filter;<a name="line.276"></a>
+<span class="sourceLineNo">277</span><a name="line.277"></a>
+<span class="sourceLineNo">278</span>                /**<a name="line.278"></a>
+<span class="sourceLineNo">279</span>                 * @param filter<a name="line.279"></a>
+<span class="sourceLineNo">280</span>                 *                      The filter to use, or {@code null} for no filter.<a name="line.280"></a>
+<span class="sourceLineNo">281</span>                 */<a name="line.281"></a>
+<span class="sourceLineNo">282</span>                protected Skeleton(/*Nullable*/ IFilter&lt;T&gt; filter) {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>                        this.filter = filter;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>                }<a name="line.284"></a>
+<span class="sourceLineNo">285</span><a name="line.285"></a>
+<span class="sourceLineNo">286</span>        /**<a name="line.286"></a>
+<span class="sourceLineNo">287</span>         * It clears the cache. You may need to do this to limit the cache to the colors used in a specific section.<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                 * This is also useful if a Filter changes what colors it should return on a frame-by-frame basis; in that case,<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                 * you can call clearCache() at the start or end of a frame to ensure the next frame gets different colors.<a name="line.289"></a>
+<span class="sourceLineNo">290</span>         */<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        public void clearCache()<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        {<a name="line.292"></a>
+<span class="sourceLineNo">293</span>            cache.clear();<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        }<a name="line.294"></a>
+<span class="sourceLineNo">295</span><a name="line.295"></a>
+<span class="sourceLineNo">296</span>                /**<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                 * The actual cache is not public, but there are cases where you may want to know how many different colors are<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                 * actually used in a frame or a section of the game. If the cache was emptied (which might be from calling<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                 * {@link #clearCache()}), some colors were requested, then this is called, the returned int should be the<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                 * count of distinct colors this IColorCenter had created and cached; duplicates won't be counted twice.<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                 * @return<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                 */<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                public int cacheSize()<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                {<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                        return cache.size();<a name="line.305"></a>
+<span class="sourceLineNo">306</span>                }<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>        /**<a name="line.308"></a>
+<span class="sourceLineNo">309</span>         * You may want to copy colors between IColorCenter instances that have different create() methods -- and as<a name="line.309"></a>
+<span class="sourceLineNo">310</span>         * such, will have different values for the same keys in the cache. This allows you to copy the cache from other<a name="line.310"></a>
+<span class="sourceLineNo">311</span>         * into this Skeleton, but using this Skeleton's create() method.<a name="line.311"></a>
+<span class="sourceLineNo">312</span>         * @param other another Skeleton of the same type that will have its cache copied into this Skeleton<a name="line.312"></a>
+<span class="sourceLineNo">313</span>         */<a name="line.313"></a>
+<span class="sourceLineNo">314</span>        public void copyCache(Skeleton&lt;T&gt; other)<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        {<a name="line.315"></a>
+<span class="sourceLineNo">316</span>            for (Map.Entry&lt;Long, T&gt; k : other.cache.entrySet())<a name="line.316"></a>
+<span class="sourceLineNo">317</span>            {<a name="line.317"></a>
+<span class="sourceLineNo">318</span>                cache.put(k.getKey(), create(getRed(k.getValue()), getGreen(k.getValue()), getBlue(k.getValue()),<a name="line.318"></a>
+<span class="sourceLineNo">319</span>                        getAlpha(k.getValue())));<a name="line.319"></a>
+<span class="sourceLineNo">320</span>            }<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        }<a name="line.321"></a>
+<span class="sourceLineNo">322</span><a name="line.322"></a>
+<span class="sourceLineNo">323</span>                /**<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                 * If you're changing the filter, you should likely call<a name="line.324"></a>
+<span class="sourceLineNo">325</span>                 * {@link #clearCache()}.<a name="line.325"></a>
+<span class="sourceLineNo">326</span>                 * <a name="line.326"></a>
+<span class="sourceLineNo">327</span>                 * @param filter<a name="line.327"></a>
+<span class="sourceLineNo">328</span>                 *            The filter to use, or {@code null} to turn filtering OFF.<a name="line.328"></a>
+<span class="sourceLineNo">329</span>                 * @return {@code this}<a name="line.329"></a>
+<span class="sourceLineNo">330</span>                 */<a name="line.330"></a>
+<span class="sourceLineNo">331</span>                public Skeleton&lt;T&gt; setFilter(IFilter&lt;T&gt; filter) {<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                        this.filter = filter;<a name="line.332"></a>
+<span class="sourceLineNo">333</span>                        return this;<a name="line.333"></a>
+<span class="sourceLineNo">334</span>                }<a name="line.334"></a>
+<span class="sourceLineNo">335</span><a name="line.335"></a>
+<span class="sourceLineNo">336</span>                protected transient Long tempValue;<a name="line.336"></a>
+<span class="sourceLineNo">337</span><a name="line.337"></a>
+<span class="sourceLineNo">338</span>        @Override<a name="line.338"></a>
+<span class="sourceLineNo">339</span>        public T get(int red, int green, int blue, int opacity) {<a name="line.339"></a>
+<span class="sourceLineNo">340</span>            tempValue = getUniqueIdentifier(red, green, blue, opacity);<a name="line.340"></a>
+<span class="sourceLineNo">341</span>            T t = cache.get(tempValue);<a name="line.341"></a>
+<span class="sourceLineNo">342</span>            if (t == null) {<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                                /* Miss */<a name="line.343"></a>
+<span class="sourceLineNo">344</span>                t = create(red, green, blue, opacity);<a name="line.344"></a>
+<span class="sourceLineNo">345</span>                                /* Put in cache */<a name="line.345"></a>
+<span class="sourceLineNo">346</span>                cache.put(tempValue, t);<a name="line.346"></a>
+<span class="sourceLineNo">347</span>            }<a name="line.347"></a>
+<span class="sourceLineNo">348</span>            return t;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>        }<a name="line.349"></a>
+<span class="sourceLineNo">350</span><a name="line.350"></a>
+<span class="sourceLineNo">351</span>                @Override<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                public T get(int red, int green, int blue) {<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                        return get(red, green, blue, 255);<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>        @Override<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        public T getHSV(float hue, float saturation, float value, float opacity) {<a name="line.357"></a>
+<span class="sourceLineNo">358</span>            if ( saturation &lt; 0.0001 )                       //HSV from 0 to 1<a name="line.358"></a>
+<span class="sourceLineNo">359</span>            {<a name="line.359"></a>
+<span class="sourceLineNo">360</span>                return get(Math.round(value * 255), Math.round(value * 255), Math.round(value * 255),<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                        Math.round(opacity * 255));<a name="line.361"></a>
+<span class="sourceLineNo">362</span>            }<a name="line.362"></a>
+<span class="sourceLineNo">363</span>            else<a name="line.363"></a>
+<span class="sourceLineNo">364</span>            {<a name="line.364"></a>
+<span class="sourceLineNo">365</span>                float h = ((hue + 6f) % 1f) * 6f; // allows negative hue to wrap<a name="line.365"></a>
+<span class="sourceLineNo">366</span>                int i = (int)h;<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                float a = value * (1 - saturation);<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                float b = value * (1 - saturation * (h - i));<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                float c = value * (1 - saturation * (1 - (h - i)));<a name="line.369"></a>
 <span class="sourceLineNo">370</span><a name="line.370"></a>
 <span class="sourceLineNo">371</span>                switch (i)<a name="line.371"></a>
 <span class="sourceLineNo">372</span>                {<a name="line.372"></a>
@@ -499,16 +499,16 @@
 <span class="sourceLineNo">491</span>            }<a name="line.491"></a>
 <span class="sourceLineNo">492</span>            else                                    //Chromatic data...<a name="line.492"></a>
 <span class="sourceLineNo">493</span>            {<a name="line.493"></a>
-<span class="sourceLineNo">494</span>                float rDelta = ( ( ( max - r ) / 6f ) + ( delta / 2f ) ) / delta;<a name="line.494"></a>
-<span class="sourceLineNo">495</span>                float gDelta = ( ( ( max - g ) / 6f ) + ( delta / 2f ) ) / delta;<a name="line.495"></a>
-<span class="sourceLineNo">496</span>                float bDelta = ( ( ( max - b ) / 6f ) + ( delta / 2f ) ) / delta;<a name="line.496"></a>
+<span class="sourceLineNo">494</span>                float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;<a name="line.494"></a>
+<span class="sourceLineNo">495</span>                float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;<a name="line.495"></a>
+<span class="sourceLineNo">496</span>                float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;<a name="line.496"></a>
 <span class="sourceLineNo">497</span><a name="line.497"></a>
-<span class="sourceLineNo">498</span>                if       ( r == max ) hue = bDelta - gDelta;<a name="line.498"></a>
-<span class="sourceLineNo">499</span>                else if ( g == max ) hue = ( 1f / 3f ) + rDelta - bDelta;<a name="line.499"></a>
-<span class="sourceLineNo">500</span>                else                 hue = ( 2f / 3f ) + gDelta - rDelta;<a name="line.500"></a>
+<span class="sourceLineNo">498</span>                if       (r == max) hue = bDelta - gDelta;<a name="line.498"></a>
+<span class="sourceLineNo">499</span>                else if (g == max) hue = (1f / 3f) + rDelta - bDelta;<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                else                 hue = (2f / 3f) + gDelta - rDelta;<a name="line.500"></a>
 <span class="sourceLineNo">501</span><a name="line.501"></a>
-<span class="sourceLineNo">502</span>                if ( hue &lt; 0 ) hue += 1f;<a name="line.502"></a>
-<span class="sourceLineNo">503</span>                else if ( hue &gt; 1 ) hue -= 1;<a name="line.503"></a>
+<span class="sourceLineNo">502</span>                if (hue &lt; 0) hue += 1f;<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                else if (hue &gt; 1) hue -= 1;<a name="line.503"></a>
 <span class="sourceLineNo">504</span>            }<a name="line.504"></a>
 <span class="sourceLineNo">505</span>            return hue;<a name="line.505"></a>
 <span class="sourceLineNo">506</span>        }<a name="line.506"></a>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -357,6 +357,15 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>static float[][][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless3D-float:A:A:A-int-int-">seamless3D</a></span>(float[][][]&nbsp;fill,
+          int&nbsp;seed,
+          int&nbsp;octaves)</code>
+<div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+ boundaries.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static double[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless3D-int-int-int-int-int-">seamless3D</a></span>(int&nbsp;depth,
           int&nbsp;width,
@@ -557,13 +566,35 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <a name="seamless3D-double:A:A:A-int-int-squidpony.squidmath.Noise.Noise6D-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>seamless3D</h4>
 <pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.1573">seamless3D</a>(double[][][]&nbsp;fill,
                                       int&nbsp;seed,
                                       int&nbsp;octaves,
                                       <a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;generator)</pre>
+<div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
+ boundaries. This overload doesn't care what you use for x, y, or z axes, it uses the exact size of fill fully.
+ Allows a seed to change the generated noise.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>fill</code> - a 3D array of double; must be rectangular, so it's a good idea to create with <code>new double[depth][width][height]</code> or something similar</dd>
+<dd><code>seed</code> - an int seed that affects the noise produced, with different seeds producing very different noise</dd>
+<dd><code>octaves</code> - how many runs of differently sized and weighted noise generations to apply to the same area</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>fill</code>, after assigning it with seamless-bounded noise</dd>
+</dl>
+</li>
+</ul>
+<a name="seamless3D-float:A:A:A-int-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>seamless3D</h4>
+<pre>public static&nbsp;float[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.1625">seamless3D</a>(float[][][]&nbsp;fill,
+                                     int&nbsp;seed,
+                                     int&nbsp;octaves)</pre>
 <div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries. This overload doesn't care what you use for x, y, or z axes, it uses the exact size of fill fully.
  Allows a seed to change the generated noise.</div>

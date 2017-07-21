@@ -188,12 +188,12 @@
 <span class="sourceLineNo">180</span>    {<a name="line.180"></a>
 <span class="sourceLineNo">181</span>        if(e == null) return false;<a name="line.181"></a>
 <span class="sourceLineNo">182</span>        int len = elements.size;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        elements.addAllIfAbsent(e);<a name="line.183"></a>
+<span class="sourceLineNo">183</span>        elements.putAll(e);<a name="line.183"></a>
 <span class="sourceLineNo">184</span>        for (int i = len; i &lt; elements.size; i++) {<a name="line.184"></a>
 <span class="sourceLineNo">185</span>            mm.add(new IntVLA(4));<a name="line.185"></a>
 <span class="sourceLineNo">186</span>        }<a name="line.186"></a>
 <span class="sourceLineNo">187</span><a name="line.187"></a>
-<span class="sourceLineNo">188</span>        elements.addAllIfAbsent(e);<a name="line.188"></a>
+<span class="sourceLineNo">188</span>        elements.putAll(e);<a name="line.188"></a>
 <span class="sourceLineNo">189</span>        int[][] bundle = new int[][]{elements.getArray(e)};<a name="line.189"></a>
 <span class="sourceLineNo">190</span>        if(!bm.put(bundle, s))<a name="line.190"></a>
 <span class="sourceLineNo">191</span>            return false;<a name="line.191"></a>
@@ -216,7 +216,7 @@
 <span class="sourceLineNo">208</span>    {<a name="line.208"></a>
 <span class="sourceLineNo">209</span>        if(e == null || variation == null) return false;<a name="line.209"></a>
 <span class="sourceLineNo">210</span>        int len = elements.size;<a name="line.210"></a>
-<span class="sourceLineNo">211</span>        elements.addAllIfAbsent(e);<a name="line.211"></a>
+<span class="sourceLineNo">211</span>        elements.putAll(e);<a name="line.211"></a>
 <span class="sourceLineNo">212</span>        for (int i = len; i &lt; elements.size; i++) {<a name="line.212"></a>
 <span class="sourceLineNo">213</span>            mm.add(new IntVLA(4));<a name="line.213"></a>
 <span class="sourceLineNo">214</span>        }<a name="line.214"></a>
@@ -241,7 +241,7 @@
 <span class="sourceLineNo">233</span>    {<a name="line.233"></a>
 <span class="sourceLineNo">234</span>        if(e == null) return false;<a name="line.234"></a>
 <span class="sourceLineNo">235</span>        int len = elements.size;<a name="line.235"></a>
-<span class="sourceLineNo">236</span>        elements.addAllIfAbsent(e);<a name="line.236"></a>
+<span class="sourceLineNo">236</span>        elements.putAll(e);<a name="line.236"></a>
 <span class="sourceLineNo">237</span>        for (int i = len; i &lt; elements.size; i++) {<a name="line.237"></a>
 <span class="sourceLineNo">238</span>            mm.add(new IntVLA(4));<a name="line.238"></a>
 <span class="sourceLineNo">239</span>        }<a name="line.239"></a>
@@ -267,7 +267,7 @@
 <span class="sourceLineNo">259</span>    {<a name="line.259"></a>
 <span class="sourceLineNo">260</span>        if(e == null || variation == null) return false;<a name="line.260"></a>
 <span class="sourceLineNo">261</span>        int len = elements.size;<a name="line.261"></a>
-<span class="sourceLineNo">262</span>        elements.addAllIfAbsent(e);<a name="line.262"></a>
+<span class="sourceLineNo">262</span>        elements.putAll(e);<a name="line.262"></a>
 <span class="sourceLineNo">263</span>        for (int i = len; i &lt; elements.size; i++) {<a name="line.263"></a>
 <span class="sourceLineNo">264</span>            mm.add(new IntVLA(4));<a name="line.264"></a>
 <span class="sourceLineNo">265</span>        }<a name="line.265"></a>

@@ -202,6 +202,18 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <td class="colFirst"><code>protected static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#terrainRidgedFreq">terrainRidgedFreq</a></span></code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#xPositions">xPositions</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#yPositions">yPositions</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#zPositions">zPositions</a></span></code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.squidpony.squidgrid.mapping.WorldMapGenerator">
@@ -430,10 +442,37 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <a name="otherRidged">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>otherRidged</h4>
 <pre>public final&nbsp;<a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1012">otherRidged</a></pre>
+</li>
+</ul>
+<a name="xPositions">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>xPositions</h4>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1013">xPositions</a></pre>
+</li>
+</ul>
+<a name="yPositions">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>yPositions</h4>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1014">yPositions</a></pre>
+</li>
+</ul>
+<a name="zPositions">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>zPositions</h4>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1015">zPositions</a></pre>
 </li>
 </ul>
 </li>
@@ -450,7 +489,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>SphereMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1023">SphereMap</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1027">SphereMap</a>()</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
  3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
  have significantly-exaggerated-in-size features while the equator is not distorted.
@@ -466,7 +505,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>SphereMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1039">SphereMap</a>(int&nbsp;mapWidth,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1043">SphereMap</a>(int&nbsp;mapWidth,
                  int&nbsp;mapHeight)</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
  3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
@@ -488,7 +527,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>SphereMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1056">SphereMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1060">SphereMap</a>(long&nbsp;initialSeed,
                  int&nbsp;mapWidth,
                  int&nbsp;mapHeight)</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
@@ -512,7 +551,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>SphereMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1079">SphereMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1083">SphereMap</a>(long&nbsp;initialSeed,
                  int&nbsp;mapWidth,
                  int&nbsp;mapHeight,
                  <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator)</pre>
@@ -543,7 +582,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SphereMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1105">SphereMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1109">SphereMap</a>(long&nbsp;initialSeed,
                  int&nbsp;mapWidth,
                  int&nbsp;mapHeight,
                  <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator,
@@ -587,7 +626,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>wrapY</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1113">wrapY</a>(int&nbsp;y)</pre>
+<pre>protected&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1120">wrapY</a>(int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapY-int-">wrapY</a></code>&nbsp;in class&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></code></dd>
@@ -600,7 +639,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockListLast">
 <li class="blockList">
 <h4>regenerate</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1117">regenerate</a>(int&nbsp;startX,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#line.1124">regenerate</a>(int&nbsp;startX,
                           int&nbsp;startY,
                           int&nbsp;usedWidth,
                           int&nbsp;usedHeight,
