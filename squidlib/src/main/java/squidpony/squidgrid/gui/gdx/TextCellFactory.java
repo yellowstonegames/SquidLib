@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
+import squidpony.StringKit;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
@@ -50,17 +51,10 @@ public class TextCellFactory implements Disposable {
     /**
      * The commonly used symbols in roguelike games.
      */
-    public static final String DEFAULT_FITTING = "@!#$%^&*()_+1234567890-=~ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz;:,'\"{}?/\\ ",
-    LINE_FITTING = "┼├┤┴┬┌┐└┘│─",
-            SQUID_FITTING = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmno"+
-                    "pqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàá"+
-                    "âãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİı"+
-                    "ĲĳĴĵĶķĹĺĻļĽľĿŀŁłŃńŅņŇňŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſƒǺǻǼǽǾ"+
-                    "ǿȘșȚțȷˆˇˉˋ˘˙˚˛˜˝;΄΅Ά·ΈΉΊΌΎΏΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυ"+
-                    "φχψωϊϋόύώЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхц"+
-                    "чшщъыьэюяѐёђѓєѕіїјљњћќѝўџѴѵҐґẀẁẂẃẄẅỲỳ–—‘’‚‛“”„†‡•…‰‹›ⁿ₤€№™Ω℮←↑→↓∆−√≈" +
-                    "─│┌┐└┘├┤┬┴┼═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬■□▲▼○●◦♀♂♠♣♥♦♪";
-
+    public static final String DEFAULT_FITTING =
+            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+            LINE_FITTING = StringKit.BOX_DRAWING_SINGLE,
+            SQUID_FITTING = StringKit.PERMISSIBLE_CHARS;
 	/**
 	 * The {@link AssetManager} from where to load the font. Use it to share
 	 * loading of a font's file across multiple factories.
@@ -119,8 +113,7 @@ public class TextCellFactory implements Disposable {
         //next.bmpFont = bmpFont;
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
-        next.bmpFont = new BitmapFont(new BitmapFont.BitmapFontData(bmpFont.getData().getFontFile(), false),
-                bmpFont.getRegions(), bmpFont.usesIntegerPositions());
+        next.bmpFont = DefaultResources.copyFont(bmpFont);
         next.block = block;
         next.swap = new OrderedMap<>(swap);
         next.distanceField = distanceField;

@@ -1129,4 +1129,88 @@ public class StringKit {
         }
         return String.valueOf(c);
     }
+
+    /**
+     * A constant containing only chars that are reasonably likely to be supported by broad fonts and thus display-able.
+     * This assumes the font supports Latin, Greek, and Cyrillic alphabets, with good support for extended Latin (at
+     * least for European languages) but not required to be complete enough to support the very large Vietnamese set of
+     * extensions to Latin, nor to support any International Phonetic Alphabet (IPA) chars. It also assumes box drawing
+     * characters are supported and a handful of common dingbats, such as male and female signs. It does not include
+     * the tab, newline, or carriage return characters, since these don't usually make sense on a grid of chars.
+     */
+    public static final String PERMISSIBLE_CHARS =
+            " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmno"+
+            "pqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàá"+
+            "âãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİı"+
+            "ĴĵĶķĹĺĻļĽľĿŀŁłŃńŅņŇňŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſƒǺǻǼǽǾǿ"+
+            "ȘșȚțȷˆˇˉˋ˘˙˚˛˜˝΄΅Ά·ΈΉΊΌΎΏΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυ"+
+            "φχψωϊϋόύώЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхц"+
+            "чшщъыьэюяѐёђѓєѕіїјљњћќѝўџѴѵҐґẀẁẂẃẄẅỲỳ–—‘’‚‛“”„†‡•…‰‹›ⁿ₤€№™Ω℮←↑→↓∆−√≈" +
+            "─│┌┐└┘├┤┬┴┼═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬■□▲▼○●◦♀♂♠♣♥♦♪";
+
+    public static final String BOX_DRAWING_SINGLE = "─│┌┐└┘├┤┬┴┼";
+    public static final String BOX_DRAWING_DOUBLE = "═║╔╗╚╝╠╣╦╩╬";
+    public static final String BOX_DRAWING = "─│┌┐└┘├┤┬┴┼═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬";
+    public static final String VISUAL_SYMBOLS = "←↑→↓■□▲▼○●◦♀♂♠♣♥♦♪";
+    public static final String DIGITS = "0123456789";
+    public static final String MARKS = "~`^'¨¯°´¸ˆˇˉˋ˘˙˚˛˜˝΄΅‘’‚‛";
+    /**
+     * Can be used to match an index with one in {@link #GROUPING_SIGNS_CLOSE} to find the closing char (this way only).
+     */
+    public static final String GROUPING_SIGNS_OPEN  = "([{<«‘‛“‹";
+    /**
+     * An index in {@link #GROUPING_SIGNS_OPEN} can be used here to find the closing char for that opening one.
+     */
+    public static final String GROUPING_SIGNS_CLOSE = ")]}>»’’”›";
+    public static final String COMMON_PUNCTUATION = "!\"%&'*+,-./:;<>?•…–—";
+    public static final String MODERN_PUNCTUATION = "@\\^_`|~¦©®™´№♀♂♪";
+    public static final String UNCOMMON_PUNCTUATION = "§¶¨ªº¯°·¸¡¿·‚„†‡";
+    public static final String TECHNICAL_PUNCTUATION = "#%'*+,-./<=>^|¬°µ±¹²³ⁿ¼½¾×÷‰№Ω℮∆−√≈";
+    public static final String PUNCTUATION = COMMON_PUNCTUATION + MODERN_PUNCTUATION + UNCOMMON_PUNCTUATION +
+            TECHNICAL_PUNCTUATION + GROUPING_SIGNS_OPEN + GROUPING_SIGNS_CLOSE;
+    public static final String CURRENCY = "$¢£¤¥₤€";
+    public static final String SPACING = " ";
+    public static final String ENGLISH_LETTERS_UPPER =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public static final String ENGLISH_LETTERS_LOWER =
+            "abcdefghijklmnopqrstuvwxyz";
+    public static final String ENGLISH_LETTERS = ENGLISH_LETTERS_UPPER + ENGLISH_LETTERS_LOWER;
+
+    public static final String LATIN_EXTENDED_LETTERS_UPPER =
+            "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞĀĂĄĆĈĊČĎĐĒĔĖĘĚĜĞĠĢĤĦĨĪĬĮİĴĶĹĻĽĿŁŃŅŇŊŌŎŐŒŔŖŘŚŜŞŠŢŤŨŪŬŮŰŲŴŶŸŹŻŽǺǼǾȘȚẀẂẄỲßSFJ";
+    public static final String LATIN_EXTENDED_LETTERS_LOWER =
+            "àáâãäåæçèéêëìíîïðñòóôõöøùúûüýþāăąćĉċčďđēĕėęěĝğġģĥħĩīĭįi̇ĵķĺļľŀłńņňŋōŏőœŕŗřśŝşšţťũūŭůűųŵŷÿźżžǻǽǿșțẁẃẅỳßſƒȷ";
+    public static final String LATIN_EXTENDED_LETTERS = LATIN_EXTENDED_LETTERS_UPPER + LATIN_EXTENDED_LETTERS_LOWER;
+
+    public static final String LATIN_LETTERS_UPPER = ENGLISH_LETTERS_UPPER + LATIN_EXTENDED_LETTERS_UPPER;
+    public static final String LATIN_LETTERS_LOWER = ENGLISH_LETTERS_LOWER + LATIN_EXTENDED_LETTERS_LOWER;
+    public static final String LATIN_LETTERS = LATIN_LETTERS_UPPER + LATIN_LETTERS_LOWER;
+
+    /**
+     * Includes the letter Sigma, 'Σ', twice because it has two lower-case forms in {@link #GREEK_LETTERS_LOWER}. This
+     * lets you use one index for both lower and upper case, like with Latin and Cyrillic.
+     */
+    public static final String GREEK_LETTERS_UPPER =
+            "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΣΤΥΦΧΨΩΆΈΉΊΌΎΏΪΫΪΫ";
+    /**
+     * Includes both lower-case forms for Sigma, 'ς' and 'σ', but this matches the two upper-case Sigma in
+     * {@link #GREEK_LETTERS_UPPER}. This lets you use one index for both lower and upper case, like with Latin and
+     * Cyrillic.
+     */
+    public static final String GREEK_LETTERS_LOWER =
+            "αβγδεζηθικλμνξοπρςστυφχψωάέήίόύώϊϋΐΰ";
+
+    public static final String GREEK_LETTERS = GREEK_LETTERS_UPPER + GREEK_LETTERS_LOWER;
+
+    public static final String CYRILLIC_LETTERS_UPPER =
+            "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏѴҐ";
+    public static final String CYRILLIC_LETTERS_LOWER =
+            "абвгдежзийклмнопрстуфхцчшщъыьэюяѐёђѓєѕіїјљњћќѝўџѵґ";
+    public static final String CYRILLIC_LETTERS = CYRILLIC_LETTERS_UPPER + CYRILLIC_LETTERS_LOWER;
+
+    public static final String LETTERS_UPPER = LATIN_LETTERS_UPPER + GREEK_LETTERS_UPPER + CYRILLIC_LETTERS_UPPER;
+    public static final String LETTERS_LOWER = LATIN_LETTERS_LOWER + GREEK_LETTERS_LOWER + CYRILLIC_LETTERS_LOWER;
+    public static final String LETTERS = LETTERS_UPPER + LETTERS_LOWER;
+    public static final String LETTERS_AND_NUMBERS = LETTERS + DIGITS;
+
 }
