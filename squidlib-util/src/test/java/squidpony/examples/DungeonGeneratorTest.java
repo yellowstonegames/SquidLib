@@ -78,7 +78,7 @@ import java.io.IOException;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonGeneratorTest {
-    public static int width = 110, height = 40, depth = 16;
+    public static int width = 110, height = 70, depth = 16;
 
     public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
@@ -100,7 +100,7 @@ public class DungeonGeneratorTest {
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
-        dungeonGenerator.setDungeon(//DungeonUtility.linesToHashes(
+        dungeonGenerator.setDungeon(
                 DungeonUtility.hashesToLines(dungeon, true));
         System.out.println(dungeonGenerator);
         System.out.println();

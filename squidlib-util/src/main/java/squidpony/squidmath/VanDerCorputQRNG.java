@@ -312,6 +312,24 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
         int s = (index+1 & 0x7fffffff), leading = Integer.numberOfLeadingZeros(s);
         return (Integer.reverse(s) >>> leading) / (double)(1 << (32 - leading));
     }
+    /**
+     * Method to get a double from the van der Corput sequence with the base 2 at a scrambling of the requested
+     * {@code index} without needing to construct a VanDerCorputQRNG. This performs different scrambling on index
+     * than the instance methods on this class perform, and it seems to do well enough while being a little simpler.
+     * This is meant to be usable as an alternative to a different base for a van der Corput sequence when you need two
+     * different sequences, and are already using base 2 via {@link #determine2(int)}.
+     * <br>
+     * Because binary manipulation of numbers is easier and more efficient, this method should be somewhat faster than
+     * the alternatives, like {@link #determine(int, int)} with base 2. It should take only slightly longer to run than
+     * {@link #determine2(int)}, due to the brief amount of time needed to scramble the index.
+     * @param index the position in the sequence of the requested base
+     * @return a quasi-random double between 0.0 (inclusive) and 1.0 (exclusive).
+     */
+    public static double determine2_scrambled(int index)
+    {
+        int s = ((++index ^ index << 1 ^ index >> 1) & 0x7fffffff), leading = Integer.numberOfLeadingZeros(s);
+        return (Integer.reverse(s) >>> leading) / (double)(1 << (32 - leading));
+    }
 
     private static final int[] lowPrimes = {2, 3, 2, 3, 5, 2, 3, 2};
 
