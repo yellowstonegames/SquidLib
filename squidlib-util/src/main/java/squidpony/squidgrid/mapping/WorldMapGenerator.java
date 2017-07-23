@@ -21,7 +21,7 @@ import squidpony.squidmath.Noise.Noise4D;
  * greater is land, and any height code 3 or less is water. This can produce rivers, and keeps that information in a
  * GreasedRegion (alongside a GreasedRegion containing lake positions) instead of in the other map data. This class does
  * not use Coord at all, but if you want maps with width and/or height greater than 256, and you want to use the river
- * or lake data as a Collection of Coord, then you should call {@link squidpony.squidmath.Coord#expandPoolTo(int, int)}
+ * or lake data as a Collection of Coord, then you should call {@link Coord#expandPoolTo(int, int)}
  * with your width and height so the Coords remain safely pooled. If you're fine with keeping rivers and lakes as
  * GreasedRegions and not requesting Coord values from them, then you don't need to do anything with Coord. Certain
  * parts of this class are not necessary to generate, just in case you want river-less maps or something similar;
@@ -719,7 +719,7 @@ public abstract class WorldMapGenerator {
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Always makes a 256x256 map.
          * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
-         * If you were using {@link squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap#TilingMap(long, int, int, squidpony.squidmath.Noise.Noise4D, double)}, then this would be the
+         * If you were using {@link WorldMapGenerator.TilingMap#TilingMap(long, int, int, Noise.Noise4D, double)}, then this would be the
          * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
          */
         public TilingMap() {

@@ -73,7 +73,7 @@ public class TextCellFactory implements Disposable {
     protected boolean distanceField = false;
     protected boolean msdf = false;
     protected ShaderProgram shader;
-    protected float smoothingMultiplier = 1f;
+    protected float smoothingMultiplier = 1.2f;
     protected float descent, lineHeight;
     private Label.LabelStyle style;
     protected OrderedMap<Character, Character> swap = new OrderedMap<>(32);

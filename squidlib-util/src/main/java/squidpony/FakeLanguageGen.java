@@ -3107,7 +3107,7 @@ public class FakeLanguageGen implements Serializable {
                 }
             }
             for (int i = 0; i < mods.size(); i++) {
-                brief.append('\016').append(mods.getAt(i).serializeToString());
+                brief.append('℗').append(mods.getAt(i).serializeToString());
             }
             return mixer.addModifiers(mods).summarize(brief.toString());
         } else
@@ -3350,7 +3350,7 @@ public class FakeLanguageGen implements Serializable {
     public static FakeLanguageGen deserializeFromString(String data) {
         if (data == null || data.equals(""))
             return ENGLISH.copy();
-        int poundIndex = data.indexOf('#'), snailIndex = data.indexOf('@'), tempBreak = data.indexOf('\016'),
+        int poundIndex = data.indexOf('#'), snailIndex = data.indexOf('@'), tempBreak = data.indexOf('℗'),
                 breakIndex = (tempBreak < 0) ? data.length() : tempBreak,
                 tildeIndex = Math.min(data.indexOf('~'), breakIndex), prevTildeIndex = -1;
         if (tildeIndex < 0)
@@ -3380,8 +3380,8 @@ public class FakeLanguageGen implements Serializable {
         ArrayList<Modifier> mods = new ArrayList<>(8);
         if (breakIndex == tempBreak) {
             tildeIndex = breakIndex - 1;
-            while ((prevTildeIndex = data.indexOf('\016', tildeIndex + 1)) >= 0) {
-                tildeIndex = data.indexOf('\016', prevTildeIndex + 1);
+            while ((prevTildeIndex = data.indexOf('℗', tildeIndex + 1)) >= 0) {
+                tildeIndex = data.indexOf('℗', prevTildeIndex + 1);
                 if (tildeIndex < 0) tildeIndex = data.length();
                 mods.add(Modifier.deserializeFromString(data.substring(prevTildeIndex, tildeIndex)));
             }
@@ -3703,13 +3703,13 @@ public class FakeLanguageGen implements Serializable {
      * {@link FakeLanguageGen#sentence(RNG, int, int, String[], String[], double, int)} or one of its overloads.
      * You can call {@link #sentence()} on this to produce another String sentence with the parameters it was given
      * at construction. The parameters to
-     * {@link #SentenceForm(FakeLanguageGen, RNG, int, int, String[], String[], double, int)} are stored in fields of
+     * {@link FakeLanguageGen.SentenceForm#SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)} are stored in fields of
      * the same name, and all fields in this class are public and modifiable.
      */
     public static class SentenceForm implements Serializable
     {
         private static final long serialVersionUID = 1246527948419533147L;
-        public RNG rng;
+        public StatefulRNG rng;
         public int minWords, maxWords, maxChars;
         public String[] midPunctuation, endPunctuation;
         public double midPunctuationFrequency;
@@ -3738,12 +3738,12 @@ public class FakeLanguageGen implements Serializable {
                     midPunctuationFrequency, maxChars);
         }
 
-        public SentenceForm(FakeLanguageGen language, RNG rng, int minWords, int maxWords,
+        public SentenceForm(FakeLanguageGen language, StatefulRNG rng, int minWords, int maxWords,
                             String[] midPunctuation, String[] endPunctuation,
                             double midPunctuationFrequency, int maxChars)
         {
             this.language = language;
-            this.rng = rng;
+            this.rng = new StatefulRNG(rng.getState());
             this.minWords = minWords;
             this.maxWords = maxWords;
             this.midPunctuation = midPunctuation;
@@ -3755,6 +3755,33 @@ public class FakeLanguageGen implements Serializable {
         {
             return language.sentence(rng, minWords, maxWords, midPunctuation, endPunctuation,
                     midPunctuationFrequency, maxChars);
+        }
+
+        public String serializeToString() {
+            return language.serializeToString() + '℘' +
+                    rng.getState() + '℘' +
+                    minWords + '℘' +
+                    maxWords + '℘' +
+                    StringKit.join("ℙ", midPunctuation) + '℘' +
+                    StringKit.join("ℙ", endPunctuation) + '℘' +
+                    NumberTools.doubleToLongBits(midPunctuationFrequency) + '℘' +
+                    maxChars;
+        }
+        public static SentenceForm deserializeFromString(String ser)
+        {
+            int gap = ser.indexOf('℘');
+            FakeLanguageGen lang = FakeLanguageGen.deserializeFromString(ser.substring(0, gap));
+            StatefulRNG rng = new StatefulRNG(
+                    StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));
+            int minWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));
+            int maxWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));
+            String[] midPunctuation =
+                    StringKit.split(ser.substring(gap + 1, gap = ser.indexOf('℘', gap + 1)), "ℙ");
+            String[] endPunctuation =
+                    StringKit.split(ser.substring(gap + 1, gap = ser.indexOf('℘', gap + 1)), "ℙ");
+            double midFreq = NumberTools.longBitsToDouble(StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));
+            int maxChars = StringKit.intFromDec(ser,gap + 1, ser.length());
+            return new SentenceForm(lang, rng, minWords, maxWords, midPunctuation, endPunctuation, midFreq, maxChars);
         }
     }
 }
