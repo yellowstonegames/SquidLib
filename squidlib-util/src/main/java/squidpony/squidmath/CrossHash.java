@@ -17,13 +17,12 @@ import java.util.Objects;
  * slow if you are running many hashes or hashing very large data; in that case you
  * should consider one of the inner classes, Lightning or Storm.
  * <br>
- * There are several static inner classes in CrossHash, Lightning, Storm, Falcon, Chariot, Wisp,
- * and Mist, that provide different hashing properties, as well as the inner IHasher interface.
- * Of these, Wisp should be the default choice in most cases. If you need a salt to alter the
- * hash function, using one of a large family of such functions instead of a single function like
- * Wisp, then Storm and Mist are good choices (Mist is faster, Storm is more stable API-wise).
- * Falcon and Lightning are mostly superseded by Wisp. Chariot has some limitations, and uses
- * potentially much more memory than the others (which use almost none).
+ * There are several static inner classes in CrossHash, Lightning, Storm, Falcon, Wisp, and Mist,
+ * that provide different hashing properties, as well as the inner IHasher interface. Of these,
+ * Wisp should be the default choice in most cases. If you need a salt to alter the hash function,
+ * using one of a large family of such functions instead of a single function like Wisp, then Mist
+ * is a good choice, and should probably be preferred over Storm since it allows a larger and more
+ * complex salt. Falcon and Lightning are mostly superseded by Wisp.
  * <br>
  * IHasher values are provided as static fields, and use Wisp to hash a specific type or fall
  * back to Object.hashCode if given an object with the wrong type. IHasher values are optional
@@ -67,11 +66,10 @@ import java.util.Objects;
  * CrossHash for compatibility reasons. Both Lightning and Wisp seem to meet all the criteria for
  * a good hash function, though, including doing well with a visual test that shows issues in
  * FNV-1a and especially Arrays.hashCode. Wisp is considered stable now, and is not considered yet
- * for replacing FNV-1a for the same reason. Chariot is not recommended. Falcon is only recommended
- * if you need an alternate algorithm for some reason and need only 64-bit hashes; it has issues when
- * generating 32-bit hashes of long arrays or double arrays. Mist is not considered stable yet, but
- * probably will be soon; it offers an improvement on speed and salting over Storm, and its collision
- * rates were very very low in testing.
+ * for replacing FNV-1a for the same reason. Falcon is only recommended if you need an alternate
+ * algorithm for some reason and need only 64-bit hashes; it has issues when generating 32-bit hashes
+ * of long arrays or double arrays. Mist offers an improvement on speed and salting over Storm, and
+ * its collision rates are very very low in testing.
  * <br>
  * To help find patterns in hash output in a visual way, you can hash an x,y point, take the bottom 24 bits,
  * and use that as an RGB color for the pixel at that x,y point. On a 512x512 grid of points, the patterns
@@ -2602,7 +2600,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
             }
-            return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
+            return (int)((a += (result >>> 27 | result << 37)) ^ (a >>> 32));
         }
         /**
          * This method is reasonable in quality and speed on desktop, though it has some visual hashing artifacts.
@@ -2666,7 +2664,7 @@ public class CrossHash {
             for (int i = 0; i < len; i++) {
                 result += (a ^= 0x8329C6EB9E6AD3E3L * ((long) (-0xD0E8.9D2D311E289Fp-25 * (t = data[i]) + t * -0x1.39b4dce80194cp9)));
             }
-            return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
+            return (int)((a += (result >>> 27 | result << 37)) ^ (a >>> 32));
         }
 
         public static int hash(final CharSequence data) {
@@ -2787,430 +2785,420 @@ public class CrossHash {
         }
     }
 
-
     /**
-     * Strongly universal hashing based loosely on Daniel Lemire's (Apache-licensed) code and paper, available at
-     * https://github.com/lemire/StronglyUniversalStringHashing . This should have among the best statistical qualities
-     * of any of these hashes while being fairly fast. It is like {@link Storm} in that you need to instantiate a
-     * Chariot object to use its hashing functions, but unlike Storm's single long it uses to salt the hash, these
-     * objects have a somewhat-large, expansible cache of random numbers they use to modify every result differently
-     * based on its position in the input array. The cache's size is related to the largest array, String, or similar
-     * sequence that this has been required to hash, and the cache's size should be about 4 bytes per byte that needs to
-     * be hashed in a single input (so hashing only 16-byte arrays, of any number of such arrays, would require 64 bytes
-     * of cache). Technically, only slightly more than 2 bytes per byte are required, but this caches more random
-     * numbers in advance to speed up expected larger inputs. Only produces 32-bit hashes because of constraints on this
-     * strongly universal hash algorithm; you could create two or more of these with different seeds and run them on the
-     * same inputs to get more than 32 bits, although that would be rather slow.
-     * <br>
-     * For 32-bit hash functions where the function can be altered by a salt, CrossHash provides {@link Storm} and now
-     * Chariot, and assuming there aren't bugs in Chariot, this class could be preferable because it has about equal
-     * performance and the salt is a less-predictable 128 bits instead of 64 bits. If you need 64-bit hashes, you should
-     * use Storm instead unless you want to chain together two 32-bit hashes from Chariot (with 256 bits of salt).
-     * <br>
-     * This previously failed visual testing, but now a finalization step nicely eliminates artifacts on the hashes of
-     * similar points or inputs. It is now almost exactly the same speed as Storm (within the margin of error, or 50
-     * microseconds of difference per million hashes, and the quality is pretty much indistinguishable (which is good).
+     * Currently experimental, this hashing algorithm is similar to Wisp and is almost as fast, but may have more
+     * reliable quality. It isn't ready yet, but is faster than every hashing algorithm in CrossHash except Wisp.
      */
     @Beta
-    public static final class Chariot implements Serializable {
-        private static final long serialVersionUID = 3152426757973945155L;
-
-        private final long $alt0, $alt1;
-
-        private int top;
-
-        private transient long $tate0, $tate1;
-
-        private transient long[] $tore = null;
-
-        public Chariot() {
-            this(0L);
-        }
-
-        public Chariot(final CharSequence alteration) {
-            this(Falcon.hash64(alteration));
-        }
-
-        public Chariot(final long alteration0, final long alteration1) {
-            $alt0 = alteration0;
-            $alt1 = alteration1;
-            expand(32);
-        }
-
-        public Chariot(final long alteration) {
-            long state = alteration + 0x9E3779B97F4A7C15L,
-                    z = state;
-            z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-            z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-            z ^= (z >>> 31);
-            $alt0 = z + 191 - Long.bitCount(z);
-            state += 0x9E3779B97F4A7C15L;
-            z = state;
-            z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
-            z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
-            z ^= (z >>> 31);
-            $alt1 = z + 191 - Long.bitCount(z);
-            expand(32);
-        }
-
-        private void expand(final int amount) {
-            if (amount <= 0)
-                return;
-            int done;
-            long z;
-            if ($tore == null) {
-                top = 32 + amount;
-                $tore = new long[top];
-                $tate0 = $alt0;
-                $tate1 = $alt1;
-                done = 0;
-            } else {
-                done = $tore.length;
-                top = done + amount;
-                long[] ls = new long[top];
-                System.arraycopy($tore, 0, ls, 0, done);
-                $tore = ls;
-            }
-            long s1;
-            for (; done < top; done++) {
-                final long s0 = $tate0;
-                s1 = $tate1;
-                $tore[done] = s0 + s1;
-
-                s1 ^= s0;
-                $tate0 = Long.rotateLeft(s0, 55) ^ s1 ^ (s1 << 14); // a, b
-                $tate1 = Long.rotateLeft(s1, 36); // c
-            }
-        }
-
-        public static final Chariot alpha = new Chariot("alpha"), beta = new Chariot("beta"), gamma = new Chariot("gamma"),
-                delta = new Chariot("delta"), epsilon = new Chariot("epsilon"), zeta = new Chariot("zeta"),
-                eta = new Chariot("eta"), theta = new Chariot("theta"), iota = new Chariot("iota"),
-                kappa = new Chariot("kappa"), lambda = new Chariot("lambda"), mu = new Chariot("mu"),
-                nu = new Chariot("nu"), xi = new Chariot("xi"), omicron = new Chariot("omicron"), pi = new Chariot("pi"),
-                rho = new Chariot("rho"), sigma = new Chariot("sigma"), tau = new Chariot("tau"),
-                upsilon = new Chariot("upsilon"), phi = new Chariot("phi"), chi = new Chariot("chi"), psi = new Chariot("psi"),
-                omega = new Chariot("omega");
-        public static final Chariot[] predefined = new Chariot[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,
-                kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega};
-
-
-        public int hash(final boolean[] data) {
+    public static final class Sketch {
+        public static long hash64(final boolean[] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if ((limit >> 5) + 3 > top)
-                expand(top << 1 < (limit >> 5) + 3 ? (limit >> 5) + 3 : top);
-            long sum = $tore[0], t = 0L;
-            int i = 0, ii = 0;
-            for (; i + 31 < limit; i += 32) {
-                sum += (t = (data[i] ? 0x00000001L : 0L) | (data[i + 1] ? 0x00000002L : 0L)
-                        | (data[i + 2] ? 0x00000004L : 0L) | (data[i + 3] ? 0x00000008L : 0L)
-                        | (data[i + 4] ? 0x00000010L : 0L) | (data[i + 5] ? 0x00000020L : 0L)
-                        | (data[i + 6] ? 0x00000040L : 0L) | (data[i + 7] ? 0x00000080L : 0L)
-                        | (data[i + 8] ? 0x00000100L : 0L) | (data[i + 9] ? 0x00000200L : 0L)
-                        | (data[i + 10] ? 0x00000400L : 0L) | (data[i + 11] ? 0x00000800L : 0L)
-                        | (data[i + 12] ? 0x00001000L : 0L) | (data[i + 13] ? 0x00002000L : 0L)
-                        | (data[i + 14] ? 0x00004000L : 0L) | (data[i + 15] ? 0x00008000L : 0L)
-                        | (data[i + 16] ? 0x00010000L : 0L) | (data[i + 17] ? 0x00020000L : 0L)
-                        | (data[i + 18] ? 0x00040000L : 0L) | (data[i + 19] ? 0x00080000L : 0L)
-                        | (data[i + 20] ? 0x00100000L : 0L) | (data[i + 21] ? 0x00200000L : 0L)
-                        | (data[i + 22] ? 0x00400000L : 0L) | (data[i + 23] ? 0x00800000L : 0L)
-                        | (data[i + 24] ? 0x01000000L : 0L) | (data[i + 25] ? 0x02000000L : 0L)
-                        | (data[i + 26] ? 0x04000000L : 0L) | (data[i + 27] ? 0x08000000L : 0L)
-                        | (data[i + 28] ? 0x10000000L : 0L) | (data[i + 29] ? 0x20000000L : 0L)
-                        | (data[i + 30] ? 0x40000000L : 0L) | (data[i + 31] ? 0x80000000L : 0L)
-                ) * ($tore[++ii]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += (data[i] ? 0xC6BC279692B5CC83L : 0xAEF17502108EF2D9L) * j);
             }
-            if ((limit & 31) != 0) {
-                t = 0L;
-                for (int l = 0; l < (limit & 31); l++) {
-                    t |= data[i++] ? 1L << l : 0L;
-                }
-                if (t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
-                else sum += t * ($tore[++ii]);
-            } else if (limit > 0 && t == 0)
-                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final byte[] data) {
+        public static long hash64(final byte[] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if ((limit >> 2) + 3 > top)
-                expand(top << 1 < (limit >> 2) + 3 ? (limit >> 2) + 3 : top);
-            long sum = $tore[0], t = 0L;
-            int i = 0, ii = 0;
-            for (; i + 3 < limit; i += 4) {
-                sum += (t = (data[i] & 0xFFL) | (data[i + 1] & 0xFFL) << 8
-                        | (data[i + 2] & 0xFFL) << 16 | (data[i + 3] & 0xFFL) << 24) * ($tore[++ii]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += data[i] * j);
             }
-            if ((limit & 3) != 0) {
-                t = 0L;
-                for (int l = 0; l < (limit & 3); l++) {
-                    t |= (data[i++] & 0xFFL) << (l << 3);
-                }
-                if (t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
-                else sum += t * ($tore[++ii]);
-            } else if (limit > 0 && t == 0)
-                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final short[] data) {
+        public static long hash64(final short[] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if ((limit >> 1) + 3 > top)
-                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
-            long sum = $tore[0], t = 0L;
-            int i = 0, ii = 0;
-            for (; i + 1 < limit; i += 2) {
-                sum += (t = (data[i] & 0xFFFFL) | (data[i + 1] & 0xFFFFL) << 16) * ($tore[++ii]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += data[i] * j);
             }
-            if ((limit & 1) != 0) {
-                t = data[i] & 0xFFFFL;
-                if (t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
-                else sum += t * ($tore[++ii]);
-            } else if (limit > 0 && t == 0)
-                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final char[] data) {
+        public static long hash64(final char[] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if ((limit >> 1) + 3 > top)
-                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
-            long sum = $tore[0], t = 0L;
-            int i = 0, ii = 0;
-            for (; i + 1 < limit; i += 2) {
-                sum += (t = (data[i] & 0xFFFFL) | (data[i + 1] & 0xFFFFL) << 16) * ($tore[++ii]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += data[i] * j);
             }
-            if ((limit & 1) != 0) {
-                t = data[i] & 0xFFFFL;
-                if (t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
-                else sum += t * ($tore[++ii]);
-            } else if (limit > 0 && t == 0)
-                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final char[] data, final int start, final int end) {
+        public static long hash64(final int[] data) {
             if (data == null)
                 return 0;
-            final int limit = end - start;
-            if ((limit >> 1) + 3 > top)
-                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
-            long sum = $tore[0], t = 0L;
-            int i = start, ii = 0;
-            for (; i + 1 < end; i += 2) {
-                sum += (t = (data[i] & 0xFFFFL) | (data[i + 1] & 0xFFFFL) << 16) * ($tore[++ii]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += data[i] * j);
             }
-            if ((limit & 1) != 0) {
-                t = data[i] & 0xFFFFL;
-                if (t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
-                else sum += t * ($tore[++ii]);
-            } else if (limit > 0 && t == 0)
-                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final char[] data, final int start, final int end, final int step) {
+        public static long hash64(final long[] data) {
             if (data == null)
                 return 0;
-            final int limit = (end - start + step - 1) / step;
-            if ((limit >> 1) + 3 > top)
-                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
-            long sum = $tore[0], t = 0L;
-            int i = start, ii = 0;
-            for (; i + 1 < end; i += step << 1) {
-                sum += (t = (data[i] & 0xFFFFL) | (data[i + step] & 0xFFFFL) << 16) * ($tore[++ii]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += data[i] * j);
             }
-            if ((limit & 1) != 0) {
-                t = data[i] & 0xFFFFL;
-                if (t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
-                else sum += t * ($tore[++ii]);
-            } else if (limit > 0 && t == 0)
-                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final int[] data) {
+        public static long hash64(final float[] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if (limit + 2 > top)
-                expand(top << 1 < limit + 2 ? limit + 2 : top);
-            long sum = $tore[0];
-            for (int i = 0; i < limit; ) {
-                sum += (data[i] & 0xFFFFFFFFL) * ($tore[++i]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += NumberTools.floatToIntBits(data[i]) * j);
             }
-            if (limit > 0 && data[limit - 1] == 0)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final long[] data) {
+        public static long hash64(final double[] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if ((limit << 1) + 2 > top)
-                expand(top << 1 < (limit << 1) + 2 ? (limit << 1) + 2 : top);
-            long sum = $tore[0], t = 0;
-            for (int i = 0, ii = 1; i < limit; ii += 2) {
-                sum += ((t = data[i++]) & 0xFFFFFFFFL) * ($tore[ii]) + (t >>> 32) * ($tore[ii + 1]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += NumberTools.doubleToLongBits(data[i]) * j);
             }
-            if (limit > 0 && (t >>> 32) == 0)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[(limit << 1) + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-
-        public int hash(final float[] data) {
+        public static long hash64(final CharSequence data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if (limit + 2 > top)
-                expand(top << 1 < limit + 2 ? limit + 2 : top);
-            long sum = $tore[0];
-            for (int i = 0; i < limit; ) {
-                sum += (NumberTools.floatToIntBits(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length();
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += data.charAt(i) * j);
             }
-            if (limit > 0 && data[limit - 1] == 0)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final double[] data) {
-            if (data == null)
+        public static long hash64(final char[] data, final int start, final int end) {
+            if (data == null || start >= end)
                 return 0;
-            final int limit = data.length;
-            if ((limit << 1) + 2 > top)
-                expand(top << 1 < (limit << 1) + 2 ? (limit << 1) + 2 : top);
-            long sum = $tore[0], t = 0;
-            for (int i = 0, ii = 1; i < limit; ii += 2) {
-                sum += ((t = NumberTools.doubleToLongBits(data[i++])) & 0xFFFFFFFFL) * ($tore[ii]) + (t >>> 32) * ($tore[ii + 1]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = end < data.length ? end : data.length;
+            for (int i = start; i < len; i++, j += 0xB9A2842E) {
+                result ^= (a += data[i] * j);
             }
-            if (limit > 0 && (t >>> 32) == 0)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[(limit << 1) + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final CharSequence data) {
+        public static long hash64(final char[][] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length();
-            if ((limit >> 1) + 3 > top)
-                expand(top << 1 < (limit >> 1) + 3 ? (limit >> 1) + 3 : top);
-            long sum = $tore[0], t = 0L;
-            int i = 0, ii = 0;
-            for (; i + 1 < limit; i += 2) {
-                sum += (t = (data.charAt(i) & 0xFFFFL) | (data.charAt(i + 1) & 0xFFFFL) << 16) * ($tore[++ii]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += hash64(data[i]) * j);
             }
-            if ((limit & 1) != 0) {
-                t = data.charAt(i) & 0xFFFFL;
-                if (t == 0) sum += $tore[++ii] ^ 0x632BE59BD9B4E019L;
-                else sum += t * ($tore[++ii]);
-            } else if (limit > 0 && t == 0)
-                sum += $tore[ii] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[ii + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final char[][] data) {
+        public static long hash64(final int[][] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if (limit + 2 > top)
-                expand(top << 1 < limit + 2 ? limit + 2 : top);
-            long sum = $tore[0];
-            for (int i = 0; i < limit; ) {
-                sum += (hash(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += hash64(data[i]) * j);
             }
-            if (limit > 0 && data[limit - 1] == null)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final long[][] data) {
+        public static long hash64(final long[][] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if (limit + 2 > top)
-                expand(top << 1 < limit + 2 ? limit + 2 : top);
-            long sum = $tore[0];
-            for (int i = 0; i < limit; ) {
-                sum += (hash(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += hash64(data[i]) * j);
             }
-            if (limit > 0 && data[limit - 1] == null)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final CharSequence[] data) {
+        public static long hash64(final CharSequence[] data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if (limit + 2 > top)
-                expand(top << 1 < limit + 2 ? limit + 2 : top);
-            long sum = $tore[0];
-            for (int i = 0; i < limit; ) {
-                sum += (hash(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += hash64(data[i]) * j);
             }
-            if (limit > 0 && data[limit - 1] == null)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-        public int hash(final CharSequence[]... data) {
+        public static long hash64(final CharSequence[]... data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if (limit + 2 > top)
-                expand(top << 1 < limit + 2 ? limit + 2 : top);
-            long sum = $tore[0];
-            for (int i = 0; i < limit; ) {
-                sum += (hash(data[i]) & 0xFFFFFFFFL) * ($tore[++i]);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += hash64(data[i]) * j);
             }
-            if (limit > 0 && data[limit - 1] == null)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
         }
 
-
-        public int hash(final Object[] data) {
+        public static long hash64(final Iterable<? extends CharSequence> data) {
             if (data == null)
                 return 0;
-            final int limit = data.length;
-            if (limit + 2 > top)
-                expand(top << 1 < limit + 2 ? limit + 2 : top);
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x3EB7FF23L;
+            for (CharSequence datum : data) {
+                result ^= (a += hash(datum) * (j += 0xB9A2842EL));
+            }
+
+            return (result >>> 27 | result << 37) + a;
+        }
+
+        public static long hash64(final List<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.size();
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += hash64(data.get(i)) * j);
+            }
+            return (result >>> 27 | result << 37) + a;
+        }
+
+        public static long hash64(final Object[] data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
             Object o;
-            long sum = $tore[0];
-            for (int i = 0; i < limit; ) {
-                o = data[i];
-                sum += (o == null ? 0xFFFFFFFFL : (o.hashCode() & 0xFFFFFFFFL)) * ($tore[++i]);
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += ((o = data[i]) == null ? -1L : o.hashCode()) * j);
             }
-            if (limit > 0 && data[limit - 1] == null)
-                sum += $tore[limit] ^ 0x632BE59BD9B4E019L;
-            sum ^= $tore[limit + 1] + sum >>> (5 + (sum >>> 59));
-            return (int) (((sum *= 0xAEF17502108EF2D9L) >>> 43) ^ sum);
+            return (result >>> 27 | result << 37) + a;
+        }
+
+        public static long hash64(final Object data) {
+            if (data == null)
+                return 0L;
+            long a = 0x632BE59BD9B4E019L + data.hashCode(), result = 0x9E3779B97F4A7C94L ^ a * 0x85157AF5;
+            return (result >>> 27 | result << 37) + a;
+        }
+
+        public static int hash(final boolean[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += (data[i] ? 0x789ABCDE : 0x62E2AC0D) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+
+        public static int hash(final byte[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += data[i] * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final short[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += data[i] * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final char[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += data[i] * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+        public static int hash(final int[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += data[i] * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final long[] data) {
+            if (data == null)
+                return 0;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L, j = 0x85157AF5L;
+            final int len = data.length;
+            for (int i = 0; i < len; i++, j += 0xB9A2842EL) {
+                result ^= (a += data[i] * j);
+            }
+            return (int)((a += (result >>> 27 | result << 37)) ^ (a >>> 32));
+        }
+        public static int hash(final float[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += NumberTools.floatToIntBits(data[i]) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final double[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += NumberTools.doubleToMixedIntBits(data[i]) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final CharSequence data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length();
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += data.charAt(i) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final char[] data, final int start, final int end) {
+            if (data == null || start >= end)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = end < data.length ? end : data.length;
+            for (int i = start, j = 0x85157AF5; i < len; i++, j += 0xB9A2842E) {
+                result ^= (a += data[i] * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final char[][] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += hash(data[i]) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final int[][] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += hash(data[i]) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final long[][] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += hash(data[i]) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final CharSequence[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += hash(data[i]) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final CharSequence[]... data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += hash(data[i]) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final Iterable<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB, j = 0xCB72F6C7;
+            for (CharSequence datum : data) {
+                result ^= (a += hash(datum) * (j += 0xB9A2842E));
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final List<? extends CharSequence> data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.size();
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += hash(data.get(i)) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final Object[] data) {
+            if (data == null)
+                return 0;
+            int result = 0x9E3779B9, a = 0x632BE5AB;
+            final int len = data.length;
+            Object o;
+            for (int i = 0, j = 0x85F5; i < len; i++, j += 0xB92E) {
+                result ^= (a += ((o = data[i]) == null ? -1 : o.hashCode()) * j);
+            }
+            return (result >>> 11 | result << 21) + a;
+        }
+
+        public static int hash(final Object data) {
+            if (data == null)
+                return 0;
+            int a = 0x632BE5AB + data.hashCode(), result = 0x9E3779B9 ^ a * 0x85157AF5;
+            return (result >>> 11 | result << 21) + a;
         }
     }
 

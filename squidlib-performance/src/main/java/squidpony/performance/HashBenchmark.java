@@ -43,6 +43,7 @@ import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.LongPeriodRNG;
 import squidpony.squidmath.ThunderRNG;
+import squidpony.squidmath.CrossHash.Sketch;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -120,7 +121,7 @@ import java.util.concurrent.TimeUnit;
  * With some simple changes to the finalization of Wisp to avoid strange artifacts in visual hashing...
  *
  * Benchmark                          Mode  Cnt    Score   Error  Units
- * HashBenchmark.measureChariotInt    avgt    8   23.654 ± 1.395  ms/op
+ * HashBenchmark.measureSketchInt    avgt    8   23.654 ± 1.395  ms/op
  * HashBenchmark.measureControl       avgt    8    2.295 ± 0.021  ms/op
  * HashBenchmark.measureFNV           avgt    8  155.490 ± 1.308  ms/op
  * HashBenchmark.measureFNVInt        avgt    8  175.354 ± 3.048  ms/op
@@ -310,14 +311,30 @@ public class HashBenchmark {
         doStormInt();
     }
 
-/*
-    public long doChariotInt()
+    public long doSketch()
     {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        final CrossHash.Chariot chariot = CrossHash.Chariot.mu;
+        final LongPeriodRNG rng = new LongPeriodRNG(seed);
         for (int i = 0; i < 1000000; i++) {
             rng.nextLong();
-            iseed += chariot.hash(rng.state);
+            seed += Sketch.hash64(rng.state);
+        }
+        return seed;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    public void measureSketch() throws InterruptedException {
+        seed = 9000;
+        doSketch();
+    }
+
+    public long doSketchInt()
+    {
+        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
+        for (int i = 0; i < 1000000; i++) {
+            rng.nextLong();
+            iseed += Sketch.hash(rng.state);
         }
         return iseed;
     }
@@ -325,11 +342,10 @@ public class HashBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureChariotInt() throws InterruptedException {
+    public void measureSketchInt() throws InterruptedException {
         iseed = 9000;
-        doChariotInt();
+        doSketchInt();
     }
-*/
 
     public long doFalcon()
     {

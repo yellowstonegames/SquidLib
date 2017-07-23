@@ -74,7 +74,6 @@ public class HashVisualizer extends ApplicationAdapter {
     private Viewport view;
     private int hashMode = 43, rngMode = 30, noiseMode = 69;
     private CrossHash.Storm storm, stormA, stormB, stormC;
-    private CrossHash.Chariot chariot, chariotA, chariotB, chariotC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private BeardRNG beard = new BeardRNG();
     private BirdRNG bird = new BirdRNG();
@@ -475,10 +474,6 @@ public class HashVisualizer extends ApplicationAdapter {
         stormA = CrossHash.Storm.alpha;
         stormB = CrossHash.Storm.beta;
         stormC = CrossHash.Storm.chi;
-        chariot = new CrossHash.Chariot();
-        chariotA = CrossHash.Chariot.alpha;
-        chariotB = CrossHash.Chariot.beta;
-        chariotC = CrossHash.Chariot.chi;
         mist = new CrossHash.Mist();
         mistA = CrossHash.Mist.alpha;
         mistB = CrossHash.Mist.beta;
@@ -1079,94 +1074,96 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 29:
-                        Gdx.graphics.setTitle("Chariot (alpha) on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist (default) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = chariotA.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = mist.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 30:
-                        Gdx.graphics.setTitle("Chariot (beta) on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist (default) 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = chariotB.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = mist.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 31:
-                        Gdx.graphics.setTitle("Chariot (chi) on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist (default) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = chariotC.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = mist.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 32:
-                        Gdx.graphics.setTitle("Chariot (alpha) on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist (default) 64 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = chariotA.hash(coordinates) << 8 | 255L;
+                                coordinate[0] = (x << 9) | y;
+                                code = mist.hash64(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 33:
-                        Gdx.graphics.setTitle("Chariot (beta) on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist (default) on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = chariotB.hash(coordinates) << 8 | 255L;
+                                code = mist.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 34:
-                        Gdx.graphics.setTitle("Chariot (chi) on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist (default) 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = chariotC.hash(coordinates) << 8 | 255L;
+                                code = mist.hash64(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 35:
-                        Gdx.graphics.setTitle("Chariot (alpha) on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist (default) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = chariotA.hash(coordinate) << 8 | 255L;
+                                coordinates[1] = y;
+                                code = mist.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 36:
-                        Gdx.graphics.setTitle("Chariot (beta) on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist (default) 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = chariotB.hash(coordinate) << 8 | 255L;
+                                coordinates[1] = y;
+                                code = mist.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 37:
-                        Gdx.graphics.setTitle("Chariot (chi) on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist (semi-random) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
+                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = chariotC.hash(coordinate) << 8 | 255L;
+                                coordinates[1] = y;
+                                code = CrossHash.Mist.predefined[Light32RNG.determine(x + Light32RNG.determine(y)) & 31].hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
