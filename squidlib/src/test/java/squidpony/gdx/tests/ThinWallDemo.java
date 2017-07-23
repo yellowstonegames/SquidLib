@@ -257,7 +257,7 @@ public class ThinWallDemo extends ApplicationAdapter {
 
         colors = MapUtility.generateDefaultColors(lineDungeon);
         bgColors = MapUtility.generateDefaultBGColors(lineDungeon);
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFFFL) * 0.013);
 
         seen = new boolean[overlapWidth][overlapHeight];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
@@ -649,10 +649,10 @@ public class ThinWallDemo extends ApplicationAdapter {
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], colors[i][j], bgColors[i][j],
-                            lights[i][j] + (int) (-105 + 250 * fovmap[i][j]));
+                            lights[i][j] + (int) (-35 + 150 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
-                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -140);
+                    display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -150);
                 }
             }
         }
@@ -673,7 +673,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         //Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFFFL) * 0.013);
 
         // you done bad. you done real bad.
         if (health <= 0) {

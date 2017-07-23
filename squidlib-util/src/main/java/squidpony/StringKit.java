@@ -639,6 +639,73 @@ public class StringKit {
     }
     /**
      * Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
+     * long they represent, reading at most 19 characters (20 if there is a sign) and returning the result if valid, or
+     * 0 if nothing could be read. The leading sign can be '+' or '-' if present. Unlike
+     * {@link #intFromDec(CharSequence)}, this can't effectively be used to read unsigned longs as decimal literals,
+     * since anything larger than the highest signed long would be larger than the normal limit for longs as text (it
+     * would be 20 characters without a sign, where we limit it to 19 without a sign to match normal behavior).
+     * <br>
+     * Should be fairly close to the JDK's Long.parseLong method, but this also supports CharSequence data instead of
+     * just String data, and ignores chars after the number. This doesn't throw on invalid input, either, instead
+     * returning 0 if the first char is not a decimal digit, or stopping the parse process early if a non-decimal-digit
+     * char is read before the end of cs is reached. If the parse is stopped early, this behaves as you would expect for
+     * a number with less digits, and simply doesn't fill the larger places.
+     * @param cs a CharSequence, such as a String, containing only digits 0-9 with an optional sign
+     * @return the long that cs represents
+     */
+    public static long longFromDec(final CharSequence cs) {
+        return longFromDec(cs,0, cs.length());
+    }
+    /**
+     * Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
+     * long they represent between the given positions {@code start} and {@code end}, reading at most 19 characters (20
+     * if there is a sign) or until end is reached and returning the result if valid, or 0 if nothing could be read. The
+     * leading sign can be '+' or '-' if present. Unlike {@link #intFromDec(CharSequence, int, int)}, this can't
+     * effectively be used to read unsigned longs as decimal literals, since anything larger than the highest signed
+     * long would be larger than the normal limit for longs as text (it would be 20 characters without a sign, where we
+     * limit it to 19 without a sign to match normal behavior).
+     * <br>
+     * Should be fairly close to the JDK's Long.parseLong method, but this also supports CharSequence data instead of
+     * just String data, and allows specifying a start and end. This doesn't throw on invalid input, either, instead
+     * returning 0 if the first char is not a decimal digit, or stopping the parse process early if a non-decimal-digit
+     * char is read before end is reached. If the parse is stopped early, this behaves as you would expect for a number
+     * with less digits, and simply doesn't fill the larger places.
+     * @param cs a CharSequence, such as a String, containing only digits 0-9 with an optional sign
+     * @param start the (inclusive) first character position in cs to read
+     * @param end the (exclusive) last character position in cs to read (this stops after 19 or 20 characters if end is too large, depending on sign)
+     * @return the long that cs represents
+     */
+    public static long longFromDec(final CharSequence cs, final int start, int end)
+    {
+        int len, h, lim = 19;
+        long sign = 1L;
+        if(cs == null || start < 0 || end <=0 || end - start <= 0
+                || (len = cs.length()) - start <= 0 || end > len)
+            return 0L;
+        char c = cs.charAt(start);
+        if(c == '-')
+        {
+            sign = -1L;
+            ++end;
+            lim = 20;
+        }
+        else if(c == '+')
+        {
+            ++end;
+            lim = 20;
+        }
+        else if(c > 102 || (h = hexCodes[c]) < 0 || h > 9)
+            return 0L;
+        long data = 0L;
+        for (int i = start; i < end && i < start + lim; i++) {
+            if((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0 || h > 9)
+                return data * sign;
+            data = data * 10 + h;
+        }
+        return data * sign;
+    }
+    /**
+     * Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
      * int they represent, reading at most 10 characters (11 if there is a sign) and returning the result if valid, or 0
      * if nothing could be read. The leading sign can be '+' or '-' if present. This can technically be used to handle
      * unsigned integers in decimal format, but it isn't the intended purpose. If you do use it for handling unsigned

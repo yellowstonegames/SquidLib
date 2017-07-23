@@ -71,7 +71,7 @@ public class ImageDemo extends ApplicationAdapter {
         }
         colors = MapUtility.generateDefaultColors(bareDungeon);
         bgColors = MapUtility.generateDefaultBGColors(bareDungeon);
-        lights = MapUtility.generateLightnessModifiers(bareDungeon, System.currentTimeMillis() * 0.08);
+        lights = MapUtility.generateLightnessModifiers(bareDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
 
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -116,7 +116,7 @@ public class ImageDemo extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        lights = MapUtility.generateLightnessModifiers(bareDungeon, System.currentTimeMillis() * 0.08);
+        lights = MapUtility.generateLightnessModifiers(bareDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
 
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();

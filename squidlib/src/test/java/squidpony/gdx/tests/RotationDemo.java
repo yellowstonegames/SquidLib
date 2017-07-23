@@ -252,7 +252,7 @@ public class RotationDemo extends ApplicationAdapter {
 
         colors = MapUtility.generateDefaultColors(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
         seen = new boolean[width][height];
         /*
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
@@ -639,7 +639,7 @@ public class RotationDemo extends ApplicationAdapter {
         //Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
 
         // you done bad. you done real bad.
         if (health <= 0) {

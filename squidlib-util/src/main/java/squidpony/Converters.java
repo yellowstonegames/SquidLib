@@ -453,6 +453,20 @@ public class Converters {
             return FakeLanguageGen.deserializeFromString(text);
         }
     };
+
+    public static final StringConvert<FakeLanguageGen.SentenceForm> convertSentenceForm = new StringConvert<FakeLanguageGen.SentenceForm>("FakeLanguageGen$SentenceForm")
+    {
+        @Override
+        public String stringify(FakeLanguageGen.SentenceForm item) {
+            return item.serializeToString();
+        }
+
+        @Override
+        public FakeLanguageGen.SentenceForm restore(String text) {
+            return FakeLanguageGen.SentenceForm.deserializeFromString(text);
+        }
+    };
+
     public static final StringConvert<ObText> convertObText = new StringConvert<ObText>("ObText") {
         @Override
         public String stringify(ObText item) {

@@ -332,7 +332,7 @@ public class EverythingDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         colors = MapUtility.generateDefaultColors(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
         seen = new boolean[decoDungeon.length][decoDungeon[0].length];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -799,7 +799,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // by a float, then you generally will get Float.POSITIVE_INFINITY, and similarly for some doubles. Infinite
         // results are not good for the smooth noise we use the current time for! We want the time to go up slowly and
         // steadily, so the animation of the "torchlight" effect looks right.
-        long tm = System.currentTimeMillis() & 0xfffffff;
+        long tm = System.currentTimeMillis() & 0xFFFFFF;
         for (int i = -1, ci = Math.max(0, offsetX-1); i <= width && ci < totalWidth; i++, ci++) {
             for (int j = -1, cj = Math.max(0, offsetY-1); j <= height && cj < totalHeight; j++, cj++) {
                 overlapping = monsters.containsPosition(Coord.get(ci, cj)) || (player.gridX == ci && player.gridY == cj);
@@ -836,7 +836,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, System.currentTimeMillis() * 0.07);
+        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
 
         // you done bad. you done real bad.
         if (health <= 0) {
