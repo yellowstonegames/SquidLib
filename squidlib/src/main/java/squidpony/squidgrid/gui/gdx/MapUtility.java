@@ -1,9 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
-import squidpony.squidgrid.mapping.SectionDungeonGenerator;
 import squidpony.squidmath.PerlinNoise;
-import squidpony.squidmath.SeededNoise;
 
 /**
  * Created by Tommy Ettinger on 7/9/2017.
@@ -71,7 +69,7 @@ public class MapUtility {
 
     /**
      * Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
-     * This overload also takes a char that corresponds to deep non-water lakes (which {@link SectionDungeonGenerator}
+     * This overload also takes a char that corresponds to deep non-water lakes (which {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
      * can produce) and a Color to use for that deep liquid, as well as a char for shallow lakes and a Color for that
      * shallow liquid.
      * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the colors this
@@ -83,9 +81,9 @@ public class MapUtility {
      * {@link #generateDefaultColors(char[][])} will be fine.
      *
      * @param map a char[][] containing foreground characters
-     * @param deepChar the char that represents deep parts of non-water lakes, from {@link SectionDungeonGenerator}
+     * @param deepChar the char that represents deep parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
      * @param deepColor the Color to use for deep parts of non-water lakes
-     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link SectionDungeonGenerator}
+     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
      * @param shallowColor  the Color to use for shallow parts of non-water lakes
      * @return a 2D array of Colors with the same size as map, that can be used for the corresponding chars
      */
@@ -212,10 +210,11 @@ public class MapUtility {
     /**
      * Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the
      * chars in map. This overload also takes a char that corresponds to deep non-water lakes (which
-     * {@link SectionDungeonGenerator} can produce) and a Color to use for that deep liquid, as well as a char for
-     * shallow lakes and a Color for that shallow liquid.
+     * {@link squidpony.squidgrid.mapping.SectionDungeonGenerator} can produce) and a Color to use for that deep liquid,
+     * as well as a char for shallow lakes and a Color for that shallow liquid.
+     * <br>
      * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the
-     * colors this returns will also change. Most backgrounds will be black. but deep water ('~') will be dark
+     * colors this returns will also change. Most backgrounds will be black, but deep water ('~') will be dark
      * blue-green, shallow water (',') will be a lighter blue-green, and grass ('"') will be dark green.
      * Deep and shallow lakes of non-water will use the given Colors. If you are using SectionDungeonGenerator to
      * produce normal water lakes, then you don't need this overload, and
@@ -225,9 +224,9 @@ public class MapUtility {
      * {@link #generateLightnessModifiers(char[][], double, char, char)} with some rising frame count.
      *
      * @param map a char[][] containing foreground characters (this gets their background color)
-     * @param deepChar the char that represents deep parts of non-water lakes, from {@link SectionDungeonGenerator}
+     * @param deepChar the char that represents deep parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
      * @param deepColor the Color to use for deep parts of non-water lakes
-     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link SectionDungeonGenerator}
+     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
      * @param shallowColor  the Color to use for shallow parts of non-water lakes
      * @return a 2D array of background Colors with the same size as map, that can be used for the corresponding chars
      */
@@ -328,13 +327,13 @@ public class MapUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887) / 4.0 - 1.5));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.25 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -349,12 +348,13 @@ public class MapUtility {
 
     /**
      * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to
-     * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
+     * animation frame if rippling water and waving grass using Perlin Noise are desired.
      *
      * @param map   a char[][] that you want to be find background lightness modifiers for
-     * @param frame a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
-     *              water and grass move more
+     * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
+     *                      water and grass move more, and 0.013 multiplied by the current time in milliseconds works well
+     *                      as long as only the smaller digits of the time are used; this can be accomplished with
+     *                      {@code (System.currentTimeMillis() & 0xFFFFFF) * 0.013} .
      * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
      */
     public static int[][] generateLightnessModifiers(char[][] map, double frame) {
@@ -390,13 +390,13 @@ public class MapUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887, frame * 0.40231) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887, frame * 0.40231) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887, frame * 0.45231) / 4.0 - 1.5));
+                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.25 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -411,13 +411,14 @@ public class MapUtility {
 
     /**
      * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
-     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to
-     * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
-     * Also allows additional chars to be treated like deep and shallow water regarding the ripple animation.
+     * animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars
+     * to be treated like deep and shallow water regarding the ripple animation.
      *
      * @param map           a char[][] that you want to be find background lightness modifiers for
      * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
-     *                      water and grass move more
+     *                      water and grass move more, and 0.013 multiplied by the current time in milliseconds works well
+     *                      as long as only the smaller digits of the time are used; this can be accomplished with
+     *                      {@code (System.currentTimeMillis() & 0xFFFFFF) * 0.013} .
      * @param deepLiquid    a char that will be treated like deep water when animating ripples
      * @param shallowLiquid a char that will be treated like shallow water when animating ripples
      * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
@@ -455,26 +456,27 @@ public class MapUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887, frame * 0.40231) / 2.5 - 0.45));
+                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887, frame * 0.40231) / 2.5 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887, frame * 0.45231) / 4.0 - 1.5));
+                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.3 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
                         break;
                     default:
                         if (map[i][j] == deepLiquid)
-                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 1.2, j * 1.2, frame / 21.0) / 2.5 - 0.7));
+                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.5) * 0.45 - 0.7));
                         else if (map[i][j] == shallowLiquid)
-                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i* 1.6180339887, j* 1.6180339887, frame / 30.0) / 2.5 - 0.45));
+                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i* 3.1, j* 3.1, frame * 0.25) * 0.4 - 0.65));
                         else portion[i][j] = 0;
                 }
             }
         }
         return portion;
     }
+
 }
