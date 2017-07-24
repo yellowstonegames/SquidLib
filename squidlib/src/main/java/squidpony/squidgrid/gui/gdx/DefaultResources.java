@@ -1345,44 +1345,58 @@ public class DefaultResources implements LifecycleListener {
      */
     @Override
     public void pause() {
+    }
+
+    /**
+     * Called when the Application is about to be resumed
+     */
+    @Override
+    public void resume() {
+    }
+
+    /**
+     * Called when the {@link Application} is about to be disposed
+     */
+    @Override
+    public void dispose() {
         if(arial15 != null) {
-            //arial15.dispose();
+            arial15.dispose();
             arial15 = null;
         }
         if(narrow1 != null) {
-            //narrow1.dispose();
+            narrow1.dispose();
             narrow1 = null;
         }
         if(narrow2 != null) {
-            //narrow2.dispose();
+            narrow2.dispose();
             narrow2 = null;
         }
         if(narrow3 != null) {
-            //narrow3.dispose();
+            narrow3.dispose();
             narrow3 = null;
         }
         if(smooth1 != null) {
-            //smooth1.dispose();
+            smooth1.dispose();
             smooth1 = null;
         }
         if(smooth2 != null) {
-            //smooth2.dispose();
+            smooth2.dispose();
             smooth2 = null;
         }
         if(square1 != null) {
-            //square1.dispose();
+            square1.dispose();
             square1 = null;
         }
         if(square2 != null) {
-            //square2.dispose();
+            square2.dispose();
             square2 = null;
         }
         if(smoothSquare != null) {
-            //smoothSquare.dispose();
+            smoothSquare.dispose();
             smoothSquare = null;
         }
         if(smoothSquareOld != null) {
-            //smoothSquareOld.dispose();
+            smoothSquareOld.dispose();
             smoothSquareOld = null;
         }
         if(distanceSquare != null) {
@@ -1462,37 +1476,21 @@ public class DefaultResources implements LifecycleListener {
             msdfDejaVuItalic = null;
         }
         if (unicode1 != null) {
-            //unicode1.dispose();
+            unicode1.dispose();
             unicode1 = null;
         }
         if (unicode2 != null) {
-            //unicode2.dispose();
+            unicode2.dispose();
             unicode2 = null;
         }
         if(tentacle != null) {
-            //tentacle.dispose();
+            tentacle.dispose();
             tentacle = null;
         }
         if(iconAtlas != null) {
             iconAtlas.dispose();
             iconAtlas = null;
         }
-        instance = null;
-    }
-
-    /**
-     * Called when the Application is about to be resumed
-     */
-    @Override
-    public void resume() {
-        initialize();
-    }
-
-    /**
-     * Called when the {@link Application} is about to be disposed
-     */
-    @Override
-    public void dispose() {
         Gdx.app.removeLifecycleListener(this);
         instance = null;
     }
