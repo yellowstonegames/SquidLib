@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
@@ -80,7 +81,6 @@ public class EverythingDemo extends ApplicationAdapter {
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
     private double[][] res;
-    private int[][] lights;
     private Color[][] colors, bgColors;
     private double[][] fovmap;
     private AnimatedEntity player;
@@ -332,7 +332,10 @@ public class EverythingDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         colors = MapUtility.generateDefaultColors(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
+        // the line after this automatically sets the brightness of backgrounds in display to match their contents, so
+        // here we simply fill the contents of display with our dungeon (but we don't set the actual colors yet).
+        ArrayTools.insert(display.getForegroundLayer().contents, decoDungeon, 0, 0);
+        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
         seen = new boolean[decoDungeon.length][decoDungeon[0].length];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -808,7 +811,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 if (fovmap[ci][cj] > 0.0) {
                     seen[ci][cj] = true;
                     display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
-                            lights[ci][cj] + (int) (-105 +
+                            (int) (-105 +
                                     180 * (fovmap[ci][cj] * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.001, 10000)))));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
@@ -820,7 +823,7 @@ public class EverythingDemo extends ApplicationAdapter {
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.highlight(pt.x, pt.y, lights[pt.x][pt.y] + (int) (170 * fovmap[pt.x][pt.y]));
+            display.highlight(pt.x, pt.y, (int) (170 * fovmap[pt.x][pt.y]));
         }
         messages.put(width - 10 >> 1, 0, "Health: " + health, SColor.RED_PIGMENT);
         //if(pt != null)
@@ -832,11 +835,9 @@ public class EverythingDemo extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        // not sure if this is always needed...
-        //Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
+        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
 
         // you done bad. you done real bad.
         if (health <= 0) {

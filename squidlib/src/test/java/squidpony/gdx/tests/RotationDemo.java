@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.CustomDijkstraMap;
@@ -73,7 +74,6 @@ public class RotationDemo extends ApplicationAdapter {
     private SectionDungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
     private double[][] res;
-    private int[][] lights;
     private Color[][] colors, bgColors;
     private double[][] fovmap;
     private Creature player;
@@ -116,7 +116,7 @@ public class RotationDemo extends ApplicationAdapter {
     @Override
     public void create() {
         // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
-        rng = new StatefulRNG(0xBADBEEFB0BBL);
+        rng = new StatefulRNG(0xBADBEEFCAFEL);
 
         fgCenter = DefaultResources.getSCC();
         bgCenter = DefaultResources.getSCC();
@@ -170,6 +170,7 @@ public class RotationDemo extends ApplicationAdapter {
         dungeonGen.addGrass(MixedGenerator.CAVE_FLOOR, 20);
         dungeonGen.addBoulders(0, 7);
         dungeonGen.addDoors(18, false);
+        dungeonGen.addLake(20, '£', '¢');
         SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng);
         serpent.putCaveCarvers(1);
         serpent.putWalledBoxRoomCarvers(2);
@@ -249,10 +250,14 @@ public class RotationDemo extends ApplicationAdapter {
         awaitedMoves = new IntVLA(10);
         playerToCursor = new CustomDijkstraMap(decoDungeon, adjacency, rng);
         bgColor = SColor.DARK_SLATE_GRAY;
-
-        colors = MapUtility.generateDefaultColors(decoDungeon);
-        bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
+//        colors = MapUtility.generateDefaultColors(decoDungeon);
+//        bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
+        colors = MapUtility.generateDefaultColors(decoDungeon, '£', SColor.CW_LIGHT_YELLOW, '¢', SColor.CW_BRIGHT_ORANGE);
+        bgColors = MapUtility.generateDefaultBGColors(decoDungeon, '£', SColor.CW_ORANGE, '¢',  SColor.CW_DARK_ORANGE);
+        // the line after this automatically sets the brightness of backgrounds in display to match their contents, so
+        // here we simply fill the contents of display with our dungeon (but we don't set the actual colors yet).
+        ArrayTools.insert(display.getForegroundLayer().contents, decoDungeon, 0, 0);
+        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.013, '£', '¢');
         seen = new boolean[width][height];
         /*
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
@@ -615,7 +620,7 @@ public class RotationDemo extends ApplicationAdapter {
                 if (fovmap[i][j] > 0.0) {
                     seen[i][j] = true;
                     display.put(i, j, (overlapping) ? ' ' : lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]),
-                            lights[i][j] + (int) (-105 + 250 * fovmap[i][j]));
+                            (int) (-105 + 250 * fovmap[i][j]));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
                     display.put(i, j, lineDungeon[i][j], fgCenter.filter(colors[i][j]), bgCenter.filter(bgColors[i][j]), -140);
@@ -626,7 +631,7 @@ public class RotationDemo extends ApplicationAdapter {
         for (int p = 0; p < toCursor.size; p++) {
             pt = toCursor.get(p);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.highlight(x = adjacency.extractX(pt), y = adjacency.extractY(pt), lights[x][y] + (int) (170 * fovmap[x][y]));
+            display.highlight(x = adjacency.extractX(pt), y = adjacency.extractY(pt), (int) (170 * fovmap[x][y]));
         }
     }
 
@@ -639,7 +644,8 @@ public class RotationDemo extends ApplicationAdapter {
         //Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
+        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.013, '£', '¢');
+        //lights = DungeonUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFL) * 0.013, '£', '¢');
 
         // you done bad. you done real bad.
         if (health <= 0) {

@@ -9,6 +9,7 @@ import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.PerlinNoise;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,8 +25,8 @@ public class SquidLayers extends Group {
     protected int height;
     protected int cellWidth;
     protected int cellHeight;
+    public int[][] lightnesses;
     protected SquidPanel backgroundPanel, foregroundPanel;
-    protected int[][] lightnesses;
     protected ArrayList<SquidPanel> extraPanels;
     protected TextCellFactory textFactory;
     protected float animationDuration;
@@ -108,6 +109,106 @@ public class SquidLayers extends Group {
      */
     public int[][] getLightnesses() {
         return lightnesses;
+    }
+    /**
+     * Alters the lightnesses that affect the background colors, accepting a parameter for
+     * animation frame if rippling water and waving grass using {@link PerlinNoise} are desired. It may make sense to
+     * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
+     * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
+     * equivalent in DungeonUtility, and directly mutates the lightness data. You can use the {@link #lightnesses} field
+     * to access the 2D array directly, where you can make further modifications to the lighting.
+     * @return this for chaining
+     */
+    public SquidLayers autoLight () {
+        return autoLight(1.2345, '~', ',');
+    }
+
+    /**
+     * Alters the lightnesses that affect the background colors, accepting a parameter for
+     * animation frame if rippling water and waving grass using {@link PerlinNoise} are desired. It may make sense to
+     * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
+     * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
+     * equivalent in DungeonUtility, and directly mutates the lightness data. You can use the {@link #lightnesses} field
+     * to access the 2D array directly, where you can make further modifications to the lighting.
+     * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
+     *                      water and grass move more, and 0.013 multiplied by the current time in milliseconds works well
+     *                      as long as only the smaller digits of the time are used; this can be accomplished with
+     *                      {@code (System.currentTimeMillis() & 0xFFFFFF) * 0.013} .
+     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
+     */
+    public SquidLayers autoLight (double frame) {
+        return autoLight(frame, '~', ',');
+    }
+    /**
+     * Alters the lightnesses that affect the background colors, accepting a parameter for
+     * animation frame if rippling water and waving grass using {@link PerlinNoise} are desired. It may make sense to
+     * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.
+     * Also allows additional chars to be treated like deep and shallow water regarding the ripple animation.
+     * Does not allocate a new 2D int array like {@link MapUtility#generateLightnessModifiers(char[][])} or its
+     * equivalent in DungeonUtility, and directly mutates the lightness data. You can use the {@link #lightnesses} field
+     * to access the 2D array directly, where you can make further modifications to the lighting.
+     * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make
+     *                      water and grass move more, and 0.013 multiplied by the current time in milliseconds works well
+     *                      as long as only the smaller digits of the time are used; this can be accomplished with
+     *                      {@code (System.currentTimeMillis() & 0xFFFFFF) * 0.013} .
+     * @param deepLiquid    a char that will be treated like deep water when animating ripples
+     * @param shallowLiquid a char that will be treated like shallow water when animating ripples
+     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
+     */
+    public SquidLayers autoLight (double frame, char deepLiquid, char shallowLiquid) {
+        final char[][] map = foregroundPanel.contents;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        lightnesses[i][j] = 30;
+                        break;
+                    case '.':
+                    case ' ':
+                    case '\u0006':
+                        lightnesses[i][j] = 0;
+                        break;
+                    case ':':
+                        lightnesses[i][j] = -15;
+                        break;
+                    case '+':
+                    case '/':
+                        lightnesses[i][j] = -10;
+                        break;
+                    case ',':
+                        lightnesses[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));
+                        break;
+                    case '~':
+                        lightnesses[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));
+                        break;
+                    case '"':
+                        lightnesses[i][j] = (int) (95 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.3 - 1.5));
+                        break;
+                    case '^':
+                        lightnesses[i][j] = 40;
+                        break;
+                    default:
+                        if (map[i][j] == deepLiquid)
+                            lightnesses[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.5) * 0.45 - 0.7));
+                        else if (map[i][j] == shallowLiquid)
+                            lightnesses[i][j] = (int) (110 * (PerlinNoise.noise(i* 3.1, j* 3.1, frame * 0.25) * 0.4 - 0.65));
+                        else lightnesses[i][j] = 0;
+                }
+            }
+        }
+        return this;
     }
 
     /**
@@ -339,11 +440,11 @@ public class SquidLayers extends Group {
         if (actualMap == null || actualMap.length <= 0) {
             backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter);
             foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter);
-            lightnesses = ArrayTools.fill(256, width, height);
+            lightnesses = new int[width][height];
         } else {
             backgroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, bgColorCenter, 0, 0, ArrayTools.fill(' ', actualMap.length, actualMap[0].length));
             foregroundPanel = new SquidPanel(gridWidth, gridHeight, textFactory, fgColorCenter, 0, 0, actualMap);
-            lightnesses = ArrayTools.fill(256, actualMap.length, actualMap[0].length);
+            lightnesses = new int[actualMap.length][actualMap[0].length];
         }
         animationDuration = foregroundPanel.DEFAULT_ANIMATION_DURATION;
 
@@ -491,7 +592,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char c, Color foreground, Color background, int backgroundLightness) {
         foregroundPanel.put(x, y, c, foreground);
-        backgroundPanel.put(x, y, background, (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
+        backgroundPanel.put(x, y, background, (lightnesses[x][y] + 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
         return this;
     }
 
@@ -513,7 +614,7 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, Color foreground, Color background, int mixAmount, Color mixBackground) {
         foregroundPanel.put(x, y, c, foreground);
         backgroundPanel.put(x, y, background,
-                (lightnesses[x][y] = 256 + clamp(mixAmount, -255, 255)) * 0.001953125f,
+                (lightnesses[x][y] + 256 + clamp(mixAmount, -255, 255)) * 0.001953125f,
                 mixBackground);
         return this;
     }
@@ -535,7 +636,7 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, int backgroundLightness) {
         foregroundPanel.put(x, y, c, encodedForeground);
         backgroundPanel.put(x, y, encodedBackground,
-                (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
+                (lightnesses[x][y] + 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
         return this;
     }
 
@@ -557,7 +658,7 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, int backgroundLightness, float mixBackground) {
         foregroundPanel.put(x, y, c, encodedForeground);
         backgroundPanel.put(x, y, encodedBackground,
-                (lightnesses[x][y] = 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f, mixBackground);
+                (lightnesses[x][y] + 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f, mixBackground);
         return this;
     }
 
@@ -578,9 +679,8 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, float backgroundLightness, float mixBackground) {
         foregroundPanel.put(x, y, c, encodedForeground);
-        lightnesses[x][y] = (int) (backgroundLightness * 512);
         backgroundPanel.put(x, y, encodedBackground,
-                backgroundLightness, mixBackground);
+                lightnesses[x][y] + (int) (backgroundLightness * 255), mixBackground);
         return this;
     }
 
@@ -615,8 +715,8 @@ public class SquidLayers extends Group {
         foregroundPanel.put(x, y, c, foregrounds);
         for (int i = x; i < getTotalWidth() && i - x < backgroundLightness.length; i++) {
             for (int j = y; j < getTotalHeight() && j - y < backgroundLightness[i].length; j++) {
-                lightnesses[i][j] = 256 + clamp(backgroundLightness[i - x][j - y], -255, 255);
-                backgroundPanel.put(i, j, backgrounds[i - x][j - y], lightnesses[i][j] * 0.001953125f);
+                backgroundPanel.put(i, j, backgrounds[i - x][j - y],
+                        (lightnesses[i][j] + 256 + clamp(backgroundLightness[i - x][j - y], -255, 255)) * 0.001953125f);
             }
         }
         return this;
@@ -740,7 +840,7 @@ public class SquidLayers extends Group {
             for (int j = y - 1; j < y + 2 && j < getTotalHeight(); j++) {
                 for (int i = x - 1; i < s.length() + x + 2 && i < getTotalWidth(); i++) {
                     foregroundPanel.put(i, j, ' ');
-                    lightnesses[i][j] = -255;
+                    lightnesses[i][j] = -200;
 
                     backgroundPanel.put(i, j, backgroundPanel.getAt(i, j),
                             SColor.DARK_GRAY, 0f * 0.001953125f);
@@ -761,10 +861,9 @@ public class SquidLayers extends Group {
      * @param lightness int between -255 and 255 , lower numbers are darker, higher lighter.
      */
     public SquidLayers highlight(int x, int y, int lightness) {
-        lightnesses[x][y] = 256 + clamp(lightness, -255, 255);
-
         backgroundPanel.put(x, y, backgroundPanel.getAt(x, y),
-                backgroundPanel.getColorAt(x, y), lightnesses[x][y] * 0.001953125f);
+                backgroundPanel.getColorAt(x, y),
+                (lightnesses[x][y] + 256 + clamp(lightness, -255, 255)) * 0.001953125f);
         return this;
     }
 
@@ -779,10 +878,8 @@ public class SquidLayers extends Group {
     public SquidLayers highlight(int x, int y, int[][] lightness) {
         for (int i = 0; i < lightness.length && x + i < getTotalWidth(); i++) {
             for (int j = 0; j < lightness[i].length && y + j < getTotalHeight(); j++) {
-                lightnesses[x + i][y + j] = 256 + clamp(lightness[i][j], -255, 255);
-                ;
                 backgroundPanel.put(x, y, backgroundPanel.getAt(x, y),
-                        backgroundPanel.getColorAt(x, y), lightnesses[i][j] * 0.001953125f);
+                        backgroundPanel.getColorAt(x, y), (lightnesses[x + i][y + j] + 256 + clamp(lightness[i][j], -255, 255)) * 0.001953125f);
             }
         }
         return this;
