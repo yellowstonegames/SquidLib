@@ -347,7 +347,7 @@ public class ThinWallDemo extends ApplicationAdapter {
                     }
                 }
             }
-        }, new SquidMouse(cellWidth, cellHeight, width, height, 0, 0, new InputAdapter() {
+        }, new SquidMouse(cellWidth, cellHeight, width, height, cellWidth >> 1, cellHeight >> 1, new InputAdapter() {
 
             // if the user clicks within FOV range and there are no awaitedMoves queued up, generate toCursor if it
             // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
@@ -389,7 +389,7 @@ public class ThinWallDemo extends ApplicationAdapter {
             }
         }));
         //set this to true to test visual input on desktop
-        input.forceButtons = true;
+        input.forceButtons = false;
         //actions to give names to in the visual input menu
         input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
@@ -782,7 +782,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         // message box should be given updated bounds since I don't think it will do this automatically
         messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-        input.reinitialize(currentZoomX, currentZoomY, ThinWallDemo.width, ThinWallDemo.height, 0, 0, width, height);
+        input.reinitialize(currentZoomX, currentZoomY, ThinWallDemo.width, ThinWallDemo.height, Math.round(cellWidth * 0.5f), Math.round(cellWidth * 0.5f), width, height);
         currentZoomX = cellWidth / currentZoomX;
         currentZoomY = cellHeight / currentZoomY;
         input.update(width, height, true);

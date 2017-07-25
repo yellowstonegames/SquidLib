@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":9,"i1":10,"i2":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -124,7 +124,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
  <a href="../squidpony/FakeLanguageGen.html#sentence-squidpony.squidmath.RNG-int-int-java.lang.String:A-java.lang.String:A-double-int-"><code>FakeLanguageGen.sentence(RNG, int, int, String[], String[], double, int)</code></a> or one of its overloads.
  You can call <a href="../squidpony/FakeLanguageGen.SentenceForm.html#sentence--"><code>sentence()</code></a> on this to produce another String sentence with the parameters it was given
  at construction. The parameters to
- <code>#SentenceForm(FakeLanguageGen, RNG, int, int, String[], String[], double, int)</code> are stored in fields of
+ <code>FakeLanguageGen.SentenceForm#SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)</code> are stored in fields of
  the same name, and all fields in this class are public and modifiable.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -177,7 +177,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#minWords">minWords</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
+<td class="colFirst"><code><a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng">rng</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -220,8 +220,8 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
             int&nbsp;maxChars)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.RNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm</a></span>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
-            <a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.StatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm</a></span>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+            <a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng,
             int&nbsp;minWords,
             int&nbsp;maxWords,
             <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
@@ -239,14 +239,22 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#deserializeFromString-java.lang.String-">deserializeFromString</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ser)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#sentence--">sentence</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#serializeToString--">serializeToString</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -276,7 +284,7 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.3712">rng</a></pre>
+<pre>public&nbsp;<a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.3712">rng</a></pre>
 </li>
 </ul>
 <a name="minWords">
@@ -399,14 +407,14 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
                     int&nbsp;maxChars)</pre>
 </li>
 </ul>
-<a name="SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.RNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">
+<a name="SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.StatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SentenceForm</h4>
 <pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.3741">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
-                    <a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+                    <a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng,
                     int&nbsp;minWords,
                     int&nbsp;maxWords,
                     <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
@@ -426,10 +434,28 @@ implements <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializabl
 <a name="sentence--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>sentence</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.3754">sentence</a>()</pre>
+</li>
+</ul>
+<a name="serializeToString--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>serializeToString</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.3760">serializeToString</a>()</pre>
+</li>
+</ul>
+<a name="deserializeFromString-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>deserializeFromString</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.3770">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ser)</pre>
 </li>
 </ul>
 </li>

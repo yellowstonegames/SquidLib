@@ -29,7 +29,7 @@
 <span class="sourceLineNo">021</span> * greater is land, and any height code 3 or less is water. This can produce rivers, and keeps that information in a<a name="line.21"></a>
 <span class="sourceLineNo">022</span> * GreasedRegion (alongside a GreasedRegion containing lake positions) instead of in the other map data. This class does<a name="line.22"></a>
 <span class="sourceLineNo">023</span> * not use Coord at all, but if you want maps with width and/or height greater than 256, and you want to use the river<a name="line.23"></a>
-<span class="sourceLineNo">024</span> * or lake data as a Collection of Coord, then you should call {@link squidpony.squidmath.Coord#expandPoolTo(int, int)}<a name="line.24"></a>
+<span class="sourceLineNo">024</span> * or lake data as a Collection of Coord, then you should call {@link Coord#expandPoolTo(int, int)}<a name="line.24"></a>
 <span class="sourceLineNo">025</span> * with your width and height so the Coords remain safely pooled. If you're fine with keeping rivers and lakes as<a name="line.25"></a>
 <span class="sourceLineNo">026</span> * GreasedRegions and not requesting Coord values from them, then you don't need to do anything with Coord. Certain<a name="line.26"></a>
 <span class="sourceLineNo">027</span> * parts of this class are not necessary to generate, just in case you want river-less maps or something similar;<a name="line.27"></a>
@@ -727,7 +727,7 @@
 <span class="sourceLineNo">719</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.719"></a>
 <span class="sourceLineNo">720</span>         * as north-to-south. Always makes a 256x256 map.<a name="line.720"></a>
 <span class="sourceLineNo">721</span>         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.721"></a>
-<span class="sourceLineNo">722</span>         * If you were using {@link squidpony.squidgrid.mapping.WorldMapGenerator.TilingMap#TilingMap(long, int, int, squidpony.squidmath.Noise.Noise4D, double)}, then this would be the<a name="line.722"></a>
+<span class="sourceLineNo">722</span>         * If you were using {@link WorldMapGenerator.TilingMap#TilingMap(long, int, int, Noise.Noise4D, double)}, then this would be the<a name="line.722"></a>
 <span class="sourceLineNo">723</span>         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.<a name="line.723"></a>
 <span class="sourceLineNo">724</span>         */<a name="line.724"></a>
 <span class="sourceLineNo">725</span>        public TilingMap() {<a name="line.725"></a>

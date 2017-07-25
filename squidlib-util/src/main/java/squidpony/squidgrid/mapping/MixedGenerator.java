@@ -409,7 +409,7 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     public char[][] generate()
     {
-        CarverType[] carvings = carvers.keySet().toArray(new CarverType[carvers.size()]);
+        CarverType[] carvings = carvers.keySet().toArray(new CarverType[0]);
         int[] carvingsCounters = new int[carvings.length];
         int totalLength = 0;
         for (int i = 0; i < carvings.length; i++) {

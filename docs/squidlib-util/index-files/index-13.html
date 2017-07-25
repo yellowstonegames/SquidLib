@@ -713,6 +713,18 @@
 <div class="block">Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the long they represent,
  reading at most 64 characters and returning the result if valid or 0 otherwise.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/StringKit.html#longFromDec-java.lang.CharSequence-">longFromDec(CharSequence)</a></span> - Static method in class squidpony.<a href="../squidpony/StringKit.html" title="class in squidpony">StringKit</a></dt>
+<dd>
+<div class="block">Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
+ long they represent, reading at most 19 characters (20 if there is a sign) and returning the result if valid, or
+ 0 if nothing could be read.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/StringKit.html#longFromDec-java.lang.CharSequence-int-int-">longFromDec(CharSequence, int, int)</a></span> - Static method in class squidpony.<a href="../squidpony/StringKit.html" title="class in squidpony">StringKit</a></dt>
+<dd>
+<div class="block">Reads in a CharSequence containing only decimal digits (0-9) with an optional sign at the start and returns the
+ long they represent between the given positions <code>start</code> and <code>end</code>, reading at most 19 characters (20
+ if there is a sign) or until end is reached and returning the result if valid, or 0 if nothing could be read.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/StringKit.html#longFromHex-java.lang.CharSequence-">longFromHex(CharSequence)</a></span> - Static method in class squidpony.<a href="../squidpony/StringKit.html" title="class in squidpony">StringKit</a></dt>
 <dd>
 <div class="block">Reads in a CharSequence containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start

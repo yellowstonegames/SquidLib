@@ -86,7 +86,8 @@ public class CombinationGenerator<T> implements Iterable<List<T>>, Serializable
      * a specified length from the given set.
      * @param elements The set from which to generate combinations.
      * @param combinationLength The length of the combinations to be generated.
-     * @param filler An array of T with the same length as elements; needed because GWT can't create a generic array.
+     * @param filler An array of T with the same length as elements or less (ideally 0);
+     *               needed because GWT can't create a generic array.
      */
     @SuppressWarnings("unchecked")
     public CombinationGenerator(Collection<T> elements,

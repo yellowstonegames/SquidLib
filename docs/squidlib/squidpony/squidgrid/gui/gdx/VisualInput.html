@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -122,11 +122,21 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.21">VisualInput</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.31">VisualInput</a>
 extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></pre>
 <div class="block">Acts like SquidInput but displays available keys as visible buttons if the device has no physical keyboard.
  Only relevant if you want keyboard input to always be available, so this doesn't implement the SquidInput
  constructors that don't handle any keys (the buttons this shows will act like keys even on Android and iOS).
+ <br>
+ This doesn't currently work well when used with a SquidPanel or SquidLayers that pans a camera over an area
+ that is larger than one screen (you only need to worry about this in "standard" SquidLib usage if you use
+ the <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#SquidPanel-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.IColorCenter-float-float-char:A:A-"><code>SquidPanel.SquidPanel(int, int, TextCellFactory, squidpony.IColorCenter, float, float, char[][])</code></a>) or
+ <a href="../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#SquidLayers-int-int-int-int-squidpony.squidgrid.gui.gdx.TextCellFactory-squidpony.squidgrid.gui.gdx.SquidColorCenter-squidpony.squidgrid.gui.gdx.SquidColorCenter-char:A:A-"><code>SquidLayers.SquidLayers(int, int, int, int, TextCellFactory, SquidColorCenter, SquidColorCenter, char[][])</code></a>
+ constructors with a larger 2D char array than the given gridWidth and/or gridHeight). It works fine if the
+ area that can be seen on one screen is as big as it gets, such as in the normal text-based mode of games like
+ Rogue and Brogue. It can also work if you manually handle movement over a larger area without using libGDX
+ Viewport and Camera code to accomplish that, since this class needs to handle the Viewport to some extent.
+ <br>
  Created by Tommy Ettinger on 4/15/2016.</div>
 </li>
 </ul>
@@ -292,11 +302,27 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.util.Map-">init</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
+    <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;available)</code>
+<div class="block">For each char and String in available, registers each keyboard key (as a char, such as 'A' or
+ SquidInput.LEFT_ARROW) with a String that names the action that key is used to perform, and makes these Strings
+ available as buttons on the right side of the screen if on a device with no hardware keyboard.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.lang.String...-">init</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
+    <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;enabled)</code>
+<div class="block">Convenience method that does essentially the same thing as init(Map&lt;Character, String&gt;).</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#mouseMoved-int-int-">mouseMoved</a></span>(int&nbsp;screenX,
           int&nbsp;screenY)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#reinitialize-float-float-float-float-int-int-float-float-">reinitialize</a></span>(float&nbsp;cellWidth,
             float&nbsp;cellHeight,
@@ -307,35 +333,35 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
             float&nbsp;screenWidth,
             float&nbsp;screenHeight)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html" title="class in squidpony.squidgrid.gui.gdx">ShrinkPartViewport</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#resizeInnerStage-com.badlogic.gdx.scenes.scene2d.Stage-">resizeInnerStage</a></span>(com.badlogic.gdx.scenes.scene2d.Stage&nbsp;insides)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#show--">show</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#touchDown-int-int-int-int-">touchDown</a></span>(int&nbsp;screenX,
          int&nbsp;screenY,
          int&nbsp;pointer,
          int&nbsp;button)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#touchDragged-int-int-int-">touchDragged</a></span>(int&nbsp;screenX,
             int&nbsp;screenY,
             int&nbsp;pointer)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#touchUp-int-int-int-int-">touchUp</a></span>(int&nbsp;screenX,
        int&nbsp;screenY,
        int&nbsp;pointer,
        int&nbsp;button)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#update-int-int-boolean-">update</a></span>(int&nbsp;width,
       int&nbsp;height,
@@ -376,7 +402,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>left</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.23">left</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.33">left</a></pre>
 </li>
 </ul>
 <a name="right">
@@ -385,7 +411,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>right</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.23">right</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.33">right</a></pre>
 </li>
 </ul>
 <a name="tcfLeft">
@@ -394,7 +420,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>tcfLeft</h4>
-<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.24">tcfLeft</a></pre>
+<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.34">tcfLeft</a></pre>
 </li>
 </ul>
 <a name="tcfRight">
@@ -403,7 +429,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>tcfRight</h4>
-<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.24">tcfRight</a></pre>
+<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.34">tcfRight</a></pre>
 </li>
 </ul>
 <a name="availableKeys">
@@ -412,7 +438,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>availableKeys</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html?is-external=true" title="class or interface in java.util">TreeMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.25">availableKeys</a></pre>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/TreeMap.html?is-external=true" title="class or interface in java.util">TreeMap</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.35">availableKeys</a></pre>
 </li>
 </ul>
 <a name="mouseLeft">
@@ -421,7 +447,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>mouseLeft</h4>
-<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.26">mouseLeft</a></pre>
+<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.36">mouseLeft</a></pre>
 </li>
 </ul>
 <a name="mouseRight">
@@ -430,7 +456,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>mouseRight</h4>
-<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.26">mouseRight</a></pre>
+<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.36">mouseRight</a></pre>
 </li>
 </ul>
 <a name="initialized">
@@ -439,7 +465,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>initialized</h4>
-<pre>protected&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.29">initialized</a></pre>
+<pre>protected&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.39">initialized</a></pre>
 </li>
 </ul>
 <a name="color">
@@ -448,7 +474,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>color</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.30">color</a></pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.40">color</a></pre>
 </li>
 </ul>
 <a name="clicks">
@@ -457,7 +483,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>clicks</h4>
-<pre>protected&nbsp;com.badlogic.gdx.utils.CharArray <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.31">clicks</a></pre>
+<pre>protected&nbsp;com.badlogic.gdx.utils.CharArray <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.41">clicks</a></pre>
 </li>
 </ul>
 <a name="eightWay">
@@ -466,7 +492,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>eightWay</h4>
-<pre>public&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.32">eightWay</a></pre>
+<pre>public&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.42">eightWay</a></pre>
 </li>
 </ul>
 <a name="forceButtons">
@@ -475,7 +501,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>forceButtons</h4>
-<pre>public&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.32">forceButtons</a></pre>
+<pre>public&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.42">forceButtons</a></pre>
 </li>
 </ul>
 <a name="stage">
@@ -484,7 +510,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>stage</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Stage <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.33">stage</a></pre>
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Stage <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.43">stage</a></pre>
 </li>
 </ul>
 <a name="spv">
@@ -493,7 +519,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockListLast">
 <li class="blockList">
 <h4>spv</h4>
-<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html" title="class in squidpony.squidgrid.gui.gdx">ShrinkPartViewport</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.34">spv</a></pre>
+<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html" title="class in squidpony.squidgrid.gui.gdx">ShrinkPartViewport</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.44">spv</a></pre>
 </li>
 </ul>
 </li>
@@ -510,7 +536,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>VisualInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.201">VisualInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.253">VisualInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler)</pre>
 </li>
 </ul>
 <a name="VisualInput-squidpony.squidgrid.gui.gdx.SquidInput.KeyHandler-boolean-">
@@ -519,7 +545,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>VisualInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.205">VisualInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.257">VisualInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
                    boolean&nbsp;ignoreInput)</pre>
 </li>
 </ul>
@@ -529,7 +555,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>VisualInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.209">VisualInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.261">VisualInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
                    <a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;mouse)</pre>
 </li>
 </ul>
@@ -539,7 +565,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockListLast">
 <li class="blockList">
 <h4>VisualInput</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.213">VisualInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.265">VisualInput</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html" title="interface in squidpony.squidgrid.gui.gdx">SquidInput.KeyHandler</a>&nbsp;keyHandler,
                    <a href="../../../../squidpony/squidgrid/gui/gdx/SquidMouse.html" title="class in squidpony.squidgrid.gui.gdx">SquidMouse</a>&nbsp;mouse,
                    boolean&nbsp;ignoreInput)</pre>
 </li>
@@ -558,7 +584,35 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.162">init</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;enabled)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.176">init</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;enabled)</pre>
+<div class="block">Convenience method that does essentially the same thing as init(Map&lt;Character, String&gt;).
+ This assumes that each String passed to this is an action, and the first letter of a String is the character that
+ a keypress would generate to perform the action named by the String. For example, calling this with
+ <code>init("fire", "Fortify")</code> would register "fire" under 'f' and "Fortify" under 'F', displaying the Strings
+ instead of the characters if possible. The first char of each String should be unique in the arguments.
+ <br>
+ This also initializes the displayed buttons if there is no hardware keyboard available. This uses the color and
+ eightWay fields to determine what color the buttons will be drawn with and if directions should be 8-way or
+ 4-way, respectively. These fields should be set before calling init() if you don't want the defaults, which are
+ white buttons and 8-way directions. The font with this overload of init is set to Inconsolata-LGC-Custom, which
+ is normally available via <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getStretchableFont--"><code>DefaultResources.getStretchableFont()</code></a> and requires the .fnt file and .png file
+ listed in the documentation for that method. If you don't have those files, but have some other font (preferably
+ some kind of distance field font, since this resizes the font significantly), you can use
+ <a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.lang.String...-"><code>init(TextCellFactory, String...)</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.util.Map-"><code>init(TextCellFactory, Map)</code></a> to have this use your font.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>enabled</code> - an array or vararg of Strings that name actions; the first char of each String should be unique</dd>
+</dl>
+</li>
+</ul>
+<a name="init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>init</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.193">init</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
+                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;enabled)</pre>
 <div class="block">Convenience method that does essentially the same thing as init(Map&lt;Character, String&gt;).
  This assumes that each String passed to this is an action, and the first letter of a String is the character that
  a keypress would generate to perform the action named by the String. For example, calling this with
@@ -571,6 +625,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
  white buttons and 8-way directions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>font</code> - the TextCellFactory to use for the buttons, usually a distance field font from DefaultResources</dd>
 <dd><code>enabled</code> - an array or vararg of Strings that name actions; the first char of each String should be unique</dd>
 </dl>
 </li>
@@ -581,7 +636,34 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.187">init</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;available)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.223">init</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;available)</pre>
+<div class="block">For each char and String in available, registers each keyboard key (as a char, such as 'A' or
+ SquidInput.LEFT_ARROW) with a String that names the action that key is used to perform, and makes these Strings
+ available as buttons on the right side of the screen if on a device with no hardware keyboard. Arrows will be
+ provided on the left side of the screen for directions.
+ <br>
+ This also initializes the displayed buttons if there is no hardware keyboard available. This uses the color and
+ eightWay fields to determine what color the buttons will be drawn with and if directions should be 8-way or
+ 4-way, respectively. These fields should be set before calling init() if you don't want the defaults, which are
+ white buttons and 8-way directions. The font with this overload of init is set to Inconsolata-LGC-Custom, which
+ is normally available via <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getStretchableFont--"><code>DefaultResources.getStretchableFont()</code></a> and requires the .fnt file and .png file
+ listed in the documentation for that method. If you don't have those files, but have some other font (preferably
+ some kind of distance field font, since this resizes the font significantly), you can use
+ <a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.lang.String...-"><code>init(TextCellFactory, String...)</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.util.Map-"><code>init(TextCellFactory, Map)</code></a> to have this use your font.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>available</code> - a Map of Character keys representing keyboard keys and Strings for the actions they trigger</dd>
+</dl>
+</li>
+</ul>
+<a name="init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.util.Map-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>init</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.239">init</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
+                 <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;available)</pre>
 <div class="block">For each char and String in available, registers each keyboard key (as a char, such as 'A' or
  SquidInput.LEFT_ARROW) with a String that names the action that key is used to perform, and makes these Strings
  available as buttons on the right side of the screen if on a device with no hardware keyboard. Arrows will be
@@ -592,6 +674,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
  defaults, which are white buttons and 8-way directions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>font</code> - the TextCellFactory to use for the buttons, usually a distance field font from DefaultResources</dd>
 <dd><code>available</code> - a Map of Character keys representing keyboard keys and Strings for the actions they trigger</dd>
 </dl>
 </li>
@@ -602,7 +685,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>touchDown</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.218">touchDown</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.270">touchDown</a>(int&nbsp;screenX,
                          int&nbsp;screenY,
                          int&nbsp;pointer,
                          int&nbsp;button)</pre>
@@ -620,7 +703,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>touchUp</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.230">touchUp</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.282">touchUp</a>(int&nbsp;screenX,
                        int&nbsp;screenY,
                        int&nbsp;pointer,
                        int&nbsp;button)</pre>
@@ -638,7 +721,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>touchDragged</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.243">touchDragged</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.295">touchDragged</a>(int&nbsp;screenX,
                             int&nbsp;screenY,
                             int&nbsp;pointer)</pre>
 <dl>
@@ -655,7 +738,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>mouseMoved</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.255">mouseMoved</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.307">mouseMoved</a>(int&nbsp;screenX,
                           int&nbsp;screenY)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -671,7 +754,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>reinitialize</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.263">reinitialize</a>(float&nbsp;cellWidth,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.315">reinitialize</a>(float&nbsp;cellWidth,
                          float&nbsp;cellHeight,
                          float&nbsp;gridWidth,
                          float&nbsp;gridHeight,
@@ -687,7 +770,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>resizeInnerStage</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html" title="class in squidpony.squidgrid.gui.gdx">ShrinkPartViewport</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.293">resizeInnerStage</a>(com.badlogic.gdx.scenes.scene2d.Stage&nbsp;insides)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ShrinkPartViewport.html" title="class in squidpony.squidgrid.gui.gdx">ShrinkPartViewport</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.345">resizeInnerStage</a>(com.badlogic.gdx.scenes.scene2d.Stage&nbsp;insides)</pre>
 </li>
 </ul>
 <a name="getSectionWidth--">
@@ -696,7 +779,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>getSectionWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.307">getSectionWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.359">getSectionWidth</a>()</pre>
 </li>
 </ul>
 <a name="getSectionHeight--">
@@ -705,7 +788,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>getSectionHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.311">getSectionHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.363">getSectionHeight</a>()</pre>
 </li>
 </ul>
 <a name="update-int-int-boolean-">
@@ -714,7 +797,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>update</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.315">update</a>(int&nbsp;width,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.367">update</a>(int&nbsp;width,
                    int&nbsp;height,
                    boolean&nbsp;centerCamera)</pre>
 </li>
@@ -725,7 +808,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title=
 <ul class="blockListLast">
 <li class="blockList">
 <h4>show</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.322">show</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/VisualInput.html#line.374">show</a>()</pre>
 </li>
 </ul>
 </li>

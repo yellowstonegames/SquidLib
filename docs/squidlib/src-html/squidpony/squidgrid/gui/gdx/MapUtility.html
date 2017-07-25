@@ -9,220 +9,220 @@
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.gui.gdx;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import com.badlogic.gdx.graphics.Color;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import squidpony.squidgrid.mapping.SectionDungeonGenerator;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import squidpony.squidmath.SeededNoise;<a name="line.5"></a>
-<span class="sourceLineNo">006</span><a name="line.6"></a>
-<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
-<span class="sourceLineNo">008</span> * Created by Tommy Ettinger on 7/9/2017.<a name="line.8"></a>
-<span class="sourceLineNo">009</span> */<a name="line.9"></a>
-<span class="sourceLineNo">010</span>public class MapUtility {<a name="line.10"></a>
-<span class="sourceLineNo">011</span>    /**<a name="line.11"></a>
-<span class="sourceLineNo">012</span>     * Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.<a name="line.12"></a>
-<span class="sourceLineNo">013</span>     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the colors this<a name="line.13"></a>
-<span class="sourceLineNo">014</span>     * returns will also change. Tiles containing nothing but a floor ('.') will be silver-gray. Walls are dark gray<a name="line.14"></a>
-<span class="sourceLineNo">015</span>     * (this doesn't care if the walls are '#' marks or box-drawing lines), Doors ('+' and '/' in the map) will be rust<a name="line.15"></a>
-<span class="sourceLineNo">016</span>     * brown. Both shallow and deep water (',' and '~') will be gray-blue. Traps ('^') will be shown in bright orange.<a name="line.16"></a>
-<span class="sourceLineNo">017</span>     * Grass ('"') will be the expected green.<a name="line.17"></a>
-<span class="sourceLineNo">018</span>     *<a name="line.18"></a>
-<span class="sourceLineNo">019</span>     * @param map a char[][] containing foreground characters<a name="line.19"></a>
-<span class="sourceLineNo">020</span>     * @return a 2D array of Colors with the same size as map, that can be used for the corresponding chars<a name="line.20"></a>
-<span class="sourceLineNo">021</span>     */<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    public static Color[][] generateDefaultColors(char[][] map) {<a name="line.22"></a>
-<span class="sourceLineNo">023</span><a name="line.23"></a>
-<span class="sourceLineNo">024</span>        int width = map.length;<a name="line.24"></a>
-<span class="sourceLineNo">025</span>        int height = map[0].length;<a name="line.25"></a>
-<span class="sourceLineNo">026</span>        Color[][] portion = new Color[width][height];<a name="line.26"></a>
-<span class="sourceLineNo">027</span>        for (int i = 0; i &lt; width; i++) {<a name="line.27"></a>
-<span class="sourceLineNo">028</span>            for (int j = 0; j &lt; height; j++) {<a name="line.28"></a>
-<span class="sourceLineNo">029</span>                switch (map[i][j]) {<a name="line.29"></a>
-<span class="sourceLineNo">030</span>                    case '\1':<a name="line.30"></a>
-<span class="sourceLineNo">031</span>                    case '├':<a name="line.31"></a>
-<span class="sourceLineNo">032</span>                    case '┤':<a name="line.32"></a>
-<span class="sourceLineNo">033</span>                    case '┴':<a name="line.33"></a>
-<span class="sourceLineNo">034</span>                    case '┬':<a name="line.34"></a>
-<span class="sourceLineNo">035</span>                    case '┌':<a name="line.35"></a>
-<span class="sourceLineNo">036</span>                    case '┐':<a name="line.36"></a>
-<span class="sourceLineNo">037</span>                    case '└':<a name="line.37"></a>
-<span class="sourceLineNo">038</span>                    case '┘':<a name="line.38"></a>
-<span class="sourceLineNo">039</span>                    case '│':<a name="line.39"></a>
-<span class="sourceLineNo">040</span>                    case '─':<a name="line.40"></a>
-<span class="sourceLineNo">041</span>                    case '┼':<a name="line.41"></a>
-<span class="sourceLineNo">042</span>                    case '#':<a name="line.42"></a>
-<span class="sourceLineNo">043</span>                        portion[i][j] = SColor.LIMITED_PALETTE[2];<a name="line.43"></a>
-<span class="sourceLineNo">044</span>                        break;<a name="line.44"></a>
-<span class="sourceLineNo">045</span>                    case '.':<a name="line.45"></a>
-<span class="sourceLineNo">046</span>                    case ':':<a name="line.46"></a>
-<span class="sourceLineNo">047</span>                        portion[i][j] = SColor.LIMITED_PALETTE[3];<a name="line.47"></a>
-<span class="sourceLineNo">048</span>                        break;<a name="line.48"></a>
-<span class="sourceLineNo">049</span>                    case '+':<a name="line.49"></a>
-<span class="sourceLineNo">050</span>                    case '/':<a name="line.50"></a>
-<span class="sourceLineNo">051</span>                        portion[i][j] = SColor.LIMITED_PALETTE[4];<a name="line.51"></a>
-<span class="sourceLineNo">052</span>                        break;<a name="line.52"></a>
-<span class="sourceLineNo">053</span>                    case ',':<a name="line.53"></a>
-<span class="sourceLineNo">054</span>                    case '~':<a name="line.54"></a>
-<span class="sourceLineNo">055</span>                        portion[i][j] = SColor.LIMITED_PALETTE[5];<a name="line.55"></a>
-<span class="sourceLineNo">056</span>                        break;<a name="line.56"></a>
-<span class="sourceLineNo">057</span>                    case '"':<a name="line.57"></a>
-<span class="sourceLineNo">058</span>                        portion[i][j] = SColor.LIMITED_PALETTE[20];<a name="line.58"></a>
-<span class="sourceLineNo">059</span>                        break;<a name="line.59"></a>
-<span class="sourceLineNo">060</span>                    case '^':<a name="line.60"></a>
-<span class="sourceLineNo">061</span>                        portion[i][j] = SColor.LIMITED_PALETTE[6];<a name="line.61"></a>
-<span class="sourceLineNo">062</span>                        break;<a name="line.62"></a>
-<span class="sourceLineNo">063</span>                    default:<a name="line.63"></a>
-<span class="sourceLineNo">064</span>                        portion[i][j] = SColor.LIMITED_PALETTE[1];<a name="line.64"></a>
-<span class="sourceLineNo">065</span>                }<a name="line.65"></a>
-<span class="sourceLineNo">066</span>            }<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        }<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        return portion;<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    }<a name="line.69"></a>
-<span class="sourceLineNo">070</span><a name="line.70"></a>
-<span class="sourceLineNo">071</span>    /**<a name="line.71"></a>
-<span class="sourceLineNo">072</span>     * Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.<a name="line.72"></a>
-<span class="sourceLineNo">073</span>     * This overload also takes a char that corresponds to deep non-water lakes (which {@link SectionDungeonGenerator}<a name="line.73"></a>
-<span class="sourceLineNo">074</span>     * can produce) and a Color to use for that deep liquid, as well as a char for shallow lakes and a Color for that<a name="line.74"></a>
-<span class="sourceLineNo">075</span>     * shallow liquid.<a name="line.75"></a>
-<span class="sourceLineNo">076</span>     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the colors this<a name="line.76"></a>
-<span class="sourceLineNo">077</span>     * returns will also change. Tiles containing nothing but a floor ('.') will be silver-gray. Walls are dark gray<a name="line.77"></a>
-<span class="sourceLineNo">078</span>     * (this doesn't care if the walls are '#' marks or box-drawing lines), Doors ('+' and '/' in the map) will be rust<a name="line.78"></a>
-<span class="sourceLineNo">079</span>     * brown. Both deep and shallow water (',' and '~') will be gray-blue. Traps ('^') will be shown in bright orange.<a name="line.79"></a>
-<span class="sourceLineNo">080</span>     * Grass ('"') will be the expected green. Deep and shallow lakes of non-water will use the given Colors. If you<a name="line.80"></a>
-<span class="sourceLineNo">081</span>     * are using SectionDungeonGenerator to produce normal water lakes, then you don't need this overload, and<a name="line.81"></a>
-<span class="sourceLineNo">082</span>     * {@link #generateDefaultColors(char[][])} will be fine.<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     *<a name="line.83"></a>
-<span class="sourceLineNo">084</span>     * @param map a char[][] containing foreground characters<a name="line.84"></a>
-<span class="sourceLineNo">085</span>     * @param deepChar the char that represents deep parts of non-water lakes, from {@link SectionDungeonGenerator}<a name="line.85"></a>
-<span class="sourceLineNo">086</span>     * @param deepColor the Color to use for deep parts of non-water lakes<a name="line.86"></a>
-<span class="sourceLineNo">087</span>     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link SectionDungeonGenerator}<a name="line.87"></a>
-<span class="sourceLineNo">088</span>     * @param shallowColor  the Color to use for shallow parts of non-water lakes<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     * @return a 2D array of Colors with the same size as map, that can be used for the corresponding chars<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     */<a name="line.90"></a>
-<span class="sourceLineNo">091</span>    public static Color[][] generateDefaultColors(char[][] map, char deepChar, Color deepColor,<a name="line.91"></a>
-<span class="sourceLineNo">092</span>                                                 char shallowChar, Color shallowColor) {<a name="line.92"></a>
-<span class="sourceLineNo">093</span><a name="line.93"></a>
-<span class="sourceLineNo">094</span>        int width = map.length;<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        int height = map[0].length;<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        Color[][] portion = new Color[width][height];<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        for (int i = 0; i &lt; width; i++) {<a name="line.97"></a>
-<span class="sourceLineNo">098</span>            for (int j = 0; j &lt; height; j++) {<a name="line.98"></a>
-<span class="sourceLineNo">099</span>                switch (map[i][j]) {<a name="line.99"></a>
-<span class="sourceLineNo">100</span>                    case '\1':<a name="line.100"></a>
-<span class="sourceLineNo">101</span>                    case '├':<a name="line.101"></a>
-<span class="sourceLineNo">102</span>                    case '┤':<a name="line.102"></a>
-<span class="sourceLineNo">103</span>                    case '┴':<a name="line.103"></a>
-<span class="sourceLineNo">104</span>                    case '┬':<a name="line.104"></a>
-<span class="sourceLineNo">105</span>                    case '┌':<a name="line.105"></a>
-<span class="sourceLineNo">106</span>                    case '┐':<a name="line.106"></a>
-<span class="sourceLineNo">107</span>                    case '└':<a name="line.107"></a>
-<span class="sourceLineNo">108</span>                    case '┘':<a name="line.108"></a>
-<span class="sourceLineNo">109</span>                    case '│':<a name="line.109"></a>
-<span class="sourceLineNo">110</span>                    case '─':<a name="line.110"></a>
-<span class="sourceLineNo">111</span>                    case '┼':<a name="line.111"></a>
-<span class="sourceLineNo">112</span>                    case '#':<a name="line.112"></a>
-<span class="sourceLineNo">113</span>                        portion[i][j] = SColor.LIMITED_PALETTE[2];<a name="line.113"></a>
-<span class="sourceLineNo">114</span>                        break;<a name="line.114"></a>
-<span class="sourceLineNo">115</span>                    case '.':<a name="line.115"></a>
-<span class="sourceLineNo">116</span>                    case ':':<a name="line.116"></a>
-<span class="sourceLineNo">117</span>                        portion[i][j] = SColor.LIMITED_PALETTE[3];<a name="line.117"></a>
-<span class="sourceLineNo">118</span>                        break;<a name="line.118"></a>
-<span class="sourceLineNo">119</span>                    case '+':<a name="line.119"></a>
-<span class="sourceLineNo">120</span>                    case '/':<a name="line.120"></a>
-<span class="sourceLineNo">121</span>                        portion[i][j] = SColor.LIMITED_PALETTE[4];<a name="line.121"></a>
-<span class="sourceLineNo">122</span>                        break;<a name="line.122"></a>
-<span class="sourceLineNo">123</span>                    case ',':<a name="line.123"></a>
-<span class="sourceLineNo">124</span>                    case '~':<a name="line.124"></a>
-<span class="sourceLineNo">125</span>                        portion[i][j] = SColor.LIMITED_PALETTE[5];<a name="line.125"></a>
-<span class="sourceLineNo">126</span>                        break;<a name="line.126"></a>
-<span class="sourceLineNo">127</span>                    case '"':<a name="line.127"></a>
-<span class="sourceLineNo">128</span>                        portion[i][j] = SColor.LIMITED_PALETTE[20];<a name="line.128"></a>
-<span class="sourceLineNo">129</span>                        break;<a name="line.129"></a>
-<span class="sourceLineNo">130</span>                    case '^':<a name="line.130"></a>
-<span class="sourceLineNo">131</span>                        portion[i][j] = SColor.LIMITED_PALETTE[6];<a name="line.131"></a>
-<span class="sourceLineNo">132</span>                        break;<a name="line.132"></a>
-<span class="sourceLineNo">133</span>                    default:<a name="line.133"></a>
-<span class="sourceLineNo">134</span>                        if (map[i][j] == deepChar)<a name="line.134"></a>
-<span class="sourceLineNo">135</span>                            portion[i][j] = deepColor;<a name="line.135"></a>
-<span class="sourceLineNo">136</span>                        else if (map[i][j] == shallowChar)<a name="line.136"></a>
-<span class="sourceLineNo">137</span>                            portion[i][j] = shallowColor;<a name="line.137"></a>
-<span class="sourceLineNo">138</span>                        else portion[i][j] = SColor.LIMITED_PALETTE[1];<a name="line.138"></a>
-<span class="sourceLineNo">139</span>                }<a name="line.139"></a>
-<span class="sourceLineNo">140</span>            }<a name="line.140"></a>
-<span class="sourceLineNo">141</span>        }<a name="line.141"></a>
-<span class="sourceLineNo">142</span>        return portion;<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
-<span class="sourceLineNo">144</span><a name="line.144"></a>
-<span class="sourceLineNo">145</span>    /**<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * chars in map. This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     * colors this returns will also change. Most backgrounds will be black. but deep water ('~') will be dark<a name="line.148"></a>
-<span class="sourceLineNo">149</span>     * blue-green, shallow water (',') will be a lighter blue-green, and grass ('"') will be dark green.<a name="line.149"></a>
-<span class="sourceLineNo">150</span>     * You can adjust the brightness of the backgrounds using {@link #generateLightnessModifiers(char[][])}, or if you<a name="line.150"></a>
-<span class="sourceLineNo">151</span>     * want water and grass to ripple, you can use the overload {@link #generateLightnessModifiers(char[][], double)}<a name="line.151"></a>
-<span class="sourceLineNo">152</span>     * with some rising frame count.<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     *<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     * @param map a char[][] containing foreground characters (this gets their background color)<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     * @return a 2D array of background Colors with the same size as map, that can be used for the corresponding chars<a name="line.155"></a>
-<span class="sourceLineNo">156</span>     */<a name="line.156"></a>
-<span class="sourceLineNo">157</span>    public static Color[][] generateDefaultBGColors(char[][] map) {<a name="line.157"></a>
-<span class="sourceLineNo">158</span><a name="line.158"></a>
-<span class="sourceLineNo">159</span>        int width = map.length;<a name="line.159"></a>
-<span class="sourceLineNo">160</span>        int height = map[0].length;<a name="line.160"></a>
-<span class="sourceLineNo">161</span>        Color[][] portion = new Color[width][height];<a name="line.161"></a>
-<span class="sourceLineNo">162</span>        for (int i = 0; i &lt; width; i++) {<a name="line.162"></a>
-<span class="sourceLineNo">163</span>            for (int j = 0; j &lt; height; j++) {<a name="line.163"></a>
-<span class="sourceLineNo">164</span>                switch (map[i][j]) {<a name="line.164"></a>
-<span class="sourceLineNo">165</span>                    case '\1':<a name="line.165"></a>
-<span class="sourceLineNo">166</span>                    case '├':<a name="line.166"></a>
-<span class="sourceLineNo">167</span>                    case '┤':<a name="line.167"></a>
-<span class="sourceLineNo">168</span>                    case '┴':<a name="line.168"></a>
-<span class="sourceLineNo">169</span>                    case '┬':<a name="line.169"></a>
-<span class="sourceLineNo">170</span>                    case '┌':<a name="line.170"></a>
-<span class="sourceLineNo">171</span>                    case '┐':<a name="line.171"></a>
-<span class="sourceLineNo">172</span>                    case '└':<a name="line.172"></a>
-<span class="sourceLineNo">173</span>                    case '┘':<a name="line.173"></a>
-<span class="sourceLineNo">174</span>                    case '│':<a name="line.174"></a>
-<span class="sourceLineNo">175</span>                    case '─':<a name="line.175"></a>
-<span class="sourceLineNo">176</span>                    case '┼':<a name="line.176"></a>
-<span class="sourceLineNo">177</span>                    case '#':<a name="line.177"></a>
-<span class="sourceLineNo">178</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.178"></a>
-<span class="sourceLineNo">179</span>                        break;<a name="line.179"></a>
-<span class="sourceLineNo">180</span>                    case '.':<a name="line.180"></a>
-<span class="sourceLineNo">181</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.181"></a>
-<span class="sourceLineNo">182</span>                        break;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>                    case ':':<a name="line.183"></a>
-<span class="sourceLineNo">184</span>                        portion[i][j] = SColor.LIMITED_PALETTE[35];<a name="line.184"></a>
-<span class="sourceLineNo">185</span>                        break;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>                    case '+':<a name="line.186"></a>
-<span class="sourceLineNo">187</span>                    case '/':<a name="line.187"></a>
-<span class="sourceLineNo">188</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.188"></a>
-<span class="sourceLineNo">189</span>                        break;<a name="line.189"></a>
-<span class="sourceLineNo">190</span>                    case ',':<a name="line.190"></a>
-<span class="sourceLineNo">191</span>                        portion[i][j] = SColor.LIMITED_PALETTE[23];<a name="line.191"></a>
-<span class="sourceLineNo">192</span>                        break;<a name="line.192"></a>
-<span class="sourceLineNo">193</span>                    case '~':<a name="line.193"></a>
-<span class="sourceLineNo">194</span>                        portion[i][j] = SColor.LIMITED_PALETTE[24];<a name="line.194"></a>
-<span class="sourceLineNo">195</span>                        break;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>                    case '"':<a name="line.196"></a>
-<span class="sourceLineNo">197</span>                        portion[i][j] = SColor.LIMITED_PALETTE[21];<a name="line.197"></a>
-<span class="sourceLineNo">198</span>                        break;<a name="line.198"></a>
-<span class="sourceLineNo">199</span>                    case '^':<a name="line.199"></a>
-<span class="sourceLineNo">200</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.200"></a>
-<span class="sourceLineNo">201</span>                        break;<a name="line.201"></a>
-<span class="sourceLineNo">202</span>                    default:<a name="line.202"></a>
-<span class="sourceLineNo">203</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.203"></a>
-<span class="sourceLineNo">204</span>                }<a name="line.204"></a>
-<span class="sourceLineNo">205</span>            }<a name="line.205"></a>
-<span class="sourceLineNo">206</span>        }<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        return portion;<a name="line.207"></a>
-<span class="sourceLineNo">208</span>    }<a name="line.208"></a>
+<span class="sourceLineNo">004</span>import squidpony.squidmath.PerlinNoise;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>/**<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * Created by Tommy Ettinger on 7/9/2017.<a name="line.7"></a>
+<span class="sourceLineNo">008</span> */<a name="line.8"></a>
+<span class="sourceLineNo">009</span>public class MapUtility {<a name="line.9"></a>
+<span class="sourceLineNo">010</span>    /**<a name="line.10"></a>
+<span class="sourceLineNo">011</span>     * Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.<a name="line.11"></a>
+<span class="sourceLineNo">012</span>     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the colors this<a name="line.12"></a>
+<span class="sourceLineNo">013</span>     * returns will also change. Tiles containing nothing but a floor ('.') will be silver-gray. Walls are dark gray<a name="line.13"></a>
+<span class="sourceLineNo">014</span>     * (this doesn't care if the walls are '#' marks or box-drawing lines), Doors ('+' and '/' in the map) will be rust<a name="line.14"></a>
+<span class="sourceLineNo">015</span>     * brown. Both shallow and deep water (',' and '~') will be gray-blue. Traps ('^') will be shown in bright orange.<a name="line.15"></a>
+<span class="sourceLineNo">016</span>     * Grass ('"') will be the expected green.<a name="line.16"></a>
+<span class="sourceLineNo">017</span>     *<a name="line.17"></a>
+<span class="sourceLineNo">018</span>     * @param map a char[][] containing foreground characters<a name="line.18"></a>
+<span class="sourceLineNo">019</span>     * @return a 2D array of Colors with the same size as map, that can be used for the corresponding chars<a name="line.19"></a>
+<span class="sourceLineNo">020</span>     */<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    public static Color[][] generateDefaultColors(char[][] map) {<a name="line.21"></a>
+<span class="sourceLineNo">022</span><a name="line.22"></a>
+<span class="sourceLineNo">023</span>        int width = map.length;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>        int height = map[0].length;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>        Color[][] portion = new Color[width][height];<a name="line.25"></a>
+<span class="sourceLineNo">026</span>        for (int i = 0; i &lt; width; i++) {<a name="line.26"></a>
+<span class="sourceLineNo">027</span>            for (int j = 0; j &lt; height; j++) {<a name="line.27"></a>
+<span class="sourceLineNo">028</span>                switch (map[i][j]) {<a name="line.28"></a>
+<span class="sourceLineNo">029</span>                    case '\1':<a name="line.29"></a>
+<span class="sourceLineNo">030</span>                    case '├':<a name="line.30"></a>
+<span class="sourceLineNo">031</span>                    case '┤':<a name="line.31"></a>
+<span class="sourceLineNo">032</span>                    case '┴':<a name="line.32"></a>
+<span class="sourceLineNo">033</span>                    case '┬':<a name="line.33"></a>
+<span class="sourceLineNo">034</span>                    case '┌':<a name="line.34"></a>
+<span class="sourceLineNo">035</span>                    case '┐':<a name="line.35"></a>
+<span class="sourceLineNo">036</span>                    case '└':<a name="line.36"></a>
+<span class="sourceLineNo">037</span>                    case '┘':<a name="line.37"></a>
+<span class="sourceLineNo">038</span>                    case '│':<a name="line.38"></a>
+<span class="sourceLineNo">039</span>                    case '─':<a name="line.39"></a>
+<span class="sourceLineNo">040</span>                    case '┼':<a name="line.40"></a>
+<span class="sourceLineNo">041</span>                    case '#':<a name="line.41"></a>
+<span class="sourceLineNo">042</span>                        portion[i][j] = SColor.LIMITED_PALETTE[2];<a name="line.42"></a>
+<span class="sourceLineNo">043</span>                        break;<a name="line.43"></a>
+<span class="sourceLineNo">044</span>                    case '.':<a name="line.44"></a>
+<span class="sourceLineNo">045</span>                    case ':':<a name="line.45"></a>
+<span class="sourceLineNo">046</span>                        portion[i][j] = SColor.LIMITED_PALETTE[3];<a name="line.46"></a>
+<span class="sourceLineNo">047</span>                        break;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>                    case '+':<a name="line.48"></a>
+<span class="sourceLineNo">049</span>                    case '/':<a name="line.49"></a>
+<span class="sourceLineNo">050</span>                        portion[i][j] = SColor.LIMITED_PALETTE[4];<a name="line.50"></a>
+<span class="sourceLineNo">051</span>                        break;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>                    case ',':<a name="line.52"></a>
+<span class="sourceLineNo">053</span>                    case '~':<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                        portion[i][j] = SColor.LIMITED_PALETTE[5];<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                        break;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>                    case '"':<a name="line.56"></a>
+<span class="sourceLineNo">057</span>                        portion[i][j] = SColor.LIMITED_PALETTE[20];<a name="line.57"></a>
+<span class="sourceLineNo">058</span>                        break;<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                    case '^':<a name="line.59"></a>
+<span class="sourceLineNo">060</span>                        portion[i][j] = SColor.LIMITED_PALETTE[6];<a name="line.60"></a>
+<span class="sourceLineNo">061</span>                        break;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>                    default:<a name="line.62"></a>
+<span class="sourceLineNo">063</span>                        portion[i][j] = SColor.LIMITED_PALETTE[1];<a name="line.63"></a>
+<span class="sourceLineNo">064</span>                }<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            }<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        }<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        return portion;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    }<a name="line.68"></a>
+<span class="sourceLineNo">069</span><a name="line.69"></a>
+<span class="sourceLineNo">070</span>    /**<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * This overload also takes a char that corresponds to deep non-water lakes (which {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * can produce) and a Color to use for that deep liquid, as well as a char for shallow lakes and a Color for that<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * shallow liquid.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the colors this<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * returns will also change. Tiles containing nothing but a floor ('.') will be silver-gray. Walls are dark gray<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * (this doesn't care if the walls are '#' marks or box-drawing lines), Doors ('+' and '/' in the map) will be rust<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * brown. Both deep and shallow water (',' and '~') will be gray-blue. Traps ('^') will be shown in bright orange.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * Grass ('"') will be the expected green. Deep and shallow lakes of non-water will use the given Colors. If you<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * are using SectionDungeonGenerator to produce normal water lakes, then you don't need this overload, and<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * {@link #generateDefaultColors(char[][])} will be fine.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     *<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @param map a char[][] containing foreground characters<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * @param deepChar the char that represents deep parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * @param deepColor the Color to use for deep parts of non-water lakes<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * @param shallowColor  the Color to use for shallow parts of non-water lakes<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * @return a 2D array of Colors with the same size as map, that can be used for the corresponding chars<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     */<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    public static Color[][] generateDefaultColors(char[][] map, char deepChar, Color deepColor,<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                                                 char shallowChar, Color shallowColor) {<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span>        int width = map.length;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        int height = map[0].length;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        Color[][] portion = new Color[width][height];<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        for (int i = 0; i &lt; width; i++) {<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            for (int j = 0; j &lt; height; j++) {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                switch (map[i][j]) {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                    case '\1':<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                    case '├':<a name="line.100"></a>
+<span class="sourceLineNo">101</span>                    case '┤':<a name="line.101"></a>
+<span class="sourceLineNo">102</span>                    case '┴':<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                    case '┬':<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                    case '┌':<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                    case '┐':<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                    case '└':<a name="line.106"></a>
+<span class="sourceLineNo">107</span>                    case '┘':<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                    case '│':<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                    case '─':<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                    case '┼':<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                    case '#':<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                        portion[i][j] = SColor.LIMITED_PALETTE[2];<a name="line.112"></a>
+<span class="sourceLineNo">113</span>                        break;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                    case '.':<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                    case ':':<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                        portion[i][j] = SColor.LIMITED_PALETTE[3];<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                        break;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                    case '+':<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                    case '/':<a name="line.119"></a>
+<span class="sourceLineNo">120</span>                        portion[i][j] = SColor.LIMITED_PALETTE[4];<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                        break;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                    case ',':<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                    case '~':<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                        portion[i][j] = SColor.LIMITED_PALETTE[5];<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                        break;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                    case '"':<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                        portion[i][j] = SColor.LIMITED_PALETTE[20];<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                        break;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                    case '^':<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                        portion[i][j] = SColor.LIMITED_PALETTE[6];<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                        break;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                    default:<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                        if (map[i][j] == deepChar)<a name="line.133"></a>
+<span class="sourceLineNo">134</span>                            portion[i][j] = deepColor;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                        else if (map[i][j] == shallowChar)<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                            portion[i][j] = shallowColor;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                        else portion[i][j] = SColor.LIMITED_PALETTE[1];<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                }<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        }<a name="line.140"></a>
+<span class="sourceLineNo">141</span>        return portion;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>    }<a name="line.142"></a>
+<span class="sourceLineNo">143</span><a name="line.143"></a>
+<span class="sourceLineNo">144</span>    /**<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * chars in map. This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * colors this returns will also change. Most backgrounds will be black. but deep water ('~') will be dark<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * blue-green, shallow water (',') will be a lighter blue-green, and grass ('"') will be dark green.<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * You can adjust the brightness of the backgrounds using {@link #generateLightnessModifiers(char[][])}, or if you<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * want water and grass to ripple, you can use the overload {@link #generateLightnessModifiers(char[][], double)}<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * with some rising frame count.<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     *<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     * @param map a char[][] containing foreground characters (this gets their background color)<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * @return a 2D array of background Colors with the same size as map, that can be used for the corresponding chars<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     */<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    public static Color[][] generateDefaultBGColors(char[][] map) {<a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>        int width = map.length;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        int height = map[0].length;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        Color[][] portion = new Color[width][height];<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        for (int i = 0; i &lt; width; i++) {<a name="line.161"></a>
+<span class="sourceLineNo">162</span>            for (int j = 0; j &lt; height; j++) {<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                switch (map[i][j]) {<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                    case '\1':<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                    case '├':<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                    case '┤':<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                    case '┴':<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                    case '┬':<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                    case '┌':<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                    case '┐':<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                    case '└':<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                    case '┘':<a name="line.172"></a>
+<span class="sourceLineNo">173</span>                    case '│':<a name="line.173"></a>
+<span class="sourceLineNo">174</span>                    case '─':<a name="line.174"></a>
+<span class="sourceLineNo">175</span>                    case '┼':<a name="line.175"></a>
+<span class="sourceLineNo">176</span>                    case '#':<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.177"></a>
+<span class="sourceLineNo">178</span>                        break;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>                    case '.':<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.180"></a>
+<span class="sourceLineNo">181</span>                        break;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>                    case ':':<a name="line.182"></a>
+<span class="sourceLineNo">183</span>                        portion[i][j] = SColor.LIMITED_PALETTE[35];<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                        break;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                    case '+':<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                    case '/':<a name="line.186"></a>
+<span class="sourceLineNo">187</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                        break;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                    case ',':<a name="line.189"></a>
+<span class="sourceLineNo">190</span>                        portion[i][j] = SColor.LIMITED_PALETTE[23];<a name="line.190"></a>
+<span class="sourceLineNo">191</span>                        break;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                    case '~':<a name="line.192"></a>
+<span class="sourceLineNo">193</span>                        portion[i][j] = SColor.LIMITED_PALETTE[24];<a name="line.193"></a>
+<span class="sourceLineNo">194</span>                        break;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>                    case '"':<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                        portion[i][j] = SColor.LIMITED_PALETTE[21];<a name="line.196"></a>
+<span class="sourceLineNo">197</span>                        break;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>                    case '^':<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                        break;<a name="line.200"></a>
+<span class="sourceLineNo">201</span>                    default:<a name="line.201"></a>
+<span class="sourceLineNo">202</span>                        portion[i][j] = SColor.LIMITED_PALETTE[0];<a name="line.202"></a>
+<span class="sourceLineNo">203</span>                }<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            }<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        }<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        return portion;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
+<span class="sourceLineNo">208</span><a name="line.208"></a>
 <span class="sourceLineNo">209</span><a name="line.209"></a>
-<span class="sourceLineNo">210</span><a name="line.210"></a>
-<span class="sourceLineNo">211</span>    /**<a name="line.211"></a>
-<span class="sourceLineNo">212</span>     * Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the<a name="line.212"></a>
-<span class="sourceLineNo">213</span>     * chars in map. This overload also takes a char that corresponds to deep non-water lakes (which<a name="line.213"></a>
-<span class="sourceLineNo">214</span>     * {@link SectionDungeonGenerator} can produce) and a Color to use for that deep liquid, as well as a char for<a name="line.214"></a>
-<span class="sourceLineNo">215</span>     * shallow lakes and a Color for that shallow liquid.<a name="line.215"></a>
+<span class="sourceLineNo">210</span>    /**<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * chars in map. This overload also takes a char that corresponds to deep non-water lakes (which<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     * {@link squidpony.squidgrid.mapping.SectionDungeonGenerator} can produce) and a Color to use for that deep liquid,<a name="line.213"></a>
+<span class="sourceLineNo">214</span>     * as well as a char for shallow lakes and a Color for that shallow liquid.<a name="line.214"></a>
+<span class="sourceLineNo">215</span>     * &lt;br&gt;<a name="line.215"></a>
 <span class="sourceLineNo">216</span>     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the<a name="line.216"></a>
-<span class="sourceLineNo">217</span>     * colors this returns will also change. Most backgrounds will be black. but deep water ('~') will be dark<a name="line.217"></a>
+<span class="sourceLineNo">217</span>     * colors this returns will also change. Most backgrounds will be black, but deep water ('~') will be dark<a name="line.217"></a>
 <span class="sourceLineNo">218</span>     * blue-green, shallow water (',') will be a lighter blue-green, and grass ('"') will be dark green.<a name="line.218"></a>
 <span class="sourceLineNo">219</span>     * Deep and shallow lakes of non-water will use the given Colors. If you are using SectionDungeonGenerator to<a name="line.219"></a>
 <span class="sourceLineNo">220</span>     * produce normal water lakes, then you don't need this overload, and<a name="line.220"></a>
@@ -232,9 +232,9 @@
 <span class="sourceLineNo">224</span>     * {@link #generateLightnessModifiers(char[][], double, char, char)} with some rising frame count.<a name="line.224"></a>
 <span class="sourceLineNo">225</span>     *<a name="line.225"></a>
 <span class="sourceLineNo">226</span>     * @param map a char[][] containing foreground characters (this gets their background color)<a name="line.226"></a>
-<span class="sourceLineNo">227</span>     * @param deepChar the char that represents deep parts of non-water lakes, from {@link SectionDungeonGenerator}<a name="line.227"></a>
+<span class="sourceLineNo">227</span>     * @param deepChar the char that represents deep parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}<a name="line.227"></a>
 <span class="sourceLineNo">228</span>     * @param deepColor the Color to use for deep parts of non-water lakes<a name="line.228"></a>
-<span class="sourceLineNo">229</span>     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link SectionDungeonGenerator}<a name="line.229"></a>
+<span class="sourceLineNo">229</span>     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}<a name="line.229"></a>
 <span class="sourceLineNo">230</span>     * @param shallowColor  the Color to use for shallow parts of non-water lakes<a name="line.230"></a>
 <span class="sourceLineNo">231</span>     * @return a 2D array of background Colors with the same size as map, that can be used for the corresponding chars<a name="line.231"></a>
 <span class="sourceLineNo">232</span>     */<a name="line.232"></a>
@@ -335,13 +335,13 @@
 <span class="sourceLineNo">327</span>                        portion[i][j] = -10;<a name="line.327"></a>
 <span class="sourceLineNo">328</span>                        break;<a name="line.328"></a>
 <span class="sourceLineNo">329</span>                    case ',':<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                        portion[i][j] = (int) (70 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5) / 2.5 - 0.45));<a name="line.330"></a>
+<span class="sourceLineNo">330</span>                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.45));<a name="line.330"></a>
 <span class="sourceLineNo">331</span>                        break;<a name="line.331"></a>
 <span class="sourceLineNo">332</span>                    case '~':<a name="line.332"></a>
-<span class="sourceLineNo">333</span>                        portion[i][j] = (int) (100 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5) / 2.5 - 0.65));<a name="line.333"></a>
+<span class="sourceLineNo">333</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.65));<a name="line.333"></a>
 <span class="sourceLineNo">334</span>                        break;<a name="line.334"></a>
 <span class="sourceLineNo">335</span>                    case '"':<a name="line.335"></a>
-<span class="sourceLineNo">336</span>                        portion[i][j] = (int) (75 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5) / 4.0 - 1.5));<a name="line.336"></a>
+<span class="sourceLineNo">336</span>                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.25 - 1.5));<a name="line.336"></a>
 <span class="sourceLineNo">337</span>                        break;<a name="line.337"></a>
 <span class="sourceLineNo">338</span>                    case '^':<a name="line.338"></a>
 <span class="sourceLineNo">339</span>                        portion[i][j] = 40;<a name="line.339"></a>
@@ -356,135 +356,138 @@
 <span class="sourceLineNo">348</span><a name="line.348"></a>
 <span class="sourceLineNo">349</span>    /**<a name="line.349"></a>
 <span class="sourceLineNo">350</span>     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for<a name="line.350"></a>
-<span class="sourceLineNo">351</span>     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to<a name="line.351"></a>
-<span class="sourceLineNo">352</span>     * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.<a name="line.352"></a>
-<span class="sourceLineNo">353</span>     *<a name="line.353"></a>
-<span class="sourceLineNo">354</span>     * @param map   a char[][] that you want to be find background lightness modifiers for<a name="line.354"></a>
-<span class="sourceLineNo">355</span>     * @param frame a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make<a name="line.355"></a>
-<span class="sourceLineNo">356</span>     *              water and grass move more<a name="line.356"></a>
-<span class="sourceLineNo">357</span>     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers<a name="line.357"></a>
-<span class="sourceLineNo">358</span>     */<a name="line.358"></a>
-<span class="sourceLineNo">359</span>    public static int[][] generateLightnessModifiers(char[][] map, double frame) {<a name="line.359"></a>
-<span class="sourceLineNo">360</span>        int width = map.length;<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        int height = map[0].length;<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        int[][] portion = new int[width][height];<a name="line.362"></a>
-<span class="sourceLineNo">363</span>        for (int i = 0; i &lt; width; i++) {<a name="line.363"></a>
-<span class="sourceLineNo">364</span>            for (int j = 0; j &lt; height; j++) {<a name="line.364"></a>
-<span class="sourceLineNo">365</span>                switch (map[i][j]) {<a name="line.365"></a>
-<span class="sourceLineNo">366</span>                    case '\1':<a name="line.366"></a>
-<span class="sourceLineNo">367</span>                    case '├':<a name="line.367"></a>
-<span class="sourceLineNo">368</span>                    case '┤':<a name="line.368"></a>
-<span class="sourceLineNo">369</span>                    case '┴':<a name="line.369"></a>
-<span class="sourceLineNo">370</span>                    case '┬':<a name="line.370"></a>
-<span class="sourceLineNo">371</span>                    case '┌':<a name="line.371"></a>
-<span class="sourceLineNo">372</span>                    case '┐':<a name="line.372"></a>
-<span class="sourceLineNo">373</span>                    case '└':<a name="line.373"></a>
-<span class="sourceLineNo">374</span>                    case '┘':<a name="line.374"></a>
-<span class="sourceLineNo">375</span>                    case '│':<a name="line.375"></a>
-<span class="sourceLineNo">376</span>                    case '─':<a name="line.376"></a>
-<span class="sourceLineNo">377</span>                    case '┼':<a name="line.377"></a>
-<span class="sourceLineNo">378</span>                    case '#':<a name="line.378"></a>
-<span class="sourceLineNo">379</span>                        portion[i][j] = 30;<a name="line.379"></a>
-<span class="sourceLineNo">380</span>                        break;<a name="line.380"></a>
-<span class="sourceLineNo">381</span>                    case '.':<a name="line.381"></a>
-<span class="sourceLineNo">382</span>                        portion[i][j] = 0;<a name="line.382"></a>
-<span class="sourceLineNo">383</span>                        break;<a name="line.383"></a>
-<span class="sourceLineNo">384</span>                    case ':':<a name="line.384"></a>
-<span class="sourceLineNo">385</span>                        portion[i][j] = -15;<a name="line.385"></a>
-<span class="sourceLineNo">386</span>                        break;<a name="line.386"></a>
-<span class="sourceLineNo">387</span>                    case '+':<a name="line.387"></a>
-<span class="sourceLineNo">388</span>                    case '/':<a name="line.388"></a>
-<span class="sourceLineNo">389</span>                        portion[i][j] = -10;<a name="line.389"></a>
-<span class="sourceLineNo">390</span>                        break;<a name="line.390"></a>
-<span class="sourceLineNo">391</span>                    case ',':<a name="line.391"></a>
-<span class="sourceLineNo">392</span>                        portion[i][j] = (int) (70 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.45));<a name="line.392"></a>
-<span class="sourceLineNo">393</span>                        break;<a name="line.393"></a>
-<span class="sourceLineNo">394</span>                    case '~':<a name="line.394"></a>
-<span class="sourceLineNo">395</span>                        portion[i][j] = (int) (100 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.65));<a name="line.395"></a>
-<span class="sourceLineNo">396</span>                        break;<a name="line.396"></a>
-<span class="sourceLineNo">397</span>                    case '"':<a name="line.397"></a>
-<span class="sourceLineNo">398</span>                        portion[i][j] = (int) (75 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5, frame * 0.45) / 4.0 - 1.5));<a name="line.398"></a>
-<span class="sourceLineNo">399</span>                        break;<a name="line.399"></a>
-<span class="sourceLineNo">400</span>                    case '^':<a name="line.400"></a>
-<span class="sourceLineNo">401</span>                        portion[i][j] = 40;<a name="line.401"></a>
-<span class="sourceLineNo">402</span>                        break;<a name="line.402"></a>
-<span class="sourceLineNo">403</span>                    default:<a name="line.403"></a>
-<span class="sourceLineNo">404</span>                        portion[i][j] = 0;<a name="line.404"></a>
-<span class="sourceLineNo">405</span>                }<a name="line.405"></a>
-<span class="sourceLineNo">406</span>            }<a name="line.406"></a>
-<span class="sourceLineNo">407</span>        }<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        return portion;<a name="line.408"></a>
-<span class="sourceLineNo">409</span>    }<a name="line.409"></a>
-<span class="sourceLineNo">410</span><a name="line.410"></a>
-<span class="sourceLineNo">411</span>    /**<a name="line.411"></a>
-<span class="sourceLineNo">412</span>     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for<a name="line.412"></a>
-<span class="sourceLineNo">413</span>     * animation frame if rippling water and waving grass using {@link SeededNoise} are desired. It may make sense to<a name="line.413"></a>
-<span class="sourceLineNo">414</span>     * pass some fraction of the current time, as given by {@link System#currentTimeMillis()}, instead of a frame.<a name="line.414"></a>
-<span class="sourceLineNo">415</span>     * Also allows additional chars to be treated like deep and shallow water regarding the ripple animation.<a name="line.415"></a>
+<span class="sourceLineNo">351</span>     * animation frame if rippling water and waving grass using Perlin Noise are desired.<a name="line.351"></a>
+<span class="sourceLineNo">352</span>     *<a name="line.352"></a>
+<span class="sourceLineNo">353</span>     * @param map   a char[][] that you want to be find background lightness modifiers for<a name="line.353"></a>
+<span class="sourceLineNo">354</span>     * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make<a name="line.354"></a>
+<span class="sourceLineNo">355</span>     *                      water and grass move more, and 0.013 multiplied by the current time in milliseconds works well<a name="line.355"></a>
+<span class="sourceLineNo">356</span>     *                      as long as only the smaller digits of the time are used; this can be accomplished with<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     *                      {@code (System.currentTimeMillis() &amp; 0xFFFFFF) * 0.013} .<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     */<a name="line.359"></a>
+<span class="sourceLineNo">360</span>    public static int[][] generateLightnessModifiers(char[][] map, double frame) {<a name="line.360"></a>
+<span class="sourceLineNo">361</span>        int width = map.length;<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        int height = map[0].length;<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        int[][] portion = new int[width][height];<a name="line.363"></a>
+<span class="sourceLineNo">364</span>        for (int i = 0; i &lt; width; i++) {<a name="line.364"></a>
+<span class="sourceLineNo">365</span>            for (int j = 0; j &lt; height; j++) {<a name="line.365"></a>
+<span class="sourceLineNo">366</span>                switch (map[i][j]) {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                    case '\1':<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                    case '├':<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                    case '┤':<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                    case '┴':<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                    case '┬':<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                    case '┌':<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                    case '┐':<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                    case '└':<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                    case '┘':<a name="line.375"></a>
+<span class="sourceLineNo">376</span>                    case '│':<a name="line.376"></a>
+<span class="sourceLineNo">377</span>                    case '─':<a name="line.377"></a>
+<span class="sourceLineNo">378</span>                    case '┼':<a name="line.378"></a>
+<span class="sourceLineNo">379</span>                    case '#':<a name="line.379"></a>
+<span class="sourceLineNo">380</span>                        portion[i][j] = 30;<a name="line.380"></a>
+<span class="sourceLineNo">381</span>                        break;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>                    case '.':<a name="line.382"></a>
+<span class="sourceLineNo">383</span>                        portion[i][j] = 0;<a name="line.383"></a>
+<span class="sourceLineNo">384</span>                        break;<a name="line.384"></a>
+<span class="sourceLineNo">385</span>                    case ':':<a name="line.385"></a>
+<span class="sourceLineNo">386</span>                        portion[i][j] = -15;<a name="line.386"></a>
+<span class="sourceLineNo">387</span>                        break;<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                    case '+':<a name="line.388"></a>
+<span class="sourceLineNo">389</span>                    case '/':<a name="line.389"></a>
+<span class="sourceLineNo">390</span>                        portion[i][j] = -10;<a name="line.390"></a>
+<span class="sourceLineNo">391</span>                        break;<a name="line.391"></a>
+<span class="sourceLineNo">392</span>                    case ',':<a name="line.392"></a>
+<span class="sourceLineNo">393</span>                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));<a name="line.393"></a>
+<span class="sourceLineNo">394</span>                        break;<a name="line.394"></a>
+<span class="sourceLineNo">395</span>                    case '~':<a name="line.395"></a>
+<span class="sourceLineNo">396</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));<a name="line.396"></a>
+<span class="sourceLineNo">397</span>                        break;<a name="line.397"></a>
+<span class="sourceLineNo">398</span>                    case '"':<a name="line.398"></a>
+<span class="sourceLineNo">399</span>                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.25 - 1.5));<a name="line.399"></a>
+<span class="sourceLineNo">400</span>                        break;<a name="line.400"></a>
+<span class="sourceLineNo">401</span>                    case '^':<a name="line.401"></a>
+<span class="sourceLineNo">402</span>                        portion[i][j] = 40;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>                        break;<a name="line.403"></a>
+<span class="sourceLineNo">404</span>                    default:<a name="line.404"></a>
+<span class="sourceLineNo">405</span>                        portion[i][j] = 0;<a name="line.405"></a>
+<span class="sourceLineNo">406</span>                }<a name="line.406"></a>
+<span class="sourceLineNo">407</span>            }<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        }<a name="line.408"></a>
+<span class="sourceLineNo">409</span>        return portion;<a name="line.409"></a>
+<span class="sourceLineNo">410</span>    }<a name="line.410"></a>
+<span class="sourceLineNo">411</span><a name="line.411"></a>
+<span class="sourceLineNo">412</span>    /**<a name="line.412"></a>
+<span class="sourceLineNo">413</span>     * Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for<a name="line.413"></a>
+<span class="sourceLineNo">414</span>     * animation frame if rippling water and waving grass using Perlin Noise are desired. Also allows additional chars<a name="line.414"></a>
+<span class="sourceLineNo">415</span>     * to be treated like deep and shallow water regarding the ripple animation.<a name="line.415"></a>
 <span class="sourceLineNo">416</span>     *<a name="line.416"></a>
 <span class="sourceLineNo">417</span>     * @param map           a char[][] that you want to be find background lightness modifiers for<a name="line.417"></a>
 <span class="sourceLineNo">418</span>     * @param frame         a counter that typically should increase by between 10.0 and 20.0 each second; higher numbers make<a name="line.418"></a>
-<span class="sourceLineNo">419</span>     *                      water and grass move more<a name="line.419"></a>
-<span class="sourceLineNo">420</span>     * @param deepLiquid    a char that will be treated like deep water when animating ripples<a name="line.420"></a>
-<span class="sourceLineNo">421</span>     * @param shallowLiquid a char that will be treated like shallow water when animating ripples<a name="line.421"></a>
-<span class="sourceLineNo">422</span>     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers<a name="line.422"></a>
-<span class="sourceLineNo">423</span>     */<a name="line.423"></a>
-<span class="sourceLineNo">424</span>    public static int[][] generateLightnessModifiers(char[][] map, double frame, char deepLiquid, char shallowLiquid) {<a name="line.424"></a>
-<span class="sourceLineNo">425</span>        int width = map.length;<a name="line.425"></a>
-<span class="sourceLineNo">426</span>        int height = map[0].length;<a name="line.426"></a>
-<span class="sourceLineNo">427</span>        int[][] portion = new int[width][height];<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        for (int i = 0; i &lt; width; i++) {<a name="line.428"></a>
-<span class="sourceLineNo">429</span>            for (int j = 0; j &lt; height; j++) {<a name="line.429"></a>
-<span class="sourceLineNo">430</span>                switch (map[i][j]) {<a name="line.430"></a>
-<span class="sourceLineNo">431</span>                    case '\1':<a name="line.431"></a>
-<span class="sourceLineNo">432</span>                    case '├':<a name="line.432"></a>
-<span class="sourceLineNo">433</span>                    case '┤':<a name="line.433"></a>
-<span class="sourceLineNo">434</span>                    case '┴':<a name="line.434"></a>
-<span class="sourceLineNo">435</span>                    case '┬':<a name="line.435"></a>
-<span class="sourceLineNo">436</span>                    case '┌':<a name="line.436"></a>
-<span class="sourceLineNo">437</span>                    case '┐':<a name="line.437"></a>
-<span class="sourceLineNo">438</span>                    case '└':<a name="line.438"></a>
-<span class="sourceLineNo">439</span>                    case '┘':<a name="line.439"></a>
-<span class="sourceLineNo">440</span>                    case '│':<a name="line.440"></a>
-<span class="sourceLineNo">441</span>                    case '─':<a name="line.441"></a>
-<span class="sourceLineNo">442</span>                    case '┼':<a name="line.442"></a>
-<span class="sourceLineNo">443</span>                    case '#':<a name="line.443"></a>
-<span class="sourceLineNo">444</span>                        portion[i][j] = 30;<a name="line.444"></a>
-<span class="sourceLineNo">445</span>                        break;<a name="line.445"></a>
-<span class="sourceLineNo">446</span>                    case '.':<a name="line.446"></a>
-<span class="sourceLineNo">447</span>                        portion[i][j] = 0;<a name="line.447"></a>
-<span class="sourceLineNo">448</span>                        break;<a name="line.448"></a>
-<span class="sourceLineNo">449</span>                    case ':':<a name="line.449"></a>
-<span class="sourceLineNo">450</span>                        portion[i][j] = -15;<a name="line.450"></a>
-<span class="sourceLineNo">451</span>                        break;<a name="line.451"></a>
-<span class="sourceLineNo">452</span>                    case '+':<a name="line.452"></a>
-<span class="sourceLineNo">453</span>                    case '/':<a name="line.453"></a>
-<span class="sourceLineNo">454</span>                        portion[i][j] = -10;<a name="line.454"></a>
-<span class="sourceLineNo">455</span>                        break;<a name="line.455"></a>
-<span class="sourceLineNo">456</span>                    case ',':<a name="line.456"></a>
-<span class="sourceLineNo">457</span>                        portion[i][j] = (int) (70 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.45));<a name="line.457"></a>
-<span class="sourceLineNo">458</span>                        break;<a name="line.458"></a>
-<span class="sourceLineNo">459</span>                    case '~':<a name="line.459"></a>
-<span class="sourceLineNo">460</span>                        portion[i][j] = (int) (100 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5, frame * 0.4) / 2.5 - 0.65));<a name="line.460"></a>
-<span class="sourceLineNo">461</span>                        break;<a name="line.461"></a>
-<span class="sourceLineNo">462</span>                    case '"':<a name="line.462"></a>
-<span class="sourceLineNo">463</span>                        portion[i][j] = (int) (75 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5, frame * 0.45) / 4.0 - 1.5));<a name="line.463"></a>
-<span class="sourceLineNo">464</span>                        break;<a name="line.464"></a>
-<span class="sourceLineNo">465</span>                    case '^':<a name="line.465"></a>
-<span class="sourceLineNo">466</span>                        portion[i][j] = 40;<a name="line.466"></a>
-<span class="sourceLineNo">467</span>                        break;<a name="line.467"></a>
-<span class="sourceLineNo">468</span>                    default:<a name="line.468"></a>
-<span class="sourceLineNo">469</span>                        if (map[i][j] == deepLiquid)<a name="line.469"></a>
-<span class="sourceLineNo">470</span>                            portion[i][j] = (int) (180 * (SeededNoise.instance.getNoise(i * 1.2, j * 1.2, frame / 21.0) / 2.5 - 0.7));<a name="line.470"></a>
-<span class="sourceLineNo">471</span>                        else if (map[i][j] == shallowLiquid)<a name="line.471"></a>
-<span class="sourceLineNo">472</span>                            portion[i][j] = (int) (110 * (SeededNoise.instance.getNoise(i* 1.5, j* 1.5, frame / 30.0) / 2.5 - 0.45));<a name="line.472"></a>
-<span class="sourceLineNo">473</span>                        else portion[i][j] = 0;<a name="line.473"></a>
-<span class="sourceLineNo">474</span>                }<a name="line.474"></a>
-<span class="sourceLineNo">475</span>            }<a name="line.475"></a>
-<span class="sourceLineNo">476</span>        }<a name="line.476"></a>
-<span class="sourceLineNo">477</span>        return portion;<a name="line.477"></a>
-<span class="sourceLineNo">478</span>    }<a name="line.478"></a>
-<span class="sourceLineNo">479</span>}<a name="line.479"></a>
+<span class="sourceLineNo">419</span>     *                      water and grass move more, and 0.013 multiplied by the current time in milliseconds works well<a name="line.419"></a>
+<span class="sourceLineNo">420</span>     *                      as long as only the smaller digits of the time are used; this can be accomplished with<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     *                      {@code (System.currentTimeMillis() &amp; 0xFFFFFF) * 0.013} .<a name="line.421"></a>
+<span class="sourceLineNo">422</span>     * @param deepLiquid    a char that will be treated like deep water when animating ripples<a name="line.422"></a>
+<span class="sourceLineNo">423</span>     * @param shallowLiquid a char that will be treated like shallow water when animating ripples<a name="line.423"></a>
+<span class="sourceLineNo">424</span>     * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers<a name="line.424"></a>
+<span class="sourceLineNo">425</span>     */<a name="line.425"></a>
+<span class="sourceLineNo">426</span>    public static int[][] generateLightnessModifiers(char[][] map, double frame, char deepLiquid, char shallowLiquid) {<a name="line.426"></a>
+<span class="sourceLineNo">427</span>        int width = map.length;<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        int height = map[0].length;<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        int[][] portion = new int[width][height];<a name="line.429"></a>
+<span class="sourceLineNo">430</span>        for (int i = 0; i &lt; width; i++) {<a name="line.430"></a>
+<span class="sourceLineNo">431</span>            for (int j = 0; j &lt; height; j++) {<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                switch (map[i][j]) {<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                    case '\1':<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                    case '├':<a name="line.434"></a>
+<span class="sourceLineNo">435</span>                    case '┤':<a name="line.435"></a>
+<span class="sourceLineNo">436</span>                    case '┴':<a name="line.436"></a>
+<span class="sourceLineNo">437</span>                    case '┬':<a name="line.437"></a>
+<span class="sourceLineNo">438</span>                    case '┌':<a name="line.438"></a>
+<span class="sourceLineNo">439</span>                    case '┐':<a name="line.439"></a>
+<span class="sourceLineNo">440</span>                    case '└':<a name="line.440"></a>
+<span class="sourceLineNo">441</span>                    case '┘':<a name="line.441"></a>
+<span class="sourceLineNo">442</span>                    case '│':<a name="line.442"></a>
+<span class="sourceLineNo">443</span>                    case '─':<a name="line.443"></a>
+<span class="sourceLineNo">444</span>                    case '┼':<a name="line.444"></a>
+<span class="sourceLineNo">445</span>                    case '#':<a name="line.445"></a>
+<span class="sourceLineNo">446</span>                        portion[i][j] = 30;<a name="line.446"></a>
+<span class="sourceLineNo">447</span>                        break;<a name="line.447"></a>
+<span class="sourceLineNo">448</span>                    case '.':<a name="line.448"></a>
+<span class="sourceLineNo">449</span>                        portion[i][j] = 0;<a name="line.449"></a>
+<span class="sourceLineNo">450</span>                        break;<a name="line.450"></a>
+<span class="sourceLineNo">451</span>                    case ':':<a name="line.451"></a>
+<span class="sourceLineNo">452</span>                        portion[i][j] = -15;<a name="line.452"></a>
+<span class="sourceLineNo">453</span>                        break;<a name="line.453"></a>
+<span class="sourceLineNo">454</span>                    case '+':<a name="line.454"></a>
+<span class="sourceLineNo">455</span>                    case '/':<a name="line.455"></a>
+<span class="sourceLineNo">456</span>                        portion[i][j] = -10;<a name="line.456"></a>
+<span class="sourceLineNo">457</span>                        break;<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                    case ',':<a name="line.458"></a>
+<span class="sourceLineNo">459</span>                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));<a name="line.459"></a>
+<span class="sourceLineNo">460</span>                        break;<a name="line.460"></a>
+<span class="sourceLineNo">461</span>                    case '~':<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));<a name="line.462"></a>
+<span class="sourceLineNo">463</span>                        break;<a name="line.463"></a>
+<span class="sourceLineNo">464</span>                    case '"':<a name="line.464"></a>
+<span class="sourceLineNo">465</span>                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.3 - 1.5));<a name="line.465"></a>
+<span class="sourceLineNo">466</span>                        break;<a name="line.466"></a>
+<span class="sourceLineNo">467</span>                    case '^':<a name="line.467"></a>
+<span class="sourceLineNo">468</span>                        portion[i][j] = 40;<a name="line.468"></a>
+<span class="sourceLineNo">469</span>                        break;<a name="line.469"></a>
+<span class="sourceLineNo">470</span>                    default:<a name="line.470"></a>
+<span class="sourceLineNo">471</span>                        if (map[i][j] == deepLiquid)<a name="line.471"></a>
+<span class="sourceLineNo">472</span>                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.5) * 0.45 - 0.7));<a name="line.472"></a>
+<span class="sourceLineNo">473</span>                        else if (map[i][j] == shallowLiquid)<a name="line.473"></a>
+<span class="sourceLineNo">474</span>                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i* 3.1, j* 3.1, frame * 0.25) * 0.4 - 0.65));<a name="line.474"></a>
+<span class="sourceLineNo">475</span>                        else portion[i][j] = 0;<a name="line.475"></a>
+<span class="sourceLineNo">476</span>                }<a name="line.476"></a>
+<span class="sourceLineNo">477</span>            }<a name="line.477"></a>
+<span class="sourceLineNo">478</span>        }<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        return portion;<a name="line.479"></a>
+<span class="sourceLineNo">480</span>    }<a name="line.480"></a>
+<span class="sourceLineNo">481</span><a name="line.481"></a>
+<span class="sourceLineNo">482</span>}<a name="line.482"></a>
 
 
 

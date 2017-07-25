@@ -2086,7 +2086,7 @@
 <span class="sourceLineNo">2078</span>                }<a name="line.2078"></a>
 <span class="sourceLineNo">2079</span>            }<a name="line.2079"></a>
 <span class="sourceLineNo">2080</span>        }<a name="line.2080"></a>
-<span class="sourceLineNo">2081</span>        return working.toArray(new String[working.size()]);<a name="line.2081"></a>
+<span class="sourceLineNo">2081</span>        return working.toArray(new String[0]);<a name="line.2081"></a>
 <span class="sourceLineNo">2082</span>    }<a name="line.2082"></a>
 <span class="sourceLineNo">2083</span><a name="line.2083"></a>
 <span class="sourceLineNo">2084</span>    /*private static final String[][] openVowels = new String[][]{<a name="line.2084"></a>
@@ -3115,7 +3115,7 @@
 <span class="sourceLineNo">3107</span>                }<a name="line.3107"></a>
 <span class="sourceLineNo">3108</span>            }<a name="line.3108"></a>
 <span class="sourceLineNo">3109</span>            for (int i = 0; i &lt; mods.size(); i++) {<a name="line.3109"></a>
-<span class="sourceLineNo">3110</span>                brief.append('\016').append(mods.getAt(i).serializeToString());<a name="line.3110"></a>
+<span class="sourceLineNo">3110</span>                brief.append('℗').append(mods.getAt(i).serializeToString());<a name="line.3110"></a>
 <span class="sourceLineNo">3111</span>            }<a name="line.3111"></a>
 <span class="sourceLineNo">3112</span>            return mixer.addModifiers(mods).summarize(brief.toString());<a name="line.3112"></a>
 <span class="sourceLineNo">3113</span>        } else<a name="line.3113"></a>
@@ -3358,7 +3358,7 @@
 <span class="sourceLineNo">3350</span>    public static FakeLanguageGen deserializeFromString(String data) {<a name="line.3350"></a>
 <span class="sourceLineNo">3351</span>        if (data == null || data.equals(""))<a name="line.3351"></a>
 <span class="sourceLineNo">3352</span>            return ENGLISH.copy();<a name="line.3352"></a>
-<span class="sourceLineNo">3353</span>        int poundIndex = data.indexOf('#'), snailIndex = data.indexOf('@'), tempBreak = data.indexOf('\016'),<a name="line.3353"></a>
+<span class="sourceLineNo">3353</span>        int poundIndex = data.indexOf('#'), snailIndex = data.indexOf('@'), tempBreak = data.indexOf('℗'),<a name="line.3353"></a>
 <span class="sourceLineNo">3354</span>                breakIndex = (tempBreak &lt; 0) ? data.length() : tempBreak,<a name="line.3354"></a>
 <span class="sourceLineNo">3355</span>                tildeIndex = Math.min(data.indexOf('~'), breakIndex), prevTildeIndex = -1;<a name="line.3355"></a>
 <span class="sourceLineNo">3356</span>        if (tildeIndex &lt; 0)<a name="line.3356"></a>
@@ -3388,8 +3388,8 @@
 <span class="sourceLineNo">3380</span>        ArrayList&lt;Modifier&gt; mods = new ArrayList&lt;&gt;(8);<a name="line.3380"></a>
 <span class="sourceLineNo">3381</span>        if (breakIndex == tempBreak) {<a name="line.3381"></a>
 <span class="sourceLineNo">3382</span>            tildeIndex = breakIndex - 1;<a name="line.3382"></a>
-<span class="sourceLineNo">3383</span>            while ((prevTildeIndex = data.indexOf('\016', tildeIndex + 1)) &gt;= 0) {<a name="line.3383"></a>
-<span class="sourceLineNo">3384</span>                tildeIndex = data.indexOf('\016', prevTildeIndex + 1);<a name="line.3384"></a>
+<span class="sourceLineNo">3383</span>            while ((prevTildeIndex = data.indexOf('℗', tildeIndex + 1)) &gt;= 0) {<a name="line.3383"></a>
+<span class="sourceLineNo">3384</span>                tildeIndex = data.indexOf('℗', prevTildeIndex + 1);<a name="line.3384"></a>
 <span class="sourceLineNo">3385</span>                if (tildeIndex &lt; 0) tildeIndex = data.length();<a name="line.3385"></a>
 <span class="sourceLineNo">3386</span>                mods.add(Modifier.deserializeFromString(data.substring(prevTildeIndex, tildeIndex)));<a name="line.3386"></a>
 <span class="sourceLineNo">3387</span>            }<a name="line.3387"></a>
@@ -3711,13 +3711,13 @@
 <span class="sourceLineNo">3703</span>     * {@link FakeLanguageGen#sentence(RNG, int, int, String[], String[], double, int)} or one of its overloads.<a name="line.3703"></a>
 <span class="sourceLineNo">3704</span>     * You can call {@link #sentence()} on this to produce another String sentence with the parameters it was given<a name="line.3704"></a>
 <span class="sourceLineNo">3705</span>     * at construction. The parameters to<a name="line.3705"></a>
-<span class="sourceLineNo">3706</span>     * {@link #SentenceForm(FakeLanguageGen, RNG, int, int, String[], String[], double, int)} are stored in fields of<a name="line.3706"></a>
+<span class="sourceLineNo">3706</span>     * {@link FakeLanguageGen.SentenceForm#SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)} are stored in fields of<a name="line.3706"></a>
 <span class="sourceLineNo">3707</span>     * the same name, and all fields in this class are public and modifiable.<a name="line.3707"></a>
 <span class="sourceLineNo">3708</span>     */<a name="line.3708"></a>
 <span class="sourceLineNo">3709</span>    public static class SentenceForm implements Serializable<a name="line.3709"></a>
 <span class="sourceLineNo">3710</span>    {<a name="line.3710"></a>
 <span class="sourceLineNo">3711</span>        private static final long serialVersionUID = 1246527948419533147L;<a name="line.3711"></a>
-<span class="sourceLineNo">3712</span>        public RNG rng;<a name="line.3712"></a>
+<span class="sourceLineNo">3712</span>        public StatefulRNG rng;<a name="line.3712"></a>
 <span class="sourceLineNo">3713</span>        public int minWords, maxWords, maxChars;<a name="line.3713"></a>
 <span class="sourceLineNo">3714</span>        public String[] midPunctuation, endPunctuation;<a name="line.3714"></a>
 <span class="sourceLineNo">3715</span>        public double midPunctuationFrequency;<a name="line.3715"></a>
@@ -3746,12 +3746,12 @@
 <span class="sourceLineNo">3738</span>                    midPunctuationFrequency, maxChars);<a name="line.3738"></a>
 <span class="sourceLineNo">3739</span>        }<a name="line.3739"></a>
 <span class="sourceLineNo">3740</span><a name="line.3740"></a>
-<span class="sourceLineNo">3741</span>        public SentenceForm(FakeLanguageGen language, RNG rng, int minWords, int maxWords,<a name="line.3741"></a>
+<span class="sourceLineNo">3741</span>        public SentenceForm(FakeLanguageGen language, StatefulRNG rng, int minWords, int maxWords,<a name="line.3741"></a>
 <span class="sourceLineNo">3742</span>                            String[] midPunctuation, String[] endPunctuation,<a name="line.3742"></a>
 <span class="sourceLineNo">3743</span>                            double midPunctuationFrequency, int maxChars)<a name="line.3743"></a>
 <span class="sourceLineNo">3744</span>        {<a name="line.3744"></a>
 <span class="sourceLineNo">3745</span>            this.language = language;<a name="line.3745"></a>
-<span class="sourceLineNo">3746</span>            this.rng = rng;<a name="line.3746"></a>
+<span class="sourceLineNo">3746</span>            this.rng = new StatefulRNG(rng.getState());<a name="line.3746"></a>
 <span class="sourceLineNo">3747</span>            this.minWords = minWords;<a name="line.3747"></a>
 <span class="sourceLineNo">3748</span>            this.maxWords = maxWords;<a name="line.3748"></a>
 <span class="sourceLineNo">3749</span>            this.midPunctuation = midPunctuation;<a name="line.3749"></a>
@@ -3764,8 +3764,35 @@
 <span class="sourceLineNo">3756</span>            return language.sentence(rng, minWords, maxWords, midPunctuation, endPunctuation,<a name="line.3756"></a>
 <span class="sourceLineNo">3757</span>                    midPunctuationFrequency, maxChars);<a name="line.3757"></a>
 <span class="sourceLineNo">3758</span>        }<a name="line.3758"></a>
-<span class="sourceLineNo">3759</span>    }<a name="line.3759"></a>
-<span class="sourceLineNo">3760</span>}<a name="line.3760"></a>
+<span class="sourceLineNo">3759</span><a name="line.3759"></a>
+<span class="sourceLineNo">3760</span>        public String serializeToString() {<a name="line.3760"></a>
+<span class="sourceLineNo">3761</span>            return language.serializeToString() + '℘' +<a name="line.3761"></a>
+<span class="sourceLineNo">3762</span>                    rng.getState() + '℘' +<a name="line.3762"></a>
+<span class="sourceLineNo">3763</span>                    minWords + '℘' +<a name="line.3763"></a>
+<span class="sourceLineNo">3764</span>                    maxWords + '℘' +<a name="line.3764"></a>
+<span class="sourceLineNo">3765</span>                    StringKit.join("ℙ", midPunctuation) + '℘' +<a name="line.3765"></a>
+<span class="sourceLineNo">3766</span>                    StringKit.join("ℙ", endPunctuation) + '℘' +<a name="line.3766"></a>
+<span class="sourceLineNo">3767</span>                    NumberTools.doubleToLongBits(midPunctuationFrequency) + '℘' +<a name="line.3767"></a>
+<span class="sourceLineNo">3768</span>                    maxChars;<a name="line.3768"></a>
+<span class="sourceLineNo">3769</span>        }<a name="line.3769"></a>
+<span class="sourceLineNo">3770</span>        public static SentenceForm deserializeFromString(String ser)<a name="line.3770"></a>
+<span class="sourceLineNo">3771</span>        {<a name="line.3771"></a>
+<span class="sourceLineNo">3772</span>            int gap = ser.indexOf('℘');<a name="line.3772"></a>
+<span class="sourceLineNo">3773</span>            FakeLanguageGen lang = FakeLanguageGen.deserializeFromString(ser.substring(0, gap));<a name="line.3773"></a>
+<span class="sourceLineNo">3774</span>            StatefulRNG rng = new StatefulRNG(<a name="line.3774"></a>
+<span class="sourceLineNo">3775</span>                    StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));<a name="line.3775"></a>
+<span class="sourceLineNo">3776</span>            int minWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));<a name="line.3776"></a>
+<span class="sourceLineNo">3777</span>            int maxWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));<a name="line.3777"></a>
+<span class="sourceLineNo">3778</span>            String[] midPunctuation =<a name="line.3778"></a>
+<span class="sourceLineNo">3779</span>                    StringKit.split(ser.substring(gap + 1, gap = ser.indexOf('℘', gap + 1)), "ℙ");<a name="line.3779"></a>
+<span class="sourceLineNo">3780</span>            String[] endPunctuation =<a name="line.3780"></a>
+<span class="sourceLineNo">3781</span>                    StringKit.split(ser.substring(gap + 1, gap = ser.indexOf('℘', gap + 1)), "ℙ");<a name="line.3781"></a>
+<span class="sourceLineNo">3782</span>            double midFreq = NumberTools.longBitsToDouble(StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));<a name="line.3782"></a>
+<span class="sourceLineNo">3783</span>            int maxChars = StringKit.intFromDec(ser,gap + 1, ser.length());<a name="line.3783"></a>
+<span class="sourceLineNo">3784</span>            return new SentenceForm(lang, rng, minWords, maxWords, midPunctuation, endPunctuation, midFreq, maxChars);<a name="line.3784"></a>
+<span class="sourceLineNo">3785</span>        }<a name="line.3785"></a>
+<span class="sourceLineNo">3786</span>    }<a name="line.3786"></a>
+<span class="sourceLineNo">3787</span>}<a name="line.3787"></a>
 
 
 

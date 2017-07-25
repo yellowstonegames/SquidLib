@@ -224,8 +224,8 @@
 <span class="sourceLineNo">216</span>            }<a name="line.216"></a>
 <span class="sourceLineNo">217</span>            return bestPoints;<a name="line.217"></a>
 <span class="sourceLineNo">218</span>        }<a name="line.218"></a>
-<span class="sourceLineNo">219</span>        Coord[] ts = targets.toArray(new Coord[targets.size()]);<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);<a name="line.220"></a>
+<span class="sourceLineNo">219</span>        Coord[] ts = targets.toArray(new Coord[0]);<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        Coord[] exs = requiredExclusions.toArray(new Coord[0]);<a name="line.220"></a>
 <span class="sourceLineNo">221</span>        Coord t = exs[0];<a name="line.221"></a>
 <span class="sourceLineNo">222</span><a name="line.222"></a>
 <span class="sourceLineNo">223</span>        double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];<a name="line.223"></a>
@@ -370,7 +370,7 @@
 <span class="sourceLineNo">362</span>        }<a name="line.362"></a>
 <span class="sourceLineNo">363</span>        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);<a name="line.363"></a>
 <span class="sourceLineNo">364</span>        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);<a name="line.364"></a>
-<span class="sourceLineNo">365</span>        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);<a name="line.365"></a>
+<span class="sourceLineNo">365</span>        Coord[] exs = requiredExclusions.toArray(new Coord[0]);<a name="line.365"></a>
 <span class="sourceLineNo">366</span>        Coord t = exs[0];<a name="line.366"></a>
 <span class="sourceLineNo">367</span><a name="line.367"></a>
 <span class="sourceLineNo">368</span>        double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];<a name="line.368"></a>
