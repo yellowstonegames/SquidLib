@@ -264,7 +264,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         }*/
         ArrayList<Coord> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, (LOS)null, whichFoes, whichAllies, user, whichFoes);
         if(path.isEmpty())
-            path = whichDijkstra.findPath(moveLength, whichFoes, whichAllies, user, whichFoes.toArray(new Coord[whichFoes.size()]));
+            path = whichDijkstra.findPath(moveLength, whichFoes, whichAllies, user, whichFoes.toArray(new Coord[0]));
         /*
         System.out.println("User at (" + user.x + "," + user.y + ") using " +
                 whichTech.name);

@@ -330,7 +330,7 @@ public class FOVCache extends FOV {
                 it.remove();
         }
 
-        lightSources = lights.keySet().toArray(new Coord[lights.size()]);
+        lightSources = lights.keySet().toArray(new Coord[0]);
         lightBrightnesses = new int[lights.size()];
         for (int i = 0; i < lightSources.length; i++) {
             lightBrightnesses[i] = lights.get(lightSources[i]);
@@ -1640,7 +1640,7 @@ public class FOVCache extends FOV {
         short x =0, y = 0;
         path.add(Coord.get(startX, startY));
         if(startX == endX && startY == endY)
-            return path.toArray(new Coord[1]);
+            return path.toArray(new Coord[0]);
 
         double angle = Math.atan2(endY - startY, endX - startX);
         double x2 = Math.sin(angle) * 0.5, y2 = Math.cos(angle) * 0.5;
@@ -1668,7 +1668,7 @@ public class FOVCache extends FOV {
                 idx += losCached[p] & 0xffff;
             }
         }
-        return path.toArray(new Coord[path.size()]);
+        return path.toArray(new Coord[0]);
     }
 
     /**
@@ -1694,7 +1694,7 @@ public class FOVCache extends FOV {
             c = path[i];
             sorted.put(distance(c.x, c.y) + modifier, c);
         }
-        return sorted.values().toArray(new Coord[sorted.size()]);
+        return sorted.values().toArray(new Coord[0]);
     }
     /**
      * Given a path as a List of Coords (such as one produced by DijkstraMap.getPath()), this method will look up the

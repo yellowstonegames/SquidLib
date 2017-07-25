@@ -2078,7 +2078,7 @@ public class FakeLanguageGen implements Serializable {
                 }
             }
         }
-        return working.toArray(new String[working.size()]);
+        return working.toArray(new String[0]);
     }
 
     /*private static final String[][] openVowels = new String[][]{

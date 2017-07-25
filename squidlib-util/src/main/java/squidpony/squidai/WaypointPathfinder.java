@@ -460,7 +460,7 @@ public class WaypointPathfinder {
             return path;
         if(reversed)
             Collections.reverse(path);
-        ArrayList<Coord> getToPath = dm.findShortcutPath(self, path.toArray(new Coord[path.size()]));
+        ArrayList<Coord> getToPath = dm.findShortcutPath(self, path.toArray(new Coord[0]));
         if (getToPath.size() > 0)
         {
             getToPath.remove(getToPath.size() - 1);
@@ -480,7 +480,7 @@ public class WaypointPathfinder {
      */
     public ArrayList<Coord> goBackToPath(Coord currentPosition, ArrayList<Coord> path)
     {
-        return dm.findShortcutPath(currentPosition, path.toArray(new Coord[path.size()]));
+        return dm.findShortcutPath(currentPosition, path.toArray(new Coord[0]));
     }
 
     public OrderedSet<Coord> getWaypoints()

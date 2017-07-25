@@ -74,7 +74,8 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
      * Permutation generator that generates all possible orderings of
      * the elements in the specified set.
      * @param elements The elements to permute.
-     * @param filler An array of T with the same length as elements; needed because GWT can't create a generic array.
+     * @param filler An array of T with the same length as elements or less (ideally 0);
+     *               needed because GWT can't create a generic array.
      */
     @SuppressWarnings("unchecked")
     public PermutationGenerator(Collection<T> elements, T[] filler)

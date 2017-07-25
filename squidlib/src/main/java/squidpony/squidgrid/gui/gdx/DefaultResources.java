@@ -132,8 +132,9 @@ public class DefaultResources implements LifecycleListener {
             + "}\n";
 
     public static final String fragmentShader = "#ifdef GL_ES\n"
-            + "	precision mediump float;\n"
-            + "	precision mediump int;\n"
+            + " precision mediump float;\n"
+            + " precision mediump int;\n"
+            + "#extension GL_OES_standard_derivatives : enable\n"
             + "#endif\n"
             + "\n"
             + "uniform sampler2D u_texture;\n"
