@@ -389,7 +389,7 @@ public class ThinWallDemo extends ApplicationAdapter {
             }
         }));
         //set this to true to test visual input on desktop
-        input.forceButtons = false;
+        input.forceButtons = true;
         //actions to give names to in the visual input menu
         input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT

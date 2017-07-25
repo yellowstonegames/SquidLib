@@ -328,15 +328,15 @@ public class VisualInput extends SquidInput {
             sectionHeight *= screenHeight / this.screenHeight;
         else
             sectionHeight *= screenHeight / Gdx.graphics.getHeight();
-        cellWidth /= screenWidth  / (screenWidth - sectionWidth);
-        float leftWidth = screenWidth / 8f / 4f, rightWidth = screenWidth / 8f / 12f,
+        cellWidth /= screenWidth / (screenWidth - sectionWidth * 0.75f);
+        float leftWidth = screenWidth / 32f, rightWidth = screenWidth / 96f,
                 leftHeight = screenHeight / 12f, rightHeight = screenHeight / 24f;
         mouse.reinitialize(cellWidth, cellHeight, gridWidth, gridHeight,
-                offsetX - MathUtils.round((screenWidth / 8f) * (screenWidth / (screenWidth - sectionWidth)) + cellWidth /2f), offsetY);
+                offsetX - MathUtils.round((screenWidth * 0.125f) * (screenWidth / (screenWidth - sectionWidth)) + cellWidth * 0.5f), offsetY);
         mouseLeft.reinitialize(leftWidth, leftHeight, 4, 16, offsetX, offsetY);
         mouseRight.reinitialize(rightWidth, rightHeight, 12, 24,
                 MathUtils.ceil(offsetX - (screenWidth - sectionWidth)),
-                MathUtils.round(offsetY - rightHeight / 2f + (right.getGridHeight() * rightHeight - screenHeight)));
+                MathUtils.round(offsetY - rightHeight * 0.5f + (right.getGridHeight() * rightHeight - screenHeight)));
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         if(spv != null)
