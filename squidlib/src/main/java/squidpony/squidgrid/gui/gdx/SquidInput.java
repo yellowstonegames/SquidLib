@@ -223,14 +223,17 @@ public class SquidInput extends InputAdapter {
      */
     public void next() {
         IntVLA qu = queue;
-        if (keyAction == null || qu.size <= 0) {
+        if (keyAction == null) {
+            qu.clear(); // Accidentally captured a keypress when keys aren't meant to be handled
+            return;
+        }
+        if (qu.isEmpty()) {
             return;
         }
         int t = qu.removeIndex(0);
 
-        char c = (char)t;
+        char c = (char) t;
         keyAction.handle(c, (t & 0x10000) != 0, (t & 0x20000) != 0, (t & 0x40000) != 0);
-
     }
 
     /**
@@ -243,7 +246,9 @@ public class SquidInput extends InputAdapter {
 
     @Override
 	public boolean keyDown (int keycode) {
-        if(ignoreInput) return false;
+        if (ignoreInput || keyAction == null) {
+            return false;
+        }
         boolean alt =  Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT),
                 ctrl =  Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT),
                 shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
