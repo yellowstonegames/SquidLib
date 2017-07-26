@@ -23,7 +23,7 @@ public class TextStorage {
     protected OrderedMap<String, String> contents;
     public final StringConvert<OrderedMap<String, String>> mapConverter;
     public boolean compress = true;
-    public int[] garbleKey = null;
+    public long[] garbleKey = null;
 
     /**
      * Please don't use this constructor if possible; it simply calls {@link #TextStorage(String)} with the constant
@@ -58,7 +58,7 @@ public class TextStorage {
      */
     public TextStorage(final String fileName)
     {
-        this(fileName, new int[0]);
+        this(fileName, new long[0]);
     }
 
     /**
@@ -99,7 +99,7 @@ public class TextStorage {
      * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
      * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly
      * to games or applications other than your own; you should avoid values for fileName that might overlap with
-     * another game's Preferences values. This constructor also allows you to specify a "garble" int array; if this is
+     * another game's Preferences values. This constructor also allows you to specify a "garble" long array; if this is
      * non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic
      * methods. If garble is null or empty, it is ignored.
      * <br>
@@ -116,7 +116,7 @@ public class TextStorage {
      * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.
      * @param garble the key that must be used exactly to decrypt any data saved by this TextStorage; will be copied
      */
-    public TextStorage(final String fileName, final int[] garble) {
+    public TextStorage(final String fileName, final long[] garble) {
         storageName = fileName;
         preferences = Gdx.app.getPreferences(storageName);
         contents = new OrderedMap<>(16, 0.2f);
@@ -124,7 +124,7 @@ public class TextStorage {
         if (garble == null || garble.length == 0)
             garbleKey = null;
         else {
-            garbleKey = new int[garble.length];
+            garbleKey = new long[garble.length];
             System.arraycopy(garble, 0, garbleKey, 0, garble.length);
         }
     }

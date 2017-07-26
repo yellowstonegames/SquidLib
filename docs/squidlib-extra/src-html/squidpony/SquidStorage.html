@@ -83,7 +83,7 @@
 <span class="sourceLineNo">075</span>     * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should<a name="line.75"></a>
 <span class="sourceLineNo">076</span>     * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly<a name="line.76"></a>
 <span class="sourceLineNo">077</span>     * to games or applications other than your own; you should avoid values for fileName that might overlap with<a name="line.77"></a>
-<span class="sourceLineNo">078</span>     * another game's Preferences values. This constructor also allows you to specify a "garble" int array; if this is<a name="line.78"></a>
+<span class="sourceLineNo">078</span>     * another game's Preferences values. This constructor also allows you to specify a "garble" long array; if this is<a name="line.78"></a>
 <span class="sourceLineNo">079</span>     * non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic<a name="line.79"></a>
 <span class="sourceLineNo">080</span>     * methods. If garble is null or empty, it is ignored.<a name="line.80"></a>
 <span class="sourceLineNo">081</span>     * &lt;br&gt;<a name="line.81"></a>
@@ -97,9 +97,9 @@
 <span class="sourceLineNo">089</span>     * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.<a name="line.89"></a>
 <span class="sourceLineNo">090</span>     * The custom char[][] representation is about half the normal size by omitting commas after each char.<a name="line.90"></a>
 <span class="sourceLineNo">091</span>     * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * @param garble a String that will be used as a key to obfuscate the saved output if non-null<a name="line.92"></a>
+<span class="sourceLineNo">092</span>     * @param garble a long array that will be used as a key to obfuscate the saved output if non-null<a name="line.92"></a>
 <span class="sourceLineNo">093</span>     */<a name="line.93"></a>
-<span class="sourceLineNo">094</span>    public SquidStorage(final String fileName, final int[] garble)<a name="line.94"></a>
+<span class="sourceLineNo">094</span>    public SquidStorage(final String fileName, final long[] garble)<a name="line.94"></a>
 <span class="sourceLineNo">095</span>    {<a name="line.95"></a>
 <span class="sourceLineNo">096</span>        super(fileName, garble);<a name="line.96"></a>
 <span class="sourceLineNo">097</span>    }<a name="line.97"></a>

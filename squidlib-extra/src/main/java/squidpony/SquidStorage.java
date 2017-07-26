@@ -75,7 +75,7 @@ public class SquidStorage extends JsonStorage {
      * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
      * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly
      * to games or applications other than your own; you should avoid values for fileName that might overlap with
-     * another game's Preferences values. This constructor also allows you to specify a "garble" int array; if this is
+     * another game's Preferences values. This constructor also allows you to specify a "garble" long array; if this is
      * non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic
      * methods. If garble is null or empty, it is ignored.
      * <br>
@@ -89,9 +89,9 @@ public class SquidStorage extends JsonStorage {
      * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.
      * The custom char[][] representation is about half the normal size by omitting commas after each char.
      * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.
-     * @param garble a String that will be used as a key to obfuscate the saved output if non-null
+     * @param garble a long array that will be used as a key to obfuscate the saved output if non-null
      */
-    public SquidStorage(final String fileName, final int[] garble)
+    public SquidStorage(final String fileName, final long[] garble)
     {
         super(fileName, garble);
     }

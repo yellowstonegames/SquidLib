@@ -27,7 +27,7 @@ public class LZSPlusTest {
 //                FakeLanguageGen.INFERNAL.sentence(rng,7, 16),
         }, compressed = new String[ozzes.length];
         String oz = StringKit.join("", ozzes), allCompressed;
-        int[] keys = Garbler.makeKeyArray(7, "There's no place like home...");
+        long[] keys = Garbler.makeKeyArray(7, "There's no place like home...");
         for (int i = 0; i < ozzes.length; i++) {
             System.out.println(compressed[i] = LZSPlus.compress(ozzes[i]));
         }

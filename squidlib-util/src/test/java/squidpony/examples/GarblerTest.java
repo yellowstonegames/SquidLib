@@ -47,7 +47,7 @@ public class GarblerTest {
                 System.exit(1);
         }
 
-        int[] keys = Garbler.makeKeyArray(5, "There's no place like home");
+        long[] keys = Garbler.makeKeyArray(5, "There's no place like home");
         for (String oz : ozzes) {
             System.out.println(oz);
             String garbled = Garbler.garble32(oz, keys);

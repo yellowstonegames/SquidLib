@@ -20,7 +20,7 @@
 <span class="sourceLineNo">012</span> * produce incompatible output when compared to the regular garble and degarble methods. A minor step of obfuscation<a name="line.12"></a>
 <span class="sourceLineNo">013</span> * could be to run some combination of garble and/or garble32 with different keys and then require they be degarbled by<a name="line.13"></a>
 <span class="sourceLineNo">014</span> * degarble and/or degarble32 calls (with the same keys as before) in the reverse order of the garble/garble32 calls.<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * This is made more efficient with the {@link #garble32(String, int[])} and {@link #degarble32(String, int[])} methods,<a name="line.15"></a>
+<span class="sourceLineNo">015</span> * This is made more efficient with the {@link #garble32(String, long[])} and {@link #degarble32(String, long[])} methods,<a name="line.15"></a>
 <span class="sourceLineNo">016</span> * which avoid allocating multiple temporary char arrays when multiple keys are used. A more major step of obfuscation<a name="line.16"></a>
 <span class="sourceLineNo">017</span> * would be to run any garbling on already-compressed text, as code in the squidlib-extra module can do (or anything<a name="line.17"></a>
 <span class="sourceLineNo">018</span> * using a string compression library, like the<a name="line.18"></a>
@@ -132,15 +132,15 @@
 <span class="sourceLineNo">124</span>    }<a name="line.124"></a>
 <span class="sourceLineNo">125</span><a name="line.125"></a>
 <span class="sourceLineNo">126</span>    /**<a name="line.126"></a>
-<span class="sourceLineNo">127</span>     * Call this with {@code splitMix32(z += 0x9E3779B9)}, where z is an int to use as state.<a name="line.127"></a>
-<span class="sourceLineNo">128</span>     * 0x9E3779B9 can be changed for any odd int if the same number is used across calls.<a name="line.128"></a>
-<span class="sourceLineNo">129</span>     * @param z int, must be changed with each call; {@code splitMix32(z += 0x9E3779B9)} is recommended<a name="line.129"></a>
-<span class="sourceLineNo">130</span>     * @return a pseudo-random int<a name="line.130"></a>
+<span class="sourceLineNo">127</span>     * Get a long from this with {@code splitMix64(z += 0x9E3779B97F4A7C15L)}, where z is a long to use as state.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * 0x9E3779B97F4A7C15L can be changed for any odd long if the same number is used across calls.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @param state long, must be changed with each call; {@code splitMix64(z += 0x9E3779B97F4A7C15L)} is recommended<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * @return a pseudo-random long<a name="line.130"></a>
 <span class="sourceLineNo">131</span>     */<a name="line.131"></a>
-<span class="sourceLineNo">132</span>    private static int splitMix32(int z) {<a name="line.132"></a>
-<span class="sourceLineNo">133</span>        z = (z ^ (z &gt;&gt;&gt; 16)) * 0x85EBCA6B;<a name="line.133"></a>
-<span class="sourceLineNo">134</span>        z = (z ^ (z &gt;&gt;&gt; 13)) * 0xC2B2AE35;<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        return z ^ (z &gt;&gt;&gt; 16);<a name="line.135"></a>
+<span class="sourceLineNo">132</span>    private static long splitMix64(long state) {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        state = (((state *= 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        return state ^ (state &gt;&gt;&gt; 31);<a name="line.135"></a>
 <span class="sourceLineNo">136</span>    }<a name="line.136"></a>
 <span class="sourceLineNo">137</span><a name="line.137"></a>
 <span class="sourceLineNo">138</span><a name="line.138"></a>
@@ -167,28 +167,28 @@
 <span class="sourceLineNo">159</span>    }<a name="line.159"></a>
 <span class="sourceLineNo">160</span><a name="line.160"></a>
 <span class="sourceLineNo">161</span>    /**<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * Garbles text with the given key as an int. This can be degarbled with {@link #degarble32(String, int)}, which must<a name="line.162"></a>
+<span class="sourceLineNo">162</span>     * Garbles text with the given key as an int. This can be degarbled with {@link #degarble32(String, long)}, which must<a name="line.162"></a>
 <span class="sourceLineNo">163</span>     * be given the same key.<a name="line.163"></a>
 <span class="sourceLineNo">164</span>     * @param text the text to garble<a name="line.164"></a>
 <span class="sourceLineNo">165</span>     * @param key the key this will use to garble text<a name="line.165"></a>
 <span class="sourceLineNo">166</span>     * @return a new String that appears unrelated to text and should look like gibberish<a name="line.166"></a>
 <span class="sourceLineNo">167</span>     */<a name="line.167"></a>
-<span class="sourceLineNo">168</span>    public static String garble32(final String text, final int key)<a name="line.168"></a>
+<span class="sourceLineNo">168</span>    public static String garble32(final String text, final long key)<a name="line.168"></a>
 <span class="sourceLineNo">169</span>    {<a name="line.169"></a>
 <span class="sourceLineNo">170</span>        final char[] cs = text.toCharArray();<a name="line.170"></a>
 <span class="sourceLineNo">171</span>        final int len = cs.length;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        int state = splitMix32(key);<a name="line.172"></a>
-<span class="sourceLineNo">173</span>        final int increment = splitMix32(key * key ^ 0x9E3779B9 + ~key) | 1;<a name="line.173"></a>
-<span class="sourceLineNo">174</span>        int wiggle;<a name="line.174"></a>
+<span class="sourceLineNo">172</span>        long state = splitMix64(key);<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        final long increment = splitMix64(key * key ^ 0x9E3779B9 + ~key) | 1;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>        long wiggle;<a name="line.174"></a>
 <span class="sourceLineNo">175</span>        for (int i = len - 1; i &gt; 0; i--) {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>            wiggle = splitMix32(state += increment);<a name="line.176"></a>
-<span class="sourceLineNo">177</span>            int r = (wiggle &amp; 0x7FFFFFFF) % (i + 1);<a name="line.177"></a>
+<span class="sourceLineNo">176</span>            wiggle = splitMix64(state += increment);<a name="line.176"></a>
+<span class="sourceLineNo">177</span>            int r = (int) (((i+1L) * (wiggle &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);;<a name="line.177"></a>
 <span class="sourceLineNo">178</span>            char c = cs[r];<a name="line.178"></a>
 <span class="sourceLineNo">179</span>            cs[r] = cs[i];<a name="line.179"></a>
-<span class="sourceLineNo">180</span>            cs[i] = (char) (c ^ (wiggle + state) &gt;&gt;&gt; 27);<a name="line.180"></a>
+<span class="sourceLineNo">180</span>            cs[i] = (char) (c ^ (wiggle + state) &gt;&gt;&gt; 59);<a name="line.180"></a>
 <span class="sourceLineNo">181</span>        }<a name="line.181"></a>
-<span class="sourceLineNo">182</span>        wiggle = splitMix32(state += increment);<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        cs[0] ^= (wiggle + state) &gt;&gt;&gt; 27;<a name="line.183"></a>
+<span class="sourceLineNo">182</span>        wiggle = splitMix64(state += increment);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        cs[0] ^= (wiggle + state) &gt;&gt;&gt; 59;<a name="line.183"></a>
 <span class="sourceLineNo">184</span>        return String.valueOf(cs);<a name="line.184"></a>
 <span class="sourceLineNo">185</span>    }<a name="line.185"></a>
 <span class="sourceLineNo">186</span><a name="line.186"></a>
@@ -214,30 +214,30 @@
 <span class="sourceLineNo">206</span>    }<a name="line.206"></a>
 <span class="sourceLineNo">207</span><a name="line.207"></a>
 <span class="sourceLineNo">208</span>    /**<a name="line.208"></a>
-<span class="sourceLineNo">209</span>     * Given a garbled String that was produced by {@link #garble32(String, int)} (using the given key), this reverses<a name="line.209"></a>
+<span class="sourceLineNo">209</span>     * Given a garbled String that was produced by {@link #garble32(String, long)} (using the given key), this reverses<a name="line.209"></a>
 <span class="sourceLineNo">210</span>     * the garbling and gets the original String.<a name="line.210"></a>
 <span class="sourceLineNo">211</span>     * @param garbled a String produced by a garble32() method using the same keyText<a name="line.211"></a>
 <span class="sourceLineNo">212</span>     * @param key the key that was used during garbling<a name="line.212"></a>
 <span class="sourceLineNo">213</span>     * @return the original String before garbling, if the keys match<a name="line.213"></a>
 <span class="sourceLineNo">214</span>     */<a name="line.214"></a>
-<span class="sourceLineNo">215</span>    public static String degarble32(final String garbled, final int key)<a name="line.215"></a>
+<span class="sourceLineNo">215</span>    public static String degarble32(final String garbled, final long key)<a name="line.215"></a>
 <span class="sourceLineNo">216</span>    {<a name="line.216"></a>
 <span class="sourceLineNo">217</span>        final char[] cs = garbled.toCharArray();<a name="line.217"></a>
 <span class="sourceLineNo">218</span>        final int len = cs.length - 1;<a name="line.218"></a>
-<span class="sourceLineNo">219</span>        int state = splitMix32(key);<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        final int increment = splitMix32(key * key ^ 0x9E3779B9 + ~key) | 1;<a name="line.220"></a>
-<span class="sourceLineNo">221</span>        int wiggle = splitMix32(state += increment * (len+1));<a name="line.221"></a>
-<span class="sourceLineNo">222</span>        cs[0] ^= (wiggle + state) &gt;&gt;&gt; 27;<a name="line.222"></a>
+<span class="sourceLineNo">219</span>        long state = splitMix64(key);<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        final long increment = splitMix64(key * key ^ 0x9E3779B9 + ~key) | 1;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        long wiggle = splitMix64(state += increment * (len+1));<a name="line.221"></a>
+<span class="sourceLineNo">222</span>        cs[0] ^= (wiggle + state) &gt;&gt;&gt; 59;<a name="line.222"></a>
 <span class="sourceLineNo">223</span>        for (int i = 1; i &lt;= len; i++) {<a name="line.223"></a>
-<span class="sourceLineNo">224</span>            wiggle = splitMix32(state -= increment);<a name="line.224"></a>
-<span class="sourceLineNo">225</span>            int r = (wiggle &amp; 0x7FFFFFFF) % (i + 1);<a name="line.225"></a>
+<span class="sourceLineNo">224</span>            wiggle = splitMix64(state -= increment);<a name="line.224"></a>
+<span class="sourceLineNo">225</span>            int r = (int) (((i+1L) * (wiggle &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.225"></a>
 <span class="sourceLineNo">226</span>            if(i == r)<a name="line.226"></a>
 <span class="sourceLineNo">227</span>            {<a name="line.227"></a>
-<span class="sourceLineNo">228</span>                cs[i] ^= (wiggle + state) &gt;&gt;&gt; 27;<a name="line.228"></a>
+<span class="sourceLineNo">228</span>                cs[i] ^= (wiggle + state) &gt;&gt;&gt; 59;<a name="line.228"></a>
 <span class="sourceLineNo">229</span>            }<a name="line.229"></a>
 <span class="sourceLineNo">230</span>            else {<a name="line.230"></a>
 <span class="sourceLineNo">231</span>                char c = cs[r];<a name="line.231"></a>
-<span class="sourceLineNo">232</span>                cs[r] = (char) (cs[i] ^ (wiggle + state) &gt;&gt;&gt; 27);<a name="line.232"></a>
+<span class="sourceLineNo">232</span>                cs[r] = (char) (cs[i] ^ (wiggle + state) &gt;&gt;&gt; 59);<a name="line.232"></a>
 <span class="sourceLineNo">233</span>                cs[i] = c;<a name="line.233"></a>
 <span class="sourceLineNo">234</span>            }<a name="line.234"></a>
 <span class="sourceLineNo">235</span>        }<a name="line.235"></a>
@@ -247,38 +247,38 @@
 <span class="sourceLineNo">239</span>    /**<a name="line.239"></a>
 <span class="sourceLineNo">240</span>     * Garbles text with the given keys as an int array, effectively garbling the same text one time per item in keys.<a name="line.240"></a>
 <span class="sourceLineNo">241</span>     * This can seen as a way to improve the quality of the shuffle by adding more bits of state to the key(s).<a name="line.241"></a>
-<span class="sourceLineNo">242</span>     * The result can be degarbled with {@link #degarble32(String, int[])}, which must be given the same keys. This<a name="line.242"></a>
+<span class="sourceLineNo">242</span>     * The result can be degarbled with {@link #degarble32(String, long[])}, which must be given the same keys. This<a name="line.242"></a>
 <span class="sourceLineNo">243</span>     * method is more efficient than calling garble32() repeatedly because it only allocates one temporary char array<a name="line.243"></a>
 <span class="sourceLineNo">244</span>     * for the whole batch of keys, as opposed to needing one temporary array per key with repeated calls.<a name="line.244"></a>
 <span class="sourceLineNo">245</span>     * @param text the text to garble<a name="line.245"></a>
 <span class="sourceLineNo">246</span>     * @param keys the key array this will use to garble text, as an int array<a name="line.246"></a>
 <span class="sourceLineNo">247</span>     * @return a new String that appears unrelated to text and should look like gibberish<a name="line.247"></a>
 <span class="sourceLineNo">248</span>     */<a name="line.248"></a>
-<span class="sourceLineNo">249</span>    public static String garble32(final String text, final int[] keys)<a name="line.249"></a>
+<span class="sourceLineNo">249</span>    public static String garble32(final String text, final long[] keys)<a name="line.249"></a>
 <span class="sourceLineNo">250</span>    {<a name="line.250"></a>
 <span class="sourceLineNo">251</span>        if(keys == null)<a name="line.251"></a>
 <span class="sourceLineNo">252</span>            return garble32(text);<a name="line.252"></a>
 <span class="sourceLineNo">253</span>        final char[] cs = text.toCharArray();<a name="line.253"></a>
 <span class="sourceLineNo">254</span>        final int len = cs.length;<a name="line.254"></a>
 <span class="sourceLineNo">255</span>        for (int k = 0; k &lt; keys.length; k++) {<a name="line.255"></a>
-<span class="sourceLineNo">256</span>            final int key = keys[k],<a name="line.256"></a>
-<span class="sourceLineNo">257</span>                    increment = splitMix32(key * key ^ 0x9E3779B9 + ~key) | 1;<a name="line.257"></a>
-<span class="sourceLineNo">258</span>            int state = splitMix32(key);<a name="line.258"></a>
-<span class="sourceLineNo">259</span>            int wiggle;<a name="line.259"></a>
+<span class="sourceLineNo">256</span>            final long key = keys[k],<a name="line.256"></a>
+<span class="sourceLineNo">257</span>                    increment = splitMix64(key * key ^ 0x9E3779B9 + ~key) | 1;<a name="line.257"></a>
+<span class="sourceLineNo">258</span>            long state = splitMix64(key);<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            long wiggle;<a name="line.259"></a>
 <span class="sourceLineNo">260</span>            for (int i = len - 1; i &gt; 0; i--) {<a name="line.260"></a>
-<span class="sourceLineNo">261</span>                wiggle = splitMix32(state += increment);<a name="line.261"></a>
-<span class="sourceLineNo">262</span>                int r = (wiggle &amp; 0x7FFFFFFF) % (i + 1);<a name="line.262"></a>
+<span class="sourceLineNo">261</span>                wiggle = splitMix64(state += increment);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>                int r = (int) (((i+1L) * (wiggle &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.262"></a>
 <span class="sourceLineNo">263</span>                char c = cs[r];<a name="line.263"></a>
 <span class="sourceLineNo">264</span>                cs[r] = cs[i];<a name="line.264"></a>
-<span class="sourceLineNo">265</span>                cs[i] = (char) (c ^ (wiggle + state) &gt;&gt;&gt; 27);<a name="line.265"></a>
+<span class="sourceLineNo">265</span>                cs[i] = (char) (c ^ (wiggle + state) &gt;&gt;&gt; 59);<a name="line.265"></a>
 <span class="sourceLineNo">266</span>            }<a name="line.266"></a>
-<span class="sourceLineNo">267</span>            wiggle = splitMix32(state += increment);<a name="line.267"></a>
-<span class="sourceLineNo">268</span>            cs[0] ^= (wiggle + state) &gt;&gt;&gt; 27;<a name="line.268"></a>
+<span class="sourceLineNo">267</span>            wiggle = splitMix64(state += increment);<a name="line.267"></a>
+<span class="sourceLineNo">268</span>            cs[0] ^= (wiggle + state) &gt;&gt;&gt; 59;<a name="line.268"></a>
 <span class="sourceLineNo">269</span>        }<a name="line.269"></a>
 <span class="sourceLineNo">270</span>        return String.valueOf(cs);<a name="line.270"></a>
 <span class="sourceLineNo">271</span>    }<a name="line.271"></a>
 <span class="sourceLineNo">272</span>    /**<a name="line.272"></a>
-<span class="sourceLineNo">273</span>     * Given a garbled String that was produced by {@link #garble32(String, int[])} (using the given keys), this<a name="line.273"></a>
+<span class="sourceLineNo">273</span>     * Given a garbled String that was produced by {@link #garble32(String, long[])} (using the given keys), this<a name="line.273"></a>
 <span class="sourceLineNo">274</span>     * reverses the garbling and gets the original String. This is not the same as calling degarble32() repeatedly, in<a name="line.274"></a>
 <span class="sourceLineNo">275</span>     * part because this uses the keys in reverse order (just like every part of the degarbling process, it needs to be<a name="line.275"></a>
 <span class="sourceLineNo">276</span>     * in reverse), and in part because this only creates one temporary char array for the whole batch of keys, instead<a name="line.276"></a>
@@ -287,26 +287,26 @@
 <span class="sourceLineNo">279</span>     * @param keys the key array that was used during garbling<a name="line.279"></a>
 <span class="sourceLineNo">280</span>     * @return the original String before garbling, if the keys match<a name="line.280"></a>
 <span class="sourceLineNo">281</span>     */<a name="line.281"></a>
-<span class="sourceLineNo">282</span>    public static String degarble32(final String garbled, final int[] keys)<a name="line.282"></a>
+<span class="sourceLineNo">282</span>    public static String degarble32(final String garbled, final long[] keys)<a name="line.282"></a>
 <span class="sourceLineNo">283</span>    {<a name="line.283"></a>
 <span class="sourceLineNo">284</span>        if(keys == null)<a name="line.284"></a>
 <span class="sourceLineNo">285</span>            return degarble(garbled);<a name="line.285"></a>
 <span class="sourceLineNo">286</span>        final char[] cs = garbled.toCharArray();<a name="line.286"></a>
 <span class="sourceLineNo">287</span>        final int len = cs.length - 1;<a name="line.287"></a>
 <span class="sourceLineNo">288</span>        for (int k = keys.length - 1; k &gt;= 0; k--) {<a name="line.288"></a>
-<span class="sourceLineNo">289</span>            final int key = keys[k],<a name="line.289"></a>
-<span class="sourceLineNo">290</span>                    increment = splitMix32(key * key ^ 0x9E3779B9 + ~key) | 1;<a name="line.290"></a>
-<span class="sourceLineNo">291</span>            int state = splitMix32(key);<a name="line.291"></a>
-<span class="sourceLineNo">292</span>            int wiggle = splitMix32(state += increment * (len + 1));<a name="line.292"></a>
-<span class="sourceLineNo">293</span>            cs[0] ^= (wiggle + state) &gt;&gt;&gt; 27;<a name="line.293"></a>
+<span class="sourceLineNo">289</span>            final long key = keys[k],<a name="line.289"></a>
+<span class="sourceLineNo">290</span>                    increment = splitMix64(key * key ^ 0x9E3779B9 + ~key) | 1;<a name="line.290"></a>
+<span class="sourceLineNo">291</span>            long state = splitMix64(key),<a name="line.291"></a>
+<span class="sourceLineNo">292</span>                    wiggle = splitMix64(state += increment * (len + 1));<a name="line.292"></a>
+<span class="sourceLineNo">293</span>            cs[0] ^= (wiggle + state) &gt;&gt;&gt; 59;<a name="line.293"></a>
 <span class="sourceLineNo">294</span>            for (int i = 1; i &lt;= len; i++) {<a name="line.294"></a>
-<span class="sourceLineNo">295</span>                wiggle = splitMix32(state -= increment);<a name="line.295"></a>
-<span class="sourceLineNo">296</span>                int r = (wiggle &amp; 0x7FFFFFFF) % (i + 1);<a name="line.296"></a>
+<span class="sourceLineNo">295</span>                wiggle = splitMix64(state -= increment);<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                int r = (int) (((i+1L) * (wiggle &amp; 0x7FFFFFFFL)) &gt;&gt;&gt; 31);<a name="line.296"></a>
 <span class="sourceLineNo">297</span>                if (i == r) {<a name="line.297"></a>
-<span class="sourceLineNo">298</span>                    cs[i] ^= (wiggle + state) &gt;&gt;&gt; 27;<a name="line.298"></a>
+<span class="sourceLineNo">298</span>                    cs[i] ^= (wiggle + state) &gt;&gt;&gt; 59;<a name="line.298"></a>
 <span class="sourceLineNo">299</span>                } else {<a name="line.299"></a>
 <span class="sourceLineNo">300</span>                    char c = cs[r];<a name="line.300"></a>
-<span class="sourceLineNo">301</span>                    cs[r] = (char) (cs[i] ^ (wiggle + state) &gt;&gt;&gt; 27);<a name="line.301"></a>
+<span class="sourceLineNo">301</span>                    cs[r] = (char) (cs[i] ^ (wiggle + state) &gt;&gt;&gt; 59);<a name="line.301"></a>
 <span class="sourceLineNo">302</span>                    cs[i] = c;<a name="line.302"></a>
 <span class="sourceLineNo">303</span>                }<a name="line.303"></a>
 <span class="sourceLineNo">304</span>            }<a name="line.304"></a>
@@ -315,25 +315,26 @@
 <span class="sourceLineNo">307</span>    }<a name="line.307"></a>
 <span class="sourceLineNo">308</span><a name="line.308"></a>
 <span class="sourceLineNo">309</span>    /**<a name="line.309"></a>
-<span class="sourceLineNo">310</span>     * If you need to produce an int array as a key for {@link #garble32(String, int[])} when you only have a String,<a name="line.310"></a>
+<span class="sourceLineNo">310</span>     * If you need to produce an int array as a key for {@link #garble32(String, long[])} when you only have a String,<a name="line.310"></a>
 <span class="sourceLineNo">311</span>     * you can use this method if the String isn't too small (at least 8 char Strings should be fine). This produces a<a name="line.311"></a>
 <span class="sourceLineNo">312</span>     * diverse array of ints without the correlation between items that you would get if you just generated a sequence<a name="line.312"></a>
 <span class="sourceLineNo">313</span>     * of random ints from one small seed, by using multiple different {@link CrossHash.Mist} objects to hash the text.<a name="line.313"></a>
 <span class="sourceLineNo">314</span>     * @param size the size of the key array to produce; larger key arrays take proportionately longer to process<a name="line.314"></a>
 <span class="sourceLineNo">315</span>     * @param keyText the String to use as a basis for generating random-seeming numbers for keys<a name="line.315"></a>
-<span class="sourceLineNo">316</span>     * @return an int array that can be given to {@link #garble32(String, int[])} and {@link #degarble32(String, int[])}<a name="line.316"></a>
+<span class="sourceLineNo">316</span>     * @return an int array that can be given to {@link #garble32(String, long[])} and {@link #degarble32(String, long[])}<a name="line.316"></a>
 <span class="sourceLineNo">317</span>     */<a name="line.317"></a>
-<span class="sourceLineNo">318</span>    public static int[] makeKeyArray(final int size, final String keyText)<a name="line.318"></a>
+<span class="sourceLineNo">318</span>    public static long[] makeKeyArray(final int size, final String keyText)<a name="line.318"></a>
 <span class="sourceLineNo">319</span>    {<a name="line.319"></a>
-<span class="sourceLineNo">320</span>        if(size &lt;= 1) return new int[]{CrossHash.Mist.predefined[keyText.length() &amp; 31].hash(keyText)};<a name="line.320"></a>
-<span class="sourceLineNo">321</span>        int[] keys = new int[size];<a name="line.321"></a>
-<span class="sourceLineNo">322</span>        for (int i = 0, ctr = keyText.length() + 0xB9A2842F; i &lt; size; i++) {<a name="line.322"></a>
-<span class="sourceLineNo">323</span>            ctr += (keys[i] = CrossHash.Mist.predefined[splitMix32(ctr) &amp; 31].hash(keyText)) + 0xB9A2842F;<a name="line.323"></a>
-<span class="sourceLineNo">324</span>            keys[i] ^= ctr;<a name="line.324"></a>
-<span class="sourceLineNo">325</span>        }<a name="line.325"></a>
-<span class="sourceLineNo">326</span>        return keys;<a name="line.326"></a>
-<span class="sourceLineNo">327</span>    }<a name="line.327"></a>
-<span class="sourceLineNo">328</span>}<a name="line.328"></a>
+<span class="sourceLineNo">320</span>        if(size &lt;= 1) return new long[]{CrossHash.Mist.predefined[keyText.length() &amp; 31].hash64(keyText)};<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        long[] keys = new long[size];<a name="line.321"></a>
+<span class="sourceLineNo">322</span>        long ctr = keyText.length() * 181L + 0xB9A2842FL;<a name="line.322"></a>
+<span class="sourceLineNo">323</span>        for (int i = 0; i &lt; size; i++) {<a name="line.323"></a>
+<span class="sourceLineNo">324</span>            ctr += (keys[i] = CrossHash.Mist.predefined[(int)splitMix64(ctr) &amp; 31].hash64(keyText)) + 0xB9A2842FL;<a name="line.324"></a>
+<span class="sourceLineNo">325</span>            keys[i] ^= ctr;<a name="line.325"></a>
+<span class="sourceLineNo">326</span>        }<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        return keys;<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    }<a name="line.328"></a>
+<span class="sourceLineNo">329</span>}<a name="line.329"></a>
 
 
 
