@@ -21,7 +21,7 @@ public class JsonStorage {
     public final JsonConverter json;
     protected StringStringMap contents;
     public boolean compress = true;
-    public int[] garbleKey = null;
+    public long[] garbleKey = null;
 
     /**
      * Please don't use this constructor if possible; it simply calls {@link #JsonStorage(String)} with the constant
@@ -31,7 +31,7 @@ public class JsonStorage {
      */
     public JsonStorage()
     {
-        this("nameless", new int[0]);
+        this("nameless", new long[0]);
     }
 
     /**
@@ -55,7 +55,7 @@ public class JsonStorage {
      */
     public JsonStorage(final String fileName)
     {
-        this(fileName, new int[0]);
+        this(fileName, new long[0]);
     }
 
     /**
@@ -94,7 +94,7 @@ public class JsonStorage {
      * semicolons, or commas for certain, and other non-alphanumeric characters are also probably invalid). You should
      * not assume anything is present in the Preferences storage unless you have put it there, and this applies doubly
      * to games or applications other than your own; you should avoid values for fileName that might overlap with
-     * another game's Preferences values. This constructor also allows you to specify a "garble" int array; if this is
+     * another game's Preferences values. This constructor also allows you to specify a "garble" long array; if this is
      * non-empty, it will be used as a key to obfuscate the output and de-obfuscate the loaded input using fairly basic
      * methods. If garble is null or empty, it is ignored.
      * <br>
@@ -108,9 +108,9 @@ public class JsonStorage {
      * JSON maps normally, and both FakeLanguageGen and Pattern are amazingly smaller with the custom representation.
      * The custom char[][] representation is about half the normal size by omitting commas after each char.
      * @param fileName the valid file name to create or open from Preferences; typically the name of the game/app.
-     * @param garble an int array that will be used as a key to obfuscate the saved output if non-null
+     * @param garble a long array that will be used as a key to obfuscate the saved output if non-null
      */
-    public JsonStorage(final String fileName, final int[] garble) {
+    public JsonStorage(final String fileName, final long[] garble) {
         storageName = fileName;
         preferences = Gdx.app.getPreferences(storageName);
         json = new JsonConverter(JsonWriter.OutputType.minimal);
@@ -118,7 +118,7 @@ public class JsonStorage {
         if (garble == null || garble.length == 0)
             garbleKey = null;
         else {
-            garbleKey = new int[garble.length];
+            garbleKey = new long[garble.length];
             System.arraycopy(garble, 0, garbleKey, 0, garble.length);
         }
     }

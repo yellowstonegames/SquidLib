@@ -56,7 +56,7 @@ public final class LZSPlus {
      * @param keys the int array that will be used to encrypt the output, and will be required to decrypt the result; may be null
      * @return a compressed version of the given text
      */
-    public static String compress(String uncompressedStr, int[] keys) {
+    public static String compress(String uncompressedStr, long[] keys) {
         if (uncompressedStr == null) return null;
         if (uncompressedStr.isEmpty()) return "";
         int i, value;
@@ -260,21 +260,31 @@ public final class LZSPlus {
         }
         if(keys != null && keys.length > 0)
         {
-            int mainLength = context_data.length(), smallLength = mainLength >> 1, rem = mainLength & 1;
+            int mainLength = context_data.length(), smallLength = mainLength >> 2, rem = mainLength & 3;
             char[] raw = new char[mainLength];
             context_data.getChars(0, mainLength, raw, 0);
             for (int j = 0; j < keys.length; j++) {
-                int z = keys[j], inc = 0x9E3779BA * z + 0x632BE5AB, r;
+                long z = keys[j], inc = 0x9E3779BAL * z + 0x632BE5ABL, r;
                 for (int k = 0, n = 0; k < smallLength; k++) {
-                    r = splitMix32(z += inc);
+                    r = splitMix64(z += inc);
                     raw[n] ^= (r & 0x7fff);
                     raw[n++] += 32;
-                    raw[n] ^= (r >>> 17);
+                    raw[n] ^= (r >>> 16 & 0x7fff);
+                    raw[n++] += 32;
+                    raw[n] ^= (r >>> 32 & 0x7fff);
+                    raw[n++] += 32;
+                    raw[n] ^= (r >>> 49);
                     raw[n++] += 32;
                 }
-                if(rem == 1)
+                z += inc;
+                switch(rem)
                 {
-                    raw[mainLength-1] ^= splitMix32(z + inc) & 0x7fff;
+                    case 3:
+                        raw[mainLength-3] ^= splitMix64(z) >>> 49;
+                    case 2:
+                        raw[mainLength-2] ^= splitMix64(z) >>> 16 & 0x7fff;
+                    case 1:
+                        raw[mainLength-1] ^= splitMix64(z) & 0x7fff;
                 }
             }
             return String.valueOf(raw);
@@ -284,7 +294,7 @@ public final class LZSPlus {
     }
     /**
      * Decompresses text that was compressed with LZ-String compression; does not reverse decryption so it can only
-     * decompress Strings produced by {@link #compress(String)}, or {@link #compress(String, int[])} with an empty or
+     * decompress Strings produced by {@link #compress(String)}, or {@link #compress(String, long[])} with an empty or
      * null keys parameter.
      * @param compressed text that was compressed by {@link #compress(String)}
      * @return the original text, decompressed from the given text
@@ -296,12 +306,12 @@ public final class LZSPlus {
 
     /**
      * Decompresses text that was compressed with LZ-String compression, reversing any encryption if the keys int array
-     * matches the int array passed to {@link #compress(String, int[])} (keys can be null if no array was passed).
-     * @param compressed text that was compressed by {@link #compress(String, int[])}
+     * matches the int array passed to {@link #compress(String, long[])} (keys can be null if no array was passed).
+     * @param compressed text that was compressed by {@link #compress(String, long[])}
      * @param keys the int array that was used to encrypt the output, and must match to decrypt the result; may be null
      * @return the original text, decompressed and decrypted from compressed
      */
-    public static String decompress(String compressed, int[] keys) {
+    public static String decompress(String compressed, long[] keys) {
         if (compressed == null)
             return null;
         if (compressed.isEmpty())
@@ -310,18 +320,27 @@ public final class LZSPlus {
         int length = comp.length;
         if(keys != null && keys.length > 0)
         {
-            int smallLength = length >> 1, rem = length & 1;
+            int smallLength = length >> 2, rem = length & 3;
             for (int j = keys.length - 1; j >= 0; j--) {
-                int z = keys[j], inc = 0x9E3779BA * z + 0x632BE5AB, r;
+                long z = keys[j], inc = 0x9E3779BAL * z + 0x632BE5ABL, r;
                 z += (1+smallLength) * inc;
-                if(rem == 1)
+                switch (rem)
                 {
-                    comp[length-1] ^= splitMix32(z) & 0x7fff;
+                    case 3:
+                        comp[length-3] ^= splitMix64(z) >>> 49;
+                    case 2:
+                        comp[length-2] ^= splitMix64(z) >>> 16 & 0x7fff;
+                    case 1:
+                        comp[length-1] ^= splitMix64(z) & 0x7fff;
                 }
-                for (int k = 0, n = (length & -2) - 1; k < smallLength ; k++) {
-                    r = splitMix32(z -= inc);
+                for (int k = 0, n = (length & -4) - 1; k < smallLength ; k++) {
+                    r = splitMix64(z -= inc);
                     comp[n] -= 32;
-                    comp[n--] ^= (r >>> 17);
+                    comp[n--] ^= (r >>> 49);
+                    comp[n] -= 32;
+                    comp[n--] ^= (r >>> 32 & 0x7fff);
+                    comp[n] -= 32;
+                    comp[n--] ^= (r >>> 16 & 0x7fff);
                     comp[n] -= 32;
                     comp[n--] ^= (r & 0x7fff);
 
@@ -484,15 +503,14 @@ public final class LZSPlus {
     }
 
     /**
-     * Call this with {@code splitMix32(z += 0x9E3779B9)}, where z is an int to use as state.
-     * 0x9E3779B9 can be changed for any odd int if the same number is used across calls.
-     * @param z int, must be changed with each call; {@code splitMix32(z += 0x9E3779B9)} is recommended
-     * @return a pseudo-random int
+     * Get a long from this with {@code splitMix64(z += 0x9E3779B97F4A7C15L)}, where z is a long to use as state.
+     * 0x9E3779B97F4A7C15L can be changed for any odd long if the same number is used across calls.
+     * @param state long, must be changed with each call; {@code splitMix64(z += 0x9E3779B97F4A7C15L)} is recommended
+     * @return a pseudo-random long
      */
-    private static int splitMix32(int z) {
-        z = (z ^ (z >>> 16)) * 0x85EBCA6B;
-        z = (z ^ (z >>> 13)) * 0xC2B2AE35;
-        return z ^ (z >>> 16);
+    private static long splitMix64(long state) {
+        state = (((state *= 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return state ^ (state >>> 31);
     }
-
 }

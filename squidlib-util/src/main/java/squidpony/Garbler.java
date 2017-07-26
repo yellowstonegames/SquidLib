@@ -12,7 +12,7 @@ import squidpony.squidmath.PermutedRNG;
  * produce incompatible output when compared to the regular garble and degarble methods. A minor step of obfuscation
  * could be to run some combination of garble and/or garble32 with different keys and then require they be degarbled by
  * degarble and/or degarble32 calls (with the same keys as before) in the reverse order of the garble/garble32 calls.
- * This is made more efficient with the {@link #garble32(String, int[])} and {@link #degarble32(String, int[])} methods,
+ * This is made more efficient with the {@link #garble32(String, long[])} and {@link #degarble32(String, long[])} methods,
  * which avoid allocating multiple temporary char arrays when multiple keys are used. A more major step of obfuscation
  * would be to run any garbling on already-compressed text, as code in the squidlib-extra module can do (or anything
  * using a string compression library, like the
@@ -124,15 +124,15 @@ public final class Garbler {
     }
 
     /**
-     * Call this with {@code splitMix32(z += 0x9E3779B9)}, where z is an int to use as state.
-     * 0x9E3779B9 can be changed for any odd int if the same number is used across calls.
-     * @param z int, must be changed with each call; {@code splitMix32(z += 0x9E3779B9)} is recommended
-     * @return a pseudo-random int
+     * Get a long from this with {@code splitMix64(z += 0x9E3779B97F4A7C15L)}, where z is a long to use as state.
+     * 0x9E3779B97F4A7C15L can be changed for any odd long if the same number is used across calls.
+     * @param state long, must be changed with each call; {@code splitMix64(z += 0x9E3779B97F4A7C15L)} is recommended
+     * @return a pseudo-random long
      */
-    private static int splitMix32(int z) {
-        z = (z ^ (z >>> 16)) * 0x85EBCA6B;
-        z = (z ^ (z >>> 13)) * 0xC2B2AE35;
-        return z ^ (z >>> 16);
+    private static long splitMix64(long state) {
+        state = (((state *= 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return state ^ (state >>> 31);
     }
 
 
@@ -159,28 +159,28 @@ public final class Garbler {
     }
 
     /**
-     * Garbles text with the given key as an int. This can be degarbled with {@link #degarble32(String, int)}, which must
+     * Garbles text with the given key as an int. This can be degarbled with {@link #degarble32(String, long)}, which must
      * be given the same key.
      * @param text the text to garble
      * @param key the key this will use to garble text
      * @return a new String that appears unrelated to text and should look like gibberish
      */
-    public static String garble32(final String text, final int key)
+    public static String garble32(final String text, final long key)
     {
         final char[] cs = text.toCharArray();
         final int len = cs.length;
-        int state = splitMix32(key);
-        final int increment = splitMix32(key * key ^ 0x9E3779B9 + ~key) | 1;
-        int wiggle;
+        long state = splitMix64(key);
+        final long increment = splitMix64(key * key ^ 0x9E3779B9 + ~key) | 1;
+        long wiggle;
         for (int i = len - 1; i > 0; i--) {
-            wiggle = splitMix32(state += increment);
-            int r = (wiggle & 0x7FFFFFFF) % (i + 1);
+            wiggle = splitMix64(state += increment);
+            int r = (int) (((i+1L) * (wiggle & 0x7FFFFFFFL)) >>> 31);;
             char c = cs[r];
             cs[r] = cs[i];
-            cs[i] = (char) (c ^ (wiggle + state) >>> 27);
+            cs[i] = (char) (c ^ (wiggle + state) >>> 59);
         }
-        wiggle = splitMix32(state += increment);
-        cs[0] ^= (wiggle + state) >>> 27;
+        wiggle = splitMix64(state += increment);
+        cs[0] ^= (wiggle + state) >>> 59;
         return String.valueOf(cs);
     }
 
@@ -206,30 +206,30 @@ public final class Garbler {
     }
 
     /**
-     * Given a garbled String that was produced by {@link #garble32(String, int)} (using the given key), this reverses
+     * Given a garbled String that was produced by {@link #garble32(String, long)} (using the given key), this reverses
      * the garbling and gets the original String.
      * @param garbled a String produced by a garble32() method using the same keyText
      * @param key the key that was used during garbling
      * @return the original String before garbling, if the keys match
      */
-    public static String degarble32(final String garbled, final int key)
+    public static String degarble32(final String garbled, final long key)
     {
         final char[] cs = garbled.toCharArray();
         final int len = cs.length - 1;
-        int state = splitMix32(key);
-        final int increment = splitMix32(key * key ^ 0x9E3779B9 + ~key) | 1;
-        int wiggle = splitMix32(state += increment * (len+1));
-        cs[0] ^= (wiggle + state) >>> 27;
+        long state = splitMix64(key);
+        final long increment = splitMix64(key * key ^ 0x9E3779B9 + ~key) | 1;
+        long wiggle = splitMix64(state += increment * (len+1));
+        cs[0] ^= (wiggle + state) >>> 59;
         for (int i = 1; i <= len; i++) {
-            wiggle = splitMix32(state -= increment);
-            int r = (wiggle & 0x7FFFFFFF) % (i + 1);
+            wiggle = splitMix64(state -= increment);
+            int r = (int) (((i+1L) * (wiggle & 0x7FFFFFFFL)) >>> 31);
             if(i == r)
             {
-                cs[i] ^= (wiggle + state) >>> 27;
+                cs[i] ^= (wiggle + state) >>> 59;
             }
             else {
                 char c = cs[r];
-                cs[r] = (char) (cs[i] ^ (wiggle + state) >>> 27);
+                cs[r] = (char) (cs[i] ^ (wiggle + state) >>> 59);
                 cs[i] = c;
             }
         }
@@ -239,38 +239,38 @@ public final class Garbler {
     /**
      * Garbles text with the given keys as an int array, effectively garbling the same text one time per item in keys.
      * This can seen as a way to improve the quality of the shuffle by adding more bits of state to the key(s).
-     * The result can be degarbled with {@link #degarble32(String, int[])}, which must be given the same keys. This
+     * The result can be degarbled with {@link #degarble32(String, long[])}, which must be given the same keys. This
      * method is more efficient than calling garble32() repeatedly because it only allocates one temporary char array
      * for the whole batch of keys, as opposed to needing one temporary array per key with repeated calls.
      * @param text the text to garble
      * @param keys the key array this will use to garble text, as an int array
      * @return a new String that appears unrelated to text and should look like gibberish
      */
-    public static String garble32(final String text, final int[] keys)
+    public static String garble32(final String text, final long[] keys)
     {
         if(keys == null)
             return garble32(text);
         final char[] cs = text.toCharArray();
         final int len = cs.length;
         for (int k = 0; k < keys.length; k++) {
-            final int key = keys[k],
-                    increment = splitMix32(key * key ^ 0x9E3779B9 + ~key) | 1;
-            int state = splitMix32(key);
-            int wiggle;
+            final long key = keys[k],
+                    increment = splitMix64(key * key ^ 0x9E3779B9 + ~key) | 1;
+            long state = splitMix64(key);
+            long wiggle;
             for (int i = len - 1; i > 0; i--) {
-                wiggle = splitMix32(state += increment);
-                int r = (wiggle & 0x7FFFFFFF) % (i + 1);
+                wiggle = splitMix64(state += increment);
+                int r = (int) (((i+1L) * (wiggle & 0x7FFFFFFFL)) >>> 31);
                 char c = cs[r];
                 cs[r] = cs[i];
-                cs[i] = (char) (c ^ (wiggle + state) >>> 27);
+                cs[i] = (char) (c ^ (wiggle + state) >>> 59);
             }
-            wiggle = splitMix32(state += increment);
-            cs[0] ^= (wiggle + state) >>> 27;
+            wiggle = splitMix64(state += increment);
+            cs[0] ^= (wiggle + state) >>> 59;
         }
         return String.valueOf(cs);
     }
     /**
-     * Given a garbled String that was produced by {@link #garble32(String, int[])} (using the given keys), this
+     * Given a garbled String that was produced by {@link #garble32(String, long[])} (using the given keys), this
      * reverses the garbling and gets the original String. This is not the same as calling degarble32() repeatedly, in
      * part because this uses the keys in reverse order (just like every part of the degarbling process, it needs to be
      * in reverse), and in part because this only creates one temporary char array for the whole batch of keys, instead
@@ -279,26 +279,26 @@ public final class Garbler {
      * @param keys the key array that was used during garbling
      * @return the original String before garbling, if the keys match
      */
-    public static String degarble32(final String garbled, final int[] keys)
+    public static String degarble32(final String garbled, final long[] keys)
     {
         if(keys == null)
             return degarble(garbled);
         final char[] cs = garbled.toCharArray();
         final int len = cs.length - 1;
         for (int k = keys.length - 1; k >= 0; k--) {
-            final int key = keys[k],
-                    increment = splitMix32(key * key ^ 0x9E3779B9 + ~key) | 1;
-            int state = splitMix32(key);
-            int wiggle = splitMix32(state += increment * (len + 1));
-            cs[0] ^= (wiggle + state) >>> 27;
+            final long key = keys[k],
+                    increment = splitMix64(key * key ^ 0x9E3779B9 + ~key) | 1;
+            long state = splitMix64(key),
+                    wiggle = splitMix64(state += increment * (len + 1));
+            cs[0] ^= (wiggle + state) >>> 59;
             for (int i = 1; i <= len; i++) {
-                wiggle = splitMix32(state -= increment);
-                int r = (wiggle & 0x7FFFFFFF) % (i + 1);
+                wiggle = splitMix64(state -= increment);
+                int r = (int) (((i+1L) * (wiggle & 0x7FFFFFFFL)) >>> 31);
                 if (i == r) {
-                    cs[i] ^= (wiggle + state) >>> 27;
+                    cs[i] ^= (wiggle + state) >>> 59;
                 } else {
                     char c = cs[r];
-                    cs[r] = (char) (cs[i] ^ (wiggle + state) >>> 27);
+                    cs[r] = (char) (cs[i] ^ (wiggle + state) >>> 59);
                     cs[i] = c;
                 }
             }
@@ -307,20 +307,21 @@ public final class Garbler {
     }
 
     /**
-     * If you need to produce an int array as a key for {@link #garble32(String, int[])} when you only have a String,
+     * If you need to produce an int array as a key for {@link #garble32(String, long[])} when you only have a String,
      * you can use this method if the String isn't too small (at least 8 char Strings should be fine). This produces a
      * diverse array of ints without the correlation between items that you would get if you just generated a sequence
      * of random ints from one small seed, by using multiple different {@link CrossHash.Mist} objects to hash the text.
      * @param size the size of the key array to produce; larger key arrays take proportionately longer to process
      * @param keyText the String to use as a basis for generating random-seeming numbers for keys
-     * @return an int array that can be given to {@link #garble32(String, int[])} and {@link #degarble32(String, int[])}
+     * @return an int array that can be given to {@link #garble32(String, long[])} and {@link #degarble32(String, long[])}
      */
-    public static int[] makeKeyArray(final int size, final String keyText)
+    public static long[] makeKeyArray(final int size, final String keyText)
     {
-        if(size <= 1) return new int[]{CrossHash.Mist.predefined[keyText.length() & 31].hash(keyText)};
-        int[] keys = new int[size];
-        for (int i = 0, ctr = keyText.length() + 0xB9A2842F; i < size; i++) {
-            ctr += (keys[i] = CrossHash.Mist.predefined[splitMix32(ctr) & 31].hash(keyText)) + 0xB9A2842F;
+        if(size <= 1) return new long[]{CrossHash.Mist.predefined[keyText.length() & 31].hash64(keyText)};
+        long[] keys = new long[size];
+        long ctr = keyText.length() * 181L + 0xB9A2842FL;
+        for (int i = 0; i < size; i++) {
+            ctr += (keys[i] = CrossHash.Mist.predefined[(int)splitMix64(ctr) & 31].hash64(keyText)) + 0xB9A2842FL;
             keys[i] ^= ctr;
         }
         return keys;
