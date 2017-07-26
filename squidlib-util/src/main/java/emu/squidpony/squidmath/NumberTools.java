@@ -184,27 +184,4 @@ public class NumberTools {
                 + intBitsToFloat(((start << 13 & 0x007FFFFF) ^ ~start >>> 19) | 0x3F000000)
                 - 3f);
     }
-    static int hashWisp(final float[] data) {
-        if (data == null)
-            return 0;
-        int result = 0x9E3779B9, a = 0x632BE5AB;
-        final int len = data.length;
-        double t;
-        for (int i = 0; i < len; i++) {
-            result += (a ^= 0x85157AF5 * ((int) (-0xD0E8.9D2D311E289Fp-25f * (t = data[i]) + t * -0x1.39b4dce80194cp9f)));
-        }
-        return result * (a | 1) ^ (result >>> 11 | result << 21);
-    }
-    static int hashWisp(final double[] data)
-    {
-        if (data == null)
-            return 0;
-        int result = 0x9E3779B9, a = 0x632BE5AB;
-        final int len = data.length;
-        for (int i = 0; i < len; i++) {
-            wda.set(0, data[i]);
-            result += (a ^= 0x85157AF5 * wia.get(0)) + (a ^= 0x85157AF5 * wia.get(1));
-        }
-        return result * (a | 1) ^ (result >>> 11 | result << 21);
-    }
 }

@@ -1766,198 +1766,199 @@
 <span class="sourceLineNo">1758</span>            if(msdf)<a name="line.1758"></a>
 <span class="sourceLineNo">1759</span>            {<a name="line.1759"></a>
 <span class="sourceLineNo">1760</span>                batch.setShader(shader);<a name="line.1760"></a>
-<span class="sourceLineNo">1761</span>            }<a name="line.1761"></a>
-<span class="sourceLineNo">1762</span>            else if (distanceField) {<a name="line.1762"></a>
-<span class="sourceLineNo">1763</span>                batch.setShader(shader);<a name="line.1763"></a>
-<span class="sourceLineNo">1764</span>                shader.setUniformf("u_smoothing", 0.35f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));<a name="line.1764"></a>
-<span class="sourceLineNo">1765</span>            }<a name="line.1765"></a>
-<span class="sourceLineNo">1766</span>        }<a name="line.1766"></a>
-<span class="sourceLineNo">1767</span>    }<a name="line.1767"></a>
-<span class="sourceLineNo">1768</span>    /**<a name="line.1768"></a>
-<span class="sourceLineNo">1769</span>     * Releases all resources of this object.<a name="line.1769"></a>
-<span class="sourceLineNo">1770</span>     */<a name="line.1770"></a>
-<span class="sourceLineNo">1771</span>    @Override<a name="line.1771"></a>
-<span class="sourceLineNo">1772</span>    public void dispose() {<a name="line.1772"></a>
-<span class="sourceLineNo">1773</span>        if(bmpFont != null) bmpFont.dispose();<a name="line.1773"></a>
-<span class="sourceLineNo">1774</span>        if(block != null) block.dispose();<a name="line.1774"></a>
-<span class="sourceLineNo">1775</span>    }<a name="line.1775"></a>
-<span class="sourceLineNo">1776</span><a name="line.1776"></a>
-<span class="sourceLineNo">1777</span>    /**<a name="line.1777"></a>
-<span class="sourceLineNo">1778</span>     * Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.<a name="line.1778"></a>
-<span class="sourceLineNo">1779</span>     * @return the descent of the BitmapFont this object uses<a name="line.1779"></a>
-<span class="sourceLineNo">1780</span>     */<a name="line.1780"></a>
-<span class="sourceLineNo">1781</span>    public float getDescent() {<a name="line.1781"></a>
-<span class="sourceLineNo">1782</span>        return descent;<a name="line.1782"></a>
-<span class="sourceLineNo">1783</span>    }<a name="line.1783"></a>
-<span class="sourceLineNo">1784</span><a name="line.1784"></a>
-<span class="sourceLineNo">1785</span>    public char getDirectionGlyph() {<a name="line.1785"></a>
-<span class="sourceLineNo">1786</span>        return directionGlyph;<a name="line.1786"></a>
-<span class="sourceLineNo">1787</span>    }<a name="line.1787"></a>
-<span class="sourceLineNo">1788</span><a name="line.1788"></a>
-<span class="sourceLineNo">1789</span>    public TextCellFactory setDirectionGlyph(char directionGlyph) {<a name="line.1789"></a>
-<span class="sourceLineNo">1790</span>        this.directionGlyph = directionGlyph;<a name="line.1790"></a>
-<span class="sourceLineNo">1791</span>        return this;<a name="line.1791"></a>
-<span class="sourceLineNo">1792</span>    }<a name="line.1792"></a>
-<span class="sourceLineNo">1793</span><a name="line.1793"></a>
-<span class="sourceLineNo">1794</span>    /**<a name="line.1794"></a>
-<span class="sourceLineNo">1795</span>     * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested<a name="line.1795"></a>
-<span class="sourceLineNo">1796</span>     * to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and<a name="line.1796"></a>
-<span class="sourceLineNo">1797</span>     * related classes, so Strings longer than 1 char are effectively disregarded beyond the first char.<a name="line.1797"></a>
-<span class="sourceLineNo">1798</span>     * &lt;br&gt;<a name="line.1798"></a>
-<span class="sourceLineNo">1799</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1799"></a>
-<span class="sourceLineNo">1800</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1800"></a>
-<span class="sourceLineNo">1801</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also<a name="line.1801"></a>
-<span class="sourceLineNo">1802</span>     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1802"></a>
-<span class="sourceLineNo">1803</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1803"></a>
-<span class="sourceLineNo">1804</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1804"></a>
-<span class="sourceLineNo">1805</span>     * @param find the requested String that will be changed<a name="line.1805"></a>
-<span class="sourceLineNo">1806</span>     * @param replace the replacement String that will be used in place of find<a name="line.1806"></a>
-<span class="sourceLineNo">1807</span>     * @return this for chaining<a name="line.1807"></a>
-<span class="sourceLineNo">1808</span>     */<a name="line.1808"></a>
-<span class="sourceLineNo">1809</span>    public TextCellFactory addSwap(String find, String replace)<a name="line.1809"></a>
-<span class="sourceLineNo">1810</span>    {<a name="line.1810"></a>
-<span class="sourceLineNo">1811</span>        if(find == null || replace == null || find.isEmpty()  || replace.isEmpty() || find.charAt(0) == 0)<a name="line.1811"></a>
-<span class="sourceLineNo">1812</span>            return this;<a name="line.1812"></a>
-<span class="sourceLineNo">1813</span>        swap.put(find.charAt(0), replace.charAt(0));<a name="line.1813"></a>
-<span class="sourceLineNo">1814</span>        return this;<a name="line.1814"></a>
-<span class="sourceLineNo">1815</span>    }<a name="line.1815"></a>
-<span class="sourceLineNo">1816</span><a name="line.1816"></a>
-<span class="sourceLineNo">1817</span>    /**<a name="line.1817"></a>
-<span class="sourceLineNo">1818</span>     * Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is<a name="line.1818"></a>
-<span class="sourceLineNo">1819</span>     * used instead.<a name="line.1819"></a>
-<span class="sourceLineNo">1820</span>     * &lt;br&gt;<a name="line.1820"></a>
-<span class="sourceLineNo">1821</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1821"></a>
-<span class="sourceLineNo">1822</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1822"></a>
-<span class="sourceLineNo">1823</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1823"></a>
-<span class="sourceLineNo">1824</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1824"></a>
-<span class="sourceLineNo">1825</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1825"></a>
-<span class="sourceLineNo">1826</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1826"></a>
-<span class="sourceLineNo">1827</span>     * @param find the requested char that will be changed (converted to a length-1 String)<a name="line.1827"></a>
-<span class="sourceLineNo">1828</span>     * @param replace the replacement char that will be used in place of find (converted to a length-1 String)<a name="line.1828"></a>
-<span class="sourceLineNo">1829</span>     * @return this for chaining<a name="line.1829"></a>
-<span class="sourceLineNo">1830</span>     */<a name="line.1830"></a>
-<span class="sourceLineNo">1831</span>    public TextCellFactory addSwap(char find, char replace)<a name="line.1831"></a>
-<span class="sourceLineNo">1832</span>    {<a name="line.1832"></a>
-<span class="sourceLineNo">1833</span>        if(find == 0)<a name="line.1833"></a>
-<span class="sourceLineNo">1834</span>            return this;<a name="line.1834"></a>
-<span class="sourceLineNo">1835</span>        swap.put(find, replace);<a name="line.1835"></a>
-<span class="sourceLineNo">1836</span>        return this;<a name="line.1836"></a>
-<span class="sourceLineNo">1837</span>    }<a name="line.1837"></a>
-<span class="sourceLineNo">1838</span><a name="line.1838"></a>
-<span class="sourceLineNo">1839</span>    /**<a name="line.1839"></a>
-<span class="sourceLineNo">1840</span>     * Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text<a name="line.1840"></a>
-<span class="sourceLineNo">1841</span>     * in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond<a name="line.1841"></a>
-<span class="sourceLineNo">1842</span>     * the first char.<a name="line.1842"></a>
-<span class="sourceLineNo">1843</span>     * &lt;br&gt;<a name="line.1843"></a>
-<span class="sourceLineNo">1844</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1844"></a>
-<span class="sourceLineNo">1845</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1845"></a>
-<span class="sourceLineNo">1846</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1846"></a>
-<span class="sourceLineNo">1847</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1847"></a>
-<span class="sourceLineNo">1848</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1848"></a>
-<span class="sourceLineNo">1849</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1849"></a>
-<span class="sourceLineNo">1850</span>     * @param find the String that would be changed in the replacement pair<a name="line.1850"></a>
-<span class="sourceLineNo">1851</span>     * @return this for chaining<a name="line.1851"></a>
-<span class="sourceLineNo">1852</span>     */<a name="line.1852"></a>
-<span class="sourceLineNo">1853</span>    public TextCellFactory removeSwap(String find)<a name="line.1853"></a>
-<span class="sourceLineNo">1854</span>    {<a name="line.1854"></a>
-<span class="sourceLineNo">1855</span><a name="line.1855"></a>
-<span class="sourceLineNo">1856</span>        if(find != null &amp;&amp; !find.isEmpty() &amp;&amp; find.charAt(0) != 0)<a name="line.1856"></a>
-<span class="sourceLineNo">1857</span>            swap.remove(find.charAt(0));<a name="line.1857"></a>
-<span class="sourceLineNo">1858</span>        return this;<a name="line.1858"></a>
-<span class="sourceLineNo">1859</span>    }<a name="line.1859"></a>
-<span class="sourceLineNo">1860</span><a name="line.1860"></a>
-<span class="sourceLineNo">1861</span>    /**<a name="line.1861"></a>
-<span class="sourceLineNo">1862</span>     * Removes the replacement pair, if present, that searches for the given key, find.<a name="line.1862"></a>
-<span class="sourceLineNo">1863</span>     * &lt;br&gt;<a name="line.1863"></a>
-<span class="sourceLineNo">1864</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1864"></a>
-<span class="sourceLineNo">1865</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1865"></a>
-<span class="sourceLineNo">1866</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1866"></a>
-<span class="sourceLineNo">1867</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1867"></a>
-<span class="sourceLineNo">1868</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1868"></a>
-<span class="sourceLineNo">1869</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1869"></a>
-<span class="sourceLineNo">1870</span>     * @return this for chaining<a name="line.1870"></a>
-<span class="sourceLineNo">1871</span>     */<a name="line.1871"></a>
-<span class="sourceLineNo">1872</span>    public TextCellFactory removeSwap(char find)<a name="line.1872"></a>
-<span class="sourceLineNo">1873</span>    {<a name="line.1873"></a>
-<span class="sourceLineNo">1874</span>        swap.remove(find);<a name="line.1874"></a>
-<span class="sourceLineNo">1875</span>        return this;<a name="line.1875"></a>
-<span class="sourceLineNo">1876</span>    }<a name="line.1876"></a>
-<span class="sourceLineNo">1877</span><a name="line.1877"></a>
-<span class="sourceLineNo">1878</span>    /**<a name="line.1878"></a>
-<span class="sourceLineNo">1879</span>     * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their<a name="line.1879"></a>
-<span class="sourceLineNo">1880</span>     * values in the OrderedMap.<a name="line.1880"></a>
-<span class="sourceLineNo">1881</span>     * &lt;br&gt;<a name="line.1881"></a>
-<span class="sourceLineNo">1882</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1882"></a>
-<span class="sourceLineNo">1883</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1883"></a>
-<span class="sourceLineNo">1884</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1884"></a>
-<span class="sourceLineNo">1885</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1885"></a>
-<span class="sourceLineNo">1886</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1886"></a>
-<span class="sourceLineNo">1887</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1887"></a>
-<span class="sourceLineNo">1888</span>     * @return the mapping of replacement pairs<a name="line.1888"></a>
-<span class="sourceLineNo">1889</span>     */<a name="line.1889"></a>
-<span class="sourceLineNo">1890</span>    public OrderedMap&lt;Character, Character&gt; getAllSwaps() {<a name="line.1890"></a>
-<span class="sourceLineNo">1891</span>        return swap;<a name="line.1891"></a>
-<span class="sourceLineNo">1892</span>    }<a name="line.1892"></a>
-<span class="sourceLineNo">1893</span><a name="line.1893"></a>
-<span class="sourceLineNo">1894</span>    /**<a name="line.1894"></a>
-<span class="sourceLineNo">1895</span>     * Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.<a name="line.1895"></a>
-<span class="sourceLineNo">1896</span>     * &lt;br&gt;<a name="line.1896"></a>
-<span class="sourceLineNo">1897</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1897"></a>
-<span class="sourceLineNo">1898</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1898"></a>
-<span class="sourceLineNo">1899</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1899"></a>
-<span class="sourceLineNo">1900</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1900"></a>
-<span class="sourceLineNo">1901</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1901"></a>
-<span class="sourceLineNo">1902</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1902"></a>
-<span class="sourceLineNo">1903</span>     * @param swaps the Map of replacement pairs; keys requested for drawing will be replaced with their values<a name="line.1903"></a>
-<span class="sourceLineNo">1904</span>     * @return this for chaining<a name="line.1904"></a>
-<span class="sourceLineNo">1905</span>     */<a name="line.1905"></a>
-<span class="sourceLineNo">1906</span>    public TextCellFactory setAllSwaps(OrderedMap&lt;Character, Character&gt; swaps) {<a name="line.1906"></a>
-<span class="sourceLineNo">1907</span>        swap.clear();<a name="line.1907"></a>
-<span class="sourceLineNo">1908</span>        for (int i = 0; i &lt; swaps.size(); i++) {<a name="line.1908"></a>
-<span class="sourceLineNo">1909</span>            if(!swaps.keyAt(i).equals('\0'))<a name="line.1909"></a>
-<span class="sourceLineNo">1910</span>                swap.put(swaps.keyAt(i), swaps.getAt(i));<a name="line.1910"></a>
-<span class="sourceLineNo">1911</span>        }<a name="line.1911"></a>
-<span class="sourceLineNo">1912</span>        return this;<a name="line.1912"></a>
-<span class="sourceLineNo">1913</span>    }<a name="line.1913"></a>
-<span class="sourceLineNo">1914</span><a name="line.1914"></a>
-<span class="sourceLineNo">1915</span>    /**<a name="line.1915"></a>
-<span class="sourceLineNo">1916</span>     * Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the<a name="line.1916"></a>
-<span class="sourceLineNo">1917</span>     * entries in a Map of Character keys to String values.<a name="line.1917"></a>
-<span class="sourceLineNo">1918</span>     * &lt;br&gt;<a name="line.1918"></a>
-<span class="sourceLineNo">1919</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1919"></a>
-<span class="sourceLineNo">1920</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1920"></a>
-<span class="sourceLineNo">1921</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1921"></a>
-<span class="sourceLineNo">1922</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1922"></a>
-<span class="sourceLineNo">1923</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1923"></a>
-<span class="sourceLineNo">1924</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1924"></a>
-<span class="sourceLineNo">1925</span>     * @param swaps the Map of replacement pairs to add; keys requested for drawing will be replaced with their values<a name="line.1925"></a>
-<span class="sourceLineNo">1926</span>     * @return this for chaining<a name="line.1926"></a>
-<span class="sourceLineNo">1927</span>     */<a name="line.1927"></a>
-<span class="sourceLineNo">1928</span>    public TextCellFactory addSwaps(OrderedMap&lt;Character, Character&gt; swaps) {<a name="line.1928"></a>
-<span class="sourceLineNo">1929</span>        for (int i = 0; i &lt; swaps.size(); i++) {<a name="line.1929"></a>
-<span class="sourceLineNo">1930</span>            if(!swaps.keyAt(i).equals('\0'))<a name="line.1930"></a>
-<span class="sourceLineNo">1931</span>                swap.put(swaps.keyAt(i), swaps.getAt(i));<a name="line.1931"></a>
-<span class="sourceLineNo">1932</span>        }<a name="line.1932"></a>
-<span class="sourceLineNo">1933</span>        return this;<a name="line.1933"></a>
-<span class="sourceLineNo">1934</span>    }<a name="line.1934"></a>
-<span class="sourceLineNo">1935</span><a name="line.1935"></a>
-<span class="sourceLineNo">1936</span>    /**<a name="line.1936"></a>
-<span class="sourceLineNo">1937</span>     * Clears all replacement pairs this has been told to swap.<a name="line.1937"></a>
-<span class="sourceLineNo">1938</span>     * &lt;br&gt;<a name="line.1938"></a>
-<span class="sourceLineNo">1939</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1939"></a>
-<span class="sourceLineNo">1940</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1940"></a>
-<span class="sourceLineNo">1941</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1941"></a>
-<span class="sourceLineNo">1942</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1942"></a>
-<span class="sourceLineNo">1943</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1943"></a>
-<span class="sourceLineNo">1944</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1944"></a>
-<span class="sourceLineNo">1945</span>     * @return this for chaining<a name="line.1945"></a>
-<span class="sourceLineNo">1946</span>     */<a name="line.1946"></a>
-<span class="sourceLineNo">1947</span>    public TextCellFactory clearSwaps()<a name="line.1947"></a>
-<span class="sourceLineNo">1948</span>    {<a name="line.1948"></a>
-<span class="sourceLineNo">1949</span>        swap.clear();<a name="line.1949"></a>
-<span class="sourceLineNo">1950</span>        return this;<a name="line.1950"></a>
-<span class="sourceLineNo">1951</span>    }<a name="line.1951"></a>
-<span class="sourceLineNo">1952</span>}<a name="line.1952"></a>
+<span class="sourceLineNo">1761</span>                shader.setUniformf("u_smoothing", 0.35f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));<a name="line.1761"></a>
+<span class="sourceLineNo">1762</span>            }<a name="line.1762"></a>
+<span class="sourceLineNo">1763</span>            else if (distanceField) {<a name="line.1763"></a>
+<span class="sourceLineNo">1764</span>                batch.setShader(shader);<a name="line.1764"></a>
+<span class="sourceLineNo">1765</span>                shader.setUniformf("u_smoothing", 0.35f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));<a name="line.1765"></a>
+<span class="sourceLineNo">1766</span>            }<a name="line.1766"></a>
+<span class="sourceLineNo">1767</span>        }<a name="line.1767"></a>
+<span class="sourceLineNo">1768</span>    }<a name="line.1768"></a>
+<span class="sourceLineNo">1769</span>    /**<a name="line.1769"></a>
+<span class="sourceLineNo">1770</span>     * Releases all resources of this object.<a name="line.1770"></a>
+<span class="sourceLineNo">1771</span>     */<a name="line.1771"></a>
+<span class="sourceLineNo">1772</span>    @Override<a name="line.1772"></a>
+<span class="sourceLineNo">1773</span>    public void dispose() {<a name="line.1773"></a>
+<span class="sourceLineNo">1774</span>        if(bmpFont != null) bmpFont.dispose();<a name="line.1774"></a>
+<span class="sourceLineNo">1775</span>        if(block != null) block.dispose();<a name="line.1775"></a>
+<span class="sourceLineNo">1776</span>    }<a name="line.1776"></a>
+<span class="sourceLineNo">1777</span><a name="line.1777"></a>
+<span class="sourceLineNo">1778</span>    /**<a name="line.1778"></a>
+<span class="sourceLineNo">1779</span>     * Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.<a name="line.1779"></a>
+<span class="sourceLineNo">1780</span>     * @return the descent of the BitmapFont this object uses<a name="line.1780"></a>
+<span class="sourceLineNo">1781</span>     */<a name="line.1781"></a>
+<span class="sourceLineNo">1782</span>    public float getDescent() {<a name="line.1782"></a>
+<span class="sourceLineNo">1783</span>        return descent;<a name="line.1783"></a>
+<span class="sourceLineNo">1784</span>    }<a name="line.1784"></a>
+<span class="sourceLineNo">1785</span><a name="line.1785"></a>
+<span class="sourceLineNo">1786</span>    public char getDirectionGlyph() {<a name="line.1786"></a>
+<span class="sourceLineNo">1787</span>        return directionGlyph;<a name="line.1787"></a>
+<span class="sourceLineNo">1788</span>    }<a name="line.1788"></a>
+<span class="sourceLineNo">1789</span><a name="line.1789"></a>
+<span class="sourceLineNo">1790</span>    public TextCellFactory setDirectionGlyph(char directionGlyph) {<a name="line.1790"></a>
+<span class="sourceLineNo">1791</span>        this.directionGlyph = directionGlyph;<a name="line.1791"></a>
+<span class="sourceLineNo">1792</span>        return this;<a name="line.1792"></a>
+<span class="sourceLineNo">1793</span>    }<a name="line.1793"></a>
+<span class="sourceLineNo">1794</span><a name="line.1794"></a>
+<span class="sourceLineNo">1795</span>    /**<a name="line.1795"></a>
+<span class="sourceLineNo">1796</span>     * Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested<a name="line.1796"></a>
+<span class="sourceLineNo">1797</span>     * to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and<a name="line.1797"></a>
+<span class="sourceLineNo">1798</span>     * related classes, so Strings longer than 1 char are effectively disregarded beyond the first char.<a name="line.1798"></a>
+<span class="sourceLineNo">1799</span>     * &lt;br&gt;<a name="line.1799"></a>
+<span class="sourceLineNo">1800</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1800"></a>
+<span class="sourceLineNo">1801</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1801"></a>
+<span class="sourceLineNo">1802</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap("^", ",")} and also<a name="line.1802"></a>
+<span class="sourceLineNo">1803</span>     * {@code addSwap(",", ":")}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1803"></a>
+<span class="sourceLineNo">1804</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1804"></a>
+<span class="sourceLineNo">1805</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1805"></a>
+<span class="sourceLineNo">1806</span>     * @param find the requested String that will be changed<a name="line.1806"></a>
+<span class="sourceLineNo">1807</span>     * @param replace the replacement String that will be used in place of find<a name="line.1807"></a>
+<span class="sourceLineNo">1808</span>     * @return this for chaining<a name="line.1808"></a>
+<span class="sourceLineNo">1809</span>     */<a name="line.1809"></a>
+<span class="sourceLineNo">1810</span>    public TextCellFactory addSwap(String find, String replace)<a name="line.1810"></a>
+<span class="sourceLineNo">1811</span>    {<a name="line.1811"></a>
+<span class="sourceLineNo">1812</span>        if(find == null || replace == null || find.isEmpty()  || replace.isEmpty() || find.charAt(0) == 0)<a name="line.1812"></a>
+<span class="sourceLineNo">1813</span>            return this;<a name="line.1813"></a>
+<span class="sourceLineNo">1814</span>        swap.put(find.charAt(0), replace.charAt(0));<a name="line.1814"></a>
+<span class="sourceLineNo">1815</span>        return this;<a name="line.1815"></a>
+<span class="sourceLineNo">1816</span>    }<a name="line.1816"></a>
+<span class="sourceLineNo">1817</span><a name="line.1817"></a>
+<span class="sourceLineNo">1818</span>    /**<a name="line.1818"></a>
+<span class="sourceLineNo">1819</span>     * Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is<a name="line.1819"></a>
+<span class="sourceLineNo">1820</span>     * used instead.<a name="line.1820"></a>
+<span class="sourceLineNo">1821</span>     * &lt;br&gt;<a name="line.1821"></a>
+<span class="sourceLineNo">1822</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1822"></a>
+<span class="sourceLineNo">1823</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1823"></a>
+<span class="sourceLineNo">1824</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1824"></a>
+<span class="sourceLineNo">1825</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1825"></a>
+<span class="sourceLineNo">1826</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1826"></a>
+<span class="sourceLineNo">1827</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1827"></a>
+<span class="sourceLineNo">1828</span>     * @param find the requested char that will be changed (converted to a length-1 String)<a name="line.1828"></a>
+<span class="sourceLineNo">1829</span>     * @param replace the replacement char that will be used in place of find (converted to a length-1 String)<a name="line.1829"></a>
+<span class="sourceLineNo">1830</span>     * @return this for chaining<a name="line.1830"></a>
+<span class="sourceLineNo">1831</span>     */<a name="line.1831"></a>
+<span class="sourceLineNo">1832</span>    public TextCellFactory addSwap(char find, char replace)<a name="line.1832"></a>
+<span class="sourceLineNo">1833</span>    {<a name="line.1833"></a>
+<span class="sourceLineNo">1834</span>        if(find == 0)<a name="line.1834"></a>
+<span class="sourceLineNo">1835</span>            return this;<a name="line.1835"></a>
+<span class="sourceLineNo">1836</span>        swap.put(find, replace);<a name="line.1836"></a>
+<span class="sourceLineNo">1837</span>        return this;<a name="line.1837"></a>
+<span class="sourceLineNo">1838</span>    }<a name="line.1838"></a>
+<span class="sourceLineNo">1839</span><a name="line.1839"></a>
+<span class="sourceLineNo">1840</span>    /**<a name="line.1840"></a>
+<span class="sourceLineNo">1841</span>     * Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text<a name="line.1841"></a>
+<span class="sourceLineNo">1842</span>     * in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond<a name="line.1842"></a>
+<span class="sourceLineNo">1843</span>     * the first char.<a name="line.1843"></a>
+<span class="sourceLineNo">1844</span>     * &lt;br&gt;<a name="line.1844"></a>
+<span class="sourceLineNo">1845</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1845"></a>
+<span class="sourceLineNo">1846</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1846"></a>
+<span class="sourceLineNo">1847</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1847"></a>
+<span class="sourceLineNo">1848</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1848"></a>
+<span class="sourceLineNo">1849</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1849"></a>
+<span class="sourceLineNo">1850</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1850"></a>
+<span class="sourceLineNo">1851</span>     * @param find the String that would be changed in the replacement pair<a name="line.1851"></a>
+<span class="sourceLineNo">1852</span>     * @return this for chaining<a name="line.1852"></a>
+<span class="sourceLineNo">1853</span>     */<a name="line.1853"></a>
+<span class="sourceLineNo">1854</span>    public TextCellFactory removeSwap(String find)<a name="line.1854"></a>
+<span class="sourceLineNo">1855</span>    {<a name="line.1855"></a>
+<span class="sourceLineNo">1856</span><a name="line.1856"></a>
+<span class="sourceLineNo">1857</span>        if(find != null &amp;&amp; !find.isEmpty() &amp;&amp; find.charAt(0) != 0)<a name="line.1857"></a>
+<span class="sourceLineNo">1858</span>            swap.remove(find.charAt(0));<a name="line.1858"></a>
+<span class="sourceLineNo">1859</span>        return this;<a name="line.1859"></a>
+<span class="sourceLineNo">1860</span>    }<a name="line.1860"></a>
+<span class="sourceLineNo">1861</span><a name="line.1861"></a>
+<span class="sourceLineNo">1862</span>    /**<a name="line.1862"></a>
+<span class="sourceLineNo">1863</span>     * Removes the replacement pair, if present, that searches for the given key, find.<a name="line.1863"></a>
+<span class="sourceLineNo">1864</span>     * &lt;br&gt;<a name="line.1864"></a>
+<span class="sourceLineNo">1865</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1865"></a>
+<span class="sourceLineNo">1866</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1866"></a>
+<span class="sourceLineNo">1867</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1867"></a>
+<span class="sourceLineNo">1868</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1868"></a>
+<span class="sourceLineNo">1869</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1869"></a>
+<span class="sourceLineNo">1870</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1870"></a>
+<span class="sourceLineNo">1871</span>     * @return this for chaining<a name="line.1871"></a>
+<span class="sourceLineNo">1872</span>     */<a name="line.1872"></a>
+<span class="sourceLineNo">1873</span>    public TextCellFactory removeSwap(char find)<a name="line.1873"></a>
+<span class="sourceLineNo">1874</span>    {<a name="line.1874"></a>
+<span class="sourceLineNo">1875</span>        swap.remove(find);<a name="line.1875"></a>
+<span class="sourceLineNo">1876</span>        return this;<a name="line.1876"></a>
+<span class="sourceLineNo">1877</span>    }<a name="line.1877"></a>
+<span class="sourceLineNo">1878</span><a name="line.1878"></a>
+<span class="sourceLineNo">1879</span>    /**<a name="line.1879"></a>
+<span class="sourceLineNo">1880</span>     * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their<a name="line.1880"></a>
+<span class="sourceLineNo">1881</span>     * values in the OrderedMap.<a name="line.1881"></a>
+<span class="sourceLineNo">1882</span>     * &lt;br&gt;<a name="line.1882"></a>
+<span class="sourceLineNo">1883</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1883"></a>
+<span class="sourceLineNo">1884</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1884"></a>
+<span class="sourceLineNo">1885</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1885"></a>
+<span class="sourceLineNo">1886</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1886"></a>
+<span class="sourceLineNo">1887</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1887"></a>
+<span class="sourceLineNo">1888</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1888"></a>
+<span class="sourceLineNo">1889</span>     * @return the mapping of replacement pairs<a name="line.1889"></a>
+<span class="sourceLineNo">1890</span>     */<a name="line.1890"></a>
+<span class="sourceLineNo">1891</span>    public OrderedMap&lt;Character, Character&gt; getAllSwaps() {<a name="line.1891"></a>
+<span class="sourceLineNo">1892</span>        return swap;<a name="line.1892"></a>
+<span class="sourceLineNo">1893</span>    }<a name="line.1893"></a>
+<span class="sourceLineNo">1894</span><a name="line.1894"></a>
+<span class="sourceLineNo">1895</span>    /**<a name="line.1895"></a>
+<span class="sourceLineNo">1896</span>     * Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.<a name="line.1896"></a>
+<span class="sourceLineNo">1897</span>     * &lt;br&gt;<a name="line.1897"></a>
+<span class="sourceLineNo">1898</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1898"></a>
+<span class="sourceLineNo">1899</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1899"></a>
+<span class="sourceLineNo">1900</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1900"></a>
+<span class="sourceLineNo">1901</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1901"></a>
+<span class="sourceLineNo">1902</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1902"></a>
+<span class="sourceLineNo">1903</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1903"></a>
+<span class="sourceLineNo">1904</span>     * @param swaps the Map of replacement pairs; keys requested for drawing will be replaced with their values<a name="line.1904"></a>
+<span class="sourceLineNo">1905</span>     * @return this for chaining<a name="line.1905"></a>
+<span class="sourceLineNo">1906</span>     */<a name="line.1906"></a>
+<span class="sourceLineNo">1907</span>    public TextCellFactory setAllSwaps(OrderedMap&lt;Character, Character&gt; swaps) {<a name="line.1907"></a>
+<span class="sourceLineNo">1908</span>        swap.clear();<a name="line.1908"></a>
+<span class="sourceLineNo">1909</span>        for (int i = 0; i &lt; swaps.size(); i++) {<a name="line.1909"></a>
+<span class="sourceLineNo">1910</span>            if(!swaps.keyAt(i).equals('\0'))<a name="line.1910"></a>
+<span class="sourceLineNo">1911</span>                swap.put(swaps.keyAt(i), swaps.getAt(i));<a name="line.1911"></a>
+<span class="sourceLineNo">1912</span>        }<a name="line.1912"></a>
+<span class="sourceLineNo">1913</span>        return this;<a name="line.1913"></a>
+<span class="sourceLineNo">1914</span>    }<a name="line.1914"></a>
+<span class="sourceLineNo">1915</span><a name="line.1915"></a>
+<span class="sourceLineNo">1916</span>    /**<a name="line.1916"></a>
+<span class="sourceLineNo">1917</span>     * Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the<a name="line.1917"></a>
+<span class="sourceLineNo">1918</span>     * entries in a Map of Character keys to String values.<a name="line.1918"></a>
+<span class="sourceLineNo">1919</span>     * &lt;br&gt;<a name="line.1919"></a>
+<span class="sourceLineNo">1920</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1920"></a>
+<span class="sourceLineNo">1921</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1921"></a>
+<span class="sourceLineNo">1922</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1922"></a>
+<span class="sourceLineNo">1923</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1923"></a>
+<span class="sourceLineNo">1924</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1924"></a>
+<span class="sourceLineNo">1925</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1925"></a>
+<span class="sourceLineNo">1926</span>     * @param swaps the Map of replacement pairs to add; keys requested for drawing will be replaced with their values<a name="line.1926"></a>
+<span class="sourceLineNo">1927</span>     * @return this for chaining<a name="line.1927"></a>
+<span class="sourceLineNo">1928</span>     */<a name="line.1928"></a>
+<span class="sourceLineNo">1929</span>    public TextCellFactory addSwaps(OrderedMap&lt;Character, Character&gt; swaps) {<a name="line.1929"></a>
+<span class="sourceLineNo">1930</span>        for (int i = 0; i &lt; swaps.size(); i++) {<a name="line.1930"></a>
+<span class="sourceLineNo">1931</span>            if(!swaps.keyAt(i).equals('\0'))<a name="line.1931"></a>
+<span class="sourceLineNo">1932</span>                swap.put(swaps.keyAt(i), swaps.getAt(i));<a name="line.1932"></a>
+<span class="sourceLineNo">1933</span>        }<a name="line.1933"></a>
+<span class="sourceLineNo">1934</span>        return this;<a name="line.1934"></a>
+<span class="sourceLineNo">1935</span>    }<a name="line.1935"></a>
+<span class="sourceLineNo">1936</span><a name="line.1936"></a>
+<span class="sourceLineNo">1937</span>    /**<a name="line.1937"></a>
+<span class="sourceLineNo">1938</span>     * Clears all replacement pairs this has been told to swap.<a name="line.1938"></a>
+<span class="sourceLineNo">1939</span>     * &lt;br&gt;<a name="line.1939"></a>
+<span class="sourceLineNo">1940</span>     * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep<a name="line.1940"></a>
+<span class="sourceLineNo">1941</span>     * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something<a name="line.1941"></a>
+<span class="sourceLineNo">1942</span>     * that would be drawn. Replacements will not be chained; that is, if you {@code addSwap('^', ',')} and also<a name="line.1942"></a>
+<span class="sourceLineNo">1943</span>     * {@code addSwap(',', ':')}, then a requested '^' will be drawn as ',', not ':', but a requested ',' will be drawn<a name="line.1943"></a>
+<span class="sourceLineNo">1944</span>     * as ':' (only one swap will be performed). Typically you want a different TextCellFactory for UI elements that use<a name="line.1944"></a>
+<span class="sourceLineNo">1945</span>     * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.<a name="line.1945"></a>
+<span class="sourceLineNo">1946</span>     * @return this for chaining<a name="line.1946"></a>
+<span class="sourceLineNo">1947</span>     */<a name="line.1947"></a>
+<span class="sourceLineNo">1948</span>    public TextCellFactory clearSwaps()<a name="line.1948"></a>
+<span class="sourceLineNo">1949</span>    {<a name="line.1949"></a>
+<span class="sourceLineNo">1950</span>        swap.clear();<a name="line.1950"></a>
+<span class="sourceLineNo">1951</span>        return this;<a name="line.1951"></a>
+<span class="sourceLineNo">1952</span>    }<a name="line.1952"></a>
+<span class="sourceLineNo">1953</span>}<a name="line.1953"></a>
 
 
 

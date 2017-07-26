@@ -131,7 +131,7 @@
 <span class="sourceLineNo">123</span>    public void setState(final long seed) {<a name="line.123"></a>
 <span class="sourceLineNo">124</span>        choice = 0;<a name="line.124"></a>
 <span class="sourceLineNo">125</span>        for (int i = 0; i &lt; 128; i++) {<a name="line.125"></a>
-<span class="sourceLineNo">126</span>            choice += (state[i] = (int)splitMix64(seed + i * 0x9E3779B9));<a name="line.126"></a>
+<span class="sourceLineNo">126</span>            choice += (state[i] = (int)splitMix64(seed + i * 0x9E3779B97F4A7C15L));<a name="line.126"></a>
 <span class="sourceLineNo">127</span>        }<a name="line.127"></a>
 <span class="sourceLineNo">128</span>    }<a name="line.128"></a>
 <span class="sourceLineNo">129</span><a name="line.129"></a>
@@ -212,7 +212,7 @@
 <span class="sourceLineNo">204</span><a name="line.204"></a>
 <span class="sourceLineNo">205</span>    @Override<a name="line.205"></a>
 <span class="sourceLineNo">206</span>    public int hashCode() {<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        return 31 * choice + CrossHash.Wisp.hash(state);<a name="line.207"></a>
+<span class="sourceLineNo">207</span>        return 31 * choice + CrossHash.hash(state);<a name="line.207"></a>
 <span class="sourceLineNo">208</span>    }<a name="line.208"></a>
 <span class="sourceLineNo">209</span>}<a name="line.209"></a>
 
