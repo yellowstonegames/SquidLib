@@ -123,7 +123,7 @@ uint32_t splitmix32(uint32_t *x) {
     public void setState(final long seed) {
         choice = 0;
         for (int i = 0; i < 128; i++) {
-            choice += (state[i] = (int)splitMix64(seed + i * 0x9E3779B9));
+            choice += (state[i] = (int)splitMix64(seed + i * 0x9E3779B97F4A7C15L));
         }
     }
 
@@ -204,6 +204,6 @@ uint32_t splitmix32(uint32_t *x) {
 
     @Override
     public int hashCode() {
-        return 31 * choice + CrossHash.Wisp.hash(state);
+        return 31 * choice + CrossHash.hash(state);
     }
 }

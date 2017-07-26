@@ -256,7 +256,7 @@ public class RotationDemo extends ApplicationAdapter {
         bgColors = MapUtility.generateDefaultBGColors(decoDungeon, '£', SColor.CW_ORANGE, '¢',  SColor.CW_DARK_ORANGE);
         // the line after this automatically sets the brightness of backgrounds in display to match their contents, so
         // here we simply fill the contents of display with our dungeon (but we don't set the actual colors yet).
-        ArrayTools.insert(display.getForegroundLayer().contents, decoDungeon, 0, 0);
+        ArrayTools.insert(decoDungeon, display.getForegroundLayer().contents, 0, 0);
         display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.013, '£', '¢');
         seen = new boolean[width][height];
         /*

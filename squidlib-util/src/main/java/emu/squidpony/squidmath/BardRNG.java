@@ -23,7 +23,7 @@ public class BardRNG implements RandomnessSource, Serializable {
     }
 
     private static final long serialVersionUID = 1L;
-    private final Int32Array state = Int32ArrayNative.create(8);
+    private final Int32Array state = Int32ArrayNative.create(128);
     private int choice = 0;
 
     public BardRNG() {
@@ -89,7 +89,7 @@ public class BardRNG implements RandomnessSource, Serializable {
         choice = 0;
         int t;
         for (int i = 0; i < 128; i++) {
-            choice += (t = (int) splitMix64(seed + i * 0x9E3779B9));
+            choice += (t = (int) splitMix64(seed + i * 0x9E3779B97F4A7C15L));
             state.set(i, t);
         }
     }
@@ -189,11 +189,12 @@ public class BardRNG implements RandomnessSource, Serializable {
 
     @Override
     public int hashCode() {
-        int result = 0x9E3779B9, a = 0x632BE5AB;
+        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
         for (int i = 0; i < 128; i++) {
-            result += (a ^= 0x85157AF5 * state.get(i));
+            result += (a ^= 0x8329C6EB9E6AD3E3L * state.get(i));
         }
-        return 31 * choice + (result * (a | 1) ^ (result >>> 11 | result << 21));
+        return 31 * choice + (int)(result * (a | 1L) ^ (result >>> 27 | result << 37));
+
     }
 
 }
