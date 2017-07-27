@@ -176,7 +176,7 @@
 <span class="sourceLineNo">168</span>            if (compress)<a name="line.168"></a>
 <span class="sourceLineNo">169</span>                preferences.putString(outerName, LZSPlus.compress(mapConverter.stringify(contents), garbleKey));<a name="line.169"></a>
 <span class="sourceLineNo">170</span>            else<a name="line.170"></a>
-<span class="sourceLineNo">171</span>                preferences.putString(outerName, Garbler.garble32(mapConverter.stringify(contents), garbleKey));<a name="line.171"></a>
+<span class="sourceLineNo">171</span>                preferences.putString(outerName, Garbler.garble(mapConverter.stringify(contents), garbleKey));<a name="line.171"></a>
 <span class="sourceLineNo">172</span>        }<a name="line.172"></a>
 <span class="sourceLineNo">173</span>        preferences.flush();<a name="line.173"></a>
 <span class="sourceLineNo">174</span>        return this;<a name="line.174"></a>
@@ -201,7 +201,7 @@
 <span class="sourceLineNo">193</span>            if (compress)<a name="line.193"></a>
 <span class="sourceLineNo">194</span>                return LZSPlus.compress(mapConverter.stringify(contents), garbleKey);<a name="line.194"></a>
 <span class="sourceLineNo">195</span>            else<a name="line.195"></a>
-<span class="sourceLineNo">196</span>                return Garbler.garble32(mapConverter.stringify(contents), garbleKey);<a name="line.196"></a>
+<span class="sourceLineNo">196</span>                return Garbler.garble(mapConverter.stringify(contents), garbleKey);<a name="line.196"></a>
 <span class="sourceLineNo">197</span>        }<a name="line.197"></a>
 <span class="sourceLineNo">198</span>    }<a name="line.198"></a>
 <span class="sourceLineNo">199</span><a name="line.199"></a>
@@ -259,7 +259,7 @@
 <span class="sourceLineNo">251</span>            if (compress)<a name="line.251"></a>
 <span class="sourceLineNo">252</span>                got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);<a name="line.252"></a>
 <span class="sourceLineNo">253</span>            else<a name="line.253"></a>
-<span class="sourceLineNo">254</span>                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);<a name="line.254"></a>
+<span class="sourceLineNo">254</span>                got = Garbler.degarble(preferences.getString(outerName), garbleKey);<a name="line.254"></a>
 <span class="sourceLineNo">255</span>        }<a name="line.255"></a>
 <span class="sourceLineNo">256</span>        if(got == null) return null;<a name="line.256"></a>
 <span class="sourceLineNo">257</span>        om = mapConverter.restore(got);<a name="line.257"></a>
@@ -299,7 +299,7 @@
 <span class="sourceLineNo">291</span>            if (compress)<a name="line.291"></a>
 <span class="sourceLineNo">292</span>                got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);<a name="line.292"></a>
 <span class="sourceLineNo">293</span>            else<a name="line.293"></a>
-<span class="sourceLineNo">294</span>                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);<a name="line.294"></a>
+<span class="sourceLineNo">294</span>                got = Garbler.degarble(preferences.getString(outerName), garbleKey);<a name="line.294"></a>
 <span class="sourceLineNo">295</span>        }<a name="line.295"></a>
 <span class="sourceLineNo">296</span>        if(got == null) return null;<a name="line.296"></a>
 <span class="sourceLineNo">297</span>        om = mapConverter.restore(got);<a name="line.297"></a>

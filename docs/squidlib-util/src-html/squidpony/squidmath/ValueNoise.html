@@ -22,9 +22,9 @@
 <span class="sourceLineNo">014</span> * &lt;br&gt;<a name="line.14"></a>
 <span class="sourceLineNo">015</span> * Implementation is based on {@link CrossHash.Wisp#hash64(int[])}, treating doubles as ints<a name="line.15"></a>
 <span class="sourceLineNo">016</span> * by using {@link NumberTools#doubleToMixedIntBits(double)}, which XORs the bottom and top halves of the long bits of<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * each double, and does it efficiently enough on GWT. Finishes by passing the top 52 bits as a significand to<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * {@link NumberTools#longBitsToDouble(long)}, using an exponent that allows this to produce numbers between -1.0 and<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * 1.0. Has special treatment for the seed when present (since it is an int).<a name="line.19"></a>
+<span class="sourceLineNo">017</span> * each double. Finishes by passing the top 52 bits as a significand to {@link NumberTools#longBitsToDouble(long)},<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * using an exponent that allows this to produce numbers between -1.0 and 1.0. Has special treatment for the seed when<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * present (since it is an int).<a name="line.19"></a>
 <span class="sourceLineNo">020</span> * &lt;br&gt;<a name="line.20"></a>
 <span class="sourceLineNo">021</span> * This can also be used as a sort of hashing function that produces a double, if you find a need for such a thing, with<a name="line.21"></a>
 <span class="sourceLineNo">022</span> * {@link #hash(double...)}.<a name="line.22"></a>

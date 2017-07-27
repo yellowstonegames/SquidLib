@@ -202,7 +202,7 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.IHasher.html#hash-java.lang.Object-">hash(Object)</a></span> - Method in interface squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a></dt>
 <dd>
 <div class="block">If data is a type that this IHasher can specifically hash, this method should use that specific hash; in
- other situations, it should simply delegate to calling <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data.</div>
+ other situations, it should simply delegate to calling <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Lightning.html#hash-boolean:A-">hash(boolean[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Lightning.html" title="class in squidpony.squidmath">CrossHash.Lightning</a></dt>
 <dd>&nbsp;</dd>
@@ -466,49 +466,6 @@
 <div class="block">Hashes the input double array or vararg and produces a double with unpredictable value, between -1.0 inclusive
  and 1.0 exclusive.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-boolean:A-">hash32(boolean[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-byte:A-">hash32(byte[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-short:A-">hash32(short[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-char:A-">hash32(char[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-int:A-">hash32(int[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-long:A-">hash32(long[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-float:A-">hash32(float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-double:A-">hash32(double[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-char:A-int-int-">hash32(char[], int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>
-<div class="block">Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-char:A-int-int-int-">hash32(char[], int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>
-<div class="block">Hashes only a subsection of the given data, starting at start (inclusive), ending before end (exclusive), and
- moving between chars in increments of step (which is always greater than 0).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-java.lang.CharSequence-">hash32(CharSequence)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-char:A:A-">hash32(char[][])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-long:A:A-">hash32(long[][])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-java.lang.CharSequence:A-">hash32(CharSequence[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-java.lang.Iterable-">hash32(Iterable&lt;? extends CharSequence&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-java.lang.CharSequence:A...-">hash32(CharSequence[]...)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-java.lang.Object:A-">hash32(Object[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-java.util.List-">hash32(List&lt;? extends CharSequence&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#hash32-java.lang.Object-">hash32(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hash32-boolean:A-">hash32(boolean[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Wisp.html#hash32-byte:A-">hash32(byte[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath">CrossHash.Wisp</a></dt>

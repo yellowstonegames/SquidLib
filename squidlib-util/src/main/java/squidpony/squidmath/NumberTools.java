@@ -175,8 +175,20 @@ public class NumberTools {
     }
 
     /**
+     * Get a pseudo-random long from this with {@code splitMix64(z += 0x9E3779B97F4A7C15L)}, where z is a long to use
+     * as state. 0x9E3779B97F4A7C15L can be changed for any odd long if the same number is used across calls.
+     * @param state long, must be changed with each call; {@code splitMix64(z += 0x9E3779B97F4A7C15L)} is recommended
+     * @return a pseudo-random long
+     */
+    public static long splitMix64(long state) {
+        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return state ^ (state >>> 31);
+    }
+
+    /**
      * Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
-     * twice through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This
+     * twice through the (very high-quality and rather fast) {@link LightRNG} algorithm, also called SplitMix64. This
      * produces a pair of random ints, which this produces a double from using the equivalent of
      * {@link #longBitsToDouble(long)} or something functionally equivalent on GWT.
      * <br>
@@ -187,16 +199,14 @@ public class NumberTools {
      */
     public static double randomDouble(int seed)
     {
-        seed ^= seed >>> (4 + (seed >>> 28));
-        long bits = ((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0xffffffffL;
-        seed += 0x9E3779B9;
-        seed ^= seed >>> (4 + (seed >>> 28));
-        bits |= ((((seed *= 0x108EF2D9) >>> 22 ^ seed) & 0xfffffL) << 32 | 0x3ff0000000000000L);
-        return Double.longBitsToDouble(bits) - 1.0;
+        long state = seed * 0x9E3779B97F4A7C15L;
+        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return Double.longBitsToDouble(((state ^ (state >>> 31)) >>> 12) | 0x3ff0000000000000L) - 1.0;
     }
     /**
      * Generates a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive) using the given int seed, passing
-     * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This
+     * it once through the (very high-quality and rather fast) {@link LightRNG} algorithm, also called SplitMix64. This
      * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something
      * functionally equivalent on GWT.
      * <br>
@@ -207,12 +217,14 @@ public class NumberTools {
      */
     public static float randomFloat(int seed)
     {
-        seed ^= seed >>> (4 + (seed >>> 28));
-        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000) - 1f);
+        long state = seed * 0x9E3779B97F4A7C15L;
+        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return Float.intBitsToFloat((int)(state >>> 41) | 0x3f800000) - 1f;
     }
     /**
      * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
-     * it once through the (very high-quality and rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This
+     * it once through the (very high-quality and rather fast) {@link LightRNG} algorithm, also called SplitMix64. This
      * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something
      * functionally equivalent on GWT. The sign bit of the result is determined by data that is not used by the float
      * otherwise, and keeps the results almost linear in distribution between -1.0 and 1.0, exclusive for both (0 shows
@@ -226,14 +238,16 @@ public class NumberTools {
      */
     public static float randomSignedFloat(int seed)
     {
-        seed ^= seed >>> (4 + (seed >>> 28));
-        return (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000) - 1f) * (seed >> 31 | 1);
+        long state = seed * 0x9E3779B97F4A7C15L;
+        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        return (Float.intBitsToFloat((int)(state >>> 40) | 0x3f800000) - 1f) * (state >> 63 | 1L);
     }
 
     /**
      * Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
      * strong central bias (around 0.0). Uses the given int seed, passing it twice through the (very high-quality and
-     * rather fast) {@link PintRNG} algorithm, derived from PCG-Random. This produces a pair of random ints, which this
+     * rather fast) {@link LightRNG} algorithm, also called SplitMix64. This produces a pair of random ints, which this
      * uses to generate a pair of floats between 0.0 (inclusive)and 1.0 (exclusive) using the equivalent of
      * {@link #intBitsToFloat(int)} or something functionally equivalent on GWT, multiplies the floats, and sets the
      * sign pseudo-randomly based on an unused bit from earlier.
@@ -245,11 +259,13 @@ public class NumberTools {
      */
     public static float randomFloatCurved(int seed)
     {
-        seed ^= seed >>> (4 + (seed >>> 28));
-        float a = Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000);
-        seed += 0x9E3779B9;
-        seed ^= seed >>> (4 + (seed >>> 28));
-        return  (a - 1f) * (Float.intBitsToFloat((((seed *= 0x108EF2D9) >>> 22 ^ seed) >>> 9) | 0x3f800000) - 1f) * (seed >> 31 | 1);
+        long state = seed * 0x9E3779B97F4A7C15L;
+        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
+        state ^= (state >>> 31);
+        return (Float.intBitsToFloat((int)(state & 0x7FFFFF) | 0x3f800000) - 1f)
+                * (Float.intBitsToFloat((int)(state >>> 40) | 0x3f800000) - 1f)
+                * (state >> 63 | 1L);
     }
 
     /**

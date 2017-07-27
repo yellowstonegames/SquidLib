@@ -97,7 +97,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
 <li>squidpony.squidmath.LapRNG</li>
@@ -109,26 +109,28 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></dd>
 </dl>
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/LapRNG.html#line.22">LapRNG</a>
-extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
+public class <a href="../../src-html/squidpony/squidmath/LapRNG.html#line.24">LapRNG</a>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Like FlapRNG, this sacrifices quality for speed, but it uses 64-bit math and as such has a larger period (FlapRNG
  will repeat the cycle of random numbers it produces after about 8 billion numbers, while this will only repeat after
  many more, probably 2 to the 65). As such, LapRNG is like FlapRNG but can generate for a longer period of time (more
  laps) without repeating, and in some cases (mainly generating 64-bit values) at even higher speed. It is currently
  the fastest RandomnessSource in this library at generating 64-bit longs, which is most of what <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath"><code>RNG</code></a> uses, and
  is second-fastest at generating 32-bit ints, with FlapRNG just slightly faster at that. While the period must be at
- least 2 to the 64, it is likely that it is actually 2 to the 65.
+ least 2 to the 64, it is likely that it is actually 2 to the 65. This is one of three RandomnessSources recommended
+ for frequent use, but only if speed is the only consideration; the quality of the numbers this produces is very bad
+ (though it appears random to even a trained human eye, a computer could detect patterns).
  <br>
  Created by Tommy Ettinger on 5/25/2017.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath"><code>FlapRNG is similar in goal to LapRNG but is implemented using int math, ideal for GWT or 32-bit OSes</code></a>, 
+<dd><a href="../../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath"><code>FlapRNG is similar to LapRNG but is implemented using int math; LapRNG should usually be preferred</code></a>, 
 <a href="../../squidpony/squidmath/ZapRNG.html" title="class in squidpony.squidmath"><code>ZapRNG is based on LapRNG, and is somewhat slower but has better quality with the same period</code></a>, 
 <a href="../../serialized-form.html#squidpony.squidmath.LapRNG">Serialized Form</a></dd>
 </dl>
@@ -151,12 +153,12 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LapRNG.html#LapRNG--">LapRNG</a></span>()</code>
-<div class="block">Constructs a LapRNG with a random internal state, using <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a> three times to get enough bits and
+<div class="block">Constructs a LapRNG with a random internal state, using <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a> three times to get enough bits and
  passing responsibility off to <a href="../../squidpony/squidmath/LapRNG.html#LapRNG-int-int-int-"><code>LapRNG(int, int, int)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LapRNG.html#LapRNG-java.lang.CharSequence-">LapRNG</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LapRNG.html#LapRNG-java.lang.CharSequence-">LapRNG</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</code>
 <div class="block">This constructor gets three differently-calculated 32-bit hash codes from the given String or other
  CharSequence and gives them to the constructor that takes three ints, <a href="../../squidpony/squidmath/LapRNG.html#LapRNG-int-int-int-"><code>LapRNG(int, int, int)</code></a>.</div>
 </td>
@@ -239,7 +241,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LapRNG.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LapRNG.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
@@ -268,7 +270,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LapRNG.html#nextInt--">nextInt</a></span>()</code>
 <div class="block">Gets a pseudo-random int, which can be positive or negative but is likely to be drawn from less possible options
- than the full range of <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> to <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>.</div>
+ than the full range of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -301,7 +303,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </td>
 </tr>
 <tr id="i16" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LapRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
@@ -309,8 +311,8 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -332,8 +334,8 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.28">LapRNG</a>()</pre>
-<div class="block">Constructs a LapRNG with a random internal state, using <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a> three times to get enough bits and
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.30">LapRNG</a>()</pre>
+<div class="block">Constructs a LapRNG with a random internal state, using <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a> three times to get enough bits and
  passing responsibility off to <a href="../../squidpony/squidmath/LapRNG.html#LapRNG-int-int-int-"><code>LapRNG(int, int, int)</code></a>.</div>
 </li>
 </ul>
@@ -343,7 +345,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.40">LapRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.42">LapRNG</a>(long&nbsp;seed)</pre>
 <div class="block">Given one long for a seed, this fills the two internal longs of state with different values, each produced by
  multiplying seed by a large constant and adding a different large constant. You can obtain the state that this
  ends up using with <a href="../../squidpony/squidmath/LapRNG.html#getState0--"><code>getState0()</code></a> and <a href="../../squidpony/squidmath/LapRNG.html#getState1--"><code>getState1()</code></a>.</div>
@@ -359,7 +361,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.50">LapRNG</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.52">LapRNG</a>(int&nbsp;seed)</pre>
 <div class="block">Given one int for a seed, this fills the two internal longs of state with different values, each produced by
  multiplying seed by a large constant and adding a different large constant. You can obtain the state that this
  ends up using with <a href="../../squidpony/squidmath/LapRNG.html#getState0--"><code>getState0()</code></a> and <a href="../../squidpony/squidmath/LapRNG.html#getState1--"><code>getState1()</code></a>.</div>
@@ -375,7 +377,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.62">LapRNG</a>(long&nbsp;seed0,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.64">LapRNG</a>(long&nbsp;seed0,
               long&nbsp;seed1)</pre>
 <div class="block">The only constructor that does not modify its seeds in some way; you should ensure seed0 is large enough (at
  least 25 bits should be needed to represent it, so greater than 33554432 or less than -33554433). If seed0 is too
@@ -393,7 +395,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.74">LapRNG</a>(int&nbsp;seed0,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.76">LapRNG</a>(int&nbsp;seed0,
               int&nbsp;seed1)</pre>
 <div class="block">This constructor takes ints for seeds, but internally LapRNG uses longs, so it multiplies each input by a large
  constant and adds another to get the state it actually will start with. You can obtain the state that this ends
@@ -411,7 +413,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.91">LapRNG</a>(int&nbsp;seed0,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.93">LapRNG</a>(int&nbsp;seed0,
               int&nbsp;seed1,
               int&nbsp;seed2)</pre>
 <div class="block">This constructor takes 3 ints for seeds, but internally LapRNG uses 2 longs (one, state0, only considers its
@@ -436,7 +438,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LapRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.102">LapRNG</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.104">LapRNG</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
 <div class="block">This constructor gets three differently-calculated 32-bit hash codes from the given String or other
  CharSequence and gives them to the constructor that takes three ints, <a href="../../squidpony/squidmath/LapRNG.html#LapRNG-int-int-int-"><code>LapRNG(int, int, int)</code></a>. You can
  pass a null seed and this will still work.</div>
@@ -460,7 +462,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.117">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.119">next</a>(int&nbsp;bits)</pre>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 <dl>
@@ -479,9 +481,9 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.126">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.128">nextInt</a>()</pre>
 <div class="block">Gets a pseudo-random int, which can be positive or negative but is likely to be drawn from less possible options
- than the full range of <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> to <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>. Very fast, though.</div>
+ than the full range of <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>. Very fast, though.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a pseudo-random 32-bit int</dd>
@@ -494,7 +496,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.144">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.146">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  This implementation is the primary one, and <a href="../../squidpony/squidmath/LapRNG.html#nextInt--"><code>nextInt()</code></a> and <a href="../../squidpony/squidmath/LapRNG.html#next-int-"><code>next(int)</code></a> just use some portion of
@@ -518,7 +520,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.159">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.161">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -536,7 +538,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getState0</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.167">getState0</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.169">getState0</a>()</pre>
 <div class="block">Gets the linearly-changing part of the state.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -550,7 +552,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState0</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.177">setState0</a>(long&nbsp;state0)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.179">setState0</a>(long&nbsp;state0)</pre>
 <div class="block">Sets the linearly-changing part of the state; if the parameter is too small, the generator will behave poorly.
  At minimum, the parameter should have significant bits beyond the 24th bit (greater than 33554432 for positive
  longs), and should ideally be larger than can be represented in a 32-bit int.</div>
@@ -566,7 +568,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>getState1</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.185">getState1</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.187">getState1</a>()</pre>
 <div class="block">Gets the irregularly-changing part of the state.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -580,7 +582,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>setState1</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.193">setState1</a>(long&nbsp;state1)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.195">setState1</a>(long&nbsp;state1)</pre>
 <div class="block">Sets the irregularly-changing part of the state; just about any long can be passed as a reasonable value here.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -594,7 +596,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.201">determine</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.203">determine</a>(long&nbsp;state)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - any long</dd>
@@ -609,7 +611,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.211">determine</a>(long&nbsp;state0,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.213">determine</a>(long&nbsp;state0,
                              long&nbsp;state1)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -626,7 +628,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.220">determineBounded</a>(long&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.222">determineBounded</a>(long&nbsp;state,
                                    int&nbsp;bound)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -642,7 +644,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.230">determineBounded</a>(long&nbsp;state0,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.232">determineBounded</a>(long&nbsp;state0,
                                    long&nbsp;state1,
                                    int&nbsp;bound)</pre>
 <dl>
@@ -660,7 +662,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>randomDouble</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.241">randomDouble</a>(long&nbsp;state0,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.243">randomDouble</a>(long&nbsp;state0,
                                   long&nbsp;state1)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -677,7 +679,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSignedDouble</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.252">randomSignedDouble</a>(long&nbsp;state0,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.254">randomSignedDouble</a>(long&nbsp;state0,
                                         long&nbsp;state1)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -694,10 +696,10 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.258">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.260">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -707,10 +709,10 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.263">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.265">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -720,10 +722,10 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.269">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/LapRNG.html#line.271">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 </dl>
 </li>
 </ul>

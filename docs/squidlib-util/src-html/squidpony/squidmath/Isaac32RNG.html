@@ -15,8 +15,8 @@
 <span class="sourceLineNo">007</span> * It is a RandomnessSource here, so it should generally be used to make an RNG, which has more features.<a name="line.7"></a>
 <span class="sourceLineNo">008</span> * Isaac32RNG is slower than the non-cryptographic RNGs in SquidLib, but much faster than cryptographic RNGs<a name="line.8"></a>
 <span class="sourceLineNo">009</span> * that need SecureRandom, and it's compatible with GWT and Android to boot! Isaac32RNG should perform better<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * than IsaacRNG on GWT, or when you specifically need a large amount of int values to be set using<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * {@link #fillBlock(int[])}. If you don't need GWT support, then {@link IsaacRNG} will have better properties.<a name="line.11"></a>
+<span class="sourceLineNo">010</span> *  when you specifically need a large amount of int values to be set using {@link #fillBlock(int[])}. If you<a name="line.10"></a>
+<span class="sourceLineNo">011</span> *  don't need that, then {@link IsaacRNG} will have better properties.<a name="line.11"></a>
 <span class="sourceLineNo">012</span> * Created by Tommy Ettinger on 8/1/2016.<a name="line.12"></a>
 <span class="sourceLineNo">013</span> */<a name="line.13"></a>
 <span class="sourceLineNo">014</span>public class Isaac32RNG implements RandomnessSource {<a name="line.14"></a>

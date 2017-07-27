@@ -5,10 +5,9 @@ import squidpony.StringKit;
 import java.io.Serializable;
 
 /**
- * A different kind of RandomnessSource that operates internally on ints, which may have significant advantages on GWT
- * since that toolchain has to emulate longs (slowly) for almost any math with them. It is, however, expected to be
- * slower on other platforms, at least platforms with 64-bit JVMs. Running on 32-bit desktop JVMs, 32-bit Dalvik on
- * Android, or other increasingly-rare environments may benefit from this class, though.
+ * A different kind of RandomnessSource that operates internally on ints. It is expected to be slower than its relative,
+ * {@link PermutedRNG}, on other platforms, at least platforms with 64-bit JVMs. Running on 32-bit desktop JVMs, 32-bit
+ * Dalvik/ART on Android, or other increasingly-rare environments may benefit from this class, though.
  * <br>
  * Quality is not completely certain, but should be excellent in this version since it's based almost directly on PCG-
  * Random's choices of numerical constants. The state changes differently with this than with PCG-Random, however, due

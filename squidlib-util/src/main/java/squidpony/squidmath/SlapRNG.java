@@ -6,7 +6,7 @@ import squidpony.annotation.Beta;
 import java.io.Serializable;
 
 /**
- * Like PintRNG (uses int math primarily, making it good with GWT and 32-bit machines) and FlapRNG, but with a longer
+ * Like PintRNG (uses int math primarily, making it good with 32-bit desktops and phones) and FlapRNG, but with a longer
  * period than either, plus this implements StatefulRandomness. SlapRNG should have higher quality than FlapRNG based on
  * some rough metrics, but its period is known to be longer than FlapRNG's for most seeds, if not all. Precisely how
  * much longer isn't clear yet; this uses an irregular increment that depends on part of the current state, and it seems
@@ -16,16 +16,7 @@ import java.io.Serializable;
  * similar seeds. The mechanism by which this produces pseudo-randomness is somewhat unusual, and involves two
  * state variables as ints, one of which is used both before and after that state part changes. This slows down the
  * generation slightly due to a data dependency between the before and after states (the same speed problem most linear
- * congruential generators face when trying to reach ideal performance), but seems to significantly improve period. It
- * should be noted that when targeting GWT and 32-bit machines, SlapRNG provides one of the better combinations of
- * period, quality, compatibility, and speed that we have for a StatefulRandomness, emphasizing period (which is hard to
- * do using 32-bit math) and quality. FlapRNG is faster by about 2x-2.5x, but sacrifices quality and period. PintRNG has
- * better quality, is a little faster, and has a lower period. Other generators give up efficient compatibility with GWT
- * due to long math (which is slower and probably produces garbage on GWT), though many are faster on PCs (LapRNG and
- * ThunderRNG, for instance, completely beat SlapRNG on speed and period, and LapRNG has comparable quality). If you
- * don't specifically need a StatefulRandomness, you may be better served by HerdRNG, which also uses int math, has a
- * significantly longer period, may have better quality, and can be about 1.5x as fast (or vice versa in some cases),
- * but only achieves this by having a much larger state of 544 bits instead of SlapRNG's 64.
+ * congruential generators face when trying to reach ideal performance), but seems to significantly improve period.
  * <br>
  * Created by Tommy Ettinger on 5/29/2017.
  * @see HerdRNG HerdRNG is similar to SlapRNG, but can be faster and has a larger period; however, it has a large state

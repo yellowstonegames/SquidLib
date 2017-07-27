@@ -7,8 +7,8 @@ import java.util.Arrays;
  * It is a RandomnessSource here, so it should generally be used to make an RNG, which has more features.
  * Isaac32RNG is slower than the non-cryptographic RNGs in SquidLib, but much faster than cryptographic RNGs
  * that need SecureRandom, and it's compatible with GWT and Android to boot! Isaac32RNG should perform better
- * than IsaacRNG on GWT, or when you specifically need a large amount of int values to be set using
- * {@link #fillBlock(int[])}. If you don't need GWT support, then {@link IsaacRNG} will have better properties.
+ *  when you specifically need a large amount of int values to be set using {@link #fillBlock(int[])}. If you
+ *  don't need that, then {@link IsaacRNG} will have better properties.
  * Created by Tommy Ettinger on 8/1/2016.
  */
 public class Isaac32RNG implements RandomnessSource {

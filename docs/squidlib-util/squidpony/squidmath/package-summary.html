@@ -332,7 +332,7 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></td>
 <td class="colLast">
-<div class="block">Like PintRNG (only uses 32-bit int math, good for GWT), but much faster at the expense of quality.</div>
+<div class="block">Like PintRNG (uses 32-bit int math, good for older desktops and phones), but much faster at the expense of quality.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -464,7 +464,7 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/MathExtras.html" title="class in squidpony.squidmath">MathExtras</a></td>
 <td class="colLast">
-<div class="block">Mathematical operations not provided by <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Math.html?is-external=true" title="class or interface in java.lang"><code>java.lang.Math</code></a>.</div>
+<div class="block">Mathematical operations not provided by <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true" title="class or interface in java.lang"><code>java.lang.Math</code></a>.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -671,8 +671,7 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></td>
 <td class="colLast">
-<div class="block">A different kind of RandomnessSource that operates internally on ints, which may have significant advantages on GWT
- since that toolchain has to emulate longs (slowly) for almost any math with them.</div>
+<div class="block">A different kind of RandomnessSource that operates internally on ints.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -748,7 +747,7 @@
 <tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></td>
 <td class="colLast">
-<div class="block">Like PintRNG (uses int math primarily, making it good with GWT and 32-bit machines) and FlapRNG, but with a longer
+<div class="block">Like PintRNG (uses int math primarily, making it good with 32-bit desktops and phones) and FlapRNG, but with a longer
  period than either, plus this implements StatefulRandomness.</div>
 </td>
 </tr>

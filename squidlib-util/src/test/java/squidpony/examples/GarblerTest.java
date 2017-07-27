@@ -39,9 +39,9 @@ public class GarblerTest {
 
         for (String oz : ozzes) {
             System.out.println(oz);
-            String garbled = Garbler.garble32(oz, 1337);
+            String garbled = Garbler.garble(oz, 1337);
             System.out.println(garbled);
-            String degarbled = Garbler.degarble32(garbled, 1337);
+            String degarbled = Garbler.degarble(garbled, 1337);
             System.out.println(degarbled);
             if(!degarbled.equals(oz))
                 System.exit(1);
@@ -50,9 +50,9 @@ public class GarblerTest {
         long[] keys = Garbler.makeKeyArray(5, "There's no place like home");
         for (String oz : ozzes) {
             System.out.println(oz);
-            String garbled = Garbler.garble32(oz, keys);
+            String garbled = Garbler.garble(oz, keys);
             System.out.println(garbled);
-            String degarbled = Garbler.degarble32(garbled, keys);
+            String degarbled = Garbler.degarble(garbled, keys);
             System.out.println(degarbled);
             if(!degarbled.equals(oz))
                 System.exit(1);

@@ -97,10 +97,10 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">java.util.AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</li>
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">java.util.AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>squidpony.ObText</li>
@@ -114,13 +114,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre><a href="../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
 public class <a href="../src-html/squidpony/ObText.html#line.79">ObText</a>
-extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</pre>
 <div class="block">A simple format parser for String-based configuration or data files where JSON is overkill.
  Supports only one type, String, but allows each String to have arbitrary nested levels of
  String children as if in sub-lists. You can interpret the Strings however you want, and
@@ -134,10 +134,10 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
  <br>
  This implements Collection of String but is (mostly) unmodifiable; you can call
  <a href="../squidpony/ObText.html#parse-java.lang.CharSequence-"><code>parse(CharSequence)</code></a> to append the results of parsing more formatted text, or call
- <a href="../squidpony/ObText.html#clear--"><code>clear()</code></a> to remove all data. <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#add-E-" title="class or interface in java.util"><code>AbstractCollection.add(Object)</code></a> and <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#remove-java.lang.Object-" title="class or interface in java.util"><code>AbstractCollection.remove(Object)</code></a> are
+ <a href="../squidpony/ObText.html#clear--"><code>clear()</code></a> to remove all data. <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#add-E-" title="class or interface in java.util"><code>AbstractCollection.add(Object)</code></a> and <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#remove-java.lang.Object-" title="class or interface in java.util"><code>AbstractCollection.remove(Object)</code></a> are
  not implemented and throw exceptions. A quirk of how this implements Collection is that it
  only considers the top-level Strings to be part of the Collection for length and for
- <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#contains-java.lang.Object-" title="class or interface in java.util"><code>AbstractCollection.contains(Object)</code></a>, and will ignore child strings unless you access them via
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#contains-java.lang.Object-" title="class or interface in java.util"><code>AbstractCollection.contains(Object)</code></a>, and will ignore child strings unless you access them via
  <a href="../squidpony/ObText.ItemIterator.html#children--"><code>ObText.ItemIterator.children()</code></a> on an item that has at least one child.
  <br>
  Format example:
@@ -282,7 +282,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#stringId">stringId</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#strings">strings</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -303,7 +303,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#ObText--">ObText</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#ObText-java.lang.CharSequence-">ObText</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#ObText-java.lang.CharSequence-">ObText</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -322,19 +322,19 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#appendQuoted-java.lang.StringBuilder-java.lang.String-">appendQuoted</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
-            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#appendQuoted-java.lang.StringBuilder-java.lang.String-">appendQuoted</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#appendQuoted-java.lang.StringBuilder-java.lang.String-regexodus.Matcher-">appendQuoted</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
-            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#appendQuoted-java.lang.StringBuilder-java.lang.String-regexodus.Matcher-">appendQuoted</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
             regexodus.Matcher&nbsp;bareFinder)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#appendQuotedObText-java.lang.StringBuilder-java.lang.String-">appendQuotedObText</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
-                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#appendQuotedObText-java.lang.StringBuilder-java.lang.String-">appendQuotedObText</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -342,7 +342,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="../squidpony/ObText.html" title="class in squidpony">ObText</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#deserializeFromString-java.lang.String-">deserializeFromString</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#deserializeFromString-java.lang.String-">deserializeFromString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</code>
 <div class="block">Deserializes an ObText that was serialized by <a href="../squidpony/ObText.html#serializeToString--"><code>serializeToString()</code></a> or <a href="../squidpony/ObText.html#toString--"><code>toString()</code></a>, and will
  ignore the prefix and suffix that toString appends for readability (these are "ObText object: [[[[ " and " ]]]]",
  for reference).</div>
@@ -350,7 +350,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -370,25 +370,25 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#makeMatcher-java.lang.CharSequence-">makeMatcher</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#makeMatcher-java.lang.CharSequence-">makeMatcher</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#makeMatcherNoComments-java.lang.CharSequence-">makeMatcherNoComments</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#makeMatcherNoComments-java.lang.CharSequence-">makeMatcherNoComments</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries, but no
  comments (which allows some additional characters to be used in bare words, like '#').</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../squidpony/ObText.html" title="class in squidpony">ObText</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#parse-java.lang.CharSequence-">parse</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#parse-java.lang.CharSequence-">parse</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>
 <div class="block">Parses the given text (a String or other CharSequence) and appends it into this ObText.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#serializeToString--">serializeToString</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i13" class="rowColor">
@@ -396,7 +396,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#size--">size</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ObText.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
@@ -404,29 +404,29 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <li class="blockList"><a name="methods.inherited.from.class.java.util.AbstractCollection">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.util.<a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#add-E-" title="class or interface in java.util">add</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#addAll-java.util.Collection-" title="class or interface in java.util">addAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#contains-java.lang.Object-" title="class or interface in java.util">contains</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#containsAll-java.util.Collection-" title="class or interface in java.util">containsAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#isEmpty--" title="class or interface in java.util">isEmpty</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#remove-java.lang.Object-" title="class or interface in java.util">remove</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#removeAll-java.util.Collection-" title="class or interface in java.util">removeAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#retainAll-java.util.Collection-" title="class or interface in java.util">retainAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#toArray--" title="class or interface in java.util">toArray</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#toArray-T:A-" title="class or interface in java.util">toArray</a></code></li>
+<h3>Methods inherited from class&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#add-E-" title="class or interface in java.util">add</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#addAll-java.util.Collection-" title="class or interface in java.util">addAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#contains-java.lang.Object-" title="class or interface in java.util">contains</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#containsAll-java.util.Collection-" title="class or interface in java.util">containsAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#isEmpty--" title="class or interface in java.util">isEmpty</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#remove-java.lang.Object-" title="class or interface in java.util">remove</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#removeAll-java.util.Collection-" title="class or interface in java.util">removeAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#retainAll-java.util.Collection-" title="class or interface in java.util">retainAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#toArray--" title="class or interface in java.util">toArray</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#toArray-T:A-" title="class or interface in java.util">toArray</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.util.Collection">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;java.util.<a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#parallelStream--" title="class or interface in java.util">parallelStream</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#removeIf-java.util.function.Predicate-" title="class or interface in java.util">removeIf</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#spliterator--" title="class or interface in java.util">spliterator</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#stream--" title="class or interface in java.util">stream</a></code></li>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#parallelStream--" title="class or interface in java.util">parallelStream</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#removeIf-java.util.function.Predicate-" title="class or interface in java.util">removeIf</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#spliterator--" title="class or interface in java.util">spliterator</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#stream--" title="class or interface in java.util">stream</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Iterable">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#forEach-java.util.function.Consumer-" title="class or interface in java.lang">forEach</a></code></li>
+<h3>Methods inherited from interface&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true#forEach-java.util.function.Consumer-" title="class or interface in java.lang">forEach</a></code></li>
 </ul>
 </li>
 </ul>
@@ -556,7 +556,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>strings</h4>
-<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../src-html/squidpony/ObText.html#line.113">strings</a></pre>
+<pre>protected final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt; <a href="../src-html/squidpony/ObText.html#line.113">strings</a></pre>
 </li>
 </ul>
 <a name="neighbors">
@@ -600,7 +600,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ObText</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.121">ObText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/ObText.html#line.121">ObText</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 </li>
 </ul>
 </li>
@@ -617,7 +617,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>parse</h4>
-<pre>public&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.131">parse</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.131">parse</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Parses the given text (a String or other CharSequence) and appends it into this ObText.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -636,9 +636,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.157">clear</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#clear--" title="class or interface in java.util">clear</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#clear--" title="class or interface in java.util">clear</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#clear--" title="class or interface in java.util">clear</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#clear--" title="class or interface in java.util">clear</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -651,9 +651,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/ObText.html#line.164">size</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#size--" title="class or interface in java.util">size</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#size--" title="class or interface in java.util">size</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#size--" title="class or interface in java.util">size</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#size--" title="class or interface in java.util">size</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -667,11 +667,11 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <div class="block">Returns an iterator over elements of type <code>T</code>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#iterator--" title="class or interface in java.util">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#iterator--" title="class or interface in java.util">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#iterator--" title="class or interface in java.util">iterator</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#iterator--" title="class or interface in java.util">iterator</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an Iterator.</dd>
 </dl>
@@ -683,8 +683,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>appendQuoted</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.285">appendQuoted</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
-                                <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.285">appendQuoted</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 </li>
 </ul>
 <a name="appendQuotedObText-java.lang.StringBuilder-java.lang.String-">
@@ -693,8 +693,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>appendQuotedObText</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.290">appendQuotedObText</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
-                                      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.290">appendQuotedObText</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 </li>
 </ul>
 <a name="appendQuoted-java.lang.StringBuilder-java.lang.String-regexodus.Matcher-">
@@ -703,8 +703,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>appendQuoted</h4>
-<pre>protected static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.294">appendQuoted</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
-                                   <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>protected static&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.html#line.294">appendQuoted</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb,
+                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                                    regexodus.Matcher&nbsp;bareFinder)</pre>
 </li>
 </ul>
@@ -714,10 +714,10 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.357">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.357">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true#toString--" title="class or interface in java.util">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true#toString--" title="class or interface in java.util">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -727,12 +727,12 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/ObText.html#line.362">equals</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/ObText.html#line.362">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.util">equals</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.util">equals</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -745,9 +745,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/ObText.html#line.373">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true#hashCode--" title="class or interface in java.util">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true#hashCode--" title="class or interface in java.util">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -757,7 +757,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>serializeToString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.377">serializeToString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.377">serializeToString</a>()</pre>
 </li>
 </ul>
 <a name="deserializeFromString-java.lang.String-">
@@ -766,7 +766,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>deserializeFromString</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.391">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.391">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
 <div class="block">Deserializes an ObText that was serialized by <a href="../squidpony/ObText.html#serializeToString--"><code>serializeToString()</code></a> or <a href="../squidpony/ObText.html#toString--"><code>toString()</code></a>, and will
  ignore the prefix and suffix that toString appends for readability (these are "ObText object: [[[[ " and " ]]]]",
  for reference). This is otherwise the same as calling the constructor <a href="../squidpony/ObText.html#ObText-java.lang.CharSequence-"><code>ObText(CharSequence)</code></a>.</div>
@@ -806,7 +806,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockList">
 <li class="blockList">
 <h4>makeMatcher</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.442">makeMatcher</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.442">makeMatcher</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries.
  This returns a <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony"><code>ObText.ContentMatcher</code></a> object that is already configured to read from <code>text</code>.
  The <code>text</code> should contain Strings that may be surrounded by quotes, heredoc-style quotes, or just bare
@@ -830,7 +830,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/util/AbstractColl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeMatcherNoComments</h4>
-<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.459">makeMatcherNoComments</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public static&nbsp;<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a>&nbsp;<a href="../src-html/squidpony/ObText.html#line.459">makeMatcherNoComments</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Can be used to help reading sequences of Strings with ObText-style quotation marking their boundaries, but no
  comments (which allows some additional characters to be used in bare words, like '#').
  This returns a <a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony"><code>ObText.ContentMatcher</code></a> object that is already configured to read from <code>text</code>.

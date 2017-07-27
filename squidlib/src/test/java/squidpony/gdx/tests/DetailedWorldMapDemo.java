@@ -298,9 +298,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             }
         }
         int seedA = (int) LightRNG.determine(seed),
-                seedB = Light32RNG.determine(seedA),
-                seedC = Light32RNG.determine(seedA + seedB);
-        counter = Light32RNG.determine(seedA + seedB + seedC) >>> 16;
+                seedB = (int)LightRNG.determine(seed + seedA),
+                seedC = (int)LightRNG.determine(seed + seedA + seedB);
+        counter = (int)(LightRNG.determine(seed + seedA + seedB + seedC) >>> 48);
         Noise.seamless3D(cloudData, seedC, 3);
     }
 

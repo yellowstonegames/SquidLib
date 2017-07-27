@@ -101,7 +101,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -110,7 +110,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public static interface <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.563">CrossHash.IHasher</a>
-extends <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">An interface that can be used to move the logic for the hashCode() and equals() methods from a class' methods to
  an implementation of IHasher that certain collections in SquidLib can use. Primarily useful when the key type is
  an array, which normally doesn't work as expected in Java hash-based collections, but can if the right collection
@@ -137,8 +137,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.h
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.IHasher.html#areEqual-java.lang.Object-java.lang.Object-">areEqual</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;left,
-        <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;right)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.IHasher.html#areEqual-java.lang.Object-java.lang.Object-">areEqual</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;left,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;right)</code>
 <div class="block">Not all types you might want to use an IHasher on meaningfully implement .equals(), such as array types; in
  these situations the areEqual method helps quickly check for equality by potentially having special logic for
  the type this is meant to check.</div>
@@ -146,9 +146,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.h
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.IHasher.html#hash-java.lang.Object-">hash</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CrossHash.IHasher.html#hash-java.lang.Object-">hash</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</code>
 <div class="block">If data is a type that this IHasher can specifically hash, this method should use that specific hash; in
- other situations, it should simply delegate to calling <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data.</div>
+ other situations, it should simply delegate to calling <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data.</div>
 </td>
 </tr>
 </table>
@@ -172,9 +172,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.h
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.IHasher.html#line.573">hash</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
+<pre>int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.IHasher.html#line.573">hash</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
 <div class="block">If data is a type that this IHasher can specifically hash, this method should use that specific hash; in
- other situations, it should simply delegate to calling <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data. The body of an
+ other situations, it should simply delegate to calling <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data. The body of an
  implementation of this method can be very small; for an IHasher that is meant for byte arrays, the body could
  be: <code>return (data instanceof byte[]) ? CrossHash.Lightning.hash((byte[]) data) : data.hashCode();</code></div>
 <dl>
@@ -191,8 +191,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/io/Serializable.h
 <ul class="blockListLast">
 <li class="blockList">
 <h4>areEqual</h4>
-<pre>boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.IHasher.html#line.595">areEqual</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;left,
-                 <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;right)</pre>
+<pre>boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.IHasher.html#line.595">areEqual</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;left,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;right)</pre>
 <div class="block">Not all types you might want to use an IHasher on meaningfully implement .equals(), such as array types; in
  these situations the areEqual method helps quickly check for equality by potentially having special logic for
  the type this is meant to check. The body of implementations for this method can be fairly small; for byte

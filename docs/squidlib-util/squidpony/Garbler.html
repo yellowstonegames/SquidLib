@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -97,7 +97,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
-<li><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
+<li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
 <li>squidpony.Garbler</li>
@@ -109,20 +109,18 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public final class <a href="../src-html/squidpony/Garbler.html#line.23">Garbler</a>
-extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<pre>public final class <a href="../src-html/squidpony/Garbler.html#line.19">Garbler</a>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Tools for garbling Strings (making them appear to be gibberish) and degarbling earlier outputs to get the original
  inputs. This is like a weak form of encryption, and is probably enough to stop random users from editing saved files
- effectively. This allows a key as a String or long to be used to affect the garbling process. There are also garble32
- and degarble32 methods meant for use on GWT and 32-bit target platforms; these methods don't need 64-bit math but
- produce incompatible output when compared to the regular garble and degarble methods. A minor step of obfuscation
- could be to run some combination of garble and/or garble32 with different keys and then require they be degarbled by
- degarble and/or degarble32 calls (with the same keys as before) in the reverse order of the garble/garble32 calls.
- This is made more efficient with the <a href="../squidpony/Garbler.html#garble32-java.lang.String-long:A-"><code>garble32(String, long[])</code></a> and <a href="../squidpony/Garbler.html#degarble32-java.lang.String-long:A-"><code>degarble32(String, long[])</code></a> methods,
+ effectively. This allows a key as a String or long to be used to affect the garbling process.
+
+ A minor step of obfuscation could be to run some combination of garble calls with different keys and then require
+ they be degarbled by degarble calls (with the same keys as before) in the reverse order of the garble calls.
+ This is made more efficient with the <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>garble(String, long[])</code></a> and <a href="../squidpony/Garbler.html#degarble-java.lang.String-long:A-"><code>degarble(String, long[])</code></a> methods,
  which avoid allocating multiple temporary char arrays when multiple keys are used. A more major step of obfuscation
  would be to run any garbling on already-compressed text, as code in the squidlib-extra module can do (or anything
- using a string compression library, like the
- <a href="https://github.com/tommyettinger/BlazingChain">BlazingChain</a> library that squidlib-extra uses).
+ using string compression, like the LZSPlus class in that module, which has its own obfuscation it can perform).
  <br>
  Created by Tommy Ettinger on 5/22/2017.</div>
 </li>
@@ -144,111 +142,68 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble-java.lang.String-">degarble</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled)</code>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble-java.lang.String-">degarble</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled)</code>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-"><code>garble(String)</code></a> (using the default key), this reverses the
  garbling and gets the original String.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble-java.lang.String-long-">degarble</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble-java.lang.String-long-">degarble</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
         long&nbsp;key)</code>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-long-"><code>garble(String, long)</code></a> (using the given key), this reverses
  the garbling and gets the original String.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble-java.lang.String-java.lang.String-">degarble</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
-        <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</code>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-java.lang.String-"><code>garble(String, String)</code></a> (using the given keyText), this
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble-java.lang.String-long:A-">degarble</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+        long[]&nbsp;keys)</code>
+<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>garble(String, long[])</code></a> (using the given keys), this
  reverses the garbling and gets the original String.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble32-java.lang.String-">degarble32</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled)</code>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble32-java.lang.String-"><code>garble32(String)</code></a> (using the default key), this reverses the
- garbling and gets the original String.</div>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble-java.lang.String-java.lang.String-">degarble</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</code>
+<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-java.lang.String-"><code>garble(String, String)</code></a> (using the given keyText), this
+ reverses the garbling and gets the original String.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble32-java.lang.String-long-">degarble32</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
-          long&nbsp;key)</code>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble32-java.lang.String-long-"><code>garble32(String, long)</code></a> (using the given key), this reverses
- the garbling and gets the original String.</div>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-">garble</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>
+<div class="block">Garbles text with the default key.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble32-java.lang.String-long:A-">degarble32</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
-          long[]&nbsp;keys)</code>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble32-java.lang.String-long:A-"><code>garble32(String, long[])</code></a> (using the given keys), this
- reverses the garbling and gets the original String.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#degarble32-java.lang.String-java.lang.String-">degarble32</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
-          <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</code>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble32-java.lang.String-java.lang.String-"><code>garble32(String, String)</code></a> (using the given keyText), this
- reverses the garbling and gets the original String.</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-">garble</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>
-<div class="block">Garbles text with the default key.</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-long-">garble</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-long-">garble</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
       long&nbsp;key)</code>
-<div class="block">Garbles text with the given key as a long.</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-java.lang.String-">garble</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
-      <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</code>
-<div class="block">Garbles text with the given keyText.</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble32-java.lang.String-">garble32</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</code>
-<div class="block">Garbles text with the default key.</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble32-java.lang.String-long-">garble32</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
-        long&nbsp;key)</code>
 <div class="block">Garbles text with the given key as an int.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble32-java.lang.String-long:A-">garble32</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
-        long[]&nbsp;keys)</code>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-">garble</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+      long[]&nbsp;keys)</code>
 <div class="block">Garbles text with the given keys as an int array, effectively garbling the same text one time per item in keys.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble32-java.lang.String-java.lang.String-">garble32</a></span>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
-        <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</code>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#garble-java.lang.String-java.lang.String-">garble</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</code>
 <div class="block">Garbles text with the given keyText.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Garbler.html#makeKeyArray-int-java.lang.String-">makeKeyArray</a></span>(int&nbsp;size,
-            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</code>
-<div class="block">If you need to produce an int array as a key for <a href="../squidpony/Garbler.html#garble32-java.lang.String-long:A-"><code>garble32(String, long[])</code></a> when you only have a String,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</code>
+<div class="block">If you need to produce an int array as a key for <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>garble(String, long[])</code></a> when you only have a String,
  you can use this method if the String isn't too small (at least 8 char Strings should be fine).</div>
 </td>
 </tr>
@@ -257,8 +212,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+<h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -280,7 +235,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>garble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.35">garble</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.141">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 <div class="block">Garbles text with the default key. This can be degarbled with <a href="../squidpony/Garbler.html#degarble-java.lang.String-"><code>degarble(String)</code></a>, which also uses the
  default key.</div>
 <dl>
@@ -297,8 +252,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>garble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.45">garble</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
-                            <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.152">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
 <div class="block">Garbles text with the given keyText. This can be degarbled with <a href="../squidpony/Garbler.html#degarble-java.lang.String-java.lang.String-"><code>degarble(String, String)</code></a>, which must be
  given the same keyText.</div>
 <dl>
@@ -316,9 +271,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>garble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.57">garble</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.164">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                             long&nbsp;key)</pre>
-<div class="block">Garbles text with the given key as a long. This can be degarbled with <a href="../squidpony/Garbler.html#degarble-java.lang.String-long-"><code>degarble(String, long)</code></a>, which must
+<div class="block">Garbles text with the given key as an int. This can be degarbled with <a href="../squidpony/Garbler.html#degarble-java.lang.String-long-"><code>degarble(String, long)</code></a>, which must
  be given the same key.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -335,7 +290,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>degarble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.81">degarble</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.189">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled)</pre>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-"><code>garble(String)</code></a> (using the default key), this reverses the
  garbling and gets the original String.</div>
 <dl>
@@ -352,8 +307,8 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>degarble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.91">degarble</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
-                              <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.199">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-java.lang.String-"><code>garble(String, String)</code></a> (using the given keyText), this
  reverses the garbling and gets the original String.</div>
 <dl>
@@ -371,7 +326,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>degarble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.103">degarble</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.211">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
                               long&nbsp;key)</pre>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-long-"><code>garble(String, long)</code></a> (using the given key), this reverses
  the garbling and gets the original String.</div>
@@ -384,128 +339,18 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="garble32-java.lang.String-">
+<a name="garble-java.lang.String-long:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>garble32</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.145">garble32</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
-<div class="block">Garbles text with the default key. This can be degarbled with <a href="../squidpony/Garbler.html#degarble32-java.lang.String-"><code>degarble32(String)</code></a>, which also uses the
- default key.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>text</code> - the text to garble</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new String that appears unrelated to text and should look like gibberish</dd>
-</dl>
-</li>
-</ul>
-<a name="garble32-java.lang.String-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>garble32</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.156">garble32</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
-                              <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
-<div class="block">Garbles text with the given keyText. This can be degarbled with <a href="../squidpony/Garbler.html#degarble32-java.lang.String-java.lang.String-"><code>degarble32(String, String)</code></a>, which must be
- given the same keyText.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>text</code> - the text to garble</dd>
-<dd><code>keyText</code> - used to determine the key this will use to garble text</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new String that appears unrelated to text and should look like gibberish</dd>
-</dl>
-</li>
-</ul>
-<a name="garble32-java.lang.String-long-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>garble32</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.168">garble32</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
-                              long&nbsp;key)</pre>
-<div class="block">Garbles text with the given key as an int. This can be degarbled with <a href="../squidpony/Garbler.html#degarble32-java.lang.String-long-"><code>degarble32(String, long)</code></a>, which must
- be given the same key.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>text</code> - the text to garble</dd>
-<dd><code>key</code> - the key this will use to garble text</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a new String that appears unrelated to text and should look like gibberish</dd>
-</dl>
-</li>
-</ul>
-<a name="degarble32-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>degarble32</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.193">degarble32</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled)</pre>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble32-java.lang.String-"><code>garble32(String)</code></a> (using the default key), this reverses the
- garbling and gets the original String.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>garbled</code> - a String produced by a garble32() method using the default key</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the original String before garbling, if the keys match</dd>
-</dl>
-</li>
-</ul>
-<a name="degarble32-java.lang.String-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>degarble32</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.203">degarble32</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
-                                <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble32-java.lang.String-java.lang.String-"><code>garble32(String, String)</code></a> (using the given keyText), this
- reverses the garbling and gets the original String.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>garbled</code> - a String produced by a garble32() method using the same keyText</dd>
-<dd><code>keyText</code> - the keyText that was used during garbling</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the original String before garbling, if the keys match</dd>
-</dl>
-</li>
-</ul>
-<a name="degarble32-java.lang.String-long-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>degarble32</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.215">degarble32</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
-                                long&nbsp;key)</pre>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble32-java.lang.String-long-"><code>garble32(String, long)</code></a> (using the given key), this reverses
- the garbling and gets the original String.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>garbled</code> - a String produced by a garble32() method using the same keyText</dd>
-<dd><code>key</code> - the key that was used during garbling</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the original String before garbling, if the keys match</dd>
-</dl>
-</li>
-</ul>
-<a name="garble32-java.lang.String-long:A-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>garble32</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.249">garble32</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
-                              long[]&nbsp;keys)</pre>
+<h4>garble</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.245">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+                            long[]&nbsp;keys)</pre>
 <div class="block">Garbles text with the given keys as an int array, effectively garbling the same text one time per item in keys.
  This can seen as a way to improve the quality of the shuffle by adding more bits of state to the key(s).
- The result can be degarbled with <a href="../squidpony/Garbler.html#degarble32-java.lang.String-long:A-"><code>degarble32(String, long[])</code></a>, which must be given the same keys. This
- method is more efficient than calling garble32() repeatedly because it only allocates one temporary char array
+ The result can be degarbled with <a href="../squidpony/Garbler.html#degarble-java.lang.String-long:A-"><code>degarble(String, long[])</code></a>, which must be given the same keys. This
+ method is more efficient than calling garble() repeatedly because it only allocates one temporary char array
  for the whole batch of keys, as opposed to needing one temporary array per key with repeated calls.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -516,22 +361,22 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="degarble32-java.lang.String-long:A-">
+<a name="degarble-java.lang.String-long:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>degarble32</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.282">degarble32</a>(<a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
-                                long[]&nbsp;keys)</pre>
-<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble32-java.lang.String-long:A-"><code>garble32(String, long[])</code></a> (using the given keys), this
- reverses the garbling and gets the original String. This is not the same as calling degarble32() repeatedly, in
+<h4>degarble</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.278">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+                              long[]&nbsp;keys)</pre>
+<div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>garble(String, long[])</code></a> (using the given keys), this
+ reverses the garbling and gets the original String. This is not the same as calling degarble() repeatedly, in
  part because this uses the keys in reverse order (just like every part of the degarbling process, it needs to be
  in reverse), and in part because this only creates one temporary char array for the whole batch of keys, instead
  of creating one new char array per repeated call.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>garbled</code> - a String produced by a garble32() method using the same keyText</dd>
+<dd><code>garbled</code> - a String produced by a garble() method using the same keyText</dd>
 <dd><code>keys</code> - the key array that was used during garbling</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the original String before garbling, if the keys match</dd>
@@ -544,9 +389,9 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeKeyArray</h4>
-<pre>public static&nbsp;long[]&nbsp;<a href="../src-html/squidpony/Garbler.html#line.318">makeKeyArray</a>(int&nbsp;size,
-                                  <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
-<div class="block">If you need to produce an int array as a key for <a href="../squidpony/Garbler.html#garble32-java.lang.String-long:A-"><code>garble32(String, long[])</code></a> when you only have a String,
+<pre>public static&nbsp;long[]&nbsp;<a href="../src-html/squidpony/Garbler.html#line.314">makeKeyArray</a>(int&nbsp;size,
+                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
+<div class="block">If you need to produce an int array as a key for <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>garble(String, long[])</code></a> when you only have a String,
  you can use this method if the String isn't too small (at least 8 char Strings should be fine). This produces a
  diverse array of ints without the correlation between items that you would get if you just generated a sequence
  of random ints from one small seed, by using multiple different <code>CrossHash.Mist</code> objects to hash the text.</div>
@@ -555,7 +400,7 @@ extends <a href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?
 <dd><code>size</code> - the size of the key array to produce; larger key arrays take proportionately longer to process</dd>
 <dd><code>keyText</code> - the String to use as a basis for generating random-seeming numbers for keys</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>an int array that can be given to <a href="../squidpony/Garbler.html#garble32-java.lang.String-long:A-"><code>garble32(String, long[])</code></a> and <a href="../squidpony/Garbler.html#degarble32-java.lang.String-long:A-"><code>degarble32(String, long[])</code></a></dd>
+<dd>an int array that can be given to <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>garble(String, long[])</code></a> and <a href="../squidpony/Garbler.html#degarble-java.lang.String-long:A-"><code>degarble(String, long[])</code></a></dd>
 </dl>
 </li>
 </ul>
