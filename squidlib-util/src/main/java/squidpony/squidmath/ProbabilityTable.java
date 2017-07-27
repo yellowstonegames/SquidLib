@@ -265,7 +265,7 @@ public class ProbabilityTable<T> implements Serializable {
     public int hashCode() {
         int result = table.hashCode();
         result = 31 * result + extraTable.hashCode();
-        result = 31 * result + weights.hashCode();
+        result = 31 * result + weights.hashWisp();
         result = 31 * result + (rng != null ? rng.hashCode() : 0);
         return result;
     }

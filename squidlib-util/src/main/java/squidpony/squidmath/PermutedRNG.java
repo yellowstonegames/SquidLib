@@ -44,7 +44,7 @@ import java.io.Serializable;
  * PermutedRNG, and both drastically faster than java.util.Random .
  * @author Melissa E. O'Neill (Go HMC!)
  * @author Tommy Ettinger
- * @see PintRNG PintRNG is similar to this algorithm but uses only 32-bit math, where possible; meant for GWT.
+ * @see PintRNG PintRNG is similar to this algorithm but uses only 32-bit math, where possible.
  */
 public class PermutedRNG implements RandomnessSource, StatefulRandomness, Serializable
 {

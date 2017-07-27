@@ -6,14 +6,14 @@ import squidpony.annotation.Beta;
 import java.io.Serializable;
 
 /**
- * Like PintRNG (only uses 32-bit int math, good for GWT), but much faster at the expense of quality.
+ * Like PintRNG (uses 32-bit int math, good for older desktops and phones), but much faster at the expense of quality.
  * This generator is faster than ThunderRNG at generating ints, while also implementing StatefulRandomness. It is slower
  * but not especially slow at generating longs, and takes between 5% and 10% more time than LightRNG to generate longs
- * (it takes about 40% less time than LightRNG to generate ints). Quality is unclear, since this relies on some very
- * particular values for constants and shows various flaws visually when the constants are even slightly off. There are
- * probably better choices for constants out there that we may be able to find, but it doesn't seem easy.
- * It's likely that the period of FlapRNG is only 2 to the 33 (0 seed is allowed), which is much less than many common
- * generators ({@link java.util.Random} has a period of approximately 2 to the 42, for instance). This may be acceptable
+ * (it takes about 40% less time than LightRNG to generate ints). Quality is bad. This relies on some very particular
+ * values for constants and shows various flaws visually when the constants are even slightly off. There are probably
+ * better choices for constants out there that we may be able to find, but it doesn't seem easy. It's likely that the
+ * period of FlapRNG is only 2 to the 33 (0 seed is allowed), which is much less than many common generators
+ * ({@link java.util.Random} has a period of approximately 2 to the 42, for instance). This may be acceptable
  * if you don't expect to generate 8 billion numbers with one FlapRNG.
  * <br>
  * Created by Tommy Ettinger on 5/1/2017.

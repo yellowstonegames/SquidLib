@@ -509,7 +509,7 @@ public final class LZSPlus {
      * @return a pseudo-random long
      */
     private static long splitMix64(long state) {
-        state = (((state *= 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
+        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
         state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
         return state ^ (state >>> 31);
     }

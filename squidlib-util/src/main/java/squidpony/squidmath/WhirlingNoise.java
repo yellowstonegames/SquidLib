@@ -2,7 +2,7 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
-import static squidpony.squidmath.Light32RNG.determine;
+import static squidpony.squidmath.LightRNG.determine;
 import static squidpony.squidmath.LightRNG.determineBounded;
 
 /**
@@ -12,8 +12,7 @@ import static squidpony.squidmath.LightRNG.determineBounded;
  * {@link #noise(double, double, double)} should have similar appearance to {@link PerlinNoise#noise(double, double)}
  * and {@link PerlinNoise#noise(double, double, double)}, but are not forced to a zoomed-in scale like PerlinNoise makes
  * its results, are less likely to repeat sections of noise, and are also somewhat faster (a 20% speedup can be expected
- * over PerlinNoise using those two methods). Sound good? This also performs minimal (if any) arithmetic on 64-bit long
- * numbers, instead using double and int, a style that is ideal for GWT (this is true of PerlinNoise too).
+ * over PerlinNoise using those two methods). Sound good?
  * <br>
  * Created by Tommy Ettinger on 12/14/2016.
  */
@@ -251,7 +250,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
      * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
-     * it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good distribution
+     * it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good distribution
      * and is fast) instead of a number chosen by hash from a single 256-element array.
      *
      * @param x X input; works well if between 0.0 and 1.0, but anything is accepted
@@ -276,7 +275,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good
+     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good
      * distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
@@ -302,7 +301,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good
+     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good
      * distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
@@ -331,7 +330,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
      * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
-     * it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good distribution
+     * it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good distribution
      * and is fast) instead of a number chosen by hash from a single 256-element array.
      *
      * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
@@ -346,7 +345,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
      * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
-     * it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather good distribution
+     * it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather good distribution
      * and is fast) instead of a number chosen by hash from a single 256-element array.
      *
      * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
@@ -538,7 +537,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather
+     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather
      * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param xin X input
      * @param yin Y input
@@ -553,7 +552,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather
+     * because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather
      * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param xin X input
      * @param yin Y input
@@ -897,7 +896,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
      * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
-     * chunks because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather
+     * chunks because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather
      * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
@@ -913,7 +912,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
      * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
-     * chunks because it uses a pseudo-random function (curiously, {@link Light32RNG#determine(int)}, which has rather
+     * chunks because it uses a pseudo-random function (curiously, {@link LightRNG#determine(long)}, which has rather
      * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input

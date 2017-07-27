@@ -168,7 +168,7 @@ public class TextStorage {
             if (compress)
                 preferences.putString(outerName, LZSPlus.compress(mapConverter.stringify(contents), garbleKey));
             else
-                preferences.putString(outerName, Garbler.garble32(mapConverter.stringify(contents), garbleKey));
+                preferences.putString(outerName, Garbler.garble(mapConverter.stringify(contents), garbleKey));
         }
         preferences.flush();
         return this;
@@ -193,7 +193,7 @@ public class TextStorage {
             if (compress)
                 return LZSPlus.compress(mapConverter.stringify(contents), garbleKey);
             else
-                return Garbler.garble32(mapConverter.stringify(contents), garbleKey);
+                return Garbler.garble(mapConverter.stringify(contents), garbleKey);
         }
     }
 
@@ -251,7 +251,7 @@ public class TextStorage {
             if (compress)
                 got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);
             else
-                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);
+                got = Garbler.degarble(preferences.getString(outerName), garbleKey);
         }
         if(got == null) return null;
         om = mapConverter.restore(got);
@@ -291,7 +291,7 @@ public class TextStorage {
             if (compress)
                 got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);
             else
-                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);
+                got = Garbler.degarble(preferences.getString(outerName), garbleKey);
         }
         if(got == null) return null;
         om = mapConverter.restore(got);

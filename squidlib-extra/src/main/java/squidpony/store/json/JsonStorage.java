@@ -160,7 +160,7 @@ public class JsonStorage {
             if (compress)
                 preferences.putString(outerName, LZSPlus.compress(json.toJson(contents, StringStringMap.class), garbleKey));
             else
-                preferences.putString(outerName, Garbler.garble32(json.toJson(contents, StringStringMap.class), garbleKey));
+                preferences.putString(outerName, Garbler.garble(json.toJson(contents, StringStringMap.class), garbleKey));
         }
         preferences.flush();
         return this;
@@ -183,7 +183,7 @@ public class JsonStorage {
             if (compress)
                 return LZSPlus.compress(json.toJson(contents, StringStringMap.class), garbleKey);
             else
-                return Garbler.garble32(json.toJson(contents, StringStringMap.class), garbleKey);
+                return Garbler.garble(json.toJson(contents, StringStringMap.class), garbleKey);
 
         }
     }
@@ -238,7 +238,7 @@ public class JsonStorage {
             if (compress)
                 got = LZSPlus.decompress(preferences.getString(outerName), garbleKey);
             else
-                got = Garbler.degarble32(preferences.getString(outerName), garbleKey);
+                got = Garbler.degarble(preferences.getString(outerName), garbleKey);
         }
         if(got == null) return null;
         om = json.fromJson(StringStringMap.class, got);

@@ -13,7 +13,7 @@ package squidpony.squidmath;
  * Created by Tommy Ettinger on 4/27/2017.
  */
 public class TuringPattern {
-    private static final double fraction = 1.0 / 0x80000000L;
+    private static final double fraction = 0x1p-53;
 
     /**
      * Initializes a substance array that can be given to other static methods. Uses very little 64-bit math,
@@ -34,16 +34,14 @@ public class TuringPattern {
      */
     public static double[] initializeInto(double[] substance){
         if(substance == null) return null;
-        int seed = 65537;
+        long seed = 65537;
         for (int i = 0; i < substance.length; i++) {
-            seed += 0x9E3779B9;
-            substance[i] = PintRNG.determine((seed >>> 19 | seed << 13) ^ 0x13A5BA1D) * fraction;
+            substance[i] = (LightRNG.determine(++seed) >> 11) * fraction;
         }
         return substance;
     }
     /**
-     * Initializes a substance array that can be given to other static methods. Uses very little 64-bit math,
-     * making it ideal for GWT.
+     * Initializes a substance array that can be given to other static methods.
      * @param width the width of the substance array; should be consistent throughout calls
      * @param height the height of the substance array; should be consistent throughout calls
      * @param seed the int seed to use for the random contents
@@ -54,8 +52,7 @@ public class TuringPattern {
     }
 
     /**
-     * Refills a substance array that can be given to other static methods. Uses very little 64-bit math,
-     * making it ideal for GWT.
+     * Refills a substance array that can be given to other static methods.
      * @param substance a 1D double array that will be modified and filled with random values
      * @param seed the int seed to use for the random contents
      * @return substance, after modification; should be given to other methods
@@ -63,8 +60,7 @@ public class TuringPattern {
     public static double[] initializeInto(double[] substance, int seed){
         if(substance == null) return null;
         for (int i = 0; i < substance.length; i++) {
-            seed += 0x9E3779B9;
-            substance[i] = PintRNG.determine((seed >>> 19 | seed << 13) ^ 0x13A5BA1D) * fraction;
+            substance[i] = (LightRNG.determine(++seed) >> 11) * fraction;
         }
         return substance;
     }

@@ -3505,11 +3505,8 @@ public class CrossHash {
      * A whole cluster of Wisp-like hash functions that sacrifice a small degree of speed, but can be built with up
      * to 128 bits of salt values that help to obscure what hashing function is actually being used. This class is
      * similar to Storm in how you can construct one (using a CharSequence, one long to use to produce a salt, or in
-     * this class two longs to use to produce a salt), but differs from Storm by being somewhat faster, having many
-     * more possible salt "states" when using the constructors that take two longs or a CharSequence, and also by using
-     * 32-bit math when only 32-bit inputs and output are used (relevant for GWT with its slower 64-bit math).
-     * The salt values are mostly a pair of longs, but for the hash() functions that don't take a long array or double
-     * array, a different salt value is used, a pair of ints.
+     * this class two longs to use to produce a salt), but differs from Storm by being somewhat faster and having many
+     * more possible salt "states" when using the constructors that take two longs or a CharSequence.
      * <br>
      * The salt fields are not serialized, so it is important that the same salt will be given by the
      * program when the same hash results are wanted for some inputs.
@@ -3528,8 +3525,6 @@ public class CrossHash {
 
         private transient final long $l1, $l2;
 
-        private transient final int $i1, $i2;
-
         public Mist() {
             this(0x1234567876543210L, 0xEDCBA98789ABCDEFL);
         }
@@ -3547,14 +3542,12 @@ public class CrossHash {
 
         @SuppressWarnings("NumericOverflow")
         public Mist(final long alteration) {
-            $i1 = permute(alteration);
             long l1, l2;
-            l1 = alteration + $i1;
+            l1 = alteration + permute(alteration);
             l1 = (l1 ^ (l1 >>> 30)) * 0xBF58476D1CE4E5B9L;
             l1 = (l1 ^ (l1 >>> 27)) * 0x94D049BB133111EBL;
             $l1 = l1 ^ l1 >>> 31;
 
-            $i2 = permute($l1 + 0x9E3779B97F4A7C15L);
             l2 = alteration + 6 * 0x9E3779B97F4A7C15L;
             l2 = (l2 ^ (l2 >>> 30)) * 0xBF58476D1CE4E5B9L;
             l2 = (l2 ^ (l2 >>> 27)) * 0x94D049BB133111EBL;
@@ -3563,10 +3556,9 @@ public class CrossHash {
 
         @SuppressWarnings("NumericOverflow")
         public Mist(final long alteration1, long alteration2) {
-            $i1 = permute(alteration1);
-            $l1 = alteration1 + $i1;
-            $i2 = permute(alteration2 + $i1);
-            $l2 = alteration2 + $i2;
+            final int i1 = permute(alteration1);
+            $l1 = alteration1 + i1;
+            $l2 = alteration2 + permute(alteration2 + i1);
         }
 
         /**
@@ -3827,231 +3819,6 @@ public class CrossHash {
             final long a = 0x632BE59BD9B4E019L ^ 0x8329C6EB9E6AD3E3L * data.hashCode(),
                     result = 0x9E3779B97F4A7C94L + $l2 + (a ^ $l2 * a + $l1);
             return result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37);
-        }
-
-        public int hash32(final boolean[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * (data[i] ? 0x789ABCDE : 0x62E2AC0D)) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final byte[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final short[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final char[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final int[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final long[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]) ^ $l2 * a + $l1;
-            }
-            return (int)((result = (result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
-        }
-
-
-        public int hash32(final float[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * NumberTools.floatToIntBits(data[i])) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final double[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(data[i])) ^ $l2 * a + $l1;
-            }
-            return (int)((result = (result * (a * $l1 | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
-        }
-
-        /**
-         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
-         * Uses 32-bit math on most platforms, but will give different results on GWT due to it using double values that
-         * only somewhat act like int values.
-         * @param data  the char array to hash
-         * @param start the start of the section to hash (inclusive)
-         * @param end   the end of the section to hash (exclusive)
-         * @return a 32-bit hash code for the requested section of data
-         */
-        public int hash32(final char[] data, final int start, final int end) {
-            if (data == null || start >= end)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = start; i < end && i < len; i++) {
-                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-        /**
-         * Hashes only a subsection of the given data, starting at start (inclusive), ending before end (exclusive), and
-         * moving between chars in increments of step (which is always greater than 0). Uses 32-bit math on most
-         * platforms, but will give different results on GWT due to it using double values that only somewhat act like
-         * int values.
-         * @param data  the char array to hash
-         * @param start the start of the section to hash (inclusive)
-         * @param end   the end of the section to hash (exclusive)
-         * @param step  how many elements to advance after using one element from data; must be greater than 0
-         * @return a 32-bit hash code for the requested section of data
-         */
-        public int hash32(final char[] data, final int start, final int end, final int step) {
-            if (data == null || start >= end || step <= 0)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = start; i < end && i < len; i += step) {
-                result += (a ^= 0x85157AF5 * data[i]) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final CharSequence data) {
-            if (data == null)
-                return 0;
-            final int len = data.length();
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * data.charAt(i)) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final char[][] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final long[][] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final CharSequence[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final Iterable<? extends CharSequence> data) {
-
-            if (data == null)
-                return 0;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (CharSequence datum : data) {
-                result += (a ^= 0x85157AF5 * hash(datum)) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final CharSequence[]... data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * hash(data[i])) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final Object[] data) {
-            if (data == null)
-                return 0;
-            final int len = data.length;
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            Object o;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * ((o = data[i]) == null ? -1 : o.hashCode())) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-        public int hash32(final List<? extends CharSequence> data) {
-            if (data == null)
-                return 0;
-            final int len = data.size();
-            int result = 0x9E3779B9 + $i2, a = 0x632BE5AB;
-            for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * hash(data.get(i))) ^ $i2 * a + $i1;
-            }
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
-        }
-
-        public int hash32(final Object data) {
-            if (data == null)
-                return 0;
-            int a = 0x632BE5AB ^ 0x85157AF5 * data.hashCode(), result = 0x9E3779B9 + $i2 + (a ^ $i2 * a + $i1);
-            return result * (a * $i1 | 1) ^ (result >>> 11 | result << 21);
         }
         public int hash(final boolean[] data) {
             if (data == null)

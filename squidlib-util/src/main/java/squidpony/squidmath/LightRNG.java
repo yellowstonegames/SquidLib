@@ -281,5 +281,4 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
         state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
         return (int)((bound * ((state ^ (state >>> 31)) & 0x7FFFFFFFL)) >> 31);
     }
-
 }

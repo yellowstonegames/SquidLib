@@ -12,10 +12,12 @@ import java.io.Serializable;
  * laps) without repeating, and in some cases (mainly generating 64-bit values) at even higher speed. It is currently
  * the fastest RandomnessSource in this library at generating 64-bit longs, which is most of what {@link RNG} uses, and
  * is second-fastest at generating 32-bit ints, with FlapRNG just slightly faster at that. While the period must be at
- * least 2 to the 64, it is likely that it is actually 2 to the 65.
+ * least 2 to the 64, it is likely that it is actually 2 to the 65. This is one of three RandomnessSources recommended
+ * for frequent use, but only if speed is the only consideration; the quality of the numbers this produces is very bad
+ * (though it appears random to even a trained human eye, a computer could detect patterns).
  * <br>
  * Created by Tommy Ettinger on 5/25/2017.
- * @see FlapRNG FlapRNG is similar in goal to LapRNG but is implemented using int math, ideal for GWT or 32-bit OSes
+ * @see FlapRNG FlapRNG is similar to LapRNG but is implemented using int math; LapRNG should usually be preferred
  * @see ZapRNG ZapRNG is based on LapRNG, and is somewhat slower but has better quality with the same period
  */
 @Beta

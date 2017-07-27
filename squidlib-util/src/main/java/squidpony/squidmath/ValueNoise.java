@@ -14,9 +14,9 @@ package squidpony.squidmath;
  * <br>
  * Implementation is based on {@link CrossHash.Wisp#hash64(int[])}, treating doubles as ints
  * by using {@link NumberTools#doubleToMixedIntBits(double)}, which XORs the bottom and top halves of the long bits of
- * each double, and does it efficiently enough on GWT. Finishes by passing the top 52 bits as a significand to
- * {@link NumberTools#longBitsToDouble(long)}, using an exponent that allows this to produce numbers between -1.0 and
- * 1.0. Has special treatment for the seed when present (since it is an int).
+ * each double. Finishes by passing the top 52 bits as a significand to {@link NumberTools#longBitsToDouble(long)},
+ * using an exponent that allows this to produce numbers between -1.0 and 1.0. Has special treatment for the seed when
+ * present (since it is an int).
  * <br>
  * This can also be used as a sort of hashing function that produces a double, if you find a need for such a thing, with
  * {@link #hash(double...)}.
