@@ -32,8 +32,8 @@ public class SquidMouse extends InputAdapter {
      * Offsets are initialized to 0 here, and the grid is assumed to take up the
      * full game window.
      *
-     * @param cellWidth
-     * @param cellHeight
+     * @param cellWidth the width of one cell in screen coordinates, usually pixels
+     * @param cellHeight the height of one cell in screen coordinates, usually pixels
      * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().
      */
     public SquidMouse(float cellWidth, float cellHeight, InputProcessor processor) {
@@ -51,19 +51,20 @@ public class SquidMouse extends InputAdapter {
      * relative to the grid. Offsets can be specified for x and y if the grid
      * is displayed at a position other than the full screen. Specify the
      * width and height in grid cells of the area to receive input, as well as
-     * the offsets from the bottom and left edges also measured in grid cells.
+     * the offsets from the bottom and left edges also measured in screen
+     * coordinates, which are often pixels but may be stretched or shrunk.
      * All input is passed to the provided InputProcessor once it's had its
      * coordinates translated to grid coordinates.
      *
      * If the input is not within the bounds of the grid as determined by
      * gridWidth, gridHeight, offsetX, and offsetY, the input will be clamped.
      *
-     * @param cellWidth
-     * @param cellHeight
-     * @param gridWidth
-     * @param gridHeight
-     * @param offsetX
-     * @param offsetY
+     * @param cellWidth the width of one cell in screen coordinates, usually pixels
+     * @param cellHeight the height of one cell in screen coordinates, usually pixels
+     * @param gridWidth in number of cells horizontally on the grid
+     * @param gridHeight in number of cells vertically on the grid
+     * @param offsetX the horizontal offset in screen coordinates, usually pixels
+     * @param offsetY the vertical offset in screen coordinates, usually pixels
      * @param processor an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().
      */
     public SquidMouse(float cellWidth, float cellHeight, float gridWidth, float gridHeight, int offsetX, int offsetY, InputProcessor processor) {
