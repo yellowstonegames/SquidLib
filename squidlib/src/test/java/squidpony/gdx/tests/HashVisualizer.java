@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 30, noiseMode = 69;
+    private int hashMode = 43, rngMode = 30, noiseMode = 76;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private BeardRNG beard = new BeardRNG();
@@ -144,13 +144,12 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 3;
+    private int testType = 4;
 
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
     private RandomXS128 gdxRandom = new RandomXS128(0xFEDCBA987654321L);
     private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L);
-    private long seed;
     private CellularAutomaton ca = new CellularAutomaton(512, 512);
     private int ctr = 0;
     private boolean keepGoing = true;
@@ -481,7 +480,6 @@ public class HashVisualizer extends ApplicationAdapter {
         fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL);
         view = new ScreenViewport();
         stage = new Stage(view, batch);
-        seed = 0xBEEFF00DCAFECABAL;
 
         Noise.seamless3D(seamless[0], 1337, 1);
         Noise.seamless3D(seamless[1], 123456, 1);
@@ -726,7 +724,6 @@ public class HashVisualizer extends ApplicationAdapter {
                     case 'R':
                     case 'r':
                         testType = 5;
-                        seed = fuzzy.nextLong();
                         putMap();
                         //Gdx.graphics.requestRendering();
                         break;

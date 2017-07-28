@@ -1200,9 +1200,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             ;
     //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
 
-    private static final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
-    private static final int[] distOrder = {0, 0, 0, 0, 0, 0},
-            intLoc = {0, 0, 0, 0, 0, 0};
     public static double noise(final double x, final double y, final int seed) {
         return noise((float)x, (float)y, seed);
     }
@@ -1464,7 +1461,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
                 skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final int[] intLoc = SeededNoise.intLoc, distOrder = SeededNoise.distOrder;
+        final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0}, gradient6DLUT = SeededNoise.gradient6DLUT;
+        final int[] distOrder = {0, 0, 0, 0, 0, 0},
+                intLoc = {0, 0, 0, 0, 0, 0};
         intLoc[0] = skewX;
         intLoc[1] = skewY;
         intLoc[2] = skewZ;
@@ -1473,7 +1472,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         intLoc[5] = skewV;
 
         final float unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
-        final float[] cellDist = SeededNoise.cellDist, gradient6DLUT = SeededNoise.gradient6DLUT;
         cellDist[0] = x - skewX + unskew;
         cellDist[1] = y - skewY + unskew;
         cellDist[2] = z - skewZ + unskew;
