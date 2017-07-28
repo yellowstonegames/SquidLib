@@ -169,14 +169,14 @@ public abstract class StringConvert<T> {
             final CharSequence s;
             if(data instanceof StringConvert) s = ((StringConvert) data).getName();
             else s = (CharSequence) data;
-            int result = 0x9E3779B9, a = 0x632BE5AB;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
             final int len = s.length();
             char c;
             for (int i = 0; i < len; i++) {
                 if((c = s.charAt(i)) != ' ')
-                    result += (a ^= 0x85157AF5 * c);
+                    result += (a ^= 0x8329C6EB9E6AD3E3L * c);
             }
-            return result * (a | 1) ^ (result >>> 11 | result << 21);
+            return (int)(result * (a | 1L) ^ (result >>> 27 | result << 37));
         }
 
         @Override
@@ -210,12 +210,12 @@ public abstract class StringConvert<T> {
             if(!(data instanceof CharSequence[]))
                 return data.hashCode();
             CharSequence[] data2 = (CharSequence[])data;
-            int result = 0x9E3779B9, a = 0x632BE5AB;
+            long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
             final int len = data2.length;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * spaceIgnoringHasher.hash(data2[i]));
+                result += (a ^= 0x8329C6EB9E6AD3E3L * spaceIgnoringHasher.hash(data2[i]));
             }
-            return result * (a | 1) ^ (result >>> 11 | result << 21);
+            return (int)(result * (a | 1L) ^ (result >>> 27 | result << 37));
         }
 
         @Override

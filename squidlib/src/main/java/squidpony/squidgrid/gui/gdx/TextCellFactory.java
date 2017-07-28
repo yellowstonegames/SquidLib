@@ -67,7 +67,7 @@ public class TextCellFactory implements Disposable {
     protected IColorCenter<Color> scc;
     protected int leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0;
     protected float width = 1, height = 1;
-    protected float actualCellWidth = 1, actualCellHeight = 1;
+    public float actualCellWidth = 1, actualCellHeight = 1;
     protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
     private boolean initialized = false, initializedByFont = false, initializedBySize = false;
     protected boolean distanceField = false;
