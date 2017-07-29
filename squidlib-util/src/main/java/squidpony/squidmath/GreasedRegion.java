@@ -4643,11 +4643,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return -1;
     }
 
-//    private static int bitPermuteStep(int x, final int m, final int shift) {
-//        final int t = ((x >>> shift) ^ x) & m;
-//        x = (x ^ t) ^ (t << shift);
-//        return x;
-//    }
+    /**
+     * Narrow-purpose; takes an x and a y value, each between 0 and 65535 inclusive, and interleaves their bits so the
+     * least significant bit and every other bit after it are filled with the bits of x, while the
+     * second-least-significant bit and every other bit after that are filled with the bits of y. Essentially, this
+     * takes two numbers with bits labeled like {@code a b c} for x and {@code R S T} for y and makes a number with
+     * those bits arranged like {@code R a S b T c}.
+     * @param x an int between 0 and 65535, inclusive
+     * @param y an int between 0 and 65535, inclusive
+     * @return an int that interleaves x and y, with x in the least significant bit position
+     */
+    public static int interleaveBits(int x, int y)
+    {
+        x |= y << 16;
+        x =    ((x & 0x0000ff00) << 8) | ((x >>> 8) & 0x0000ff00) | (x & 0xff0000ff);
+        x =    ((x & 0x00f000f0) << 4) | ((x >>> 4) & 0x00f000f0) | (x & 0xf00ff00f);
+        x =    ((x & 0x0c0c0c0c) << 2) | ((x >>> 2) & 0x0c0c0c0c) | (x & 0xc3c3c3c3);
+        return ((x & 0x22222222) << 1) | ((x >>> 1) & 0x22222222) | (x & 0x99999999);
+    }
 
     /**
      * Narrow-purpose; takes an int that represents a distance down the Z-order curve and moves its bits around so that
@@ -4659,20 +4672,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      */
     public static int disperseBits(int n)
     {
-        //Generated with http://programming.sirrida.de/calcperm.php
-        int t = ((n >>> 1) ^ n) & 0x22222222;
-        n = (n ^ t) ^ (t << 1);
-        t = ((n >>> 2) ^ n) & 0x0c0c0c0c;
-        n = (n ^ t) ^ (t << 2);
-        t = ((n >>> 4) ^ n) & 0x00f000f0;
-        n = (n ^ t) ^ (t << 4);
-        t = ((n >>> 8) ^ n) & 0x0000ff00;
-        return  (n ^ t) ^ (t << 8);
-
-//        x = bitPermuteStep(x, 0x22222222, 1);
-//        x = bitPermuteStep(x, 0x0c0c0c0c, 2);
-//        x = bitPermuteStep(x, 0x00f000f0, 4);
-//        return bitPermuteStep(x, 0x0000ff00, 8);
+        n =    ((n & 0x22222222) << 1) | ((n >>> 1) & 0x22222222) | (n & 0x99999999);
+        n =    ((n & 0x0c0c0c0c) << 2) | ((n >>> 2) & 0x0c0c0c0c) | (n & 0xc3c3c3c3);
+        n =    ((n & 0x00f000f0) << 4) | ((n >>> 4) & 0x00f000f0) | (n & 0xf00ff00f);
+        return ((n & 0x0000ff00) << 8) | ((n >>> 8) & 0x0000ff00) | (n & 0xff0000ff);
     }
     private static int nextPowerOfTwo(int n)
     {
@@ -4716,7 +4719,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * traverses the path in a zig-zag pattern called the Z-Order Curve, and unlike {@link #nthZCurve(int)}, this does
      * not return a Coord and instead produces a "tight"-encoded int. This method is often not very fast compared to
      * nth(), but this different path can help if iteration needs to seem less regular while still covering all "on"
-     * cells in the GresedRegion eventually, and the tight encoding may be handy if you need to use ints.
+     * cells in the GreasedRegion eventually, and the tight encoding may be handy if you need to use ints.
      * @param index the distance along the Z-order curve to travel, only counting "on" cells in this GreasedRegion.
      * @return the "tight" encoded point at the given distance, or -1 if index is too high or low
      */
