@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
 import squidpony.squidmath.OrderedMap;
@@ -1717,6 +1718,36 @@ public class TextCellFactory implements Disposable {
         }
         return block;
     }
+    /**
+     * Gets a Glyph with the given char to show, libGDX Color, and position as x and y in world coordinates.
+     * Glyph is a kind of scene2d Actor that uses this TextCellFactory to handle its rendering instead of delegating
+     * that to the Label class from scene2d.ui.
+     * @param shown char to show; if this is the char with codepoint 0, then this will show a solid block
+     * @param color the color as a libGDX Color; can also be an SColor or some other subclass of Color
+     * @param x the x position of the Glyph in world coordinates, as would be passed to draw()
+     * @param y the y position of the Glyph in world coordinates, as would be passed to draw()
+     * @return a new Glyph that will use the specified char, color, and position
+     */
+
+    public Glyph glyph(char shown, Color color, float x, float y)
+    {
+        return new Glyph(shown, color, x, y);
+    }
+
+    /**
+     * Gets a Glyph with the given char to show, color as a packed float, and position as x and y in world coordinates.
+     * Glyph is a kind of scene2d Actor that uses this TextCellFactory to handle its rendering instead of delegating
+     * that to the Label class from scene2d.ui.
+     * @param shown char to show; if this is the char with codepoint 0, then this will show a solid block
+     * @param encodedColor the encoded color as a float, as produced by {@link Color#toFloatBits()}
+     * @param x the x position of the Glyph in world coordinates, as would be passed to draw()
+     * @param y the y position of the Glyph in world coordinates, as would be passed to draw()
+     * @return a new Glyph that will use the specified char, color, and position
+     */
+    public Glyph glyph(char shown, float encodedColor, float x, float y)
+    {
+        return new Glyph(shown, encodedColor, x, y);
+    }
 
     public boolean isMultiDistanceField() {
         return msdf;
@@ -1965,5 +1996,50 @@ public class TextCellFactory implements Disposable {
     {
         swap.clear();
         return this;
+    }
+
+    public class Glyph extends Actor
+    {
+        public char shown;
+        public float color;
+
+        public Glyph() {
+            this('@', SColor.SAFETY_ORANGE.toFloatBits(), 0f, 0f);
+        }
+        public Glyph(char shown, Color color, float x, float y)
+        {
+            this(shown, color.toFloatBits(), x, y);
+        }
+        public Glyph(char shown, float color, float x, float y) {
+            super();
+            this.shown = shown;
+            this.color = color;
+            setPosition(x, y);
+        }
+
+        @Override
+        public String toString() {
+            return "Glyph{'" +
+                     + shown +
+                    "' with color 0x" + StringKit.hex(NumberUtils.floatToIntColor(color)) +
+                    ", position (" + getX() +
+                    "," + getY() +
+                    ")}";
+        }
+
+        /**
+         * Draws the actor. The batch is configured to draw in the parent's coordinate system.
+         * {@link Batch#draw(TextureRegion, float, float, float, float, float, float, float, float, float)
+         * This draw method} is convenient to draw a rotated and scaled TextureRegion. {@link Batch#begin()} has already been called on
+         * the batch. If {@link Batch#end()} is called to draw without the batch then {@link Batch#begin()} must be called before the
+         * method returns.
+         *
+         * @param batch the batch should be between begin() and end(), usually handled by Stage
+         * @param parentAlpha Should be multiplied with the actor's alpha, allowing a parent's alpha to affect all children.
+         */
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            TextCellFactory.this.draw(batch, shown, color, getX(), getY());
+        }
     }
 }

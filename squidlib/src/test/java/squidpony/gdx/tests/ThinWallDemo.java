@@ -700,7 +700,7 @@ public class ThinWallDemo extends ApplicationAdapter {
             // this doesn't check for input, but instead processes and removes Points from awaitedMoves.
             if (!display.hasActiveAnimations()) {
                 ++framesWithoutAnimation;
-                if (framesWithoutAnimation >= 3) {
+                if (framesWithoutAnimation >= 2) {
                     framesWithoutAnimation = 0;
                     switch (phase) {
                         case WAIT:
