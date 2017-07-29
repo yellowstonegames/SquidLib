@@ -1,6 +1,7 @@
 package squidpony.examples;
 
-import java.util.HashSet;
+import squidpony.StringKit;
+import squidpony.squidmath.GreasedRegion;
 
 /**
  * This class is a scratchpad area to test things out.
@@ -32,19 +33,28 @@ public class Playground {
     }
 
     private void go() {
-//        final double WEYL = Math.cbrt(Math.PI + Math.E - 1.111);//Math.pow(0.5 * Math.sqrt(7.0) + Math.PI, 1.0 / Math.E);
-//        double w = WEYL + 1.2357;
-//        for (int i = 0; i < 50; i++) {
-//            System.out.println((w = w * WEYL % 1.0));
-//        }
-        for (int i = 0; i < 50; i++) {
-            System.out.println(determine2(i) + ", " + determine2_scrambled(i));
-        }
-        HashSet<Double> doubles = new HashSet<>(65536);
-        for (int i = 0; i < 65536; i++) {
-            doubles.add(determine2_scrambled(i));
-        }
-        System.out.println(doubles.size());
+        int
+                a1b1 = GreasedRegion.interleaveBits(1, 1),
+                a2b1 = GreasedRegion.interleaveBits(2, 1),
+                a1b2 = GreasedRegion.interleaveBits(1, 2),
+                a2b2 = GreasedRegion.interleaveBits(2, 2),
+                a65535b0 = GreasedRegion.interleaveBits(65535, 0),
+                a0b65535 = GreasedRegion.interleaveBits(0, 65535);
+        System.out.println("Interleaving...");
+        System.out.println("a1b1          : " + StringKit.bin(a1b1));
+        System.out.println("a2b1          : " + StringKit.bin(a2b1));
+        System.out.println("a1b2          : " + StringKit.bin(a1b2));
+        System.out.println("a2b2          : " + StringKit.bin(a2b2));
+        System.out.println("a65535b0      : " + StringKit.bin(a65535b0));
+        System.out.println("a0b65535      : " + StringKit.bin(a0b65535));
+        System.out.println("Dispersing...");
+        System.out.println("a1b1          : " + StringKit.bin(GreasedRegion.disperseBits(a1b1)));
+        System.out.println("a2b1          : " + StringKit.bin(GreasedRegion.disperseBits(a2b1)));
+        System.out.println("a1b2          : " + StringKit.bin(GreasedRegion.disperseBits(a1b2)));
+        System.out.println("a2b2          : " + StringKit.bin(GreasedRegion.disperseBits(a2b2)));
+        System.out.println("a65535b0      : " + StringKit.bin(GreasedRegion.disperseBits(a65535b0)));
+        System.out.println("a0b65535      : " + StringKit.bin(GreasedRegion.disperseBits(a0b65535)));
+
     }
 
 }

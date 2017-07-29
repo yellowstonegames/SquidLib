@@ -1229,6 +1229,22 @@ public class TextCellFactory implements Disposable {
         }
     }
 
+    public void draw(Batch batch, float[][] encodedColors, float x, float y)
+    {
+        float orig = batch.getPackedColor();
+        final int w = encodedColors.length, h = encodedColors[0].length;
+        float wm = x, hm;
+        for (int i = 0; i < w; i++, wm += actualCellWidth) {
+            hm = y + (h - 1) * actualCellHeight;
+            for (int j = 0; j < h; j++, hm -= actualCellHeight) {
+                batch.setColor(encodedColors[i][j]);
+                batch.draw(block, wm, hm, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            }
+        }
+        batch.setColor(orig);
+
+    }
+
     /**
      * Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
      * for preparing glyphs for animation effects.
