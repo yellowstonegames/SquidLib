@@ -1,12 +1,17 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.badlogic.gdx.utils.SnapshotArray;
 import squidpony.ArrayTools;
 
 /**
@@ -19,6 +24,9 @@ public class SparseLayers extends Actor {
     protected IntIntMap mapping;
     public TextCellFactory font;
     public float xOffset, yOffset;
+    protected int animationCount = 0;
+    private SnapshotArray<TextCellFactory.Glyph> glyphs;
+
 
     public SparseLayers(int width, int height)
     {
@@ -43,6 +51,7 @@ public class SparseLayers extends Actor {
         layers.add(new SparseTextMap(width * height >> 2));
         mapping = new IntIntMap(4);
         mapping.put(0, 0);
+        glyphs = new SnapshotArray<>(true, 16, TextCellFactory.Glyph.class);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         setBounds(xOffset, yOffset,
@@ -176,6 +185,117 @@ public class SparseLayers extends Actor {
         }
     }
 
+    public boolean hasActiveAnimations()
+    {
+        return animationCount > 0;
+    }
+
+    public TextCellFactory.Glyph glyph(char shown, float color, int x, int y)
+    {
+        TextCellFactory.Glyph g =
+                font.glyph(shown, color,
+                        xOffset + x * font.actualCellWidth,
+                        yOffset + (height - y) * font.actualCellHeight);
+        glyphs.add(g);
+        return g;
+    }
+
+    public TextCellFactory.Glyph glyphFromGrid(int x, int y)
+    {
+        int code = SparseTextMap.encodePosition(x, y);
+        char shown = layers.items[0].getChar(code, ' ');
+        float color = layers.items[0].getFloat(code, 0f);
+        layers.items[0].remove(code);
+        TextCellFactory.Glyph g =
+                font.glyph(shown, color, xOffset + x * font.actualCellWidth, yOffset + (height - y) * font.actualCellHeight);
+        glyphs.add(g);
+        return g;
+    }
+
+    public TextCellFactory.Glyph glyphFromGrid(int x, int y, int layer) {
+        layer = mapping.get(layer, -1);
+        if (layer >= 0) {
+            SparseTextMap l = layers.get(layer);
+            int code = SparseTextMap.encodePosition(x, y);
+            char shown = l.getChar(code, ' ');
+            float color = l.getFloat(code, 0f);
+            l.remove(code);
+            TextCellFactory.Glyph g =
+                    font.glyph(shown, color, xOffset + x * font.actualCellWidth, yOffset + (height - y) * font.actualCellHeight);
+            glyphs.add(g);
+            return g;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void recallToGrid(TextCellFactory.Glyph glyph)
+    {
+        layers.items[0].place(Math.round((glyph.getX() - xOffset) / font.actualCellWidth),
+                Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + height),
+                glyph.shown, glyph.color);
+        glyphs.removeValue(glyph, true);
+    }
+
+    public void recallToGrid(TextCellFactory.Glyph glyph, int layer)
+    {
+        layer = mapping.get(layer, 0);
+        layers.get(layer).place(Math.round((glyph.getX() - xOffset) / font.actualCellWidth),
+                Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + height),
+                glyph.shown, glyph.color);
+        glyphs.removeValue(glyph, true);
+    }
+
+    /**
+     * Slides {@code name} from {@code (x,y)} to {@code (newx, newy)}. If
+     * {@code name} or {@code color} is {@code null}, it is picked from this
+     * panel (thereby removing the current name, if any). This also allows
+     * a Runnable to be given as {@code postRunnable} to be run after the
+     * slide completes.
+     *
+     * @param x
+     *            Where to start the slide, horizontally.
+     * @param y
+     *            Where to start the slide, vertically.
+     * @param glyph
+     *            A
+     * @param newX
+     *            Where to end the slide, horizontally.
+     * @param newY
+     *            Where to end the slide, vertically.
+     * @param duration
+     *            The animation's duration.
+     * @param postRunnable a Runnable to execute after the slide completes; may be null to do nothing.
+     */
+    public void slide(int x, int y, TextCellFactory.Glyph glyph, final int newX,
+                      final int newY, float duration, /* @Nullable */ Runnable postRunnable) {
+        glyph.setPosition(xOffset + x * font.actualCellWidth, yOffset + (height - y) * font.actualCellHeight);
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        final int nbActions = 2 + (postRunnable == null ? 0 : 1);
+        int index = 0;
+        final Action[] sequence = new Action[nbActions];
+        final float nextX = xOffset + newX * font.actualCellWidth;
+        final float nextY = yOffset + (height - newY) * font.actualCellHeight;
+        sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                SparseLayers.this.animationCount--;
+            }
+        }));
+
+        glyph.addAction(Actions.sequence(sequence));
+    }
+
+
     /**
      * Draws the actor. The batch is configured to draw in the parent's coordinate system.
      * {@link Batch#draw(TextureRegion, float, float, float, float, float, float, float, float, float)
@@ -195,5 +315,15 @@ public class SparseLayers extends Actor {
         for (int i = 0; i < len; i++) {
             layers.get(i).draw(batch, font, xOffset, yOff2);
         }
+        TextCellFactory.Glyph[] items = glyphs.begin();
+        for (int i = 0, n = glyphs.size; i < n; i++) {
+            TextCellFactory.Glyph glyph = items[i];
+            if(glyph == null || backgrounds[Math.round((glyph.getX() - xOffset) / font.actualCellWidth)]
+            [Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + height)] == 0f)
+                continue;
+            glyph.act(Gdx.graphics.getDeltaTime());
+            glyph.draw(batch, 1f);
+        }
+        glyphs.end();
     }
 }

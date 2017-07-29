@@ -70,6 +70,7 @@ public class SparseDemo extends ApplicationAdapter {
     private double[][] visible;
     private GreasedRegion blockage;
     private GreasedRegion seen;
+    private TextCellFactory.Glyph pg;
     private static final float WHITE_FLOAT = NumberUtils.intToFloatColor(-1),
             GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444);
     @Override
@@ -188,6 +189,11 @@ public class SparseDemo extends ApplicationAdapter {
         }
 
         baseLightness = ArrayTools.fill(40, gridWidth, gridHeight);
+
+        //places the player as an '@' at his position in orange.
+        pg = display.glyph('@', SColor.SAFETY_ORANGE.toFloatBits(), player.x, player.y);
+
+
         // this creates an array of sentence builders, where each imitates one or more languages or linguistic styles.
         // this serves to demonstrate the large amount of glyphs SquidLib supports.
         // there's no need to put much effort into understanding this section yet, and many games won't use the language
@@ -408,6 +414,7 @@ public class SparseDemo extends ApplicationAdapter {
         if (newX >= 0 && newY >= 0 && newX < gridWidth && newY < gridHeight
                 && bareDungeon[newX][newY] != '#')
         {
+            display.slide(player.x, player.y, pg, newX, newY, 0.12f, null);
             player = player.translate(xmod, ymod);
             FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
@@ -432,7 +439,8 @@ public class SparseDemo extends ApplicationAdapter {
             for (int j = 0; j < gridHeight; j++) {
                 if(visible[i][j] > 0.01) {
                     float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(baseLightness[i][j] + 256f + (-105f +
-                            180f * ((float)visible[i][j] * (1.0f + 0.2f * SeededNoise.noise(i * 0.2f, j * 0.2f, tm * 0.001f, 10000))))) * 0x1p-9f);
+                            180f * ((float)visible[i][j] * (1.0f + 0.2f * SeededNoise.noise(i * 0.2f, j * 0.2f, tm * 0.001f, 10000)))))
+                            * 0x1p-9f); // "* 0x1p-9f" is equivalent to "/ 512.0", just possibly faster
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bg);
                 }else if(seen.contains(i, j))
                     display.put(i, j, lineDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], GRAY_FLOAT, 0.3f));
@@ -444,8 +452,6 @@ public class SparseDemo extends ApplicationAdapter {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.changeBackground(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], WHITE_FLOAT, 0.75f));
         }
-        //places the player as an '@' at his position in orange.
-        display.put(player.x, player.y, '@', SColor.SAFETY_ORANGE, null);
         //this helps compatibility with the HTML target, which doesn't support String.format()
         char[] spaceArray = new char[gridWidth];
         Arrays.fill(spaceArray, ' ');
@@ -468,29 +474,30 @@ public class SparseDemo extends ApplicationAdapter {
         if(!awaitedMoves.isEmpty())
         {
             // this doesn't check for input, but instead processes and removes Coords from awaitedMoves.
-            secondsWithoutMoves += Gdx.graphics.getDeltaTime();
-            if (secondsWithoutMoves >= 0.01) {
-                secondsWithoutMoves = 0;
-                Coord m = awaitedMoves.remove(0);
-                toCursor.remove(0);
-                move(m.x - player.x, m.y - player.y);
-            }
-            // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to
-            // re-calculate the distances from all cells to the player. We don't need to calculate this information on
-            // each part of a many-cell move (just the end), nor do we need to calculate it whenever the mouse moves.
-            if(awaitedMoves.isEmpty())
-            {
-                // the next two lines remove any lingering data needed for earlier paths
-                playerToCursor.clearGoals();
-                playerToCursor.resetMap();
-                // the next line marks the player as a "goal" cell, which seems counter-intuitive, but it works because all
-                // cells will try to find the distance between themselves and the nearest goal, and once this is found, the
-                // distances don't change as long as the goals don't change. Since the mouse will move and new paths will be
-                // found, but the player doesn't move until a cell is clicked, the "goal" is the non-changing cell, so the
-                // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
-                // currently-moused-over cell, which we only need to set where the mouse is being handled.
-                playerToCursor.setGoal(player);
-                playerToCursor.scan(blockage);
+            if (!display.hasActiveAnimations()) {
+                //secondsWithoutMoves += Gdx.graphics.getDeltaTime();
+                //if (secondsWithoutMoves >= 0.01) {
+                //    secondsWithoutMoves = 0;
+                    Coord m = awaitedMoves.remove(0);
+                    toCursor.remove(0);
+                    move(m.x - player.x, m.y - player.y);
+                //}
+                // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to
+                // re-calculate the distances from all cells to the player. We don't need to calculate this information on
+                // each part of a many-cell move (just the end), nor do we need to calculate it whenever the mouse moves.
+                if (awaitedMoves.isEmpty()) {
+                    // the next two lines remove any lingering data needed for earlier paths
+                    playerToCursor.clearGoals();
+                    playerToCursor.resetMap();
+                    // the next line marks the player as a "goal" cell, which seems counter-intuitive, but it works because all
+                    // cells will try to find the distance between themselves and the nearest goal, and once this is found, the
+                    // distances don't change as long as the goals don't change. Since the mouse will move and new paths will be
+                    // found, but the player doesn't move until a cell is clicked, the "goal" is the non-changing cell, so the
+                    // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
+                    // currently-moused-over cell, which we only need to set where the mouse is being handled.
+                    playerToCursor.setGoal(player);
+                    playerToCursor.scan(blockage);
+                }
             }
         }
         // if we are waiting for the player's input and get input, process it.
@@ -515,6 +522,8 @@ public class SparseDemo extends ApplicationAdapter {
         config.title = "SquidLib GDX Basic Demo";
         config.width = gridWidth * cellWidth;
         config.height = (gridHeight + bonusHeight) * cellHeight;
+        config.vSyncEnabled = false;
+        config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
