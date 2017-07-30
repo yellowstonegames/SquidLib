@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.SnapshotArray;
 import squidpony.ArrayTools;
+import squidpony.squidmath.StatefulRNG;
 
 /**
  * Created by Tommy Ettinger on 7/28/2017.
@@ -190,12 +191,33 @@ public class SparseLayers extends Actor {
         return animationCount > 0;
     }
 
+    public float worldX(int gridX)
+    {
+        return xOffset + gridX * font.actualCellWidth;
+    }
+
+    public float worldY(int gridY)
+    {
+        return yOffset + (height - gridY) * font.actualCellHeight;
+    }
+
+    public int gridX(float screenX)
+    {
+        return Math.round((screenX - xOffset) / font.actualCellWidth);
+    }
+
+    public int gridY(float screenY)
+    {
+        return Math.round((yOffset - screenY) / font.actualCellHeight + height);
+    }
+
+
     public TextCellFactory.Glyph glyph(char shown, float color, int x, int y)
     {
         TextCellFactory.Glyph g =
                 font.glyph(shown, color,
-                        xOffset + x * font.actualCellWidth,
-                        yOffset + (height - y) * font.actualCellHeight);
+                        worldX(x),
+                        worldY(y));
         glyphs.add(g);
         return g;
     }
@@ -207,7 +229,7 @@ public class SparseLayers extends Actor {
         float color = layers.items[0].getFloat(code, 0f);
         layers.items[0].remove(code);
         TextCellFactory.Glyph g =
-                font.glyph(shown, color, xOffset + x * font.actualCellWidth, yOffset + (height - y) * font.actualCellHeight);
+                font.glyph(shown, color, worldX(x), worldY(y));
         glyphs.add(g);
         return g;
     }
@@ -221,7 +243,7 @@ public class SparseLayers extends Actor {
             float color = l.getFloat(code, 0f);
             l.remove(code);
             TextCellFactory.Glyph g =
-                    font.glyph(shown, color, xOffset + x * font.actualCellWidth, yOffset + (height - y) * font.actualCellHeight);
+                    font.glyph(shown, color, worldX(x), worldY(y));
             glyphs.add(g);
             return g;
         }
@@ -233,34 +255,30 @@ public class SparseLayers extends Actor {
 
     public void recallToGrid(TextCellFactory.Glyph glyph)
     {
-        layers.items[0].place(Math.round((glyph.getX() - xOffset) / font.actualCellWidth),
-                Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + height),
-                glyph.shown, glyph.color);
+        layers.items[0].place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
         glyphs.removeValue(glyph, true);
     }
 
     public void recallToGrid(TextCellFactory.Glyph glyph, int layer)
     {
         layer = mapping.get(layer, 0);
-        layers.get(layer).place(Math.round((glyph.getX() - xOffset) / font.actualCellWidth),
-                Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + height),
-                glyph.shown, glyph.color);
+        layers.get(layer).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
         glyphs.removeValue(glyph, true);
     }
 
     /**
-     * Slides {@code name} from {@code (x,y)} to {@code (newx, newy)}. If
-     * {@code name} or {@code color} is {@code null}, it is picked from this
-     * panel (thereby removing the current name, if any). This also allows
+     * Slides {@code glyph} from {@code (xstartX,startY)} to {@code (newx, newy)}.
+     * Takes a number of seconds equal to duration to complete. This also allows
      * a Runnable to be given as {@code postRunnable} to be run after the
-     * slide completes.
+     * slide completes, or null to not run anything after the slide.
      *
-     * @param x
-     *            Where to start the slide, horizontally.
-     * @param y
-     *            Where to start the slide, vertically.
      * @param glyph
-     *            A
+     *            A {@link TextCellFactory.Glyph}, probably produced by
+     *            {@link #glyph(char, float, int, int)} or {@link #glyphFromGrid(int, int)}
+     * @param startX
+     *            Where to start the slide, horizontally.
+     * @param startY
+     *            Where to start the slide, vertically.
      * @param newX
      *            Where to end the slide, horizontally.
      * @param newY
@@ -269,16 +287,16 @@ public class SparseLayers extends Actor {
      *            The animation's duration.
      * @param postRunnable a Runnable to execute after the slide completes; may be null to do nothing.
      */
-    public void slide(int x, int y, TextCellFactory.Glyph glyph, final int newX,
+    public void slide(TextCellFactory.Glyph glyph, final int startX, final int startY, final int newX,
                       final int newY, float duration, /* @Nullable */ Runnable postRunnable) {
-        glyph.setPosition(xOffset + x * font.actualCellWidth, yOffset + (height - y) * font.actualCellHeight);
+        glyph.setPosition(worldX(startX), worldY(startY));
         duration = Math.max(0.015f, duration);
         animationCount++;
         final int nbActions = 2 + (postRunnable == null ? 0 : 1);
         int index = 0;
         final Action[] sequence = new Action[nbActions];
-        final float nextX = xOffset + newX * font.actualCellWidth;
-        final float nextY = yOffset + (height - newY) * font.actualCellHeight;
+        final float nextX = worldX(newX);
+        final float nextY = worldY(newY);
         sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
         if(postRunnable != null)
         {
@@ -288,13 +306,49 @@ public class SparseLayers extends Actor {
         sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
             @Override
             public void run() {
-                SparseLayers.this.animationCount--;
+                animationCount--;
             }
         }));
 
         glyph.addAction(Actions.sequence(sequence));
     }
 
+    /**
+     * Starts an wiggling animation for the object at the given location for the given duration in seconds.
+     *
+     * @param glyph
+     *            A {@link TextCellFactory.Glyph}, probably produced by
+     *            {@link #glyph(char, float, int, int)} or {@link #glyphFromGrid(int, int)}
+     * @param duration in seconds, as a float
+     */
+    public void wiggle(final TextCellFactory.Glyph glyph, float duration) {
+
+        final float x = glyph.getX(), y = glyph.getY(),
+                cellWidth = font.actualCellWidth, cellHeight = font.actualCellHeight;
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        final StatefulRNG gRandom = DefaultResources.getGuiRandom();
+        glyph.addAction(Actions.sequence(
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
+                        Align.bottomLeft, duration * 0.2F),
+                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        animationCount--;
+                    }
+                }))));
+    }
 
     /**
      * Draws the actor. The batch is configured to draw in the parent's coordinate system.
