@@ -32,7 +32,7 @@ public class BonusConverters {
         public StatefulRNG restore(String text) {
             long state = StringKit.longFromHex(text);
             try {
-                StatefulRandomness sr = (StatefulRandomness) (ClassReflection.forName(text.substring(text.indexOf(':') + 1)).newInstance());
+                StatefulRandomness sr = (StatefulRandomness) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));
                 sr.setState(state);
                 return new StatefulRNG(sr);
             }catch (Exception re)
@@ -51,7 +51,7 @@ public class BonusConverters {
         @Override
         public RNG restore(String text) {
             try {
-                RandomnessSource rs = (RandomnessSource) (ClassReflection.forName(text.substring(text.indexOf(':') + 1)).newInstance());
+                RandomnessSource rs = (RandomnessSource) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));
                 return new RNG(rs);
             }catch (Exception re)
             {
