@@ -284,8 +284,9 @@ public class SparseDemo extends ApplicationAdapter {
                     case 'K':
                     case 'W':
                     {
+                        toCursor.clear();
                         //-1 is up on the screen
-                        move(0, -1);
+                        awaitedMoves.add(player.translate(0, -1));
                         break;
                     }
                     case SquidInput.DOWN_ARROW:
@@ -294,8 +295,9 @@ public class SparseDemo extends ApplicationAdapter {
                     case 'J':
                     case 'S':
                     {
+                        toCursor.clear();
                         //+1 is down on the screen
-                        move(0, 1);
+                        awaitedMoves.add(player.translate(0, 1));
                         break;
                     }
                     case SquidInput.LEFT_ARROW:
@@ -304,7 +306,8 @@ public class SparseDemo extends ApplicationAdapter {
                     case 'H':
                     case 'A':
                     {
-                        move(-1, 0);
+                        toCursor.clear();
+                        awaitedMoves.add(player.translate(-1, 0));
                         break;
                     }
                     case SquidInput.RIGHT_ARROW:
@@ -313,7 +316,8 @@ public class SparseDemo extends ApplicationAdapter {
                     case 'L':
                     case 'D':
                     {
-                        move(1, 0);
+                        toCursor.clear();
+                        awaitedMoves.add(player.translate(1, 0));
                         break;
                     }
                     case 'Q':
@@ -414,7 +418,7 @@ public class SparseDemo extends ApplicationAdapter {
         if (newX >= 0 && newY >= 0 && newX < gridWidth && newY < gridHeight
                 && bareDungeon[newX][newY] != '#')
         {
-            display.slide(player.x, player.y, pg, newX, newY, 0.12f, null);
+            display.slide(pg, player.x, player.y, newX, newY, 0.12f, null);
             player = player.translate(xmod, ymod);
             FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
@@ -422,6 +426,10 @@ public class SparseDemo extends ApplicationAdapter {
             blockage.refill(visible, 0.01);
             seen.or(blockage.not());
             blockage.fringe8way();
+        }
+        else
+        {
+            display.wiggle(pg, 0.12f);
         }
         // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.
         lang[langIndex] = forms[langIndex].sentence();
@@ -479,7 +487,8 @@ public class SparseDemo extends ApplicationAdapter {
                 //if (secondsWithoutMoves >= 0.01) {
                 //    secondsWithoutMoves = 0;
                     Coord m = awaitedMoves.remove(0);
-                    toCursor.remove(0);
+                    if(!toCursor.isEmpty())
+                        toCursor.remove(0);
                     move(m.x - player.x, m.y - player.y);
                 //}
                 // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to

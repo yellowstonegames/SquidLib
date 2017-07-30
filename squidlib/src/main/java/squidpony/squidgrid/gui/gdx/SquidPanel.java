@@ -1479,9 +1479,9 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * Starts a sliding movement animation for the object at the given location at the provided speed. The duration is
      * how many seconds should pass for the entire animation.
      *
-     * @param start
-     * @param end
-     * @param duration
+     * @param start Coord to pick up a tile from and slide
+     * @param end Coord to end the slide on
+     * @param duration in seconds, as a float
      */
     public void slide(Coord start, Coord end, float duration) {
         slide(start.x, start.y, end.x, end.y, duration);
@@ -1491,7 +1491,7 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * Starts an wiggling animation for the object at the given location for the given duration in seconds.
      *
      * @param ae an AnimatedEntity returned by animateActor()
-     * @param duration
+     * @param duration in seconds, as a float
      */
     public void wiggle(final AnimatedEntity ae, float duration) {
 
