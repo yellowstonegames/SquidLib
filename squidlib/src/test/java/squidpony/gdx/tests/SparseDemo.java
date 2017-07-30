@@ -72,7 +72,7 @@ public class SparseDemo extends ApplicationAdapter {
     private GreasedRegion seen;
     private TextCellFactory.Glyph pg;
     private static final float WHITE_FLOAT = NumberUtils.intToFloatColor(-1),
-            GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444);
+            GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444), CRIMSON_FLOAT = SColor.CRIMSON.toFloatBits();
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -429,7 +429,8 @@ public class SparseDemo extends ApplicationAdapter {
         }
         else
         {
-            display.wiggle(pg, 0.12f);
+            //display.wiggle(pg, 0.12f);
+            display.tint(0f, player.x, player.y, CRIMSON_FLOAT, 0.12f, null);
         }
         // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.
         lang[langIndex] = forms[langIndex].sentence();
@@ -513,11 +514,10 @@ public class SparseDemo extends ApplicationAdapter {
         else if(input.hasNext()) {
             input.next();
         }
-
-        // stage has its own batch and must be explicitly told to draw().
-        stage.draw();
         // certain classes that use scene2d.ui widgets need to be told to act() to process input.
         stage.act();
+        // stage has its own batch and must be explicitly told to draw().
+        stage.draw();
     }
 
     @Override

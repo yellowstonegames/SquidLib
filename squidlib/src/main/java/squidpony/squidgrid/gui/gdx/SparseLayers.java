@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
@@ -348,6 +350,59 @@ public class SparseLayers extends Actor {
                         animationCount--;
                     }
                 }))));
+    }
+    /**
+     * Tints the background at position x,y so it becomes the given encodedColor, waiting for {@code delay} (in seconds)
+     * before performing it, then after the tint is complete it returns the cell to its original color, taking duration
+     * seconds. Additionally, enqueue {@code postRunnable} for running after the created action ends.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the tint this applies, then apply the tint when you call act(), then quickly overwrite
+     * the tint in the next frame. That visually appears as nothing happening other than a delay.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
+     * @param encodedColor what to transition the cell's color towards, and then transition back from, as a packed float
+     * @param duration how long the total "round-trip" transition should take in seconds
+     * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
+     */
+    public void tint(float delay, final int x, final int y, final float encodedColor, float duration, Runnable postRunnable) {
+        if(x < 0 || x >= width || y < 0 || y >= height)
+            return;
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        final float ac = backgrounds[x][y];
+        final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = new TemporalAction(0.3f) {
+            @Override
+            protected void update(float percent) {
+                backgrounds[x][y] = SColor.lerpFloatColors(ac, encodedColor, percent);
+            }
+        };
+        sequence[index++] = new TemporalAction(0.7f) {
+            @Override
+            protected void update(float percent) {
+                backgrounds[x][y] = SColor.lerpFloatColors(encodedColor, ac, percent);
+            }
+        };
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                animationCount--;
+            }
+        }));
+
+        addAction(Actions.sequence(sequence));
     }
 
     /**
