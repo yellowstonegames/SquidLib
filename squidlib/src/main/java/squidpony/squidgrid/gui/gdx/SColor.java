@@ -1,6 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.ArrayTools;
 import squidpony.StringKit;
@@ -9253,13 +9254,47 @@ public class SColor extends Color {
      * does some quick work to convert that to RGBA order and assign that into changing.
      * @param changing a Color object that will be modified to have the given value
      * @param value a value as a float that can be obtained by {@link Color#toFloatBits()}
-     * @return
+     * @return the Color changing, after modification
      */
     public static Color colorFromFloat(Color changing, float value)
     {
-        return changing.set(Integer.reverseBytes(NumberUtils.floatToIntColor(value)));
+        abgr8888ToColor(changing, value);
+        return changing;
     }
-    static final char[] digits = {
+
+    /**
+     * Produces a new Color that is identical to the one encoded in {@code encoded}. There are various methods in this
+     * class that return or deal with encoded colors, such as {@link #lerpFloatColors(float, float, float)}, and for
+     * libGDX Color objects (including SColors) you can use {@link Color#toFloatBits()} to get the float from a Color.
+     * This method is able to do the reverse of that conversion, and produces a new Color instead of what the overload
+     * {@link #colorFromFloat(Color, float)} does, which modifies an existing Color. You may want to prefer that
+     * overload if you have a temporary Color available and can modify it to pass to some method before modifying it
+     * again later.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return the Color that can be represented by encoded
+     */
+    public static Color colorFromFloat(float encoded)
+    {
+        int c = NumberUtils.floatToIntColor(encoded);
+        return new Color(((c & 0x000000ff)) / 255f, ((c & 0x0000ff00) >>> 8) / 255f,
+                ((c & 0x00ff0000) >>> 16) / 255f, ((c & 0xff000000) >>> 24) / 255f);
+    }
+
+    /**
+     * Given a color stored as a packed float, and a desired alpha to set for that color (between 0.0 and 1.0, inclusive
+     * and clamped in that range), this makes a new float that has the same red, green, and blue channels but has been
+     * set to the given alpha, without constructing any objects along the way.
+     * @param encodedColor a color encoded as a packed float, as by {@link Color#toFloatBits()}
+     * @param alpha between 0.0 and 1.0 inclusive, the alpha to set into the returned packed color
+     * @return another color encoded as a packed float, using encodedColor's RGB channels and the given alpha
+     */
+    public static float translucentColor(float encodedColor, float alpha)
+    {
+        return NumberUtils.intToFloatColor(NumberUtils.floatToIntColor(encodedColor) & 0xFFFFFF
+                | (MathUtils.clamp((int) (255f * alpha), 0, 255) << 24));
+    }
+
+    private static final char[] digits = {
             '0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
@@ -9276,7 +9311,7 @@ public class SColor extends Color {
      *
      * @param changing a char array that will be changed in place; must not be null and must have length of at least 8
      * @param color a color
-     * @return
+     * @return the char array parameter changing, after modifications
      */
     public static char[] floatToChars(final char[] changing, final float color)
     {
@@ -9335,6 +9370,7 @@ public class SColor extends Color {
     {
         return Integer.reverseBytes(StringKit.intFromHex(data, 0, 8));
     }
+
     /**
      * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
      * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
@@ -9344,7 +9380,6 @@ public class SColor extends Color {
      * @param data a char array that must not be null and must have length of at least 8
      * @return a float in packed ABGR8888 format
      */
-
     public static float charsToFloat(final char[] data)
     {
         return NumberUtils.intToFloatColor(
@@ -9360,7 +9395,6 @@ public class SColor extends Color {
      * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length
      * @return a float in packed ABGR8888 format
      */
-
     public static float charsToFloat(final char[] data, final int offset)
     {
         return NumberUtils.intToFloatColor(
@@ -9463,7 +9497,17 @@ public class SColor extends Color {
     }
 
     /**
-     *
+     * Gets a color as a packed float given floats representing hue, saturation, value, and opacity.
+     * All parameters should normally be between 0 and 1 inclusive, though hue is tolerated if it is negative down to
+     * -6f at the lowest or positive up to any finite value, though precision loss may affect the color if the hue is
+     * too large. A hue of 0 is red, progressively higher hue values go to orange, yellow, green, blue, and purple
+     * before wrapping around to red as it approaches 1. A saturation of 0 is grayscale, a saturation of 1 is brightly
+     * colored, and values close to 1 will usually appear more distinct than values close to 0, especially if the
+     * hue is different (saturation below 0.0039f is treated specially here, and does less work to simply get a color
+     * between black and white with the given opacity). The value is similar to lightness; a value of 0.0039 or less is
+     * always black (also using a shortcut if this is the case, respecting opacity), while a value of 1 is as bright as
+     * the color gets with the given saturation and value. To get a value of white, you would need both a value of 1 and
+     * a saturation of 0.
      * @param hue 0f to 1f, color wheel position
      * @param saturation 0f to 1f, 0f is grayscale and 1f is brightly colored
      * @param value 0f to 1f, 0f is black and 1f is bright or light
@@ -9471,14 +9515,18 @@ public class SColor extends Color {
      * @return a float encoding a color with the given properties
      */
     public static float floatGetHSV(float hue, float saturation, float value, float opacity) {
-        if ( saturation < 0.004 )                       //HSV from 0 to 1
+        if ( saturation <= 0.0039f )
         {
             return floatGet(value, value, value, opacity);
         }
+        else if(value <= 0.0039f)
+        {
+            return NumberUtils.intToFloatColor((int) (opacity * 255f) << 24);
+        }
         else
         {
-            final float h = (hue * 6f) % 6f;
-            final int i = (int)h;             //Or ... var_i = floor( var_h )
+            final float h = ((hue + 6f) % 1f) * 6f;
+            final int i = (int)h;
             final float a = value * ( 1 - saturation );
             final float b = value * ( 1 - saturation * ( h - i ) );
             final float c = value * ( 1 - saturation * ( 1 - ( h - i ) ) );
@@ -9495,16 +9543,15 @@ public class SColor extends Color {
         }
     }
 
-    @SuppressWarnings("NumericOverflow")
     public static float lerpFloatColors(final float start, final float end, final float change)
     {
         final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),
-                rs = (s & 255), gs = (s & 255 << 8) >>> 8, bs = (s & 255 << 16) >>> 16, as = (s & 254 << 24) >>> 24,
-                re = (e & 255), ge = (e & 255 << 8) >>> 8, be = (e & 255 << 16) >>> 16, ae = (e & 254 << 24) >>> 24;
-        return NumberUtils.intBitsToFloat(((int)(rs + change * (re - rs)) & 0xff)
-                | ((int)(gs + change * (ge - gs)) & 0xff) << 8
-                | (((int)(bs + change * (be - bs)) & 0xff) << 16)
-                | (((int)(as + change * (ae - as)) & 0xfe) << 24));
+                rs = (s & 0xFF), gs = (s >>> 8) & 0xFF, bs = (s >>> 16) & 0xFF, as = (s >>> 24) & 254,
+                re = (e & 0xFF), ge = (e >>> 8) & 0xFF, be = (e >>> 16) & 0xFF, ae = (e >>> 24) & 254;
+        return NumberUtils.intBitsToFloat(((int)(rs + change * (re - rs)) & 0xFF)
+                | ((int)(gs + change * (ge - gs)) & 0xFF) << 8
+                | (((int)(bs + change * (be - bs)) & 0xFF) << 16)
+                | (((int)(as + change * (ae - as)) & 0xFE) << 24));
     }
 
     /**

@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.SnapshotArray;
 import squidpony.ArrayTools;
+import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.Radius;
 import squidpony.squidmath.StatefulRNG;
 
 /**
@@ -378,13 +380,13 @@ public class SparseLayers extends Actor {
         int index = 0;
         if (0 < delay)
             sequence[index++] = Actions.delay(delay);
-        sequence[index++] = new TemporalAction(0.3f) {
+        sequence[index++] = new TemporalAction(duration * 0.3f) {
             @Override
             protected void update(float percent) {
                 backgrounds[x][y] = SColor.lerpFloatColors(ac, encodedColor, percent);
             }
         };
-        sequence[index++] = new TemporalAction(0.7f) {
+        sequence[index++] = new TemporalAction(duration * 0.7f) {
             @Override
             protected void update(float percent) {
                 backgrounds[x][y] = SColor.lerpFloatColors(encodedColor, ac, percent);
@@ -403,6 +405,197 @@ public class SparseLayers extends Actor {
         }));
 
         addAction(Actions.sequence(sequence));
+    }
+
+    /**
+     * Create a new Glyph at (startX, startY) using the char shown with the given startColor, and immediately starts
+     * changing color to endColor, changing position so it ends on the cell (endX, endY), taking duration seconds to
+     * complete before removing the Glyph.
+     * <br>
+     * Unlike {@link SquidPanel#summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)},
+     * this does not rotate the Glyph it produces.
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param shown the char to show (the same char throughout the effect)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(int startX, int startY, int endX, int endY, char shown,
+                       final float startColor, final float endColor, float duration)
+    {
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        final TextCellFactory.Glyph glyph = glyph(shown, startColor, startX, startY);
+        glyph.addAction(Actions.sequence(
+                Actions.parallel(
+                        new TemporalAction(duration) {
+                            @Override
+                            protected void update(float percent) {
+                                glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.9f);
+                            }
+                        },
+                        Actions.moveTo(worldX(endX), worldY(endY), duration)),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        --animationCount;
+                        glyphs.removeValue(glyph, true);
+                    }
+                })));
+    }
+
+    /**
+     * Create a new Glyph at (startX, startY) in world coordinates (often pixels on the screen) using the char shown
+     * with the given startColor, and immediately starts changing color to endColor, changing position so it ends at the
+     * world coordinates (endX, endY), taking duration seconds to complete before removing the Glyph.
+     * <br>
+     * Unlike {@link SquidPanel#summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)},
+     * this does not rotate the Glyph it produces.
+     * @param startX the starting x position in world coordinates
+     * @param startY the starting y position in world coordinates
+     * @param endX the ending x position in world coordinates
+     * @param endY the ending y position in world coordinates
+     * @param shown the char to show (the same char throughout the effect)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param duration the duration in seconds for the effect
+     */
+    public void summon(float startX, float startY, float endX, float endY, char shown,
+                       final float startColor, final float endColor, float duration)
+    {
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        final TextCellFactory.Glyph glyph = glyph(shown, startColor, gridX(startX), gridY(startY));
+        glyph.addAction(Actions.sequence(
+                Actions.parallel(
+                        new TemporalAction(duration) {
+                            @Override
+                            protected void update(float percent) {
+                                glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.9f);
+                            }
+                        },
+                        Actions.moveTo(endX, endY, duration)),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        --animationCount;
+                        glyphs.removeValue(glyph, true);
+                    }
+                })));
+    }
+
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(int, int, int, int, char, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Glyphs that change color and position.
+     * The distance is how many cells away to move the created Actors away from (x,y). The measurement determines
+     * whether this produces Glyphs in 4 (cardinal) directions for DIAMOND or OCTAHEDRON, or 8 (cardinal and diagonal)
+     * directions for any other enum value for Radius; CIRCLE and SPHERE will position the 8 glyphs in a circle, while
+     * SQUARE and CUBE will position their 8 glyphs in a square.
+     * <br>
+     * Unlike {@link SquidPanel#burst(float, int, int, int, boolean, char, Color, Color, boolean, float, float)}, this
+     * does not rotate the individual Glyphs it produces.
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param measurement a Radius enum that determines if 4 (DIAMOND, OCTAHEDRON) or 8 (anything else) Glyphs are
+     *                    created, and the shape they will take
+     * @param shown the char to use for Glyphs; should definitely be visible
+     * @param startColor the encoded color to start the effect with
+     * @param endColor the encoded color to end the effect on
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, int distance, Radius measurement, char shown,
+                      float startColor, float endColor, float duration)
+    {
+        Direction d;
+        switch (measurement)
+        {
+            case SQUARE:
+            case CUBE:
+                for (int i = 0; i < 8; i++) {
+                    d = Direction.CLOCKWISE[i];
+                    summon(x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                            shown, startColor, endColor, duration);
+                }
+                break;
+            case CIRCLE:
+            case SPHERE:
+                float xf = worldX(x), yf = worldY(y);
+                for (int i = 0; i < 4; i++) {
+                    d = Direction.DIAGONALS[i];
+                    summon(xf, yf, xf - d.deltaX * font.actualCellWidth * distance * 0.7071067811865475f, // the constant is 1.0 / Math.sqrt(2.0)
+                            yf + d.deltaY * font.actualCellHeight * distance * 0.7071067811865475f,
+                            shown, startColor, endColor, duration);
+                }
+                // break intentionally absent
+            default:
+                for (int i = 0; i < 4; i++) {
+                    d = Direction.CARDINALS_CLOCKWISE[i];
+                    summon(x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                            shown, startColor, endColor, duration);
+                }
+                break;
+        }
+    }
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(int, int, int, int, char, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Glyphs that change color and position.
+     * The distance is how many cells away to move the created Actors away from (x,y). The measurement determines
+     * whether this produces Glyphs in 4 (cardinal) directions for DIAMOND or OCTAHEDRON, or 8 (cardinal and diagonal)
+     * directions for any other enum value for Radius; CIRCLE and SPHERE will position the 8 glyphs in a circle, while
+     * SQUARE and CUBE will position their 8 glyphs in a square.
+     * <br>
+     * Unlike {@link SquidPanel#burst(float, int, int, int, boolean, char, Color, Color, boolean, float, float)}, this
+     * does not rotate the individual Glyphs it produces.
+     * @param x the starting, center, x-position to create all Actors at
+     * @param y the starting, center, y-position to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param measurement a Radius enum that determines if 4 (DIAMOND, OCTAHEDRON) or 8 (anything else) Glyphs are
+     *                    created, and the shape they will take
+     * @param choices a String or other CharSequence containing the chars this can randomly choose
+     * @param startColor the encoded color to start the effect with
+     * @param endColor the encoded color to end the effect on
+     * @param duration how long, in seconds, the effect should last
+     */
+    public void burst(int x, int y, int distance, Radius measurement, CharSequence choices,
+                      float startColor, float endColor, float duration)
+    {
+        Direction d;
+        final int len = choices.length();
+        final StatefulRNG rng = DefaultResources.getGuiRandom();
+        switch (measurement)
+        {
+            case SQUARE:
+            case CUBE:
+                for (int i = 0; i < 8; i++) {
+                    d = Direction.CLOCKWISE[i];
+                    summon(x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration);
+                }
+                break;
+            case CIRCLE:
+            case SPHERE:
+                float xf = worldX(x), yf = worldY(y);
+                for (int i = 0; i < 4; i++) {
+                    d = Direction.DIAGONALS[i];
+                    summon(xf, yf, xf - d.deltaX * font.actualCellWidth * distance * 0.7071067811865475f,
+                            yf + d.deltaY * font.actualCellHeight * distance * 0.7071067811865475f,
+                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration);
+                }
+                // break intentionally absent
+            default:
+                for (int i = 0; i < 4; i++) {
+                    d = Direction.CARDINALS_CLOCKWISE[i];
+                    summon(x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration);
+                }
+                break;
+        }
     }
 
     /**
@@ -425,12 +618,17 @@ public class SparseLayers extends Actor {
             layers.get(i).draw(batch, font, xOffset, yOff2);
         }
         TextCellFactory.Glyph[] items = glyphs.begin();
+        int x, y;
         for (int i = 0, n = glyphs.size; i < n; i++) {
             TextCellFactory.Glyph glyph = items[i];
-            if(glyph == null || backgrounds[Math.round((glyph.getX() - xOffset) / font.actualCellWidth)]
-            [Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + height)] == 0f)
+            if(glyph == null)
                 continue;
             glyph.act(Gdx.graphics.getDeltaTime());
+            if(
+                    (x = Math.round((glyph.getX() - xOffset) / font.actualCellWidth)) < 0 || x >= width ||
+                    (y = Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + height)) < 0 || y >= height ||
+                    backgrounds[x][y] == 0f)
+                continue;
             glyph.draw(batch, 1f);
         }
         glyphs.end();

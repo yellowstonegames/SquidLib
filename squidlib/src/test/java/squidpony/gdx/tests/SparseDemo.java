@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
+import squidpony.StringKit;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
@@ -72,7 +73,9 @@ public class SparseDemo extends ApplicationAdapter {
     private GreasedRegion seen;
     private TextCellFactory.Glyph pg;
     private static final float WHITE_FLOAT = NumberUtils.intToFloatColor(-1),
-            GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444), CRIMSON_FLOAT = SColor.CRIMSON.toFloatBits();
+            GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444), CRIMSON_FLOAT = SColor.CRIMSON.toFloatBits(),
+            YELLOW_FLOAT = SColor.CW_BRIGHT_GOLD.toFloatBits(),
+            YELLOW_FADING_FLOAT = SColor.translucentColor(SColor.CW_YELLOW.toFloatBits(), 0f);
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -429,8 +432,9 @@ public class SparseDemo extends ApplicationAdapter {
         }
         else
         {
-            //display.wiggle(pg, 0.12f);
-            display.tint(0f, player.x, player.y, CRIMSON_FLOAT, 0.12f, null);
+            display.wiggle(pg, 0.35f);
+            display.burst(player.x, player.y, 1, Radius.CIRCLE, StringKit.PUNCTUATION, YELLOW_FLOAT, YELLOW_FADING_FLOAT, 0.45f);
+            //display.tint(0f, player.x, player.y, CRIMSON_FLOAT, 0.13f, null);
         }
         // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.
         lang[langIndex] = forms[langIndex].sentence();
