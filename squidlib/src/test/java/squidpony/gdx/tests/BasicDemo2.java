@@ -87,7 +87,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.setTextSize(cellWidth * 1.15f, cellHeight * 1.1f);
+        display.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
 
         // this makes animations very fast, which is good for multi-cell movement but bad for attack animations.
         display.setAnimationDuration(0.03f);
@@ -258,53 +258,52 @@ public class BasicDemo2 extends ApplicationAdapter {
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
-                switch (key)
-                {
+                switch (key) {
                     case SquidInput.UP_ARROW:
                     case 'k':
                     case 'w':
                     case 'K':
-                    case 'W':
-                    {
+                    case 'W': {
+                        toCursor.clear();
                         //-1 is up on the screen
-                        move(0, -1);
+                        awaitedMoves.add(player.translate(0, -1));
                         break;
                     }
                     case SquidInput.DOWN_ARROW:
                     case 'j':
                     case 's':
                     case 'J':
-                    case 'S':
-                    {
+                    case 'S': {
+                        toCursor.clear();
                         //+1 is down on the screen
-                        move(0, 1);
+                        awaitedMoves.add(player.translate(0, 1));
                         break;
                     }
                     case SquidInput.LEFT_ARROW:
                     case 'h':
                     case 'a':
                     case 'H':
-                    case 'A':
-                    {
-                        move(-1, 0);
+                    case 'A': {
+                        toCursor.clear();
+                        awaitedMoves.add(player.translate(-1, 0));
                         break;
                     }
                     case SquidInput.RIGHT_ARROW:
                     case 'l':
                     case 'd':
                     case 'L':
-                    case 'D':
-                    {
-                        move(1, 0);
+                    case 'D': {
+                        toCursor.clear();
+                        awaitedMoves.add(player.translate(1, 0));
                         break;
                     }
                     case 'Q':
                     case 'q':
-                    case SquidInput.ESCAPE:
-                    {
+                    case SquidInput.ESCAPE: {
                         Gdx.app.exit();
                         break;
                     }
+
                 }
             }
         },
@@ -406,6 +405,11 @@ public class BasicDemo2 extends ApplicationAdapter {
             seen.or(blockage.not());
             blockage.fringe8way();
         }
+        else
+        {
+            display.getForegroundLayer().summon(0.1f, player.x, player.y, player.x, player.y - 1, '?', SColor.CW_BRIGHT_INDIGO, SColor.ELECTRIC_PURPLE.cpy().sub(0,0,0,1),  false, 0f, 0f, 0.8f);
+            //display.getForegroundLayer().burst(0.1f, player.x, player.y, 2, true, '?', SColor.CW_BRIGHT_INDIGO, SColor.ELECTRIC_PURPLE.cpy().sub(0,0,0,1),  false, -1f, 0.8f);
+        }
         // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.
         lang[langIndex] = forms[langIndex].sentence();
         // cycles through the text snippets displayed whenever the player moves
@@ -465,7 +469,8 @@ public class BasicDemo2 extends ApplicationAdapter {
                 secondsWithoutMoves = 0;
                 Coord m = awaitedMoves.remove(0);
                 line = OrthoLine.lineChars(toCursor);
-                toCursor.remove(0);
+                if(!toCursor.isEmpty())
+                    toCursor.remove(0);
                 move(m.x - player.x, m.y - player.y);
             }
             // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to
@@ -490,11 +495,11 @@ public class BasicDemo2 extends ApplicationAdapter {
         else if(input.hasNext()) {
             input.next();
         }
+        // certain classes that use scene2d.ui widgets need to be told to act() to process input.
+        stage.act();
 
         // stage has its own batch and must be explicitly told to draw().
         stage.draw();
-        // certain classes that use scene2d.ui widgets need to be told to act() to process input.
-        stage.act();
     }
 
     @Override

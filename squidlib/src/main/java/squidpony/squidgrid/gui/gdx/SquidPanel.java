@@ -1807,34 +1807,55 @@ public class SquidPanel extends Group implements ISquidPanel<Color> {
      * @param endRotation the amount of rotation, in degrees, the glyph should end at
      * @param duration the duration in seconds for the effect
      */
-    public void summon(float delay, int startX, int startY, int endX, int endY, char glyph,
-                       Color startColor, Color endColor, boolean doubleWidth,
-                       float startRotation, float endRotation, float duration)
+    public void summon(float delay, final int startX, final int startY, final int endX, final int endY,
+                       final char glyph, final Color startColor, final Color endColor, final boolean doubleWidth,
+                       final float startRotation, final float endRotation, float duration)
 
     {
-        duration = clampDuration(duration);
+        final float dur = clampDuration(duration);
         animationCount++;
-        final ColorChangeImage
-                gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (duration * 40)), duration * 1.1f, doubleWidth);
-        gi.setPosition(adjustX(startX, doubleWidth) - getX(), adjustY(startY) - getY());
-        gi.setRotation(startRotation);
-        autoActors.add(gi);
-        final int nbActions = 2 + (0 < delay ? 1 : 0);
-        final Action[] sequence = new Action[nbActions];
-        int index = 0;
-        if (0 < delay)
-            sequence[index++] = Actions.delay(delay);
-        sequence[index++] = Actions.parallel(
-                Actions.moveTo(adjustX(endX, doubleWidth) - getX(), adjustY(endY) - getY(), duration),
-                Actions.rotateTo(endRotation, duration));
-        sequence[index] = Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                recallActor(gi, false);
-            }
-        });
+        final Action[] sequence = new Action[2];
+        if (0 < delay) {
+            addAction(Actions.delay(delay, Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    final ColorChangeImage
+                            gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (dur * 40)), dur * 1.1f, doubleWidth);
+                    gi.setPosition(adjustX(startX, doubleWidth) - getX(), adjustY(startY) - getY());
+                    gi.setRotation(startRotation);
+                    autoActors.add(gi);
+                    sequence[0] = Actions.parallel(
+                            Actions.moveTo(adjustX(endX, doubleWidth) - getX(), adjustY(endY) - getY(), dur),
+                            Actions.rotateTo(endRotation, dur));
+                    sequence[1] = Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            recallActor(gi, false);
+                        }
+                    });
 
-        gi.addAction(Actions.sequence(sequence));
+                    gi.addAction(Actions.sequence(sequence));
+
+                }
+            })));
+        }
+        else {
+            final ColorChangeImage
+                    gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (dur * 40)), dur * 1.1f, doubleWidth);
+            gi.setPosition(adjustX(startX, doubleWidth) - getX(), adjustY(startY) - getY());
+            gi.setRotation(startRotation);
+            autoActors.add(gi);
+            sequence[0] = Actions.parallel(
+                    Actions.moveTo(adjustX(endX, doubleWidth) - getX(), adjustY(endY) - getY(), dur),
+                    Actions.rotateTo(endRotation, dur));
+            sequence[1] = Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    recallActor(gi, false);
+                }
+            });
+            gi.addAction(Actions.sequence(sequence));
+        }
     }
     /**
      * Convenience method to produce an explosion, splash, or burst effect. Calls
