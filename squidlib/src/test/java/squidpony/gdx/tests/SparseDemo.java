@@ -13,12 +13,16 @@ import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.squidai.DijkstraMap;
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.SeededNoise;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -432,7 +436,7 @@ public class SparseDemo extends ApplicationAdapter {
         }
         else
         {
-            display.wiggle(pg, 0.35f);
+            display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
             display.burst(player.x, player.y, 1, Radius.CIRCLE, StringKit.PUNCTUATION, YELLOW_FLOAT, YELLOW_FADING_FLOAT, 0.45f);
             //display.tint(0f, player.x, player.y, CRIMSON_FLOAT, 0.13f, null);
         }
