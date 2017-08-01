@@ -135,7 +135,7 @@ public abstract class PanelEffect extends TemporalAction{
             resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);
             validCells.writeDoublesInto(resMap, 0.0);
             lightMap = new double[validCells.width][validCells.height];
-            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius);
+            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius + 0.5);
             validCells.not().writeDoublesInto(lightMap, 0.0);
             validCells.not();
             affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);

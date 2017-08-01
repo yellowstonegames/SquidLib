@@ -492,14 +492,23 @@ public enum Radius {
             break;
             default:
             {
-                int high;
+                float high, changedX;
+                int rndX, rndY;
                 for (int dx = -radiusLength; dx <= radiusLength; ++dx) {
-                    high = (int) Math.sqrt(radiusLength * radiusLength - dx * dx);
-                    for (int dy = -high; dy <= high; ++dy) {
-                        if (!surpassEdges && (centerX + dx < 0 || centerY + dy < 0 ||
-                                centerX + dx >= width || centerY + dy >= height))
-                            continue;
-                        contents.add(Coord.get(centerX + dx, centerY + dy));
+                    changedX = dx - 0.25f * Math.signum(dx);
+                    rndX = Math.round(changedX);
+                    high = (float) Math.sqrt(radiusLength * radiusLength - changedX * changedX);
+                    if (surpassEdges || !(centerX + rndX < 0||
+                            centerX + rndX >= width))
+                        contents.add(Coord.get(centerX + rndX, centerY));
+                    for (float dy = high; dy >= 1f; --dy) {
+                        rndY = Math.round(dy - 0.25f);
+                        if (surpassEdges || !(centerX + rndX < 0 || centerY + rndY < 0 ||
+                                centerX + rndX >= width || centerY + rndY >= height))
+                            contents.add(Coord.get(centerX + rndX, centerY + rndY));
+                        if (surpassEdges || !(centerX + rndX < 0 || centerY - rndY < 0 ||
+                                centerX + rndX >= width || centerY - rndY >= height))
+                            contents.add(Coord.get(centerX + rndX, centerY - rndY));
                     }
                 }
             }

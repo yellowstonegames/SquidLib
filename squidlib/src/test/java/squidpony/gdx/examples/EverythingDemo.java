@@ -212,7 +212,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //mix.putWalledBoxRoomCarvers(3);
         //mix.putWalledRoundRoomCarvers(2);
         //char[][] mg = mix.generate();
-        decoDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
+        decoDungeon = dungeonGen.generate(TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS);
 
         // change the TilesetType to lots of different choices to see what dungeon works best.
         //bareDungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON);
