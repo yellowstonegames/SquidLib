@@ -269,6 +269,33 @@ public class SparseLayers extends Actor {
         layers.get(layer).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
         glyphs.removeValue(glyph, true);
     }
+    /**
+     * Start a bumping animation in the given direction that will last duration seconds.
+     * @param glyph
+     *              A {@link TextCellFactory.Glyph}, probably produced by
+     *              {@link #glyph(char, float, int, int)} or {@link #glyphFromGrid(int, int)}
+     * @param direction the direction for the glyph to bump towards
+     * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.12f
+     */
+    public void bump(final TextCellFactory.Glyph glyph, Direction direction, float duration)
+    {
+        final float x = glyph.getX(),
+                y = glyph.getY();
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        glyph.addAction(Actions.sequence(
+                Actions.moveToAligned(x + direction.deltaX * 0.35f * font.actualCellWidth,
+                        y - direction.deltaY * 0.35f * font.actualCellHeight,
+                        Align.bottomLeft, duration * 0.35F),
+                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F),
+                Actions.delay(duration, Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        --animationCount;
+                    }
+                }))));
+
+    }
 
     /**
      * Slides {@code glyph} from {@code (xstartX,startY)} to {@code (newx, newy)}.
@@ -310,7 +337,7 @@ public class SparseLayers extends Actor {
         sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
             @Override
             public void run() {
-                animationCount--;
+                --animationCount;
             }
         }));
 
@@ -349,7 +376,7 @@ public class SparseLayers extends Actor {
                 Actions.delay(duration, Actions.run(new Runnable() {
                     @Override
                     public void run() {
-                        animationCount--;
+                        --animationCount;
                     }
                 }))));
     }
@@ -400,7 +427,7 @@ public class SparseLayers extends Actor {
         sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
             @Override
             public void run() {
-                animationCount--;
+                --animationCount;
             }
         }));
 
@@ -434,7 +461,7 @@ public class SparseLayers extends Actor {
                         new TemporalAction(duration) {
                             @Override
                             protected void update(float percent) {
-                                glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.9f);
+                                glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.95f);
                             }
                         },
                         Actions.moveTo(worldX(endX), worldY(endY), duration)),
