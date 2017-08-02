@@ -228,13 +228,13 @@ public class FOV implements Serializable {
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique, double angle, double span) {
 
-        double rad = Math.max(1, radius);
+        radius = Math.max(1, radius);
 
-        double decay = 1.0 / rad;
+        double decay = 1.0 / radius;
 
-		double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0)
+		angle = Math.toRadians((angle > 360.0 || angle < 0.0)
 				? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
-        double span2 = Math.toRadians(span);
+        span = Math.toRadians(span);
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
 
@@ -247,7 +247,7 @@ public class FOV implements Serializable {
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
                 initializeNearLight(width, height);
-                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);
+                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, radius, resistanceMap, nearLight, radiusTechnique, angle, span);
                 break;
             case SHADOW:
                 // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
@@ -258,13 +258,13 @@ public class FOV implements Serializable {
                 for (Direction d : ccw) {
                     ctr &= 3;
                     ++ctr;
-                    if (angle2 <= Math.PI * 0.5 * ctr + span2 * 0.5)
+                    if (angle <= Math.PI * 0.5 * ctr + span * 0.5)
                         started = true;
                     if (started) {
-                        if(ctr < 4 && angle2 < Math.PI * 0.5 * (ctr - 1) - span2 * 0.5)
+                        if(ctr < 4 && angle < Math.PI * 0.5 * (ctr - 1) - span * 0.5)
                             break;
-                        light = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle2, span2);
-                        light = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle2, span2);
+                        light = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+                        light = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
                     }
                 }
                 break;
@@ -360,6 +360,59 @@ public class FOV implements Serializable {
 
         shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
         shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        return light;
+    }
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates, lighting at the given angle in  degrees and covering a span
+     * centered on that angle, also in degrees. Assigns to, and returns, a light
+     * map where the values represent a percentage of fully lit. Always uses
+     * shadowcasting FOV, which allows this method to be static since it doesn't
+     * need to keep any state around, and can reuse the state the user gives it
+     * via the {@code light} parameter. The values in light are cleared before
+     * this is run, because prior state can make this give incorrect results.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are determined by the provided
+     * RadiusStrategy.  A conical section of FOV is lit by this method if
+     * span is greater than 0.
+     *
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
+     * @param radius the distance the light will extend to
+     * @param radiusTechnique provides a means to shape the FOV by changing distance calculation (circle, square, etc.)
+     * @param angle the angle in degrees that will be the center of the FOV cone, 0 points right
+     * @param span the angle in degrees that measures the full arc contained in the FOV cone
+     * @return the computed light grid
+     */
+    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY,
+                                          double radius, Radius radiusTechnique, double angle, double span) {
+
+        double rad = Math.max(1, radius);
+        double decay = 1.0 / rad;
+        ArrayTools.fill(light, 0);
+        light[startX][startY] = 1;//make the starting space full power
+
+        angle = Math.toRadians((angle > 360.0 || angle < 0.0)
+                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
+        span = Math.toRadians(span);
+
+        int ctr = 0;
+        boolean started = false;
+        for (Direction d : ccw) {
+            ctr &= 3;
+            ++ctr;
+            if (angle <= Math.PI * 0.5 * ctr + span * 0.5)
+                started = true;
+            if (started) {
+                if (ctr < 4 && angle < Math.PI * 0.5 * (ctr - 1) - span * 0.5)
+                    break;
+                light = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+                light = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+            }
+        }
         return light;
     }
 
