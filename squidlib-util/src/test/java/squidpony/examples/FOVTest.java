@@ -2,6 +2,7 @@ package squidpony.examples;
 
 import squidpony.ArrayTools;
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
@@ -46,8 +47,9 @@ public class FOVTest {
         double[][] losMap = ArrayTools.copy(fov.calculateLOSMap(resMap, pt.x, pt.y));
         for (int i = 0; i < 20; i++) {
             pt = points.getAt(i);
-            fovMaps.add(FOV.bouncingLine(resMap, new double[width][height], pt.x, pt.y, rng.between(25.0, 40.0),
-                    rng.nextDouble(360)));
+            fovMaps.add(FOV.reuseFOV(resMap, new double[width][height], pt.x, pt.y, 6, Radius.CIRCLE, i * 40, 60.0));
+//            fovMaps.add(FOV.bouncingLine(resMap, new double[width][height], pt.x, pt.y, rng.between(25.0, 40.0),
+//                    rng.nextDouble(360)));
         }
         double[][] result = FOV.mixVisibleFOVs(losMap, fovMaps);
         for (int y = 0; y < height; y++) {
