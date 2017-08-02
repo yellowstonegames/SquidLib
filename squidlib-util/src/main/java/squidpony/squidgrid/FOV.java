@@ -230,10 +230,10 @@ public class FOV implements Serializable {
 
         radius = Math.max(1, radius);
 
-        double decay = 1.0 / radius;
+        double decay = 1.0 / (radius + 1);
 
-		angle = Math.toRadians((angle > 360.0 || angle < 0.0)
-				? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
+        angle = Math.toRadians((angle >= 360.0 || angle < 0.0)
+                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
         span = Math.toRadians(span);
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
@@ -250,23 +250,17 @@ public class FOV implements Serializable {
                 doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, radius, resistanceMap, nearLight, radiusTechnique, angle, span);
                 break;
             case SHADOW:
-                // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
-                // run through more than (width + height) iterations of the radius-related loop (which seemed to be the
-                // only problem, running through billions of iterations when Integer/MAX_VALUE is given as a radius).
-                int ctr = 0;
-                boolean started = false;
-                for (Direction d : ccw) {
-                    ctr &= 3;
-                    ++ctr;
-                    if (angle <= Math.PI * 0.5 * ctr + span * 0.5)
-                        started = true;
-                    if (started) {
-                        if(ctr < 4 && angle < Math.PI * 0.5 * (ctr - 1) - span * 0.5)
-                            break;
-                        light = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
-                        light = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
-                    }
-                }
+                light = shadowCastLimited(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+                light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+
+                light = shadowCastLimited(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+                light = shadowCastLimited(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+
+                light = shadowCastLimited(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+                light = shadowCastLimited(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+
+                light = shadowCastLimited(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+                light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
                 break;
         }
 
@@ -343,23 +337,23 @@ public class FOV implements Serializable {
      */
     public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique) {
 
-        double rad = Math.max(1, radius);
-        double decay = 1.0 / rad;
+        radius = Math.max(1, radius);
+        double decay = 1.0 / radius;
         ArrayTools.fill(light, 0);
         light[startX][startY] = 1;//make the starting space full power
 
 
-        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
 
-        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
 
-        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
 
-        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
         return light;
     }
     /**
@@ -390,29 +384,26 @@ public class FOV implements Serializable {
     public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY,
                                           double radius, Radius radiusTechnique, double angle, double span) {
 
-        double rad = Math.max(1, radius);
-        double decay = 1.0 / rad;
+        radius = Math.max(1, radius);
+        double decay = 1.0 / (radius + 1.0);
         ArrayTools.fill(light, 0);
         light[startX][startY] = 1;//make the starting space full power
-
-        angle = Math.toRadians((angle > 360.0 || angle < 0.0)
+        angle = Math.toRadians((angle >= 360.0 || angle < 0.0)
                 ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
         span = Math.toRadians(span);
 
-        int ctr = 0;
-        boolean started = false;
-        for (Direction d : ccw) {
-            ctr &= 3;
-            ++ctr;
-            if (angle <= Math.PI * 0.5 * ctr + span * 0.5)
-                started = true;
-            if (started) {
-                if (ctr < 4 && angle < Math.PI * 0.5 * (ctr - 1) - span * 0.5)
-                    break;
-                light = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
-                light = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
-            }
-        }
+
+        light = shadowCastLimited(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+        light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+
+        light = shadowCastLimited(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+        light = shadowCastLimited(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+
+        light = shadowCastLimited(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+        light = shadowCastLimited(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+
+        light = shadowCastLimited(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
+        light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
         return light;
     }
 
@@ -742,8 +733,9 @@ public class FOV implements Serializable {
                 } else if (end > leftSlope) {
                     break;
                 }
-                double newAngle = Math.atan2(currentY - starty, currentX - startx) + Math.PI * 2;
-				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) > span / 2.0)
+                double newAngle = (Math.atan2(currentY - starty, currentX - startx) + Math.PI * 8.0) % (Math.PI * 2),
+                        rem = (angle - newAngle + Math.PI * 2) % (Math.PI * 2), irem = (newAngle - angle + Math.PI * 2) % (Math.PI * 2);
+				if (Math.abs(rem) > span * 0.5 && Math.abs(irem) > span * 0.5)
 					continue;
 
                 double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
