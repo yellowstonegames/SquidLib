@@ -963,6 +963,7 @@ public class EverythingDemo extends ApplicationAdapter {
             fgCenter.clearCache();
             bgCenter.clearCache();
         }
+        Gdx.graphics.setTitle("SquidLib Everything Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
     }
 
     @Override

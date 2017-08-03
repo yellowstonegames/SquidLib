@@ -15,6 +15,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.SnapshotArray;
 import squidpony.ArrayTools;
+import squidpony.IColorCenter;
+import squidpony.panel.IColoredString;
+import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.StatefulRNG;
@@ -22,73 +25,340 @@ import squidpony.squidmath.StatefulRNG;
 /**
  * Created by Tommy Ettinger on 7/28/2017.
  */
-public class SparseLayers extends Actor {
-    public final int width, height;
+public class SparseLayers extends Actor implements ISquidPanel<Color> {
+    public final int gridWidth, gridHeight;
     public float[][] backgrounds;
+    public Color defaultForeground = SColor.WHITE,
+            defaultBackground = SColor.BLACK;
+    public float defaultPackedForeground = SColor.WHITE.toFloatBits(),
+            defaultPackedBackground = SColor.BLACK.toFloatBits();
     public Array<SparseTextMap> layers;
     protected IntIntMap mapping;
     public TextCellFactory font;
     public float xOffset, yOffset;
     protected int animationCount = 0;
     private SnapshotArray<TextCellFactory.Glyph> glyphs;
+    public IColorCenter<Color> scc;
 
 
-    public SparseLayers(int width, int height)
+    public SparseLayers(int gridWidth, int gridHeight)
     {
-        this(width, height, 10, 16, DefaultResources.getStretchableFont());
+        this(gridWidth, gridHeight, 10, 16, DefaultResources.getStretchableFont());
     }
 
-    public SparseLayers(int width, int height, float cellWidth, float cellHeight)
+    public SparseLayers(int gridWidth, int gridHeight, float cellWidth, float cellHeight)
     {
-        this(width, height, cellWidth, cellHeight, DefaultResources.getStretchableFont());
+        this(gridWidth, gridHeight, cellWidth, cellHeight, DefaultResources.getStretchableFont());
     }
 
-    public SparseLayers(int width, int height, float cellWidth, float cellHeight, TextCellFactory font) {
-        this(width, height, cellWidth, cellHeight, font, 0f, 0f);
+    public SparseLayers(int gridWidth, int gridHeight, float cellWidth, float cellHeight, TextCellFactory font) {
+        this(gridWidth, gridHeight, cellWidth, cellHeight, font, 0f, 0f);
     }
 
-    public SparseLayers(int width, int height, float cellWidth, float cellHeight, TextCellFactory font, float xOffset, float yOffset) {
-        this.width = MathUtils.clamp(width, 1, 65535);
-        this.height = MathUtils.clamp(height, 1, 65535);
-        backgrounds = ArrayTools.fill(0f, this.width, this.height);
+    public SparseLayers(int gridWidth, int gridHeight, float cellWidth, float cellHeight, TextCellFactory font, float xOffset, float yOffset) {
+        this.gridWidth = MathUtils.clamp(gridWidth, 1, 65535);
+        this.gridHeight = MathUtils.clamp(gridHeight, 1, 65535);
+        backgrounds = ArrayTools.fill(0f, this.gridWidth, this.gridHeight);
         layers = new Array<>(true, 4, SparseTextMap.class);
         this.font = font.width(cellWidth).height(cellHeight).initBySize();
-        layers.add(new SparseTextMap(width * height >> 2));
+        layers.add(new SparseTextMap(gridWidth * gridHeight >> 2));
         mapping = new IntIntMap(4);
         mapping.put(0, 0);
         glyphs = new SnapshotArray<>(true, 16, TextCellFactory.Glyph.class);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
+        scc = DefaultResources.getSCC();
         setBounds(xOffset, yOffset,
-                this.font.actualCellWidth * this.width, this.font.actualCellHeight * this.height);
+                this.font.actualCellWidth * this.gridWidth, this.font.actualCellHeight * this.gridHeight);
     }
 
+    /**
+     * Gets the number of layers currently used in this SparseLayers; if a layer is put into that is equal to or greater
+     * than this layer count, then a new layer is created to hold the latest placement. It is recommended that you
+     * assign to the layer equal to the result of this method if you want to add a layer. You can add to layers that are
+     * higher than this result, and can technically do so out of order, but this just gets confusing because their
+     * ordering won't be related to the numbers of the layers.
+     * @return the current number of layers in this SparseLayers
+     */
+    public int getLayerCount()
+    {
+        return layers.size;
+    }
+
+    /**
+     * Puts the character {@code c} at {@code (x, y)} with the default foreground. Does not change the background.
+     *
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param c the char to place, using the default foreground color
+     */
+    @Override
+    public void put(int x, int y, char c) {
+        put(x, y, c, defaultPackedForeground, 0f);
+    }
+
+    /**
+     * Puts the given string horizontally with the first character at the given
+     * offset. Uses the given color for the text and does not change the background
+     * color at all.
+     * <p>
+     * Does not word wrap. Characters that are not renderable (due to being at
+     * negative offsets or offsets greater than the grid size) will not be shown
+     * but will not cause any malfunctions.
+     *
+     * @param xOffset    the x coordinate of the first character
+     * @param yOffset    the y coordinate of the first character
+     * @param string     the characters to be displayed
+     * @param foreground the color to use for the text
+     */
+    @Override
+    public void put(int xOffset, int yOffset, String string, Color foreground) {
+        put(xOffset, yOffset, string, foreground, null);
+    }
+
+    /**
+     * Puts the given string horizontally with the first character at the given
+     * offset, using the colors that {@code cs} provides. Does not change the
+     * background colors. Does filter the colors from cs if the color center this
+     * uses is set up to filter colors.
+     * <p>
+     * Does not word wrap. Characters that are not renderable (due to being at
+     * negative offsets or offsets greater than the grid size) will not be shown
+     * but will not cause any malfunctions.
+     *
+     * @param xOffset the x coordinate of the first character
+     * @param yOffset the y coordinate of the first character
+     * @param cs an {@link IColoredString} with potentially multiple colors
+     */
+    @Override
+    public void put(int xOffset, int yOffset, IColoredString<? extends Color> cs) {
+        int x = xOffset;
+        for (IColoredString.Bucket<? extends Color> fragment : cs) {
+            final String s = fragment.getText();
+            final Color color = fragment.getColor();
+            put(x, yOffset, s, color == null ? getDefaultForegroundColor() : scc.filter(color), null);
+            x += s.length();
+        }
+    }
+
+    /**
+     * Puts the character {@code c} at {@code (x, y)} with some {@code color}.
+     * Does not change the background colors.
+     *
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param c the char to place
+     * @param color the color to use for c; if null or fully transparent, nothing will change in the foreground
+     */
+    @Override
+    public void put(int x, int y, char c, Color color) {
+        put(x, y, c, color, null);
+    }
+
+    /**
+     * Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0, while also
+     * setting the background colors to match the given Color 2D array. If the colors argument is null, does nothing. If
+     * the chars argument is null, only affects the background colors.
+     * @param chars Can be {@code null}, indicating that only colors must be put.
+     * @param colors the background colors for the given chars
+     */
+    @Override
+    public void put(char[][] chars, Color[][] colors) {
+        if(colors == null)
+            return;
+        if(chars == null)
+        {
+            for (int i = 0; i < colors.length; i++) {
+                if(colors[i] == null)
+                    continue;
+                for (int j = 0; j < colors.length; j++) {
+                    backgrounds[i][j] = (colors[i][j] == null) ? 0f : scc.filter(colors[i][j]).toFloatBits();
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < chars.length && i < colors.length; i++) {
+                if(colors[i] == null || chars[i] == null)
+                    continue;
+                for (int j = 0; j < chars[i].length && j < colors[i].length; j++) {
+                    if(colors[i][j] == null)
+                        put(i, j, chars[i][j], defaultPackedForeground, 0f);
+                    else
+                        put(i, j, chars[i][j], defaultPackedForeground, scc.filter(colors[i][j]).toFloatBits());
+                }
+            }
+        }
+    }
+
+    /**
+     * @return The number of cells that this panel spans, horizontally.
+     */
+    @Override
+    public int gridWidth() {
+        return gridWidth;
+    }
+
+    /**
+     * @return The number of cells that this panel spans, vertically.
+     */
+    @Override
+    public int gridHeight() {
+        return gridHeight;
+    }
+
+    /**
+     * @return The width of a cell, in number of pixels.
+     */
+    @Override
+    public int cellWidth() {
+        return Math.round(font.actualCellWidth);
+    }
+
+    /**
+     * @return The height of a cell, in number of pixels.
+     */
+    @Override
+    public int cellHeight() {
+        return Math.round(font.actualCellHeight);
+    }
+
+    /**
+     * Sets the default foreground color.
+     * Unlike most ISquidPanel implementations, color can be null, which will
+     * usually not be rendered unless a different color is specified.
+     * @param color a libGDX Color object or an extension of Color, such as SColor
+     */
+    @Override
+    public void setDefaultForeground(Color color) {
+        defaultForeground = color;
+    }
+
+    /**
+     * @return The default foreground color (if none was set with
+     * {@link #setDefaultForeground(Object)}), or the last color set
+     * with {@link #setDefaultForeground(Object)}. Unlike most
+     * ISquidPanel implementations, this can be null, which will
+     * usually not be rendered unless a different color is specified.
+     */
+    @Override
+    public Color getDefaultForegroundColor() {
+        return defaultForeground;
+    }
+
+    /**
+     * Method to change the backing {@link IColorCenter}.
+     * Note that the IColorCenter is not used to filter floats that encode colors, so passing the result of
+     * {@link Color#toFloatBits()} can be used to bypass the filtering if you want a color to be used exactly.
+     * @param icc an IColorCenter that can cache and possibly filter {@link Color} objects
+     * @return {@code this} for chaining
+     */
+    @Override
+    public ISquidPanel<Color> setColorCenter(IColorCenter<Color> icc) {
+        scc = icc;
+        return this;
+    }
+
+    /**
+     * Gets the IColorCenter this can use to filter Color objects; this is usually a {@link SquidColorCenter}.
+     * Note that the IColorCenter is not used to filter floats that encode colors, so passing the result of
+     * {@link Color#toFloatBits()} can be used to bypass the filtering if you want a color to be used exactly.
+     * @return the IColorCenter this uses
+     */
+    public IColorCenter<Color> getColorCenter() {
+        return scc;
+    }
+
+    /**
+     * @return The panel doing the real job, i.e. an instance of
+     * {@code SquidPanel}. The type of colors is unspecified, as some
+     * clients have forwarding instances of this class that hides that
+     * the type of color of the backer differs from the type of color in
+     * {@code this}.
+     * <p>
+     * This implementation returns {@code this}.
+     */
+    @Override
+    public ISquidPanel<?> getBacker() {
+        return this;
+    }
+
+    /**
+     * Puts the char c at the position x,y with the given foreground and background colors. If foreground is null or is
+     * fully transparent (all channels 0), then this does not change the foreground contents.
+     * If background is null or is fully transparent, this does not change the background. Uses the color center to
+     * potentially filter the given colors; this can be changed with {@link #setColorCenter(IColorCenter)}.
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param c the char to place
+     * @param foreground the color to use for c; if null or fully transparent, nothing will change in the foreground
+     * @param background the color to use for the cell; if null or fully transparent, nothing will change in the background
+     */
     public void put(int x, int y, char c, Color foreground, Color background)
     {
-        put(x, y, c, foreground == null ? 0f : foreground.toFloatBits(),
-                background == null ? 0f : background.toFloatBits());
+        put(x, y, c, foreground == null ? 0f : scc.filter(foreground).toFloatBits(),
+                background == null ? 0f : scc.filter(background).toFloatBits());
     }
-
+    /**
+     * Puts the char c at the position x,y with the given foreground and background colors as encoded floats, such as
+     * those produced by {@link Color#toFloatBits()}. If foreground is 0f, then this does not
+     * change the foreground contents. If background is 0f, this does not change the background. Does not filter the
+     * given colors.
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param c the char to place
+     * @param foreground the color to use for c; if 0f, nothing will change in the foreground
+     * @param background the color to use for the cell; if null or fully transparent, nothing will change in the background
+     */
     public void put(int x, int y, char c, float foreground, float background)
     {
-        if(x < 0 || x >= width || y < 0 || y >= height)
+        if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
             return;
         if(background != 0f)
             backgrounds[x][y] = background;
         if(foreground != 0f)
             layers.items[0].place(x, y, c, foreground);
     }
-
+    /**
+     * Puts the char c at the position x,y in the requested layer with the given foreground and background colors. If
+     * foreground is null or is fully transparent (all channels 0), then this does not change
+     * the foreground contents. If background is null or is fully transparent, this does not change the background. Uses
+     * the color center to potentially filter the given colors; this can be changed with
+     * {@link #setColorCenter(IColorCenter)}. The layer can be greater than the number of layers currently present,
+     * which will add a layer to be rendered over the existing layers, but the number that refers to that layer will not
+     * change. It is recommended that to add a layer, you only add at the value equal to {@link #getLayerCount()}, which
+     * will maintain the order and layer numbers in a sane way.
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param c the char to place
+     * @param foreground the color to use for c; if null or fully transparent, nothing will change in the foreground
+     * @param background the color to use for the cell; if null or fully transparent, nothing will change in the background
+     * @param layer the layer to place the colorful char into; should usually be between 0 and {@link #getLayerCount()} inclusive
+     */
     public void put(int x, int y, char c, Color foreground, Color background, int layer)
     {
-        put(x, y, c, foreground == null ? 0f : foreground.toFloatBits(),
-                background == null ? 0f : background.toFloatBits(), layer);
+        put(x, y, c, foreground == null ? 0f : scc.filter(foreground).toFloatBits(),
+                background == null ? 0f : scc.filter(background).toFloatBits(), layer);
 
     }
-
+    /**
+     * Puts the char c at the position x,y in the requested layer with the given foreground and background colors as
+     * encoded floats, such as those produced by {@link Color#toFloatBits()}. If foreground is 0f, then this does not
+     * change the foreground contents. If background is 0f, this does not change the
+     * background. Does not filter the given colors. The layer can be greater than the number of layers currently
+     * present, which will add a layer to be rendered over the existing layers, but the number that refers to that layer
+     * will not change. It is recommended that to add a layer, you only add at the value equal to
+     * {@link #getLayerCount()}, which will maintain the order and layer numbers in a sane way.
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param c the char to place
+     * @param foreground the color to use for c; if 0f, nothing will change in the foreground
+     * @param background the color to use for the cell; if null or fully transparent, nothing will change in the background
+     * @param layer the layer to place the colorful char into; should usually be between 0 and {@link #getLayerCount()} inclusive
+     */
     public void put(int x, int y, char c, float foreground, float background, int layer)
     {
-        if(x < 0 || x >= width || y < 0 || y >= height || layer < 0)
+        if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight || layer < 0)
             return;
         if(background != 0f)
             backgrounds[x][y] = background;
@@ -98,7 +368,7 @@ public class SparseLayers extends Actor {
             if(layer >= layers.size)
             {
                 mapping.put(layer, layers.size);
-                SparseTextMap stm = new SparseTextMap(width * height >> 4);
+                SparseTextMap stm = new SparseTextMap(gridWidth * gridHeight >> 4);
                 stm.place(x, y, c, foreground);
                 layers.add(stm);
             }
@@ -108,27 +378,77 @@ public class SparseLayers extends Actor {
             }
         }
     }
-    public void print(int x, int y, String text, Color foreground, Color background) {
-        print(x, y, text, foreground == null ? 0f : foreground.toFloatBits(),
-                background == null ? 0f : background.toFloatBits());
+    /**
+     * Puts text at the position x,y with the given foreground and background colors. If foreground is null or is
+     * fully transparent (all channels 0), then this does not change the foreground contents.
+     * If background is null or is fully transparent, this does not change the background. Uses the color center to
+     * potentially filter the given colors; this can be changed with {@link #setColorCenter(IColorCenter)}.
+     * @param x the x position to place the String at
+     * @param y the y position to place the String at
+     * @param text the String to place
+     * @param foreground the color to use for text; if null or fully transparent, nothing will change in the foreground
+     * @param background the color to use for the cells; if null or fully transparent, nothing will change in the background
+     */
+    public void put(int x, int y, String text, Color foreground, Color background) {
+        put(x, y, text, foreground == null ? 0f : scc.filter(foreground).toFloatBits(),
+                background == null ? 0f : scc.filter(background).toFloatBits());
     }
-
-    public void print(int x, int y, String text, float foreground, float background)
+    /**
+     * Puts text at the position x,y with the given foreground and background colors as encoded floats, such as
+     * those produced by {@link Color#toFloatBits()}. If foreground is 0f, then this does not change the foreground
+     * contents. If background is 0f, this does not change the background. Does not filter the given colors.
+     * @param x the x position to place the String at
+     * @param y the y position to place the String at
+     * @param text the String to place
+     * @param foreground the color to use for text; if 0f, nothing will change in the foreground
+     * @param background the color to use for the cells; if null or fully transparent, nothing will change in the background
+     */
+    public void put(int x, int y, String text, float foreground, float background)
     {
-        int len = Math.min(text.length(), width - x);
+        int len = Math.min(text.length(), gridWidth - x);
         for (int i = 0; i < len; i++) {
             put(x + i, y, text.charAt(i), foreground, background);
         }
     }
-
-    public void print(int x, int y, String text, Color foreground, Color background, int layer) {
-        print(x, y, text, foreground == null ? 0f : foreground.toFloatBits(),
-                background == null ? 0f : background.toFloatBits(), layer);
+    /**
+     * Puts text at the position x,y in the requested layer with the given foreground and background colors. If
+     * foreground is null or is fully transparent (all channels 0), then this does not change the foreground contents.
+     * If background is null or is fully transparent, this does not change the background. Uses the color center to
+     * potentially filter the given colors; this can be changed with {@link #setColorCenter(IColorCenter)}. The layer
+     * can be greater than the number of layers currently present, which will add a layer to be rendered over the
+     * existing layers, but the number that refers to that layer will not change. It is recommended that to add a layer,
+     * you only add at the value equal to {@link #getLayerCount()}, which will maintain the order and layer numbers in a
+     * sane way.
+     * @param x the x position to place the String at
+     * @param y the y position to place the String at
+     * @param text the String to place
+     * @param foreground the color to use for text; if null or fully transparent, nothing will change in the foreground
+     * @param background the color to use for the cells; if null or fully transparent, nothing will change in the background
+     * @param layer the layer to place the colorful char into; should usually be between 0 and {@link #getLayerCount()} inclusive
+     */
+    public void put(int x, int y, String text, Color foreground, Color background, int layer) {
+        put(x, y, text, foreground == null ? 0f : scc.filter(foreground).toFloatBits(),
+                background == null ? 0f : scc.filter(background).toFloatBits(), layer);
     }
-    public void print(int x, int y, String text, float foreground, float background, int layer) {
-        if (x < 0 || x >= width || y < 0 || y >= height || layer < 0)
+    /**
+     * Puts text at the position x,y in the requested layer with the given foreground and background colors as encoded
+     * floats, such as those produced by {@link Color#toFloatBits()}. If foreground is 0f, then this does not change the
+     * foreground contents. If background is 0f, this does not change the background. Does not filter the given colors.
+     * The layer can be greater than the number of layers currently present, which will add a layer to be rendered over
+     * the existing layers, but the number that refers to that layer will not change. It is recommended that to add a
+     * layer, you only add at the value equal to {@link #getLayerCount()}, which will maintain the order and layer
+     * numbers in a sane way.
+     * @param x the x position to place the String at
+     * @param y the y position to place the String at
+     * @param text the String to place
+     * @param foreground the color to use for text; if 0f, nothing will change in the foreground
+     * @param background the color to use for the cells; if null or fully transparent, nothing will change in the background
+     * @param layer the layer to place the colorful char into; should usually be between 0 and {@link #getLayerCount()} inclusive
+     */
+    public void put(int x, int y, String text, float foreground, float background, int layer) {
+        if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight || layer < 0)
             return;
-        int len = Math.min(text.length(), width - x);
+        int len = Math.min(text.length(), gridWidth - x);
         if(background != 0f) {
             for (int i = 0; i < len; i++) {
                 backgrounds[x + i][y] = background;
@@ -139,7 +459,7 @@ public class SparseLayers extends Actor {
             layer = mapping.get(layer, layer);
             if (layer >= layers.size) {
                 mapping.put(layer, layers.size);
-                SparseTextMap stm = new SparseTextMap(width * height >> 4);
+                SparseTextMap stm = new SparseTextMap(gridWidth * gridHeight >> 4);
                 for (int i = 0; i < len; i++) {
                     stm.place(x + i, y, text.charAt(i), foreground);
                 }
@@ -153,19 +473,41 @@ public class SparseLayers extends Actor {
         }
     }
 
-    public void changeBackground(int x, int y, Color color)
+    /**
+     * Changes the background at position x,y to the given Color. If the color is null, then this will make the
+     * background fully transparent at the specified position.
+     * @param x where to change the background color, x-coordinate
+     * @param y where to change the background color, y-coordinate
+     * @param color the Color to change to; if null will be considered fully transparent
+     */
+    public void put(int x, int y, Color color)
     {
-        changeBackground(x, y, color == null ? 0f : color.toFloatBits());
+        put(x, y, color == null ? 0f : scc.filter(color).toFloatBits());
     }
-    public void changeBackground(int x, int y, float color)
+    /**
+     * Changes the background at position x,y to the given color as an encoded float. The color can be transparent,
+     * which will show through to whatever is behind this SparseLayers, or the color the screen was last cleared with.
+     * @param x where to change the background color, x-coordinate
+     * @param y where to change the background color, y-coordinate
+     * @param color the color, as an encoded float, to change to; may be transparent
+     */
+    public void put(int x, int y, float color)
     {
-        if(x < 0 || x >= width || y < 0 || y >= height)
+        if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
             return;
         backgrounds[x][y] = color;
     }
-    public void erase(int x, int y)
+
+    /**
+     * Removes the foreground chars, where present, in all layers at the given x,y position.
+     * The backgrounds will be unchanged.
+     * @param x the x-coordinate of the position to remove all chars from
+     * @param y the y-coordinate of the position to remove all chars from
+     */
+    @Override
+    public void clear(int x, int y)
     {
-        if(x < 0 || x >= width || y < 0 || y >= height)
+        if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
             return;
         backgrounds[x][y] = 0f;
         int code = SparseTextMap.encodePosition(x, y);
@@ -173,7 +515,15 @@ public class SparseLayers extends Actor {
             layers.get(i).remove(code);
         }
     }
-    public void removeChar(int x, int y, int layer)
+
+    /**
+     * Removes the foreground char, if present, in the given layer at the given x,y position.
+     * The backgrounds and other layers will be unchanged.
+     * @param x the x-coordinate of the position to remove all chars from
+     * @param y the y-coordinate of the position to remove all chars from
+     * @param layer the layer to remove from
+     */
+    public void clear(int x, int y, int layer)
     {
         layer = mapping.get(layer, -1);
         if(layer >= 0)
@@ -182,6 +532,10 @@ public class SparseLayers extends Actor {
         }
     }
 
+    /**
+     * Removes all background colors, setting them to transparent, and all foreground chars in all layers.
+     */
+    @Override
     public void clear()
     {
         ArrayTools.fill(backgrounds, 0f);
@@ -190,32 +544,79 @@ public class SparseLayers extends Actor {
         }
     }
 
+    @Override
     public boolean hasActiveAnimations()
     {
         return animationCount > 0;
     }
 
+    /**
+     * Used internally to go between grid positions and world positions.
+     * @param gridX x on the grid
+     * @return x in the world
+     */
     public float worldX(int gridX)
     {
         return xOffset + gridX * font.actualCellWidth;
     }
-
+    /**
+     * Used internally to go between grid positions and world positions.
+     * @param gridY y on the grid
+     * @return y in the world
+     */
     public float worldY(int gridY)
     {
-        return yOffset + (height - gridY) * font.actualCellHeight;
+        return yOffset + (gridHeight - gridY) * font.actualCellHeight;
     }
 
-    public int gridX(float screenX)
+    /**
+     * Used internally to go between world positions and grid positions.
+     * @param worldX x in the world
+     * @return x on the grid
+     */
+    public int gridX(float worldX)
     {
-        return Math.round((screenX - xOffset) / font.actualCellWidth);
+        return Math.round((worldX - xOffset) / font.actualCellWidth);
     }
 
-    public int gridY(float screenY)
+    /**
+     * Used internally to go between world positions and grid positions.
+     * @param worldY y in the world
+     * @return y on the grid
+     */
+    public int gridY(float worldY)
     {
-        return Math.round((yOffset - screenY) / font.actualCellHeight + height);
+        return Math.round((yOffset - worldY) / font.actualCellHeight + gridHeight);
     }
 
 
+    /**
+     * Produces a single char with a color, that can be positioned independently of the contents of this SparseLayers.
+     * Various effects in this class take a Glyph parameter and can perform visual effects with one. This takes a char
+     * to show, a color that may be filtered, and an x,y position in grid cells, and returns a Glyph that has those
+     * qualities set.
+     * @param shown the char to use in the Glyph
+     * @param color the color to use for the Glyph, which can be filtered
+     * @param x the x position, in grid cells
+     * @param y the y position, in grid cells
+     * @return a Glyph (an inner class of TextCellFactory) with the given qualities
+     */
+    public TextCellFactory.Glyph glyph(char shown, Color color, int x, int y)
+    {
+        return glyph(shown, color == null ? 0f : scc.filter(color).toFloatBits(), x, y);
+    }
+
+    /**
+     * Produces a single char with a color, that can be positioned independently of the contents of this SparseLayers.
+     * Various effects in this class take a Glyph parameter and can perform visual effects with one. This takes a char
+     * to show, a color as an encoded float, and an x,y position in grid cells, and returns a Glyph that has those
+     * qualities set.
+     * @param shown the char to use in the Glyph
+     * @param color the color to use for the Glyph as an encoded float
+     * @param x the x position, in grid cells
+     * @param y the y position, in grid cells
+     * @return a Glyph (an inner class of TextCellFactory) with the given qualities
+     */
     public TextCellFactory.Glyph glyph(char shown, float color, int x, int y)
     {
         TextCellFactory.Glyph g =
@@ -225,7 +626,15 @@ public class SparseLayers extends Actor {
         glyphs.add(g);
         return g;
     }
-
+    /**
+     * "Promotes" a colorful char in the first layer to a Glyph that can be positioned independently of the contents of
+     * this SparseLayers. Various effects in this class take a Glyph parameter and can perform visual effects with one.
+     * This takes only an x,y position in grid cells, removes the char at that position in the first layer from normal
+     * rendering, and returns a Glyph at that same position with the same char and color, but that can be moved more.
+     * @param x the x position, in grid cells
+     * @param y the y position, in grid cells
+     * @return a Glyph (an inner class of TextCellFactory) that took the qualities of the removed char and its color
+     */
     public TextCellFactory.Glyph glyphFromGrid(int x, int y)
     {
         int code = SparseTextMap.encodePosition(x, y);
@@ -237,7 +646,16 @@ public class SparseLayers extends Actor {
         glyphs.add(g);
         return g;
     }
-
+    /**
+     * "Promotes" a colorful char in the given layer to a Glyph that can be positioned independently of the contents of
+     * this SparseLayers. Various effects in this class take a Glyph parameter and can perform visual effects with one.
+     * This takes only an x,y position in grid cells, removes the char at that position in the given layer from normal
+     * rendering, and returns a Glyph at that same position with the same char and color, but that can be moved more.
+     * @param x the x position, in grid cells
+     * @param y the y position, in grid cells
+     * @param layer the layer to take a colorful char from
+     * @return a Glyph (an inner class of TextCellFactory) that took the qualities of the removed char and its color; may return null if the layer is invalid
+     */
     public TextCellFactory.Glyph glyphFromGrid(int x, int y, int layer) {
         layer = mapping.get(layer, -1);
         if (layer >= 0) {
@@ -257,12 +675,22 @@ public class SparseLayers extends Actor {
         }
     }
 
+    /**
+     * Brings a Glyph back into normal rendering, removing it from the Glyphs this class knows about and filling the
+     * grid's char at the Glyph's position in the first layer with the Glyph's char and color.
+     * @param glyph the Glyph to remove and fit back into the grid
+     */
     public void recallToGrid(TextCellFactory.Glyph glyph)
     {
         layers.items[0].place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
         glyphs.removeValue(glyph, true);
     }
 
+    /**
+     * Brings a Glyph back into normal rendering, removing it from the Glyphs this class knows about and filling the
+     * grid's char at the Glyph's position in the given layer with the Glyph's char and color.
+     * @param glyph the Glyph to remove and fit back into the grid
+     */
     public void recallToGrid(TextCellFactory.Glyph glyph, int layer)
     {
         layer = mapping.get(layer, 0);
@@ -397,7 +825,7 @@ public class SparseLayers extends Actor {
      * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
      */
     public void tint(float delay, final int x, final int y, final float encodedColor, float duration, Runnable postRunnable) {
-        if(x < 0 || x >= width || y < 0 || y >= height)
+        if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
             return;
         duration = Math.max(0.015f, duration);
         animationCount++;
@@ -640,7 +1068,7 @@ public class SparseLayers extends Actor {
         super.draw(batch, parentAlpha);
         font.draw(batch, backgrounds, xOffset, yOffset);
         int len = layers.size;
-        float yOff2 = yOffset + 1f + height * font.actualCellHeight;
+        float yOff2 = yOffset + 1f + gridHeight * font.actualCellHeight;
         for (int i = 0; i < len; i++) {
             layers.get(i).draw(batch, font, xOffset, yOff2);
         }
@@ -652,8 +1080,8 @@ public class SparseLayers extends Actor {
                 continue;
             glyph.act(Gdx.graphics.getDeltaTime());
             if(
-                    (x = Math.round((glyph.getX() - xOffset) / font.actualCellWidth)) < 0 || x >= width ||
-                    (y = Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + height)) < 0 || y >= height ||
+                    (x = Math.round((glyph.getX() - xOffset) / font.actualCellWidth)) < 0 || x >= gridWidth ||
+                    (y = Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + gridHeight)) < 0 || y >= gridHeight ||
                     backgrounds[x][y] == 0f)
                 continue;
             glyph.draw(batch, 1f);

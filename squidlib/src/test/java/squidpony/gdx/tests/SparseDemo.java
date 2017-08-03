@@ -467,7 +467,7 @@ public class SparseDemo extends ApplicationAdapter {
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.changeBackground(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], WHITE_FLOAT, 0.75f));
+            display.put(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], WHITE_FLOAT, 0.75f));
         }
         //this helps compatibility with the HTML target, which doesn't support String.format()
         char[] spaceArray = new char[gridWidth];
@@ -475,8 +475,8 @@ public class SparseDemo extends ApplicationAdapter {
         String spaces = String.valueOf(spaceArray);
 
         for (int i = 0; i < 6; i++) {
-            display.print(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.CREAM);
-            display.print(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.CREAM);
+            display.put(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.CREAM);
+            display.put(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.CREAM);
         }
     }
     @Override
@@ -526,6 +526,7 @@ public class SparseDemo extends ApplicationAdapter {
         stage.act();
         // stage has its own batch and must be explicitly told to draw().
         stage.draw();
+        Gdx.graphics.setTitle("SparseLayers Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
     }
 
     @Override
