@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.squidai.DijkstraMap;
@@ -36,7 +35,6 @@ public class SparseDemo extends ApplicationAdapter {
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
     private float[][] colors, bgColors;
-    private int[][] baseLightness;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
     //We're displaying 24 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
@@ -54,8 +52,14 @@ public class SparseDemo extends ApplicationAdapter {
     private static final int gridWidth = 80;
     /** In number of cells */
     private static final int gridHeight = 24;
+
     /** In number of cells */
-    private static final int bonusHeight = 8;
+    private static final int bigWidth = 80 * 3;
+    /** In number of cells */
+    private static final int bigHeight = 24 * 3;
+
+    /** In number of cells */
+    private static final int bonusHeight = 0;
     /** The pixel width of a cell */
     private static final int cellWidth = 10;
     /** The pixel height of a cell */
@@ -67,7 +71,6 @@ public class SparseDemo extends ApplicationAdapter {
     private Coord cursor, player;
     private List<Coord> toCursor;
     private List<Coord> awaitedMoves;
-    private float secondsWithoutMoves;
     private String[] lang;
     private FakeLanguageGen.SentenceForm[] forms;
     private int langIndex = 0;
@@ -92,20 +95,16 @@ public class SparseDemo extends ApplicationAdapter {
         // the font will try to load Iosevka Slab as an embedded bitmap font with a distance field effect.
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
-        display = new SparseLayers(gridWidth, gridHeight + bonusHeight, cellWidth, cellHeight,
+        display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableSlabFont());
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
         display.font.tweakWidth(cellWidth * 1.1f).tweakHeight(cellHeight * 1.1f).initBySize();
 
-        //These need to have their positions set before adding any entities if there is an offset involved.
-        //There is no offset used here, but it's still a good practice here to set positions early on.
-        display.setPosition(0, 0);
-
         //This uses the seeded RNG we made earlier to build a procedural dungeon using a method that takes rectangular
         //sections of pre-drawn dungeon and drops them into place in a tiling pattern. It makes good "ruined" dungeons.
-        dungeonGen = new DungeonGenerator(gridWidth, gridHeight, rng);
+        dungeonGen = new DungeonGenerator(bigWidth, bigHeight, rng);
         //uncomment this next line to randomly add water to the dungeon in pools.
         //dungeonGen.addWater(15);
         //decoDungeon is given the dungeon with any decorations we specified. (Here, we didn't, unless you chose to add
@@ -117,8 +116,8 @@ public class SparseDemo extends ApplicationAdapter {
         //for modifying char[][] dungeon grids, and this one takes each '#' and replaces it with a box-drawing character.
         lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
 
-        resistance = DungeonUtility.generateResistances(bareDungeon);
-        visible = new double[gridWidth][gridHeight];
+        resistance = DungeonUtility.generateResistances(decoDungeon);
+        visible = new double[bigWidth][bigHeight];
 
         //Coord is the type we use as a general 2D point, usually in a dungeon.
         //Because we know dungeons won't be incredibly huge, Coord performs best for x and y values less than 256, but
@@ -152,6 +151,12 @@ public class SparseDemo extends ApplicationAdapter {
         // if you gave a seed to the RNG constructor, then the cell this chooses will be reliable for testing. If you
         // don't seed the RNG, any valid cell should be possible.
         player = placement.singleRandom(rng);
+
+        //These need to have their positions set before adding any entities if there is an offset involved.
+        //There is no offset used here, but it's still a good practice here to set positions early on.
+//        display.setPosition(gridWidth * cellWidth * 0.5f - display.worldX(player.x),
+//                gridHeight * cellHeight * 0.5f - display.worldY(player.y));
+        display.setPosition(0f, 0f);
         // Uses shadowcasting FOV and reuses the visible array without creating new arrays constantly.
         FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);
         // 0.01 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.01 will _not_ be in
@@ -181,21 +186,19 @@ public class SparseDemo extends ApplicationAdapter {
         bgColor = SColor.DARK_SLATE_GRAY;
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
         Color[][] temp = MapUtility.generateDefaultColors(decoDungeon);
-        colors = new float[gridWidth][gridHeight];
-        for (int i = 0; i < gridWidth; i++) {
-            for (int j = 0; j < gridHeight; j++) {
+        colors = new float[bigWidth][bigHeight];
+        for (int i = 0; i < bigWidth; i++) {
+            for (int j = 0; j < bigHeight; j++) {
                 colors[i][j] = temp[i][j].toFloatBits();
             }
         }
         temp = MapUtility.generateDefaultBGColors(decoDungeon);
-        bgColors = new float[gridWidth][gridHeight];
-        for (int i = 0; i < gridWidth; i++) {
-            for (int j = 0; j < gridHeight; j++) {
+        bgColors = new float[bigWidth][bigHeight];
+        for (int i = 0; i < bigWidth; i++) {
+            for (int j = 0; j < bigHeight; j++) {
                 bgColors[i][j] = temp[i][j].toFloatBits();
             }
         }
-
-        baseLightness = ArrayTools.fill(40, gridWidth, gridHeight);
 
         //places the player as an '@' at his position in orange.
         pg = display.glyph('@', SColor.SAFETY_ORANGE.toFloatBits(), player.x, player.y);
@@ -347,7 +350,16 @@ public class SparseDemo extends ApplicationAdapter {
             // hasn't been generated already by mouseMoved, then copy it over to awaitedMoves.
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                if(awaitedMoves.isEmpty()) {
+                // This is needed because we center the camera on the player as he moves through a dungeon that is three
+                // screens wide and three screens tall, but the mouse still only can receive input on one screen's worth
+                // of cells. (gridWidth >> 1) halves gridWidth, pretty much, and that we use to get the centered
+                // position after adding to the player's position (along with the gridHeight).
+                screenX += player.x - (gridWidth >> 1);
+                screenY += player.y - (gridHeight >> 1);
+                // we also need to check if screenX or screenY is out of bounds.
+                if (screenX < 0 || screenY < 0 || screenX >= bigWidth || screenY >= bigHeight)
+                    return false;
+                if (awaitedMoves.isEmpty()) {
                     if (toCursor.isEmpty()) {
                         cursor = Coord.get(screenX, screenY);
                         //This uses DijkstraMap.findPathPreScannned() to get a path as a List of Coord from the current
@@ -361,8 +373,7 @@ public class SparseDemo extends ApplicationAdapter {
                         // confusing because you would "move into yourself" as your first move without this.
                         // Getting a sublist avoids potential performance issues with removing from the start of an
                         // ArrayList, since it keeps the original list around and only gets a "view" of it.
-                        if(!toCursor.isEmpty())
-                        {
+                        if (!toCursor.isEmpty()) {
                             toCursor = toCursor.subList(1, toCursor.size());
                         }
                     }
@@ -382,7 +393,15 @@ public class SparseDemo extends ApplicationAdapter {
             public boolean mouseMoved(int screenX, int screenY) {
                 if(!awaitedMoves.isEmpty())
                     return false;
-                if(cursor.x == screenX && cursor.y == screenY)
+                // This is needed because we center the camera on the player as he moves through a dungeon that is three
+                // screens wide and three screens tall, but the mouse still only can receive input on one screen's worth
+                // of cells. (gridWidth >> 1) halves gridWidth, pretty much, and that we use to get the centered
+                // position after adding to the player's position (along with the gridHeight).
+                screenX += player.x - (gridWidth >> 1);
+                screenY += player.y - (gridHeight >> 1);
+                // we also need to check if screenX or screenY is out of bounds.
+                if(screenX < 0 || screenY < 0 || screenX >= bigWidth || screenY >= bigHeight ||
+                        (cursor.x == screenX && cursor.y == screenY))
                 {
                     return false;
                 }
@@ -422,7 +441,7 @@ public class SparseDemo extends ApplicationAdapter {
      */
     private void move(int xmod, int ymod) {
         int newX = player.x + xmod, newY = player.y + ymod;
-        if (newX >= 0 && newY >= 0 && newX < gridWidth && newY < gridHeight
+        if (newX >= 0 && newY >= 0 && newX < bigWidth && newY < bigHeight
                 && bareDungeon[newX][newY] != '#')
         {
             display.slide(pg, player.x, player.y, newX, newY, 0.12f, null);
@@ -452,10 +471,10 @@ public class SparseDemo extends ApplicationAdapter {
     public void putMap()
     {
         long tm = (System.currentTimeMillis() & 0xffffffL);
-        for (int i = 0; i < gridWidth; i++) {
-            for (int j = 0; j < gridHeight; j++) {
+        for (int i = 0; i < bigWidth; i++) {
+            for (int j = 0; j < bigHeight; j++) {
                 if(visible[i][j] > 0.01) {
-                    float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(baseLightness[i][j] + 256f + (-105f +
+                    float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(40f + 256f + (-105f +
                             180f * ((float)visible[i][j] * (1.0f + 0.2f * SeededNoise.noise(i * 0.2f, j * 0.2f, tm * 0.001f, 10000)))))
                             * 0x1p-9f); // "* 0x1p-9f" is equivalent to "/ 512.0", just possibly faster
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bg);
@@ -474,16 +493,19 @@ public class SparseDemo extends ApplicationAdapter {
         Arrays.fill(spaceArray, ' ');
         String spaces = String.valueOf(spaceArray);
 
-        for (int i = 0; i < 6; i++) {
-            display.put(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.CREAM);
-            display.put(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.CREAM);
-        }
+//        for (int i = 0; i < 6; i++) {
+//            display.put(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.CREAM);
+//            display.put(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.CREAM);
+//        }
     }
     @Override
     public void render () {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.getCamera().position.x = pg.getX();
+        stage.getCamera().position.y =  pg.getY();
 
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
@@ -524,6 +546,7 @@ public class SparseDemo extends ApplicationAdapter {
         }
         // certain classes that use scene2d.ui widgets need to be told to act() to process input.
         stage.act();
+
         // stage has its own batch and must be explicitly told to draw().
         stage.draw();
         Gdx.graphics.setTitle("SparseLayers Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
@@ -537,11 +560,12 @@ public class SparseDemo extends ApplicationAdapter {
 	}
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib GDX Basic Demo";
+        config.title = "SquidLib GDX Sparse Demo";
         config.width = gridWidth * cellWidth;
         config.height = (gridHeight + bonusHeight) * cellHeight;
         config.vSyncEnabled = false;
         config.foregroundFPS = 0;
+        config.backgroundFPS = 30;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
