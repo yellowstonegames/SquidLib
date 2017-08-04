@@ -1732,6 +1732,60 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen SIMPLISH = simplish().register();
 
+
+    private static FakeLanguageGen alien_a(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "a", "a", "ai", "ai", "ao", "ao", "ae", "ae", "e", "e", "e", "e",
+                        "ea", "eo", "i", "i", "i", "i", "i", "i", "ia", "ie", "io", "o", "o", "o", "oa"},
+                new String[]{},
+                new String[]{"c", "f", "h", "j", "l", "m", "n", "p", "q", "r", "s", "v", "w", "x", "y", "z",
+                        "c", "h", "j", "l", "m", "n", "q", "r", "s", "v", "w", "x", "y", "z",
+                        "h", "j", "l", "m", "n", "q", "r", "s", "v", "w", "x", "y", "z",
+                        "hc", "hf", "hj", "hl", "hm", "hn", "hq", "hr", "hv", "hw", "hy", "hz",
+                        "cr", "fr", "jr", "mr", "nr", "pr", "qr", "sr", "vr", "xr", "yr", "zr",
+                        "cy", "fy", "jy", "my", "ny", "py", "qy", "ry", "sy", "vy", "xy", "zy",
+                        "cl", "fl", "jl", "ml", "nl", "pl", "ql", "sl", "vl", "xl", "yl", "zl",
+                },
+                new String[]{
+                        "cr", "fr", "jr", "mr", "nr", "pr", "qr", "sr", "vr", "xr", "yr", "zr",
+                        "cy", "fy", "jy", "my", "ny", "py", "qy", "ry", "sy", "vy", "xy", "zy",
+                        "cl", "fl", "jl", "ml", "nl", "pl", "ql", "sl", "vl", "xl", "yl", "zl",
+                                    "jc", "lc", "mc", "nc", "qc", "rc", "sc",       "wc", "yc", "zc",
+                        "cf",       "jf", "lf",       "nf", "qf", "rf", "sf", "vf", "wf", "yf", "zf",
+                        "cj", "fj",       "lj", "mj", "nj", "qj", "rj", "sj",       "wj", "yj", "zj",
+                        "cm", "fm", "jm", "lm",       "nm", "qm", "rm", "sm", "vm", "wm", "ym", "zm",
+                        "cn", "fn", "jn", "ln", "mn",       "qn", "rn", "sn", "vn", "wn", "yn", "zn",
+                        "cp", "fp", "jp", "lp", "mp", "np", "qp", "rp", "sp", "vp", "wp", "yp", "zp",
+                        "cq",       "jq", "lq", "mq", "nq",       "rq", "sq",       "wq", "yq", "zq",
+                        "cs", "fs", "js", "ls", "ms", "ns", "qs",             "vs", "ws", "ys", "zs",
+                        "cv", "fv", "jv", "lv", "mv", "nv", "qv", "rv", "sv",       "wv", "yv", "zv",
+                        "cw", "fw", "jw", "lw", "mw", "nw", "qw", "rw", "sw", "vw",       "yw", "zw",
+                        "cx",       "jx", "lx", "mx", "nx", "qx", "rx",       "vx", "wx", "yx", "zx",
+                        "cz", "fz",       "lz", "mz", "nz", "qz", "rz", "sz", "vz", "wz", "yz",
+                },
+                new String[]{
+                        "c", "f", "h", "j", "l", "m", "n", "p", "q", "r", "s", "v", "w", "x", "y", "z",
+                        "c", "h", "j", "l", "m", "n", "q", "r", "s", "v", "w", "x", "y", "z",
+                        "h", "j", "l", "m", "n", "q", "r", "s", "v", "w", "x", "y", "z",
+                        "hc", "hf", "hj", "hl", "hm", "hn", "hq", "hr", "hv", "hw", "hy", "hz",
+                },
+                new String[]{},
+                new String[]{}, new int[]{1, 2, 3}, new double[]{1, 1, 1}, 0.65, 0.6, 0.0, 0.0, null, true);
+    }
+
+    /**
+     * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+     * an alien species. This alien language emphasizes unusual consonant groups and prefers the vowels 'a' and 'a',
+     * sometimes with two different vowels in one syllable, like with 'ea', but never two of the same vowel, like 'ee'.
+     * Many consonant groups may border on unpronounceable unless a different sound is meant by some letters, such as
+     * 'c', 'h', 'q', 'x', 'w', and 'y'. In particular, 'x' and 'q' may need to sound like different breathy, guttural,
+     * or click noises for this to be pronounced by humans effectively.
+     * <br>
+     * Jlerno iypeyae; miojqaexli qraisojlea epefsaihj xlae...
+     */
+    public static final FakeLanguageGen ALIEN_A = alien_a().register();
+
+
     /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
      */
