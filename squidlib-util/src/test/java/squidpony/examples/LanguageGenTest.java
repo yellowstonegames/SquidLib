@@ -222,6 +222,13 @@ public class LanguageGenTest {
                     new String[]{".", ".", "?", "?", "!", "...", "..."}, 0.2));
         }
         rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ALIEN_A;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";", " -"},
+                    new String[]{".", ".", "?", "?", "...", "...", "..."}, 0.2));
+        }
+
+        rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
         System.out.print(flg.word(rng, true, rng.between(2, 4)));
         for (int i = 1; i < 10; i++) {
@@ -364,7 +371,12 @@ public class LanguageGenTest {
                         FakeLanguageGen.modifier("cc", "ch"),
                         FakeLanguageGen.modifier("[^aeiou]([^aeiou][^aeiou])", "$1"),
                         FakeLanguageGen.Modifier.NO_DOUBLES
-                )
+                ),
+                FakeLanguageGen.GOBLIN,
+                FakeLanguageGen.ELF,
+                FakeLanguageGen.DEMONIC,
+                FakeLanguageGen.INFERNAL,
+                FakeLanguageGen.ALIEN_A,
                 //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
                 //FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
                 //FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),

@@ -1,0 +1,1165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*******************************************************************************<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Copyright 2011 See AUTHORS file.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> *<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * you may not use this file except in compliance with the License.<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * You may obtain a copy of the License at<a name="line.6"></a>
+<span class="sourceLineNo">007</span> *<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *   http://www.apache.org/licenses/LICENSE-2.0<a name="line.8"></a>
+<span class="sourceLineNo">009</span> *<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Unless required by applicable law or agreed to in writing, software<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * See the License for the specific language governing permissions and<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * limitations under the License.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> ******************************************************************************/<a name="line.15"></a>
+<span class="sourceLineNo">016</span><a name="line.16"></a>
+<span class="sourceLineNo">017</span>package squidpony.squidgrid.gui.gdx;<a name="line.17"></a>
+<span class="sourceLineNo">018</span><a name="line.18"></a>
+<span class="sourceLineNo">019</span>import com.badlogic.gdx.graphics.Color;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import com.badlogic.gdx.graphics.g2d.Batch;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import com.badlogic.gdx.math.MathUtils;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import com.badlogic.gdx.utils.GdxRuntimeException;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import squidpony.squidmath.GreasedRegion;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import squidpony.squidmath.HashCommon;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import squidpony.squidmath.NumberTools;<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>import java.util.Iterator;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>import java.util.NoSuchElementException;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>/**<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * An unordered map where the keys are two positive ints up to 16 bits (x and y, between 0 and 65535) and there are<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * multiple kinds of value per key, here just a char and a float for color. Can be rendered if given a running Batch<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * and a TextCellFactory using {@link #draw(Batch, TextCellFactory)}.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;br&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * @author Nathan Sweet<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * @author Tommy Ettinger<a name="line.37"></a>
+<span class="sourceLineNo">038</span> */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>public class SparseTextMap implements Iterable&lt;SparseTextMap.Entry&gt; {<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    private static final int PRIME1 = 0xbe1f14b1;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    private static final int PRIME2 = 0xb4b82e39;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    private static final int PRIME3 = 0xced1c241;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    private static final int EMPTY = 0;<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    public int size;<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    int[] keyTable;<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    char[] charValueTable;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    float[] floatValueTable;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    int capacity, stashSize;<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    char zeroChar;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    float zeroFloat;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    boolean hasZeroValue;<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    private float loadFactor;<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    private int hashShift, mask, threshold;<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    private int stashCapacity;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    private int pushIterations;<a name="line.58"></a>
+<span class="sourceLineNo">059</span><a name="line.59"></a>
+<span class="sourceLineNo">060</span>    private Entries entries1, entries2;<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    private CharValues charValues1, charValues2;<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    private FloatValues floatValues1, floatValues2;<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    private Keys keys1, keys2;<a name="line.63"></a>
+<span class="sourceLineNo">064</span><a name="line.64"></a>
+<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * Creates a new map with an initial capacity of 51 and a load factor of 0.8.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     */<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    public SparseTextMap() {<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        this(51, 0.8f);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    }<a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>    /**<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * Creates a new map with a load factor of 0.8.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     *<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     * @param initialCapacity If not a power of two, it is increased to the next nearest power of two.<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    public SparseTextMap(int initialCapacity) {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        this(initialCapacity, 0.8f);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    }<a name="line.79"></a>
+<span class="sourceLineNo">080</span><a name="line.80"></a>
+<span class="sourceLineNo">081</span>    /**<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * Creates a new map with the specified initial capacity and load factor. This map will hold initialCapacity items before<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * growing the backing table.<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     *<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * @param initialCapacity If not a power of two, it is increased to the next nearest power of two.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     */<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    public SparseTextMap(int initialCapacity, float loadFactor) {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        if (initialCapacity &lt; 0) throw new IllegalArgumentException("initialCapacity must be &gt;= 0: " + initialCapacity);<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        initialCapacity = HashCommon.nextPowerOfTwo((int) Math.ceil(initialCapacity / loadFactor));<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        if (initialCapacity &gt; 1 &lt;&lt; 30)<a name="line.90"></a>
+<span class="sourceLineNo">091</span>            throw new IllegalArgumentException("initialCapacity is too large: " + initialCapacity);<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        capacity = initialCapacity;<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>        if (loadFactor &lt;= 0) throw new IllegalArgumentException("loadFactor must be &gt; 0: " + loadFactor);<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        this.loadFactor = loadFactor;<a name="line.95"></a>
+<span class="sourceLineNo">096</span><a name="line.96"></a>
+<span class="sourceLineNo">097</span>        threshold = (int) (capacity * loadFactor);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        mask = capacity - 1;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        hashShift = 31 - Integer.numberOfTrailingZeros(capacity);<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        stashCapacity = Math.max(3, (int) Math.ceil(Math.log(capacity)) * 2);<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        pushIterations = Math.max(Math.min(capacity, 8), (int) Math.sqrt(capacity) / 8);<a name="line.101"></a>
+<span class="sourceLineNo">102</span><a name="line.102"></a>
+<span class="sourceLineNo">103</span>        keyTable = new int[capacity + stashCapacity];<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        charValueTable = new char[keyTable.length];<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        floatValueTable = new float[keyTable.length];<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>    /**<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * Creates a new map identical to the specified map.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     */<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    public SparseTextMap(SparseTextMap map) {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        this((int) Math.floor(map.capacity * map.loadFactor), map.loadFactor);<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        stashSize = map.stashSize;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        System.arraycopy(map.keyTable, 0, keyTable, 0, map.keyTable.length);<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        System.arraycopy(map.charValueTable, 0, charValueTable, 0, map.charValueTable.length);<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        System.arraycopy(map.floatValueTable, 0, floatValueTable, 0, map.floatValueTable.length);<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        size = map.size;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        zeroChar = map.zeroChar;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        zeroFloat = map.zeroFloat;<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        hasZeroValue = map.hasZeroValue;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>    /**<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * Draws the contents of this SparseTextMap, using the keys as x,y pairs as they would be entered by calling<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * {@link #place(int, int, char, float)} and drawing the associated char at that x,y position. Treats the float<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * value as a color for the char, using the encoding for colors as floats that {@link Color#toFloatBits()} uses.<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * Relies on the sizing information from the given TextCellFactory (its {@link TextCellFactory#actualCellWidth} and<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * {@link TextCellFactory#actualCellHeight}, which may differ from its width and height if either of<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * {@link TextCellFactory#tweakWidth(float)} or {@link TextCellFactory#tweakHeight(float)} were called). It also, of<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * course, uses the TextCellFactory to determine what its text will look like (font, size, and so on). The<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * TextCellFactory must have been initialized, probably with {@link TextCellFactory#initBySize()} after setting the<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * width and height as desired. This method should be called between {@code batch.begin()} and {@code batch.end()}<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * with the Batch passed to this.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     *<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * @param textFactory used to determine the font, size, cell size, and other information; must be initialized<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     */<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    public void draw(Batch batch, TextCellFactory textFactory) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        draw(batch, textFactory, 0f, 0f);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    }<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    /**<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * Draws the contents of this SparseTextMap, using the keys as x,y pairs as they would be entered by calling<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * {@link #place(int, int, char, float)} and drawing the associated char at that x,y position, potentially with an<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * offset on x and/or y. Treats the float value as a color for the char, using the encoding for colors as floats<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * that {@link Color#toFloatBits()} uses. Relies on the sizing information from the given TextCellFactory (its<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * {@link TextCellFactory#actualCellWidth} and {@link TextCellFactory#actualCellHeight}, which may differ from its<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * width and height if either of {@link TextCellFactory#tweakWidth(float)} or<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * {@link TextCellFactory#tweakHeight(float)} were called). It also, of course, uses the TextCellFactory to<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * determine what its text will look like (font, size, and so on). The TextCellFactory must have been initialized,<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     *<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     * @param textFactory used to determine the font, size, cell size, and other information; must be initialized<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * @param screenOffsetX offset to apply to the x position of each char rendered; positive moves chars right<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     * @param screenOffsetY offset to apply to the y position of each char rendered; positive moves chars up<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     */<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    public void draw(Batch batch, TextCellFactory textFactory, float screenOffsetX, float screenOffsetY) {<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        textFactory.configureShader(batch);<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        float widthInc = textFactory.actualCellWidth, heightInc = -textFactory.actualCellHeight;<a name="line.160"></a>
+<span class="sourceLineNo">161</span><a name="line.161"></a>
+<span class="sourceLineNo">162</span>        for (Entry entry : entries()) {<a name="line.162"></a>
+<span class="sourceLineNo">163</span>            int n = entry.key;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>            n =    ((n &amp; 0x22222222) &lt;&lt; 1) | ((n &gt;&gt;&gt; 1) &amp; 0x22222222) | (n &amp; 0x99999999);<a name="line.164"></a>
+<span class="sourceLineNo">165</span>            n =    ((n &amp; 0x0c0c0c0c) &lt;&lt; 2) | ((n &gt;&gt;&gt; 2) &amp; 0x0c0c0c0c) | (n &amp; 0xc3c3c3c3);<a name="line.165"></a>
+<span class="sourceLineNo">166</span>            n =    ((n &amp; 0x00f000f0) &lt;&lt; 4) | ((n &gt;&gt;&gt; 4) &amp; 0x00f000f0) | (n &amp; 0xf00ff00f);<a name="line.166"></a>
+<span class="sourceLineNo">167</span>            n =    ((n &amp; 0x0000ff00) &lt;&lt; 8) | ((n &gt;&gt;&gt; 8) &amp; 0x0000ff00) | (n &amp; 0xff0000ff);<a name="line.167"></a>
+<span class="sourceLineNo">168</span>            textFactory.draw(batch, entry.charValue, entry.floatValue,<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                    (n &amp; 0xFFFF) * widthInc + screenOffsetX, (n &gt;&gt;&gt; 16) * heightInc + screenOffsetY);<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Packs the given x,y position into one int in the type that is used elsewhere in this class.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * This requires x and y to each be between 0 and 65535, both inclusive.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     *<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param x the x component to encode; this must be between 0 and 65535, both inclusive<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @param y the y component to encode; this must be between 0 and 65535, both inclusive<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * @return an encoded form of the x,y pair in the style used elsewhere in this class<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     */<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    public static int encodePosition(int x, int y) {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        return GreasedRegion.interleaveBits(x, y);<a name="line.182"></a>
+<span class="sourceLineNo">183</span>    }<a name="line.183"></a>
+<span class="sourceLineNo">184</span><a name="line.184"></a>
+<span class="sourceLineNo">185</span>    /**<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * Decodes a packed position and gets the x component from it, if it was produced by<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * {@link #encodePosition(int, int)} or {@link #place(int, int, char, float)}.<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     *<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     * @param encoded a packed position that holds x and y components<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * @return the x component packed in the parameter<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     */<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    public static int decodeX(int encoded) {<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        return GreasedRegion.disperseBits(encoded) &amp; 0xFFFF;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    }<a name="line.194"></a>
+<span class="sourceLineNo">195</span><a name="line.195"></a>
+<span class="sourceLineNo">196</span>    /**<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     * Decodes a packed position and gets the y component from it, if it was produced by<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * {@link #encodePosition(int, int)} or {@link #place(int, int, char, float)}.<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     *<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * @param encoded a packed position that holds x and y components<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * @return the y component packed in the parameter<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     */<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    public static int decodeY(int encoded) {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        return GreasedRegion.disperseBits(encoded) &gt;&gt;&gt; 16;<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    }<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>    /**<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     * Places a char in the given libGDX Color at the requested x, y position in grid cells, where x and y must each be<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     * between 0 and 65535, both inclusive. The color can also be an SColor, such as one of the many constants in that<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     * class. Returns the int code that can be used to locate the x,y pair as a key in this SparseTextMap.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     *<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * @param x         the x position of the colorful char; this must be between 0 and 65535, both inclusive<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     * @param y         the y position of the colorful char; this must be between 0 and 65535, both inclusive<a name="line.213"></a>
+<span class="sourceLineNo">214</span>     * @param charValue the char to put into the SparseTextMap<a name="line.214"></a>
+<span class="sourceLineNo">215</span>     * @param color     the libGDX Color or SColor to use for the char<a name="line.215"></a>
+<span class="sourceLineNo">216</span>     * @return the int that the x,y pair will be stored at, and used as the single key associated with the colorful char<a name="line.216"></a>
+<span class="sourceLineNo">217</span>     */<a name="line.217"></a>
+<span class="sourceLineNo">218</span>    public int place(int x, int y, char charValue, Color color) {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        return place(x, y, charValue, color.toFloatBits());<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    }<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>    /**<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * Places a char in the given encoded color at the requested x, y position in grid cells, where x and y must each be<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * between 0 and 65535, both inclusive, and the encoded color is one produced by {@link Color#toFloatBits()} or any<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * of several methods in {@link SColor}, such as {@link SColor#floatGetI(int, int, int)},<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * {@link SColor#floatGetHSV(float, float, float, float)}, or {@link SColor#lerpFloatColors(float, float, float)}.<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     * Returns the int code that can be used to locate the x,y pair as a key in this SparseTextMap.<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     *<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * @param x            the x position of the colorful char; this must be between 0 and 65535, both inclusive<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     * @param y            the y position of the colorful char; this must be between 0 and 65535, both inclusive<a name="line.230"></a>
+<span class="sourceLineNo">231</span>     * @param charValue    the char to put into the SparseTextMap<a name="line.231"></a>
+<span class="sourceLineNo">232</span>     * @param encodedColor the encoded color to use for the char, as produced by {@link Color#toFloatBits()}<a name="line.232"></a>
+<span class="sourceLineNo">233</span>     * @return the int that the x,y pair will be stored at, and used as the single key associated with the colorful char<a name="line.233"></a>
+<span class="sourceLineNo">234</span>     */<a name="line.234"></a>
+<span class="sourceLineNo">235</span>    public int place(int x, int y, char charValue, float encodedColor) {<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        int code = GreasedRegion.interleaveBits(x, y);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        put(code, charValue, encodedColor);<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        return code;<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    }<a name="line.239"></a>
+<span class="sourceLineNo">240</span><a name="line.240"></a>
+<span class="sourceLineNo">241</span>    public void put(int key, char charValue, float floatValue) {<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        if (key == 0) {<a name="line.242"></a>
+<span class="sourceLineNo">243</span>            zeroChar = charValue;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>            zeroFloat = floatValue;<a name="line.244"></a>
+<span class="sourceLineNo">245</span>            if (!hasZeroValue) {<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                hasZeroValue = true;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                size++;<a name="line.247"></a>
+<span class="sourceLineNo">248</span>            }<a name="line.248"></a>
+<span class="sourceLineNo">249</span>            return;<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        }<a name="line.250"></a>
+<span class="sourceLineNo">251</span><a name="line.251"></a>
+<span class="sourceLineNo">252</span>        int[] keyTable = this.keyTable;<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>        // Check for existing keys.<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        int index1 = key &amp; mask;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>        int key1 = keyTable[index1];<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        if (key == key1) {<a name="line.257"></a>
+<span class="sourceLineNo">258</span>            charValueTable[index1] = charValue;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            floatValueTable[index1] = floatValue;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>            return;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        }<a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>        int index2 = hash2(key);<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        int key2 = keyTable[index2];<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        if (key == key2) {<a name="line.265"></a>
+<span class="sourceLineNo">266</span>            charValueTable[index2] = charValue;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>            floatValueTable[index2] = floatValue;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>            return;<a name="line.268"></a>
+<span class="sourceLineNo">269</span>        }<a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>        int index3 = hash3(key);<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        int key3 = keyTable[index3];<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        if (key == key3) {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            charValueTable[index3] = charValue;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>            floatValueTable[index3] = floatValue;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>            return;<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        }<a name="line.277"></a>
+<span class="sourceLineNo">278</span><a name="line.278"></a>
+<span class="sourceLineNo">279</span>        // Update key in the stash.<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        for (int i = capacity, n = i + stashSize; i &lt; n; i++) {<a name="line.280"></a>
+<span class="sourceLineNo">281</span>            if (key == keyTable[i]) {<a name="line.281"></a>
+<span class="sourceLineNo">282</span>                charValueTable[i] = charValue;<a name="line.282"></a>
+<span class="sourceLineNo">283</span>                floatValueTable[i] = floatValue;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>                return;<a name="line.284"></a>
+<span class="sourceLineNo">285</span>            }<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        }<a name="line.286"></a>
+<span class="sourceLineNo">287</span><a name="line.287"></a>
+<span class="sourceLineNo">288</span>        // Check for empty buckets.<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        if (key1 == EMPTY) {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>            keyTable[index1] = key;<a name="line.290"></a>
+<span class="sourceLineNo">291</span>            charValueTable[index1] = charValue;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>            floatValueTable[index1] = floatValue;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>            if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            return;<a name="line.294"></a>
+<span class="sourceLineNo">295</span>        }<a name="line.295"></a>
+<span class="sourceLineNo">296</span><a name="line.296"></a>
+<span class="sourceLineNo">297</span>        if (key2 == EMPTY) {<a name="line.297"></a>
+<span class="sourceLineNo">298</span>            keyTable[index2] = key;<a name="line.298"></a>
+<span class="sourceLineNo">299</span>            charValueTable[index2] = charValue;<a name="line.299"></a>
+<span class="sourceLineNo">300</span>            floatValueTable[index2] = floatValue;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.301"></a>
+<span class="sourceLineNo">302</span>            return;<a name="line.302"></a>
+<span class="sourceLineNo">303</span>        }<a name="line.303"></a>
+<span class="sourceLineNo">304</span><a name="line.304"></a>
+<span class="sourceLineNo">305</span>        if (key3 == EMPTY) {<a name="line.305"></a>
+<span class="sourceLineNo">306</span>            keyTable[index3] = key;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>            charValueTable[index3] = charValue;<a name="line.307"></a>
+<span class="sourceLineNo">308</span>            floatValueTable[index3] = floatValue;<a name="line.308"></a>
+<span class="sourceLineNo">309</span>            if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.309"></a>
+<span class="sourceLineNo">310</span>            return;<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        }<a name="line.311"></a>
+<span class="sourceLineNo">312</span><a name="line.312"></a>
+<span class="sourceLineNo">313</span>        push(key, charValue, floatValue, index1, key1, index2, key2, index3, key3);<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    }<a name="line.314"></a>
+<span class="sourceLineNo">315</span><a name="line.315"></a>
+<span class="sourceLineNo">316</span>    public void putAll(SparseTextMap map) {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>        for (Entry entry : map.entries())<a name="line.317"></a>
+<span class="sourceLineNo">318</span>            put(entry.key, entry.charValue, entry.floatValue);<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    }<a name="line.319"></a>
+<span class="sourceLineNo">320</span><a name="line.320"></a>
+<span class="sourceLineNo">321</span>    /**<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * Skips checks for existing keys.<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     */<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    private void putResize(int key, char charValue, float floatValue) {<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        if (key == 0) {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>            zeroChar = charValue;<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            zeroFloat = floatValue;<a name="line.327"></a>
+<span class="sourceLineNo">328</span>            hasZeroValue = true;<a name="line.328"></a>
+<span class="sourceLineNo">329</span>            return;<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        }<a name="line.330"></a>
+<span class="sourceLineNo">331</span><a name="line.331"></a>
+<span class="sourceLineNo">332</span>        // Check for empty buckets.<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        int index1 = key &amp; mask;<a name="line.333"></a>
+<span class="sourceLineNo">334</span>        int key1 = keyTable[index1];<a name="line.334"></a>
+<span class="sourceLineNo">335</span>        if (key1 == EMPTY) {<a name="line.335"></a>
+<span class="sourceLineNo">336</span>            keyTable[index1] = key;<a name="line.336"></a>
+<span class="sourceLineNo">337</span>            charValueTable[index1] = charValue;<a name="line.337"></a>
+<span class="sourceLineNo">338</span>            floatValueTable[index1] = floatValue;<a name="line.338"></a>
+<span class="sourceLineNo">339</span>            if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.339"></a>
+<span class="sourceLineNo">340</span>            return;<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        }<a name="line.341"></a>
+<span class="sourceLineNo">342</span><a name="line.342"></a>
+<span class="sourceLineNo">343</span>        int index2 = hash2(key);<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        int key2 = keyTable[index2];<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        if (key2 == EMPTY) {<a name="line.345"></a>
+<span class="sourceLineNo">346</span>            keyTable[index2] = key;<a name="line.346"></a>
+<span class="sourceLineNo">347</span>            charValueTable[index2] = charValue;<a name="line.347"></a>
+<span class="sourceLineNo">348</span>            floatValueTable[index1] = floatValue;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>            if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.349"></a>
+<span class="sourceLineNo">350</span>            return;<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        }<a name="line.351"></a>
+<span class="sourceLineNo">352</span><a name="line.352"></a>
+<span class="sourceLineNo">353</span>        int index3 = hash3(key);<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        int key3 = keyTable[index3];<a name="line.354"></a>
+<span class="sourceLineNo">355</span>        if (key3 == EMPTY) {<a name="line.355"></a>
+<span class="sourceLineNo">356</span>            keyTable[index3] = key;<a name="line.356"></a>
+<span class="sourceLineNo">357</span>            charValueTable[index3] = charValue;<a name="line.357"></a>
+<span class="sourceLineNo">358</span>            floatValueTable[index3] = floatValue;<a name="line.358"></a>
+<span class="sourceLineNo">359</span>            if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.359"></a>
+<span class="sourceLineNo">360</span>            return;<a name="line.360"></a>
+<span class="sourceLineNo">361</span>        }<a name="line.361"></a>
+<span class="sourceLineNo">362</span><a name="line.362"></a>
+<span class="sourceLineNo">363</span>        push(key, charValue, floatValue, index1, key1, index2, key2, index3, key3);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    }<a name="line.364"></a>
+<span class="sourceLineNo">365</span><a name="line.365"></a>
+<span class="sourceLineNo">366</span>    private void push(int insertKey, char insertChar, float insertFloat, int index1, int key1, int index2, int key2, int index3, int key3) {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>        int[] keyTable = this.keyTable;<a name="line.367"></a>
+<span class="sourceLineNo">368</span>        char[] charTable = this.charValueTable;<a name="line.368"></a>
+<span class="sourceLineNo">369</span>        float[] floatTable = this.floatValueTable;<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        int mask = this.mask;<a name="line.370"></a>
+<span class="sourceLineNo">371</span><a name="line.371"></a>
+<span class="sourceLineNo">372</span>        // Push keys until an empty bucket is found.<a name="line.372"></a>
+<span class="sourceLineNo">373</span>        int evictedKey;<a name="line.373"></a>
+<span class="sourceLineNo">374</span>        char evictedChar;<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        float evictedFloat;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>        int i = 0, pushIterations = this.pushIterations;<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        do {<a name="line.377"></a>
+<span class="sourceLineNo">378</span>            // Replace the key and value for one of the hashes.<a name="line.378"></a>
+<span class="sourceLineNo">379</span>            switch (MathUtils.random(2)) {<a name="line.379"></a>
+<span class="sourceLineNo">380</span>                case 0:<a name="line.380"></a>
+<span class="sourceLineNo">381</span>                    evictedKey = key1;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>                    evictedChar = charTable[index1];<a name="line.382"></a>
+<span class="sourceLineNo">383</span>                    evictedFloat = floatTable[index1];<a name="line.383"></a>
+<span class="sourceLineNo">384</span>                    keyTable[index1] = insertKey;<a name="line.384"></a>
+<span class="sourceLineNo">385</span>                    charTable[index1] = insertChar;<a name="line.385"></a>
+<span class="sourceLineNo">386</span>                    floatTable[index1] = insertFloat;<a name="line.386"></a>
+<span class="sourceLineNo">387</span>                    break;<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                case 1:<a name="line.388"></a>
+<span class="sourceLineNo">389</span>                    evictedKey = key2;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>                    evictedChar = charTable[index2];<a name="line.390"></a>
+<span class="sourceLineNo">391</span>                    evictedFloat = floatTable[index1];<a name="line.391"></a>
+<span class="sourceLineNo">392</span>                    keyTable[index2] = insertKey;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>                    charTable[index2] = insertChar;<a name="line.393"></a>
+<span class="sourceLineNo">394</span>                    floatTable[index2] = insertFloat;<a name="line.394"></a>
+<span class="sourceLineNo">395</span>                    break;<a name="line.395"></a>
+<span class="sourceLineNo">396</span>                default:<a name="line.396"></a>
+<span class="sourceLineNo">397</span>                    evictedKey = key3;<a name="line.397"></a>
+<span class="sourceLineNo">398</span>                    evictedChar = charTable[index3];<a name="line.398"></a>
+<span class="sourceLineNo">399</span>                    evictedFloat = floatTable[index3];<a name="line.399"></a>
+<span class="sourceLineNo">400</span>                    keyTable[index3] = insertKey;<a name="line.400"></a>
+<span class="sourceLineNo">401</span>                    charTable[index3] = insertChar;<a name="line.401"></a>
+<span class="sourceLineNo">402</span>                    floatTable[index3] = insertFloat;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>                    break;<a name="line.403"></a>
+<span class="sourceLineNo">404</span>            }<a name="line.404"></a>
+<span class="sourceLineNo">405</span><a name="line.405"></a>
+<span class="sourceLineNo">406</span>            // If the evicted key hashes to an empty bucket, put it there and stop.<a name="line.406"></a>
+<span class="sourceLineNo">407</span>            index1 = evictedKey &amp; mask;<a name="line.407"></a>
+<span class="sourceLineNo">408</span>            key1 = keyTable[index1];<a name="line.408"></a>
+<span class="sourceLineNo">409</span>            if (key1 == EMPTY) {<a name="line.409"></a>
+<span class="sourceLineNo">410</span>                keyTable[index1] = evictedKey;<a name="line.410"></a>
+<span class="sourceLineNo">411</span>                charTable[index1] = evictedChar;<a name="line.411"></a>
+<span class="sourceLineNo">412</span>                floatTable[index1] = evictedFloat;<a name="line.412"></a>
+<span class="sourceLineNo">413</span>                if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.413"></a>
+<span class="sourceLineNo">414</span>                return;<a name="line.414"></a>
+<span class="sourceLineNo">415</span>            }<a name="line.415"></a>
+<span class="sourceLineNo">416</span><a name="line.416"></a>
+<span class="sourceLineNo">417</span>            index2 = hash2(evictedKey);<a name="line.417"></a>
+<span class="sourceLineNo">418</span>            key2 = keyTable[index2];<a name="line.418"></a>
+<span class="sourceLineNo">419</span>            if (key2 == EMPTY) {<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                keyTable[index2] = evictedKey;<a name="line.420"></a>
+<span class="sourceLineNo">421</span>                charTable[index2] = evictedChar;<a name="line.421"></a>
+<span class="sourceLineNo">422</span>                floatTable[index2] = evictedFloat;<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.423"></a>
+<span class="sourceLineNo">424</span>                return;<a name="line.424"></a>
+<span class="sourceLineNo">425</span>            }<a name="line.425"></a>
+<span class="sourceLineNo">426</span><a name="line.426"></a>
+<span class="sourceLineNo">427</span>            index3 = hash3(evictedKey);<a name="line.427"></a>
+<span class="sourceLineNo">428</span>            key3 = keyTable[index3];<a name="line.428"></a>
+<span class="sourceLineNo">429</span>            if (key3 == EMPTY) {<a name="line.429"></a>
+<span class="sourceLineNo">430</span>                keyTable[index3] = evictedKey;<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                charTable[index3] = evictedChar;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                floatTable[index3] = evictedFloat;<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                return;<a name="line.434"></a>
+<span class="sourceLineNo">435</span>            }<a name="line.435"></a>
+<span class="sourceLineNo">436</span><a name="line.436"></a>
+<span class="sourceLineNo">437</span>            if (++i == pushIterations) break;<a name="line.437"></a>
+<span class="sourceLineNo">438</span><a name="line.438"></a>
+<span class="sourceLineNo">439</span>            insertKey = evictedKey;<a name="line.439"></a>
+<span class="sourceLineNo">440</span>            insertChar = evictedChar;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>            insertFloat = evictedFloat;<a name="line.441"></a>
+<span class="sourceLineNo">442</span>        } while (true);<a name="line.442"></a>
+<span class="sourceLineNo">443</span><a name="line.443"></a>
+<span class="sourceLineNo">444</span>        putStash(evictedKey, evictedChar, evictedFloat);<a name="line.444"></a>
+<span class="sourceLineNo">445</span>    }<a name="line.445"></a>
+<span class="sourceLineNo">446</span><a name="line.446"></a>
+<span class="sourceLineNo">447</span>    private void putStash(int key, char charValue, float floatValue) {<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        if (stashSize == stashCapacity) {<a name="line.448"></a>
+<span class="sourceLineNo">449</span>            // Too many pushes occurred and the stash is full, increase the table size.<a name="line.449"></a>
+<span class="sourceLineNo">450</span>            resize(capacity &lt;&lt; 1);<a name="line.450"></a>
+<span class="sourceLineNo">451</span>            put(key, charValue, floatValue);<a name="line.451"></a>
+<span class="sourceLineNo">452</span>            return;<a name="line.452"></a>
+<span class="sourceLineNo">453</span>        }<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        // Store key in the stash.<a name="line.454"></a>
+<span class="sourceLineNo">455</span>        int index = capacity + stashSize;<a name="line.455"></a>
+<span class="sourceLineNo">456</span>        keyTable[index] = key;<a name="line.456"></a>
+<span class="sourceLineNo">457</span>        charValueTable[index] = charValue;<a name="line.457"></a>
+<span class="sourceLineNo">458</span>        floatValueTable[index] = floatValue;<a name="line.458"></a>
+<span class="sourceLineNo">459</span>        stashSize++;<a name="line.459"></a>
+<span class="sourceLineNo">460</span>        size++;<a name="line.460"></a>
+<span class="sourceLineNo">461</span>    }<a name="line.461"></a>
+<span class="sourceLineNo">462</span><a name="line.462"></a>
+<span class="sourceLineNo">463</span>    /**<a name="line.463"></a>
+<span class="sourceLineNo">464</span>     * @param defaultValue Returned if the key was not associated with a value.<a name="line.464"></a>
+<span class="sourceLineNo">465</span>     */<a name="line.465"></a>
+<span class="sourceLineNo">466</span>    public char getChar(int key, char defaultValue) {<a name="line.466"></a>
+<span class="sourceLineNo">467</span>        if (key == 0) {<a name="line.467"></a>
+<span class="sourceLineNo">468</span>            if (!hasZeroValue) return defaultValue;<a name="line.468"></a>
+<span class="sourceLineNo">469</span>            return zeroChar;<a name="line.469"></a>
+<span class="sourceLineNo">470</span>        }<a name="line.470"></a>
+<span class="sourceLineNo">471</span>        int index = key &amp; mask;<a name="line.471"></a>
+<span class="sourceLineNo">472</span>        if (keyTable[index] != key) {<a name="line.472"></a>
+<span class="sourceLineNo">473</span>            index = hash2(key);<a name="line.473"></a>
+<span class="sourceLineNo">474</span>            if (keyTable[index] != key) {<a name="line.474"></a>
+<span class="sourceLineNo">475</span>                index = hash3(key);<a name="line.475"></a>
+<span class="sourceLineNo">476</span>                if (keyTable[index] != key) return getStashChar(key, defaultValue);<a name="line.476"></a>
+<span class="sourceLineNo">477</span>            }<a name="line.477"></a>
+<span class="sourceLineNo">478</span>        }<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        return charValueTable[index];<a name="line.479"></a>
+<span class="sourceLineNo">480</span>    }<a name="line.480"></a>
+<span class="sourceLineNo">481</span><a name="line.481"></a>
+<span class="sourceLineNo">482</span>    private char getStashChar(int key, char defaultValue) {<a name="line.482"></a>
+<span class="sourceLineNo">483</span>        int[] keyTable = this.keyTable;<a name="line.483"></a>
+<span class="sourceLineNo">484</span>        for (int i = capacity, n = i + stashSize; i &lt; n; i++)<a name="line.484"></a>
+<span class="sourceLineNo">485</span>            if (key == keyTable[i]) return charValueTable[i];<a name="line.485"></a>
+<span class="sourceLineNo">486</span>        return defaultValue;<a name="line.486"></a>
+<span class="sourceLineNo">487</span>    }<a name="line.487"></a>
+<span class="sourceLineNo">488</span><a name="line.488"></a>
+<span class="sourceLineNo">489</span>    /**<a name="line.489"></a>
+<span class="sourceLineNo">490</span>     * @param defaultValue Returned if the key was not associated with a value.<a name="line.490"></a>
+<span class="sourceLineNo">491</span>     */<a name="line.491"></a>
+<span class="sourceLineNo">492</span>    public float getFloat(int key, float defaultValue) {<a name="line.492"></a>
+<span class="sourceLineNo">493</span>        if (key == 0) {<a name="line.493"></a>
+<span class="sourceLineNo">494</span>            if (!hasZeroValue) return defaultValue;<a name="line.494"></a>
+<span class="sourceLineNo">495</span>            return zeroFloat;<a name="line.495"></a>
+<span class="sourceLineNo">496</span>        }<a name="line.496"></a>
+<span class="sourceLineNo">497</span>        int index = key &amp; mask;<a name="line.497"></a>
+<span class="sourceLineNo">498</span>        if (keyTable[index] != key) {<a name="line.498"></a>
+<span class="sourceLineNo">499</span>            index = hash2(key);<a name="line.499"></a>
+<span class="sourceLineNo">500</span>            if (keyTable[index] != key) {<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                index = hash3(key);<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                if (keyTable[index] != key) return getStashFloat(key, defaultValue);<a name="line.502"></a>
+<span class="sourceLineNo">503</span>            }<a name="line.503"></a>
+<span class="sourceLineNo">504</span>        }<a name="line.504"></a>
+<span class="sourceLineNo">505</span>        return floatValueTable[index];<a name="line.505"></a>
+<span class="sourceLineNo">506</span>    }<a name="line.506"></a>
+<span class="sourceLineNo">507</span><a name="line.507"></a>
+<span class="sourceLineNo">508</span>    private float getStashFloat(int key, float defaultValue) {<a name="line.508"></a>
+<span class="sourceLineNo">509</span>        int[] keyTable = this.keyTable;<a name="line.509"></a>
+<span class="sourceLineNo">510</span>        for (int i = capacity, n = i + stashSize; i &lt; n; i++)<a name="line.510"></a>
+<span class="sourceLineNo">511</span>            if (key == keyTable[i]) return floatValueTable[i];<a name="line.511"></a>
+<span class="sourceLineNo">512</span>        return defaultValue;<a name="line.512"></a>
+<span class="sourceLineNo">513</span>    }<a name="line.513"></a>
+<span class="sourceLineNo">514</span><a name="line.514"></a>
+<span class="sourceLineNo">515</span>    public void remove(int key) {<a name="line.515"></a>
+<span class="sourceLineNo">516</span>        remove(key, '#');<a name="line.516"></a>
+<span class="sourceLineNo">517</span>    }<a name="line.517"></a>
+<span class="sourceLineNo">518</span><a name="line.518"></a>
+<span class="sourceLineNo">519</span>    public char remove(int key, char defaultValue) {<a name="line.519"></a>
+<span class="sourceLineNo">520</span>        if (key == 0) {<a name="line.520"></a>
+<span class="sourceLineNo">521</span>            if (!hasZeroValue) return defaultValue;<a name="line.521"></a>
+<span class="sourceLineNo">522</span>            hasZeroValue = false;<a name="line.522"></a>
+<span class="sourceLineNo">523</span>            size--;<a name="line.523"></a>
+<span class="sourceLineNo">524</span>            return zeroChar;<a name="line.524"></a>
+<span class="sourceLineNo">525</span>        }<a name="line.525"></a>
+<span class="sourceLineNo">526</span><a name="line.526"></a>
+<span class="sourceLineNo">527</span>        int index = key &amp; mask;<a name="line.527"></a>
+<span class="sourceLineNo">528</span>        if (key == keyTable[index]) {<a name="line.528"></a>
+<span class="sourceLineNo">529</span>            keyTable[index] = EMPTY;<a name="line.529"></a>
+<span class="sourceLineNo">530</span>            char oldValue = charValueTable[index];<a name="line.530"></a>
+<span class="sourceLineNo">531</span>            size--;<a name="line.531"></a>
+<span class="sourceLineNo">532</span>            return oldValue;<a name="line.532"></a>
+<span class="sourceLineNo">533</span>        }<a name="line.533"></a>
+<span class="sourceLineNo">534</span><a name="line.534"></a>
+<span class="sourceLineNo">535</span>        index = hash2(key);<a name="line.535"></a>
+<span class="sourceLineNo">536</span>        if (key == keyTable[index]) {<a name="line.536"></a>
+<span class="sourceLineNo">537</span>            keyTable[index] = EMPTY;<a name="line.537"></a>
+<span class="sourceLineNo">538</span>            char oldValue = charValueTable[index];<a name="line.538"></a>
+<span class="sourceLineNo">539</span>            size--;<a name="line.539"></a>
+<span class="sourceLineNo">540</span>            return oldValue;<a name="line.540"></a>
+<span class="sourceLineNo">541</span>        }<a name="line.541"></a>
+<span class="sourceLineNo">542</span><a name="line.542"></a>
+<span class="sourceLineNo">543</span>        index = hash3(key);<a name="line.543"></a>
+<span class="sourceLineNo">544</span>        if (key == keyTable[index]) {<a name="line.544"></a>
+<span class="sourceLineNo">545</span>            keyTable[index] = EMPTY;<a name="line.545"></a>
+<span class="sourceLineNo">546</span>            char oldValue = charValueTable[index];<a name="line.546"></a>
+<span class="sourceLineNo">547</span>            size--;<a name="line.547"></a>
+<span class="sourceLineNo">548</span>            return oldValue;<a name="line.548"></a>
+<span class="sourceLineNo">549</span>        }<a name="line.549"></a>
+<span class="sourceLineNo">550</span><a name="line.550"></a>
+<span class="sourceLineNo">551</span>        return removeStash(key, defaultValue);<a name="line.551"></a>
+<span class="sourceLineNo">552</span>    }<a name="line.552"></a>
+<span class="sourceLineNo">553</span><a name="line.553"></a>
+<span class="sourceLineNo">554</span>    private char removeStash(int key, char defaultValue) {<a name="line.554"></a>
+<span class="sourceLineNo">555</span>        int[] keyTable = this.keyTable;<a name="line.555"></a>
+<span class="sourceLineNo">556</span>        for (int i = capacity, n = i + stashSize; i &lt; n; i++) {<a name="line.556"></a>
+<span class="sourceLineNo">557</span>            if (key == keyTable[i]) {<a name="line.557"></a>
+<span class="sourceLineNo">558</span>                char oldValue = charValueTable[i];<a name="line.558"></a>
+<span class="sourceLineNo">559</span>                removeStashIndex(i);<a name="line.559"></a>
+<span class="sourceLineNo">560</span>                size--;<a name="line.560"></a>
+<span class="sourceLineNo">561</span>                return oldValue;<a name="line.561"></a>
+<span class="sourceLineNo">562</span>            }<a name="line.562"></a>
+<span class="sourceLineNo">563</span>        }<a name="line.563"></a>
+<span class="sourceLineNo">564</span>        return defaultValue;<a name="line.564"></a>
+<span class="sourceLineNo">565</span>    }<a name="line.565"></a>
+<span class="sourceLineNo">566</span><a name="line.566"></a>
+<span class="sourceLineNo">567</span>    void removeStashIndex(int index) {<a name="line.567"></a>
+<span class="sourceLineNo">568</span>        // If the removed location was not last, move the last tuple to the removed location.<a name="line.568"></a>
+<span class="sourceLineNo">569</span>        stashSize--;<a name="line.569"></a>
+<span class="sourceLineNo">570</span>        int lastIndex = capacity + stashSize;<a name="line.570"></a>
+<span class="sourceLineNo">571</span>        if (index &lt; lastIndex) {<a name="line.571"></a>
+<span class="sourceLineNo">572</span>            keyTable[index] = keyTable[lastIndex];<a name="line.572"></a>
+<span class="sourceLineNo">573</span>            charValueTable[index] = charValueTable[lastIndex];<a name="line.573"></a>
+<span class="sourceLineNo">574</span>        }<a name="line.574"></a>
+<span class="sourceLineNo">575</span>    }<a name="line.575"></a>
+<span class="sourceLineNo">576</span><a name="line.576"></a>
+<span class="sourceLineNo">577</span>    /**<a name="line.577"></a>
+<span class="sourceLineNo">578</span>     * Reduces the size of the backing arrays to be the specified capacity or less. If the capacity is already less, nothing is<a name="line.578"></a>
+<span class="sourceLineNo">579</span>     * done. If the map contains more items than the specified capacity, the next highest power of two capacity is used instead.<a name="line.579"></a>
+<span class="sourceLineNo">580</span>     */<a name="line.580"></a>
+<span class="sourceLineNo">581</span>    public void shrink(int maximumCapacity) {<a name="line.581"></a>
+<span class="sourceLineNo">582</span>        if (maximumCapacity &lt; 0) throw new IllegalArgumentException("maximumCapacity must be &gt;= 0: " + maximumCapacity);<a name="line.582"></a>
+<span class="sourceLineNo">583</span>        if (size &gt; maximumCapacity) maximumCapacity = size;<a name="line.583"></a>
+<span class="sourceLineNo">584</span>        if (capacity &lt;= maximumCapacity) return;<a name="line.584"></a>
+<span class="sourceLineNo">585</span>        maximumCapacity = HashCommon.nextPowerOfTwo(maximumCapacity);<a name="line.585"></a>
+<span class="sourceLineNo">586</span>        resize(maximumCapacity);<a name="line.586"></a>
+<span class="sourceLineNo">587</span>    }<a name="line.587"></a>
+<span class="sourceLineNo">588</span><a name="line.588"></a>
+<span class="sourceLineNo">589</span>    /**<a name="line.589"></a>
+<span class="sourceLineNo">590</span>     * Clears the map and reduces the size of the backing arrays to be the specified capacity if they are larger.<a name="line.590"></a>
+<span class="sourceLineNo">591</span>     */<a name="line.591"></a>
+<span class="sourceLineNo">592</span>    public void clear(int maximumCapacity) {<a name="line.592"></a>
+<span class="sourceLineNo">593</span>        if (capacity &lt;= maximumCapacity) {<a name="line.593"></a>
+<span class="sourceLineNo">594</span>            clear();<a name="line.594"></a>
+<span class="sourceLineNo">595</span>            return;<a name="line.595"></a>
+<span class="sourceLineNo">596</span>        }<a name="line.596"></a>
+<span class="sourceLineNo">597</span>        hasZeroValue = false;<a name="line.597"></a>
+<span class="sourceLineNo">598</span>        size = 0;<a name="line.598"></a>
+<span class="sourceLineNo">599</span>        resize(maximumCapacity);<a name="line.599"></a>
+<span class="sourceLineNo">600</span>    }<a name="line.600"></a>
+<span class="sourceLineNo">601</span><a name="line.601"></a>
+<span class="sourceLineNo">602</span>    public void clear() {<a name="line.602"></a>
+<span class="sourceLineNo">603</span>        if (size == 0) return;<a name="line.603"></a>
+<span class="sourceLineNo">604</span>        int[] keyTable = this.keyTable;<a name="line.604"></a>
+<span class="sourceLineNo">605</span>        for (int i = capacity + stashSize; i-- &gt; 0; )<a name="line.605"></a>
+<span class="sourceLineNo">606</span>            keyTable[i] = EMPTY;<a name="line.606"></a>
+<span class="sourceLineNo">607</span>        size = 0;<a name="line.607"></a>
+<span class="sourceLineNo">608</span>        stashSize = 0;<a name="line.608"></a>
+<span class="sourceLineNo">609</span>        hasZeroValue = false;<a name="line.609"></a>
+<span class="sourceLineNo">610</span>    }<a name="line.610"></a>
+<span class="sourceLineNo">611</span><a name="line.611"></a>
+<span class="sourceLineNo">612</span>    /**<a name="line.612"></a>
+<span class="sourceLineNo">613</span>     * Returns true if the specified char value is in the map. Note: this traverses the entire map and compares every<a name="line.613"></a>
+<span class="sourceLineNo">614</span>     * value, which may be an expensive operation.<a name="line.614"></a>
+<span class="sourceLineNo">615</span>     */<a name="line.615"></a>
+<span class="sourceLineNo">616</span>    public boolean containsCharValue(char value) {<a name="line.616"></a>
+<span class="sourceLineNo">617</span>        if (hasZeroValue &amp;&amp; zeroChar == value) return true;<a name="line.617"></a>
+<span class="sourceLineNo">618</span>        int[] keyTable = this.keyTable;<a name="line.618"></a>
+<span class="sourceLineNo">619</span>        char[] valueTable = this.charValueTable;<a name="line.619"></a>
+<span class="sourceLineNo">620</span>        for (int i = capacity + stashSize; i-- &gt; 0; )<a name="line.620"></a>
+<span class="sourceLineNo">621</span>            if (keyTable[i] != 0 &amp;&amp; valueTable[i] == value) return true;<a name="line.621"></a>
+<span class="sourceLineNo">622</span>        return false;<a name="line.622"></a>
+<span class="sourceLineNo">623</span>    }<a name="line.623"></a>
+<span class="sourceLineNo">624</span><a name="line.624"></a>
+<span class="sourceLineNo">625</span>    /**<a name="line.625"></a>
+<span class="sourceLineNo">626</span>     * Returns true if the specified char value is in the map. Note: this traverses the entire map and compares every<a name="line.626"></a>
+<span class="sourceLineNo">627</span>     * value, which may be an expensive operation.<a name="line.627"></a>
+<span class="sourceLineNo">628</span>     */<a name="line.628"></a>
+<span class="sourceLineNo">629</span>    public boolean containsFloatValue(float value) {<a name="line.629"></a>
+<span class="sourceLineNo">630</span>        if (hasZeroValue &amp;&amp; zeroFloat == value) return true;<a name="line.630"></a>
+<span class="sourceLineNo">631</span>        int[] keyTable = this.keyTable;<a name="line.631"></a>
+<span class="sourceLineNo">632</span>        float[] valueTable = this.floatValueTable;<a name="line.632"></a>
+<span class="sourceLineNo">633</span>        for (int i = capacity + stashSize; i-- &gt; 0; )<a name="line.633"></a>
+<span class="sourceLineNo">634</span>            if (keyTable[i] != 0 &amp;&amp; valueTable[i] == value) return true;<a name="line.634"></a>
+<span class="sourceLineNo">635</span>        return false;<a name="line.635"></a>
+<span class="sourceLineNo">636</span>    }<a name="line.636"></a>
+<span class="sourceLineNo">637</span><a name="line.637"></a>
+<span class="sourceLineNo">638</span>    public boolean containsKey(int key) {<a name="line.638"></a>
+<span class="sourceLineNo">639</span>        if (key == 0) return hasZeroValue;<a name="line.639"></a>
+<span class="sourceLineNo">640</span>        int index = key &amp; mask;<a name="line.640"></a>
+<span class="sourceLineNo">641</span>        if (keyTable[index] != key) {<a name="line.641"></a>
+<span class="sourceLineNo">642</span>            index = hash2(key);<a name="line.642"></a>
+<span class="sourceLineNo">643</span>            if (keyTable[index] != key) {<a name="line.643"></a>
+<span class="sourceLineNo">644</span>                index = hash3(key);<a name="line.644"></a>
+<span class="sourceLineNo">645</span>                if (keyTable[index] != key) return containsKeyStash(key);<a name="line.645"></a>
+<span class="sourceLineNo">646</span>            }<a name="line.646"></a>
+<span class="sourceLineNo">647</span>        }<a name="line.647"></a>
+<span class="sourceLineNo">648</span>        return true;<a name="line.648"></a>
+<span class="sourceLineNo">649</span>    }<a name="line.649"></a>
+<span class="sourceLineNo">650</span><a name="line.650"></a>
+<span class="sourceLineNo">651</span>    private boolean containsKeyStash(int key) {<a name="line.651"></a>
+<span class="sourceLineNo">652</span>        int[] keyTable = this.keyTable;<a name="line.652"></a>
+<span class="sourceLineNo">653</span>        for (int i = capacity, n = i + stashSize; i &lt; n; i++)<a name="line.653"></a>
+<span class="sourceLineNo">654</span>            if (key == keyTable[i]) return true;<a name="line.654"></a>
+<span class="sourceLineNo">655</span>        return false;<a name="line.655"></a>
+<span class="sourceLineNo">656</span>    }<a name="line.656"></a>
+<span class="sourceLineNo">657</span><a name="line.657"></a>
+<span class="sourceLineNo">658</span>    /**<a name="line.658"></a>
+<span class="sourceLineNo">659</span>     * Returns the key for the specified char value, or notFound if it is not in the map. Note this traverses the<a name="line.659"></a>
+<span class="sourceLineNo">660</span>     * entire map and compares every value, which may be an expensive operation.<a name="line.660"></a>
+<span class="sourceLineNo">661</span>     */<a name="line.661"></a>
+<span class="sourceLineNo">662</span>    public int findKey(char value, int notFound) {<a name="line.662"></a>
+<span class="sourceLineNo">663</span>        if (hasZeroValue &amp;&amp; zeroChar == value) return 0;<a name="line.663"></a>
+<span class="sourceLineNo">664</span>        int[] keyTable = this.keyTable;<a name="line.664"></a>
+<span class="sourceLineNo">665</span>        char[] valueTable = this.charValueTable;<a name="line.665"></a>
+<span class="sourceLineNo">666</span>        for (int i = capacity + stashSize; i-- &gt; 0; )<a name="line.666"></a>
+<span class="sourceLineNo">667</span>            if (keyTable[i] != 0 &amp;&amp; valueTable[i] == value) return keyTable[i];<a name="line.667"></a>
+<span class="sourceLineNo">668</span>        return notFound;<a name="line.668"></a>
+<span class="sourceLineNo">669</span>    }<a name="line.669"></a>
+<span class="sourceLineNo">670</span><a name="line.670"></a>
+<span class="sourceLineNo">671</span>    /**<a name="line.671"></a>
+<span class="sourceLineNo">672</span>     * Returns the key for the specified float value, or notFound if it is not in the map. Note this traverses the<a name="line.672"></a>
+<span class="sourceLineNo">673</span>     * entire map and compares every value, which may be an expensive operation.<a name="line.673"></a>
+<span class="sourceLineNo">674</span>     */<a name="line.674"></a>
+<span class="sourceLineNo">675</span>    public int findKey(float value, int notFound) {<a name="line.675"></a>
+<span class="sourceLineNo">676</span>        if (hasZeroValue &amp;&amp; zeroFloat == value) return 0;<a name="line.676"></a>
+<span class="sourceLineNo">677</span>        int[] keyTable = this.keyTable;<a name="line.677"></a>
+<span class="sourceLineNo">678</span>        float[] valueTable = this.floatValueTable;<a name="line.678"></a>
+<span class="sourceLineNo">679</span>        for (int i = capacity + stashSize; i-- &gt; 0; )<a name="line.679"></a>
+<span class="sourceLineNo">680</span>            if (keyTable[i] != 0 &amp;&amp; valueTable[i] == value) return keyTable[i];<a name="line.680"></a>
+<span class="sourceLineNo">681</span>        return notFound;<a name="line.681"></a>
+<span class="sourceLineNo">682</span>    }<a name="line.682"></a>
+<span class="sourceLineNo">683</span><a name="line.683"></a>
+<span class="sourceLineNo">684</span>    /**<a name="line.684"></a>
+<span class="sourceLineNo">685</span>     * Increases the size of the backing array to accommodate the specified number of additional items. Useful before adding many<a name="line.685"></a>
+<span class="sourceLineNo">686</span>     * items to avoid multiple backing array resizes.<a name="line.686"></a>
+<span class="sourceLineNo">687</span>     */<a name="line.687"></a>
+<span class="sourceLineNo">688</span>    public void ensureCapacity(int additionalCapacity) {<a name="line.688"></a>
+<span class="sourceLineNo">689</span>        int sizeNeeded = size + additionalCapacity;<a name="line.689"></a>
+<span class="sourceLineNo">690</span>        if (sizeNeeded &gt;= threshold) resize(HashCommon.nextPowerOfTwo((int) Math.ceil(sizeNeeded / loadFactor)));<a name="line.690"></a>
+<span class="sourceLineNo">691</span>    }<a name="line.691"></a>
+<span class="sourceLineNo">692</span><a name="line.692"></a>
+<span class="sourceLineNo">693</span>    private void resize(int newSize) {<a name="line.693"></a>
+<span class="sourceLineNo">694</span>        int oldEndIndex = capacity + stashSize;<a name="line.694"></a>
+<span class="sourceLineNo">695</span><a name="line.695"></a>
+<span class="sourceLineNo">696</span>        capacity = newSize;<a name="line.696"></a>
+<span class="sourceLineNo">697</span>        threshold = (int) (newSize * loadFactor);<a name="line.697"></a>
+<span class="sourceLineNo">698</span>        mask = newSize - 1;<a name="line.698"></a>
+<span class="sourceLineNo">699</span>        hashShift = 31 - Integer.numberOfTrailingZeros(newSize);<a name="line.699"></a>
+<span class="sourceLineNo">700</span>        stashCapacity = Math.max(3, (int) Math.ceil(Math.log(newSize)) * 2);<a name="line.700"></a>
+<span class="sourceLineNo">701</span>        pushIterations = Math.max(Math.min(newSize, 8), (int) Math.sqrt(newSize) / 8);<a name="line.701"></a>
+<span class="sourceLineNo">702</span><a name="line.702"></a>
+<span class="sourceLineNo">703</span>        int[] oldKeyTable = keyTable;<a name="line.703"></a>
+<span class="sourceLineNo">704</span>        char[] oldCharTable = charValueTable;<a name="line.704"></a>
+<span class="sourceLineNo">705</span>        float[] oldFloatTable = floatValueTable;<a name="line.705"></a>
+<span class="sourceLineNo">706</span><a name="line.706"></a>
+<span class="sourceLineNo">707</span>        keyTable = new int[newSize + stashCapacity];<a name="line.707"></a>
+<span class="sourceLineNo">708</span>        charValueTable = new char[newSize + stashCapacity];<a name="line.708"></a>
+<span class="sourceLineNo">709</span>        floatValueTable = new float[newSize + stashCapacity];<a name="line.709"></a>
+<span class="sourceLineNo">710</span><a name="line.710"></a>
+<span class="sourceLineNo">711</span>        int oldSize = size;<a name="line.711"></a>
+<span class="sourceLineNo">712</span>        size = hasZeroValue ? 1 : 0;<a name="line.712"></a>
+<span class="sourceLineNo">713</span>        stashSize = 0;<a name="line.713"></a>
+<span class="sourceLineNo">714</span>        if (oldSize &gt; 0) {<a name="line.714"></a>
+<span class="sourceLineNo">715</span>            for (int i = 0; i &lt; oldEndIndex; i++) {<a name="line.715"></a>
+<span class="sourceLineNo">716</span>                int key = oldKeyTable[i];<a name="line.716"></a>
+<span class="sourceLineNo">717</span>                if (key != EMPTY) putResize(key, oldCharTable[i], oldFloatTable[i]);<a name="line.717"></a>
+<span class="sourceLineNo">718</span>            }<a name="line.718"></a>
+<span class="sourceLineNo">719</span>        }<a name="line.719"></a>
+<span class="sourceLineNo">720</span>    }<a name="line.720"></a>
+<span class="sourceLineNo">721</span><a name="line.721"></a>
+<span class="sourceLineNo">722</span>    private int hash2(int h) {<a name="line.722"></a>
+<span class="sourceLineNo">723</span>        h *= PRIME2;<a name="line.723"></a>
+<span class="sourceLineNo">724</span>        return (h ^ h &gt;&gt;&gt; hashShift) &amp; mask;<a name="line.724"></a>
+<span class="sourceLineNo">725</span>    }<a name="line.725"></a>
+<span class="sourceLineNo">726</span><a name="line.726"></a>
+<span class="sourceLineNo">727</span>    private int hash3(int h) {<a name="line.727"></a>
+<span class="sourceLineNo">728</span>        h *= PRIME3;<a name="line.728"></a>
+<span class="sourceLineNo">729</span>        return (h ^ h &gt;&gt;&gt; hashShift) &amp; mask;<a name="line.729"></a>
+<span class="sourceLineNo">730</span>    }<a name="line.730"></a>
+<span class="sourceLineNo">731</span><a name="line.731"></a>
+<span class="sourceLineNo">732</span>    public int hashCode() {<a name="line.732"></a>
+<span class="sourceLineNo">733</span>        int h = 0;<a name="line.733"></a>
+<span class="sourceLineNo">734</span>        if (hasZeroValue) {<a name="line.734"></a>
+<span class="sourceLineNo">735</span>            h += zeroChar * 31 + NumberTools.floatToIntBits(zeroFloat);<a name="line.735"></a>
+<span class="sourceLineNo">736</span>        }<a name="line.736"></a>
+<span class="sourceLineNo">737</span>        int[] keyTable = this.keyTable;<a name="line.737"></a>
+<span class="sourceLineNo">738</span>        char[] charTable = this.charValueTable;<a name="line.738"></a>
+<span class="sourceLineNo">739</span>        float[] floatTable = this.floatValueTable;<a name="line.739"></a>
+<span class="sourceLineNo">740</span>        for (int i = 0, n = capacity + stashSize; i &lt; n; i++) {<a name="line.740"></a>
+<span class="sourceLineNo">741</span>            int key = keyTable[i];<a name="line.741"></a>
+<span class="sourceLineNo">742</span>            if (key != EMPTY) {<a name="line.742"></a>
+<span class="sourceLineNo">743</span>                h += key * 421;<a name="line.743"></a>
+<span class="sourceLineNo">744</span>                h += charTable[i] * 31;<a name="line.744"></a>
+<span class="sourceLineNo">745</span>                h += NumberTools.floatToIntBits(floatTable[i]);<a name="line.745"></a>
+<span class="sourceLineNo">746</span>            }<a name="line.746"></a>
+<span class="sourceLineNo">747</span>        }<a name="line.747"></a>
+<span class="sourceLineNo">748</span>        return h;<a name="line.748"></a>
+<span class="sourceLineNo">749</span>    }<a name="line.749"></a>
+<span class="sourceLineNo">750</span><a name="line.750"></a>
+<span class="sourceLineNo">751</span>    public boolean equals(Object obj) {<a name="line.751"></a>
+<span class="sourceLineNo">752</span>        if (obj == this) return true;<a name="line.752"></a>
+<span class="sourceLineNo">753</span>        if (!(obj instanceof SparseTextMap)) return false;<a name="line.753"></a>
+<span class="sourceLineNo">754</span>        SparseTextMap other = (SparseTextMap) obj;<a name="line.754"></a>
+<span class="sourceLineNo">755</span>        if (other.size != size) return false;<a name="line.755"></a>
+<span class="sourceLineNo">756</span>        if (other.hasZeroValue != hasZeroValue) return false;<a name="line.756"></a>
+<span class="sourceLineNo">757</span>        if (hasZeroValue &amp;&amp; (other.zeroChar != zeroChar || other.zeroFloat != zeroFloat)) {<a name="line.757"></a>
+<span class="sourceLineNo">758</span>            return false;<a name="line.758"></a>
+<span class="sourceLineNo">759</span>        }<a name="line.759"></a>
+<span class="sourceLineNo">760</span>        int[] keyTable = this.keyTable;<a name="line.760"></a>
+<span class="sourceLineNo">761</span>        char[] valueTable = this.charValueTable;<a name="line.761"></a>
+<span class="sourceLineNo">762</span>        for (int i = 0, n = capacity + stashSize; i &lt; n; i++) {<a name="line.762"></a>
+<span class="sourceLineNo">763</span>            int key = keyTable[i];<a name="line.763"></a>
+<span class="sourceLineNo">764</span>            if (key != EMPTY) {<a name="line.764"></a>
+<span class="sourceLineNo">765</span>                char otherValue = other.getChar(key, '\0');<a name="line.765"></a>
+<span class="sourceLineNo">766</span>                if (otherValue == 0 &amp;&amp; !other.containsKey(key)) return false;<a name="line.766"></a>
+<span class="sourceLineNo">767</span>                int value = valueTable[i];<a name="line.767"></a>
+<span class="sourceLineNo">768</span>                if (otherValue != value) return false;<a name="line.768"></a>
+<span class="sourceLineNo">769</span>            }<a name="line.769"></a>
+<span class="sourceLineNo">770</span>        }<a name="line.770"></a>
+<span class="sourceLineNo">771</span>        return true;<a name="line.771"></a>
+<span class="sourceLineNo">772</span>    }<a name="line.772"></a>
+<span class="sourceLineNo">773</span><a name="line.773"></a>
+<span class="sourceLineNo">774</span>    public String toString() {<a name="line.774"></a>
+<span class="sourceLineNo">775</span>        if (size == 0) return "{}";<a name="line.775"></a>
+<span class="sourceLineNo">776</span>        StringBuilder buffer = new StringBuilder(32);<a name="line.776"></a>
+<span class="sourceLineNo">777</span>        buffer.append('{');<a name="line.777"></a>
+<span class="sourceLineNo">778</span>        int[] keyTable = this.keyTable;<a name="line.778"></a>
+<span class="sourceLineNo">779</span>        char[] charTable = this.charValueTable;<a name="line.779"></a>
+<span class="sourceLineNo">780</span>        float[] floatTable = this.floatValueTable;<a name="line.780"></a>
+<span class="sourceLineNo">781</span>        int i = keyTable.length;<a name="line.781"></a>
+<span class="sourceLineNo">782</span>        if (hasZeroValue) {<a name="line.782"></a>
+<span class="sourceLineNo">783</span>            buffer.append("0=").append(zeroChar).append(',').append(zeroFloat);<a name="line.783"></a>
+<span class="sourceLineNo">784</span>        } else {<a name="line.784"></a>
+<span class="sourceLineNo">785</span>            while (i-- &gt; 0) {<a name="line.785"></a>
+<span class="sourceLineNo">786</span>                int key = keyTable[i];<a name="line.786"></a>
+<span class="sourceLineNo">787</span>                if (key == EMPTY) continue;<a name="line.787"></a>
+<span class="sourceLineNo">788</span>                buffer.append(key).append('=').append(charTable[i]).append(',').append(floatTable[i]);<a name="line.788"></a>
+<span class="sourceLineNo">789</span>                break;<a name="line.789"></a>
+<span class="sourceLineNo">790</span>            }<a name="line.790"></a>
+<span class="sourceLineNo">791</span>        }<a name="line.791"></a>
+<span class="sourceLineNo">792</span>        while (i-- &gt; 0) {<a name="line.792"></a>
+<span class="sourceLineNo">793</span>            int key = keyTable[i];<a name="line.793"></a>
+<span class="sourceLineNo">794</span>            if (key == EMPTY) continue;<a name="line.794"></a>
+<span class="sourceLineNo">795</span>            buffer.append(", ").append(key).append('=').append(charTable[i]).append(',').append(floatTable[i]);<a name="line.795"></a>
+<span class="sourceLineNo">796</span>        }<a name="line.796"></a>
+<span class="sourceLineNo">797</span>        buffer.append('}');<a name="line.797"></a>
+<span class="sourceLineNo">798</span>        return buffer.toString();<a name="line.798"></a>
+<span class="sourceLineNo">799</span>    }<a name="line.799"></a>
+<span class="sourceLineNo">800</span><a name="line.800"></a>
+<span class="sourceLineNo">801</span>    public Iterator&lt;Entry&gt; iterator() {<a name="line.801"></a>
+<span class="sourceLineNo">802</span>        return entries();<a name="line.802"></a>
+<span class="sourceLineNo">803</span>    }<a name="line.803"></a>
+<span class="sourceLineNo">804</span><a name="line.804"></a>
+<span class="sourceLineNo">805</span>    /**<a name="line.805"></a>
+<span class="sourceLineNo">806</span>     * Returns an iterator for the entries in the map. Remove is supported. Note that the same iterator instance is returned each<a name="line.806"></a>
+<span class="sourceLineNo">807</span>     * time this method is called. Use the {@link Entries} constructor for nested or multithreaded iteration.<a name="line.807"></a>
+<span class="sourceLineNo">808</span>     */<a name="line.808"></a>
+<span class="sourceLineNo">809</span>    public Entries entries() {<a name="line.809"></a>
+<span class="sourceLineNo">810</span>        if (entries1 == null) {<a name="line.810"></a>
+<span class="sourceLineNo">811</span>            entries1 = new Entries(this);<a name="line.811"></a>
+<span class="sourceLineNo">812</span>            entries2 = new Entries(this);<a name="line.812"></a>
+<span class="sourceLineNo">813</span>        }<a name="line.813"></a>
+<span class="sourceLineNo">814</span>        if (!entries1.valid) {<a name="line.814"></a>
+<span class="sourceLineNo">815</span>            entries1.reset();<a name="line.815"></a>
+<span class="sourceLineNo">816</span>            entries1.valid = true;<a name="line.816"></a>
+<span class="sourceLineNo">817</span>            entries2.valid = false;<a name="line.817"></a>
+<span class="sourceLineNo">818</span>            return entries1;<a name="line.818"></a>
+<span class="sourceLineNo">819</span>        }<a name="line.819"></a>
+<span class="sourceLineNo">820</span>        entries2.reset();<a name="line.820"></a>
+<span class="sourceLineNo">821</span>        entries2.valid = true;<a name="line.821"></a>
+<span class="sourceLineNo">822</span>        entries1.valid = false;<a name="line.822"></a>
+<span class="sourceLineNo">823</span>        return entries2;<a name="line.823"></a>
+<span class="sourceLineNo">824</span>    }<a name="line.824"></a>
+<span class="sourceLineNo">825</span><a name="line.825"></a>
+<span class="sourceLineNo">826</span>    /**<a name="line.826"></a>
+<span class="sourceLineNo">827</span>     * Returns an iterator for the values in the map. Remove is supported. Note that the same iterator instance is returned each<a name="line.827"></a>
+<span class="sourceLineNo">828</span>     * time this method is called. Use the {@link Entries} constructor for nested or multithreaded iteration.<a name="line.828"></a>
+<span class="sourceLineNo">829</span>     */<a name="line.829"></a>
+<span class="sourceLineNo">830</span>    public CharValues charValues() {<a name="line.830"></a>
+<span class="sourceLineNo">831</span>        if (charValues1 == null) {<a name="line.831"></a>
+<span class="sourceLineNo">832</span>            charValues1 = new CharValues(this);<a name="line.832"></a>
+<span class="sourceLineNo">833</span>            charValues2 = new CharValues(this);<a name="line.833"></a>
+<span class="sourceLineNo">834</span>        }<a name="line.834"></a>
+<span class="sourceLineNo">835</span>        if (!charValues1.valid) {<a name="line.835"></a>
+<span class="sourceLineNo">836</span>            charValues1.reset();<a name="line.836"></a>
+<span class="sourceLineNo">837</span>            charValues1.valid = true;<a name="line.837"></a>
+<span class="sourceLineNo">838</span>            charValues2.valid = false;<a name="line.838"></a>
+<span class="sourceLineNo">839</span>            return charValues1;<a name="line.839"></a>
+<span class="sourceLineNo">840</span>        }<a name="line.840"></a>
+<span class="sourceLineNo">841</span>        charValues2.reset();<a name="line.841"></a>
+<span class="sourceLineNo">842</span>        charValues2.valid = true;<a name="line.842"></a>
+<span class="sourceLineNo">843</span>        charValues1.valid = false;<a name="line.843"></a>
+<span class="sourceLineNo">844</span>        return charValues2;<a name="line.844"></a>
+<span class="sourceLineNo">845</span>    }<a name="line.845"></a>
+<span class="sourceLineNo">846</span><a name="line.846"></a>
+<span class="sourceLineNo">847</span>    /**<a name="line.847"></a>
+<span class="sourceLineNo">848</span>     * Returns an iterator for the values in the map. Remove is supported. Note that the same iterator instance is returned each<a name="line.848"></a>
+<span class="sourceLineNo">849</span>     * time this method is called. Use the {@link Entries} constructor for nested or multithreaded iteration.<a name="line.849"></a>
+<span class="sourceLineNo">850</span>     */<a name="line.850"></a>
+<span class="sourceLineNo">851</span>    public FloatValues floatValues() {<a name="line.851"></a>
+<span class="sourceLineNo">852</span>        if (floatValues1 == null) {<a name="line.852"></a>
+<span class="sourceLineNo">853</span>            floatValues1 = new FloatValues(this);<a name="line.853"></a>
+<span class="sourceLineNo">854</span>            floatValues2 = new FloatValues(this);<a name="line.854"></a>
+<span class="sourceLineNo">855</span>        }<a name="line.855"></a>
+<span class="sourceLineNo">856</span>        if (!floatValues1.valid) {<a name="line.856"></a>
+<span class="sourceLineNo">857</span>            floatValues1.reset();<a name="line.857"></a>
+<span class="sourceLineNo">858</span>            floatValues1.valid = true;<a name="line.858"></a>
+<span class="sourceLineNo">859</span>            floatValues2.valid = false;<a name="line.859"></a>
+<span class="sourceLineNo">860</span>            return floatValues1;<a name="line.860"></a>
+<span class="sourceLineNo">861</span>        }<a name="line.861"></a>
+<span class="sourceLineNo">862</span>        floatValues2.reset();<a name="line.862"></a>
+<span class="sourceLineNo">863</span>        floatValues2.valid = true;<a name="line.863"></a>
+<span class="sourceLineNo">864</span>        floatValues1.valid = false;<a name="line.864"></a>
+<span class="sourceLineNo">865</span>        return floatValues2;<a name="line.865"></a>
+<span class="sourceLineNo">866</span>    }<a name="line.866"></a>
+<span class="sourceLineNo">867</span><a name="line.867"></a>
+<span class="sourceLineNo">868</span>    /**<a name="line.868"></a>
+<span class="sourceLineNo">869</span>     * Returns an iterator for the keys in the map. Remove is supported. Note that the same iterator instance is returned each time<a name="line.869"></a>
+<span class="sourceLineNo">870</span>     * this method is called. Use the {@link Entries} constructor for nested or multithreaded iteration.<a name="line.870"></a>
+<span class="sourceLineNo">871</span>     */<a name="line.871"></a>
+<span class="sourceLineNo">872</span>    public Keys keys() {<a name="line.872"></a>
+<span class="sourceLineNo">873</span>        if (keys1 == null) {<a name="line.873"></a>
+<span class="sourceLineNo">874</span>            keys1 = new Keys(this);<a name="line.874"></a>
+<span class="sourceLineNo">875</span>            keys2 = new Keys(this);<a name="line.875"></a>
+<span class="sourceLineNo">876</span>        }<a name="line.876"></a>
+<span class="sourceLineNo">877</span>        if (!keys1.valid) {<a name="line.877"></a>
+<span class="sourceLineNo">878</span>            keys1.reset();<a name="line.878"></a>
+<span class="sourceLineNo">879</span>            keys1.valid = true;<a name="line.879"></a>
+<span class="sourceLineNo">880</span>            keys2.valid = false;<a name="line.880"></a>
+<span class="sourceLineNo">881</span>            return keys1;<a name="line.881"></a>
+<span class="sourceLineNo">882</span>        }<a name="line.882"></a>
+<span class="sourceLineNo">883</span>        keys2.reset();<a name="line.883"></a>
+<span class="sourceLineNo">884</span>        keys2.valid = true;<a name="line.884"></a>
+<span class="sourceLineNo">885</span>        keys1.valid = false;<a name="line.885"></a>
+<span class="sourceLineNo">886</span>        return keys2;<a name="line.886"></a>
+<span class="sourceLineNo">887</span>    }<a name="line.887"></a>
+<span class="sourceLineNo">888</span><a name="line.888"></a>
+<span class="sourceLineNo">889</span>    static public class Entry {<a name="line.889"></a>
+<span class="sourceLineNo">890</span>        public int key;<a name="line.890"></a>
+<span class="sourceLineNo">891</span>        public char charValue;<a name="line.891"></a>
+<span class="sourceLineNo">892</span>        public float floatValue;<a name="line.892"></a>
+<span class="sourceLineNo">893</span><a name="line.893"></a>
+<span class="sourceLineNo">894</span>        public String toString() {<a name="line.894"></a>
+<span class="sourceLineNo">895</span>            return key + "=" + charValue + "," + floatValue;<a name="line.895"></a>
+<span class="sourceLineNo">896</span>        }<a name="line.896"></a>
+<span class="sourceLineNo">897</span>    }<a name="line.897"></a>
+<span class="sourceLineNo">898</span><a name="line.898"></a>
+<span class="sourceLineNo">899</span>    static private class MapIterator {<a name="line.899"></a>
+<span class="sourceLineNo">900</span>        static final int INDEX_ILLEGAL = -2;<a name="line.900"></a>
+<span class="sourceLineNo">901</span>        static final int INDEX_ZERO = -1;<a name="line.901"></a>
+<span class="sourceLineNo">902</span><a name="line.902"></a>
+<span class="sourceLineNo">903</span>        public boolean hasNext;<a name="line.903"></a>
+<span class="sourceLineNo">904</span><a name="line.904"></a>
+<span class="sourceLineNo">905</span>        final SparseTextMap map;<a name="line.905"></a>
+<span class="sourceLineNo">906</span>        int nextIndex, currentIndex;<a name="line.906"></a>
+<span class="sourceLineNo">907</span>        boolean valid = true;<a name="line.907"></a>
+<span class="sourceLineNo">908</span><a name="line.908"></a>
+<span class="sourceLineNo">909</span>        public MapIterator(SparseTextMap map) {<a name="line.909"></a>
+<span class="sourceLineNo">910</span>            this.map = map;<a name="line.910"></a>
+<span class="sourceLineNo">911</span>            reset();<a name="line.911"></a>
+<span class="sourceLineNo">912</span>        }<a name="line.912"></a>
+<span class="sourceLineNo">913</span><a name="line.913"></a>
+<span class="sourceLineNo">914</span>        public void reset() {<a name="line.914"></a>
+<span class="sourceLineNo">915</span>            currentIndex = INDEX_ILLEGAL;<a name="line.915"></a>
+<span class="sourceLineNo">916</span>            nextIndex = INDEX_ZERO;<a name="line.916"></a>
+<span class="sourceLineNo">917</span>            if (map.hasZeroValue)<a name="line.917"></a>
+<span class="sourceLineNo">918</span>                hasNext = true;<a name="line.918"></a>
+<span class="sourceLineNo">919</span>            else<a name="line.919"></a>
+<span class="sourceLineNo">920</span>                findNextIndex();<a name="line.920"></a>
+<span class="sourceLineNo">921</span>        }<a name="line.921"></a>
+<span class="sourceLineNo">922</span><a name="line.922"></a>
+<span class="sourceLineNo">923</span>        void findNextIndex() {<a name="line.923"></a>
+<span class="sourceLineNo">924</span>            hasNext = false;<a name="line.924"></a>
+<span class="sourceLineNo">925</span>            int[] keyTable = map.keyTable;<a name="line.925"></a>
+<span class="sourceLineNo">926</span>            for (int n = map.capacity + map.stashSize; ++nextIndex &lt; n; ) {<a name="line.926"></a>
+<span class="sourceLineNo">927</span>                if (keyTable[nextIndex] != EMPTY) {<a name="line.927"></a>
+<span class="sourceLineNo">928</span>                    hasNext = true;<a name="line.928"></a>
+<span class="sourceLineNo">929</span>                    break;<a name="line.929"></a>
+<span class="sourceLineNo">930</span>                }<a name="line.930"></a>
+<span class="sourceLineNo">931</span>            }<a name="line.931"></a>
+<span class="sourceLineNo">932</span>        }<a name="line.932"></a>
+<span class="sourceLineNo">933</span><a name="line.933"></a>
+<span class="sourceLineNo">934</span>        public void remove() {<a name="line.934"></a>
+<span class="sourceLineNo">935</span>            if (currentIndex == INDEX_ZERO &amp;&amp; map.hasZeroValue) {<a name="line.935"></a>
+<span class="sourceLineNo">936</span>                map.hasZeroValue = false;<a name="line.936"></a>
+<span class="sourceLineNo">937</span>            } else if (currentIndex &lt; 0) {<a name="line.937"></a>
+<span class="sourceLineNo">938</span>                throw new IllegalStateException("next must be called before remove.");<a name="line.938"></a>
+<span class="sourceLineNo">939</span>            } else if (currentIndex &gt;= map.capacity) {<a name="line.939"></a>
+<span class="sourceLineNo">940</span>                map.removeStashIndex(currentIndex);<a name="line.940"></a>
+<span class="sourceLineNo">941</span>                nextIndex = currentIndex - 1;<a name="line.941"></a>
+<span class="sourceLineNo">942</span>                findNextIndex();<a name="line.942"></a>
+<span class="sourceLineNo">943</span>            } else {<a name="line.943"></a>
+<span class="sourceLineNo">944</span>                map.keyTable[currentIndex] = EMPTY;<a name="line.944"></a>
+<span class="sourceLineNo">945</span>            }<a name="line.945"></a>
+<span class="sourceLineNo">946</span>            currentIndex = INDEX_ILLEGAL;<a name="line.946"></a>
+<span class="sourceLineNo">947</span>            map.size--;<a name="line.947"></a>
+<span class="sourceLineNo">948</span>        }<a name="line.948"></a>
+<span class="sourceLineNo">949</span>    }<a name="line.949"></a>
+<span class="sourceLineNo">950</span><a name="line.950"></a>
+<span class="sourceLineNo">951</span>    static public class Entries extends MapIterator implements Iterable&lt;Entry&gt;, Iterator&lt;Entry&gt; {<a name="line.951"></a>
+<span class="sourceLineNo">952</span>        private Entry entry = new Entry();<a name="line.952"></a>
+<span class="sourceLineNo">953</span><a name="line.953"></a>
+<span class="sourceLineNo">954</span>        public Entries(SparseTextMap map) {<a name="line.954"></a>
+<span class="sourceLineNo">955</span>            super(map);<a name="line.955"></a>
+<span class="sourceLineNo">956</span>        }<a name="line.956"></a>
+<span class="sourceLineNo">957</span><a name="line.957"></a>
+<span class="sourceLineNo">958</span>        /**<a name="line.958"></a>
+<span class="sourceLineNo">959</span>         * Note the same entry instance is returned each time this method is called.<a name="line.959"></a>
+<span class="sourceLineNo">960</span>         */<a name="line.960"></a>
+<span class="sourceLineNo">961</span>        public Entry next() {<a name="line.961"></a>
+<span class="sourceLineNo">962</span>            if (!hasNext) throw new NoSuchElementException();<a name="line.962"></a>
+<span class="sourceLineNo">963</span>            if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");<a name="line.963"></a>
+<span class="sourceLineNo">964</span>            int[] keyTable = map.keyTable;<a name="line.964"></a>
+<span class="sourceLineNo">965</span>            if (nextIndex == INDEX_ZERO) {<a name="line.965"></a>
+<span class="sourceLineNo">966</span>                entry.key = 0;<a name="line.966"></a>
+<span class="sourceLineNo">967</span>                entry.charValue = map.zeroChar;<a name="line.967"></a>
+<span class="sourceLineNo">968</span>                entry.floatValue = map.zeroFloat;<a name="line.968"></a>
+<span class="sourceLineNo">969</span>            } else {<a name="line.969"></a>
+<span class="sourceLineNo">970</span>                entry.key = keyTable[nextIndex];<a name="line.970"></a>
+<span class="sourceLineNo">971</span>                entry.charValue = map.charValueTable[nextIndex];<a name="line.971"></a>
+<span class="sourceLineNo">972</span>                entry.floatValue = map.floatValueTable[nextIndex];<a name="line.972"></a>
+<span class="sourceLineNo">973</span>            }<a name="line.973"></a>
+<span class="sourceLineNo">974</span>            currentIndex = nextIndex;<a name="line.974"></a>
+<span class="sourceLineNo">975</span>            findNextIndex();<a name="line.975"></a>
+<span class="sourceLineNo">976</span>            return entry;<a name="line.976"></a>
+<span class="sourceLineNo">977</span>        }<a name="line.977"></a>
+<span class="sourceLineNo">978</span><a name="line.978"></a>
+<span class="sourceLineNo">979</span>        public boolean hasNext() {<a name="line.979"></a>
+<span class="sourceLineNo">980</span>            if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");<a name="line.980"></a>
+<span class="sourceLineNo">981</span>            return hasNext;<a name="line.981"></a>
+<span class="sourceLineNo">982</span>        }<a name="line.982"></a>
+<span class="sourceLineNo">983</span><a name="line.983"></a>
+<span class="sourceLineNo">984</span>        public Iterator&lt;Entry&gt; iterator() {<a name="line.984"></a>
+<span class="sourceLineNo">985</span>            return this;<a name="line.985"></a>
+<span class="sourceLineNo">986</span>        }<a name="line.986"></a>
+<span class="sourceLineNo">987</span><a name="line.987"></a>
+<span class="sourceLineNo">988</span>        public void remove() {<a name="line.988"></a>
+<span class="sourceLineNo">989</span>            super.remove();<a name="line.989"></a>
+<span class="sourceLineNo">990</span>        }<a name="line.990"></a>
+<span class="sourceLineNo">991</span>    }<a name="line.991"></a>
+<span class="sourceLineNo">992</span><a name="line.992"></a>
+<span class="sourceLineNo">993</span>    static public class CharValues extends MapIterator {<a name="line.993"></a>
+<span class="sourceLineNo">994</span>        public CharValues(SparseTextMap map) {<a name="line.994"></a>
+<span class="sourceLineNo">995</span>            super(map);<a name="line.995"></a>
+<span class="sourceLineNo">996</span>        }<a name="line.996"></a>
+<span class="sourceLineNo">997</span><a name="line.997"></a>
+<span class="sourceLineNo">998</span>        public boolean hasNext() {<a name="line.998"></a>
+<span class="sourceLineNo">999</span>            if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");<a name="line.999"></a>
+<span class="sourceLineNo">1000</span>            return hasNext;<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>        }<a name="line.1001"></a>
+<span class="sourceLineNo">1002</span><a name="line.1002"></a>
+<span class="sourceLineNo">1003</span>        public char next() {<a name="line.1003"></a>
+<span class="sourceLineNo">1004</span>            if (!hasNext) throw new NoSuchElementException();<a name="line.1004"></a>
+<span class="sourceLineNo">1005</span>            if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");<a name="line.1005"></a>
+<span class="sourceLineNo">1006</span>            char value;<a name="line.1006"></a>
+<span class="sourceLineNo">1007</span>            if (nextIndex == INDEX_ZERO)<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span>                value = map.zeroChar;<a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>            else<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>                value = map.charValueTable[nextIndex];<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>            currentIndex = nextIndex;<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>            findNextIndex();<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>            return value;<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span>        }<a name="line.1014"></a>
+<span class="sourceLineNo">1015</span><a name="line.1015"></a>
+<span class="sourceLineNo">1016</span>        /**<a name="line.1016"></a>
+<span class="sourceLineNo">1017</span>         * Returns a new array containing the remaining values.<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>         */<a name="line.1018"></a>
+<span class="sourceLineNo">1019</span>        public char[] toArray() {<a name="line.1019"></a>
+<span class="sourceLineNo">1020</span>            char[] array = new char[map.size];<a name="line.1020"></a>
+<span class="sourceLineNo">1021</span>            int idx = 0;<a name="line.1021"></a>
+<span class="sourceLineNo">1022</span>            while (hasNext &amp;&amp; idx &lt; array.length)<a name="line.1022"></a>
+<span class="sourceLineNo">1023</span>                array[idx++] = next();<a name="line.1023"></a>
+<span class="sourceLineNo">1024</span>            return array;<a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>        }<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>    }<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span><a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>    static public class FloatValues extends MapIterator {<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>        public FloatValues(SparseTextMap map) {<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span>            super(map);<a name="line.1030"></a>
+<span class="sourceLineNo">1031</span>        }<a name="line.1031"></a>
+<span class="sourceLineNo">1032</span><a name="line.1032"></a>
+<span class="sourceLineNo">1033</span>        public boolean hasNext() {<a name="line.1033"></a>
+<span class="sourceLineNo">1034</span>            if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");<a name="line.1034"></a>
+<span class="sourceLineNo">1035</span>            return hasNext;<a name="line.1035"></a>
+<span class="sourceLineNo">1036</span>        }<a name="line.1036"></a>
+<span class="sourceLineNo">1037</span><a name="line.1037"></a>
+<span class="sourceLineNo">1038</span>        public float next() {<a name="line.1038"></a>
+<span class="sourceLineNo">1039</span>            if (!hasNext) throw new NoSuchElementException();<a name="line.1039"></a>
+<span class="sourceLineNo">1040</span>            if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");<a name="line.1040"></a>
+<span class="sourceLineNo">1041</span>            float value;<a name="line.1041"></a>
+<span class="sourceLineNo">1042</span>            if (nextIndex == INDEX_ZERO)<a name="line.1042"></a>
+<span class="sourceLineNo">1043</span>                value = map.zeroFloat;<a name="line.1043"></a>
+<span class="sourceLineNo">1044</span>            else<a name="line.1044"></a>
+<span class="sourceLineNo">1045</span>                value = map.floatValueTable[nextIndex];<a name="line.1045"></a>
+<span class="sourceLineNo">1046</span>            currentIndex = nextIndex;<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>            findNextIndex();<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>            return value;<a name="line.1048"></a>
+<span class="sourceLineNo">1049</span>        }<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span><a name="line.1050"></a>
+<span class="sourceLineNo">1051</span>        /**<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>         * Returns a new array containing the remaining values.<a name="line.1052"></a>
+<span class="sourceLineNo">1053</span>         */<a name="line.1053"></a>
+<span class="sourceLineNo">1054</span>        public float[] toArray() {<a name="line.1054"></a>
+<span class="sourceLineNo">1055</span>            float[] array = new float[map.size];<a name="line.1055"></a>
+<span class="sourceLineNo">1056</span>            int idx = 0;<a name="line.1056"></a>
+<span class="sourceLineNo">1057</span>            while (hasNext &amp;&amp; idx &lt; array.length)<a name="line.1057"></a>
+<span class="sourceLineNo">1058</span>                array[idx++] = next();<a name="line.1058"></a>
+<span class="sourceLineNo">1059</span>            return array;<a name="line.1059"></a>
+<span class="sourceLineNo">1060</span>        }<a name="line.1060"></a>
+<span class="sourceLineNo">1061</span>    }<a name="line.1061"></a>
+<span class="sourceLineNo">1062</span><a name="line.1062"></a>
+<span class="sourceLineNo">1063</span>    static public class Keys extends MapIterator {<a name="line.1063"></a>
+<span class="sourceLineNo">1064</span>        public Keys(SparseTextMap map) {<a name="line.1064"></a>
+<span class="sourceLineNo">1065</span>            super(map);<a name="line.1065"></a>
+<span class="sourceLineNo">1066</span>        }<a name="line.1066"></a>
+<span class="sourceLineNo">1067</span><a name="line.1067"></a>
+<span class="sourceLineNo">1068</span>        public boolean hasNext() {<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>            if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");<a name="line.1069"></a>
+<span class="sourceLineNo">1070</span>            return hasNext;<a name="line.1070"></a>
+<span class="sourceLineNo">1071</span>        }<a name="line.1071"></a>
+<span class="sourceLineNo">1072</span><a name="line.1072"></a>
+<span class="sourceLineNo">1073</span>        public int next() {<a name="line.1073"></a>
+<span class="sourceLineNo">1074</span>            if (!hasNext) throw new NoSuchElementException();<a name="line.1074"></a>
+<span class="sourceLineNo">1075</span>            if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");<a name="line.1075"></a>
+<span class="sourceLineNo">1076</span>            int key = nextIndex == INDEX_ZERO ? 0 : map.keyTable[nextIndex];<a name="line.1076"></a>
+<span class="sourceLineNo">1077</span>            currentIndex = nextIndex;<a name="line.1077"></a>
+<span class="sourceLineNo">1078</span>            findNextIndex();<a name="line.1078"></a>
+<span class="sourceLineNo">1079</span>            return key;<a name="line.1079"></a>
+<span class="sourceLineNo">1080</span>        }<a name="line.1080"></a>
+<span class="sourceLineNo">1081</span><a name="line.1081"></a>
+<span class="sourceLineNo">1082</span>        /**<a name="line.1082"></a>
+<span class="sourceLineNo">1083</span>         * Returns a new array containing the remaining keys.<a name="line.1083"></a>
+<span class="sourceLineNo">1084</span>         */<a name="line.1084"></a>
+<span class="sourceLineNo">1085</span>        public int[] toArray() {<a name="line.1085"></a>
+<span class="sourceLineNo">1086</span>            int[] array = new int[map.size];<a name="line.1086"></a>
+<span class="sourceLineNo">1087</span>            int idx = 0;<a name="line.1087"></a>
+<span class="sourceLineNo">1088</span>            while (hasNext &amp;&amp; idx &lt; array.length)<a name="line.1088"></a>
+<span class="sourceLineNo">1089</span>                array[idx++] = next();<a name="line.1089"></a>
+<span class="sourceLineNo">1090</span>            return array;<a name="line.1090"></a>
+<span class="sourceLineNo">1091</span>        }<a name="line.1091"></a>
+<span class="sourceLineNo">1092</span>    }<a name="line.1092"></a>
+<span class="sourceLineNo">1093</span>}<a name="line.1093"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

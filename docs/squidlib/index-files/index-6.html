@@ -156,7 +156,7 @@
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidgrid/gui/gdx/Filters.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Filters</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
 <dd>
-<div class="block">Implementations of <code>IFilter</code>, that all are meant to perform different changes
+<div class="block">Implementations of <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/IFilter.html?is-external=true" title="class or interface in squidpony"><code>IFilter</code></a>, that all are meant to perform different changes
  to colors before they are created (they should be passed to SquidColorCenter's constructor, which can use them).</div>
 </dd>
 <dt><a href="../squidpony/squidgrid/gui/gdx/Filters.ColorizeFilter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Filters.ColorizeFilter</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
@@ -229,6 +229,14 @@
 <dd>
 <div class="block">Color constant</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html#findKey-char-int-">findKey(char, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap</a></dt>
+<dd>
+<div class="block">Returns the key for the specified char value, or notFound if it is not in the map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html#findKey-float-int-">findKey(float, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap</a></dt>
+<dd>
+<div class="block">Returns the key for the specified float value, or notFound if it is not in the map.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#FIREBRICK">FIREBRICK</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Color constant</div>
@@ -273,7 +281,9 @@
 <div class="block">Gets a packed float representation of a color given an RGBA8888-format int.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#floatGetHSV-float-float-float-float-">floatGetHSV(float, float, float, float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Gets a color as a packed float given floats representing hue, saturation, value, and opacity.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#floatGetI-int-int-int-">floatGetI(int, int, int)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque.</div>
@@ -282,6 +292,14 @@
 <dd>
 <div class="block">Stores the value of color in the char[] <code>changing</code>, using RGBA8888 format with two hex digits per channel.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.Entry.html#floatValue">floatValue</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.Entry.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap.Entry</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html#floatValues--">floatValues()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap</a></dt>
+<dd>
+<div class="block">Returns an iterator for the values in the map.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.FloatValues.html#FloatValues-squidpony.squidgrid.gui.gdx.SparseTextMap-">FloatValues(SparseTextMap)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.FloatValues.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap.FloatValues</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#FLORAL_LEAF">FLORAL_LEAF</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Color constant</div>
@@ -298,6 +316,8 @@
 <dd>
 <div class="block">The font used to draw <a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html#content"><code>LinesPanel.content</code></a>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#font">font</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html#font--">font()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dt>
 <dd>
 <div class="block">Returns the font used by this factory.</div>

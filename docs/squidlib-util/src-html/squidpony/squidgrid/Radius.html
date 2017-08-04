@@ -500,166 +500,175 @@
 <span class="sourceLineNo">492</span>            break;<a name="line.492"></a>
 <span class="sourceLineNo">493</span>            default:<a name="line.493"></a>
 <span class="sourceLineNo">494</span>            {<a name="line.494"></a>
-<span class="sourceLineNo">495</span>                int high;<a name="line.495"></a>
-<span class="sourceLineNo">496</span>                for (int dx = -radiusLength; dx &lt;= radiusLength; ++dx) {<a name="line.496"></a>
-<span class="sourceLineNo">497</span>                    high = (int) Math.sqrt(radiusLength * radiusLength - dx * dx);<a name="line.497"></a>
-<span class="sourceLineNo">498</span>                    for (int dy = -high; dy &lt;= high; ++dy) {<a name="line.498"></a>
-<span class="sourceLineNo">499</span>                        if (!surpassEdges &amp;&amp; (centerX + dx &lt; 0 || centerY + dy &lt; 0 ||<a name="line.499"></a>
-<span class="sourceLineNo">500</span>                                centerX + dx &gt;= width || centerY + dy &gt;= height))<a name="line.500"></a>
-<span class="sourceLineNo">501</span>                            continue;<a name="line.501"></a>
-<span class="sourceLineNo">502</span>                        contents.add(Coord.get(centerX + dx, centerY + dy));<a name="line.502"></a>
-<span class="sourceLineNo">503</span>                    }<a name="line.503"></a>
-<span class="sourceLineNo">504</span>                }<a name="line.504"></a>
-<span class="sourceLineNo">505</span>            }<a name="line.505"></a>
-<span class="sourceLineNo">506</span>        }<a name="line.506"></a>
-<span class="sourceLineNo">507</span>        return contents;<a name="line.507"></a>
-<span class="sourceLineNo">508</span>    }<a name="line.508"></a>
-<span class="sourceLineNo">509</span><a name="line.509"></a>
-<span class="sourceLineNo">510</span>    /**<a name="line.510"></a>
-<span class="sourceLineNo">511</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Chebyshev measurement (making<a name="line.511"></a>
-<span class="sourceLineNo">512</span>     * a square). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of<a name="line.512"></a>
-<span class="sourceLineNo">513</span>     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less<a name="line.513"></a>
-<span class="sourceLineNo">514</span>     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords<a name="line.514"></a>
-<span class="sourceLineNo">515</span>     * in the actual radius.<a name="line.515"></a>
-<span class="sourceLineNo">516</span>     * @param centerX the center Coord x<a name="line.516"></a>
-<span class="sourceLineNo">517</span>     * @param centerY the center Coord x<a name="line.517"></a>
-<span class="sourceLineNo">518</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.518"></a>
-<span class="sourceLineNo">519</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.519"></a>
-<span class="sourceLineNo">520</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.520"></a>
-<span class="sourceLineNo">521</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.521"></a>
-<span class="sourceLineNo">522</span>     * @return a new List containing the points within radiusLength of the center<a name="line.522"></a>
-<span class="sourceLineNo">523</span><a name="line.523"></a>
-<span class="sourceLineNo">524</span>     */<a name="line.524"></a>
-<span class="sourceLineNo">525</span>    public static List&lt;Coord&gt; inSquare(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)<a name="line.525"></a>
-<span class="sourceLineNo">526</span>    {<a name="line.526"></a>
-<span class="sourceLineNo">527</span>        return SQUARE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);<a name="line.527"></a>
-<span class="sourceLineNo">528</span>    }<a name="line.528"></a>
-<span class="sourceLineNo">529</span>    /**<a name="line.529"></a>
-<span class="sourceLineNo">530</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Manhattan measurement (making<a name="line.530"></a>
-<span class="sourceLineNo">531</span>     * a diamond). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List<a name="line.531"></a>
-<span class="sourceLineNo">532</span>     * of Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y<a name="line.532"></a>
-<span class="sourceLineNo">533</span>     * less than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any<a name="line.533"></a>
-<span class="sourceLineNo">534</span>     * Coords in the actual radius.<a name="line.534"></a>
-<span class="sourceLineNo">535</span>     * @param centerX the center Coord x<a name="line.535"></a>
-<span class="sourceLineNo">536</span>     * @param centerY the center Coord x<a name="line.536"></a>
-<span class="sourceLineNo">537</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.537"></a>
-<span class="sourceLineNo">538</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.538"></a>
-<span class="sourceLineNo">539</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.539"></a>
-<span class="sourceLineNo">540</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.540"></a>
-<span class="sourceLineNo">541</span>     * @return a new List containing the points within radiusLength of the center<a name="line.541"></a>
-<span class="sourceLineNo">542</span>     */<a name="line.542"></a>
-<span class="sourceLineNo">543</span>    public static List&lt;Coord&gt; inDiamond(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)<a name="line.543"></a>
-<span class="sourceLineNo">544</span>    {<a name="line.544"></a>
-<span class="sourceLineNo">545</span>        return DIAMOND.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);<a name="line.545"></a>
-<span class="sourceLineNo">546</span>    }<a name="line.546"></a>
-<span class="sourceLineNo">547</span>    /**<a name="line.547"></a>
-<span class="sourceLineNo">548</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Euclidean measurement (making<a name="line.548"></a>
-<span class="sourceLineNo">549</span>     * a circle). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of<a name="line.549"></a>
-<span class="sourceLineNo">550</span>     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less<a name="line.550"></a>
-<span class="sourceLineNo">551</span>     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords<a name="line.551"></a>
-<span class="sourceLineNo">552</span>     * in the actual radius.<a name="line.552"></a>
-<span class="sourceLineNo">553</span>     * @param centerX the center Coord x<a name="line.553"></a>
-<span class="sourceLineNo">554</span>     * @param centerY the center Coord x<a name="line.554"></a>
-<span class="sourceLineNo">555</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.555"></a>
-<span class="sourceLineNo">556</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.556"></a>
-<span class="sourceLineNo">557</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.557"></a>
-<span class="sourceLineNo">558</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.558"></a>
-<span class="sourceLineNo">559</span>     * @return a new List containing the points within radiusLength of the center<a name="line.559"></a>
-<span class="sourceLineNo">560</span>     */<a name="line.560"></a>
-<span class="sourceLineNo">561</span>    public static List&lt;Coord&gt; inCircle(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)<a name="line.561"></a>
-<span class="sourceLineNo">562</span>    {<a name="line.562"></a>
-<span class="sourceLineNo">563</span>        return CIRCLE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);<a name="line.563"></a>
-<span class="sourceLineNo">564</span>    }<a name="line.564"></a>
-<span class="sourceLineNo">565</span><a name="line.565"></a>
-<span class="sourceLineNo">566</span>    /**<a name="line.566"></a>
-<span class="sourceLineNo">567</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Chebyshev measurement (making<a name="line.567"></a>
-<span class="sourceLineNo">568</span>     * a square). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of<a name="line.568"></a>
-<span class="sourceLineNo">569</span>     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less<a name="line.569"></a>
-<span class="sourceLineNo">570</span>     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords<a name="line.570"></a>
-<span class="sourceLineNo">571</span>     * in the actual radius.<a name="line.571"></a>
-<span class="sourceLineNo">572</span>     * @param centerX the center Coord x<a name="line.572"></a>
-<span class="sourceLineNo">573</span>     * @param centerY the center Coord x<a name="line.573"></a>
-<span class="sourceLineNo">574</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.574"></a>
-<span class="sourceLineNo">575</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.575"></a>
-<span class="sourceLineNo">576</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.576"></a>
-<span class="sourceLineNo">577</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.577"></a>
-<span class="sourceLineNo">578</span>     * @param buf the List of Coord to append points to; may be null to create a new List<a name="line.578"></a>
-<span class="sourceLineNo">579</span>     * @return buf, after appending Coords to it, or a new List if buf was null<a name="line.579"></a>
-<span class="sourceLineNo">580</span>     */<a name="line.580"></a>
-<span class="sourceLineNo">581</span>    public static List&lt;Coord&gt; inSquare(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List&lt;Coord&gt; buf)<a name="line.581"></a>
-<span class="sourceLineNo">582</span>    {<a name="line.582"></a>
-<span class="sourceLineNo">583</span>        return SQUARE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);<a name="line.583"></a>
-<span class="sourceLineNo">584</span>    }<a name="line.584"></a>
-<span class="sourceLineNo">585</span>    /**<a name="line.585"></a>
-<span class="sourceLineNo">586</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Manhattan measurement (making<a name="line.586"></a>
-<span class="sourceLineNo">587</span>     * a diamond). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List<a name="line.587"></a>
-<span class="sourceLineNo">588</span>     * of Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y<a name="line.588"></a>
-<span class="sourceLineNo">589</span>     * less than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any<a name="line.589"></a>
-<span class="sourceLineNo">590</span>     * Coords in the actual radius.<a name="line.590"></a>
-<span class="sourceLineNo">591</span>     * @param centerX the center Coord x<a name="line.591"></a>
-<span class="sourceLineNo">592</span>     * @param centerY the center Coord x<a name="line.592"></a>
-<span class="sourceLineNo">593</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.593"></a>
-<span class="sourceLineNo">594</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.594"></a>
-<span class="sourceLineNo">595</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.595"></a>
-<span class="sourceLineNo">596</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.596"></a>
-<span class="sourceLineNo">597</span>     * @param buf the List of Coord to append points to; may be null to create a new List<a name="line.597"></a>
-<span class="sourceLineNo">598</span>     * @return buf, after appending Coords to it, or a new List if buf was null<a name="line.598"></a>
-<span class="sourceLineNo">599</span>     */<a name="line.599"></a>
-<span class="sourceLineNo">600</span>    public static List&lt;Coord&gt; inDiamond(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List&lt;Coord&gt; buf)<a name="line.600"></a>
-<span class="sourceLineNo">601</span>    {<a name="line.601"></a>
-<span class="sourceLineNo">602</span>        return DIAMOND.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);<a name="line.602"></a>
-<span class="sourceLineNo">603</span>    }<a name="line.603"></a>
-<span class="sourceLineNo">604</span>    /**<a name="line.604"></a>
-<span class="sourceLineNo">605</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Euclidean measurement (making<a name="line.605"></a>
-<span class="sourceLineNo">606</span>     * a circle). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of<a name="line.606"></a>
-<span class="sourceLineNo">607</span>     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less<a name="line.607"></a>
-<span class="sourceLineNo">608</span>     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords<a name="line.608"></a>
-<span class="sourceLineNo">609</span>     * in the actual radius.<a name="line.609"></a>
-<span class="sourceLineNo">610</span>     * @param centerX the center Coord x<a name="line.610"></a>
-<span class="sourceLineNo">611</span>     * @param centerY the center Coord x<a name="line.611"></a>
-<span class="sourceLineNo">612</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.612"></a>
-<span class="sourceLineNo">613</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.613"></a>
-<span class="sourceLineNo">614</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.614"></a>
-<span class="sourceLineNo">615</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.615"></a>
-<span class="sourceLineNo">616</span>     * @param buf the List of Coord to append points to; may be null to create a new List<a name="line.616"></a>
-<span class="sourceLineNo">617</span>     * @return buf, after appending Coords to it, or a new List if buf was null<a name="line.617"></a>
-<span class="sourceLineNo">618</span>     */<a name="line.618"></a>
-<span class="sourceLineNo">619</span>    public static List&lt;Coord&gt; inCircle(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List&lt;Coord&gt; buf)<a name="line.619"></a>
-<span class="sourceLineNo">620</span>    {<a name="line.620"></a>
-<span class="sourceLineNo">621</span>        return CIRCLE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);<a name="line.621"></a>
-<span class="sourceLineNo">622</span>    }<a name="line.622"></a>
-<span class="sourceLineNo">623</span><a name="line.623"></a>
-<span class="sourceLineNo">624</span>    /**<a name="line.624"></a>
-<span class="sourceLineNo">625</span>     * Given an Iterable of Coord (such as a List or Set), a distance to expand outward by (using this Radius), and the<a name="line.625"></a>
-<span class="sourceLineNo">626</span>     * bounding height and width of the map, gets a "thickened" group of Coord as a Set where each Coord in points has<a name="line.626"></a>
-<span class="sourceLineNo">627</span>     * been expanded out by an amount no greater than distance. As an example, you could call this on a line generated<a name="line.627"></a>
-<span class="sourceLineNo">628</span>     * by Bresenham, OrthoLine, or an LOS object's getLastPath() method, and expand the line into a thick "brush stroke"<a name="line.628"></a>
-<span class="sourceLineNo">629</span>     * where this Radius affects the shape of the ends. This will never produce a Coord with negative x or y, a Coord<a name="line.629"></a>
-<span class="sourceLineNo">630</span>     * with x greater than or equal to width, or a Coord with y greater than or equal to height.<a name="line.630"></a>
-<span class="sourceLineNo">631</span>     * @param distance the distance, as measured by this Radius, to expand each Coord on points up to<a name="line.631"></a>
-<span class="sourceLineNo">632</span>     * @param width the bounding width of the map (exclusive)<a name="line.632"></a>
-<span class="sourceLineNo">633</span>     * @param height the bounding height of the map (exclusive)<a name="line.633"></a>
-<span class="sourceLineNo">634</span>     * @param points an Iterable (such as a List or Set) of Coord that this will make a "thickened" version of<a name="line.634"></a>
-<span class="sourceLineNo">635</span>     * @return a Set of Coord that covers a wider area than what points covers; each Coord will be unique (it's a Set)<a name="line.635"></a>
-<span class="sourceLineNo">636</span>     */<a name="line.636"></a>
-<span class="sourceLineNo">637</span>    public Set&lt;Coord&gt; expand(int distance, int width, int height, Iterable&lt;Coord&gt; points)<a name="line.637"></a>
-<span class="sourceLineNo">638</span>    {<a name="line.638"></a>
-<span class="sourceLineNo">639</span>        List&lt;Coord&gt; around = pointsInside(Coord.get(distance, distance), distance, false, width, height);<a name="line.639"></a>
-<span class="sourceLineNo">640</span>        OrderedSet&lt;Coord&gt; expanded = new OrderedSet&lt;&gt;(around.size() * 16);<a name="line.640"></a>
-<span class="sourceLineNo">641</span>        int tx, ty;<a name="line.641"></a>
-<span class="sourceLineNo">642</span>        for(Coord pt : points)<a name="line.642"></a>
-<span class="sourceLineNo">643</span>        {<a name="line.643"></a>
-<span class="sourceLineNo">644</span>            for(Coord ar : around)<a name="line.644"></a>
-<span class="sourceLineNo">645</span>            {<a name="line.645"></a>
-<span class="sourceLineNo">646</span>                tx = pt.x + ar.x - distance;<a name="line.646"></a>
-<span class="sourceLineNo">647</span>                ty = pt.y + ar.y - distance;<a name="line.647"></a>
-<span class="sourceLineNo">648</span>                if(tx &gt;= 0 &amp;&amp; tx &lt; width &amp;&amp; ty &gt;= 0 &amp;&amp; ty &lt; height)<a name="line.648"></a>
-<span class="sourceLineNo">649</span>                    expanded.add(Coord.get(tx, ty));<a name="line.649"></a>
-<span class="sourceLineNo">650</span>            }<a name="line.650"></a>
-<span class="sourceLineNo">651</span>        }<a name="line.651"></a>
-<span class="sourceLineNo">652</span>        return expanded;<a name="line.652"></a>
-<span class="sourceLineNo">653</span>    }<a name="line.653"></a>
-<span class="sourceLineNo">654</span>}<a name="line.654"></a>
+<span class="sourceLineNo">495</span>                float high, changedX;<a name="line.495"></a>
+<span class="sourceLineNo">496</span>                int rndX, rndY;<a name="line.496"></a>
+<span class="sourceLineNo">497</span>                for (int dx = -radiusLength; dx &lt;= radiusLength; ++dx) {<a name="line.497"></a>
+<span class="sourceLineNo">498</span>                    changedX = dx - 0.25f * Math.signum(dx);<a name="line.498"></a>
+<span class="sourceLineNo">499</span>                    rndX = Math.round(changedX);<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                    high = (float) Math.sqrt(radiusLength * radiusLength - changedX * changedX);<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                    if (surpassEdges || !(centerX + rndX &lt; 0||<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                            centerX + rndX &gt;= width))<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                        contents.add(Coord.get(centerX + rndX, centerY));<a name="line.503"></a>
+<span class="sourceLineNo">504</span>                    for (float dy = high; dy &gt;= 1f; --dy) {<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                        rndY = Math.round(dy - 0.25f);<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                        if (surpassEdges || !(centerX + rndX &lt; 0 || centerY + rndY &lt; 0 ||<a name="line.506"></a>
+<span class="sourceLineNo">507</span>                                centerX + rndX &gt;= width || centerY + rndY &gt;= height))<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                            contents.add(Coord.get(centerX + rndX, centerY + rndY));<a name="line.508"></a>
+<span class="sourceLineNo">509</span>                        if (surpassEdges || !(centerX + rndX &lt; 0 || centerY - rndY &lt; 0 ||<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                                centerX + rndX &gt;= width || centerY - rndY &gt;= height))<a name="line.510"></a>
+<span class="sourceLineNo">511</span>                            contents.add(Coord.get(centerX + rndX, centerY - rndY));<a name="line.511"></a>
+<span class="sourceLineNo">512</span>                    }<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                }<a name="line.513"></a>
+<span class="sourceLineNo">514</span>            }<a name="line.514"></a>
+<span class="sourceLineNo">515</span>        }<a name="line.515"></a>
+<span class="sourceLineNo">516</span>        return contents;<a name="line.516"></a>
+<span class="sourceLineNo">517</span>    }<a name="line.517"></a>
+<span class="sourceLineNo">518</span><a name="line.518"></a>
+<span class="sourceLineNo">519</span>    /**<a name="line.519"></a>
+<span class="sourceLineNo">520</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Chebyshev measurement (making<a name="line.520"></a>
+<span class="sourceLineNo">521</span>     * a square). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of<a name="line.521"></a>
+<span class="sourceLineNo">522</span>     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less<a name="line.522"></a>
+<span class="sourceLineNo">523</span>     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords<a name="line.523"></a>
+<span class="sourceLineNo">524</span>     * in the actual radius.<a name="line.524"></a>
+<span class="sourceLineNo">525</span>     * @param centerX the center Coord x<a name="line.525"></a>
+<span class="sourceLineNo">526</span>     * @param centerY the center Coord x<a name="line.526"></a>
+<span class="sourceLineNo">527</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.527"></a>
+<span class="sourceLineNo">528</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.528"></a>
+<span class="sourceLineNo">529</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.529"></a>
+<span class="sourceLineNo">530</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.530"></a>
+<span class="sourceLineNo">531</span>     * @return a new List containing the points within radiusLength of the center<a name="line.531"></a>
+<span class="sourceLineNo">532</span><a name="line.532"></a>
+<span class="sourceLineNo">533</span>     */<a name="line.533"></a>
+<span class="sourceLineNo">534</span>    public static List&lt;Coord&gt; inSquare(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)<a name="line.534"></a>
+<span class="sourceLineNo">535</span>    {<a name="line.535"></a>
+<span class="sourceLineNo">536</span>        return SQUARE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);<a name="line.536"></a>
+<span class="sourceLineNo">537</span>    }<a name="line.537"></a>
+<span class="sourceLineNo">538</span>    /**<a name="line.538"></a>
+<span class="sourceLineNo">539</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Manhattan measurement (making<a name="line.539"></a>
+<span class="sourceLineNo">540</span>     * a diamond). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List<a name="line.540"></a>
+<span class="sourceLineNo">541</span>     * of Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y<a name="line.541"></a>
+<span class="sourceLineNo">542</span>     * less than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any<a name="line.542"></a>
+<span class="sourceLineNo">543</span>     * Coords in the actual radius.<a name="line.543"></a>
+<span class="sourceLineNo">544</span>     * @param centerX the center Coord x<a name="line.544"></a>
+<span class="sourceLineNo">545</span>     * @param centerY the center Coord x<a name="line.545"></a>
+<span class="sourceLineNo">546</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.546"></a>
+<span class="sourceLineNo">547</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.547"></a>
+<span class="sourceLineNo">548</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.548"></a>
+<span class="sourceLineNo">549</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.549"></a>
+<span class="sourceLineNo">550</span>     * @return a new List containing the points within radiusLength of the center<a name="line.550"></a>
+<span class="sourceLineNo">551</span>     */<a name="line.551"></a>
+<span class="sourceLineNo">552</span>    public static List&lt;Coord&gt; inDiamond(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)<a name="line.552"></a>
+<span class="sourceLineNo">553</span>    {<a name="line.553"></a>
+<span class="sourceLineNo">554</span>        return DIAMOND.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);<a name="line.554"></a>
+<span class="sourceLineNo">555</span>    }<a name="line.555"></a>
+<span class="sourceLineNo">556</span>    /**<a name="line.556"></a>
+<span class="sourceLineNo">557</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Euclidean measurement (making<a name="line.557"></a>
+<span class="sourceLineNo">558</span>     * a circle). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of<a name="line.558"></a>
+<span class="sourceLineNo">559</span>     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less<a name="line.559"></a>
+<span class="sourceLineNo">560</span>     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords<a name="line.560"></a>
+<span class="sourceLineNo">561</span>     * in the actual radius.<a name="line.561"></a>
+<span class="sourceLineNo">562</span>     * @param centerX the center Coord x<a name="line.562"></a>
+<span class="sourceLineNo">563</span>     * @param centerY the center Coord x<a name="line.563"></a>
+<span class="sourceLineNo">564</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.564"></a>
+<span class="sourceLineNo">565</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.565"></a>
+<span class="sourceLineNo">566</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.566"></a>
+<span class="sourceLineNo">567</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.567"></a>
+<span class="sourceLineNo">568</span>     * @return a new List containing the points within radiusLength of the center<a name="line.568"></a>
+<span class="sourceLineNo">569</span>     */<a name="line.569"></a>
+<span class="sourceLineNo">570</span>    public static List&lt;Coord&gt; inCircle(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height)<a name="line.570"></a>
+<span class="sourceLineNo">571</span>    {<a name="line.571"></a>
+<span class="sourceLineNo">572</span>        return CIRCLE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, null);<a name="line.572"></a>
+<span class="sourceLineNo">573</span>    }<a name="line.573"></a>
+<span class="sourceLineNo">574</span><a name="line.574"></a>
+<span class="sourceLineNo">575</span>    /**<a name="line.575"></a>
+<span class="sourceLineNo">576</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Chebyshev measurement (making<a name="line.576"></a>
+<span class="sourceLineNo">577</span>     * a square). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of<a name="line.577"></a>
+<span class="sourceLineNo">578</span>     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less<a name="line.578"></a>
+<span class="sourceLineNo">579</span>     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords<a name="line.579"></a>
+<span class="sourceLineNo">580</span>     * in the actual radius.<a name="line.580"></a>
+<span class="sourceLineNo">581</span>     * @param centerX the center Coord x<a name="line.581"></a>
+<span class="sourceLineNo">582</span>     * @param centerY the center Coord x<a name="line.582"></a>
+<span class="sourceLineNo">583</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.583"></a>
+<span class="sourceLineNo">584</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.584"></a>
+<span class="sourceLineNo">585</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.585"></a>
+<span class="sourceLineNo">586</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.586"></a>
+<span class="sourceLineNo">587</span>     * @param buf the List of Coord to append points to; may be null to create a new List<a name="line.587"></a>
+<span class="sourceLineNo">588</span>     * @return buf, after appending Coords to it, or a new List if buf was null<a name="line.588"></a>
+<span class="sourceLineNo">589</span>     */<a name="line.589"></a>
+<span class="sourceLineNo">590</span>    public static List&lt;Coord&gt; inSquare(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List&lt;Coord&gt; buf)<a name="line.590"></a>
+<span class="sourceLineNo">591</span>    {<a name="line.591"></a>
+<span class="sourceLineNo">592</span>        return SQUARE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);<a name="line.592"></a>
+<span class="sourceLineNo">593</span>    }<a name="line.593"></a>
+<span class="sourceLineNo">594</span>    /**<a name="line.594"></a>
+<span class="sourceLineNo">595</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Manhattan measurement (making<a name="line.595"></a>
+<span class="sourceLineNo">596</span>     * a diamond). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List<a name="line.596"></a>
+<span class="sourceLineNo">597</span>     * of Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y<a name="line.597"></a>
+<span class="sourceLineNo">598</span>     * less than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any<a name="line.598"></a>
+<span class="sourceLineNo">599</span>     * Coords in the actual radius.<a name="line.599"></a>
+<span class="sourceLineNo">600</span>     * @param centerX the center Coord x<a name="line.600"></a>
+<span class="sourceLineNo">601</span>     * @param centerY the center Coord x<a name="line.601"></a>
+<span class="sourceLineNo">602</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.602"></a>
+<span class="sourceLineNo">603</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.603"></a>
+<span class="sourceLineNo">604</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.604"></a>
+<span class="sourceLineNo">605</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.605"></a>
+<span class="sourceLineNo">606</span>     * @param buf the List of Coord to append points to; may be null to create a new List<a name="line.606"></a>
+<span class="sourceLineNo">607</span>     * @return buf, after appending Coords to it, or a new List if buf was null<a name="line.607"></a>
+<span class="sourceLineNo">608</span>     */<a name="line.608"></a>
+<span class="sourceLineNo">609</span>    public static List&lt;Coord&gt; inDiamond(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List&lt;Coord&gt; buf)<a name="line.609"></a>
+<span class="sourceLineNo">610</span>    {<a name="line.610"></a>
+<span class="sourceLineNo">611</span>        return DIAMOND.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);<a name="line.611"></a>
+<span class="sourceLineNo">612</span>    }<a name="line.612"></a>
+<span class="sourceLineNo">613</span>    /**<a name="line.613"></a>
+<span class="sourceLineNo">614</span>     * Gets a List of all Coord points within {@code radiusLength} of {@code center} using Euclidean measurement (making<a name="line.614"></a>
+<span class="sourceLineNo">615</span>     * a circle). Appends Coords to {@code buf} if it is non-null, and returns either buf or a freshly-allocated List of<a name="line.615"></a>
+<span class="sourceLineNo">616</span>     * Coord. If {@code surpassEdges} is false, which is the normal usage, this will not produce Coords with x or y less<a name="line.616"></a>
+<span class="sourceLineNo">617</span>     * than 0 or greater than {@code width} or {@code height}; if surpassEdges is true, then it can produce any Coords<a name="line.617"></a>
+<span class="sourceLineNo">618</span>     * in the actual radius.<a name="line.618"></a>
+<span class="sourceLineNo">619</span>     * @param centerX the center Coord x<a name="line.619"></a>
+<span class="sourceLineNo">620</span>     * @param centerY the center Coord x<a name="line.620"></a>
+<span class="sourceLineNo">621</span>     * @param radiusLength the inclusive distance from (centerX,centerY) for Coords to use in the List<a name="line.621"></a>
+<span class="sourceLineNo">622</span>     * @param surpassEdges usually should be false; if true, can produce Coords with negative x/y or past width/height<a name="line.622"></a>
+<span class="sourceLineNo">623</span>     * @param width the width of the area this can place Coords (exclusive, not relative to center, usually map width)<a name="line.623"></a>
+<span class="sourceLineNo">624</span>     * @param height the height of the area this can place Coords (exclusive, not relative to center, usually map height)<a name="line.624"></a>
+<span class="sourceLineNo">625</span>     * @param buf the List of Coord to append points to; may be null to create a new List<a name="line.625"></a>
+<span class="sourceLineNo">626</span>     * @return buf, after appending Coords to it, or a new List if buf was null<a name="line.626"></a>
+<span class="sourceLineNo">627</span>     */<a name="line.627"></a>
+<span class="sourceLineNo">628</span>    public static List&lt;Coord&gt; inCircle(int centerX, int centerY, int radiusLength, boolean surpassEdges, int width, int height, List&lt;Coord&gt; buf)<a name="line.628"></a>
+<span class="sourceLineNo">629</span>    {<a name="line.629"></a>
+<span class="sourceLineNo">630</span>        return CIRCLE.pointsInside(centerX, centerY, radiusLength, surpassEdges, width, height, buf);<a name="line.630"></a>
+<span class="sourceLineNo">631</span>    }<a name="line.631"></a>
+<span class="sourceLineNo">632</span><a name="line.632"></a>
+<span class="sourceLineNo">633</span>    /**<a name="line.633"></a>
+<span class="sourceLineNo">634</span>     * Given an Iterable of Coord (such as a List or Set), a distance to expand outward by (using this Radius), and the<a name="line.634"></a>
+<span class="sourceLineNo">635</span>     * bounding height and width of the map, gets a "thickened" group of Coord as a Set where each Coord in points has<a name="line.635"></a>
+<span class="sourceLineNo">636</span>     * been expanded out by an amount no greater than distance. As an example, you could call this on a line generated<a name="line.636"></a>
+<span class="sourceLineNo">637</span>     * by Bresenham, OrthoLine, or an LOS object's getLastPath() method, and expand the line into a thick "brush stroke"<a name="line.637"></a>
+<span class="sourceLineNo">638</span>     * where this Radius affects the shape of the ends. This will never produce a Coord with negative x or y, a Coord<a name="line.638"></a>
+<span class="sourceLineNo">639</span>     * with x greater than or equal to width, or a Coord with y greater than or equal to height.<a name="line.639"></a>
+<span class="sourceLineNo">640</span>     * @param distance the distance, as measured by this Radius, to expand each Coord on points up to<a name="line.640"></a>
+<span class="sourceLineNo">641</span>     * @param width the bounding width of the map (exclusive)<a name="line.641"></a>
+<span class="sourceLineNo">642</span>     * @param height the bounding height of the map (exclusive)<a name="line.642"></a>
+<span class="sourceLineNo">643</span>     * @param points an Iterable (such as a List or Set) of Coord that this will make a "thickened" version of<a name="line.643"></a>
+<span class="sourceLineNo">644</span>     * @return a Set of Coord that covers a wider area than what points covers; each Coord will be unique (it's a Set)<a name="line.644"></a>
+<span class="sourceLineNo">645</span>     */<a name="line.645"></a>
+<span class="sourceLineNo">646</span>    public Set&lt;Coord&gt; expand(int distance, int width, int height, Iterable&lt;Coord&gt; points)<a name="line.646"></a>
+<span class="sourceLineNo">647</span>    {<a name="line.647"></a>
+<span class="sourceLineNo">648</span>        List&lt;Coord&gt; around = pointsInside(Coord.get(distance, distance), distance, false, width, height);<a name="line.648"></a>
+<span class="sourceLineNo">649</span>        OrderedSet&lt;Coord&gt; expanded = new OrderedSet&lt;&gt;(around.size() * 16);<a name="line.649"></a>
+<span class="sourceLineNo">650</span>        int tx, ty;<a name="line.650"></a>
+<span class="sourceLineNo">651</span>        for(Coord pt : points)<a name="line.651"></a>
+<span class="sourceLineNo">652</span>        {<a name="line.652"></a>
+<span class="sourceLineNo">653</span>            for(Coord ar : around)<a name="line.653"></a>
+<span class="sourceLineNo">654</span>            {<a name="line.654"></a>
+<span class="sourceLineNo">655</span>                tx = pt.x + ar.x - distance;<a name="line.655"></a>
+<span class="sourceLineNo">656</span>                ty = pt.y + ar.y - distance;<a name="line.656"></a>
+<span class="sourceLineNo">657</span>                if(tx &gt;= 0 &amp;&amp; tx &lt; width &amp;&amp; ty &gt;= 0 &amp;&amp; ty &lt; height)<a name="line.657"></a>
+<span class="sourceLineNo">658</span>                    expanded.add(Coord.get(tx, ty));<a name="line.658"></a>
+<span class="sourceLineNo">659</span>            }<a name="line.659"></a>
+<span class="sourceLineNo">660</span>        }<a name="line.660"></a>
+<span class="sourceLineNo">661</span>        return expanded;<a name="line.661"></a>
+<span class="sourceLineNo">662</span>    }<a name="line.662"></a>
+<span class="sourceLineNo">663</span>}<a name="line.663"></a>
 
 
 

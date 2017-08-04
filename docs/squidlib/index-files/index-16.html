@@ -281,6 +281,18 @@
 <dd>
 <div class="block">Color constant</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html#place-int-int-char-com.badlogic.gdx.graphics.Color-">place(int, int, char, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap</a></dt>
+<dd>
+<div class="block">Places a char in the given libGDX Color at the requested x, y position in grid cells, where x and y must each be
+ between 0 and 65535, both inclusive.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html#place-int-int-char-float-">place(int, int, char, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap</a></dt>
+<dd>
+<div class="block">Places a char in the given encoded color at the requested x, y position in grid cells, where x and y must each be
+ between 0 and 65535, both inclusive, and the encoded color is one produced by <code>Color.toFloatBits()</code> or any
+ of several methods in <a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx"><code>SColor</code></a>, such as <a href="../squidpony/squidgrid/gui/gdx/SColor.html#floatGetI-int-int-int-"><code>SColor.floatGetI(int, int, int)</code></a>,
+ <a href="../squidpony/squidgrid/gui/gdx/SColor.html#floatGetHSV-float-float-float-float-"><code>SColor.floatGetHSV(float, float, float, float)</code></a>, or <a href="../squidpony/squidgrid/gui/gdx/SColor.html#lerpFloatColors-float-float-float-"><code>SColor.lerpFloatColors(float, float, float)</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#PLAIN_MOUSE">PLAIN_MOUSE</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Color constant</div>
@@ -363,6 +375,75 @@
 <dd>
 <div class="block">Color constant</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-">put(int, int, char)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the character <code>c</code> at <code>(x, y)</code> with the default foreground.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-java.lang.String-com.badlogic.gdx.graphics.Color-">put(int, int, String, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the given string horizontally with the first character at the given
+ offset.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-squidpony.panel.IColoredString-">put(int, int, IColoredString&lt;? extends Color&gt;)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the given string horizontally with the first character at the given
+ offset, using the colors that <code>cs</code> provides.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-">put(int, int, char, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the character <code>c</code> at <code>(x, y)</code> with some <code>color</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-char:A:A-com.badlogic.gdx.graphics.Color:A:A-">put(char[][], Color[][])</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0, while also
+ setting the background colors to match the given Color 2D array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-">put(int, int, char, Color, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the char c at the position x,y with the given foreground and background colors.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-float-float-">put(int, int, char, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the char c at the position x,y with the given foreground and background colors as encoded floats, such as
+ those produced by <code>Color.toFloatBits()</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-int-">put(int, int, char, Color, Color, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the char c at the position x,y in the requested layer with the given foreground and background colors.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-float-float-int-">put(int, int, char, float, float, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the char c at the position x,y in the requested layer with the given foreground and background colors as
+ encoded floats, such as those produced by <code>Color.toFloatBits()</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-java.lang.String-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-">put(int, int, String, Color, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts text at the position x,y with the given foreground and background colors.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-java.lang.String-float-float-">put(int, int, String, float, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts text at the position x,y with the given foreground and background colors as encoded floats, such as
+ those produced by <code>Color.toFloatBits()</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-java.lang.String-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-int-">put(int, int, String, Color, Color, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts text at the position x,y in the requested layer with the given foreground and background colors.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-java.lang.String-float-float-int-">put(int, int, String, float, float, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts text at the position x,y in the requested layer with the given foreground and background colors as encoded
+ floats, such as those produced by <code>Color.toFloatBits()</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-com.badlogic.gdx.graphics.Color-">put(int, int, Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Changes the background at position x,y to the given Color.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-float-">put(int, int, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Changes the background at position x,y to the given color as an encoded float.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html#put-int-char-float-">put(int, char, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#put-int-int-char-">put(int, int, char)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">Place a char c into the foreground at position x, y, with the default color.</div>
@@ -516,6 +597,8 @@
  only, and anything between 0 and 1 will produce some tint to color, and probably cache the produced color in the
  IColorCenter this uses).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html#putAll-squidpony.squidgrid.gui.gdx.SparseTextMap-">putAll(SparseTextMap)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseTextMap.html" title="class in squidpony.squidgrid.gui.gdx">SparseTextMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html#putBoxedString-int-int-java.lang.String-">putBoxedString(int, int, String)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SquidLayers.html" title="class in squidpony.squidgrid.gui.gdx">SquidLayers</a></dt>
 <dd>
 <div class="block">A utility method that draws a 1-cell-wide black box around the text you request (as s) and replaces the contents

@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>/**<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Code used internally for hashing OrderedMap, OrderedSet, IntDoubleOrderedMap, Arrangement, and so on.<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Has some methods and constants that may be useful in other kinds of code.<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * Created by Tommy Ettinger on 7/28/2017.<a name="line.6"></a>
+<span class="sourceLineNo">007</span> */<a name="line.7"></a>
+<span class="sourceLineNo">008</span>public class HashCommon {<a name="line.8"></a>
+<span class="sourceLineNo">009</span><a name="line.9"></a>
+<span class="sourceLineNo">010</span>    private HashCommon() {<a name="line.10"></a>
+<span class="sourceLineNo">011</span>    }<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>    /**<a name="line.13"></a>
+<span class="sourceLineNo">014</span>     * 2&lt;sup&gt;32&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.<a name="line.14"></a>
+<span class="sourceLineNo">015</span>     */<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    public static final int INT_PHI = 0x9E3779B9;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    /**<a name="line.17"></a>
+<span class="sourceLineNo">018</span>     * The reciprocal of {@link #INT_PHI} modulo 2&lt;sup&gt;32&lt;/sup&gt;.<a name="line.18"></a>
+<span class="sourceLineNo">019</span>     */<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    public static final int INV_INT_PHI = 0x144cbc89;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    /**<a name="line.21"></a>
+<span class="sourceLineNo">022</span>     * 2&lt;sup&gt;64&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.<a name="line.22"></a>
+<span class="sourceLineNo">023</span>     */<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    public static final long LONG_PHI = 0x9E3779B97F4A7C15L;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    /**<a name="line.25"></a>
+<span class="sourceLineNo">026</span>     * The reciprocal of {@link #LONG_PHI} modulo 2&lt;sup&gt;64&lt;/sup&gt;.<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    public static final long INV_LONG_PHI = 0xf1de83e19937733dL;<a name="line.28"></a>
+<span class="sourceLineNo">029</span><a name="line.29"></a>
+<span class="sourceLineNo">030</span>    /**<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * Quickly mixes the bits of an integer.<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     * xorshifting the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and<a name="line.33"></a>
+<span class="sourceLineNo">034</span>     * it has slightly worse behaviour than MurmurHash3 (in open-addressing hash tables the average number of probes<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     * is slightly larger), but it's much faster.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     *<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * @param x an integer.<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * @return a hash value obtained by mixing the bits of {@code x}.<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * @see #invMix(int)<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     */<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    static int mix(final int x) {<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        final int h = x * INT_PHI;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        return h ^ (h &gt;&gt;&gt; 16);<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    }<a name="line.44"></a>
+<span class="sourceLineNo">045</span><a name="line.45"></a>
+<span class="sourceLineNo">046</span>    /**<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * The inverse of {@link #mix(int)}. This method is mainly useful to create unit tests.<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     *<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * @param x an integer.<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * @return a value that passed through {@link #mix(int)} would give {@code x}.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    static int invMix(final int x) {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        return (x ^ x &gt;&gt;&gt; 16) * INV_INT_PHI;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    }<a name="line.54"></a>
+<span class="sourceLineNo">055</span><a name="line.55"></a>
+<span class="sourceLineNo">056</span>    /**<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * Quickly mixes the bits of a long integer.<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * xorshifting twice the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * it has slightly worse behaviour than MurmurHash3 (in open-addressing hash tables the average number of probes<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * is slightly larger), but it's much faster.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     *<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     * @param x a long integer.<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * @return a hash value obtained by mixing the bits of {@code x}.<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * @see #invMix(long)<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     */<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    static long mix(final long x) {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        long h = x * LONG_PHI;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        h ^= h &gt;&gt;&gt; 32;<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        return h ^ (h &gt;&gt;&gt; 16);<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    }<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>    /**<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * The inverse of {@link #mix(long)}. This method is mainly useful to create unit tests.<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     *<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * @param x a long integer.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * @return a value that passed through {@link #mix(long)} would give {@code x}.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     */<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    static long invMix(long x) {<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        x ^= x &gt;&gt;&gt; 32;<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        x ^= x &gt;&gt;&gt; 16;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        return (x ^ x &gt;&gt;&gt; 32) * INV_LONG_PHI;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    }<a name="line.83"></a>
+<span class="sourceLineNo">084</span><a name="line.84"></a>
+<span class="sourceLineNo">085</span>    /**<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     * Return the least power of two greater than or equal to the specified value.<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * &lt;br&gt;Note that this function will return 1 when the argument is 0.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     *<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * @param x an integer smaller than or equal to 2&lt;sup&gt;30&lt;/sup&gt;.<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * @return the least power of two greater than or equal to the specified value.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    public static int nextPowerOfTwo(int x) {<a name="line.92"></a>
+<span class="sourceLineNo">093</span>        if (x == 0) return 1;<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        x--;<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        x |= x &gt;&gt; 1;<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        x |= x &gt;&gt; 2;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        x |= x &gt;&gt; 4;<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        x |= x &gt;&gt; 8;<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        return (x | x &gt;&gt; 16) + 1;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    }<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>    /**<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * Return the least power of two greater than or equal to the specified value.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * &lt;br&gt;Note that this function will return 1 when the argument is 0.<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     *<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * @param x a long integer smaller than or equal to 2&lt;sup&gt;62&lt;/sup&gt;.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * @return the least power of two greater than or equal to the specified value.<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     */<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    public static long nextPowerOfTwo(long x) {<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        if (x == 0) return 1;<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        x--;<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        x |= x &gt;&gt; 1;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        x |= x &gt;&gt; 2;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        x |= x &gt;&gt; 4;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        x |= x &gt;&gt; 8;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        x |= x &gt;&gt; 16;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        return (x | x &gt;&gt; 32) + 1;<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    }<a name="line.118"></a>
+<span class="sourceLineNo">119</span>}<a name="line.119"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

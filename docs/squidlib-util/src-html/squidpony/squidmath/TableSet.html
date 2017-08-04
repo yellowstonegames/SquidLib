@@ -1278,493 +1278,344 @@
 <span class="sourceLineNo">1270</span>        return (int) s;<a name="line.1270"></a>
 <span class="sourceLineNo">1271</span>    }<a name="line.1271"></a>
 <span class="sourceLineNo">1272</span><a name="line.1272"></a>
-<span class="sourceLineNo">1273</span>    private static class HashCommon {<a name="line.1273"></a>
-<span class="sourceLineNo">1274</span><a name="line.1274"></a>
-<span class="sourceLineNo">1275</span>        private HashCommon() {<a name="line.1275"></a>
-<span class="sourceLineNo">1276</span>        }<a name="line.1276"></a>
-<span class="sourceLineNo">1277</span><a name="line.1277"></a>
-<span class="sourceLineNo">1278</span>        /**<a name="line.1278"></a>
-<span class="sourceLineNo">1279</span>         * 2&lt;sup&gt;32&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.<a name="line.1279"></a>
-<span class="sourceLineNo">1280</span>         */<a name="line.1280"></a>
-<span class="sourceLineNo">1281</span>        private static final int INT_PHI = 0x9E3779B9;<a name="line.1281"></a>
-<span class="sourceLineNo">1282</span>        /**<a name="line.1282"></a>
-<span class="sourceLineNo">1283</span>         * The reciprocal of {@link #INT_PHI} modulo 2&lt;sup&gt;32&lt;/sup&gt;.<a name="line.1283"></a>
-<span class="sourceLineNo">1284</span>         */<a name="line.1284"></a>
-<span class="sourceLineNo">1285</span>        private static final int INV_INT_PHI = 0x144cbc89;<a name="line.1285"></a>
-<span class="sourceLineNo">1286</span>        /**<a name="line.1286"></a>
-<span class="sourceLineNo">1287</span>         * 2&lt;sup&gt;64&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.<a name="line.1287"></a>
-<span class="sourceLineNo">1288</span>         */<a name="line.1288"></a>
-<span class="sourceLineNo">1289</span>        private static final long LONG_PHI = 0x9E3779B97F4A7C15L;<a name="line.1289"></a>
-<span class="sourceLineNo">1290</span>        /**<a name="line.1290"></a>
-<span class="sourceLineNo">1291</span>         * The reciprocal of {@link #LONG_PHI} modulo 2&lt;sup&gt;64&lt;/sup&gt;.<a name="line.1291"></a>
-<span class="sourceLineNo">1292</span>         */<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span>        private static final long INV_LONG_PHI = 0xf1de83e19937733dL;<a name="line.1293"></a>
-<span class="sourceLineNo">1294</span><a name="line.1294"></a>
-<span class="sourceLineNo">1295</span>        /**<a name="line.1295"></a>
-<span class="sourceLineNo">1296</span>         * Avalanches the bits of an integer by applying the finalisation step of MurmurHash3.<a name="line.1296"></a>
-<span class="sourceLineNo">1297</span>         * &lt;br&gt;<a name="line.1297"></a>
-<span class="sourceLineNo">1298</span>         * &lt;br&gt;This method implements the finalisation step of Austin Appleby's &lt;a href="http://code.google.com/p/smhasher/"&gt;MurmurHash3&lt;/a&gt;.<a name="line.1298"></a>
-<span class="sourceLineNo">1299</span>         * Its purpose is to avalanche the bits of the argument to within 0.25% bias.<a name="line.1299"></a>
-<span class="sourceLineNo">1300</span>         *<a name="line.1300"></a>
-<span class="sourceLineNo">1301</span>         * @param x an integer.<a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>         * @return a hash value with good avalanching properties.<a name="line.1302"></a>
-<span class="sourceLineNo">1303</span>         */<a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>        static int murmurHash3(int x) {<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span>            x ^= x &gt;&gt;&gt; 16;<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>            x *= 0x85ebca6b;<a name="line.1306"></a>
-<span class="sourceLineNo">1307</span>            x ^= x &gt;&gt;&gt; 13;<a name="line.1307"></a>
-<span class="sourceLineNo">1308</span>            x *= 0xc2b2ae35;<a name="line.1308"></a>
-<span class="sourceLineNo">1309</span>            x ^= x &gt;&gt;&gt; 16;<a name="line.1309"></a>
-<span class="sourceLineNo">1310</span>            return x;<a name="line.1310"></a>
-<span class="sourceLineNo">1311</span>        }<a name="line.1311"></a>
-<span class="sourceLineNo">1312</span><a name="line.1312"></a>
-<span class="sourceLineNo">1313</span><a name="line.1313"></a>
-<span class="sourceLineNo">1314</span>        /**<a name="line.1314"></a>
-<span class="sourceLineNo">1315</span>         * Avalanches the bits of a long integer by applying the finalisation step of MurmurHash3.<a name="line.1315"></a>
-<span class="sourceLineNo">1316</span>         * &lt;br&gt;<a name="line.1316"></a>
-<span class="sourceLineNo">1317</span>         * &lt;br&gt;This method implements the finalisation step of Austin Appleby's &lt;a href="http://code.google.com/p/smhasher/"&gt;MurmurHash3&lt;/a&gt;.<a name="line.1317"></a>
-<span class="sourceLineNo">1318</span>         * Its purpose is to avalanche the bits of the argument to within 0.25% bias.<a name="line.1318"></a>
-<span class="sourceLineNo">1319</span>         *<a name="line.1319"></a>
-<span class="sourceLineNo">1320</span>         * @param x a long integer.<a name="line.1320"></a>
-<span class="sourceLineNo">1321</span>         * @return a hash value with good avalanching properties.<a name="line.1321"></a>
-<span class="sourceLineNo">1322</span>         */<a name="line.1322"></a>
-<span class="sourceLineNo">1323</span>        static long murmurHash3(long x) {<a name="line.1323"></a>
-<span class="sourceLineNo">1324</span>            x ^= x &gt;&gt;&gt; 33;<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>            x *= 0xff51afd7ed558ccdL;<a name="line.1325"></a>
-<span class="sourceLineNo">1326</span>            x ^= x &gt;&gt;&gt; 33;<a name="line.1326"></a>
-<span class="sourceLineNo">1327</span>            x *= 0xc4ceb9fe1a85ec53L;<a name="line.1327"></a>
-<span class="sourceLineNo">1328</span>            x ^= x &gt;&gt;&gt; 33;<a name="line.1328"></a>
-<span class="sourceLineNo">1329</span>            return x;<a name="line.1329"></a>
-<span class="sourceLineNo">1330</span>        }<a name="line.1330"></a>
-<span class="sourceLineNo">1331</span><a name="line.1331"></a>
-<span class="sourceLineNo">1332</span>        /**<a name="line.1332"></a>
-<span class="sourceLineNo">1333</span>         * Quickly mixes the bits of an integer.<a name="line.1333"></a>
-<span class="sourceLineNo">1334</span>         * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and<a name="line.1334"></a>
-<span class="sourceLineNo">1335</span>         * xorshifting the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and<a name="line.1335"></a>
-<span class="sourceLineNo">1336</span>         * it has slightly worse behaviour than {@link #murmurHash3(int)} (in open-addressing hash tables the average number of probes<a name="line.1336"></a>
-<span class="sourceLineNo">1337</span>         * is slightly larger), but it's much faster.<a name="line.1337"></a>
-<span class="sourceLineNo">1338</span>         *<a name="line.1338"></a>
-<span class="sourceLineNo">1339</span>         * @param x an integer.<a name="line.1339"></a>
-<span class="sourceLineNo">1340</span>         * @return a hash value obtained by mixing the bits of {@code x}.<a name="line.1340"></a>
-<span class="sourceLineNo">1341</span>         * @see #invMix(int)<a name="line.1341"></a>
-<span class="sourceLineNo">1342</span>         */<a name="line.1342"></a>
-<span class="sourceLineNo">1343</span>        static int mix(final int x) {<a name="line.1343"></a>
-<span class="sourceLineNo">1344</span>            final int h = x * INT_PHI;<a name="line.1344"></a>
-<span class="sourceLineNo">1345</span>            return h ^ h &gt;&gt;&gt; 16;<a name="line.1345"></a>
-<span class="sourceLineNo">1346</span>        }<a name="line.1346"></a>
+<span class="sourceLineNo">1273</span>    @Override<a name="line.1273"></a>
+<span class="sourceLineNo">1274</span>    public String toString() {<a name="line.1274"></a>
+<span class="sourceLineNo">1275</span>        final StringBuilder s = new StringBuilder();<a name="line.1275"></a>
+<span class="sourceLineNo">1276</span>        int n = size(), i = 0;<a name="line.1276"></a>
+<span class="sourceLineNo">1277</span>        boolean first = true;<a name="line.1277"></a>
+<span class="sourceLineNo">1278</span>        s.append("TableSet{");<a name="line.1278"></a>
+<span class="sourceLineNo">1279</span>        while (i &lt; n) {<a name="line.1279"></a>
+<span class="sourceLineNo">1280</span>            if (first) first = false;<a name="line.1280"></a>
+<span class="sourceLineNo">1281</span>            else s.append(", ");<a name="line.1281"></a>
+<span class="sourceLineNo">1282</span>            s.append(columnAt(i)).append(" with ").append(rowAt(i++));<a name="line.1282"></a>
+<span class="sourceLineNo">1283</span>        }<a name="line.1283"></a>
+<span class="sourceLineNo">1284</span>        s.append("}");<a name="line.1284"></a>
+<span class="sourceLineNo">1285</span>        return s.toString();<a name="line.1285"></a>
+<span class="sourceLineNo">1286</span>    }<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span><a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>    @Override<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span>    public boolean equals(final Object o) {<a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>        if (o == this)<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span>            return true;<a name="line.1291"></a>
+<span class="sourceLineNo">1292</span>        if (!(o instanceof TableSet))<a name="line.1292"></a>
+<span class="sourceLineNo">1293</span>            return false;<a name="line.1293"></a>
+<span class="sourceLineNo">1294</span>        TableSet&lt;?, ?&gt; s = (TableSet&lt;?, ?&gt;) o;<a name="line.1294"></a>
+<span class="sourceLineNo">1295</span>        if (s.size() != size || columnHasher != s.columnHasher || rowHasher != s.rowHasher)<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>            return false;<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>        int p;<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>        for (int i = 0; i &lt; size; i++) {<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>            if(!columnHasher.areEqual(cols[p = order.get(i)], s.cols[p]) || !rowHasher.areEqual(rows[p], s.rows[p]))<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>                return false;<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>        }<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span>        return true;<a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>    }<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span><a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>    @GwtIncompatible<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>    private void writeObject(java.io.ObjectOutputStream s)<a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>            throws java.io.IOException {<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span>        final ListIterator&lt;C&gt; i = iterator();<a name="line.1308"></a>
+<span class="sourceLineNo">1309</span>        s.defaultWriteObject();<a name="line.1309"></a>
+<span class="sourceLineNo">1310</span>        s.writeObject(columnHasher);<a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>        for (int j = size; j-- != 0; )<a name="line.1311"></a>
+<span class="sourceLineNo">1312</span>            s.writeObject(i.next());<a name="line.1312"></a>
+<span class="sourceLineNo">1313</span>    }<a name="line.1313"></a>
+<span class="sourceLineNo">1314</span><a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>    @GwtIncompatible<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>    @SuppressWarnings("unchecked")<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span>    private void readObject(java.io.ObjectInputStream s)<a name="line.1317"></a>
+<span class="sourceLineNo">1318</span>            throws java.io.IOException, ClassNotFoundException {<a name="line.1318"></a>
+<span class="sourceLineNo">1319</span>        s.defaultReadObject();<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>        columnHasher = (CrossHash.IHasher) s.readObject();<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>        n = arraySize(size, f);<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>        maxFill = maxFill(n, f);<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>        mask = n - 1;<a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>        final C key[] = this.cols = (C[]) new Object[n + 1];<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>        final IntVLA order = this.order = new IntVLA(n + 1);<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>        int prev = -1;<a name="line.1326"></a>
+<span class="sourceLineNo">1327</span>        first = last = -1;<a name="line.1327"></a>
+<span class="sourceLineNo">1328</span>        C c;<a name="line.1328"></a>
+<span class="sourceLineNo">1329</span>        for (int i = size, pos; i-- != 0; ) {<a name="line.1329"></a>
+<span class="sourceLineNo">1330</span>            c = (C) s.readObject();<a name="line.1330"></a>
+<span class="sourceLineNo">1331</span>            if (c == null) {<a name="line.1331"></a>
+<span class="sourceLineNo">1332</span>                pos = n;<a name="line.1332"></a>
+<span class="sourceLineNo">1333</span>                containsNull = true;<a name="line.1333"></a>
+<span class="sourceLineNo">1334</span>            } else {<a name="line.1334"></a>
+<span class="sourceLineNo">1335</span>                if (!(key[pos = HashCommon.mix(columnHasher.hash(c)) &amp; mask] == null))<a name="line.1335"></a>
+<span class="sourceLineNo">1336</span>                    while (!(key[pos = pos + 1 &amp; mask] == null)) ;<a name="line.1336"></a>
+<span class="sourceLineNo">1337</span>            }<a name="line.1337"></a>
+<span class="sourceLineNo">1338</span>            key[pos] = c;<a name="line.1338"></a>
+<span class="sourceLineNo">1339</span>            if (first != -1) {<a name="line.1339"></a>
+<span class="sourceLineNo">1340</span>                last = pos;<a name="line.1340"></a>
+<span class="sourceLineNo">1341</span>            } else {<a name="line.1341"></a>
+<span class="sourceLineNo">1342</span>                first = last = pos;<a name="line.1342"></a>
+<span class="sourceLineNo">1343</span>            }<a name="line.1343"></a>
+<span class="sourceLineNo">1344</span>            order.add(pos);<a name="line.1344"></a>
+<span class="sourceLineNo">1345</span>        }<a name="line.1345"></a>
+<span class="sourceLineNo">1346</span>    }<a name="line.1346"></a>
 <span class="sourceLineNo">1347</span><a name="line.1347"></a>
-<span class="sourceLineNo">1348</span>        /**<a name="line.1348"></a>
-<span class="sourceLineNo">1349</span>         * The inverse of {@link #mix(int)}. This method is mainly useful to create unit tests.<a name="line.1349"></a>
-<span class="sourceLineNo">1350</span>         *<a name="line.1350"></a>
-<span class="sourceLineNo">1351</span>         * @param x an integer.<a name="line.1351"></a>
-<span class="sourceLineNo">1352</span>         * @return a value that passed through {@link #mix(int)} would give {@code x}.<a name="line.1352"></a>
-<span class="sourceLineNo">1353</span>         */<a name="line.1353"></a>
-<span class="sourceLineNo">1354</span>        static int invMix(final int x) {<a name="line.1354"></a>
-<span class="sourceLineNo">1355</span>            return (x ^ x &gt;&gt;&gt; 16) * INV_INT_PHI;<a name="line.1355"></a>
-<span class="sourceLineNo">1356</span>        }<a name="line.1356"></a>
-<span class="sourceLineNo">1357</span><a name="line.1357"></a>
-<span class="sourceLineNo">1358</span>        /**<a name="line.1358"></a>
-<span class="sourceLineNo">1359</span>         * Quickly mixes the bits of a long integer.<a name="line.1359"></a>
-<span class="sourceLineNo">1360</span>         * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and<a name="line.1360"></a>
-<span class="sourceLineNo">1361</span>         * xorshifting twice the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and<a name="line.1361"></a>
-<span class="sourceLineNo">1362</span>         * it has slightly worse behaviour than {@link #murmurHash3(long)} (in open-addressing hash tables the average number of probes<a name="line.1362"></a>
-<span class="sourceLineNo">1363</span>         * is slightly larger), but it's much faster.<a name="line.1363"></a>
-<span class="sourceLineNo">1364</span>         *<a name="line.1364"></a>
-<span class="sourceLineNo">1365</span>         * @param x a long integer.<a name="line.1365"></a>
-<span class="sourceLineNo">1366</span>         * @return a hash value obtained by mixing the bits of {@code x}.<a name="line.1366"></a>
-<span class="sourceLineNo">1367</span>         */<a name="line.1367"></a>
-<span class="sourceLineNo">1368</span>        static long mix(final long x) {<a name="line.1368"></a>
-<span class="sourceLineNo">1369</span>            long h = x * LONG_PHI;<a name="line.1369"></a>
-<span class="sourceLineNo">1370</span>            h ^= h &gt;&gt;&gt; 32;<a name="line.1370"></a>
-<span class="sourceLineNo">1371</span>            return h ^ h &gt;&gt;&gt; 16;<a name="line.1371"></a>
-<span class="sourceLineNo">1372</span>        }<a name="line.1372"></a>
+<span class="sourceLineNo">1348</span>    /**<a name="line.1348"></a>
+<span class="sourceLineNo">1349</span>     * Gets the item at the given index in the iteration order in constant time (random-access).<a name="line.1349"></a>
+<span class="sourceLineNo">1350</span>     *<a name="line.1350"></a>
+<span class="sourceLineNo">1351</span>     * @param idx the index in the iteration order of the key to fetch<a name="line.1351"></a>
+<span class="sourceLineNo">1352</span>     * @return the key at the index, if the index is valid, otherwise null<a name="line.1352"></a>
+<span class="sourceLineNo">1353</span>     */<a name="line.1353"></a>
+<span class="sourceLineNo">1354</span>    public C columnAt(final int idx) {<a name="line.1354"></a>
+<span class="sourceLineNo">1355</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.1355"></a>
+<span class="sourceLineNo">1356</span>            return null;<a name="line.1356"></a>
+<span class="sourceLineNo">1357</span>        // The starting point.<a name="line.1357"></a>
+<span class="sourceLineNo">1358</span>        return this.cols[order.get(idx)];<a name="line.1358"></a>
+<span class="sourceLineNo">1359</span>    }<a name="line.1359"></a>
+<span class="sourceLineNo">1360</span><a name="line.1360"></a>
+<span class="sourceLineNo">1361</span>    /**<a name="line.1361"></a>
+<span class="sourceLineNo">1362</span>     * Gets the item at the given index in the iteration order in constant time (random-access).<a name="line.1362"></a>
+<span class="sourceLineNo">1363</span>     *<a name="line.1363"></a>
+<span class="sourceLineNo">1364</span>     * @param idx the index in the iteration order of the key to fetch<a name="line.1364"></a>
+<span class="sourceLineNo">1365</span>     * @return the key at the index, if the index is valid, otherwise null<a name="line.1365"></a>
+<span class="sourceLineNo">1366</span>     */<a name="line.1366"></a>
+<span class="sourceLineNo">1367</span>    public R rowAt(final int idx) {<a name="line.1367"></a>
+<span class="sourceLineNo">1368</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.1368"></a>
+<span class="sourceLineNo">1369</span>            return null;<a name="line.1369"></a>
+<span class="sourceLineNo">1370</span>        // The starting point.<a name="line.1370"></a>
+<span class="sourceLineNo">1371</span>        return this.rows[order.get(idx)];<a name="line.1371"></a>
+<span class="sourceLineNo">1372</span>    }<a name="line.1372"></a>
 <span class="sourceLineNo">1373</span><a name="line.1373"></a>
-<span class="sourceLineNo">1374</span>        /**<a name="line.1374"></a>
-<span class="sourceLineNo">1375</span>         * The inverse of {@link #mix(long)}. This method is mainly useful to create unit tests.<a name="line.1375"></a>
-<span class="sourceLineNo">1376</span>         *<a name="line.1376"></a>
-<span class="sourceLineNo">1377</span>         * @param x a long integer.<a name="line.1377"></a>
-<span class="sourceLineNo">1378</span>         * @return a value that passed through {@link #mix(long)} would give {@code x}.<a name="line.1378"></a>
-<span class="sourceLineNo">1379</span>         */<a name="line.1379"></a>
-<span class="sourceLineNo">1380</span>        static long invMix(long x) {<a name="line.1380"></a>
-<span class="sourceLineNo">1381</span>            x ^= x &gt;&gt;&gt; 32;<a name="line.1381"></a>
-<span class="sourceLineNo">1382</span>            x ^= x &gt;&gt;&gt; 16;<a name="line.1382"></a>
-<span class="sourceLineNo">1383</span>            return (x ^ x &gt;&gt;&gt; 32) * INV_LONG_PHI;<a name="line.1383"></a>
-<span class="sourceLineNo">1384</span>        }<a name="line.1384"></a>
-<span class="sourceLineNo">1385</span><a name="line.1385"></a>
-<span class="sourceLineNo">1386</span>        /**<a name="line.1386"></a>
-<span class="sourceLineNo">1387</span>         * Return the least power of two greater than or equal to the specified value.<a name="line.1387"></a>
-<span class="sourceLineNo">1388</span>         * &lt;br&gt;Note that this function will return 1 when the argument is 0.<a name="line.1388"></a>
-<span class="sourceLineNo">1389</span>         *<a name="line.1389"></a>
-<span class="sourceLineNo">1390</span>         * @param x an integer smaller than or equal to 2&lt;sup&gt;30&lt;/sup&gt;.<a name="line.1390"></a>
-<span class="sourceLineNo">1391</span>         * @return the least power of two greater than or equal to the specified value.<a name="line.1391"></a>
-<span class="sourceLineNo">1392</span>         */<a name="line.1392"></a>
-<span class="sourceLineNo">1393</span>        static int nextPowerOfTwo(int x) {<a name="line.1393"></a>
-<span class="sourceLineNo">1394</span>            if (x == 0) return 1;<a name="line.1394"></a>
-<span class="sourceLineNo">1395</span>            x--;<a name="line.1395"></a>
-<span class="sourceLineNo">1396</span>            x |= x &gt;&gt; 1;<a name="line.1396"></a>
-<span class="sourceLineNo">1397</span>            x |= x &gt;&gt; 2;<a name="line.1397"></a>
-<span class="sourceLineNo">1398</span>            x |= x &gt;&gt; 4;<a name="line.1398"></a>
-<span class="sourceLineNo">1399</span>            x |= x &gt;&gt; 8;<a name="line.1399"></a>
-<span class="sourceLineNo">1400</span>            return (x | x &gt;&gt; 16) + 1;<a name="line.1400"></a>
-<span class="sourceLineNo">1401</span>        }<a name="line.1401"></a>
-<span class="sourceLineNo">1402</span><a name="line.1402"></a>
-<span class="sourceLineNo">1403</span>        /**<a name="line.1403"></a>
-<span class="sourceLineNo">1404</span>         * Return the least power of two greater than or equal to the specified value.<a name="line.1404"></a>
-<span class="sourceLineNo">1405</span>         * &lt;br&gt;Note that this function will return 1 when the argument is 0.<a name="line.1405"></a>
-<span class="sourceLineNo">1406</span>         *<a name="line.1406"></a>
-<span class="sourceLineNo">1407</span>         * @param x a long integer smaller than or equal to 2&lt;sup&gt;62&lt;/sup&gt;.<a name="line.1407"></a>
-<span class="sourceLineNo">1408</span>         * @return the least power of two greater than or equal to the specified value.<a name="line.1408"></a>
-<span class="sourceLineNo">1409</span>         */<a name="line.1409"></a>
-<span class="sourceLineNo">1410</span>        static long nextPowerOfTwo(long x) {<a name="line.1410"></a>
-<span class="sourceLineNo">1411</span>            if (x == 0) return 1;<a name="line.1411"></a>
-<span class="sourceLineNo">1412</span>            x--;<a name="line.1412"></a>
-<span class="sourceLineNo">1413</span>            x |= x &gt;&gt; 1;<a name="line.1413"></a>
-<span class="sourceLineNo">1414</span>            x |= x &gt;&gt; 2;<a name="line.1414"></a>
-<span class="sourceLineNo">1415</span>            x |= x &gt;&gt; 4;<a name="line.1415"></a>
-<span class="sourceLineNo">1416</span>            x |= x &gt;&gt; 8;<a name="line.1416"></a>
-<span class="sourceLineNo">1417</span>            x |= x &gt;&gt; 16;<a name="line.1417"></a>
-<span class="sourceLineNo">1418</span>            return (x | x &gt;&gt; 32) + 1;<a name="line.1418"></a>
-<span class="sourceLineNo">1419</span>        }<a name="line.1419"></a>
-<span class="sourceLineNo">1420</span>    }<a name="line.1420"></a>
-<span class="sourceLineNo">1421</span><a name="line.1421"></a>
-<span class="sourceLineNo">1422</span>    @Override<a name="line.1422"></a>
-<span class="sourceLineNo">1423</span>    public String toString() {<a name="line.1423"></a>
-<span class="sourceLineNo">1424</span>        final StringBuilder s = new StringBuilder();<a name="line.1424"></a>
-<span class="sourceLineNo">1425</span>        int n = size(), i = 0;<a name="line.1425"></a>
-<span class="sourceLineNo">1426</span>        boolean first = true;<a name="line.1426"></a>
-<span class="sourceLineNo">1427</span>        s.append("TableSet{");<a name="line.1427"></a>
-<span class="sourceLineNo">1428</span>        while (i &lt; n) {<a name="line.1428"></a>
-<span class="sourceLineNo">1429</span>            if (first) first = false;<a name="line.1429"></a>
-<span class="sourceLineNo">1430</span>            else s.append(", ");<a name="line.1430"></a>
-<span class="sourceLineNo">1431</span>            s.append(columnAt(i)).append(" with ").append(rowAt(i++));<a name="line.1431"></a>
-<span class="sourceLineNo">1432</span>        }<a name="line.1432"></a>
-<span class="sourceLineNo">1433</span>        s.append("}");<a name="line.1433"></a>
-<span class="sourceLineNo">1434</span>        return s.toString();<a name="line.1434"></a>
-<span class="sourceLineNo">1435</span>    }<a name="line.1435"></a>
-<span class="sourceLineNo">1436</span><a name="line.1436"></a>
-<span class="sourceLineNo">1437</span>    @Override<a name="line.1437"></a>
-<span class="sourceLineNo">1438</span>    public boolean equals(final Object o) {<a name="line.1438"></a>
-<span class="sourceLineNo">1439</span>        if (o == this)<a name="line.1439"></a>
-<span class="sourceLineNo">1440</span>            return true;<a name="line.1440"></a>
-<span class="sourceLineNo">1441</span>        if (!(o instanceof TableSet))<a name="line.1441"></a>
-<span class="sourceLineNo">1442</span>            return false;<a name="line.1442"></a>
-<span class="sourceLineNo">1443</span>        TableSet&lt;?, ?&gt; s = (TableSet&lt;?, ?&gt;) o;<a name="line.1443"></a>
-<span class="sourceLineNo">1444</span>        if (s.size() != size || columnHasher != s.columnHasher || rowHasher != s.rowHasher)<a name="line.1444"></a>
-<span class="sourceLineNo">1445</span>            return false;<a name="line.1445"></a>
-<span class="sourceLineNo">1446</span>        int p;<a name="line.1446"></a>
-<span class="sourceLineNo">1447</span>        for (int i = 0; i &lt; size; i++) {<a name="line.1447"></a>
-<span class="sourceLineNo">1448</span>            if(!columnHasher.areEqual(cols[p = order.get(i)], s.cols[p]) || !rowHasher.areEqual(rows[p], s.rows[p]))<a name="line.1448"></a>
-<span class="sourceLineNo">1449</span>                return false;<a name="line.1449"></a>
-<span class="sourceLineNo">1450</span>        }<a name="line.1450"></a>
-<span class="sourceLineNo">1451</span>        return true;<a name="line.1451"></a>
+<span class="sourceLineNo">1374</span>    /**<a name="line.1374"></a>
+<span class="sourceLineNo">1375</span>     * Removes the item at the given index in the iteration order in not-exactly constant time (though it still should<a name="line.1375"></a>
+<span class="sourceLineNo">1376</span>     * be efficient).<a name="line.1376"></a>
+<span class="sourceLineNo">1377</span>     *<a name="line.1377"></a>
+<span class="sourceLineNo">1378</span>     * @param idx the index in the iteration order of the item to remove<a name="line.1378"></a>
+<span class="sourceLineNo">1379</span>     * @return true if this Set was changed as a result of this call, or false if nothing changed.<a name="line.1379"></a>
+<span class="sourceLineNo">1380</span>     */<a name="line.1380"></a>
+<span class="sourceLineNo">1381</span>    public boolean removeAt(final int idx) {<a name="line.1381"></a>
+<span class="sourceLineNo">1382</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.1382"></a>
+<span class="sourceLineNo">1383</span>            throw new NoSuchElementException();<a name="line.1383"></a>
+<span class="sourceLineNo">1384</span>        int pos = order.get(idx);<a name="line.1384"></a>
+<span class="sourceLineNo">1385</span>        if(pos &gt; n)<a name="line.1385"></a>
+<span class="sourceLineNo">1386</span>            return false;<a name="line.1386"></a>
+<span class="sourceLineNo">1387</span>        if (cols[pos] == null &amp;&amp; rows[pos] == null) {<a name="line.1387"></a>
+<span class="sourceLineNo">1388</span>            if (containsNull)<a name="line.1388"></a>
+<span class="sourceLineNo">1389</span>                return removeNullEntry();<a name="line.1389"></a>
+<span class="sourceLineNo">1390</span>            return false;<a name="line.1390"></a>
+<span class="sourceLineNo">1391</span>        }<a name="line.1391"></a>
+<span class="sourceLineNo">1392</span>        return removeEntry(pos);<a name="line.1392"></a>
+<span class="sourceLineNo">1393</span>    }<a name="line.1393"></a>
+<span class="sourceLineNo">1394</span><a name="line.1394"></a>
+<span class="sourceLineNo">1395</span>    /**<a name="line.1395"></a>
+<span class="sourceLineNo">1396</span>     * Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.<a name="line.1396"></a>
+<span class="sourceLineNo">1397</span>     *<a name="line.1397"></a>
+<span class="sourceLineNo">1398</span>     * @param rng used to generate a random index for a value<a name="line.1398"></a>
+<span class="sourceLineNo">1399</span>     * @return a random value from this OrderedSet<a name="line.1399"></a>
+<span class="sourceLineNo">1400</span>     */<a name="line.1400"></a>
+<span class="sourceLineNo">1401</span>    public C randomColumn(RNG rng) {<a name="line.1401"></a>
+<span class="sourceLineNo">1402</span>        return columnAt(rng.nextIntHasty(order.size));<a name="line.1402"></a>
+<span class="sourceLineNo">1403</span>    }<a name="line.1403"></a>
+<span class="sourceLineNo">1404</span><a name="line.1404"></a>
+<span class="sourceLineNo">1405</span>    /**<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>     * Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span>     *<a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>     * @param rng used to generate a random index for a value<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>     * @return a random value from this OrderedSet<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>     */<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span>    public R randomRow(RNG rng) {<a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>        return rowAt(rng.nextIntHasty(order.size));<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span>    }<a name="line.1413"></a>
+<span class="sourceLineNo">1414</span><a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>    /**<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>     * Randomly alters the iteration order for this OrderedSet using the given RNG to shuffle.<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>     *<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span>     * @param rng used to generate a random ordering<a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>     * @return this for chaining<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>     */<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span>    public TableSet&lt;C, R&gt; shuffle(RNG rng) {<a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>        if (size &lt; 2 || rng == null)<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span>            return this;<a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>        order.shuffle(rng);<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span>        first = order.get(0);<a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>        last = order.peek();<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>        return this;<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span>    }<a name="line.1428"></a>
+<span class="sourceLineNo">1429</span><a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>    /**<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>     * Given an array or varargs of replacement indices for this OrderedSet's iteration order, reorders this so the<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>     * first item in the returned version is the same as {@code getAt(ordering[0])} (with some care taken for negative<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>     * or too-large indices), the second item in the returned version is the same as {@code getAt(ordering[1])}, etc.<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>     * &lt;br&gt;<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>     * Negative indices are considered reversed distances from the end of ordering, so -1 refers to the same index as<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>     * {@code ordering[ordering.length - 1]}. If ordering is smaller than {@code size()}, only the indices up to the<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span>     * length of ordering will be modified. If ordering is larger than {@code size()}, only as many indices will be<a name="line.1437"></a>
+<span class="sourceLineNo">1438</span>     * affected as {@code size()}, and reversed distances are measured from the end of this Set's entries instead of<a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>     * the end of ordering. Duplicate values in ordering will produce duplicate values in the returned Set.<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>     * &lt;br&gt;<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>     * This method modifies this OrderedSet in-place and also returns it for chaining.<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span>     *<a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>     * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>     *                 Set to have the value currently in this Set at the index specified by the value in ordering<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>     * @return this for chaining, after modifying it in-place<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span>     */<a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>    public TableSet&lt;C, R&gt; reorder(int... ordering) {<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>        order.reorder(ordering);<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>        first = order.get(0);<a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>        last = order.peek();<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>        return this;<a name="line.1451"></a>
 <span class="sourceLineNo">1452</span>    }<a name="line.1452"></a>
 <span class="sourceLineNo">1453</span><a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>    @GwtIncompatible<a name="line.1454"></a>
-<span class="sourceLineNo">1455</span>    private void writeObject(java.io.ObjectOutputStream s)<a name="line.1455"></a>
-<span class="sourceLineNo">1456</span>            throws java.io.IOException {<a name="line.1456"></a>
-<span class="sourceLineNo">1457</span>        final ListIterator&lt;C&gt; i = iterator();<a name="line.1457"></a>
-<span class="sourceLineNo">1458</span>        s.defaultWriteObject();<a name="line.1458"></a>
-<span class="sourceLineNo">1459</span>        s.writeObject(columnHasher);<a name="line.1459"></a>
-<span class="sourceLineNo">1460</span>        for (int j = size; j-- != 0; )<a name="line.1460"></a>
-<span class="sourceLineNo">1461</span>            s.writeObject(i.next());<a name="line.1461"></a>
-<span class="sourceLineNo">1462</span>    }<a name="line.1462"></a>
-<span class="sourceLineNo">1463</span><a name="line.1463"></a>
-<span class="sourceLineNo">1464</span>    @GwtIncompatible<a name="line.1464"></a>
-<span class="sourceLineNo">1465</span>    @SuppressWarnings("unchecked")<a name="line.1465"></a>
-<span class="sourceLineNo">1466</span>    private void readObject(java.io.ObjectInputStream s)<a name="line.1466"></a>
-<span class="sourceLineNo">1467</span>            throws java.io.IOException, ClassNotFoundException {<a name="line.1467"></a>
-<span class="sourceLineNo">1468</span>        s.defaultReadObject();<a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>        columnHasher = (CrossHash.IHasher) s.readObject();<a name="line.1469"></a>
-<span class="sourceLineNo">1470</span>        n = arraySize(size, f);<a name="line.1470"></a>
-<span class="sourceLineNo">1471</span>        maxFill = maxFill(n, f);<a name="line.1471"></a>
-<span class="sourceLineNo">1472</span>        mask = n - 1;<a name="line.1472"></a>
-<span class="sourceLineNo">1473</span>        final C key[] = this.cols = (C[]) new Object[n + 1];<a name="line.1473"></a>
-<span class="sourceLineNo">1474</span>        final IntVLA order = this.order = new IntVLA(n + 1);<a name="line.1474"></a>
-<span class="sourceLineNo">1475</span>        int prev = -1;<a name="line.1475"></a>
-<span class="sourceLineNo">1476</span>        first = last = -1;<a name="line.1476"></a>
-<span class="sourceLineNo">1477</span>        C c;<a name="line.1477"></a>
-<span class="sourceLineNo">1478</span>        for (int i = size, pos; i-- != 0; ) {<a name="line.1478"></a>
-<span class="sourceLineNo">1479</span>            c = (C) s.readObject();<a name="line.1479"></a>
-<span class="sourceLineNo">1480</span>            if (c == null) {<a name="line.1480"></a>
-<span class="sourceLineNo">1481</span>                pos = n;<a name="line.1481"></a>
-<span class="sourceLineNo">1482</span>                containsNull = true;<a name="line.1482"></a>
-<span class="sourceLineNo">1483</span>            } else {<a name="line.1483"></a>
-<span class="sourceLineNo">1484</span>                if (!(key[pos = HashCommon.mix(columnHasher.hash(c)) &amp; mask] == null))<a name="line.1484"></a>
-<span class="sourceLineNo">1485</span>                    while (!(key[pos = pos + 1 &amp; mask] == null)) ;<a name="line.1485"></a>
-<span class="sourceLineNo">1486</span>            }<a name="line.1486"></a>
-<span class="sourceLineNo">1487</span>            key[pos] = c;<a name="line.1487"></a>
-<span class="sourceLineNo">1488</span>            if (first != -1) {<a name="line.1488"></a>
-<span class="sourceLineNo">1489</span>                last = pos;<a name="line.1489"></a>
-<span class="sourceLineNo">1490</span>            } else {<a name="line.1490"></a>
-<span class="sourceLineNo">1491</span>                first = last = pos;<a name="line.1491"></a>
-<span class="sourceLineNo">1492</span>            }<a name="line.1492"></a>
-<span class="sourceLineNo">1493</span>            order.add(pos);<a name="line.1493"></a>
-<span class="sourceLineNo">1494</span>        }<a name="line.1494"></a>
-<span class="sourceLineNo">1495</span>    }<a name="line.1495"></a>
-<span class="sourceLineNo">1496</span><a name="line.1496"></a>
-<span class="sourceLineNo">1497</span>    /**<a name="line.1497"></a>
-<span class="sourceLineNo">1498</span>     * Gets the item at the given index in the iteration order in constant time (random-access).<a name="line.1498"></a>
-<span class="sourceLineNo">1499</span>     *<a name="line.1499"></a>
-<span class="sourceLineNo">1500</span>     * @param idx the index in the iteration order of the key to fetch<a name="line.1500"></a>
-<span class="sourceLineNo">1501</span>     * @return the key at the index, if the index is valid, otherwise null<a name="line.1501"></a>
-<span class="sourceLineNo">1502</span>     */<a name="line.1502"></a>
-<span class="sourceLineNo">1503</span>    public C columnAt(final int idx) {<a name="line.1503"></a>
-<span class="sourceLineNo">1504</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.1504"></a>
-<span class="sourceLineNo">1505</span>            return null;<a name="line.1505"></a>
-<span class="sourceLineNo">1506</span>        // The starting point.<a name="line.1506"></a>
-<span class="sourceLineNo">1507</span>        return this.cols[order.get(idx)];<a name="line.1507"></a>
-<span class="sourceLineNo">1508</span>    }<a name="line.1508"></a>
-<span class="sourceLineNo">1509</span><a name="line.1509"></a>
-<span class="sourceLineNo">1510</span>    /**<a name="line.1510"></a>
-<span class="sourceLineNo">1511</span>     * Gets the item at the given index in the iteration order in constant time (random-access).<a name="line.1511"></a>
-<span class="sourceLineNo">1512</span>     *<a name="line.1512"></a>
-<span class="sourceLineNo">1513</span>     * @param idx the index in the iteration order of the key to fetch<a name="line.1513"></a>
-<span class="sourceLineNo">1514</span>     * @return the key at the index, if the index is valid, otherwise null<a name="line.1514"></a>
-<span class="sourceLineNo">1515</span>     */<a name="line.1515"></a>
-<span class="sourceLineNo">1516</span>    public R rowAt(final int idx) {<a name="line.1516"></a>
-<span class="sourceLineNo">1517</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.1517"></a>
-<span class="sourceLineNo">1518</span>            return null;<a name="line.1518"></a>
-<span class="sourceLineNo">1519</span>        // The starting point.<a name="line.1519"></a>
-<span class="sourceLineNo">1520</span>        return this.rows[order.get(idx)];<a name="line.1520"></a>
-<span class="sourceLineNo">1521</span>    }<a name="line.1521"></a>
-<span class="sourceLineNo">1522</span><a name="line.1522"></a>
-<span class="sourceLineNo">1523</span>    /**<a name="line.1523"></a>
-<span class="sourceLineNo">1524</span>     * Removes the item at the given index in the iteration order in not-exactly constant time (though it still should<a name="line.1524"></a>
-<span class="sourceLineNo">1525</span>     * be efficient).<a name="line.1525"></a>
-<span class="sourceLineNo">1526</span>     *<a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>     * @param idx the index in the iteration order of the item to remove<a name="line.1527"></a>
-<span class="sourceLineNo">1528</span>     * @return true if this Set was changed as a result of this call, or false if nothing changed.<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>     */<a name="line.1529"></a>
-<span class="sourceLineNo">1530</span>    public boolean removeAt(final int idx) {<a name="line.1530"></a>
-<span class="sourceLineNo">1531</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.1531"></a>
-<span class="sourceLineNo">1532</span>            throw new NoSuchElementException();<a name="line.1532"></a>
-<span class="sourceLineNo">1533</span>        int pos = order.get(idx);<a name="line.1533"></a>
-<span class="sourceLineNo">1534</span>        if(pos &gt; n)<a name="line.1534"></a>
-<span class="sourceLineNo">1535</span>            return false;<a name="line.1535"></a>
-<span class="sourceLineNo">1536</span>        if (cols[pos] == null &amp;&amp; rows[pos] == null) {<a name="line.1536"></a>
-<span class="sourceLineNo">1537</span>            if (containsNull)<a name="line.1537"></a>
-<span class="sourceLineNo">1538</span>                return removeNullEntry();<a name="line.1538"></a>
-<span class="sourceLineNo">1539</span>            return false;<a name="line.1539"></a>
-<span class="sourceLineNo">1540</span>        }<a name="line.1540"></a>
-<span class="sourceLineNo">1541</span>        return removeEntry(pos);<a name="line.1541"></a>
-<span class="sourceLineNo">1542</span>    }<a name="line.1542"></a>
-<span class="sourceLineNo">1543</span><a name="line.1543"></a>
-<span class="sourceLineNo">1544</span>    /**<a name="line.1544"></a>
-<span class="sourceLineNo">1545</span>     * Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.<a name="line.1545"></a>
-<span class="sourceLineNo">1546</span>     *<a name="line.1546"></a>
-<span class="sourceLineNo">1547</span>     * @param rng used to generate a random index for a value<a name="line.1547"></a>
-<span class="sourceLineNo">1548</span>     * @return a random value from this OrderedSet<a name="line.1548"></a>
-<span class="sourceLineNo">1549</span>     */<a name="line.1549"></a>
-<span class="sourceLineNo">1550</span>    public C randomColumn(RNG rng) {<a name="line.1550"></a>
-<span class="sourceLineNo">1551</span>        return columnAt(rng.nextIntHasty(order.size));<a name="line.1551"></a>
-<span class="sourceLineNo">1552</span>    }<a name="line.1552"></a>
-<span class="sourceLineNo">1553</span><a name="line.1553"></a>
-<span class="sourceLineNo">1554</span>    /**<a name="line.1554"></a>
-<span class="sourceLineNo">1555</span>     * Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.<a name="line.1555"></a>
-<span class="sourceLineNo">1556</span>     *<a name="line.1556"></a>
-<span class="sourceLineNo">1557</span>     * @param rng used to generate a random index for a value<a name="line.1557"></a>
-<span class="sourceLineNo">1558</span>     * @return a random value from this OrderedSet<a name="line.1558"></a>
-<span class="sourceLineNo">1559</span>     */<a name="line.1559"></a>
-<span class="sourceLineNo">1560</span>    public R randomRow(RNG rng) {<a name="line.1560"></a>
-<span class="sourceLineNo">1561</span>        return rowAt(rng.nextIntHasty(order.size));<a name="line.1561"></a>
-<span class="sourceLineNo">1562</span>    }<a name="line.1562"></a>
-<span class="sourceLineNo">1563</span><a name="line.1563"></a>
-<span class="sourceLineNo">1564</span>    /**<a name="line.1564"></a>
-<span class="sourceLineNo">1565</span>     * Randomly alters the iteration order for this OrderedSet using the given RNG to shuffle.<a name="line.1565"></a>
-<span class="sourceLineNo">1566</span>     *<a name="line.1566"></a>
-<span class="sourceLineNo">1567</span>     * @param rng used to generate a random ordering<a name="line.1567"></a>
-<span class="sourceLineNo">1568</span>     * @return this for chaining<a name="line.1568"></a>
-<span class="sourceLineNo">1569</span>     */<a name="line.1569"></a>
-<span class="sourceLineNo">1570</span>    public TableSet&lt;C, R&gt; shuffle(RNG rng) {<a name="line.1570"></a>
-<span class="sourceLineNo">1571</span>        if (size &lt; 2 || rng == null)<a name="line.1571"></a>
-<span class="sourceLineNo">1572</span>            return this;<a name="line.1572"></a>
-<span class="sourceLineNo">1573</span>        order.shuffle(rng);<a name="line.1573"></a>
-<span class="sourceLineNo">1574</span>        first = order.get(0);<a name="line.1574"></a>
-<span class="sourceLineNo">1575</span>        last = order.peek();<a name="line.1575"></a>
-<span class="sourceLineNo">1576</span>        return this;<a name="line.1576"></a>
-<span class="sourceLineNo">1577</span>    }<a name="line.1577"></a>
-<span class="sourceLineNo">1578</span><a name="line.1578"></a>
-<span class="sourceLineNo">1579</span>    /**<a name="line.1579"></a>
-<span class="sourceLineNo">1580</span>     * Given an array or varargs of replacement indices for this OrderedSet's iteration order, reorders this so the<a name="line.1580"></a>
-<span class="sourceLineNo">1581</span>     * first item in the returned version is the same as {@code getAt(ordering[0])} (with some care taken for negative<a name="line.1581"></a>
-<span class="sourceLineNo">1582</span>     * or too-large indices), the second item in the returned version is the same as {@code getAt(ordering[1])}, etc.<a name="line.1582"></a>
-<span class="sourceLineNo">1583</span>     * &lt;br&gt;<a name="line.1583"></a>
-<span class="sourceLineNo">1584</span>     * Negative indices are considered reversed distances from the end of ordering, so -1 refers to the same index as<a name="line.1584"></a>
-<span class="sourceLineNo">1585</span>     * {@code ordering[ordering.length - 1]}. If ordering is smaller than {@code size()}, only the indices up to the<a name="line.1585"></a>
-<span class="sourceLineNo">1586</span>     * length of ordering will be modified. If ordering is larger than {@code size()}, only as many indices will be<a name="line.1586"></a>
-<span class="sourceLineNo">1587</span>     * affected as {@code size()}, and reversed distances are measured from the end of this Set's entries instead of<a name="line.1587"></a>
-<span class="sourceLineNo">1588</span>     * the end of ordering. Duplicate values in ordering will produce duplicate values in the returned Set.<a name="line.1588"></a>
-<span class="sourceLineNo">1589</span>     * &lt;br&gt;<a name="line.1589"></a>
-<span class="sourceLineNo">1590</span>     * This method modifies this OrderedSet in-place and also returns it for chaining.<a name="line.1590"></a>
-<span class="sourceLineNo">1591</span>     *<a name="line.1591"></a>
-<span class="sourceLineNo">1592</span>     * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this<a name="line.1592"></a>
-<span class="sourceLineNo">1593</span>     *                 Set to have the value currently in this Set at the index specified by the value in ordering<a name="line.1593"></a>
-<span class="sourceLineNo">1594</span>     * @return this for chaining, after modifying it in-place<a name="line.1594"></a>
-<span class="sourceLineNo">1595</span>     */<a name="line.1595"></a>
-<span class="sourceLineNo">1596</span>    public TableSet&lt;C, R&gt; reorder(int... ordering) {<a name="line.1596"></a>
-<span class="sourceLineNo">1597</span>        order.reorder(ordering);<a name="line.1597"></a>
-<span class="sourceLineNo">1598</span>        first = order.get(0);<a name="line.1598"></a>
-<span class="sourceLineNo">1599</span>        last = order.peek();<a name="line.1599"></a>
-<span class="sourceLineNo">1600</span>        return this;<a name="line.1600"></a>
-<span class="sourceLineNo">1601</span>    }<a name="line.1601"></a>
-<span class="sourceLineNo">1602</span><a name="line.1602"></a>
-<span class="sourceLineNo">1603</span>    private boolean alterEntry(final int pos, final C creplacement, final R rreplacement) {<a name="line.1603"></a>
-<span class="sourceLineNo">1604</span>        int rep;<a name="line.1604"></a>
-<span class="sourceLineNo">1605</span>        if (creplacement == null &amp;&amp; rreplacement == null) {<a name="line.1605"></a>
-<span class="sourceLineNo">1606</span>            if (containsNull)<a name="line.1606"></a>
-<span class="sourceLineNo">1607</span>                return false;<a name="line.1607"></a>
-<span class="sourceLineNo">1608</span>            rep = n;<a name="line.1608"></a>
-<span class="sourceLineNo">1609</span>            containsNull = true;<a name="line.1609"></a>
-<span class="sourceLineNo">1610</span>        } else {<a name="line.1610"></a>
-<span class="sourceLineNo">1611</span>            C curr;<a name="line.1611"></a>
-<span class="sourceLineNo">1612</span>            R rurr;<a name="line.1612"></a>
-<span class="sourceLineNo">1613</span>            final C[] col = this.cols;<a name="line.1613"></a>
-<span class="sourceLineNo">1614</span>            final R[] row = this.rows;<a name="line.1614"></a>
-<span class="sourceLineNo">1615</span>            col[pos] = null;<a name="line.1615"></a>
-<span class="sourceLineNo">1616</span>            row[pos] = null;<a name="line.1616"></a>
-<span class="sourceLineNo">1617</span>            // The starting point.<a name="line.1617"></a>
-<span class="sourceLineNo">1618</span>            if (((curr = col[rep = PintRNG.determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))<a name="line.1618"></a>
-<span class="sourceLineNo">1619</span>                    &amp; mask]) != null) &amp;&amp; (rurr = row[rep]) != null) {<a name="line.1619"></a>
-<span class="sourceLineNo">1620</span>                if (columnHasher.areEqual(curr, creplacement) &amp;&amp; rowHasher.areEqual(rurr, rreplacement))<a name="line.1620"></a>
-<span class="sourceLineNo">1621</span>                    return false;<a name="line.1621"></a>
-<span class="sourceLineNo">1622</span>                while ((curr = col[rep = rep + 1 &amp; mask]) != null &amp;&amp; (rurr = row[rep]) != null)<a name="line.1622"></a>
-<span class="sourceLineNo">1623</span>                    if (columnHasher.areEqual(curr, creplacement) &amp;&amp; rowHasher.areEqual(rurr, rreplacement))<a name="line.1623"></a>
-<span class="sourceLineNo">1624</span>                        return false;<a name="line.1624"></a>
-<span class="sourceLineNo">1625</span>            }<a name="line.1625"></a>
-<span class="sourceLineNo">1626</span>            col[rep] = creplacement;<a name="line.1626"></a>
-<span class="sourceLineNo">1627</span>            row[rep] = rreplacement;<a name="line.1627"></a>
-<span class="sourceLineNo">1628</span>        }<a name="line.1628"></a>
-<span class="sourceLineNo">1629</span>        fixOrder(pos, rep);<a name="line.1629"></a>
-<span class="sourceLineNo">1630</span>        return true;<a name="line.1630"></a>
-<span class="sourceLineNo">1631</span>    }<a name="line.1631"></a>
-<span class="sourceLineNo">1632</span><a name="line.1632"></a>
-<span class="sourceLineNo">1633</span>    private boolean alterNullEntry(final C creplacement, final R rreplacement) {<a name="line.1633"></a>
-<span class="sourceLineNo">1634</span>        containsNull = false;<a name="line.1634"></a>
-<span class="sourceLineNo">1635</span>        cols[n] = null;<a name="line.1635"></a>
-<span class="sourceLineNo">1636</span>        rows[n] = null;<a name="line.1636"></a>
-<span class="sourceLineNo">1637</span>        int rep;<a name="line.1637"></a>
-<span class="sourceLineNo">1638</span>        if (creplacement == null &amp;&amp; rreplacement == null) {<a name="line.1638"></a>
-<span class="sourceLineNo">1639</span>            rep = n;<a name="line.1639"></a>
-<span class="sourceLineNo">1640</span>            containsNull = true;<a name="line.1640"></a>
-<span class="sourceLineNo">1641</span>        } else {<a name="line.1641"></a>
-<span class="sourceLineNo">1642</span>            C curr;<a name="line.1642"></a>
-<span class="sourceLineNo">1643</span>            R rurr;<a name="line.1643"></a>
-<span class="sourceLineNo">1644</span>            final C[] col = this.cols;<a name="line.1644"></a>
-<span class="sourceLineNo">1645</span>            final R[] row = this.rows;<a name="line.1645"></a>
-<span class="sourceLineNo">1646</span>            // The starting point.<a name="line.1646"></a>
-<span class="sourceLineNo">1647</span>            if (((curr = col[rep = PintRNG.determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))<a name="line.1647"></a>
-<span class="sourceLineNo">1648</span>                    &amp; mask]) != null) &amp;&amp; (rurr = row[rep]) != null) {<a name="line.1648"></a>
-<span class="sourceLineNo">1649</span>                if (columnHasher.areEqual(curr, creplacement) &amp;&amp; rowHasher.areEqual(rurr, rreplacement))<a name="line.1649"></a>
-<span class="sourceLineNo">1650</span>                    return false;<a name="line.1650"></a>
-<span class="sourceLineNo">1651</span>                while ((curr = col[rep = rep + 1 &amp; mask]) != null &amp;&amp; (rurr = row[rep]) != null)<a name="line.1651"></a>
-<span class="sourceLineNo">1652</span>                    if (columnHasher.areEqual(curr, creplacement) &amp;&amp; rowHasher.areEqual(rurr, rreplacement))<a name="line.1652"></a>
-<span class="sourceLineNo">1653</span>                        return false;<a name="line.1653"></a>
-<span class="sourceLineNo">1654</span>            }<a name="line.1654"></a>
-<span class="sourceLineNo">1655</span>            col[rep] = creplacement;<a name="line.1655"></a>
-<span class="sourceLineNo">1656</span>            row[rep] = rreplacement;<a name="line.1656"></a>
-<span class="sourceLineNo">1657</span>        }<a name="line.1657"></a>
-<span class="sourceLineNo">1658</span>        fixOrder(n, rep);<a name="line.1658"></a>
-<span class="sourceLineNo">1659</span>        return true;<a name="line.1659"></a>
-<span class="sourceLineNo">1660</span>    }<a name="line.1660"></a>
-<span class="sourceLineNo">1661</span><a name="line.1661"></a>
-<span class="sourceLineNo">1662</span>    /*<a name="line.1662"></a>
-<span class="sourceLineNo">1663</span>    public boolean alter(C original, C replacement)<a name="line.1663"></a>
-<span class="sourceLineNo">1664</span>    {<a name="line.1664"></a>
-<span class="sourceLineNo">1665</span>        if (original == null) {<a name="line.1665"></a>
-<span class="sourceLineNo">1666</span>            if (containsNull) {<a name="line.1666"></a>
-<span class="sourceLineNo">1667</span>                return replacement != null &amp;&amp; alterNullEntry(replacement);<a name="line.1667"></a>
-<span class="sourceLineNo">1668</span>            }<a name="line.1668"></a>
-<span class="sourceLineNo">1669</span>            else<a name="line.1669"></a>
-<span class="sourceLineNo">1670</span>                return add(replacement);<a name="line.1670"></a>
-<span class="sourceLineNo">1671</span>        }<a name="line.1671"></a>
-<span class="sourceLineNo">1672</span>        else if(hasher.areEqual(original, replacement))<a name="line.1672"></a>
-<span class="sourceLineNo">1673</span>            return false;<a name="line.1673"></a>
-<span class="sourceLineNo">1674</span>        C curr;<a name="line.1674"></a>
-<span class="sourceLineNo">1675</span>        final C[] key = this.key;<a name="line.1675"></a>
-<span class="sourceLineNo">1676</span>        int pos;<a name="line.1676"></a>
-<span class="sourceLineNo">1677</span>        // The starting point.<a name="line.1677"></a>
-<span class="sourceLineNo">1678</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) &amp; mask]) == null)<a name="line.1678"></a>
-<span class="sourceLineNo">1679</span>            return add(replacement);<a name="line.1679"></a>
-<span class="sourceLineNo">1680</span>        if (hasher.areEqual(original, curr))<a name="line.1680"></a>
-<span class="sourceLineNo">1681</span>            return alterEntry(pos, replacement);<a name="line.1681"></a>
-<span class="sourceLineNo">1682</span>        while (true) {<a name="line.1682"></a>
-<span class="sourceLineNo">1683</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.1683"></a>
-<span class="sourceLineNo">1684</span>                return add(replacement);<a name="line.1684"></a>
-<span class="sourceLineNo">1685</span>            if (hasher.areEqual(original, curr))<a name="line.1685"></a>
-<span class="sourceLineNo">1686</span>                return alterEntry(pos, replacement);<a name="line.1686"></a>
-<span class="sourceLineNo">1687</span>        }<a name="line.1687"></a>
-<span class="sourceLineNo">1688</span>    }*/<a name="line.1688"></a>
-<span class="sourceLineNo">1689</span>    private int alterEntry(final int pos) {<a name="line.1689"></a>
-<span class="sourceLineNo">1690</span>        size--;<a name="line.1690"></a>
-<span class="sourceLineNo">1691</span>        int idx = fixOrder(pos);<a name="line.1691"></a>
-<span class="sourceLineNo">1692</span>        shiftKeys(pos);<a name="line.1692"></a>
-<span class="sourceLineNo">1693</span>        if (size &lt; maxFill / 4 &amp;&amp; n &gt; DEFAULT_INITIAL_SIZE)<a name="line.1693"></a>
-<span class="sourceLineNo">1694</span>            rehash(n / 2);<a name="line.1694"></a>
-<span class="sourceLineNo">1695</span>        return idx;<a name="line.1695"></a>
-<span class="sourceLineNo">1696</span>    }<a name="line.1696"></a>
-<span class="sourceLineNo">1697</span><a name="line.1697"></a>
-<span class="sourceLineNo">1698</span>    private int alterNullEntry() {<a name="line.1698"></a>
-<span class="sourceLineNo">1699</span>        containsNull = false;<a name="line.1699"></a>
-<span class="sourceLineNo">1700</span>        cols[n] = null;<a name="line.1700"></a>
-<span class="sourceLineNo">1701</span>        size--;<a name="line.1701"></a>
-<span class="sourceLineNo">1702</span>        int idx = fixOrder(n);<a name="line.1702"></a>
-<span class="sourceLineNo">1703</span>        if (size &lt; maxFill / 4 &amp;&amp; n &gt; DEFAULT_INITIAL_SIZE)<a name="line.1703"></a>
-<span class="sourceLineNo">1704</span>            rehash(n / 2);<a name="line.1704"></a>
-<span class="sourceLineNo">1705</span>        return idx;<a name="line.1705"></a>
-<span class="sourceLineNo">1706</span>    }<a name="line.1706"></a>
-<span class="sourceLineNo">1707</span><a name="line.1707"></a>
-<span class="sourceLineNo">1708</span>    /**<a name="line.1708"></a>
-<span class="sourceLineNo">1709</span>     * Changes a pair of C and R, originalC and originalR, to another pair, replacementC and replacementR.<a name="line.1709"></a>
-<span class="sourceLineNo">1710</span>     * Keeps the replacement at the same point in the ordering.<a name="line.1710"></a>
-<span class="sourceLineNo">1711</span>     *<a name="line.1711"></a>
-<span class="sourceLineNo">1712</span>     * @param originalC    the column part of a pair that will be removed from this TableSet if present, and its iteration index remembered<a name="line.1712"></a>
-<span class="sourceLineNo">1713</span>     * @param originalR    the row part of a pair that will be removed from this TableSet if present, and its iteration index remembered<a name="line.1713"></a>
-<span class="sourceLineNo">1714</span>     * @param replacementC another column value that will replace originalC at the remembered index<a name="line.1714"></a>
-<span class="sourceLineNo">1715</span>     * @param replacementR another row value that will replace originalR at the remembered index<a name="line.1715"></a>
-<span class="sourceLineNo">1716</span>     * @return true if the Set changed, or false if it didn't (such as if the two arguments are equal, or replacement was already in the Set but original was not)<a name="line.1716"></a>
-<span class="sourceLineNo">1717</span>     */<a name="line.1717"></a>
-<span class="sourceLineNo">1718</span>    public boolean alter(C originalC, R originalR, C replacementC, R replacementR) {<a name="line.1718"></a>
-<span class="sourceLineNo">1719</span>        int idx;<a name="line.1719"></a>
-<span class="sourceLineNo">1720</span>        if (originalC == null &amp;&amp; originalR == null) {<a name="line.1720"></a>
-<span class="sourceLineNo">1721</span>            if (containsNull) {<a name="line.1721"></a>
-<span class="sourceLineNo">1722</span>                if (replacementC != null &amp;&amp; replacementR != null) {<a name="line.1722"></a>
-<span class="sourceLineNo">1723</span>                    idx = alterNullEntry();<a name="line.1723"></a>
-<span class="sourceLineNo">1724</span>                    addAt(replacementC, replacementR, idx);<a name="line.1724"></a>
-<span class="sourceLineNo">1725</span>                    return true;<a name="line.1725"></a>
-<span class="sourceLineNo">1726</span>                } else<a name="line.1726"></a>
-<span class="sourceLineNo">1727</span>                    return false;<a name="line.1727"></a>
-<span class="sourceLineNo">1728</span>            }<a name="line.1728"></a>
-<span class="sourceLineNo">1729</span>            ;<a name="line.1729"></a>
-<span class="sourceLineNo">1730</span>            return false;<a name="line.1730"></a>
-<span class="sourceLineNo">1731</span>        }<a name="line.1731"></a>
-<span class="sourceLineNo">1732</span>        if (columnHasher.areEqual(originalC, replacementR) &amp;&amp; rowHasher.areEqual(originalR, replacementR))<a name="line.1732"></a>
-<span class="sourceLineNo">1733</span>            return false;<a name="line.1733"></a>
-<span class="sourceLineNo">1734</span>        C curr;<a name="line.1734"></a>
-<span class="sourceLineNo">1735</span>        R rurr;<a name="line.1735"></a>
-<span class="sourceLineNo">1736</span>        final C[] col = this.cols;<a name="line.1736"></a>
-<span class="sourceLineNo">1737</span>        final R[] row = this.rows;<a name="line.1737"></a>
-<span class="sourceLineNo">1738</span>        int pos;<a name="line.1738"></a>
-<span class="sourceLineNo">1739</span>        // The starting point.<a name="line.1739"></a>
-<span class="sourceLineNo">1740</span>        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(originalC), rowHasher.hash(originalR)) &amp; mask]) == null<a name="line.1740"></a>
-<span class="sourceLineNo">1741</span>                || (rurr = row[pos]) == null)<a name="line.1741"></a>
-<span class="sourceLineNo">1742</span>            return false;<a name="line.1742"></a>
-<span class="sourceLineNo">1743</span>        if (columnHasher.areEqual(originalC, curr) &amp;&amp; rowHasher.areEqual(originalR, rurr)) {<a name="line.1743"></a>
-<span class="sourceLineNo">1744</span>            idx = alterEntry(pos);<a name="line.1744"></a>
-<span class="sourceLineNo">1745</span>            addAt(replacementC, replacementR, idx);<a name="line.1745"></a>
-<span class="sourceLineNo">1746</span>            return true;<a name="line.1746"></a>
-<span class="sourceLineNo">1747</span>        }<a name="line.1747"></a>
-<span class="sourceLineNo">1748</span>        while (true) {<a name="line.1748"></a>
-<span class="sourceLineNo">1749</span>            if ((curr = col[pos = pos + 1 &amp; mask]) == null || (rurr = row[pos]) == null)<a name="line.1749"></a>
-<span class="sourceLineNo">1750</span>                return false;<a name="line.1750"></a>
-<span class="sourceLineNo">1751</span>            if (columnHasher.areEqual(originalC, curr) &amp;&amp; rowHasher.areEqual(originalR, rurr)) {<a name="line.1751"></a>
-<span class="sourceLineNo">1752</span>                idx = alterEntry(pos);<a name="line.1752"></a>
-<span class="sourceLineNo">1753</span>                addAt(replacementC, replacementR, idx);<a name="line.1753"></a>
-<span class="sourceLineNo">1754</span>                return true;<a name="line.1754"></a>
-<span class="sourceLineNo">1755</span>            }<a name="line.1755"></a>
-<span class="sourceLineNo">1756</span>        }<a name="line.1756"></a>
-<span class="sourceLineNo">1757</span>    }<a name="line.1757"></a>
-<span class="sourceLineNo">1758</span><a name="line.1758"></a>
-<span class="sourceLineNo">1759</span>}<a name="line.1759"></a>
+<span class="sourceLineNo">1454</span>    private boolean alterEntry(final int pos, final C creplacement, final R rreplacement) {<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>        int rep;<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>        if (creplacement == null &amp;&amp; rreplacement == null) {<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>            if (containsNull)<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>                return false;<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>            rep = n;<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>            containsNull = true;<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>        } else {<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span>            C curr;<a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>            R rurr;<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>            final C[] col = this.cols;<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>            final R[] row = this.rows;<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>            col[pos] = null;<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>            row[pos] = null;<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>            // The starting point.<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>            if (((curr = col[rep = PintRNG.determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>                    &amp; mask]) != null) &amp;&amp; (rurr = row[rep]) != null) {<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>                if (columnHasher.areEqual(curr, creplacement) &amp;&amp; rowHasher.areEqual(rurr, rreplacement))<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>                    return false;<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>                while ((curr = col[rep = rep + 1 &amp; mask]) != null &amp;&amp; (rurr = row[rep]) != null)<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>                    if (columnHasher.areEqual(curr, creplacement) &amp;&amp; rowHasher.areEqual(rurr, rreplacement))<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>                        return false;<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>            }<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>            col[rep] = creplacement;<a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>            row[rep] = rreplacement;<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>        }<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>        fixOrder(pos, rep);<a name="line.1480"></a>
+<span class="sourceLineNo">1481</span>        return true;<a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>    }<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span><a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>    private boolean alterNullEntry(final C creplacement, final R rreplacement) {<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span>        containsNull = false;<a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>        cols[n] = null;<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span>        rows[n] = null;<a name="line.1487"></a>
+<span class="sourceLineNo">1488</span>        int rep;<a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>        if (creplacement == null &amp;&amp; rreplacement == null) {<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>            rep = n;<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span>            containsNull = true;<a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>        } else {<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span>            C curr;<a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>            R rurr;<a name="line.1494"></a>
+<span class="sourceLineNo">1495</span>            final C[] col = this.cols;<a name="line.1495"></a>
+<span class="sourceLineNo">1496</span>            final R[] row = this.rows;<a name="line.1496"></a>
+<span class="sourceLineNo">1497</span>            // The starting point.<a name="line.1497"></a>
+<span class="sourceLineNo">1498</span>            if (((curr = col[rep = PintRNG.determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))<a name="line.1498"></a>
+<span class="sourceLineNo">1499</span>                    &amp; mask]) != null) &amp;&amp; (rurr = row[rep]) != null) {<a name="line.1499"></a>
+<span class="sourceLineNo">1500</span>                if (columnHasher.areEqual(curr, creplacement) &amp;&amp; rowHasher.areEqual(rurr, rreplacement))<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>                    return false;<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>                while ((curr = col[rep = rep + 1 &amp; mask]) != null &amp;&amp; (rurr = row[rep]) != null)<a name="line.1502"></a>
+<span class="sourceLineNo">1503</span>                    if (columnHasher.areEqual(curr, creplacement) &amp;&amp; rowHasher.areEqual(rurr, rreplacement))<a name="line.1503"></a>
+<span class="sourceLineNo">1504</span>                        return false;<a name="line.1504"></a>
+<span class="sourceLineNo">1505</span>            }<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>            col[rep] = creplacement;<a name="line.1506"></a>
+<span class="sourceLineNo">1507</span>            row[rep] = rreplacement;<a name="line.1507"></a>
+<span class="sourceLineNo">1508</span>        }<a name="line.1508"></a>
+<span class="sourceLineNo">1509</span>        fixOrder(n, rep);<a name="line.1509"></a>
+<span class="sourceLineNo">1510</span>        return true;<a name="line.1510"></a>
+<span class="sourceLineNo">1511</span>    }<a name="line.1511"></a>
+<span class="sourceLineNo">1512</span><a name="line.1512"></a>
+<span class="sourceLineNo">1513</span>    /*<a name="line.1513"></a>
+<span class="sourceLineNo">1514</span>    public boolean alter(C original, C replacement)<a name="line.1514"></a>
+<span class="sourceLineNo">1515</span>    {<a name="line.1515"></a>
+<span class="sourceLineNo">1516</span>        if (original == null) {<a name="line.1516"></a>
+<span class="sourceLineNo">1517</span>            if (containsNull) {<a name="line.1517"></a>
+<span class="sourceLineNo">1518</span>                return replacement != null &amp;&amp; alterNullEntry(replacement);<a name="line.1518"></a>
+<span class="sourceLineNo">1519</span>            }<a name="line.1519"></a>
+<span class="sourceLineNo">1520</span>            else<a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>                return add(replacement);<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>        }<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>        else if(hasher.areEqual(original, replacement))<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>            return false;<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>        C curr;<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>        final C[] key = this.key;<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span>        int pos;<a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>        // The starting point.<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) &amp; mask]) == null)<a name="line.1529"></a>
+<span class="sourceLineNo">1530</span>            return add(replacement);<a name="line.1530"></a>
+<span class="sourceLineNo">1531</span>        if (hasher.areEqual(original, curr))<a name="line.1531"></a>
+<span class="sourceLineNo">1532</span>            return alterEntry(pos, replacement);<a name="line.1532"></a>
+<span class="sourceLineNo">1533</span>        while (true) {<a name="line.1533"></a>
+<span class="sourceLineNo">1534</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.1534"></a>
+<span class="sourceLineNo">1535</span>                return add(replacement);<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span>            if (hasher.areEqual(original, curr))<a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>                return alterEntry(pos, replacement);<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span>        }<a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>    }*/<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>    private int alterEntry(final int pos) {<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>        size--;<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>        int idx = fixOrder(pos);<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>        shiftKeys(pos);<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span>        if (size &lt; maxFill / 4 &amp;&amp; n &gt; DEFAULT_INITIAL_SIZE)<a name="line.1544"></a>
+<span class="sourceLineNo">1545</span>            rehash(n / 2);<a name="line.1545"></a>
+<span class="sourceLineNo">1546</span>        return idx;<a name="line.1546"></a>
+<span class="sourceLineNo">1547</span>    }<a name="line.1547"></a>
+<span class="sourceLineNo">1548</span><a name="line.1548"></a>
+<span class="sourceLineNo">1549</span>    private int alterNullEntry() {<a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>        containsNull = false;<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span>        cols[n] = null;<a name="line.1551"></a>
+<span class="sourceLineNo">1552</span>        size--;<a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>        int idx = fixOrder(n);<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span>        if (size &lt; maxFill / 4 &amp;&amp; n &gt; DEFAULT_INITIAL_SIZE)<a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>            rehash(n / 2);<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span>        return idx;<a name="line.1556"></a>
+<span class="sourceLineNo">1557</span>    }<a name="line.1557"></a>
+<span class="sourceLineNo">1558</span><a name="line.1558"></a>
+<span class="sourceLineNo">1559</span>    /**<a name="line.1559"></a>
+<span class="sourceLineNo">1560</span>     * Changes a pair of C and R, originalC and originalR, to another pair, replacementC and replacementR.<a name="line.1560"></a>
+<span class="sourceLineNo">1561</span>     * Keeps the replacement at the same point in the ordering.<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span>     *<a name="line.1562"></a>
+<span class="sourceLineNo">1563</span>     * @param originalC    the column part of a pair that will be removed from this TableSet if present, and its iteration index remembered<a name="line.1563"></a>
+<span class="sourceLineNo">1564</span>     * @param originalR    the row part of a pair that will be removed from this TableSet if present, and its iteration index remembered<a name="line.1564"></a>
+<span class="sourceLineNo">1565</span>     * @param replacementC another column value that will replace originalC at the remembered index<a name="line.1565"></a>
+<span class="sourceLineNo">1566</span>     * @param replacementR another row value that will replace originalR at the remembered index<a name="line.1566"></a>
+<span class="sourceLineNo">1567</span>     * @return true if the Set changed, or false if it didn't (such as if the two arguments are equal, or replacement was already in the Set but original was not)<a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>     */<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>    public boolean alter(C originalC, R originalR, C replacementC, R replacementR) {<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span>        int idx;<a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>        if (originalC == null &amp;&amp; originalR == null) {<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>            if (containsNull) {<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>                if (replacementC != null &amp;&amp; replacementR != null) {<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span>                    idx = alterNullEntry();<a name="line.1574"></a>
+<span class="sourceLineNo">1575</span>                    addAt(replacementC, replacementR, idx);<a name="line.1575"></a>
+<span class="sourceLineNo">1576</span>                    return true;<a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>                } else<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span>                    return false;<a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>            }<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>            ;<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span>            return false;<a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>        }<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span>        if (columnHasher.areEqual(originalC, replacementR) &amp;&amp; rowHasher.areEqual(originalR, replacementR))<a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>            return false;<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>        C curr;<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span>        R rurr;<a name="line.1586"></a>
+<span class="sourceLineNo">1587</span>        final C[] col = this.cols;<a name="line.1587"></a>
+<span class="sourceLineNo">1588</span>        final R[] row = this.rows;<a name="line.1588"></a>
+<span class="sourceLineNo">1589</span>        int pos;<a name="line.1589"></a>
+<span class="sourceLineNo">1590</span>        // The starting point.<a name="line.1590"></a>
+<span class="sourceLineNo">1591</span>        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(originalC), rowHasher.hash(originalR)) &amp; mask]) == null<a name="line.1591"></a>
+<span class="sourceLineNo">1592</span>                || (rurr = row[pos]) == null)<a name="line.1592"></a>
+<span class="sourceLineNo">1593</span>            return false;<a name="line.1593"></a>
+<span class="sourceLineNo">1594</span>        if (columnHasher.areEqual(originalC, curr) &amp;&amp; rowHasher.areEqual(originalR, rurr)) {<a name="line.1594"></a>
+<span class="sourceLineNo">1595</span>            idx = alterEntry(pos);<a name="line.1595"></a>
+<span class="sourceLineNo">1596</span>            addAt(replacementC, replacementR, idx);<a name="line.1596"></a>
+<span class="sourceLineNo">1597</span>            return true;<a name="line.1597"></a>
+<span class="sourceLineNo">1598</span>        }<a name="line.1598"></a>
+<span class="sourceLineNo">1599</span>        while (true) {<a name="line.1599"></a>
+<span class="sourceLineNo">1600</span>            if ((curr = col[pos = pos + 1 &amp; mask]) == null || (rurr = row[pos]) == null)<a name="line.1600"></a>
+<span class="sourceLineNo">1601</span>                return false;<a name="line.1601"></a>
+<span class="sourceLineNo">1602</span>            if (columnHasher.areEqual(originalC, curr) &amp;&amp; rowHasher.areEqual(originalR, rurr)) {<a name="line.1602"></a>
+<span class="sourceLineNo">1603</span>                idx = alterEntry(pos);<a name="line.1603"></a>
+<span class="sourceLineNo">1604</span>                addAt(replacementC, replacementR, idx);<a name="line.1604"></a>
+<span class="sourceLineNo">1605</span>                return true;<a name="line.1605"></a>
+<span class="sourceLineNo">1606</span>            }<a name="line.1606"></a>
+<span class="sourceLineNo">1607</span>        }<a name="line.1607"></a>
+<span class="sourceLineNo">1608</span>    }<a name="line.1608"></a>
+<span class="sourceLineNo">1609</span><a name="line.1609"></a>
+<span class="sourceLineNo">1610</span>}<a name="line.1610"></a>
 
 
 

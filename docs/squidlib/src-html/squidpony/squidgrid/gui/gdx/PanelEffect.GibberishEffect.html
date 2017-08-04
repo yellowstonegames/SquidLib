@@ -143,7 +143,7 @@
 <span class="sourceLineNo">135</span>            resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);<a name="line.135"></a>
 <span class="sourceLineNo">136</span>            validCells.writeDoublesInto(resMap, 0.0);<a name="line.136"></a>
 <span class="sourceLineNo">137</span>            lightMap = new double[validCells.width][validCells.height];<a name="line.137"></a>
-<span class="sourceLineNo">138</span>            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius);<a name="line.138"></a>
+<span class="sourceLineNo">138</span>            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius + 0.5);<a name="line.138"></a>
 <span class="sourceLineNo">139</span>            validCells.not().writeDoublesInto(lightMap, 0.0);<a name="line.139"></a>
 <span class="sourceLineNo">140</span>            validCells.not();<a name="line.140"></a>
 <span class="sourceLineNo">141</span>            affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);<a name="line.141"></a>

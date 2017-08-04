@@ -236,13 +236,13 @@
 <span class="sourceLineNo">228</span>    public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,<a name="line.228"></a>
 <span class="sourceLineNo">229</span>                                   Radius radiusTechnique, double angle, double span) {<a name="line.229"></a>
 <span class="sourceLineNo">230</span><a name="line.230"></a>
-<span class="sourceLineNo">231</span>        double rad = Math.max(1, radius);<a name="line.231"></a>
+<span class="sourceLineNo">231</span>        radius = Math.max(1, radius);<a name="line.231"></a>
 <span class="sourceLineNo">232</span><a name="line.232"></a>
-<span class="sourceLineNo">233</span>        double decay = 1.0 / rad;<a name="line.233"></a>
+<span class="sourceLineNo">233</span>        double decay = 1.0 / (radius + 1);<a name="line.233"></a>
 <span class="sourceLineNo">234</span><a name="line.234"></a>
-<span class="sourceLineNo">235</span>                double angle2 = Math.toRadians((angle &gt; 360.0 || angle &lt; 0.0)<a name="line.235"></a>
-<span class="sourceLineNo">236</span>                                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);<a name="line.236"></a>
-<span class="sourceLineNo">237</span>        double span2 = Math.toRadians(span);<a name="line.237"></a>
+<span class="sourceLineNo">235</span>        angle = Math.toRadians((angle &gt;= 360.0 || angle &lt; 0.0)<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        span = Math.toRadians(span);<a name="line.237"></a>
 <span class="sourceLineNo">238</span>        int width = resistanceMap.length;<a name="line.238"></a>
 <span class="sourceLineNo">239</span>        int height = resistanceMap[0].length;<a name="line.239"></a>
 <span class="sourceLineNo">240</span><a name="line.240"></a>
@@ -255,636 +255,681 @@
 <span class="sourceLineNo">247</span>            case RIPPLE_TIGHT:<a name="line.247"></a>
 <span class="sourceLineNo">248</span>            case RIPPLE_VERY_LOOSE:<a name="line.248"></a>
 <span class="sourceLineNo">249</span>                initializeNearLight(width, height);<a name="line.249"></a>
-<span class="sourceLineNo">250</span>                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique, angle2, span2);<a name="line.250"></a>
+<span class="sourceLineNo">250</span>                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, radius, resistanceMap, nearLight, radiusTechnique, angle, span);<a name="line.250"></a>
 <span class="sourceLineNo">251</span>                break;<a name="line.251"></a>
 <span class="sourceLineNo">252</span>            case SHADOW:<a name="line.252"></a>
-<span class="sourceLineNo">253</span>                // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever<a name="line.253"></a>
-<span class="sourceLineNo">254</span>                // run through more than (width + height) iterations of the radius-related loop (which seemed to be the<a name="line.254"></a>
-<span class="sourceLineNo">255</span>                // only problem, running through billions of iterations when Integer/MAX_VALUE is given as a radius).<a name="line.255"></a>
-<span class="sourceLineNo">256</span>                int ctr = 0;<a name="line.256"></a>
-<span class="sourceLineNo">257</span>                boolean started = false;<a name="line.257"></a>
-<span class="sourceLineNo">258</span>                for (Direction d : ccw) {<a name="line.258"></a>
-<span class="sourceLineNo">259</span>                    ctr &amp;= 3;<a name="line.259"></a>
-<span class="sourceLineNo">260</span>                    ++ctr;<a name="line.260"></a>
-<span class="sourceLineNo">261</span>                    if (angle2 &lt;= Math.PI * 0.5 * ctr + span2 * 0.5)<a name="line.261"></a>
-<span class="sourceLineNo">262</span>                        started = true;<a name="line.262"></a>
-<span class="sourceLineNo">263</span>                    if (started) {<a name="line.263"></a>
-<span class="sourceLineNo">264</span>                        if(ctr &lt; 4 &amp;&amp; angle2 &lt; Math.PI * 0.5 * (ctr - 1) - span2 * 0.5)<a name="line.264"></a>
-<span class="sourceLineNo">265</span>                            break;<a name="line.265"></a>
-<span class="sourceLineNo">266</span>                        light = shadowCastLimited(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle2, span2);<a name="line.266"></a>
-<span class="sourceLineNo">267</span>                        light = shadowCastLimited(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique, angle2, span2);<a name="line.267"></a>
-<span class="sourceLineNo">268</span>                    }<a name="line.268"></a>
-<span class="sourceLineNo">269</span>                }<a name="line.269"></a>
-<span class="sourceLineNo">270</span>                break;<a name="line.270"></a>
-<span class="sourceLineNo">271</span>        }<a name="line.271"></a>
-<span class="sourceLineNo">272</span><a name="line.272"></a>
-<span class="sourceLineNo">273</span>        return light;<a name="line.273"></a>
-<span class="sourceLineNo">274</span>    }<a name="line.274"></a>
-<span class="sourceLineNo">275</span><a name="line.275"></a>
-<span class="sourceLineNo">276</span><a name="line.276"></a>
-<span class="sourceLineNo">277</span>    /**<a name="line.277"></a>
-<span class="sourceLineNo">278</span>     * Calculates the Field Of View for the provided map from the given x, y<a name="line.278"></a>
-<span class="sourceLineNo">279</span>     * coordinates. Assigns to, and returns, a light map where the values<a name="line.279"></a>
-<span class="sourceLineNo">280</span>     * represent a percentage of fully lit. Always uses shadowcasting FOV,<a name="line.280"></a>
-<span class="sourceLineNo">281</span>     * which allows this method to be static since it doesn't need to keep any<a name="line.281"></a>
-<span class="sourceLineNo">282</span>     * state around, and can reuse the state the user gives it via the<a name="line.282"></a>
-<span class="sourceLineNo">283</span>     * {@code light} parameter.  The values in light are always cleared before<a name="line.283"></a>
-<span class="sourceLineNo">284</span>     * this is run, because prior state can make this give incorrect results.<a name="line.284"></a>
-<span class="sourceLineNo">285</span>     * &lt;br&gt;<a name="line.285"></a>
-<span class="sourceLineNo">286</span>     * The starting point for the calculation is considered to be at the center<a name="line.286"></a>
-<span class="sourceLineNo">287</span>     * of the origin cell. Radius determinations based on Euclidean<a name="line.287"></a>
-<span class="sourceLineNo">288</span>     * calculations. The light will be treated as having infinite possible<a name="line.288"></a>
-<span class="sourceLineNo">289</span>     * radius.<a name="line.289"></a>
-<span class="sourceLineNo">290</span>     *<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.291"></a>
-<span class="sourceLineNo">292</span>     * @param startx the horizontal component of the starting location<a name="line.292"></a>
-<span class="sourceLineNo">293</span>     * @param starty the vertical component of the starting location<a name="line.293"></a>
-<span class="sourceLineNo">294</span>     * @return the computed light grid<a name="line.294"></a>
-<span class="sourceLineNo">295</span>     */<a name="line.295"></a>
-<span class="sourceLineNo">296</span>    public static double[][] calculateFOV(double[][] resistanceMap, double[][] light, int startx, int starty) {<a name="line.296"></a>
-<span class="sourceLineNo">297</span>        return reuseFOV(resistanceMap, light, startx, starty, Integer.MAX_VALUE, Radius.CIRCLE);<a name="line.297"></a>
-<span class="sourceLineNo">298</span>    }<a name="line.298"></a>
-<span class="sourceLineNo">299</span><a name="line.299"></a>
-<span class="sourceLineNo">300</span>    /**<a name="line.300"></a>
-<span class="sourceLineNo">301</span>     * Calculates the Field Of View for the provided map from the given x, y<a name="line.301"></a>
-<span class="sourceLineNo">302</span>     * coordinates. Assigns to, and returns, a light map where the values<a name="line.302"></a>
-<span class="sourceLineNo">303</span>     * represent a percentage of fully lit. Always uses shadowcasting FOV,<a name="line.303"></a>
-<span class="sourceLineNo">304</span>     * which allows this method to be static since it doesn't need to keep any<a name="line.304"></a>
-<span class="sourceLineNo">305</span>     * state around, and can reuse the state the user gives it via the<a name="line.305"></a>
-<span class="sourceLineNo">306</span>     * {@code light} parameter. The values in light are always cleared before<a name="line.306"></a>
-<span class="sourceLineNo">307</span>     * this is run, because prior state can make this give incorrect results.<a name="line.307"></a>
-<span class="sourceLineNo">308</span>     * &lt;br&gt;<a name="line.308"></a>
-<span class="sourceLineNo">309</span>     * The starting point for the calculation is considered to be at the center<a name="line.309"></a>
-<span class="sourceLineNo">310</span>     * of the origin cell. Radius determinations based on Euclidean<a name="line.310"></a>
-<span class="sourceLineNo">311</span>     * calculations.<a name="line.311"></a>
-<span class="sourceLineNo">312</span>     *<a name="line.312"></a>
-<span class="sourceLineNo">313</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.313"></a>
-<span class="sourceLineNo">314</span>     * @param startx the horizontal component of the starting location<a name="line.314"></a>
-<span class="sourceLineNo">315</span>     * @param starty the vertical component of the starting location<a name="line.315"></a>
-<span class="sourceLineNo">316</span>     * @param radius the distance the light will extend to<a name="line.316"></a>
-<span class="sourceLineNo">317</span>     * @return the computed light grid<a name="line.317"></a>
-<span class="sourceLineNo">318</span>     */<a name="line.318"></a>
-<span class="sourceLineNo">319</span>    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startx, int starty, double radius) {<a name="line.319"></a>
-<span class="sourceLineNo">320</span>        return reuseFOV(resistanceMap, light, startx, starty, radius, Radius.CIRCLE);<a name="line.320"></a>
-<span class="sourceLineNo">321</span>    }<a name="line.321"></a>
-<span class="sourceLineNo">322</span><a name="line.322"></a>
-<span class="sourceLineNo">323</span><a name="line.323"></a>
-<span class="sourceLineNo">324</span>    /**<a name="line.324"></a>
-<span class="sourceLineNo">325</span>     * Calculates the Field Of View for the provided map from the given x, y<a name="line.325"></a>
-<span class="sourceLineNo">326</span>     * coordinates. Assigns to, and returns, a light map where the values<a name="line.326"></a>
-<span class="sourceLineNo">327</span>     * represent a percentage of fully lit. Always uses shadowcasting FOV,<a name="line.327"></a>
-<span class="sourceLineNo">328</span>     * which allows this method to be static since it doesn't need to keep any<a name="line.328"></a>
-<span class="sourceLineNo">329</span>     * state around, and can reuse the state the user gives it via the<a name="line.329"></a>
-<span class="sourceLineNo">330</span>     * {@code light} parameter. The values in light are always cleared before<a name="line.330"></a>
-<span class="sourceLineNo">331</span>     * this is run, because prior state can make this give incorrect results.<a name="line.331"></a>
-<span class="sourceLineNo">332</span>     * &lt;br&gt;<a name="line.332"></a>
-<span class="sourceLineNo">333</span>     * The starting point for the calculation is considered to be at the center<a name="line.333"></a>
-<span class="sourceLineNo">334</span>     * of the origin cell. Radius determinations are determined by the provided<a name="line.334"></a>
-<span class="sourceLineNo">335</span>     * RadiusStrategy.<a name="line.335"></a>
-<span class="sourceLineNo">336</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.336"></a>
-<span class="sourceLineNo">337</span>     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"<a name="line.337"></a>
-<span class="sourceLineNo">338</span>     * @param startX the horizontal component of the starting location<a name="line.338"></a>
-<span class="sourceLineNo">339</span>     * @param startY the vertical component of the starting location<a name="line.339"></a>
-<span class="sourceLineNo">340</span>     * @param radius the distance the light will extend to<a name="line.340"></a>
-<span class="sourceLineNo">341</span>     * @param radiusTechnique provides a means to calculate the radius as desired<a name="line.341"></a>
-<span class="sourceLineNo">342</span>     * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}<a name="line.342"></a>
-<span class="sourceLineNo">343</span>     */<a name="line.343"></a>
-<span class="sourceLineNo">344</span>    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique) {<a name="line.344"></a>
+<span class="sourceLineNo">253</span>                light = shadowCastLimited(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.253"></a>
+<span class="sourceLineNo">254</span>                light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.254"></a>
+<span class="sourceLineNo">255</span><a name="line.255"></a>
+<span class="sourceLineNo">256</span>                light = shadowCastLimited(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.256"></a>
+<span class="sourceLineNo">257</span>                light = shadowCastLimited(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span>                light = shadowCastLimited(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.259"></a>
+<span class="sourceLineNo">260</span>                light = shadowCastLimited(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.260"></a>
+<span class="sourceLineNo">261</span><a name="line.261"></a>
+<span class="sourceLineNo">262</span>                light = shadowCastLimited(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.262"></a>
+<span class="sourceLineNo">263</span>                light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.263"></a>
+<span class="sourceLineNo">264</span>                break;<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        }<a name="line.265"></a>
+<span class="sourceLineNo">266</span><a name="line.266"></a>
+<span class="sourceLineNo">267</span>        return light;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    }<a name="line.268"></a>
+<span class="sourceLineNo">269</span><a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>    /**<a name="line.271"></a>
+<span class="sourceLineNo">272</span>     * Calculates the Field Of View for the provided map from the given x, y<a name="line.272"></a>
+<span class="sourceLineNo">273</span>     * coordinates. Assigns to, and returns, a light map where the values<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * represent a percentage of fully lit. Always uses shadowcasting FOV,<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * which allows this method to be static since it doesn't need to keep any<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * state around, and can reuse the state the user gives it via the<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     * {@code light} parameter.  The values in light are always cleared before<a name="line.277"></a>
+<span class="sourceLineNo">278</span>     * this is run, because prior state can make this give incorrect results.<a name="line.278"></a>
+<span class="sourceLineNo">279</span>     * &lt;br&gt;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * The starting point for the calculation is considered to be at the center<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     * of the origin cell. Radius determinations based on Euclidean<a name="line.281"></a>
+<span class="sourceLineNo">282</span>     * calculations. The light will be treated as having infinite possible<a name="line.282"></a>
+<span class="sourceLineNo">283</span>     * radius.<a name="line.283"></a>
+<span class="sourceLineNo">284</span>     *<a name="line.284"></a>
+<span class="sourceLineNo">285</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.285"></a>
+<span class="sourceLineNo">286</span>     * @param startx the horizontal component of the starting location<a name="line.286"></a>
+<span class="sourceLineNo">287</span>     * @param starty the vertical component of the starting location<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     * @return the computed light grid<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     */<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    public static double[][] calculateFOV(double[][] resistanceMap, double[][] light, int startx, int starty) {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        return reuseFOV(resistanceMap, light, startx, starty, Integer.MAX_VALUE, Radius.CIRCLE);<a name="line.291"></a>
+<span class="sourceLineNo">292</span>    }<a name="line.292"></a>
+<span class="sourceLineNo">293</span><a name="line.293"></a>
+<span class="sourceLineNo">294</span>    /**<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     * Calculates the Field Of View for the provided map from the given x, y<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     * coordinates. Assigns to, and returns, a light map where the values<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     * represent a percentage of fully lit. Always uses shadowcasting FOV,<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     * which allows this method to be static since it doesn't need to keep any<a name="line.298"></a>
+<span class="sourceLineNo">299</span>     * state around, and can reuse the state the user gives it via the<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     * {@code light} parameter. The values in light are always cleared before<a name="line.300"></a>
+<span class="sourceLineNo">301</span>     * this is run, because prior state can make this give incorrect results.<a name="line.301"></a>
+<span class="sourceLineNo">302</span>     * &lt;br&gt;<a name="line.302"></a>
+<span class="sourceLineNo">303</span>     * The starting point for the calculation is considered to be at the center<a name="line.303"></a>
+<span class="sourceLineNo">304</span>     * of the origin cell. Radius determinations based on Euclidean<a name="line.304"></a>
+<span class="sourceLineNo">305</span>     * calculations.<a name="line.305"></a>
+<span class="sourceLineNo">306</span>     *<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * @param startx the horizontal component of the starting location<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * @param starty the vertical component of the starting location<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * @param radius the distance the light will extend to<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * @return the computed light grid<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     */<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startx, int starty, double radius) {<a name="line.313"></a>
+<span class="sourceLineNo">314</span>        return reuseFOV(resistanceMap, light, startx, starty, radius, Radius.CIRCLE);<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    }<a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span><a name="line.317"></a>
+<span class="sourceLineNo">318</span>    /**<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * Calculates the Field Of View for the provided map from the given x, y<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * coordinates. Assigns to, and returns, a light map where the values<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * represent a percentage of fully lit. Always uses shadowcasting FOV,<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * which allows this method to be static since it doesn't need to keep any<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * state around, and can reuse the state the user gives it via the<a name="line.323"></a>
+<span class="sourceLineNo">324</span>     * {@code light} parameter. The values in light are always cleared before<a name="line.324"></a>
+<span class="sourceLineNo">325</span>     * this is run, because prior state can make this give incorrect results.<a name="line.325"></a>
+<span class="sourceLineNo">326</span>     * &lt;br&gt;<a name="line.326"></a>
+<span class="sourceLineNo">327</span>     * The starting point for the calculation is considered to be at the center<a name="line.327"></a>
+<span class="sourceLineNo">328</span>     * of the origin cell. Radius determinations are determined by the provided<a name="line.328"></a>
+<span class="sourceLineNo">329</span>     * RadiusStrategy.<a name="line.329"></a>
+<span class="sourceLineNo">330</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"<a name="line.331"></a>
+<span class="sourceLineNo">332</span>     * @param startX the horizontal component of the starting location<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     * @param startY the vertical component of the starting location<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * @param radius the distance the light will extend to<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     * @param radiusTechnique provides a means to calculate the radius as desired<a name="line.335"></a>
+<span class="sourceLineNo">336</span>     * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}<a name="line.336"></a>
+<span class="sourceLineNo">337</span>     */<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique) {<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>        radius = Math.max(1, radius);<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        double decay = 1.0 / radius;<a name="line.341"></a>
+<span class="sourceLineNo">342</span>        ArrayTools.fill(light, 0);<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        light[startX][startY] = 1;//make the starting space full power<a name="line.343"></a>
+<span class="sourceLineNo">344</span><a name="line.344"></a>
 <span class="sourceLineNo">345</span><a name="line.345"></a>
-<span class="sourceLineNo">346</span>        double rad = Math.max(1, radius);<a name="line.346"></a>
-<span class="sourceLineNo">347</span>        double decay = 1.0 / rad;<a name="line.347"></a>
-<span class="sourceLineNo">348</span>        ArrayTools.fill(light, 0);<a name="line.348"></a>
-<span class="sourceLineNo">349</span>        light[startX][startY] = 1;//make the starting space full power<a name="line.349"></a>
-<span class="sourceLineNo">350</span><a name="line.350"></a>
+<span class="sourceLineNo">346</span>        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.346"></a>
+<span class="sourceLineNo">347</span>        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.347"></a>
+<span class="sourceLineNo">348</span><a name="line.348"></a>
+<span class="sourceLineNo">349</span>        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.349"></a>
+<span class="sourceLineNo">350</span>        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.350"></a>
 <span class="sourceLineNo">351</span><a name="line.351"></a>
-<span class="sourceLineNo">352</span>        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.352"></a>
-<span class="sourceLineNo">353</span>        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.353"></a>
+<span class="sourceLineNo">352</span>        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.352"></a>
+<span class="sourceLineNo">353</span>        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.353"></a>
 <span class="sourceLineNo">354</span><a name="line.354"></a>
-<span class="sourceLineNo">355</span>        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.355"></a>
-<span class="sourceLineNo">356</span>        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.356"></a>
-<span class="sourceLineNo">357</span><a name="line.357"></a>
-<span class="sourceLineNo">358</span>        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.358"></a>
-<span class="sourceLineNo">359</span>        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.359"></a>
-<span class="sourceLineNo">360</span><a name="line.360"></a>
-<span class="sourceLineNo">361</span>        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.362"></a>
-<span class="sourceLineNo">363</span>        return light;<a name="line.363"></a>
-<span class="sourceLineNo">364</span>    }<a name="line.364"></a>
-<span class="sourceLineNo">365</span><a name="line.365"></a>
-<span class="sourceLineNo">366</span>    /**<a name="line.366"></a>
-<span class="sourceLineNo">367</span>     * Reuses the existing light 2D array and fills it with a straight-line bouncing path of light that reflects its way<a name="line.367"></a>
-<span class="sourceLineNo">368</span>     * through the given resistanceMap from startX, startY until it uses up the given distance. The angle the path<a name="line.368"></a>
-<span class="sourceLineNo">369</span>     * takes is given in degrees, and the angle used can change as obstacles are hit (reflecting backwards if it hits a<a name="line.369"></a>
-<span class="sourceLineNo">370</span>     * corner pointing directly into or away from its path). This can be used something like an LOS method, but because<a name="line.370"></a>
-<span class="sourceLineNo">371</span>     * the path can be traveled back over, an array or Queue becomes somewhat more complex, and the decreasing numbers<a name="line.371"></a>
-<span class="sourceLineNo">372</span>     * for a straight line that stack may make more sense for how this could be used (especially with visual effects).<a name="line.372"></a>
-<span class="sourceLineNo">373</span>     * This currently allows the path to pass through single-cell wall-like obstacles without changing direction, e.g.<a name="line.373"></a>
-<span class="sourceLineNo">374</span>     * it passes through pillars, but will bounce if it hits a bigger wall.<a name="line.374"></a>
-<span class="sourceLineNo">375</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.375"></a>
-<span class="sourceLineNo">376</span>     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"<a name="line.376"></a>
-<span class="sourceLineNo">377</span>     * @param startX the horizontal component of the starting location<a name="line.377"></a>
-<span class="sourceLineNo">378</span>     * @param startY the vertical component of the starting location<a name="line.378"></a>
-<span class="sourceLineNo">379</span>     * @param distance the distance the light will extend to<a name="line.379"></a>
-<span class="sourceLineNo">380</span>     * @param angle in degrees, the angle to start the path traveling in<a name="line.380"></a>
-<span class="sourceLineNo">381</span>     * @return the given light parameter, after modifications<a name="line.381"></a>
-<span class="sourceLineNo">382</span>     */<a name="line.382"></a>
-<span class="sourceLineNo">383</span>    public static double[][] bouncingLine(double[][] resistanceMap, double[][] light, int startX, int startY, double distance, double angle)<a name="line.383"></a>
-<span class="sourceLineNo">384</span>    {<a name="line.384"></a>
-<span class="sourceLineNo">385</span>        double rad = Math.max(1, distance);<a name="line.385"></a>
-<span class="sourceLineNo">386</span>        double decay = 1.0 / rad;<a name="line.386"></a>
-<span class="sourceLineNo">387</span>        ArrayTools.fill(light, 0);<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        light[startX][startY] = 1;//make the starting space full power<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        angle = Math.toRadians((angle &gt; 360.0 || angle &lt; 0.0)<a name="line.389"></a>
-<span class="sourceLineNo">390</span>                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);<a name="line.390"></a>
-<span class="sourceLineNo">391</span>        float s = (float) Math.sin(angle),<a name="line.391"></a>
-<span class="sourceLineNo">392</span>                c = (float) Math.cos(angle);<a name="line.392"></a>
-<span class="sourceLineNo">393</span>        double deteriorate = 1.0;<a name="line.393"></a>
-<span class="sourceLineNo">394</span>        int dx, dy, width = resistanceMap.length, height = resistanceMap[0].length;<a name="line.394"></a>
-<span class="sourceLineNo">395</span>        for (int d = 1; d &lt;= rad; ) {<a name="line.395"></a>
-<span class="sourceLineNo">396</span>            dx = startX + Math.round(c * d);<a name="line.396"></a>
-<span class="sourceLineNo">397</span>            if(dx &lt; 0 || dx &gt; width)<a name="line.397"></a>
-<span class="sourceLineNo">398</span>                break;<a name="line.398"></a>
-<span class="sourceLineNo">399</span>            dy = startY + Math.round(s * d);<a name="line.399"></a>
-<span class="sourceLineNo">400</span>            if(dy &lt; 0 || dy &gt; height)<a name="line.400"></a>
-<span class="sourceLineNo">401</span>                break;<a name="line.401"></a>
-<span class="sourceLineNo">402</span>            deteriorate -= decay;<a name="line.402"></a>
-<span class="sourceLineNo">403</span>            //check if it's within the lightable area and light if needed<a name="line.403"></a>
-<span class="sourceLineNo">404</span>            if (deteriorate &gt; 0.0) {<a name="line.404"></a>
-<span class="sourceLineNo">405</span>                light[dx][dy] = Math.min(light[dx][dy] + deteriorate, 1.0);<a name="line.405"></a>
-<span class="sourceLineNo">406</span>                if (resistanceMap[dx][dy] &gt;= 1 &amp;&amp; deteriorate &gt; decay)<a name="line.406"></a>
-<span class="sourceLineNo">407</span>                {<a name="line.407"></a>
-<span class="sourceLineNo">408</span>                    startX = dx;<a name="line.408"></a>
-<span class="sourceLineNo">409</span>                    startY = dy;<a name="line.409"></a>
-<span class="sourceLineNo">410</span>                    d = 1;<a name="line.410"></a>
-<span class="sourceLineNo">411</span>                    double flipX = resistanceMap[startX + Math.round(-c * d)][dy],<a name="line.411"></a>
-<span class="sourceLineNo">412</span>                            flipY = resistanceMap[dx][startY + Math.round(-s * d)];<a name="line.412"></a>
-<span class="sourceLineNo">413</span>                    if(flipX &gt;= 1.0)<a name="line.413"></a>
-<span class="sourceLineNo">414</span>                        s = -s;<a name="line.414"></a>
-<span class="sourceLineNo">415</span>                    if(flipY &gt;= 1.0)<a name="line.415"></a>
-<span class="sourceLineNo">416</span>                        c = -c;<a name="line.416"></a>
-<span class="sourceLineNo">417</span>                }<a name="line.417"></a>
-<span class="sourceLineNo">418</span>                else ++d;<a name="line.418"></a>
-<span class="sourceLineNo">419</span><a name="line.419"></a>
-<span class="sourceLineNo">420</span>            }<a name="line.420"></a>
-<span class="sourceLineNo">421</span>            else break;<a name="line.421"></a>
-<span class="sourceLineNo">422</span>        }<a name="line.422"></a>
-<span class="sourceLineNo">423</span><a name="line.423"></a>
-<span class="sourceLineNo">424</span>        return light;<a name="line.424"></a>
-<span class="sourceLineNo">425</span>    }<a name="line.425"></a>
-<span class="sourceLineNo">426</span>    /**<a name="line.426"></a>
-<span class="sourceLineNo">427</span>         * @param width<a name="line.427"></a>
-<span class="sourceLineNo">428</span>         *            The width that {@link #light} should have.<a name="line.428"></a>
-<span class="sourceLineNo">429</span>         * @param height<a name="line.429"></a>
-<span class="sourceLineNo">430</span>         *            The height that {@link #light} should have.<a name="line.430"></a>
-<span class="sourceLineNo">431</span>         */<a name="line.431"></a>
-<span class="sourceLineNo">432</span>        private void initializeLightMap(int width, int height) {<a name="line.432"></a>
-<span class="sourceLineNo">433</span>                if (light == null)<a name="line.433"></a>
-<span class="sourceLineNo">434</span>                        light = new double[width][height];<a name="line.434"></a>
-<span class="sourceLineNo">435</span>                else {<a name="line.435"></a>
-<span class="sourceLineNo">436</span>                        if (light.length != width || light[0].length != height)<a name="line.436"></a>
-<span class="sourceLineNo">437</span>                                /* Size changed */<a name="line.437"></a>
-<span class="sourceLineNo">438</span>                                light = new double[width][height];<a name="line.438"></a>
-<span class="sourceLineNo">439</span>                        else {<a name="line.439"></a>
-<span class="sourceLineNo">440</span>                                /*<a name="line.440"></a>
-<span class="sourceLineNo">441</span>                                 * Size did not change, we simply need to erase the previous<a name="line.441"></a>
-<span class="sourceLineNo">442</span>                                 * result<a name="line.442"></a>
-<span class="sourceLineNo">443</span>                                 */<a name="line.443"></a>
-<span class="sourceLineNo">444</span>                                ArrayTools.fill(light, 0.0);<a name="line.444"></a>
-<span class="sourceLineNo">445</span>                        }<a name="line.445"></a>
-<span class="sourceLineNo">446</span>                }<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        }<a name="line.447"></a>
-<span class="sourceLineNo">448</span><a name="line.448"></a>
-<span class="sourceLineNo">449</span>        /**<a name="line.449"></a>
-<span class="sourceLineNo">450</span>         * @param width<a name="line.450"></a>
-<span class="sourceLineNo">451</span>         *            The width that {@link #nearLight} should have.<a name="line.451"></a>
-<span class="sourceLineNo">452</span>         * @param height<a name="line.452"></a>
-<span class="sourceLineNo">453</span>         *            The height that {@link #nearLight} should have.<a name="line.453"></a>
-<span class="sourceLineNo">454</span>         */<a name="line.454"></a>
-<span class="sourceLineNo">455</span>        private void initializeNearLight(int width, int height) {<a name="line.455"></a>
-<span class="sourceLineNo">456</span>                if (nearLight == null)<a name="line.456"></a>
-<span class="sourceLineNo">457</span>                        nearLight = new boolean[width][height];<a name="line.457"></a>
-<span class="sourceLineNo">458</span>                else {<a name="line.458"></a>
-<span class="sourceLineNo">459</span>                        if (nearLight.length != width || nearLight[0].length != height)<a name="line.459"></a>
-<span class="sourceLineNo">460</span>                                /* Size changed */<a name="line.460"></a>
-<span class="sourceLineNo">461</span>                                nearLight = new boolean[width][height];<a name="line.461"></a>
-<span class="sourceLineNo">462</span>                        else {<a name="line.462"></a>
-<span class="sourceLineNo">463</span>                                /*<a name="line.463"></a>
-<span class="sourceLineNo">464</span>                                 * Size did not change, we simply need to erase the previous<a name="line.464"></a>
-<span class="sourceLineNo">465</span>                                 * result<a name="line.465"></a>
-<span class="sourceLineNo">466</span>                                 */<a name="line.466"></a>
-<span class="sourceLineNo">467</span>                                ArrayTools.fill(nearLight, false);<a name="line.467"></a>
-<span class="sourceLineNo">468</span>                        }<a name="line.468"></a>
-<span class="sourceLineNo">469</span>                }<a name="line.469"></a>
-<span class="sourceLineNo">470</span>        }<a name="line.470"></a>
-<span class="sourceLineNo">471</span><a name="line.471"></a>
-<span class="sourceLineNo">472</span>        private static int rippleValue(int type) {<a name="line.472"></a>
-<span class="sourceLineNo">473</span>                switch (type) {<a name="line.473"></a>
-<span class="sourceLineNo">474</span>                case RIPPLE:<a name="line.474"></a>
-<span class="sourceLineNo">475</span>                        return 2;<a name="line.475"></a>
-<span class="sourceLineNo">476</span>                case RIPPLE_LOOSE:<a name="line.476"></a>
-<span class="sourceLineNo">477</span>                        return 3;<a name="line.477"></a>
-<span class="sourceLineNo">478</span>                case RIPPLE_TIGHT:<a name="line.478"></a>
-<span class="sourceLineNo">479</span>                        return 1;<a name="line.479"></a>
-<span class="sourceLineNo">480</span>                case RIPPLE_VERY_LOOSE:<a name="line.480"></a>
-<span class="sourceLineNo">481</span>                        return 6;<a name="line.481"></a>
-<span class="sourceLineNo">482</span>                default:<a name="line.482"></a>
-<span class="sourceLineNo">483</span>                        System.err.println("Unrecognized ripple type: " + type + ". Defaulting to RIPPLE");<a name="line.483"></a>
-<span class="sourceLineNo">484</span>                        return rippleValue(RIPPLE);<a name="line.484"></a>
-<span class="sourceLineNo">485</span>                }<a name="line.485"></a>
-<span class="sourceLineNo">486</span>        }<a name="line.486"></a>
-<span class="sourceLineNo">487</span><a name="line.487"></a>
-<span class="sourceLineNo">488</span>    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy) {<a name="line.488"></a>
-<span class="sourceLineNo">489</span>        /* Not using Deque's interface, it isn't GWT compatible */<a name="line.489"></a>
-<span class="sourceLineNo">490</span>        final LinkedList&lt;Coord&gt; dq = new LinkedList&lt;&gt;();<a name="line.490"></a>
-<span class="sourceLineNo">491</span>        int width = lightMap.length;<a name="line.491"></a>
-<span class="sourceLineNo">492</span>        int height = lightMap[0].length;<a name="line.492"></a>
-<span class="sourceLineNo">493</span>        dq.offer(Coord.get(x, y));<a name="line.493"></a>
-<span class="sourceLineNo">494</span>        while (!dq.isEmpty()) {<a name="line.494"></a>
-<span class="sourceLineNo">495</span>            Coord p = dq.removeFirst();<a name="line.495"></a>
-<span class="sourceLineNo">496</span>            if (lightMap[p.x][p.y] &lt;= 0 || indirect[p.x][p.y]) {<a name="line.496"></a>
-<span class="sourceLineNo">497</span>                continue;//no light to spread<a name="line.497"></a>
-<span class="sourceLineNo">498</span>            }<a name="line.498"></a>
-<span class="sourceLineNo">499</span><a name="line.499"></a>
-<span class="sourceLineNo">500</span>            for (Direction dir : Direction.OUTWARDS) {<a name="line.500"></a>
-<span class="sourceLineNo">501</span>                int x2 = p.x + dir.deltaX;<a name="line.501"></a>
-<span class="sourceLineNo">502</span>                int y2 = p.y + dir.deltaY;<a name="line.502"></a>
-<span class="sourceLineNo">503</span>                if (x2 &lt; 0 || x2 &gt;= width || y2 &lt; 0 || y2 &gt;= height //out of bounds<a name="line.503"></a>
-<span class="sourceLineNo">504</span>                        || radiusStrategy.radius(startx, starty, x2, y2) &gt;= radius + 1) {//+1 to cover starting tile<a name="line.504"></a>
-<span class="sourceLineNo">505</span>                    continue;<a name="line.505"></a>
-<span class="sourceLineNo">506</span>                }<a name="line.506"></a>
-<span class="sourceLineNo">507</span><a name="line.507"></a>
-<span class="sourceLineNo">508</span>                double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy);<a name="line.508"></a>
-<span class="sourceLineNo">509</span>                if (lightMap[x2][y2] &lt; surroundingLight) {<a name="line.509"></a>
-<span class="sourceLineNo">510</span>                    lightMap[x2][y2] = surroundingLight;<a name="line.510"></a>
-<span class="sourceLineNo">511</span>                    if (map[x2][y2] &lt; 1) {//make sure it's not a wall<a name="line.511"></a>
-<span class="sourceLineNo">512</span>                        dq.offer(Coord.get(x2, y2));//redo neighbors since this one's light changed<a name="line.512"></a>
-<span class="sourceLineNo">513</span>                    }<a name="line.513"></a>
-<span class="sourceLineNo">514</span>                }<a name="line.514"></a>
-<span class="sourceLineNo">515</span>            }<a name="line.515"></a>
-<span class="sourceLineNo">516</span>        }<a name="line.516"></a>
-<span class="sourceLineNo">517</span>    }<a name="line.517"></a>
-<span class="sourceLineNo">518</span><a name="line.518"></a>
-<span class="sourceLineNo">519</span><a name="line.519"></a>
-<span class="sourceLineNo">520</span><a name="line.520"></a>
-<span class="sourceLineNo">521</span>    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy, double angle, double span) {<a name="line.521"></a>
-<span class="sourceLineNo">522</span>        /* Not using Deque's interface, it isn't GWT compatible */<a name="line.522"></a>
-<span class="sourceLineNo">523</span>        final LinkedList&lt;Coord&gt; dq = new LinkedList&lt;&gt;();<a name="line.523"></a>
-<span class="sourceLineNo">524</span>        int width = lightMap.length;<a name="line.524"></a>
-<span class="sourceLineNo">525</span>        int height = lightMap[0].length;<a name="line.525"></a>
-<span class="sourceLineNo">526</span>        dq.offer(Coord.get(x, y));<a name="line.526"></a>
-<span class="sourceLineNo">527</span>        while (!dq.isEmpty()) {<a name="line.527"></a>
-<span class="sourceLineNo">528</span>            Coord p = dq.removeFirst();<a name="line.528"></a>
-<span class="sourceLineNo">529</span>            if (lightMap[p.x][p.y] &lt;= 0 || indirect[p.x][p.y]) {<a name="line.529"></a>
-<span class="sourceLineNo">530</span>                continue;//no light to spread<a name="line.530"></a>
-<span class="sourceLineNo">531</span>            }<a name="line.531"></a>
-<span class="sourceLineNo">532</span><a name="line.532"></a>
-<span class="sourceLineNo">533</span>            for (Direction dir : ccw_full) {<a name="line.533"></a>
-<span class="sourceLineNo">534</span>                int x2 = p.x + dir.deltaX;<a name="line.534"></a>
-<span class="sourceLineNo">535</span>                int y2 = p.y + dir.deltaY;<a name="line.535"></a>
-<span class="sourceLineNo">536</span>                if (x2 &lt; 0 || x2 &gt;= width || y2 &lt; 0 || y2 &gt;= height //out of bounds<a name="line.536"></a>
-<span class="sourceLineNo">537</span>                        || radiusStrategy.radius(startx, starty, x2, y2) &gt;= radius + 1) {//+1 to cover starting tile<a name="line.537"></a>
-<span class="sourceLineNo">538</span>                    continue;<a name="line.538"></a>
-<span class="sourceLineNo">539</span>                }<a name="line.539"></a>
-<span class="sourceLineNo">540</span>                double newAngle = Math.atan2(y2 - starty, x2 - startx) + Math.PI * 2;<a name="line.540"></a>
-<span class="sourceLineNo">541</span>                                if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) &gt; span / 2.0)<a name="line.541"></a>
-<span class="sourceLineNo">542</span>                                        continue;<a name="line.542"></a>
+<span class="sourceLineNo">355</span>        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.355"></a>
+<span class="sourceLineNo">356</span>        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        return light;<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    }<a name="line.358"></a>
+<span class="sourceLineNo">359</span>    /**<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     * Calculates the Field Of View for the provided map from the given x, y<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     * coordinates, lighting at the given angle in  degrees and covering a span<a name="line.361"></a>
+<span class="sourceLineNo">362</span>     * centered on that angle, also in degrees. Assigns to, and returns, a light<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     * map where the values represent a percentage of fully lit. Always uses<a name="line.363"></a>
+<span class="sourceLineNo">364</span>     * shadowcasting FOV, which allows this method to be static since it doesn't<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     * need to keep any state around, and can reuse the state the user gives it<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     * via the {@code light} parameter. The values in light are cleared before<a name="line.366"></a>
+<span class="sourceLineNo">367</span>     * this is run, because prior state can make this give incorrect results.<a name="line.367"></a>
+<span class="sourceLineNo">368</span>     * &lt;br&gt;<a name="line.368"></a>
+<span class="sourceLineNo">369</span>     * The starting point for the calculation is considered to be at the center<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     * of the origin cell. Radius determinations are determined by the provided<a name="line.370"></a>
+<span class="sourceLineNo">371</span>     * RadiusStrategy.  A conical section of FOV is lit by this method if<a name="line.371"></a>
+<span class="sourceLineNo">372</span>     * span is greater than 0.<a name="line.372"></a>
+<span class="sourceLineNo">373</span>     *<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.374"></a>
+<span class="sourceLineNo">375</span>     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"<a name="line.375"></a>
+<span class="sourceLineNo">376</span>     * @param startX the horizontal component of the starting location<a name="line.376"></a>
+<span class="sourceLineNo">377</span>     * @param startY the vertical component of the starting location<a name="line.377"></a>
+<span class="sourceLineNo">378</span>     * @param radius the distance the light will extend to<a name="line.378"></a>
+<span class="sourceLineNo">379</span>     * @param radiusTechnique provides a means to shape the FOV by changing distance calculation (circle, square, etc.)<a name="line.379"></a>
+<span class="sourceLineNo">380</span>     * @param angle the angle in degrees that will be the center of the FOV cone, 0 points right<a name="line.380"></a>
+<span class="sourceLineNo">381</span>     * @param span the angle in degrees that measures the full arc contained in the FOV cone<a name="line.381"></a>
+<span class="sourceLineNo">382</span>     * @return the computed light grid<a name="line.382"></a>
+<span class="sourceLineNo">383</span>     */<a name="line.383"></a>
+<span class="sourceLineNo">384</span>    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY,<a name="line.384"></a>
+<span class="sourceLineNo">385</span>                                          double radius, Radius radiusTechnique, double angle, double span) {<a name="line.385"></a>
+<span class="sourceLineNo">386</span><a name="line.386"></a>
+<span class="sourceLineNo">387</span>        radius = Math.max(1, radius);<a name="line.387"></a>
+<span class="sourceLineNo">388</span>        double decay = 1.0 / (radius + 1.0);<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        ArrayTools.fill(light, 0);<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        light[startX][startY] = 1;//make the starting space full power<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        angle = Math.toRadians((angle &gt;= 360.0 || angle &lt; 0.0)<a name="line.391"></a>
+<span class="sourceLineNo">392</span>                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);<a name="line.392"></a>
+<span class="sourceLineNo">393</span>        span = Math.toRadians(span);<a name="line.393"></a>
+<span class="sourceLineNo">394</span><a name="line.394"></a>
+<span class="sourceLineNo">395</span><a name="line.395"></a>
+<span class="sourceLineNo">396</span>        light = shadowCastLimited(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.396"></a>
+<span class="sourceLineNo">397</span>        light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.397"></a>
+<span class="sourceLineNo">398</span><a name="line.398"></a>
+<span class="sourceLineNo">399</span>        light = shadowCastLimited(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.399"></a>
+<span class="sourceLineNo">400</span>        light = shadowCastLimited(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.400"></a>
+<span class="sourceLineNo">401</span><a name="line.401"></a>
+<span class="sourceLineNo">402</span>        light = shadowCastLimited(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.402"></a>
+<span class="sourceLineNo">403</span>        light = shadowCastLimited(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.403"></a>
+<span class="sourceLineNo">404</span><a name="line.404"></a>
+<span class="sourceLineNo">405</span>        light = shadowCastLimited(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.405"></a>
+<span class="sourceLineNo">406</span>        light = shadowCastLimited(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        return light;<a name="line.407"></a>
+<span class="sourceLineNo">408</span>    }<a name="line.408"></a>
+<span class="sourceLineNo">409</span><a name="line.409"></a>
+<span class="sourceLineNo">410</span>    /**<a name="line.410"></a>
+<span class="sourceLineNo">411</span>     * Reuses the existing light 2D array and fills it with a straight-line bouncing path of light that reflects its way<a name="line.411"></a>
+<span class="sourceLineNo">412</span>     * through the given resistanceMap from startX, startY until it uses up the given distance. The angle the path<a name="line.412"></a>
+<span class="sourceLineNo">413</span>     * takes is given in degrees, and the angle used can change as obstacles are hit (reflecting backwards if it hits a<a name="line.413"></a>
+<span class="sourceLineNo">414</span>     * corner pointing directly into or away from its path). This can be used something like an LOS method, but because<a name="line.414"></a>
+<span class="sourceLineNo">415</span>     * the path can be traveled back over, an array or Queue becomes somewhat more complex, and the decreasing numbers<a name="line.415"></a>
+<span class="sourceLineNo">416</span>     * for a straight line that stack may make more sense for how this could be used (especially with visual effects).<a name="line.416"></a>
+<span class="sourceLineNo">417</span>     * This currently allows the path to pass through single-cell wall-like obstacles without changing direction, e.g.<a name="line.417"></a>
+<span class="sourceLineNo">418</span>     * it passes through pillars, but will bounce if it hits a bigger wall.<a name="line.418"></a>
+<span class="sourceLineNo">419</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.419"></a>
+<span class="sourceLineNo">420</span>     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     * @param startX the horizontal component of the starting location<a name="line.421"></a>
+<span class="sourceLineNo">422</span>     * @param startY the vertical component of the starting location<a name="line.422"></a>
+<span class="sourceLineNo">423</span>     * @param distance the distance the light will extend to<a name="line.423"></a>
+<span class="sourceLineNo">424</span>     * @param angle in degrees, the angle to start the path traveling in<a name="line.424"></a>
+<span class="sourceLineNo">425</span>     * @return the given light parameter, after modifications<a name="line.425"></a>
+<span class="sourceLineNo">426</span>     */<a name="line.426"></a>
+<span class="sourceLineNo">427</span>    public static double[][] bouncingLine(double[][] resistanceMap, double[][] light, int startX, int startY, double distance, double angle)<a name="line.427"></a>
+<span class="sourceLineNo">428</span>    {<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        double rad = Math.max(1, distance);<a name="line.429"></a>
+<span class="sourceLineNo">430</span>        double decay = 1.0 / rad;<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        ArrayTools.fill(light, 0);<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        light[startX][startY] = 1;//make the starting space full power<a name="line.432"></a>
+<span class="sourceLineNo">433</span>        angle = Math.toRadians((angle &gt; 360.0 || angle &lt; 0.0)<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);<a name="line.434"></a>
+<span class="sourceLineNo">435</span>        float s = (float) Math.sin(angle),<a name="line.435"></a>
+<span class="sourceLineNo">436</span>                c = (float) Math.cos(angle);<a name="line.436"></a>
+<span class="sourceLineNo">437</span>        double deteriorate = 1.0;<a name="line.437"></a>
+<span class="sourceLineNo">438</span>        int dx, dy, width = resistanceMap.length, height = resistanceMap[0].length;<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        for (int d = 1; d &lt;= rad; ) {<a name="line.439"></a>
+<span class="sourceLineNo">440</span>            dx = startX + Math.round(c * d);<a name="line.440"></a>
+<span class="sourceLineNo">441</span>            if(dx &lt; 0 || dx &gt; width)<a name="line.441"></a>
+<span class="sourceLineNo">442</span>                break;<a name="line.442"></a>
+<span class="sourceLineNo">443</span>            dy = startY + Math.round(s * d);<a name="line.443"></a>
+<span class="sourceLineNo">444</span>            if(dy &lt; 0 || dy &gt; height)<a name="line.444"></a>
+<span class="sourceLineNo">445</span>                break;<a name="line.445"></a>
+<span class="sourceLineNo">446</span>            deteriorate -= decay;<a name="line.446"></a>
+<span class="sourceLineNo">447</span>            //check if it's within the lightable area and light if needed<a name="line.447"></a>
+<span class="sourceLineNo">448</span>            if (deteriorate &gt; 0.0) {<a name="line.448"></a>
+<span class="sourceLineNo">449</span>                light[dx][dy] = Math.min(light[dx][dy] + deteriorate, 1.0);<a name="line.449"></a>
+<span class="sourceLineNo">450</span>                if (resistanceMap[dx][dy] &gt;= 1 &amp;&amp; deteriorate &gt; decay)<a name="line.450"></a>
+<span class="sourceLineNo">451</span>                {<a name="line.451"></a>
+<span class="sourceLineNo">452</span>                    startX = dx;<a name="line.452"></a>
+<span class="sourceLineNo">453</span>                    startY = dy;<a name="line.453"></a>
+<span class="sourceLineNo">454</span>                    d = 1;<a name="line.454"></a>
+<span class="sourceLineNo">455</span>                    double flipX = resistanceMap[startX + Math.round(-c * d)][dy],<a name="line.455"></a>
+<span class="sourceLineNo">456</span>                            flipY = resistanceMap[dx][startY + Math.round(-s * d)];<a name="line.456"></a>
+<span class="sourceLineNo">457</span>                    if(flipX &gt;= 1.0)<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                        s = -s;<a name="line.458"></a>
+<span class="sourceLineNo">459</span>                    if(flipY &gt;= 1.0)<a name="line.459"></a>
+<span class="sourceLineNo">460</span>                        c = -c;<a name="line.460"></a>
+<span class="sourceLineNo">461</span>                }<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                else ++d;<a name="line.462"></a>
+<span class="sourceLineNo">463</span><a name="line.463"></a>
+<span class="sourceLineNo">464</span>            }<a name="line.464"></a>
+<span class="sourceLineNo">465</span>            else break;<a name="line.465"></a>
+<span class="sourceLineNo">466</span>        }<a name="line.466"></a>
+<span class="sourceLineNo">467</span><a name="line.467"></a>
+<span class="sourceLineNo">468</span>        return light;<a name="line.468"></a>
+<span class="sourceLineNo">469</span>    }<a name="line.469"></a>
+<span class="sourceLineNo">470</span>    /**<a name="line.470"></a>
+<span class="sourceLineNo">471</span>         * @param width<a name="line.471"></a>
+<span class="sourceLineNo">472</span>         *            The width that {@link #light} should have.<a name="line.472"></a>
+<span class="sourceLineNo">473</span>         * @param height<a name="line.473"></a>
+<span class="sourceLineNo">474</span>         *            The height that {@link #light} should have.<a name="line.474"></a>
+<span class="sourceLineNo">475</span>         */<a name="line.475"></a>
+<span class="sourceLineNo">476</span>        private void initializeLightMap(int width, int height) {<a name="line.476"></a>
+<span class="sourceLineNo">477</span>                if (light == null)<a name="line.477"></a>
+<span class="sourceLineNo">478</span>                        light = new double[width][height];<a name="line.478"></a>
+<span class="sourceLineNo">479</span>                else {<a name="line.479"></a>
+<span class="sourceLineNo">480</span>                        if (light.length != width || light[0].length != height)<a name="line.480"></a>
+<span class="sourceLineNo">481</span>                                /* Size changed */<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                                light = new double[width][height];<a name="line.482"></a>
+<span class="sourceLineNo">483</span>                        else {<a name="line.483"></a>
+<span class="sourceLineNo">484</span>                                /*<a name="line.484"></a>
+<span class="sourceLineNo">485</span>                                 * Size did not change, we simply need to erase the previous<a name="line.485"></a>
+<span class="sourceLineNo">486</span>                                 * result<a name="line.486"></a>
+<span class="sourceLineNo">487</span>                                 */<a name="line.487"></a>
+<span class="sourceLineNo">488</span>                                ArrayTools.fill(light, 0.0);<a name="line.488"></a>
+<span class="sourceLineNo">489</span>                        }<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                }<a name="line.490"></a>
+<span class="sourceLineNo">491</span>        }<a name="line.491"></a>
+<span class="sourceLineNo">492</span><a name="line.492"></a>
+<span class="sourceLineNo">493</span>        /**<a name="line.493"></a>
+<span class="sourceLineNo">494</span>         * @param width<a name="line.494"></a>
+<span class="sourceLineNo">495</span>         *            The width that {@link #nearLight} should have.<a name="line.495"></a>
+<span class="sourceLineNo">496</span>         * @param height<a name="line.496"></a>
+<span class="sourceLineNo">497</span>         *            The height that {@link #nearLight} should have.<a name="line.497"></a>
+<span class="sourceLineNo">498</span>         */<a name="line.498"></a>
+<span class="sourceLineNo">499</span>        private void initializeNearLight(int width, int height) {<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                if (nearLight == null)<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                        nearLight = new boolean[width][height];<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                else {<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                        if (nearLight.length != width || nearLight[0].length != height)<a name="line.503"></a>
+<span class="sourceLineNo">504</span>                                /* Size changed */<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                                nearLight = new boolean[width][height];<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                        else {<a name="line.506"></a>
+<span class="sourceLineNo">507</span>                                /*<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                                 * Size did not change, we simply need to erase the previous<a name="line.508"></a>
+<span class="sourceLineNo">509</span>                                 * result<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                                 */<a name="line.510"></a>
+<span class="sourceLineNo">511</span>                                ArrayTools.fill(nearLight, false);<a name="line.511"></a>
+<span class="sourceLineNo">512</span>                        }<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                }<a name="line.513"></a>
+<span class="sourceLineNo">514</span>        }<a name="line.514"></a>
+<span class="sourceLineNo">515</span><a name="line.515"></a>
+<span class="sourceLineNo">516</span>        private static int rippleValue(int type) {<a name="line.516"></a>
+<span class="sourceLineNo">517</span>                switch (type) {<a name="line.517"></a>
+<span class="sourceLineNo">518</span>                case RIPPLE:<a name="line.518"></a>
+<span class="sourceLineNo">519</span>                        return 2;<a name="line.519"></a>
+<span class="sourceLineNo">520</span>                case RIPPLE_LOOSE:<a name="line.520"></a>
+<span class="sourceLineNo">521</span>                        return 3;<a name="line.521"></a>
+<span class="sourceLineNo">522</span>                case RIPPLE_TIGHT:<a name="line.522"></a>
+<span class="sourceLineNo">523</span>                        return 1;<a name="line.523"></a>
+<span class="sourceLineNo">524</span>                case RIPPLE_VERY_LOOSE:<a name="line.524"></a>
+<span class="sourceLineNo">525</span>                        return 6;<a name="line.525"></a>
+<span class="sourceLineNo">526</span>                default:<a name="line.526"></a>
+<span class="sourceLineNo">527</span>                        System.err.println("Unrecognized ripple type: " + type + ". Defaulting to RIPPLE");<a name="line.527"></a>
+<span class="sourceLineNo">528</span>                        return rippleValue(RIPPLE);<a name="line.528"></a>
+<span class="sourceLineNo">529</span>                }<a name="line.529"></a>
+<span class="sourceLineNo">530</span>        }<a name="line.530"></a>
+<span class="sourceLineNo">531</span><a name="line.531"></a>
+<span class="sourceLineNo">532</span>    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy) {<a name="line.532"></a>
+<span class="sourceLineNo">533</span>        /* Not using Deque's interface, it isn't GWT compatible */<a name="line.533"></a>
+<span class="sourceLineNo">534</span>        final LinkedList&lt;Coord&gt; dq = new LinkedList&lt;&gt;();<a name="line.534"></a>
+<span class="sourceLineNo">535</span>        int width = lightMap.length;<a name="line.535"></a>
+<span class="sourceLineNo">536</span>        int height = lightMap[0].length;<a name="line.536"></a>
+<span class="sourceLineNo">537</span>        dq.offer(Coord.get(x, y));<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        while (!dq.isEmpty()) {<a name="line.538"></a>
+<span class="sourceLineNo">539</span>            Coord p = dq.removeFirst();<a name="line.539"></a>
+<span class="sourceLineNo">540</span>            if (lightMap[p.x][p.y] &lt;= 0 || indirect[p.x][p.y]) {<a name="line.540"></a>
+<span class="sourceLineNo">541</span>                continue;//no light to spread<a name="line.541"></a>
+<span class="sourceLineNo">542</span>            }<a name="line.542"></a>
 <span class="sourceLineNo">543</span><a name="line.543"></a>
-<span class="sourceLineNo">544</span>                double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy );<a name="line.544"></a>
-<span class="sourceLineNo">545</span>                if (lightMap[x2][y2] &lt; surroundingLight) {<a name="line.545"></a>
-<span class="sourceLineNo">546</span>                    lightMap[x2][y2] = surroundingLight;<a name="line.546"></a>
-<span class="sourceLineNo">547</span>                    if (map[x2][y2] &lt; 1) {//make sure it's not a wall<a name="line.547"></a>
-<span class="sourceLineNo">548</span>                        dq.offer(Coord.get(x2, y2));//redo neighbors since this one's light changed<a name="line.548"></a>
-<span class="sourceLineNo">549</span>                    }<a name="line.549"></a>
+<span class="sourceLineNo">544</span>            for (Direction dir : Direction.OUTWARDS) {<a name="line.544"></a>
+<span class="sourceLineNo">545</span>                int x2 = p.x + dir.deltaX;<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                int y2 = p.y + dir.deltaY;<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                if (x2 &lt; 0 || x2 &gt;= width || y2 &lt; 0 || y2 &gt;= height //out of bounds<a name="line.547"></a>
+<span class="sourceLineNo">548</span>                        || radiusStrategy.radius(startx, starty, x2, y2) &gt;= radius + 1) {//+1 to cover starting tile<a name="line.548"></a>
+<span class="sourceLineNo">549</span>                    continue;<a name="line.549"></a>
 <span class="sourceLineNo">550</span>                }<a name="line.550"></a>
-<span class="sourceLineNo">551</span>            }<a name="line.551"></a>
-<span class="sourceLineNo">552</span>        }<a name="line.552"></a>
-<span class="sourceLineNo">553</span>    }<a name="line.553"></a>
-<span class="sourceLineNo">554</span><a name="line.554"></a>
-<span class="sourceLineNo">555</span>    private static double nearRippleLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, boolean[][] indirect, Radius radiusStrategy) {<a name="line.555"></a>
-<span class="sourceLineNo">556</span>        if (x == startx &amp;&amp; y == starty) {<a name="line.556"></a>
-<span class="sourceLineNo">557</span>            return 1;<a name="line.557"></a>
-<span class="sourceLineNo">558</span>        }<a name="line.558"></a>
-<span class="sourceLineNo">559</span>        int width = lightMap.length;<a name="line.559"></a>
-<span class="sourceLineNo">560</span>        int height = lightMap[0].length;<a name="line.560"></a>
-<span class="sourceLineNo">561</span>        List&lt;Coord&gt; neighbors = new ArrayList&lt;&gt;();<a name="line.561"></a>
-<span class="sourceLineNo">562</span>        double tmpDistance = 0, testDistance;<a name="line.562"></a>
-<span class="sourceLineNo">563</span>        Coord c;<a name="line.563"></a>
-<span class="sourceLineNo">564</span>        for (Direction di : Direction.OUTWARDS) {<a name="line.564"></a>
-<span class="sourceLineNo">565</span>            int x2 = x + di.deltaX;<a name="line.565"></a>
-<span class="sourceLineNo">566</span>            int y2 = y + di.deltaY;<a name="line.566"></a>
-<span class="sourceLineNo">567</span>            if (x2 &gt;= 0 &amp;&amp; x2 &lt; width &amp;&amp; y2 &gt;= 0 &amp;&amp; y2 &lt; height) {<a name="line.567"></a>
-<span class="sourceLineNo">568</span>                tmpDistance = radiusStrategy.radius(startx, starty, x2, y2);<a name="line.568"></a>
-<span class="sourceLineNo">569</span>                int idx = 0;<a name="line.569"></a>
-<span class="sourceLineNo">570</span>                for(int i = 0; i &lt; neighbors.size() &amp;&amp; i &lt;= rippleNeighbors; i++)<a name="line.570"></a>
-<span class="sourceLineNo">571</span>                {<a name="line.571"></a>
-<span class="sourceLineNo">572</span>                    c = neighbors.get(i);<a name="line.572"></a>
-<span class="sourceLineNo">573</span>                    testDistance = radiusStrategy.radius(startx, starty, c.x, c.y);<a name="line.573"></a>
-<span class="sourceLineNo">574</span>                    if(tmpDistance &lt; testDistance) {<a name="line.574"></a>
-<span class="sourceLineNo">575</span>                        break;<a name="line.575"></a>
-<span class="sourceLineNo">576</span>                    }<a name="line.576"></a>
-<span class="sourceLineNo">577</span>                    idx++;<a name="line.577"></a>
-<span class="sourceLineNo">578</span>                }<a name="line.578"></a>
-<span class="sourceLineNo">579</span>                neighbors.add(idx, Coord.get(x2, y2));<a name="line.579"></a>
-<span class="sourceLineNo">580</span>            }<a name="line.580"></a>
-<span class="sourceLineNo">581</span>        }<a name="line.581"></a>
-<span class="sourceLineNo">582</span><a name="line.582"></a>
-<span class="sourceLineNo">583</span>        if (neighbors.isEmpty()) {<a name="line.583"></a>
-<span class="sourceLineNo">584</span>            return 0;<a name="line.584"></a>
-<span class="sourceLineNo">585</span>        }<a name="line.585"></a>
-<span class="sourceLineNo">586</span>        neighbors = neighbors.subList(0, Math.min(neighbors.size(), rippleNeighbors));<a name="line.586"></a>
-<span class="sourceLineNo">587</span>/*<a name="line.587"></a>
-<span class="sourceLineNo">588</span>        while (neighbors.size() &gt; rippleNeighbors) {<a name="line.588"></a>
-<span class="sourceLineNo">589</span>            Coord p = neighbors.remove(0);<a name="line.589"></a>
-<span class="sourceLineNo">590</span>            double dist = radiusStrategy.radius(startx, starty, p.x, p.y);<a name="line.590"></a>
-<span class="sourceLineNo">591</span>            double dist2 = 0;<a name="line.591"></a>
-<span class="sourceLineNo">592</span>            for (Coord p2 : neighbors) {<a name="line.592"></a>
-<span class="sourceLineNo">593</span>                dist2 = Math.max(dist2, radiusStrategy.radius(startx, starty, p2.x, p2.y));<a name="line.593"></a>
-<span class="sourceLineNo">594</span>            }<a name="line.594"></a>
-<span class="sourceLineNo">595</span>            if (dist &lt; dist2) {//not the largest, put it back<a name="line.595"></a>
-<span class="sourceLineNo">596</span>                neighbors.add(p);<a name="line.596"></a>
-<span class="sourceLineNo">597</span>            }<a name="line.597"></a>
-<span class="sourceLineNo">598</span>        }<a name="line.598"></a>
-<span class="sourceLineNo">599</span>*/<a name="line.599"></a>
-<span class="sourceLineNo">600</span>        double light = 0;<a name="line.600"></a>
-<span class="sourceLineNo">601</span>        int lit = 0, indirects = 0;<a name="line.601"></a>
-<span class="sourceLineNo">602</span>        for (Coord p : neighbors) {<a name="line.602"></a>
-<span class="sourceLineNo">603</span>            if (lightMap[p.x][p.y] &gt; 0) {<a name="line.603"></a>
-<span class="sourceLineNo">604</span>                lit++;<a name="line.604"></a>
-<span class="sourceLineNo">605</span>                if (indirect[p.x][p.y]) {<a name="line.605"></a>
-<span class="sourceLineNo">606</span>                    indirects++;<a name="line.606"></a>
-<span class="sourceLineNo">607</span>                }<a name="line.607"></a>
-<span class="sourceLineNo">608</span>                double dist = radiusStrategy.radius(x, y, p.x, p.y);<a name="line.608"></a>
-<span class="sourceLineNo">609</span>                light = Math.max(light, lightMap[p.x][p.y] - dist * decay - map[p.x][p.y]);<a name="line.609"></a>
-<span class="sourceLineNo">610</span>            }<a name="line.610"></a>
-<span class="sourceLineNo">611</span>        }<a name="line.611"></a>
-<span class="sourceLineNo">612</span><a name="line.612"></a>
-<span class="sourceLineNo">613</span>        if (map[x][y] &gt;= 1 || indirects &gt;= lit) {<a name="line.613"></a>
-<span class="sourceLineNo">614</span>            indirect[x][y] = true;<a name="line.614"></a>
-<span class="sourceLineNo">615</span>        }<a name="line.615"></a>
-<span class="sourceLineNo">616</span>        return light;<a name="line.616"></a>
-<span class="sourceLineNo">617</span>    }<a name="line.617"></a>
-<span class="sourceLineNo">618</span><a name="line.618"></a>
-<span class="sourceLineNo">619</span>    private static double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,<a name="line.619"></a>
-<span class="sourceLineNo">620</span>                                  double radius, int startx, int starty, double decay, double[][] lightMap,<a name="line.620"></a>
-<span class="sourceLineNo">621</span>                                  double[][] map, Radius radiusStrategy) {<a name="line.621"></a>
-<span class="sourceLineNo">622</span>        double newStart = 0;<a name="line.622"></a>
-<span class="sourceLineNo">623</span>        if (start &lt; end) {<a name="line.623"></a>
-<span class="sourceLineNo">624</span>            return lightMap;<a name="line.624"></a>
+<span class="sourceLineNo">551</span><a name="line.551"></a>
+<span class="sourceLineNo">552</span>                double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy);<a name="line.552"></a>
+<span class="sourceLineNo">553</span>                if (lightMap[x2][y2] &lt; surroundingLight) {<a name="line.553"></a>
+<span class="sourceLineNo">554</span>                    lightMap[x2][y2] = surroundingLight;<a name="line.554"></a>
+<span class="sourceLineNo">555</span>                    if (map[x2][y2] &lt; 1) {//make sure it's not a wall<a name="line.555"></a>
+<span class="sourceLineNo">556</span>                        dq.offer(Coord.get(x2, y2));//redo neighbors since this one's light changed<a name="line.556"></a>
+<span class="sourceLineNo">557</span>                    }<a name="line.557"></a>
+<span class="sourceLineNo">558</span>                }<a name="line.558"></a>
+<span class="sourceLineNo">559</span>            }<a name="line.559"></a>
+<span class="sourceLineNo">560</span>        }<a name="line.560"></a>
+<span class="sourceLineNo">561</span>    }<a name="line.561"></a>
+<span class="sourceLineNo">562</span><a name="line.562"></a>
+<span class="sourceLineNo">563</span><a name="line.563"></a>
+<span class="sourceLineNo">564</span><a name="line.564"></a>
+<span class="sourceLineNo">565</span>    private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy, double angle, double span) {<a name="line.565"></a>
+<span class="sourceLineNo">566</span>        /* Not using Deque's interface, it isn't GWT compatible */<a name="line.566"></a>
+<span class="sourceLineNo">567</span>        final LinkedList&lt;Coord&gt; dq = new LinkedList&lt;&gt;();<a name="line.567"></a>
+<span class="sourceLineNo">568</span>        int width = lightMap.length;<a name="line.568"></a>
+<span class="sourceLineNo">569</span>        int height = lightMap[0].length;<a name="line.569"></a>
+<span class="sourceLineNo">570</span>        dq.offer(Coord.get(x, y));<a name="line.570"></a>
+<span class="sourceLineNo">571</span>        while (!dq.isEmpty()) {<a name="line.571"></a>
+<span class="sourceLineNo">572</span>            Coord p = dq.removeFirst();<a name="line.572"></a>
+<span class="sourceLineNo">573</span>            if (lightMap[p.x][p.y] &lt;= 0 || indirect[p.x][p.y]) {<a name="line.573"></a>
+<span class="sourceLineNo">574</span>                continue;//no light to spread<a name="line.574"></a>
+<span class="sourceLineNo">575</span>            }<a name="line.575"></a>
+<span class="sourceLineNo">576</span><a name="line.576"></a>
+<span class="sourceLineNo">577</span>            for (Direction dir : ccw_full) {<a name="line.577"></a>
+<span class="sourceLineNo">578</span>                int x2 = p.x + dir.deltaX;<a name="line.578"></a>
+<span class="sourceLineNo">579</span>                int y2 = p.y + dir.deltaY;<a name="line.579"></a>
+<span class="sourceLineNo">580</span>                if (x2 &lt; 0 || x2 &gt;= width || y2 &lt; 0 || y2 &gt;= height //out of bounds<a name="line.580"></a>
+<span class="sourceLineNo">581</span>                        || radiusStrategy.radius(startx, starty, x2, y2) &gt;= radius + 1) {//+1 to cover starting tile<a name="line.581"></a>
+<span class="sourceLineNo">582</span>                    continue;<a name="line.582"></a>
+<span class="sourceLineNo">583</span>                }<a name="line.583"></a>
+<span class="sourceLineNo">584</span>                double newAngle = Math.atan2(y2 - starty, x2 - startx) + Math.PI * 2;<a name="line.584"></a>
+<span class="sourceLineNo">585</span>                                if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) &gt; span / 2.0)<a name="line.585"></a>
+<span class="sourceLineNo">586</span>                                        continue;<a name="line.586"></a>
+<span class="sourceLineNo">587</span><a name="line.587"></a>
+<span class="sourceLineNo">588</span>                double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy );<a name="line.588"></a>
+<span class="sourceLineNo">589</span>                if (lightMap[x2][y2] &lt; surroundingLight) {<a name="line.589"></a>
+<span class="sourceLineNo">590</span>                    lightMap[x2][y2] = surroundingLight;<a name="line.590"></a>
+<span class="sourceLineNo">591</span>                    if (map[x2][y2] &lt; 1) {//make sure it's not a wall<a name="line.591"></a>
+<span class="sourceLineNo">592</span>                        dq.offer(Coord.get(x2, y2));//redo neighbors since this one's light changed<a name="line.592"></a>
+<span class="sourceLineNo">593</span>                    }<a name="line.593"></a>
+<span class="sourceLineNo">594</span>                }<a name="line.594"></a>
+<span class="sourceLineNo">595</span>            }<a name="line.595"></a>
+<span class="sourceLineNo">596</span>        }<a name="line.596"></a>
+<span class="sourceLineNo">597</span>    }<a name="line.597"></a>
+<span class="sourceLineNo">598</span><a name="line.598"></a>
+<span class="sourceLineNo">599</span>    private static double nearRippleLight(int x, int y, int rippleNeighbors, int startx, int starty, double decay, double[][] lightMap, double[][] map, boolean[][] indirect, Radius radiusStrategy) {<a name="line.599"></a>
+<span class="sourceLineNo">600</span>        if (x == startx &amp;&amp; y == starty) {<a name="line.600"></a>
+<span class="sourceLineNo">601</span>            return 1;<a name="line.601"></a>
+<span class="sourceLineNo">602</span>        }<a name="line.602"></a>
+<span class="sourceLineNo">603</span>        int width = lightMap.length;<a name="line.603"></a>
+<span class="sourceLineNo">604</span>        int height = lightMap[0].length;<a name="line.604"></a>
+<span class="sourceLineNo">605</span>        List&lt;Coord&gt; neighbors = new ArrayList&lt;&gt;();<a name="line.605"></a>
+<span class="sourceLineNo">606</span>        double tmpDistance = 0, testDistance;<a name="line.606"></a>
+<span class="sourceLineNo">607</span>        Coord c;<a name="line.607"></a>
+<span class="sourceLineNo">608</span>        for (Direction di : Direction.OUTWARDS) {<a name="line.608"></a>
+<span class="sourceLineNo">609</span>            int x2 = x + di.deltaX;<a name="line.609"></a>
+<span class="sourceLineNo">610</span>            int y2 = y + di.deltaY;<a name="line.610"></a>
+<span class="sourceLineNo">611</span>            if (x2 &gt;= 0 &amp;&amp; x2 &lt; width &amp;&amp; y2 &gt;= 0 &amp;&amp; y2 &lt; height) {<a name="line.611"></a>
+<span class="sourceLineNo">612</span>                tmpDistance = radiusStrategy.radius(startx, starty, x2, y2);<a name="line.612"></a>
+<span class="sourceLineNo">613</span>                int idx = 0;<a name="line.613"></a>
+<span class="sourceLineNo">614</span>                for(int i = 0; i &lt; neighbors.size() &amp;&amp; i &lt;= rippleNeighbors; i++)<a name="line.614"></a>
+<span class="sourceLineNo">615</span>                {<a name="line.615"></a>
+<span class="sourceLineNo">616</span>                    c = neighbors.get(i);<a name="line.616"></a>
+<span class="sourceLineNo">617</span>                    testDistance = radiusStrategy.radius(startx, starty, c.x, c.y);<a name="line.617"></a>
+<span class="sourceLineNo">618</span>                    if(tmpDistance &lt; testDistance) {<a name="line.618"></a>
+<span class="sourceLineNo">619</span>                        break;<a name="line.619"></a>
+<span class="sourceLineNo">620</span>                    }<a name="line.620"></a>
+<span class="sourceLineNo">621</span>                    idx++;<a name="line.621"></a>
+<span class="sourceLineNo">622</span>                }<a name="line.622"></a>
+<span class="sourceLineNo">623</span>                neighbors.add(idx, Coord.get(x2, y2));<a name="line.623"></a>
+<span class="sourceLineNo">624</span>            }<a name="line.624"></a>
 <span class="sourceLineNo">625</span>        }<a name="line.625"></a>
-<span class="sourceLineNo">626</span>        int width = lightMap.length;<a name="line.626"></a>
-<span class="sourceLineNo">627</span>        int height = lightMap[0].length;<a name="line.627"></a>
-<span class="sourceLineNo">628</span><a name="line.628"></a>
-<span class="sourceLineNo">629</span>        boolean blocked = false;<a name="line.629"></a>
-<span class="sourceLineNo">630</span>        for (int distance = row; distance &lt;= radius &amp;&amp; distance &lt; width + height &amp;&amp; !blocked; distance++) {<a name="line.630"></a>
-<span class="sourceLineNo">631</span>            int deltaY = -distance;<a name="line.631"></a>
-<span class="sourceLineNo">632</span>            for (int deltaX = -distance; deltaX &lt;= 0; deltaX++) {<a name="line.632"></a>
-<span class="sourceLineNo">633</span>                int currentX = startx + deltaX * xx + deltaY * xy;<a name="line.633"></a>
-<span class="sourceLineNo">634</span>                int currentY = starty + deltaX * yx + deltaY * yy;<a name="line.634"></a>
-<span class="sourceLineNo">635</span>                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);<a name="line.635"></a>
-<span class="sourceLineNo">636</span>                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);<a name="line.636"></a>
-<span class="sourceLineNo">637</span><a name="line.637"></a>
-<span class="sourceLineNo">638</span>                if (!(currentX &gt;= 0 &amp;&amp; currentY &gt;= 0 &amp;&amp; currentX &lt; width &amp;&amp; currentY &lt; height) || start &lt; rightSlope) {<a name="line.638"></a>
-<span class="sourceLineNo">639</span>                    continue;<a name="line.639"></a>
-<span class="sourceLineNo">640</span>                } else if (end &gt; leftSlope) {<a name="line.640"></a>
-<span class="sourceLineNo">641</span>                    break;<a name="line.641"></a>
-<span class="sourceLineNo">642</span>                }<a name="line.642"></a>
-<span class="sourceLineNo">643</span>                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);<a name="line.643"></a>
-<span class="sourceLineNo">644</span>                //check if it's within the lightable area and light if needed<a name="line.644"></a>
-<span class="sourceLineNo">645</span>                if (deltaRadius &lt;= radius) {<a name="line.645"></a>
-<span class="sourceLineNo">646</span>                    double bright = 1 - decay * deltaRadius;<a name="line.646"></a>
-<span class="sourceLineNo">647</span>                    lightMap[currentX][currentY] = bright;<a name="line.647"></a>
-<span class="sourceLineNo">648</span>                }<a name="line.648"></a>
-<span class="sourceLineNo">649</span><a name="line.649"></a>
-<span class="sourceLineNo">650</span>                if (blocked) { //previous cell was a blocking one<a name="line.650"></a>
-<span class="sourceLineNo">651</span>                    if (map[currentX][currentY] &gt;= 1) {//hit a wall<a name="line.651"></a>
-<span class="sourceLineNo">652</span>                        newStart = rightSlope;<a name="line.652"></a>
-<span class="sourceLineNo">653</span>                    } else {<a name="line.653"></a>
-<span class="sourceLineNo">654</span>                        blocked = false;<a name="line.654"></a>
-<span class="sourceLineNo">655</span>                        start = newStart;<a name="line.655"></a>
-<span class="sourceLineNo">656</span>                    }<a name="line.656"></a>
-<span class="sourceLineNo">657</span>                } else {<a name="line.657"></a>
-<span class="sourceLineNo">658</span>                    if (map[currentX][currentY] &gt;= 1 &amp;&amp; distance &lt; radius) {//hit a wall within sight line<a name="line.658"></a>
-<span class="sourceLineNo">659</span>                        blocked = true;<a name="line.659"></a>
-<span class="sourceLineNo">660</span>                        lightMap = shadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy);<a name="line.660"></a>
-<span class="sourceLineNo">661</span>                        newStart = rightSlope;<a name="line.661"></a>
-<span class="sourceLineNo">662</span>                    }<a name="line.662"></a>
-<span class="sourceLineNo">663</span>                }<a name="line.663"></a>
-<span class="sourceLineNo">664</span>            }<a name="line.664"></a>
-<span class="sourceLineNo">665</span>        }<a name="line.665"></a>
-<span class="sourceLineNo">666</span>        return lightMap;<a name="line.666"></a>
-<span class="sourceLineNo">667</span>    }<a name="line.667"></a>
-<span class="sourceLineNo">668</span>    private static double[][] shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy,<a name="line.668"></a>
-<span class="sourceLineNo">669</span>                                         double radius, int startx, int starty, double decay, double[][] lightMap,<a name="line.669"></a>
-<span class="sourceLineNo">670</span>                                         double[][] map, Radius radiusStrategy, double angle, double span) {<a name="line.670"></a>
-<span class="sourceLineNo">671</span>        double newStart = 0;<a name="line.671"></a>
-<span class="sourceLineNo">672</span>        if (start &lt; end) {<a name="line.672"></a>
-<span class="sourceLineNo">673</span>            return lightMap;<a name="line.673"></a>
-<span class="sourceLineNo">674</span>        }<a name="line.674"></a>
-<span class="sourceLineNo">675</span>        int width = lightMap.length;<a name="line.675"></a>
-<span class="sourceLineNo">676</span>        int height = lightMap[0].length;<a name="line.676"></a>
-<span class="sourceLineNo">677</span><a name="line.677"></a>
-<span class="sourceLineNo">678</span>        boolean blocked = false;<a name="line.678"></a>
-<span class="sourceLineNo">679</span>        for (int distance = row; distance &lt;= radius &amp;&amp; distance &lt; width + height &amp;&amp; !blocked; distance++) {<a name="line.679"></a>
-<span class="sourceLineNo">680</span>            int deltaY = -distance;<a name="line.680"></a>
-<span class="sourceLineNo">681</span>            for (int deltaX = -distance; deltaX &lt;= 0; deltaX++) {<a name="line.681"></a>
-<span class="sourceLineNo">682</span>                int currentX = startx + deltaX * xx + deltaY * xy;<a name="line.682"></a>
-<span class="sourceLineNo">683</span>                int currentY = starty + deltaX * yx + deltaY * yy;<a name="line.683"></a>
-<span class="sourceLineNo">684</span>                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);<a name="line.684"></a>
-<span class="sourceLineNo">685</span>                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);<a name="line.685"></a>
-<span class="sourceLineNo">686</span><a name="line.686"></a>
-<span class="sourceLineNo">687</span>                if (!(currentX &gt;= 0 &amp;&amp; currentY &gt;= 0 &amp;&amp; currentX &lt; width &amp;&amp; currentY &lt; height) || start &lt; rightSlope) {<a name="line.687"></a>
-<span class="sourceLineNo">688</span>                    continue;<a name="line.688"></a>
-<span class="sourceLineNo">689</span>                } else if (end &gt; leftSlope) {<a name="line.689"></a>
-<span class="sourceLineNo">690</span>                    break;<a name="line.690"></a>
-<span class="sourceLineNo">691</span>                }<a name="line.691"></a>
-<span class="sourceLineNo">692</span>                double newAngle = Math.atan2(currentY - starty, currentX - startx) + Math.PI * 2;<a name="line.692"></a>
-<span class="sourceLineNo">693</span>                                if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) &gt; span / 2.0)<a name="line.693"></a>
-<span class="sourceLineNo">694</span>                                        continue;<a name="line.694"></a>
-<span class="sourceLineNo">695</span><a name="line.695"></a>
-<span class="sourceLineNo">696</span>                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);<a name="line.696"></a>
-<span class="sourceLineNo">697</span>                //check if it's within the lightable area and light if needed<a name="line.697"></a>
-<span class="sourceLineNo">698</span>                if (deltaRadius &lt;= radius) {<a name="line.698"></a>
-<span class="sourceLineNo">699</span>                    double bright = 1 - decay * deltaRadius;<a name="line.699"></a>
-<span class="sourceLineNo">700</span>                    lightMap[currentX][currentY] = bright;<a name="line.700"></a>
-<span class="sourceLineNo">701</span>                }<a name="line.701"></a>
-<span class="sourceLineNo">702</span><a name="line.702"></a>
-<span class="sourceLineNo">703</span>                if (blocked) { //previous cell was a blocking one<a name="line.703"></a>
-<span class="sourceLineNo">704</span>                    if (map[currentX][currentY] &gt;= 1) {//hit a wall<a name="line.704"></a>
+<span class="sourceLineNo">626</span><a name="line.626"></a>
+<span class="sourceLineNo">627</span>        if (neighbors.isEmpty()) {<a name="line.627"></a>
+<span class="sourceLineNo">628</span>            return 0;<a name="line.628"></a>
+<span class="sourceLineNo">629</span>        }<a name="line.629"></a>
+<span class="sourceLineNo">630</span>        neighbors = neighbors.subList(0, Math.min(neighbors.size(), rippleNeighbors));<a name="line.630"></a>
+<span class="sourceLineNo">631</span>/*<a name="line.631"></a>
+<span class="sourceLineNo">632</span>        while (neighbors.size() &gt; rippleNeighbors) {<a name="line.632"></a>
+<span class="sourceLineNo">633</span>            Coord p = neighbors.remove(0);<a name="line.633"></a>
+<span class="sourceLineNo">634</span>            double dist = radiusStrategy.radius(startx, starty, p.x, p.y);<a name="line.634"></a>
+<span class="sourceLineNo">635</span>            double dist2 = 0;<a name="line.635"></a>
+<span class="sourceLineNo">636</span>            for (Coord p2 : neighbors) {<a name="line.636"></a>
+<span class="sourceLineNo">637</span>                dist2 = Math.max(dist2, radiusStrategy.radius(startx, starty, p2.x, p2.y));<a name="line.637"></a>
+<span class="sourceLineNo">638</span>            }<a name="line.638"></a>
+<span class="sourceLineNo">639</span>            if (dist &lt; dist2) {//not the largest, put it back<a name="line.639"></a>
+<span class="sourceLineNo">640</span>                neighbors.add(p);<a name="line.640"></a>
+<span class="sourceLineNo">641</span>            }<a name="line.641"></a>
+<span class="sourceLineNo">642</span>        }<a name="line.642"></a>
+<span class="sourceLineNo">643</span>*/<a name="line.643"></a>
+<span class="sourceLineNo">644</span>        double light = 0;<a name="line.644"></a>
+<span class="sourceLineNo">645</span>        int lit = 0, indirects = 0;<a name="line.645"></a>
+<span class="sourceLineNo">646</span>        for (Coord p : neighbors) {<a name="line.646"></a>
+<span class="sourceLineNo">647</span>            if (lightMap[p.x][p.y] &gt; 0) {<a name="line.647"></a>
+<span class="sourceLineNo">648</span>                lit++;<a name="line.648"></a>
+<span class="sourceLineNo">649</span>                if (indirect[p.x][p.y]) {<a name="line.649"></a>
+<span class="sourceLineNo">650</span>                    indirects++;<a name="line.650"></a>
+<span class="sourceLineNo">651</span>                }<a name="line.651"></a>
+<span class="sourceLineNo">652</span>                double dist = radiusStrategy.radius(x, y, p.x, p.y);<a name="line.652"></a>
+<span class="sourceLineNo">653</span>                light = Math.max(light, lightMap[p.x][p.y] - dist * decay - map[p.x][p.y]);<a name="line.653"></a>
+<span class="sourceLineNo">654</span>            }<a name="line.654"></a>
+<span class="sourceLineNo">655</span>        }<a name="line.655"></a>
+<span class="sourceLineNo">656</span><a name="line.656"></a>
+<span class="sourceLineNo">657</span>        if (map[x][y] &gt;= 1 || indirects &gt;= lit) {<a name="line.657"></a>
+<span class="sourceLineNo">658</span>            indirect[x][y] = true;<a name="line.658"></a>
+<span class="sourceLineNo">659</span>        }<a name="line.659"></a>
+<span class="sourceLineNo">660</span>        return light;<a name="line.660"></a>
+<span class="sourceLineNo">661</span>    }<a name="line.661"></a>
+<span class="sourceLineNo">662</span><a name="line.662"></a>
+<span class="sourceLineNo">663</span>    private static double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,<a name="line.663"></a>
+<span class="sourceLineNo">664</span>                                  double radius, int startx, int starty, double decay, double[][] lightMap,<a name="line.664"></a>
+<span class="sourceLineNo">665</span>                                  double[][] map, Radius radiusStrategy) {<a name="line.665"></a>
+<span class="sourceLineNo">666</span>        double newStart = 0;<a name="line.666"></a>
+<span class="sourceLineNo">667</span>        if (start &lt; end) {<a name="line.667"></a>
+<span class="sourceLineNo">668</span>            return lightMap;<a name="line.668"></a>
+<span class="sourceLineNo">669</span>        }<a name="line.669"></a>
+<span class="sourceLineNo">670</span>        int width = lightMap.length;<a name="line.670"></a>
+<span class="sourceLineNo">671</span>        int height = lightMap[0].length;<a name="line.671"></a>
+<span class="sourceLineNo">672</span><a name="line.672"></a>
+<span class="sourceLineNo">673</span>        boolean blocked = false;<a name="line.673"></a>
+<span class="sourceLineNo">674</span>        for (int distance = row; distance &lt;= radius &amp;&amp; distance &lt; width + height &amp;&amp; !blocked; distance++) {<a name="line.674"></a>
+<span class="sourceLineNo">675</span>            int deltaY = -distance;<a name="line.675"></a>
+<span class="sourceLineNo">676</span>            for (int deltaX = -distance; deltaX &lt;= 0; deltaX++) {<a name="line.676"></a>
+<span class="sourceLineNo">677</span>                int currentX = startx + deltaX * xx + deltaY * xy;<a name="line.677"></a>
+<span class="sourceLineNo">678</span>                int currentY = starty + deltaX * yx + deltaY * yy;<a name="line.678"></a>
+<span class="sourceLineNo">679</span>                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);<a name="line.679"></a>
+<span class="sourceLineNo">680</span>                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);<a name="line.680"></a>
+<span class="sourceLineNo">681</span><a name="line.681"></a>
+<span class="sourceLineNo">682</span>                if (!(currentX &gt;= 0 &amp;&amp; currentY &gt;= 0 &amp;&amp; currentX &lt; width &amp;&amp; currentY &lt; height) || start &lt; rightSlope) {<a name="line.682"></a>
+<span class="sourceLineNo">683</span>                    continue;<a name="line.683"></a>
+<span class="sourceLineNo">684</span>                } else if (end &gt; leftSlope) {<a name="line.684"></a>
+<span class="sourceLineNo">685</span>                    break;<a name="line.685"></a>
+<span class="sourceLineNo">686</span>                }<a name="line.686"></a>
+<span class="sourceLineNo">687</span>                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);<a name="line.687"></a>
+<span class="sourceLineNo">688</span>                //check if it's within the lightable area and light if needed<a name="line.688"></a>
+<span class="sourceLineNo">689</span>                if (deltaRadius &lt;= radius) {<a name="line.689"></a>
+<span class="sourceLineNo">690</span>                    double bright = 1 - decay * deltaRadius;<a name="line.690"></a>
+<span class="sourceLineNo">691</span>                    lightMap[currentX][currentY] = bright;<a name="line.691"></a>
+<span class="sourceLineNo">692</span>                }<a name="line.692"></a>
+<span class="sourceLineNo">693</span><a name="line.693"></a>
+<span class="sourceLineNo">694</span>                if (blocked) { //previous cell was a blocking one<a name="line.694"></a>
+<span class="sourceLineNo">695</span>                    if (map[currentX][currentY] &gt;= 1) {//hit a wall<a name="line.695"></a>
+<span class="sourceLineNo">696</span>                        newStart = rightSlope;<a name="line.696"></a>
+<span class="sourceLineNo">697</span>                    } else {<a name="line.697"></a>
+<span class="sourceLineNo">698</span>                        blocked = false;<a name="line.698"></a>
+<span class="sourceLineNo">699</span>                        start = newStart;<a name="line.699"></a>
+<span class="sourceLineNo">700</span>                    }<a name="line.700"></a>
+<span class="sourceLineNo">701</span>                } else {<a name="line.701"></a>
+<span class="sourceLineNo">702</span>                    if (map[currentX][currentY] &gt;= 1 &amp;&amp; distance &lt; radius) {//hit a wall within sight line<a name="line.702"></a>
+<span class="sourceLineNo">703</span>                        blocked = true;<a name="line.703"></a>
+<span class="sourceLineNo">704</span>                        lightMap = shadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy);<a name="line.704"></a>
 <span class="sourceLineNo">705</span>                        newStart = rightSlope;<a name="line.705"></a>
-<span class="sourceLineNo">706</span>                    } else {<a name="line.706"></a>
-<span class="sourceLineNo">707</span>                        blocked = false;<a name="line.707"></a>
-<span class="sourceLineNo">708</span>                        start = newStart;<a name="line.708"></a>
-<span class="sourceLineNo">709</span>                    }<a name="line.709"></a>
-<span class="sourceLineNo">710</span>                } else {<a name="line.710"></a>
-<span class="sourceLineNo">711</span>                    if (map[currentX][currentY] &gt;= 1 &amp;&amp; distance &lt; radius) {//hit a wall within sight line<a name="line.711"></a>
-<span class="sourceLineNo">712</span>                        blocked = true;<a name="line.712"></a>
-<span class="sourceLineNo">713</span>                        lightMap = shadowCastLimited(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, angle, span);<a name="line.713"></a>
-<span class="sourceLineNo">714</span>                        newStart = rightSlope;<a name="line.714"></a>
-<span class="sourceLineNo">715</span>                    }<a name="line.715"></a>
-<span class="sourceLineNo">716</span>                }<a name="line.716"></a>
-<span class="sourceLineNo">717</span>            }<a name="line.717"></a>
+<span class="sourceLineNo">706</span>                    }<a name="line.706"></a>
+<span class="sourceLineNo">707</span>                }<a name="line.707"></a>
+<span class="sourceLineNo">708</span>            }<a name="line.708"></a>
+<span class="sourceLineNo">709</span>        }<a name="line.709"></a>
+<span class="sourceLineNo">710</span>        return lightMap;<a name="line.710"></a>
+<span class="sourceLineNo">711</span>    }<a name="line.711"></a>
+<span class="sourceLineNo">712</span>    private static double[][] shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy,<a name="line.712"></a>
+<span class="sourceLineNo">713</span>                                         double radius, int startx, int starty, double decay, double[][] lightMap,<a name="line.713"></a>
+<span class="sourceLineNo">714</span>                                         double[][] map, Radius radiusStrategy, double angle, double span) {<a name="line.714"></a>
+<span class="sourceLineNo">715</span>        double newStart = 0;<a name="line.715"></a>
+<span class="sourceLineNo">716</span>        if (start &lt; end) {<a name="line.716"></a>
+<span class="sourceLineNo">717</span>            return lightMap;<a name="line.717"></a>
 <span class="sourceLineNo">718</span>        }<a name="line.718"></a>
-<span class="sourceLineNo">719</span>        return lightMap;<a name="line.719"></a>
-<span class="sourceLineNo">720</span>    }<a name="line.720"></a>
+<span class="sourceLineNo">719</span>        int width = lightMap.length;<a name="line.719"></a>
+<span class="sourceLineNo">720</span>        int height = lightMap[0].length;<a name="line.720"></a>
 <span class="sourceLineNo">721</span><a name="line.721"></a>
-<span class="sourceLineNo">722</span>    /**<a name="line.722"></a>
-<span class="sourceLineNo">723</span>     * Adds an FOV map to another in the simplest way possible; does not check line-of-sight between FOV maps.<a name="line.723"></a>
-<span class="sourceLineNo">724</span>     * Clamps the highest value for any single position at 1.0. Modifies the basis parameter in-place and makes no<a name="line.724"></a>
-<span class="sourceLineNo">725</span>     * allocations; this is different from {@link #addFOVs(double[][]...)}, which creates a new 2D array.<a name="line.725"></a>
-<span class="sourceLineNo">726</span>     * @param basis a 2D double array, which can be empty or returned by calculateFOV() or reuseFOV(); modified!<a name="line.726"></a>
-<span class="sourceLineNo">727</span>     * @param addend another 2D double array that will be added into basis; this one will not be modified<a name="line.727"></a>
-<span class="sourceLineNo">728</span>     * @return the sum of the 2D double arrays passed, using the dimensions of basis if they don't match<a name="line.728"></a>
-<span class="sourceLineNo">729</span>     */<a name="line.729"></a>
-<span class="sourceLineNo">730</span>    public static double[][] addFOVsInto(double[][] basis, double[][] addend)<a name="line.730"></a>
-<span class="sourceLineNo">731</span>    {<a name="line.731"></a>
-<span class="sourceLineNo">732</span>        for (int x = 0; x &lt; basis.length &amp;&amp; x &lt; addend.length; x++) {<a name="line.732"></a>
-<span class="sourceLineNo">733</span>                for (int y = 0; y &lt; basis[x].length &amp;&amp; y &lt; addend[x].length; y++) {<a name="line.733"></a>
-<span class="sourceLineNo">734</span>                    basis[x][y] = Math.min(1.0, basis[x][y] + addend[x][y]);<a name="line.734"></a>
+<span class="sourceLineNo">722</span>        boolean blocked = false;<a name="line.722"></a>
+<span class="sourceLineNo">723</span>        for (int distance = row; distance &lt;= radius &amp;&amp; distance &lt; width + height &amp;&amp; !blocked; distance++) {<a name="line.723"></a>
+<span class="sourceLineNo">724</span>            int deltaY = -distance;<a name="line.724"></a>
+<span class="sourceLineNo">725</span>            for (int deltaX = -distance; deltaX &lt;= 0; deltaX++) {<a name="line.725"></a>
+<span class="sourceLineNo">726</span>                int currentX = startx + deltaX * xx + deltaY * xy;<a name="line.726"></a>
+<span class="sourceLineNo">727</span>                int currentY = starty + deltaX * yx + deltaY * yy;<a name="line.727"></a>
+<span class="sourceLineNo">728</span>                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);<a name="line.728"></a>
+<span class="sourceLineNo">729</span>                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);<a name="line.729"></a>
+<span class="sourceLineNo">730</span><a name="line.730"></a>
+<span class="sourceLineNo">731</span>                if (!(currentX &gt;= 0 &amp;&amp; currentY &gt;= 0 &amp;&amp; currentX &lt; width &amp;&amp; currentY &lt; height) || start &lt; rightSlope) {<a name="line.731"></a>
+<span class="sourceLineNo">732</span>                    continue;<a name="line.732"></a>
+<span class="sourceLineNo">733</span>                } else if (end &gt; leftSlope) {<a name="line.733"></a>
+<span class="sourceLineNo">734</span>                    break;<a name="line.734"></a>
 <span class="sourceLineNo">735</span>                }<a name="line.735"></a>
-<span class="sourceLineNo">736</span>            }<a name="line.736"></a>
-<span class="sourceLineNo">737</span>        return basis;<a name="line.737"></a>
-<span class="sourceLineNo">738</span>    }<a name="line.738"></a>
-<span class="sourceLineNo">739</span>    /**<a name="line.739"></a>
-<span class="sourceLineNo">740</span>     * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.<a name="line.740"></a>
-<span class="sourceLineNo">741</span>     * Clamps the highest value for any single position at 1.0.<a name="line.741"></a>
-<span class="sourceLineNo">742</span>     * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()<a name="line.742"></a>
-<span class="sourceLineNo">743</span>     * @return the sum of all the 2D double arrays passed, using the dimensions of the first if they don't all match<a name="line.743"></a>
-<span class="sourceLineNo">744</span>     */<a name="line.744"></a>
-<span class="sourceLineNo">745</span>    public static double[][] addFOVs(double[][]... maps)<a name="line.745"></a>
-<span class="sourceLineNo">746</span>    {<a name="line.746"></a>
-<span class="sourceLineNo">747</span>        if(maps == null || maps.length == 0)<a name="line.747"></a>
-<span class="sourceLineNo">748</span>            return new double[0][0];<a name="line.748"></a>
-<span class="sourceLineNo">749</span>        double[][] map = ArrayTools.copy(maps[0]);<a name="line.749"></a>
-<span class="sourceLineNo">750</span>        for(int i = 1; i &lt; maps.length; i++)<a name="line.750"></a>
-<span class="sourceLineNo">751</span>        {<a name="line.751"></a>
-<span class="sourceLineNo">752</span>            for (int x = 0; x &lt; map.length &amp;&amp; x &lt; maps[i].length; x++) {<a name="line.752"></a>
-<span class="sourceLineNo">753</span>                for (int y = 0; y &lt; map[x].length &amp;&amp; y &lt; maps[i][x].length; y++) {<a name="line.753"></a>
-<span class="sourceLineNo">754</span>                    map[x][y] += maps[i][x][y];<a name="line.754"></a>
-<span class="sourceLineNo">755</span>                }<a name="line.755"></a>
-<span class="sourceLineNo">756</span>            }<a name="line.756"></a>
-<span class="sourceLineNo">757</span>        }<a name="line.757"></a>
-<span class="sourceLineNo">758</span>        for (int x = 0; x &lt; map.length; x++) {<a name="line.758"></a>
-<span class="sourceLineNo">759</span>            for (int y = 0; y &lt; map[x].length; y++) {<a name="line.759"></a>
-<span class="sourceLineNo">760</span>                if(map[x][y] &gt; 1.0) map[x][y] = 1.0;<a name="line.760"></a>
-<span class="sourceLineNo">761</span>            }<a name="line.761"></a>
-<span class="sourceLineNo">762</span>        }<a name="line.762"></a>
-<span class="sourceLineNo">763</span>        return map;<a name="line.763"></a>
-<span class="sourceLineNo">764</span>    }<a name="line.764"></a>
-<span class="sourceLineNo">765</span><a name="line.765"></a>
-<span class="sourceLineNo">766</span>    /**<a name="line.766"></a>
-<span class="sourceLineNo">767</span>     * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.<a name="line.767"></a>
-<span class="sourceLineNo">768</span>     * Clamps the highest value for any single position at 1.0.<a name="line.768"></a>
-<span class="sourceLineNo">769</span>     * @param maps an Iterable of 2D double arrays (most collections implement Iterable),<a name="line.769"></a>
-<span class="sourceLineNo">770</span>     *             each usually returned by calculateFOV()<a name="line.770"></a>
-<span class="sourceLineNo">771</span>     * @return the sum of all the 2D double arrays passed, using the dimensions of the first if they don't all match<a name="line.771"></a>
-<span class="sourceLineNo">772</span>     */<a name="line.772"></a>
-<span class="sourceLineNo">773</span>    public static double[][] addFOVs(Iterable&lt;double[][]&gt; maps)<a name="line.773"></a>
-<span class="sourceLineNo">774</span>    {<a name="line.774"></a>
-<span class="sourceLineNo">775</span>        if(maps == null)<a name="line.775"></a>
-<span class="sourceLineNo">776</span>            return new double[0][0];<a name="line.776"></a>
-<span class="sourceLineNo">777</span>        Iterator&lt;double[][]&gt; it = maps.iterator();<a name="line.777"></a>
-<span class="sourceLineNo">778</span>        if(!it.hasNext())<a name="line.778"></a>
-<span class="sourceLineNo">779</span>            return new double[0][0];<a name="line.779"></a>
-<span class="sourceLineNo">780</span>        double[][] map = ArrayTools.copy(it.next()), t;<a name="line.780"></a>
-<span class="sourceLineNo">781</span>        while (it.hasNext())<a name="line.781"></a>
-<span class="sourceLineNo">782</span>        {<a name="line.782"></a>
-<span class="sourceLineNo">783</span>            t = it.next();<a name="line.783"></a>
-<span class="sourceLineNo">784</span>            for (int x = 0; x &lt; map.length &amp;&amp; x &lt; t.length; x++) {<a name="line.784"></a>
-<span class="sourceLineNo">785</span>                for (int y = 0; y &lt; map[x].length &amp;&amp; y &lt; t[x].length; y++) {<a name="line.785"></a>
-<span class="sourceLineNo">786</span>                    map[x][y] += t[x][y];<a name="line.786"></a>
-<span class="sourceLineNo">787</span>                }<a name="line.787"></a>
-<span class="sourceLineNo">788</span>            }<a name="line.788"></a>
-<span class="sourceLineNo">789</span>        }<a name="line.789"></a>
-<span class="sourceLineNo">790</span>        for (int x = 0; x &lt; map.length; x++) {<a name="line.790"></a>
-<span class="sourceLineNo">791</span>            for (int y = 0; y &lt; map[x].length; y++) {<a name="line.791"></a>
-<span class="sourceLineNo">792</span>                if(map[x][y] &gt; 1.0) map[x][y] = 1.0;<a name="line.792"></a>
-<span class="sourceLineNo">793</span>            }<a name="line.793"></a>
-<span class="sourceLineNo">794</span>        }<a name="line.794"></a>
-<span class="sourceLineNo">795</span>        return map;<a name="line.795"></a>
-<span class="sourceLineNo">796</span>    }<a name="line.796"></a>
-<span class="sourceLineNo">797</span><a name="line.797"></a>
-<span class="sourceLineNo">798</span>    /**<a name="line.798"></a>
-<span class="sourceLineNo">799</span>     * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if<a name="line.799"></a>
-<span class="sourceLineNo">800</span>     * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map<a name="line.800"></a>
-<span class="sourceLineNo">801</span>     * is calculated by calculateLOSMap(), using the same resistance map used to calculate the FOV maps.<a name="line.801"></a>
-<span class="sourceLineNo">802</span>     * Clamps the highest value for any single position at 1.0.<a name="line.802"></a>
-<span class="sourceLineNo">803</span>     * @param losMap an LOS map such as one generated by calculateLOSMap()<a name="line.803"></a>
-<span class="sourceLineNo">804</span>     * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()<a name="line.804"></a>
-<span class="sourceLineNo">805</span>     * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap<a name="line.805"></a>
-<span class="sourceLineNo">806</span>     */<a name="line.806"></a>
-<span class="sourceLineNo">807</span>    public static double[][] mixVisibleFOVs(double[][] losMap, double[][]... maps)<a name="line.807"></a>
-<span class="sourceLineNo">808</span>    {<a name="line.808"></a>
-<span class="sourceLineNo">809</span>        if(losMap == null || losMap.length == 0)<a name="line.809"></a>
-<span class="sourceLineNo">810</span>            return addFOVs(maps);<a name="line.810"></a>
-<span class="sourceLineNo">811</span>        double[][] map = new double[losMap.length][losMap[0].length];<a name="line.811"></a>
-<span class="sourceLineNo">812</span>        if(maps == null || maps.length == 0)<a name="line.812"></a>
-<span class="sourceLineNo">813</span>            return map;<a name="line.813"></a>
-<span class="sourceLineNo">814</span>        for(int i = 0; i &lt; maps.length; i++)<a name="line.814"></a>
-<span class="sourceLineNo">815</span>        {<a name="line.815"></a>
-<span class="sourceLineNo">816</span>            for (int x = 0; x &lt; losMap.length &amp;&amp; x &lt; map.length &amp;&amp; x &lt; maps[i].length; x++) {<a name="line.816"></a>
-<span class="sourceLineNo">817</span>                for (int y = 0; y &lt; losMap[x].length &amp;&amp; y &lt; map[x].length &amp;&amp; y &lt; maps[i][x].length; y++) {<a name="line.817"></a>
-<span class="sourceLineNo">818</span>                    if(losMap[x][y] &gt; 0.0001) {<a name="line.818"></a>
-<span class="sourceLineNo">819</span>                        map[x][y] += maps[i][x][y];<a name="line.819"></a>
-<span class="sourceLineNo">820</span>                        if(map[x][y] &gt; 1.0) map[x][y] = 1.0;<a name="line.820"></a>
-<span class="sourceLineNo">821</span>                    }<a name="line.821"></a>
-<span class="sourceLineNo">822</span>                }<a name="line.822"></a>
-<span class="sourceLineNo">823</span>            }<a name="line.823"></a>
-<span class="sourceLineNo">824</span>        }<a name="line.824"></a>
-<span class="sourceLineNo">825</span>        return map;<a name="line.825"></a>
-<span class="sourceLineNo">826</span>    }<a name="line.826"></a>
-<span class="sourceLineNo">827</span><a name="line.827"></a>
-<span class="sourceLineNo">828</span>    /**<a name="line.828"></a>
-<span class="sourceLineNo">829</span>     * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if<a name="line.829"></a>
-<span class="sourceLineNo">830</span>     * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map<a name="line.830"></a>
-<span class="sourceLineNo">831</span>     * is calculated by calculateLOSMap(), using the same resistance map used to calculate the FOV maps.<a name="line.831"></a>
-<span class="sourceLineNo">832</span>     * Clamps the highest value for any single position at 1.0.<a name="line.832"></a>
-<span class="sourceLineNo">833</span>     * @param losMap an LOS map such as one generated by calculateLOSMap()<a name="line.833"></a>
-<span class="sourceLineNo">834</span>     * @param maps an Iterable of 2D double arrays, each usually returned by calculateFOV()<a name="line.834"></a>
-<span class="sourceLineNo">835</span>     * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap<a name="line.835"></a>
-<span class="sourceLineNo">836</span>     */<a name="line.836"></a>
-<span class="sourceLineNo">837</span>    public static double[][] mixVisibleFOVs(double[][] losMap, Iterable&lt;double[][]&gt; maps)<a name="line.837"></a>
-<span class="sourceLineNo">838</span>    {<a name="line.838"></a>
-<span class="sourceLineNo">839</span>        if(losMap == null || losMap.length == 0)<a name="line.839"></a>
-<span class="sourceLineNo">840</span>            return addFOVs(maps);<a name="line.840"></a>
-<span class="sourceLineNo">841</span>        double[][] map = new double[losMap.length][losMap[0].length], t;<a name="line.841"></a>
-<span class="sourceLineNo">842</span>        if(maps == null)<a name="line.842"></a>
-<span class="sourceLineNo">843</span>            return map;<a name="line.843"></a>
-<span class="sourceLineNo">844</span>        Iterator&lt;double[][]&gt; it = maps.iterator();<a name="line.844"></a>
-<span class="sourceLineNo">845</span>        if(!it.hasNext())<a name="line.845"></a>
-<span class="sourceLineNo">846</span>            return map;<a name="line.846"></a>
-<span class="sourceLineNo">847</span><a name="line.847"></a>
-<span class="sourceLineNo">848</span>        while (it.hasNext())<a name="line.848"></a>
-<span class="sourceLineNo">849</span>        {<a name="line.849"></a>
-<span class="sourceLineNo">850</span>            t = it.next();<a name="line.850"></a>
-<span class="sourceLineNo">851</span>            for (int x = 0; x &lt; losMap.length &amp;&amp; x &lt; map.length &amp;&amp; x &lt; t.length; x++) {<a name="line.851"></a>
-<span class="sourceLineNo">852</span>                for (int y = 0; y &lt; losMap[x].length &amp;&amp; y &lt; map[x].length &amp;&amp; y &lt; t[x].length; y++) {<a name="line.852"></a>
-<span class="sourceLineNo">853</span>                    if (losMap[x][y] &gt; 0.0001) {<a name="line.853"></a>
-<span class="sourceLineNo">854</span>                        map[x][y] += t[x][y];<a name="line.854"></a>
-<span class="sourceLineNo">855</span>                        if(map[x][y] &gt; 1.0) map[x][y] = 1.0;<a name="line.855"></a>
-<span class="sourceLineNo">856</span>                    }<a name="line.856"></a>
-<span class="sourceLineNo">857</span>                }<a name="line.857"></a>
-<span class="sourceLineNo">858</span>            }<a name="line.858"></a>
-<span class="sourceLineNo">859</span>        }<a name="line.859"></a>
-<span class="sourceLineNo">860</span>        return map;<a name="line.860"></a>
-<span class="sourceLineNo">861</span>    }<a name="line.861"></a>
-<span class="sourceLineNo">862</span><a name="line.862"></a>
-<span class="sourceLineNo">863</span>    /**<a name="line.863"></a>
-<span class="sourceLineNo">864</span>     * Calculates what cells are visible from (startX,startY) using the given resistanceMap; this can be given to<a name="line.864"></a>
-<span class="sourceLineNo">865</span>     * mixVisibleFOVs() to limit extra light sources to those visible from the starting point. Just like calling<a name="line.865"></a>
-<span class="sourceLineNo">866</span>     * calculateFOV(), this creates a new double[][]; there doesn't appear to be a way to work with Ripple FOV and avoid<a name="line.866"></a>
-<span class="sourceLineNo">867</span>     * needing an empty double[][] every time, since it uses previously-placed light to determine how it should spread.<a name="line.867"></a>
-<span class="sourceLineNo">868</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.868"></a>
-<span class="sourceLineNo">869</span>     * @param startX the center of the LOS map; typically the player's x-position<a name="line.869"></a>
-<span class="sourceLineNo">870</span>     * @param startY the center of the LOS map; typically the player's y-position<a name="line.870"></a>
-<span class="sourceLineNo">871</span>     * @return an LOS map with the given starting point<a name="line.871"></a>
-<span class="sourceLineNo">872</span>     */<a name="line.872"></a>
-<span class="sourceLineNo">873</span>    public double[][] calculateLOSMap(double[][] resistanceMap, int startX, int startY)<a name="line.873"></a>
-<span class="sourceLineNo">874</span>    {<a name="line.874"></a>
-<span class="sourceLineNo">875</span>        if(resistanceMap == null || resistanceMap.length == 0)<a name="line.875"></a>
-<span class="sourceLineNo">876</span>            return new double[0][0];<a name="line.876"></a>
-<span class="sourceLineNo">877</span>        return calculateFOV(resistanceMap, startX, startY, resistanceMap.length + resistanceMap[0].length, Radius.SQUARE);<a name="line.877"></a>
-<span class="sourceLineNo">878</span>    }<a name="line.878"></a>
-<span class="sourceLineNo">879</span>}<a name="line.879"></a>
+<span class="sourceLineNo">736</span>                double newAngle = (Math.atan2(currentY - starty, currentX - startx) + Math.PI * 8.0) % (Math.PI * 2),<a name="line.736"></a>
+<span class="sourceLineNo">737</span>                        rem = (angle - newAngle + Math.PI * 2) % (Math.PI * 2), irem = (newAngle - angle + Math.PI * 2) % (Math.PI * 2);<a name="line.737"></a>
+<span class="sourceLineNo">738</span>                                if (Math.abs(rem) &gt; span * 0.5 &amp;&amp; Math.abs(irem) &gt; span * 0.5)<a name="line.738"></a>
+<span class="sourceLineNo">739</span>                                        continue;<a name="line.739"></a>
+<span class="sourceLineNo">740</span><a name="line.740"></a>
+<span class="sourceLineNo">741</span>                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);<a name="line.741"></a>
+<span class="sourceLineNo">742</span>                //check if it's within the lightable area and light if needed<a name="line.742"></a>
+<span class="sourceLineNo">743</span>                if (deltaRadius &lt;= radius) {<a name="line.743"></a>
+<span class="sourceLineNo">744</span>                    double bright = 1 - decay * deltaRadius;<a name="line.744"></a>
+<span class="sourceLineNo">745</span>                    lightMap[currentX][currentY] = bright;<a name="line.745"></a>
+<span class="sourceLineNo">746</span>                }<a name="line.746"></a>
+<span class="sourceLineNo">747</span><a name="line.747"></a>
+<span class="sourceLineNo">748</span>                if (blocked) { //previous cell was a blocking one<a name="line.748"></a>
+<span class="sourceLineNo">749</span>                    if (map[currentX][currentY] &gt;= 1) {//hit a wall<a name="line.749"></a>
+<span class="sourceLineNo">750</span>                        newStart = rightSlope;<a name="line.750"></a>
+<span class="sourceLineNo">751</span>                    } else {<a name="line.751"></a>
+<span class="sourceLineNo">752</span>                        blocked = false;<a name="line.752"></a>
+<span class="sourceLineNo">753</span>                        start = newStart;<a name="line.753"></a>
+<span class="sourceLineNo">754</span>                    }<a name="line.754"></a>
+<span class="sourceLineNo">755</span>                } else {<a name="line.755"></a>
+<span class="sourceLineNo">756</span>                    if (map[currentX][currentY] &gt;= 1 &amp;&amp; distance &lt; radius) {//hit a wall within sight line<a name="line.756"></a>
+<span class="sourceLineNo">757</span>                        blocked = true;<a name="line.757"></a>
+<span class="sourceLineNo">758</span>                        lightMap = shadowCastLimited(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, angle, span);<a name="line.758"></a>
+<span class="sourceLineNo">759</span>                        newStart = rightSlope;<a name="line.759"></a>
+<span class="sourceLineNo">760</span>                    }<a name="line.760"></a>
+<span class="sourceLineNo">761</span>                }<a name="line.761"></a>
+<span class="sourceLineNo">762</span>            }<a name="line.762"></a>
+<span class="sourceLineNo">763</span>        }<a name="line.763"></a>
+<span class="sourceLineNo">764</span>        return lightMap;<a name="line.764"></a>
+<span class="sourceLineNo">765</span>    }<a name="line.765"></a>
+<span class="sourceLineNo">766</span><a name="line.766"></a>
+<span class="sourceLineNo">767</span>    /**<a name="line.767"></a>
+<span class="sourceLineNo">768</span>     * Adds an FOV map to another in the simplest way possible; does not check line-of-sight between FOV maps.<a name="line.768"></a>
+<span class="sourceLineNo">769</span>     * Clamps the highest value for any single position at 1.0. Modifies the basis parameter in-place and makes no<a name="line.769"></a>
+<span class="sourceLineNo">770</span>     * allocations; this is different from {@link #addFOVs(double[][]...)}, which creates a new 2D array.<a name="line.770"></a>
+<span class="sourceLineNo">771</span>     * @param basis a 2D double array, which can be empty or returned by calculateFOV() or reuseFOV(); modified!<a name="line.771"></a>
+<span class="sourceLineNo">772</span>     * @param addend another 2D double array that will be added into basis; this one will not be modified<a name="line.772"></a>
+<span class="sourceLineNo">773</span>     * @return the sum of the 2D double arrays passed, using the dimensions of basis if they don't match<a name="line.773"></a>
+<span class="sourceLineNo">774</span>     */<a name="line.774"></a>
+<span class="sourceLineNo">775</span>    public static double[][] addFOVsInto(double[][] basis, double[][] addend)<a name="line.775"></a>
+<span class="sourceLineNo">776</span>    {<a name="line.776"></a>
+<span class="sourceLineNo">777</span>        for (int x = 0; x &lt; basis.length &amp;&amp; x &lt; addend.length; x++) {<a name="line.777"></a>
+<span class="sourceLineNo">778</span>                for (int y = 0; y &lt; basis[x].length &amp;&amp; y &lt; addend[x].length; y++) {<a name="line.778"></a>
+<span class="sourceLineNo">779</span>                    basis[x][y] = Math.min(1.0, basis[x][y] + addend[x][y]);<a name="line.779"></a>
+<span class="sourceLineNo">780</span>                }<a name="line.780"></a>
+<span class="sourceLineNo">781</span>            }<a name="line.781"></a>
+<span class="sourceLineNo">782</span>        return basis;<a name="line.782"></a>
+<span class="sourceLineNo">783</span>    }<a name="line.783"></a>
+<span class="sourceLineNo">784</span>    /**<a name="line.784"></a>
+<span class="sourceLineNo">785</span>     * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.<a name="line.785"></a>
+<span class="sourceLineNo">786</span>     * Clamps the highest value for any single position at 1.0.<a name="line.786"></a>
+<span class="sourceLineNo">787</span>     * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()<a name="line.787"></a>
+<span class="sourceLineNo">788</span>     * @return the sum of all the 2D double arrays passed, using the dimensions of the first if they don't all match<a name="line.788"></a>
+<span class="sourceLineNo">789</span>     */<a name="line.789"></a>
+<span class="sourceLineNo">790</span>    public static double[][] addFOVs(double[][]... maps)<a name="line.790"></a>
+<span class="sourceLineNo">791</span>    {<a name="line.791"></a>
+<span class="sourceLineNo">792</span>        if(maps == null || maps.length == 0)<a name="line.792"></a>
+<span class="sourceLineNo">793</span>            return new double[0][0];<a name="line.793"></a>
+<span class="sourceLineNo">794</span>        double[][] map = ArrayTools.copy(maps[0]);<a name="line.794"></a>
+<span class="sourceLineNo">795</span>        for(int i = 1; i &lt; maps.length; i++)<a name="line.795"></a>
+<span class="sourceLineNo">796</span>        {<a name="line.796"></a>
+<span class="sourceLineNo">797</span>            for (int x = 0; x &lt; map.length &amp;&amp; x &lt; maps[i].length; x++) {<a name="line.797"></a>
+<span class="sourceLineNo">798</span>                for (int y = 0; y &lt; map[x].length &amp;&amp; y &lt; maps[i][x].length; y++) {<a name="line.798"></a>
+<span class="sourceLineNo">799</span>                    map[x][y] += maps[i][x][y];<a name="line.799"></a>
+<span class="sourceLineNo">800</span>                }<a name="line.800"></a>
+<span class="sourceLineNo">801</span>            }<a name="line.801"></a>
+<span class="sourceLineNo">802</span>        }<a name="line.802"></a>
+<span class="sourceLineNo">803</span>        for (int x = 0; x &lt; map.length; x++) {<a name="line.803"></a>
+<span class="sourceLineNo">804</span>            for (int y = 0; y &lt; map[x].length; y++) {<a name="line.804"></a>
+<span class="sourceLineNo">805</span>                if(map[x][y] &gt; 1.0) map[x][y] = 1.0;<a name="line.805"></a>
+<span class="sourceLineNo">806</span>            }<a name="line.806"></a>
+<span class="sourceLineNo">807</span>        }<a name="line.807"></a>
+<span class="sourceLineNo">808</span>        return map;<a name="line.808"></a>
+<span class="sourceLineNo">809</span>    }<a name="line.809"></a>
+<span class="sourceLineNo">810</span><a name="line.810"></a>
+<span class="sourceLineNo">811</span>    /**<a name="line.811"></a>
+<span class="sourceLineNo">812</span>     * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.<a name="line.812"></a>
+<span class="sourceLineNo">813</span>     * Clamps the highest value for any single position at 1.0.<a name="line.813"></a>
+<span class="sourceLineNo">814</span>     * @param maps an Iterable of 2D double arrays (most collections implement Iterable),<a name="line.814"></a>
+<span class="sourceLineNo">815</span>     *             each usually returned by calculateFOV()<a name="line.815"></a>
+<span class="sourceLineNo">816</span>     * @return the sum of all the 2D double arrays passed, using the dimensions of the first if they don't all match<a name="line.816"></a>
+<span class="sourceLineNo">817</span>     */<a name="line.817"></a>
+<span class="sourceLineNo">818</span>    public static double[][] addFOVs(Iterable&lt;double[][]&gt; maps)<a name="line.818"></a>
+<span class="sourceLineNo">819</span>    {<a name="line.819"></a>
+<span class="sourceLineNo">820</span>        if(maps == null)<a name="line.820"></a>
+<span class="sourceLineNo">821</span>            return new double[0][0];<a name="line.821"></a>
+<span class="sourceLineNo">822</span>        Iterator&lt;double[][]&gt; it = maps.iterator();<a name="line.822"></a>
+<span class="sourceLineNo">823</span>        if(!it.hasNext())<a name="line.823"></a>
+<span class="sourceLineNo">824</span>            return new double[0][0];<a name="line.824"></a>
+<span class="sourceLineNo">825</span>        double[][] map = ArrayTools.copy(it.next()), t;<a name="line.825"></a>
+<span class="sourceLineNo">826</span>        while (it.hasNext())<a name="line.826"></a>
+<span class="sourceLineNo">827</span>        {<a name="line.827"></a>
+<span class="sourceLineNo">828</span>            t = it.next();<a name="line.828"></a>
+<span class="sourceLineNo">829</span>            for (int x = 0; x &lt; map.length &amp;&amp; x &lt; t.length; x++) {<a name="line.829"></a>
+<span class="sourceLineNo">830</span>                for (int y = 0; y &lt; map[x].length &amp;&amp; y &lt; t[x].length; y++) {<a name="line.830"></a>
+<span class="sourceLineNo">831</span>                    map[x][y] += t[x][y];<a name="line.831"></a>
+<span class="sourceLineNo">832</span>                }<a name="line.832"></a>
+<span class="sourceLineNo">833</span>            }<a name="line.833"></a>
+<span class="sourceLineNo">834</span>        }<a name="line.834"></a>
+<span class="sourceLineNo">835</span>        for (int x = 0; x &lt; map.length; x++) {<a name="line.835"></a>
+<span class="sourceLineNo">836</span>            for (int y = 0; y &lt; map[x].length; y++) {<a name="line.836"></a>
+<span class="sourceLineNo">837</span>                if(map[x][y] &gt; 1.0) map[x][y] = 1.0;<a name="line.837"></a>
+<span class="sourceLineNo">838</span>            }<a name="line.838"></a>
+<span class="sourceLineNo">839</span>        }<a name="line.839"></a>
+<span class="sourceLineNo">840</span>        return map;<a name="line.840"></a>
+<span class="sourceLineNo">841</span>    }<a name="line.841"></a>
+<span class="sourceLineNo">842</span><a name="line.842"></a>
+<span class="sourceLineNo">843</span>    /**<a name="line.843"></a>
+<span class="sourceLineNo">844</span>     * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if<a name="line.844"></a>
+<span class="sourceLineNo">845</span>     * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map<a name="line.845"></a>
+<span class="sourceLineNo">846</span>     * is calculated by calculateLOSMap(), using the same resistance map used to calculate the FOV maps.<a name="line.846"></a>
+<span class="sourceLineNo">847</span>     * Clamps the highest value for any single position at 1.0.<a name="line.847"></a>
+<span class="sourceLineNo">848</span>     * @param losMap an LOS map such as one generated by calculateLOSMap()<a name="line.848"></a>
+<span class="sourceLineNo">849</span>     * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()<a name="line.849"></a>
+<span class="sourceLineNo">850</span>     * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap<a name="line.850"></a>
+<span class="sourceLineNo">851</span>     */<a name="line.851"></a>
+<span class="sourceLineNo">852</span>    public static double[][] mixVisibleFOVs(double[][] losMap, double[][]... maps)<a name="line.852"></a>
+<span class="sourceLineNo">853</span>    {<a name="line.853"></a>
+<span class="sourceLineNo">854</span>        if(losMap == null || losMap.length == 0)<a name="line.854"></a>
+<span class="sourceLineNo">855</span>            return addFOVs(maps);<a name="line.855"></a>
+<span class="sourceLineNo">856</span>        double[][] map = new double[losMap.length][losMap[0].length];<a name="line.856"></a>
+<span class="sourceLineNo">857</span>        if(maps == null || maps.length == 0)<a name="line.857"></a>
+<span class="sourceLineNo">858</span>            return map;<a name="line.858"></a>
+<span class="sourceLineNo">859</span>        for(int i = 0; i &lt; maps.length; i++)<a name="line.859"></a>
+<span class="sourceLineNo">860</span>        {<a name="line.860"></a>
+<span class="sourceLineNo">861</span>            for (int x = 0; x &lt; losMap.length &amp;&amp; x &lt; map.length &amp;&amp; x &lt; maps[i].length; x++) {<a name="line.861"></a>
+<span class="sourceLineNo">862</span>                for (int y = 0; y &lt; losMap[x].length &amp;&amp; y &lt; map[x].length &amp;&amp; y &lt; maps[i][x].length; y++) {<a name="line.862"></a>
+<span class="sourceLineNo">863</span>                    if(losMap[x][y] &gt; 0.0001) {<a name="line.863"></a>
+<span class="sourceLineNo">864</span>                        map[x][y] += maps[i][x][y];<a name="line.864"></a>
+<span class="sourceLineNo">865</span>                        if(map[x][y] &gt; 1.0) map[x][y] = 1.0;<a name="line.865"></a>
+<span class="sourceLineNo">866</span>                    }<a name="line.866"></a>
+<span class="sourceLineNo">867</span>                }<a name="line.867"></a>
+<span class="sourceLineNo">868</span>            }<a name="line.868"></a>
+<span class="sourceLineNo">869</span>        }<a name="line.869"></a>
+<span class="sourceLineNo">870</span>        return map;<a name="line.870"></a>
+<span class="sourceLineNo">871</span>    }<a name="line.871"></a>
+<span class="sourceLineNo">872</span><a name="line.872"></a>
+<span class="sourceLineNo">873</span>    /**<a name="line.873"></a>
+<span class="sourceLineNo">874</span>     * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if<a name="line.874"></a>
+<span class="sourceLineNo">875</span>     * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map<a name="line.875"></a>
+<span class="sourceLineNo">876</span>     * is calculated by calculateLOSMap(), using the same resistance map used to calculate the FOV maps.<a name="line.876"></a>
+<span class="sourceLineNo">877</span>     * Clamps the highest value for any single position at 1.0.<a name="line.877"></a>
+<span class="sourceLineNo">878</span>     * @param losMap an LOS map such as one generated by calculateLOSMap()<a name="line.878"></a>
+<span class="sourceLineNo">879</span>     * @param maps an Iterable of 2D double arrays, each usually returned by calculateFOV()<a name="line.879"></a>
+<span class="sourceLineNo">880</span>     * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap<a name="line.880"></a>
+<span class="sourceLineNo">881</span>     */<a name="line.881"></a>
+<span class="sourceLineNo">882</span>    public static double[][] mixVisibleFOVs(double[][] losMap, Iterable&lt;double[][]&gt; maps)<a name="line.882"></a>
+<span class="sourceLineNo">883</span>    {<a name="line.883"></a>
+<span class="sourceLineNo">884</span>        if(losMap == null || losMap.length == 0)<a name="line.884"></a>
+<span class="sourceLineNo">885</span>            return addFOVs(maps);<a name="line.885"></a>
+<span class="sourceLineNo">886</span>        double[][] map = new double[losMap.length][losMap[0].length], t;<a name="line.886"></a>
+<span class="sourceLineNo">887</span>        if(maps == null)<a name="line.887"></a>
+<span class="sourceLineNo">888</span>            return map;<a name="line.888"></a>
+<span class="sourceLineNo">889</span>        Iterator&lt;double[][]&gt; it = maps.iterator();<a name="line.889"></a>
+<span class="sourceLineNo">890</span>        if(!it.hasNext())<a name="line.890"></a>
+<span class="sourceLineNo">891</span>            return map;<a name="line.891"></a>
+<span class="sourceLineNo">892</span><a name="line.892"></a>
+<span class="sourceLineNo">893</span>        while (it.hasNext())<a name="line.893"></a>
+<span class="sourceLineNo">894</span>        {<a name="line.894"></a>
+<span class="sourceLineNo">895</span>            t = it.next();<a name="line.895"></a>
+<span class="sourceLineNo">896</span>            for (int x = 0; x &lt; losMap.length &amp;&amp; x &lt; map.length &amp;&amp; x &lt; t.length; x++) {<a name="line.896"></a>
+<span class="sourceLineNo">897</span>                for (int y = 0; y &lt; losMap[x].length &amp;&amp; y &lt; map[x].length &amp;&amp; y &lt; t[x].length; y++) {<a name="line.897"></a>
+<span class="sourceLineNo">898</span>                    if (losMap[x][y] &gt; 0.0001) {<a name="line.898"></a>
+<span class="sourceLineNo">899</span>                        map[x][y] += t[x][y];<a name="line.899"></a>
+<span class="sourceLineNo">900</span>                        if(map[x][y] &gt; 1.0) map[x][y] = 1.0;<a name="line.900"></a>
+<span class="sourceLineNo">901</span>                    }<a name="line.901"></a>
+<span class="sourceLineNo">902</span>                }<a name="line.902"></a>
+<span class="sourceLineNo">903</span>            }<a name="line.903"></a>
+<span class="sourceLineNo">904</span>        }<a name="line.904"></a>
+<span class="sourceLineNo">905</span>        return map;<a name="line.905"></a>
+<span class="sourceLineNo">906</span>    }<a name="line.906"></a>
+<span class="sourceLineNo">907</span><a name="line.907"></a>
+<span class="sourceLineNo">908</span>    /**<a name="line.908"></a>
+<span class="sourceLineNo">909</span>     * Calculates what cells are visible from (startX,startY) using the given resistanceMap; this can be given to<a name="line.909"></a>
+<span class="sourceLineNo">910</span>     * mixVisibleFOVs() to limit extra light sources to those visible from the starting point. Just like calling<a name="line.910"></a>
+<span class="sourceLineNo">911</span>     * calculateFOV(), this creates a new double[][]; there doesn't appear to be a way to work with Ripple FOV and avoid<a name="line.911"></a>
+<span class="sourceLineNo">912</span>     * needing an empty double[][] every time, since it uses previously-placed light to determine how it should spread.<a name="line.912"></a>
+<span class="sourceLineNo">913</span>     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()<a name="line.913"></a>
+<span class="sourceLineNo">914</span>     * @param startX the center of the LOS map; typically the player's x-position<a name="line.914"></a>
+<span class="sourceLineNo">915</span>     * @param startY the center of the LOS map; typically the player's y-position<a name="line.915"></a>
+<span class="sourceLineNo">916</span>     * @return an LOS map with the given starting point<a name="line.916"></a>
+<span class="sourceLineNo">917</span>     */<a name="line.917"></a>
+<span class="sourceLineNo">918</span>    public double[][] calculateLOSMap(double[][] resistanceMap, int startX, int startY)<a name="line.918"></a>
+<span class="sourceLineNo">919</span>    {<a name="line.919"></a>
+<span class="sourceLineNo">920</span>        if(resistanceMap == null || resistanceMap.length == 0)<a name="line.920"></a>
+<span class="sourceLineNo">921</span>            return new double[0][0];<a name="line.921"></a>
+<span class="sourceLineNo">922</span>        return calculateFOV(resistanceMap, startX, startY, resistanceMap.length + resistanceMap[0].length, Radius.SQUARE);<a name="line.922"></a>
+<span class="sourceLineNo">923</span>    }<a name="line.923"></a>
+<span class="sourceLineNo">924</span>}<a name="line.924"></a>
 
 
 

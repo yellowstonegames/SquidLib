@@ -2243,720 +2243,551 @@
 <span class="sourceLineNo">2235</span>        return (int) s;<a name="line.2235"></a>
 <span class="sourceLineNo">2236</span>    }<a name="line.2236"></a>
 <span class="sourceLineNo">2237</span><a name="line.2237"></a>
-<span class="sourceLineNo">2238</span>    private static class HashCommon {<a name="line.2238"></a>
-<span class="sourceLineNo">2239</span><a name="line.2239"></a>
-<span class="sourceLineNo">2240</span>        private HashCommon() {<a name="line.2240"></a>
-<span class="sourceLineNo">2241</span>        }<a name="line.2241"></a>
-<span class="sourceLineNo">2242</span><a name="line.2242"></a>
-<span class="sourceLineNo">2243</span>        ;<a name="line.2243"></a>
-<span class="sourceLineNo">2244</span><a name="line.2244"></a>
-<span class="sourceLineNo">2245</span>        /**<a name="line.2245"></a>
-<span class="sourceLineNo">2246</span>         * This reference is used to fill keys and values of removed entries (if<a name="line.2246"></a>
-<span class="sourceLineNo">2247</span>         * they are objects). &lt;code&gt;null&lt;/code&gt; cannot be used as it would confuse the<a name="line.2247"></a>
-<span class="sourceLineNo">2248</span>         * search algorithm in the presence of an actual &lt;code&gt;null&lt;/code&gt; key.<a name="line.2248"></a>
-<span class="sourceLineNo">2249</span>         */<a name="line.2249"></a>
-<span class="sourceLineNo">2250</span>        public static final Object REMOVED = new Object();<a name="line.2250"></a>
-<span class="sourceLineNo">2251</span><a name="line.2251"></a>
-<span class="sourceLineNo">2252</span>        /**<a name="line.2252"></a>
-<span class="sourceLineNo">2253</span>         * 2&lt;sup&gt;32&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.<a name="line.2253"></a>
-<span class="sourceLineNo">2254</span>         */<a name="line.2254"></a>
-<span class="sourceLineNo">2255</span>        private static final int INT_PHI = 0x9E3779B9;<a name="line.2255"></a>
-<span class="sourceLineNo">2256</span>        /**<a name="line.2256"></a>
-<span class="sourceLineNo">2257</span>         * The reciprocal of {@link #INT_PHI} modulo 2&lt;sup&gt;32&lt;/sup&gt;.<a name="line.2257"></a>
-<span class="sourceLineNo">2258</span>         */<a name="line.2258"></a>
-<span class="sourceLineNo">2259</span>        private static final int INV_INT_PHI = 0x144cbc89;<a name="line.2259"></a>
-<span class="sourceLineNo">2260</span>        /**<a name="line.2260"></a>
-<span class="sourceLineNo">2261</span>         * 2&lt;sup&gt;64&lt;/sup&gt; &amp;middot; &amp;phi;, &amp;phi; = (&amp;#x221A;5 &amp;minus; 1)/2.<a name="line.2261"></a>
-<span class="sourceLineNo">2262</span>         */<a name="line.2262"></a>
-<span class="sourceLineNo">2263</span>        private static final long LONG_PHI = 0x9E3779B97F4A7C15L;<a name="line.2263"></a>
-<span class="sourceLineNo">2264</span>        /**<a name="line.2264"></a>
-<span class="sourceLineNo">2265</span>         * The reciprocal of {@link #LONG_PHI} modulo 2&lt;sup&gt;64&lt;/sup&gt;.<a name="line.2265"></a>
-<span class="sourceLineNo">2266</span>         */<a name="line.2266"></a>
-<span class="sourceLineNo">2267</span>        private static final long INV_LONG_PHI = 0xF1DE83E19937733DL;<a name="line.2267"></a>
-<span class="sourceLineNo">2268</span><a name="line.2268"></a>
-<span class="sourceLineNo">2269</span>        /**<a name="line.2269"></a>
-<span class="sourceLineNo">2270</span>         * Avalanches the bits of an integer by applying the finalisation step of MurmurHash3.<a name="line.2270"></a>
-<span class="sourceLineNo">2271</span>         * &lt;br&gt;<a name="line.2271"></a>
-<span class="sourceLineNo">2272</span>         * &lt;br&gt;This method implements the finalisation step of Austin Appleby's &lt;a href="http://code.google.com/p/smhasher/"&gt;MurmurHash3&lt;/a&gt;.<a name="line.2272"></a>
-<span class="sourceLineNo">2273</span>         * Its purpose is to avalanche the bits of the argument to within 0.25% bias.<a name="line.2273"></a>
-<span class="sourceLineNo">2274</span>         *<a name="line.2274"></a>
-<span class="sourceLineNo">2275</span>         * @param x an integer.<a name="line.2275"></a>
-<span class="sourceLineNo">2276</span>         * @return a hash value with good avalanching properties.<a name="line.2276"></a>
-<span class="sourceLineNo">2277</span>         */<a name="line.2277"></a>
-<span class="sourceLineNo">2278</span>        static int murmurHash3(int x) {<a name="line.2278"></a>
-<span class="sourceLineNo">2279</span>            x ^= x &gt;&gt;&gt; 16;<a name="line.2279"></a>
-<span class="sourceLineNo">2280</span>            x *= 0x85ebca6b;<a name="line.2280"></a>
-<span class="sourceLineNo">2281</span>            x ^= x &gt;&gt;&gt; 13;<a name="line.2281"></a>
-<span class="sourceLineNo">2282</span>            x *= 0xc2b2ae35;<a name="line.2282"></a>
-<span class="sourceLineNo">2283</span>            x ^= x &gt;&gt;&gt; 16;<a name="line.2283"></a>
-<span class="sourceLineNo">2284</span>            return x;<a name="line.2284"></a>
-<span class="sourceLineNo">2285</span>        }<a name="line.2285"></a>
-<span class="sourceLineNo">2286</span><a name="line.2286"></a>
-<span class="sourceLineNo">2287</span><a name="line.2287"></a>
-<span class="sourceLineNo">2288</span>        /**<a name="line.2288"></a>
-<span class="sourceLineNo">2289</span>         * Avalanches the bits of a long integer by applying the finalisation step of MurmurHash3.<a name="line.2289"></a>
-<span class="sourceLineNo">2290</span>         * &lt;br&gt;<a name="line.2290"></a>
-<span class="sourceLineNo">2291</span>         * &lt;br&gt;This method implements the finalisation step of Austin Appleby's &lt;a href="http://code.google.com/p/smhasher/"&gt;MurmurHash3&lt;/a&gt;.<a name="line.2291"></a>
-<span class="sourceLineNo">2292</span>         * Its purpose is to avalanche the bits of the argument to within 0.25% bias.<a name="line.2292"></a>
-<span class="sourceLineNo">2293</span>         *<a name="line.2293"></a>
-<span class="sourceLineNo">2294</span>         * @param x a long integer.<a name="line.2294"></a>
-<span class="sourceLineNo">2295</span>         * @return a hash value with good avalanching properties.<a name="line.2295"></a>
-<span class="sourceLineNo">2296</span>         */<a name="line.2296"></a>
-<span class="sourceLineNo">2297</span>        static long murmurHash3(long x) {<a name="line.2297"></a>
-<span class="sourceLineNo">2298</span>            x ^= x &gt;&gt;&gt; 33;<a name="line.2298"></a>
-<span class="sourceLineNo">2299</span>            x *= 0xff51afd7ed558ccdL;<a name="line.2299"></a>
-<span class="sourceLineNo">2300</span>            x ^= x &gt;&gt;&gt; 33;<a name="line.2300"></a>
-<span class="sourceLineNo">2301</span>            x *= 0xc4ceb9fe1a85ec53L;<a name="line.2301"></a>
-<span class="sourceLineNo">2302</span>            x ^= x &gt;&gt;&gt; 33;<a name="line.2302"></a>
-<span class="sourceLineNo">2303</span>            return x;<a name="line.2303"></a>
-<span class="sourceLineNo">2304</span>        }<a name="line.2304"></a>
-<span class="sourceLineNo">2305</span><a name="line.2305"></a>
-<span class="sourceLineNo">2306</span>        /**<a name="line.2306"></a>
-<span class="sourceLineNo">2307</span>         * Quickly mixes the bits of an integer.<a name="line.2307"></a>
-<span class="sourceLineNo">2308</span>         * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and<a name="line.2308"></a>
-<span class="sourceLineNo">2309</span>         * xorshifting the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and<a name="line.2309"></a>
-<span class="sourceLineNo">2310</span>         * it has slightly worse behaviour than {@link #murmurHash3(int)} (in open-addressing hash tables the average number of probes<a name="line.2310"></a>
-<span class="sourceLineNo">2311</span>         * is slightly larger), but it's much faster.<a name="line.2311"></a>
-<span class="sourceLineNo">2312</span>         *<a name="line.2312"></a>
-<span class="sourceLineNo">2313</span>         * @param x an integer.<a name="line.2313"></a>
-<span class="sourceLineNo">2314</span>         * @return a hash value obtained by mixing the bits of {@code x}.<a name="line.2314"></a>
-<span class="sourceLineNo">2315</span>         * @see #invMix(int)<a name="line.2315"></a>
-<span class="sourceLineNo">2316</span>         */<a name="line.2316"></a>
-<span class="sourceLineNo">2317</span>        static int mix(final int x) {<a name="line.2317"></a>
-<span class="sourceLineNo">2318</span>            final int h = x * INT_PHI;<a name="line.2318"></a>
-<span class="sourceLineNo">2319</span>            return h ^ (h &gt;&gt;&gt; 16);<a name="line.2319"></a>
-<span class="sourceLineNo">2320</span>        }<a name="line.2320"></a>
-<span class="sourceLineNo">2321</span><a name="line.2321"></a>
-<span class="sourceLineNo">2322</span>        /**<a name="line.2322"></a>
-<span class="sourceLineNo">2323</span>         * The inverse of {@link #mix(int)}. This method is mainly useful to create unit tests.<a name="line.2323"></a>
-<span class="sourceLineNo">2324</span>         *<a name="line.2324"></a>
-<span class="sourceLineNo">2325</span>         * @param x an integer.<a name="line.2325"></a>
-<span class="sourceLineNo">2326</span>         * @return a value that passed through {@link #mix(int)} would give {@code x}.<a name="line.2326"></a>
-<span class="sourceLineNo">2327</span>         */<a name="line.2327"></a>
-<span class="sourceLineNo">2328</span>        static int invMix(final int x) {<a name="line.2328"></a>
-<span class="sourceLineNo">2329</span>            return (x ^ x &gt;&gt;&gt; 16) * INV_INT_PHI;<a name="line.2329"></a>
-<span class="sourceLineNo">2330</span>        }<a name="line.2330"></a>
-<span class="sourceLineNo">2331</span><a name="line.2331"></a>
-<span class="sourceLineNo">2332</span>        /**<a name="line.2332"></a>
-<span class="sourceLineNo">2333</span>         * Quickly mixes the bits of a long integer.<a name="line.2333"></a>
-<span class="sourceLineNo">2334</span>         * &lt;br&gt;This method mixes the bits of the argument by multiplying by the golden ratio and<a name="line.2334"></a>
-<span class="sourceLineNo">2335</span>         * xorshifting twice the result. It is borrowed from &lt;a href="https://github.com/OpenHFT/Koloboke"&gt;Koloboke&lt;/a&gt;, and<a name="line.2335"></a>
-<span class="sourceLineNo">2336</span>         * it has slightly worse behaviour than {@link #murmurHash3(long)} (in open-addressing hash tables the average number of probes<a name="line.2336"></a>
-<span class="sourceLineNo">2337</span>         * is slightly larger), but it's much faster.<a name="line.2337"></a>
-<span class="sourceLineNo">2338</span>         *<a name="line.2338"></a>
-<span class="sourceLineNo">2339</span>         * @param x a long integer.<a name="line.2339"></a>
-<span class="sourceLineNo">2340</span>         * @return a hash value obtained by mixing the bits of {@code x}.<a name="line.2340"></a>
-<span class="sourceLineNo">2341</span>         */<a name="line.2341"></a>
-<span class="sourceLineNo">2342</span>        static long mix(final long x) {<a name="line.2342"></a>
-<span class="sourceLineNo">2343</span>            long h = x * LONG_PHI;<a name="line.2343"></a>
-<span class="sourceLineNo">2344</span>            h ^= h &gt;&gt;&gt; 32;<a name="line.2344"></a>
-<span class="sourceLineNo">2345</span>            return h ^ (h &gt;&gt;&gt; 16);<a name="line.2345"></a>
-<span class="sourceLineNo">2346</span>        }<a name="line.2346"></a>
-<span class="sourceLineNo">2347</span><a name="line.2347"></a>
-<span class="sourceLineNo">2348</span>        /**<a name="line.2348"></a>
-<span class="sourceLineNo">2349</span>         * The inverse of {@link #mix(long)}. This method is mainly useful to create unit tests.<a name="line.2349"></a>
-<span class="sourceLineNo">2350</span>         *<a name="line.2350"></a>
-<span class="sourceLineNo">2351</span>         * @param x a long integer.<a name="line.2351"></a>
-<span class="sourceLineNo">2352</span>         * @return a value that passed through {@link #mix(long)} would give {@code x}.<a name="line.2352"></a>
-<span class="sourceLineNo">2353</span>         */<a name="line.2353"></a>
-<span class="sourceLineNo">2354</span>        static long invMix(long x) {<a name="line.2354"></a>
-<span class="sourceLineNo">2355</span>            x ^= x &gt;&gt;&gt; 32;<a name="line.2355"></a>
-<span class="sourceLineNo">2356</span>            x ^= x &gt;&gt;&gt; 16;<a name="line.2356"></a>
-<span class="sourceLineNo">2357</span>            return (x ^ x &gt;&gt;&gt; 32) * INV_LONG_PHI;<a name="line.2357"></a>
-<span class="sourceLineNo">2358</span>        }<a name="line.2358"></a>
-<span class="sourceLineNo">2359</span><a name="line.2359"></a>
-<span class="sourceLineNo">2360</span>        /**<a name="line.2360"></a>
-<span class="sourceLineNo">2361</span>         * Return the least power of two greater than or equal to the specified value.<a name="line.2361"></a>
-<span class="sourceLineNo">2362</span>         * &lt;br&gt;Note that this function will return 1 when the argument is 0.<a name="line.2362"></a>
-<span class="sourceLineNo">2363</span>         *<a name="line.2363"></a>
-<span class="sourceLineNo">2364</span>         * @param x an integer smaller than or equal to 2&lt;sup&gt;30&lt;/sup&gt;.<a name="line.2364"></a>
-<span class="sourceLineNo">2365</span>         * @return the least power of two greater than or equal to the specified value.<a name="line.2365"></a>
-<span class="sourceLineNo">2366</span>         */<a name="line.2366"></a>
-<span class="sourceLineNo">2367</span>        static int nextPowerOfTwo(int x) {<a name="line.2367"></a>
-<span class="sourceLineNo">2368</span>            if (x == 0) return 1;<a name="line.2368"></a>
-<span class="sourceLineNo">2369</span>            x--;<a name="line.2369"></a>
-<span class="sourceLineNo">2370</span>            x |= x &gt;&gt; 1;<a name="line.2370"></a>
-<span class="sourceLineNo">2371</span>            x |= x &gt;&gt; 2;<a name="line.2371"></a>
-<span class="sourceLineNo">2372</span>            x |= x &gt;&gt; 4;<a name="line.2372"></a>
-<span class="sourceLineNo">2373</span>            x |= x &gt;&gt; 8;<a name="line.2373"></a>
-<span class="sourceLineNo">2374</span>            return (x | x &gt;&gt; 16) + 1;<a name="line.2374"></a>
-<span class="sourceLineNo">2375</span>        }<a name="line.2375"></a>
-<span class="sourceLineNo">2376</span><a name="line.2376"></a>
-<span class="sourceLineNo">2377</span>        /**<a name="line.2377"></a>
-<span class="sourceLineNo">2378</span>         * Return the least power of two greater than or equal to the specified value.<a name="line.2378"></a>
-<span class="sourceLineNo">2379</span>         * &lt;br&gt;Note that this function will return 1 when the argument is 0.<a name="line.2379"></a>
-<span class="sourceLineNo">2380</span>         *<a name="line.2380"></a>
-<span class="sourceLineNo">2381</span>         * @param x a long integer smaller than or equal to 2&lt;sup&gt;62&lt;/sup&gt;.<a name="line.2381"></a>
-<span class="sourceLineNo">2382</span>         * @return the least power of two greater than or equal to the specified value.<a name="line.2382"></a>
-<span class="sourceLineNo">2383</span>         */<a name="line.2383"></a>
-<span class="sourceLineNo">2384</span>        static long nextPowerOfTwo(long x) {<a name="line.2384"></a>
-<span class="sourceLineNo">2385</span>            if (x == 0) return 1;<a name="line.2385"></a>
-<span class="sourceLineNo">2386</span>            x--;<a name="line.2386"></a>
-<span class="sourceLineNo">2387</span>            x |= x &gt;&gt; 1;<a name="line.2387"></a>
-<span class="sourceLineNo">2388</span>            x |= x &gt;&gt; 2;<a name="line.2388"></a>
-<span class="sourceLineNo">2389</span>            x |= x &gt;&gt; 4;<a name="line.2389"></a>
-<span class="sourceLineNo">2390</span>            x |= x &gt;&gt; 8;<a name="line.2390"></a>
-<span class="sourceLineNo">2391</span>            x |= x &gt;&gt; 16;<a name="line.2391"></a>
-<span class="sourceLineNo">2392</span>            return (x | x &gt;&gt; 32) + 1;<a name="line.2392"></a>
-<span class="sourceLineNo">2393</span>        }<a name="line.2393"></a>
-<span class="sourceLineNo">2394</span><a name="line.2394"></a>
-<span class="sourceLineNo">2395</span>        /**<a name="line.2395"></a>
-<span class="sourceLineNo">2396</span>         * Returns the least power of two larger than or equal to &lt;code&gt;Math.ceil( expected / f )&lt;/code&gt;.<a name="line.2396"></a>
-<span class="sourceLineNo">2397</span>         *<a name="line.2397"></a>
-<span class="sourceLineNo">2398</span>         * @param expected the expected number of elements in a hash table.<a name="line.2398"></a>
-<span class="sourceLineNo">2399</span>         * @param f        the load factor.<a name="line.2399"></a>
-<span class="sourceLineNo">2400</span>         * @return the minimum possible size for a backing big array.<a name="line.2400"></a>
-<span class="sourceLineNo">2401</span>         */<a name="line.2401"></a>
-<span class="sourceLineNo">2402</span>        static long bigArraySize(final long expected, final float f) {<a name="line.2402"></a>
-<span class="sourceLineNo">2403</span>            return nextPowerOfTwo((long) Math.ceil(expected / f));<a name="line.2403"></a>
-<span class="sourceLineNo">2404</span>        }<a name="line.2404"></a>
-<span class="sourceLineNo">2405</span>    }<a name="line.2405"></a>
-<span class="sourceLineNo">2406</span><a name="line.2406"></a>
-<span class="sourceLineNo">2407</span>    /**<a name="line.2407"></a>
-<span class="sourceLineNo">2408</span>     * Unwraps an iterator into an array starting at a given offset for a given number of elements.<a name="line.2408"></a>
-<span class="sourceLineNo">2409</span>     * &lt;p&gt;<a name="line.2409"></a>
-<span class="sourceLineNo">2410</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The<a name="line.2410"></a>
-<span class="sourceLineNo">2411</span>     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).<a name="line.2411"></a>
-<span class="sourceLineNo">2412</span>     *<a name="line.2412"></a>
-<span class="sourceLineNo">2413</span>     * @param i      a type-specific iterator.<a name="line.2413"></a>
-<span class="sourceLineNo">2414</span>     * @param array  an array to contain the output of the iterator.<a name="line.2414"></a>
-<span class="sourceLineNo">2415</span>     * @param offset the first element of the array to be returned.<a name="line.2415"></a>
-<span class="sourceLineNo">2416</span>     * @param max    the maximum number of elements to unwrap.<a name="line.2416"></a>
-<span class="sourceLineNo">2417</span>     * @return the number of elements unwrapped.<a name="line.2417"></a>
-<span class="sourceLineNo">2418</span>     */<a name="line.2418"></a>
-<span class="sourceLineNo">2419</span>    private int unwrap(final ValueIterator i, final Object[] array, int offset, final int max) {<a name="line.2419"></a>
-<span class="sourceLineNo">2420</span>        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");<a name="line.2420"></a>
-<span class="sourceLineNo">2421</span>        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();<a name="line.2421"></a>
-<span class="sourceLineNo">2422</span>        int j = max;<a name="line.2422"></a>
-<span class="sourceLineNo">2423</span>        while (j-- != 0 &amp;&amp; i.hasNext())<a name="line.2423"></a>
-<span class="sourceLineNo">2424</span>            array[offset++] = i.next();<a name="line.2424"></a>
-<span class="sourceLineNo">2425</span>        return max - j - 1;<a name="line.2425"></a>
-<span class="sourceLineNo">2426</span>    }<a name="line.2426"></a>
-<span class="sourceLineNo">2427</span><a name="line.2427"></a>
-<span class="sourceLineNo">2428</span>    /**<a name="line.2428"></a>
-<span class="sourceLineNo">2429</span>     * Unwraps an iterator into an array.<a name="line.2429"></a>
-<span class="sourceLineNo">2430</span>     * &lt;p&gt;<a name="line.2430"></a>
-<span class="sourceLineNo">2431</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end<a name="line.2431"></a>
-<span class="sourceLineNo">2432</span>     * of the array has been reached.<a name="line.2432"></a>
-<span class="sourceLineNo">2433</span>     *<a name="line.2433"></a>
-<span class="sourceLineNo">2434</span>     * @param i     a type-specific iterator.<a name="line.2434"></a>
-<span class="sourceLineNo">2435</span>     * @param array an array to contain the output of the iterator.<a name="line.2435"></a>
-<span class="sourceLineNo">2436</span>     * @return the number of elements unwrapped.<a name="line.2436"></a>
-<span class="sourceLineNo">2437</span>     */<a name="line.2437"></a>
-<span class="sourceLineNo">2438</span>    private int unwrap(final ValueIterator i, final Object[] array) {<a name="line.2438"></a>
-<span class="sourceLineNo">2439</span>        return unwrap(i, array, 0, array.length);<a name="line.2439"></a>
-<span class="sourceLineNo">2440</span>    }<a name="line.2440"></a>
-<span class="sourceLineNo">2441</span><a name="line.2441"></a>
-<span class="sourceLineNo">2442</span><a name="line.2442"></a>
-<span class="sourceLineNo">2443</span>    /** Unwraps an iterator into an array starting at a given offset for a given number of elements.<a name="line.2443"></a>
-<span class="sourceLineNo">2444</span>     *<a name="line.2444"></a>
-<span class="sourceLineNo">2445</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The<a name="line.2445"></a>
-<span class="sourceLineNo">2446</span>     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).<a name="line.2446"></a>
-<span class="sourceLineNo">2447</span>     *<a name="line.2447"></a>
-<span class="sourceLineNo">2448</span>     * @param i a type-specific iterator.<a name="line.2448"></a>
-<span class="sourceLineNo">2449</span>     * @param array an array to contain the output of the iterator.<a name="line.2449"></a>
-<span class="sourceLineNo">2450</span>     * @param offset the first element of the array to be returned.<a name="line.2450"></a>
-<span class="sourceLineNo">2451</span>     * @param max the maximum number of elements to unwrap.<a name="line.2451"></a>
-<span class="sourceLineNo">2452</span>     * @return the number of elements unwrapped. */<a name="line.2452"></a>
-<span class="sourceLineNo">2453</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[], int offset, final int max ) {<a name="line.2453"></a>
-<span class="sourceLineNo">2454</span>        if ( max &lt; 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );<a name="line.2454"></a>
-<span class="sourceLineNo">2455</span>        if ( offset &lt; 0 || offset + max &gt; array.length ) throw new IllegalArgumentException();<a name="line.2455"></a>
-<span class="sourceLineNo">2456</span>        int j = max;<a name="line.2456"></a>
-<span class="sourceLineNo">2457</span>        while ( j-- != 0 &amp;&amp; i.hasNext() )<a name="line.2457"></a>
-<span class="sourceLineNo">2458</span>            array[ offset++ ] = i.next();<a name="line.2458"></a>
-<span class="sourceLineNo">2459</span>        return max - j - 1;<a name="line.2459"></a>
-<span class="sourceLineNo">2460</span>    }<a name="line.2460"></a>
-<span class="sourceLineNo">2461</span><a name="line.2461"></a>
-<span class="sourceLineNo">2462</span>    /** Unwraps an iterator into an array.<a name="line.2462"></a>
-<span class="sourceLineNo">2463</span>     *<a name="line.2463"></a>
-<span class="sourceLineNo">2464</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end<a name="line.2464"></a>
-<span class="sourceLineNo">2465</span>     * of the array has been reached.<a name="line.2465"></a>
-<span class="sourceLineNo">2466</span>     *<a name="line.2466"></a>
-<span class="sourceLineNo">2467</span>     * @param i a type-specific iterator.<a name="line.2467"></a>
-<span class="sourceLineNo">2468</span>     * @param array an array to contain the output of the iterator.<a name="line.2468"></a>
-<span class="sourceLineNo">2469</span>     * @return the number of elements unwrapped. */<a name="line.2469"></a>
-<span class="sourceLineNo">2470</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[] ) {<a name="line.2470"></a>
-<span class="sourceLineNo">2471</span>        return objectUnwrap(i, array, 0, array.length );<a name="line.2471"></a>
+<span class="sourceLineNo">2238</span>    /**<a name="line.2238"></a>
+<span class="sourceLineNo">2239</span>     * Unwraps an iterator into an array starting at a given offset for a given number of elements.<a name="line.2239"></a>
+<span class="sourceLineNo">2240</span>     * &lt;p&gt;<a name="line.2240"></a>
+<span class="sourceLineNo">2241</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The<a name="line.2241"></a>
+<span class="sourceLineNo">2242</span>     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).<a name="line.2242"></a>
+<span class="sourceLineNo">2243</span>     *<a name="line.2243"></a>
+<span class="sourceLineNo">2244</span>     * @param i      a type-specific iterator.<a name="line.2244"></a>
+<span class="sourceLineNo">2245</span>     * @param array  an array to contain the output of the iterator.<a name="line.2245"></a>
+<span class="sourceLineNo">2246</span>     * @param offset the first element of the array to be returned.<a name="line.2246"></a>
+<span class="sourceLineNo">2247</span>     * @param max    the maximum number of elements to unwrap.<a name="line.2247"></a>
+<span class="sourceLineNo">2248</span>     * @return the number of elements unwrapped.<a name="line.2248"></a>
+<span class="sourceLineNo">2249</span>     */<a name="line.2249"></a>
+<span class="sourceLineNo">2250</span>    private int unwrap(final ValueIterator i, final Object[] array, int offset, final int max) {<a name="line.2250"></a>
+<span class="sourceLineNo">2251</span>        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");<a name="line.2251"></a>
+<span class="sourceLineNo">2252</span>        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();<a name="line.2252"></a>
+<span class="sourceLineNo">2253</span>        int j = max;<a name="line.2253"></a>
+<span class="sourceLineNo">2254</span>        while (j-- != 0 &amp;&amp; i.hasNext())<a name="line.2254"></a>
+<span class="sourceLineNo">2255</span>            array[offset++] = i.next();<a name="line.2255"></a>
+<span class="sourceLineNo">2256</span>        return max - j - 1;<a name="line.2256"></a>
+<span class="sourceLineNo">2257</span>    }<a name="line.2257"></a>
+<span class="sourceLineNo">2258</span><a name="line.2258"></a>
+<span class="sourceLineNo">2259</span>    /**<a name="line.2259"></a>
+<span class="sourceLineNo">2260</span>     * Unwraps an iterator into an array.<a name="line.2260"></a>
+<span class="sourceLineNo">2261</span>     * &lt;p&gt;<a name="line.2261"></a>
+<span class="sourceLineNo">2262</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end<a name="line.2262"></a>
+<span class="sourceLineNo">2263</span>     * of the array has been reached.<a name="line.2263"></a>
+<span class="sourceLineNo">2264</span>     *<a name="line.2264"></a>
+<span class="sourceLineNo">2265</span>     * @param i     a type-specific iterator.<a name="line.2265"></a>
+<span class="sourceLineNo">2266</span>     * @param array an array to contain the output of the iterator.<a name="line.2266"></a>
+<span class="sourceLineNo">2267</span>     * @return the number of elements unwrapped.<a name="line.2267"></a>
+<span class="sourceLineNo">2268</span>     */<a name="line.2268"></a>
+<span class="sourceLineNo">2269</span>    private int unwrap(final ValueIterator i, final Object[] array) {<a name="line.2269"></a>
+<span class="sourceLineNo">2270</span>        return unwrap(i, array, 0, array.length);<a name="line.2270"></a>
+<span class="sourceLineNo">2271</span>    }<a name="line.2271"></a>
+<span class="sourceLineNo">2272</span><a name="line.2272"></a>
+<span class="sourceLineNo">2273</span><a name="line.2273"></a>
+<span class="sourceLineNo">2274</span>    /** Unwraps an iterator into an array starting at a given offset for a given number of elements.<a name="line.2274"></a>
+<span class="sourceLineNo">2275</span>     *<a name="line.2275"></a>
+<span class="sourceLineNo">2276</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The<a name="line.2276"></a>
+<span class="sourceLineNo">2277</span>     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).<a name="line.2277"></a>
+<span class="sourceLineNo">2278</span>     *<a name="line.2278"></a>
+<span class="sourceLineNo">2279</span>     * @param i a type-specific iterator.<a name="line.2279"></a>
+<span class="sourceLineNo">2280</span>     * @param array an array to contain the output of the iterator.<a name="line.2280"></a>
+<span class="sourceLineNo">2281</span>     * @param offset the first element of the array to be returned.<a name="line.2281"></a>
+<span class="sourceLineNo">2282</span>     * @param max the maximum number of elements to unwrap.<a name="line.2282"></a>
+<span class="sourceLineNo">2283</span>     * @return the number of elements unwrapped. */<a name="line.2283"></a>
+<span class="sourceLineNo">2284</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[], int offset, final int max ) {<a name="line.2284"></a>
+<span class="sourceLineNo">2285</span>        if ( max &lt; 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );<a name="line.2285"></a>
+<span class="sourceLineNo">2286</span>        if ( offset &lt; 0 || offset + max &gt; array.length ) throw new IllegalArgumentException();<a name="line.2286"></a>
+<span class="sourceLineNo">2287</span>        int j = max;<a name="line.2287"></a>
+<span class="sourceLineNo">2288</span>        while ( j-- != 0 &amp;&amp; i.hasNext() )<a name="line.2288"></a>
+<span class="sourceLineNo">2289</span>            array[ offset++ ] = i.next();<a name="line.2289"></a>
+<span class="sourceLineNo">2290</span>        return max - j - 1;<a name="line.2290"></a>
+<span class="sourceLineNo">2291</span>    }<a name="line.2291"></a>
+<span class="sourceLineNo">2292</span><a name="line.2292"></a>
+<span class="sourceLineNo">2293</span>    /** Unwraps an iterator into an array.<a name="line.2293"></a>
+<span class="sourceLineNo">2294</span>     *<a name="line.2294"></a>
+<span class="sourceLineNo">2295</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end<a name="line.2295"></a>
+<span class="sourceLineNo">2296</span>     * of the array has been reached.<a name="line.2296"></a>
+<span class="sourceLineNo">2297</span>     *<a name="line.2297"></a>
+<span class="sourceLineNo">2298</span>     * @param i a type-specific iterator.<a name="line.2298"></a>
+<span class="sourceLineNo">2299</span>     * @param array an array to contain the output of the iterator.<a name="line.2299"></a>
+<span class="sourceLineNo">2300</span>     * @return the number of elements unwrapped. */<a name="line.2300"></a>
+<span class="sourceLineNo">2301</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[] ) {<a name="line.2301"></a>
+<span class="sourceLineNo">2302</span>        return objectUnwrap(i, array, 0, array.length );<a name="line.2302"></a>
+<span class="sourceLineNo">2303</span>    }<a name="line.2303"></a>
+<span class="sourceLineNo">2304</span><a name="line.2304"></a>
+<span class="sourceLineNo">2305</span>    @Override<a name="line.2305"></a>
+<span class="sourceLineNo">2306</span>    public String toString() {<a name="line.2306"></a>
+<span class="sourceLineNo">2307</span>        final StringBuilder s = new StringBuilder();<a name="line.2307"></a>
+<span class="sourceLineNo">2308</span>        int n = size(), i = 0;<a name="line.2308"></a>
+<span class="sourceLineNo">2309</span>        boolean first = true;<a name="line.2309"></a>
+<span class="sourceLineNo">2310</span>        s.append("Arrangement{");<a name="line.2310"></a>
+<span class="sourceLineNo">2311</span>        while (i &lt; n) {<a name="line.2311"></a>
+<span class="sourceLineNo">2312</span>            if (first) first = false;<a name="line.2312"></a>
+<span class="sourceLineNo">2313</span>            else s.append(", ");<a name="line.2313"></a>
+<span class="sourceLineNo">2314</span>            s.append(entryAt(i++));<a name="line.2314"></a>
+<span class="sourceLineNo">2315</span>        }<a name="line.2315"></a>
+<span class="sourceLineNo">2316</span>        s.append("}");<a name="line.2316"></a>
+<span class="sourceLineNo">2317</span>        return s.toString();<a name="line.2317"></a>
+<span class="sourceLineNo">2318</span>    }<a name="line.2318"></a>
+<span class="sourceLineNo">2319</span>    @Override<a name="line.2319"></a>
+<span class="sourceLineNo">2320</span>    public boolean equals(Object o) {<a name="line.2320"></a>
+<span class="sourceLineNo">2321</span>        if (o == this)<a name="line.2321"></a>
+<span class="sourceLineNo">2322</span>            return true;<a name="line.2322"></a>
+<span class="sourceLineNo">2323</span>        if (!(o instanceof Map))<a name="line.2323"></a>
+<span class="sourceLineNo">2324</span>            return false;<a name="line.2324"></a>
+<span class="sourceLineNo">2325</span>        Map&lt;?, ?&gt; m = (Map&lt;?, ?&gt;) o;<a name="line.2325"></a>
+<span class="sourceLineNo">2326</span>        if (m.size() != size())<a name="line.2326"></a>
+<span class="sourceLineNo">2327</span>            return false;<a name="line.2327"></a>
+<span class="sourceLineNo">2328</span>        return entrySet().containsAll(m.entrySet());<a name="line.2328"></a>
+<span class="sourceLineNo">2329</span>    }<a name="line.2329"></a>
+<span class="sourceLineNo">2330</span><a name="line.2330"></a>
+<span class="sourceLineNo">2331</span>    @GwtIncompatible<a name="line.2331"></a>
+<span class="sourceLineNo">2332</span>    private void writeObject(java.io.ObjectOutputStream s)<a name="line.2332"></a>
+<span class="sourceLineNo">2333</span>            throws java.io.IOException {<a name="line.2333"></a>
+<span class="sourceLineNo">2334</span>        final K key[] = this.key;<a name="line.2334"></a>
+<span class="sourceLineNo">2335</span>        final int[] value = this.value;<a name="line.2335"></a>
+<span class="sourceLineNo">2336</span>        final MapIterator i = new MapIterator();<a name="line.2336"></a>
+<span class="sourceLineNo">2337</span>        s.defaultWriteObject();<a name="line.2337"></a>
+<span class="sourceLineNo">2338</span>        s.writeObject(hasher);<a name="line.2338"></a>
+<span class="sourceLineNo">2339</span>        for (int j = size, e; j-- != 0;) {<a name="line.2339"></a>
+<span class="sourceLineNo">2340</span>            e = i.nextEntry();<a name="line.2340"></a>
+<span class="sourceLineNo">2341</span>            s.writeObject(key[e]);<a name="line.2341"></a>
+<span class="sourceLineNo">2342</span>            s.writeInt(value[e]);<a name="line.2342"></a>
+<span class="sourceLineNo">2343</span>        }<a name="line.2343"></a>
+<span class="sourceLineNo">2344</span>    }<a name="line.2344"></a>
+<span class="sourceLineNo">2345</span>    @GwtIncompatible<a name="line.2345"></a>
+<span class="sourceLineNo">2346</span>    @SuppressWarnings("unchecked")<a name="line.2346"></a>
+<span class="sourceLineNo">2347</span>    private void readObject(java.io.ObjectInputStream s)<a name="line.2347"></a>
+<span class="sourceLineNo">2348</span>            throws java.io.IOException, ClassNotFoundException {<a name="line.2348"></a>
+<span class="sourceLineNo">2349</span>        s.defaultReadObject();<a name="line.2349"></a>
+<span class="sourceLineNo">2350</span>        hasher = (CrossHash.IHasher) s.readObject();<a name="line.2350"></a>
+<span class="sourceLineNo">2351</span>        n = arraySize(size, f);<a name="line.2351"></a>
+<span class="sourceLineNo">2352</span>        maxFill = maxFill(n, f);<a name="line.2352"></a>
+<span class="sourceLineNo">2353</span>        mask = n - 1;<a name="line.2353"></a>
+<span class="sourceLineNo">2354</span>        final K key[] = this.key = (K[]) new Object[n + 1];<a name="line.2354"></a>
+<span class="sourceLineNo">2355</span>        final int[] value = this.value = new int[n + 1];<a name="line.2355"></a>
+<span class="sourceLineNo">2356</span>        final IntVLA order = this.order = new IntVLA(n + 1);<a name="line.2356"></a>
+<span class="sourceLineNo">2357</span>        int prev = -1;<a name="line.2357"></a>
+<span class="sourceLineNo">2358</span>        first = last = -1;<a name="line.2358"></a>
+<span class="sourceLineNo">2359</span>        K k;<a name="line.2359"></a>
+<span class="sourceLineNo">2360</span>        int v;<a name="line.2360"></a>
+<span class="sourceLineNo">2361</span>        for (int i = size, pos; i-- != 0;) {<a name="line.2361"></a>
+<span class="sourceLineNo">2362</span>            k = (K) s.readObject();<a name="line.2362"></a>
+<span class="sourceLineNo">2363</span>            v = s.readInt();<a name="line.2363"></a>
+<span class="sourceLineNo">2364</span>            if (k == null) {<a name="line.2364"></a>
+<span class="sourceLineNo">2365</span>                pos = n;<a name="line.2365"></a>
+<span class="sourceLineNo">2366</span>                containsNullKey = true;<a name="line.2366"></a>
+<span class="sourceLineNo">2367</span>            } else {<a name="line.2367"></a>
+<span class="sourceLineNo">2368</span>                pos = HashCommon.mix(hasher.hash(k))<a name="line.2368"></a>
+<span class="sourceLineNo">2369</span>                        &amp; mask;<a name="line.2369"></a>
+<span class="sourceLineNo">2370</span>                while (!(key[pos] == null))<a name="line.2370"></a>
+<span class="sourceLineNo">2371</span>                    pos = (pos + 1) &amp; mask;<a name="line.2371"></a>
+<span class="sourceLineNo">2372</span>            }<a name="line.2372"></a>
+<span class="sourceLineNo">2373</span><a name="line.2373"></a>
+<span class="sourceLineNo">2374</span>            key[pos] = k;<a name="line.2374"></a>
+<span class="sourceLineNo">2375</span>            value[pos] = v;<a name="line.2375"></a>
+<span class="sourceLineNo">2376</span>            if (first != -1) {<a name="line.2376"></a>
+<span class="sourceLineNo">2377</span>                prev = pos;<a name="line.2377"></a>
+<span class="sourceLineNo">2378</span>            } else {<a name="line.2378"></a>
+<span class="sourceLineNo">2379</span>                prev = first = pos;<a name="line.2379"></a>
+<span class="sourceLineNo">2380</span>            }<a name="line.2380"></a>
+<span class="sourceLineNo">2381</span>            order.add(pos);<a name="line.2381"></a>
+<span class="sourceLineNo">2382</span>        }<a name="line.2382"></a>
+<span class="sourceLineNo">2383</span>        last = prev;<a name="line.2383"></a>
+<span class="sourceLineNo">2384</span>    }<a name="line.2384"></a>
+<span class="sourceLineNo">2385</span><a name="line.2385"></a>
+<span class="sourceLineNo">2386</span>    /**<a name="line.2386"></a>
+<span class="sourceLineNo">2387</span>     * Gets the value at the given index in the iteration order in constant time (random-access).<a name="line.2387"></a>
+<span class="sourceLineNo">2388</span>     * @param idx the index in the iteration order of the value to fetch<a name="line.2388"></a>
+<span class="sourceLineNo">2389</span>     * @return the value at the index, if the index is valid, otherwise the default return value<a name="line.2389"></a>
+<span class="sourceLineNo">2390</span>     */<a name="line.2390"></a>
+<span class="sourceLineNo">2391</span>    public int getAt(final int idx) {<a name="line.2391"></a>
+<span class="sourceLineNo">2392</span>        int pos;<a name="line.2392"></a>
+<span class="sourceLineNo">2393</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.2393"></a>
+<span class="sourceLineNo">2394</span>            return defRetValue;<a name="line.2394"></a>
+<span class="sourceLineNo">2395</span>        // The starting point.<a name="line.2395"></a>
+<span class="sourceLineNo">2396</span>        if (key[pos = order.get(idx)] == null)<a name="line.2396"></a>
+<span class="sourceLineNo">2397</span>            return containsNullKey ? value[n] : defRetValue;<a name="line.2397"></a>
+<span class="sourceLineNo">2398</span>        return value[pos];<a name="line.2398"></a>
+<span class="sourceLineNo">2399</span>    }<a name="line.2399"></a>
+<span class="sourceLineNo">2400</span>    /**<a name="line.2400"></a>
+<span class="sourceLineNo">2401</span>     * Gets the key at the given index in the iteration order in constant time (random-access).<a name="line.2401"></a>
+<span class="sourceLineNo">2402</span>     * @param idx the index in the iteration order of the key to fetch<a name="line.2402"></a>
+<span class="sourceLineNo">2403</span>     * @return the key at the index, if the index is valid, otherwise null<a name="line.2403"></a>
+<span class="sourceLineNo">2404</span>     */<a name="line.2404"></a>
+<span class="sourceLineNo">2405</span>    public K keyAt(final int idx) {<a name="line.2405"></a>
+<span class="sourceLineNo">2406</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.2406"></a>
+<span class="sourceLineNo">2407</span>            return null;<a name="line.2407"></a>
+<span class="sourceLineNo">2408</span>        // The starting point.<a name="line.2408"></a>
+<span class="sourceLineNo">2409</span>        return key[order.get(idx)];<a name="line.2409"></a>
+<span class="sourceLineNo">2410</span>    }<a name="line.2410"></a>
+<span class="sourceLineNo">2411</span><a name="line.2411"></a>
+<span class="sourceLineNo">2412</span>    /**<a name="line.2412"></a>
+<span class="sourceLineNo">2413</span>     * Gets the key-value Map.Entry at the given index in the iteration order in constant time (random-access).<a name="line.2413"></a>
+<span class="sourceLineNo">2414</span>     * @param idx the index in the iteration order of the entry to fetch<a name="line.2414"></a>
+<span class="sourceLineNo">2415</span>     * @return the key-value entry at the index, if the index is valid, otherwise null<a name="line.2415"></a>
+<span class="sourceLineNo">2416</span>     */<a name="line.2416"></a>
+<span class="sourceLineNo">2417</span>    public Entry&lt;K, Integer&gt; entryAt(final int idx)<a name="line.2417"></a>
+<span class="sourceLineNo">2418</span>    {<a name="line.2418"></a>
+<span class="sourceLineNo">2419</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.2419"></a>
+<span class="sourceLineNo">2420</span>            return null;<a name="line.2420"></a>
+<span class="sourceLineNo">2421</span>        return new MapEntry(order.get(idx));<a name="line.2421"></a>
+<span class="sourceLineNo">2422</span>    }<a name="line.2422"></a>
+<span class="sourceLineNo">2423</span><a name="line.2423"></a>
+<span class="sourceLineNo">2424</span>    /**<a name="line.2424"></a>
+<span class="sourceLineNo">2425</span>     * Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still<a name="line.2425"></a>
+<span class="sourceLineNo">2426</span>     * should be efficient).<a name="line.2426"></a>
+<span class="sourceLineNo">2427</span>     * @param idx the index in the iteration order of the key and value to remove<a name="line.2427"></a>
+<span class="sourceLineNo">2428</span>     * @return the key removed, if there was anything removed, or null otherwise<a name="line.2428"></a>
+<span class="sourceLineNo">2429</span>     */<a name="line.2429"></a>
+<span class="sourceLineNo">2430</span>    public K removeAt(final int idx) {<a name="line.2430"></a>
+<span class="sourceLineNo">2431</span><a name="line.2431"></a>
+<span class="sourceLineNo">2432</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.2432"></a>
+<span class="sourceLineNo">2433</span>            return null;<a name="line.2433"></a>
+<span class="sourceLineNo">2434</span>        int pos = order.get(idx);<a name="line.2434"></a>
+<span class="sourceLineNo">2435</span>        K k;<a name="line.2435"></a>
+<span class="sourceLineNo">2436</span>        if ((k = key[pos]) == null) {<a name="line.2436"></a>
+<span class="sourceLineNo">2437</span>            if (containsNullKey) {<a name="line.2437"></a>
+<span class="sourceLineNo">2438</span>                removeNullEntry();<a name="line.2438"></a>
+<span class="sourceLineNo">2439</span>            }<a name="line.2439"></a>
+<span class="sourceLineNo">2440</span>            return null;<a name="line.2440"></a>
+<span class="sourceLineNo">2441</span>        }<a name="line.2441"></a>
+<span class="sourceLineNo">2442</span>        removeEntry(pos);<a name="line.2442"></a>
+<span class="sourceLineNo">2443</span>        return k;<a name="line.2443"></a>
+<span class="sourceLineNo">2444</span>    }<a name="line.2444"></a>
+<span class="sourceLineNo">2445</span><a name="line.2445"></a>
+<span class="sourceLineNo">2446</span>    /**<a name="line.2446"></a>
+<span class="sourceLineNo">2447</span>     * Equivalent to {@link #add(Object)}, except that it can place k at any point in the ordering (shifting up later<a name="line.2447"></a>
+<span class="sourceLineNo">2448</span>     * entries and changing their values to match their new positions in the ordering).<a name="line.2448"></a>
+<span class="sourceLineNo">2449</span>     * @param idx the position in the ordering to place k at; will not be used if negative or greater than the current size (it can be equal to the current size)<a name="line.2449"></a>
+<span class="sourceLineNo">2450</span>     * @param k the key to add into this Arrangement; its value will be idx<a name="line.2450"></a>
+<span class="sourceLineNo">2451</span>     * @return the previous position in the ordering that k had if already present, the previous size of the Arrangement if k was just added now, or -1 if idx is invalid<a name="line.2451"></a>
+<span class="sourceLineNo">2452</span>     */<a name="line.2452"></a>
+<span class="sourceLineNo">2453</span>    public int addAt(final int idx, final K k) {<a name="line.2453"></a>
+<span class="sourceLineNo">2454</span>        if(idx &lt; 0 || idx &gt; size)<a name="line.2454"></a>
+<span class="sourceLineNo">2455</span>            return -1;<a name="line.2455"></a>
+<span class="sourceLineNo">2456</span>        final int pos = insertAt(k, idx), oldValue = value[pos];<a name="line.2456"></a>
+<span class="sourceLineNo">2457</span>        fixValues(idx);<a name="line.2457"></a>
+<span class="sourceLineNo">2458</span>        if (pos &lt; 0)<a name="line.2458"></a>
+<span class="sourceLineNo">2459</span>            return size - 1;<a name="line.2459"></a>
+<span class="sourceLineNo">2460</span>        return oldValue;<a name="line.2460"></a>
+<span class="sourceLineNo">2461</span>    }<a name="line.2461"></a>
+<span class="sourceLineNo">2462</span>    /**<a name="line.2462"></a>
+<span class="sourceLineNo">2463</span>     * Gets a random value from this Arrangement in constant time, using the given RNG to generate a random number.<a name="line.2463"></a>
+<span class="sourceLineNo">2464</span>     * @param rng used to generate a random index for a value<a name="line.2464"></a>
+<span class="sourceLineNo">2465</span>     * @return a random value from this Arrangement, or -1 if this is empty<a name="line.2465"></a>
+<span class="sourceLineNo">2466</span>     */<a name="line.2466"></a>
+<span class="sourceLineNo">2467</span>    public int randomValue(RNG rng)<a name="line.2467"></a>
+<span class="sourceLineNo">2468</span>    {<a name="line.2468"></a>
+<span class="sourceLineNo">2469</span>        if(rng == null)<a name="line.2469"></a>
+<span class="sourceLineNo">2470</span>            return defRetValue;<a name="line.2470"></a>
+<span class="sourceLineNo">2471</span>        return getAt(rng.nextInt(order.size));<a name="line.2471"></a>
 <span class="sourceLineNo">2472</span>    }<a name="line.2472"></a>
 <span class="sourceLineNo">2473</span><a name="line.2473"></a>
-<span class="sourceLineNo">2474</span>    @Override<a name="line.2474"></a>
-<span class="sourceLineNo">2475</span>    public String toString() {<a name="line.2475"></a>
-<span class="sourceLineNo">2476</span>        final StringBuilder s = new StringBuilder();<a name="line.2476"></a>
-<span class="sourceLineNo">2477</span>        int n = size(), i = 0;<a name="line.2477"></a>
-<span class="sourceLineNo">2478</span>        boolean first = true;<a name="line.2478"></a>
-<span class="sourceLineNo">2479</span>        s.append("Arrangement{");<a name="line.2479"></a>
-<span class="sourceLineNo">2480</span>        while (i &lt; n) {<a name="line.2480"></a>
-<span class="sourceLineNo">2481</span>            if (first) first = false;<a name="line.2481"></a>
-<span class="sourceLineNo">2482</span>            else s.append(", ");<a name="line.2482"></a>
-<span class="sourceLineNo">2483</span>            s.append(entryAt(i++));<a name="line.2483"></a>
-<span class="sourceLineNo">2484</span>        }<a name="line.2484"></a>
-<span class="sourceLineNo">2485</span>        s.append("}");<a name="line.2485"></a>
-<span class="sourceLineNo">2486</span>        return s.toString();<a name="line.2486"></a>
-<span class="sourceLineNo">2487</span>    }<a name="line.2487"></a>
-<span class="sourceLineNo">2488</span>    @Override<a name="line.2488"></a>
-<span class="sourceLineNo">2489</span>    public boolean equals(Object o) {<a name="line.2489"></a>
-<span class="sourceLineNo">2490</span>        if (o == this)<a name="line.2490"></a>
-<span class="sourceLineNo">2491</span>            return true;<a name="line.2491"></a>
-<span class="sourceLineNo">2492</span>        if (!(o instanceof Map))<a name="line.2492"></a>
-<span class="sourceLineNo">2493</span>            return false;<a name="line.2493"></a>
-<span class="sourceLineNo">2494</span>        Map&lt;?, ?&gt; m = (Map&lt;?, ?&gt;) o;<a name="line.2494"></a>
-<span class="sourceLineNo">2495</span>        if (m.size() != size())<a name="line.2495"></a>
-<span class="sourceLineNo">2496</span>            return false;<a name="line.2496"></a>
-<span class="sourceLineNo">2497</span>        return entrySet().containsAll(m.entrySet());<a name="line.2497"></a>
-<span class="sourceLineNo">2498</span>    }<a name="line.2498"></a>
-<span class="sourceLineNo">2499</span><a name="line.2499"></a>
-<span class="sourceLineNo">2500</span>    @GwtIncompatible<a name="line.2500"></a>
-<span class="sourceLineNo">2501</span>    private void writeObject(java.io.ObjectOutputStream s)<a name="line.2501"></a>
-<span class="sourceLineNo">2502</span>            throws java.io.IOException {<a name="line.2502"></a>
-<span class="sourceLineNo">2503</span>        final K key[] = this.key;<a name="line.2503"></a>
-<span class="sourceLineNo">2504</span>        final int[] value = this.value;<a name="line.2504"></a>
-<span class="sourceLineNo">2505</span>        final MapIterator i = new MapIterator();<a name="line.2505"></a>
-<span class="sourceLineNo">2506</span>        s.defaultWriteObject();<a name="line.2506"></a>
-<span class="sourceLineNo">2507</span>        s.writeObject(hasher);<a name="line.2507"></a>
-<span class="sourceLineNo">2508</span>        for (int j = size, e; j-- != 0;) {<a name="line.2508"></a>
-<span class="sourceLineNo">2509</span>            e = i.nextEntry();<a name="line.2509"></a>
-<span class="sourceLineNo">2510</span>            s.writeObject(key[e]);<a name="line.2510"></a>
-<span class="sourceLineNo">2511</span>            s.writeInt(value[e]);<a name="line.2511"></a>
-<span class="sourceLineNo">2512</span>        }<a name="line.2512"></a>
-<span class="sourceLineNo">2513</span>    }<a name="line.2513"></a>
-<span class="sourceLineNo">2514</span>    @GwtIncompatible<a name="line.2514"></a>
-<span class="sourceLineNo">2515</span>    @SuppressWarnings("unchecked")<a name="line.2515"></a>
-<span class="sourceLineNo">2516</span>    private void readObject(java.io.ObjectInputStream s)<a name="line.2516"></a>
-<span class="sourceLineNo">2517</span>            throws java.io.IOException, ClassNotFoundException {<a name="line.2517"></a>
-<span class="sourceLineNo">2518</span>        s.defaultReadObject();<a name="line.2518"></a>
-<span class="sourceLineNo">2519</span>        hasher = (CrossHash.IHasher) s.readObject();<a name="line.2519"></a>
-<span class="sourceLineNo">2520</span>        n = arraySize(size, f);<a name="line.2520"></a>
-<span class="sourceLineNo">2521</span>        maxFill = maxFill(n, f);<a name="line.2521"></a>
-<span class="sourceLineNo">2522</span>        mask = n - 1;<a name="line.2522"></a>
-<span class="sourceLineNo">2523</span>        final K key[] = this.key = (K[]) new Object[n + 1];<a name="line.2523"></a>
-<span class="sourceLineNo">2524</span>        final int[] value = this.value = new int[n + 1];<a name="line.2524"></a>
-<span class="sourceLineNo">2525</span>        final IntVLA order = this.order = new IntVLA(n + 1);<a name="line.2525"></a>
-<span class="sourceLineNo">2526</span>        int prev = -1;<a name="line.2526"></a>
-<span class="sourceLineNo">2527</span>        first = last = -1;<a name="line.2527"></a>
-<span class="sourceLineNo">2528</span>        K k;<a name="line.2528"></a>
-<span class="sourceLineNo">2529</span>        int v;<a name="line.2529"></a>
-<span class="sourceLineNo">2530</span>        for (int i = size, pos; i-- != 0;) {<a name="line.2530"></a>
-<span class="sourceLineNo">2531</span>            k = (K) s.readObject();<a name="line.2531"></a>
-<span class="sourceLineNo">2532</span>            v = s.readInt();<a name="line.2532"></a>
-<span class="sourceLineNo">2533</span>            if (k == null) {<a name="line.2533"></a>
-<span class="sourceLineNo">2534</span>                pos = n;<a name="line.2534"></a>
-<span class="sourceLineNo">2535</span>                containsNullKey = true;<a name="line.2535"></a>
-<span class="sourceLineNo">2536</span>            } else {<a name="line.2536"></a>
-<span class="sourceLineNo">2537</span>                pos = HashCommon.mix(hasher.hash(k))<a name="line.2537"></a>
-<span class="sourceLineNo">2538</span>                        &amp; mask;<a name="line.2538"></a>
-<span class="sourceLineNo">2539</span>                while (!(key[pos] == null))<a name="line.2539"></a>
-<span class="sourceLineNo">2540</span>                    pos = (pos + 1) &amp; mask;<a name="line.2540"></a>
-<span class="sourceLineNo">2541</span>            }<a name="line.2541"></a>
-<span class="sourceLineNo">2542</span><a name="line.2542"></a>
-<span class="sourceLineNo">2543</span>            key[pos] = k;<a name="line.2543"></a>
-<span class="sourceLineNo">2544</span>            value[pos] = v;<a name="line.2544"></a>
-<span class="sourceLineNo">2545</span>            if (first != -1) {<a name="line.2545"></a>
-<span class="sourceLineNo">2546</span>                prev = pos;<a name="line.2546"></a>
-<span class="sourceLineNo">2547</span>            } else {<a name="line.2547"></a>
-<span class="sourceLineNo">2548</span>                prev = first = pos;<a name="line.2548"></a>
-<span class="sourceLineNo">2549</span>            }<a name="line.2549"></a>
-<span class="sourceLineNo">2550</span>            order.add(pos);<a name="line.2550"></a>
-<span class="sourceLineNo">2551</span>        }<a name="line.2551"></a>
-<span class="sourceLineNo">2552</span>        last = prev;<a name="line.2552"></a>
-<span class="sourceLineNo">2553</span>    }<a name="line.2553"></a>
-<span class="sourceLineNo">2554</span><a name="line.2554"></a>
-<span class="sourceLineNo">2555</span>    /**<a name="line.2555"></a>
-<span class="sourceLineNo">2556</span>     * Gets the value at the given index in the iteration order in constant time (random-access).<a name="line.2556"></a>
-<span class="sourceLineNo">2557</span>     * @param idx the index in the iteration order of the value to fetch<a name="line.2557"></a>
-<span class="sourceLineNo">2558</span>     * @return the value at the index, if the index is valid, otherwise the default return value<a name="line.2558"></a>
-<span class="sourceLineNo">2559</span>     */<a name="line.2559"></a>
-<span class="sourceLineNo">2560</span>    public int getAt(final int idx) {<a name="line.2560"></a>
-<span class="sourceLineNo">2561</span>        int pos;<a name="line.2561"></a>
-<span class="sourceLineNo">2562</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.2562"></a>
-<span class="sourceLineNo">2563</span>            return defRetValue;<a name="line.2563"></a>
-<span class="sourceLineNo">2564</span>        // The starting point.<a name="line.2564"></a>
-<span class="sourceLineNo">2565</span>        if (key[pos = order.get(idx)] == null)<a name="line.2565"></a>
-<span class="sourceLineNo">2566</span>            return containsNullKey ? value[n] : defRetValue;<a name="line.2566"></a>
-<span class="sourceLineNo">2567</span>        return value[pos];<a name="line.2567"></a>
-<span class="sourceLineNo">2568</span>    }<a name="line.2568"></a>
-<span class="sourceLineNo">2569</span>    /**<a name="line.2569"></a>
-<span class="sourceLineNo">2570</span>     * Gets the key at the given index in the iteration order in constant time (random-access).<a name="line.2570"></a>
-<span class="sourceLineNo">2571</span>     * @param idx the index in the iteration order of the key to fetch<a name="line.2571"></a>
-<span class="sourceLineNo">2572</span>     * @return the key at the index, if the index is valid, otherwise null<a name="line.2572"></a>
-<span class="sourceLineNo">2573</span>     */<a name="line.2573"></a>
-<span class="sourceLineNo">2574</span>    public K keyAt(final int idx) {<a name="line.2574"></a>
-<span class="sourceLineNo">2575</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.2575"></a>
-<span class="sourceLineNo">2576</span>            return null;<a name="line.2576"></a>
-<span class="sourceLineNo">2577</span>        // The starting point.<a name="line.2577"></a>
-<span class="sourceLineNo">2578</span>        return key[order.get(idx)];<a name="line.2578"></a>
-<span class="sourceLineNo">2579</span>    }<a name="line.2579"></a>
-<span class="sourceLineNo">2580</span><a name="line.2580"></a>
-<span class="sourceLineNo">2581</span>    /**<a name="line.2581"></a>
-<span class="sourceLineNo">2582</span>     * Gets the key-value Map.Entry at the given index in the iteration order in constant time (random-access).<a name="line.2582"></a>
-<span class="sourceLineNo">2583</span>     * @param idx the index in the iteration order of the entry to fetch<a name="line.2583"></a>
-<span class="sourceLineNo">2584</span>     * @return the key-value entry at the index, if the index is valid, otherwise null<a name="line.2584"></a>
-<span class="sourceLineNo">2585</span>     */<a name="line.2585"></a>
-<span class="sourceLineNo">2586</span>    public Entry&lt;K, Integer&gt; entryAt(final int idx)<a name="line.2586"></a>
-<span class="sourceLineNo">2587</span>    {<a name="line.2587"></a>
-<span class="sourceLineNo">2588</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.2588"></a>
-<span class="sourceLineNo">2589</span>            return null;<a name="line.2589"></a>
-<span class="sourceLineNo">2590</span>        return new MapEntry(order.get(idx));<a name="line.2590"></a>
-<span class="sourceLineNo">2591</span>    }<a name="line.2591"></a>
-<span class="sourceLineNo">2592</span><a name="line.2592"></a>
-<span class="sourceLineNo">2593</span>    /**<a name="line.2593"></a>
-<span class="sourceLineNo">2594</span>     * Removes the key and value at the given index in the iteration order in not-exactly constant time (though it still<a name="line.2594"></a>
-<span class="sourceLineNo">2595</span>     * should be efficient).<a name="line.2595"></a>
-<span class="sourceLineNo">2596</span>     * @param idx the index in the iteration order of the key and value to remove<a name="line.2596"></a>
-<span class="sourceLineNo">2597</span>     * @return the key removed, if there was anything removed, or null otherwise<a name="line.2597"></a>
-<span class="sourceLineNo">2598</span>     */<a name="line.2598"></a>
-<span class="sourceLineNo">2599</span>    public K removeAt(final int idx) {<a name="line.2599"></a>
-<span class="sourceLineNo">2600</span><a name="line.2600"></a>
-<span class="sourceLineNo">2601</span>        if (idx &lt; 0 || idx &gt;= order.size)<a name="line.2601"></a>
-<span class="sourceLineNo">2602</span>            return null;<a name="line.2602"></a>
-<span class="sourceLineNo">2603</span>        int pos = order.get(idx);<a name="line.2603"></a>
-<span class="sourceLineNo">2604</span>        K k;<a name="line.2604"></a>
-<span class="sourceLineNo">2605</span>        if ((k = key[pos]) == null) {<a name="line.2605"></a>
-<span class="sourceLineNo">2606</span>            if (containsNullKey) {<a name="line.2606"></a>
-<span class="sourceLineNo">2607</span>                removeNullEntry();<a name="line.2607"></a>
-<span class="sourceLineNo">2608</span>            }<a name="line.2608"></a>
-<span class="sourceLineNo">2609</span>            return null;<a name="line.2609"></a>
-<span class="sourceLineNo">2610</span>        }<a name="line.2610"></a>
-<span class="sourceLineNo">2611</span>        removeEntry(pos);<a name="line.2611"></a>
-<span class="sourceLineNo">2612</span>        return k;<a name="line.2612"></a>
-<span class="sourceLineNo">2613</span>    }<a name="line.2613"></a>
-<span class="sourceLineNo">2614</span><a name="line.2614"></a>
-<span class="sourceLineNo">2615</span>    /**<a name="line.2615"></a>
-<span class="sourceLineNo">2616</span>     * Equivalent to {@link #add(Object)}, except that it can place k at any point in the ordering (shifting up later<a name="line.2616"></a>
-<span class="sourceLineNo">2617</span>     * entries and changing their values to match their new positions in the ordering).<a name="line.2617"></a>
-<span class="sourceLineNo">2618</span>     * @param idx the position in the ordering to place k at; will not be used if negative or greater than the current size (it can be equal to the current size)<a name="line.2618"></a>
-<span class="sourceLineNo">2619</span>     * @param k the key to add into this Arrangement; its value will be idx<a name="line.2619"></a>
-<span class="sourceLineNo">2620</span>     * @return the previous position in the ordering that k had if already present, the previous size of the Arrangement if k was just added now, or -1 if idx is invalid<a name="line.2620"></a>
-<span class="sourceLineNo">2621</span>     */<a name="line.2621"></a>
-<span class="sourceLineNo">2622</span>    public int addAt(final int idx, final K k) {<a name="line.2622"></a>
-<span class="sourceLineNo">2623</span>        if(idx &lt; 0 || idx &gt; size)<a name="line.2623"></a>
-<span class="sourceLineNo">2624</span>            return -1;<a name="line.2624"></a>
-<span class="sourceLineNo">2625</span>        final int pos = insertAt(k, idx), oldValue = value[pos];<a name="line.2625"></a>
-<span class="sourceLineNo">2626</span>        fixValues(idx);<a name="line.2626"></a>
-<span class="sourceLineNo">2627</span>        if (pos &lt; 0)<a name="line.2627"></a>
-<span class="sourceLineNo">2628</span>            return size - 1;<a name="line.2628"></a>
-<span class="sourceLineNo">2629</span>        return oldValue;<a name="line.2629"></a>
-<span class="sourceLineNo">2630</span>    }<a name="line.2630"></a>
-<span class="sourceLineNo">2631</span>    /**<a name="line.2631"></a>
-<span class="sourceLineNo">2632</span>     * Gets a random value from this Arrangement in constant time, using the given RNG to generate a random number.<a name="line.2632"></a>
-<span class="sourceLineNo">2633</span>     * @param rng used to generate a random index for a value<a name="line.2633"></a>
-<span class="sourceLineNo">2634</span>     * @return a random value from this Arrangement, or -1 if this is empty<a name="line.2634"></a>
-<span class="sourceLineNo">2635</span>     */<a name="line.2635"></a>
-<span class="sourceLineNo">2636</span>    public int randomValue(RNG rng)<a name="line.2636"></a>
-<span class="sourceLineNo">2637</span>    {<a name="line.2637"></a>
-<span class="sourceLineNo">2638</span>        if(rng == null)<a name="line.2638"></a>
-<span class="sourceLineNo">2639</span>            return defRetValue;<a name="line.2639"></a>
-<span class="sourceLineNo">2640</span>        return getAt(rng.nextInt(order.size));<a name="line.2640"></a>
-<span class="sourceLineNo">2641</span>    }<a name="line.2641"></a>
-<span class="sourceLineNo">2642</span><a name="line.2642"></a>
-<span class="sourceLineNo">2643</span>    /**<a name="line.2643"></a>
-<span class="sourceLineNo">2644</span>     * Gets a random key from this Arrangement in constant time, using the given RNG to generate a random number.<a name="line.2644"></a>
-<span class="sourceLineNo">2645</span>     * @param rng used to generate a random index for a key<a name="line.2645"></a>
-<span class="sourceLineNo">2646</span>     * @return a random key from this Arrangement, or null if this is empty<a name="line.2646"></a>
-<span class="sourceLineNo">2647</span>     */<a name="line.2647"></a>
-<span class="sourceLineNo">2648</span>    public K randomKey(RNG rng)<a name="line.2648"></a>
-<span class="sourceLineNo">2649</span>    {<a name="line.2649"></a>
-<span class="sourceLineNo">2650</span>        if(rng == null)<a name="line.2650"></a>
-<span class="sourceLineNo">2651</span>            return null;<a name="line.2651"></a>
-<span class="sourceLineNo">2652</span>        return keyAt(rng.nextInt(order.size));<a name="line.2652"></a>
-<span class="sourceLineNo">2653</span>    }<a name="line.2653"></a>
-<span class="sourceLineNo">2654</span><a name="line.2654"></a>
-<span class="sourceLineNo">2655</span>    /**<a name="line.2655"></a>
-<span class="sourceLineNo">2656</span>     * Gets a random entry from this Arrangement in constant time, using the given RNG to generate a random number.<a name="line.2656"></a>
-<span class="sourceLineNo">2657</span>     * @param rng used to generate a random index for a entry<a name="line.2657"></a>
-<span class="sourceLineNo">2658</span>     * @return a random key-value entry from this Arrangement<a name="line.2658"></a>
-<span class="sourceLineNo">2659</span>     */<a name="line.2659"></a>
-<span class="sourceLineNo">2660</span>    public Entry&lt;K, Integer&gt; randomEntry(RNG rng)<a name="line.2660"></a>
+<span class="sourceLineNo">2474</span>    /**<a name="line.2474"></a>
+<span class="sourceLineNo">2475</span>     * Gets a random key from this Arrangement in constant time, using the given RNG to generate a random number.<a name="line.2475"></a>
+<span class="sourceLineNo">2476</span>     * @param rng used to generate a random index for a key<a name="line.2476"></a>
+<span class="sourceLineNo">2477</span>     * @return a random key from this Arrangement, or null if this is empty<a name="line.2477"></a>
+<span class="sourceLineNo">2478</span>     */<a name="line.2478"></a>
+<span class="sourceLineNo">2479</span>    public K randomKey(RNG rng)<a name="line.2479"></a>
+<span class="sourceLineNo">2480</span>    {<a name="line.2480"></a>
+<span class="sourceLineNo">2481</span>        if(rng == null)<a name="line.2481"></a>
+<span class="sourceLineNo">2482</span>            return null;<a name="line.2482"></a>
+<span class="sourceLineNo">2483</span>        return keyAt(rng.nextInt(order.size));<a name="line.2483"></a>
+<span class="sourceLineNo">2484</span>    }<a name="line.2484"></a>
+<span class="sourceLineNo">2485</span><a name="line.2485"></a>
+<span class="sourceLineNo">2486</span>    /**<a name="line.2486"></a>
+<span class="sourceLineNo">2487</span>     * Gets a random entry from this Arrangement in constant time, using the given RNG to generate a random number.<a name="line.2487"></a>
+<span class="sourceLineNo">2488</span>     * @param rng used to generate a random index for a entry<a name="line.2488"></a>
+<span class="sourceLineNo">2489</span>     * @return a random key-value entry from this Arrangement<a name="line.2489"></a>
+<span class="sourceLineNo">2490</span>     */<a name="line.2490"></a>
+<span class="sourceLineNo">2491</span>    public Entry&lt;K, Integer&gt; randomEntry(RNG rng)<a name="line.2491"></a>
+<span class="sourceLineNo">2492</span>    {<a name="line.2492"></a>
+<span class="sourceLineNo">2493</span>        return new MapEntry(order.getRandomElement(rng));<a name="line.2493"></a>
+<span class="sourceLineNo">2494</span>    }<a name="line.2494"></a>
+<span class="sourceLineNo">2495</span><a name="line.2495"></a>
+<span class="sourceLineNo">2496</span>    /**<a name="line.2496"></a>
+<span class="sourceLineNo">2497</span>     * Randomly alters the iteration order for this Arrangement using the given RNG to shuffle.<a name="line.2497"></a>
+<span class="sourceLineNo">2498</span>     * @param rng used to generate a random ordering<a name="line.2498"></a>
+<span class="sourceLineNo">2499</span>     * @return this for chaining<a name="line.2499"></a>
+<span class="sourceLineNo">2500</span>     */<a name="line.2500"></a>
+<span class="sourceLineNo">2501</span>    public Arrangement&lt;K&gt; shuffle(RNG rng)<a name="line.2501"></a>
+<span class="sourceLineNo">2502</span>    {<a name="line.2502"></a>
+<span class="sourceLineNo">2503</span>        if(size &lt; 2)<a name="line.2503"></a>
+<span class="sourceLineNo">2504</span>            return this;<a name="line.2504"></a>
+<span class="sourceLineNo">2505</span>        order.shuffle(rng);<a name="line.2505"></a>
+<span class="sourceLineNo">2506</span>        first = order.get(0);<a name="line.2506"></a>
+<span class="sourceLineNo">2507</span>        last = order.peek();<a name="line.2507"></a>
+<span class="sourceLineNo">2508</span>        fixValues(0);<a name="line.2508"></a>
+<span class="sourceLineNo">2509</span>        return this;<a name="line.2509"></a>
+<span class="sourceLineNo">2510</span>    }<a name="line.2510"></a>
+<span class="sourceLineNo">2511</span><a name="line.2511"></a>
+<span class="sourceLineNo">2512</span>    /**<a name="line.2512"></a>
+<span class="sourceLineNo">2513</span>     * Given an array or varargs of replacement indices for this Arrangement's iteration order, reorders this so the<a name="line.2513"></a>
+<span class="sourceLineNo">2514</span>     * first item in the returned version is the same as {@code getAt(ordering[0])} (with some care taken for negative<a name="line.2514"></a>
+<span class="sourceLineNo">2515</span>     * or too-large indices), the second item in the returned version is the same as {@code getAt(ordering[1])}, etc.<a name="line.2515"></a>
+<span class="sourceLineNo">2516</span>     * &lt;br&gt;<a name="line.2516"></a>
+<span class="sourceLineNo">2517</span>     * Negative indices are considered reversed distances from the end of ordering, so -1 refers to the same index as<a name="line.2517"></a>
+<span class="sourceLineNo">2518</span>     * {@code ordering[ordering.length - 1]}. If ordering is smaller than {@code size()}, only the indices up to the<a name="line.2518"></a>
+<span class="sourceLineNo">2519</span>     * length of ordering will be modified. If ordering is larger than {@code size()}, only as many indices will be<a name="line.2519"></a>
+<span class="sourceLineNo">2520</span>     * affected as {@code size()}, and reversed distances are measured from the end of this Map's entries instead of<a name="line.2520"></a>
+<span class="sourceLineNo">2521</span>     * the end of ordering. Duplicate values in ordering will produce duplicate values in the returned Map.<a name="line.2521"></a>
+<span class="sourceLineNo">2522</span>     * &lt;br&gt;<a name="line.2522"></a>
+<span class="sourceLineNo">2523</span>     * This method modifies this Arrangement in-place and also returns it for chaining.<a name="line.2523"></a>
+<span class="sourceLineNo">2524</span>     * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this<a name="line.2524"></a>
+<span class="sourceLineNo">2525</span>     *                 Map to have the value currently in this Map at the index specified by the value in ordering<a name="line.2525"></a>
+<span class="sourceLineNo">2526</span>     * @return this for chaining, after modifying it in-place<a name="line.2526"></a>
+<span class="sourceLineNo">2527</span>     */<a name="line.2527"></a>
+<span class="sourceLineNo">2528</span>    public Arrangement&lt;K&gt; reorder(int... ordering)<a name="line.2528"></a>
+<span class="sourceLineNo">2529</span>    {<a name="line.2529"></a>
+<span class="sourceLineNo">2530</span>        if(ordering == null || ordering.length &lt;= 0)<a name="line.2530"></a>
+<span class="sourceLineNo">2531</span>            return this;<a name="line.2531"></a>
+<span class="sourceLineNo">2532</span>        order.reorder(ordering);<a name="line.2532"></a>
+<span class="sourceLineNo">2533</span>        first = order.get(0);<a name="line.2533"></a>
+<span class="sourceLineNo">2534</span>        last = order.peek();<a name="line.2534"></a>
+<span class="sourceLineNo">2535</span>        fixValues(0);<a name="line.2535"></a>
+<span class="sourceLineNo">2536</span>        return this;<a name="line.2536"></a>
+<span class="sourceLineNo">2537</span>    }<a name="line.2537"></a>
+<span class="sourceLineNo">2538</span>    private int alterEntry(final int pos, final K replacement) {<a name="line.2538"></a>
+<span class="sourceLineNo">2539</span>        final int[] value = this.value;<a name="line.2539"></a>
+<span class="sourceLineNo">2540</span>        final int v = value[pos], op = order.indexOf(pos);<a name="line.2540"></a>
+<span class="sourceLineNo">2541</span>        final boolean isFirst = op == 0, isLast = op == order.size - 1;<a name="line.2541"></a>
+<span class="sourceLineNo">2542</span>        shiftKeysValues(pos);<a name="line.2542"></a>
+<span class="sourceLineNo">2543</span><a name="line.2543"></a>
+<span class="sourceLineNo">2544</span>        int rep;<a name="line.2544"></a>
+<span class="sourceLineNo">2545</span>        if (replacement == null) {<a name="line.2545"></a>
+<span class="sourceLineNo">2546</span>            if (containsNullKey)<a name="line.2546"></a>
+<span class="sourceLineNo">2547</span>                return v;<a name="line.2547"></a>
+<span class="sourceLineNo">2548</span>            rep = n;<a name="line.2548"></a>
+<span class="sourceLineNo">2549</span>            containsNullKey = true;<a name="line.2549"></a>
+<span class="sourceLineNo">2550</span>        } else {<a name="line.2550"></a>
+<span class="sourceLineNo">2551</span>            K curr;<a name="line.2551"></a>
+<span class="sourceLineNo">2552</span>            final K[] key = this.key;<a name="line.2552"></a>
+<span class="sourceLineNo">2553</span><a name="line.2553"></a>
+<span class="sourceLineNo">2554</span>            // The starting point.<a name="line.2554"></a>
+<span class="sourceLineNo">2555</span>            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) &amp; mask]) == null)) {<a name="line.2555"></a>
+<span class="sourceLineNo">2556</span>                if (hasher.areEqual(curr, replacement))<a name="line.2556"></a>
+<span class="sourceLineNo">2557</span>                    return v;<a name="line.2557"></a>
+<span class="sourceLineNo">2558</span>                while (!((curr = key[rep = (rep + 1) &amp; mask]) == null))<a name="line.2558"></a>
+<span class="sourceLineNo">2559</span>                    if (hasher.areEqual(curr, replacement))<a name="line.2559"></a>
+<span class="sourceLineNo">2560</span>                        return v;<a name="line.2560"></a>
+<span class="sourceLineNo">2561</span>            }<a name="line.2561"></a>
+<span class="sourceLineNo">2562</span>            key[rep] = replacement;<a name="line.2562"></a>
+<span class="sourceLineNo">2563</span>            value[rep] = v;<a name="line.2563"></a>
+<span class="sourceLineNo">2564</span>        }<a name="line.2564"></a>
+<span class="sourceLineNo">2565</span>        order.set(op, rep);<a name="line.2565"></a>
+<span class="sourceLineNo">2566</span>        if(isFirst)<a name="line.2566"></a>
+<span class="sourceLineNo">2567</span>            first = rep;<a name="line.2567"></a>
+<span class="sourceLineNo">2568</span>        if(isLast)<a name="line.2568"></a>
+<span class="sourceLineNo">2569</span>            last = rep;<a name="line.2569"></a>
+<span class="sourceLineNo">2570</span>        return v;<a name="line.2570"></a>
+<span class="sourceLineNo">2571</span>    }<a name="line.2571"></a>
+<span class="sourceLineNo">2572</span>    private int alterNullEntry(final K replacement) {<a name="line.2572"></a>
+<span class="sourceLineNo">2573</span>        containsNullKey = false;<a name="line.2573"></a>
+<span class="sourceLineNo">2574</span>        key[n] = null;<a name="line.2574"></a>
+<span class="sourceLineNo">2575</span>        final int[] value = this.value;<a name="line.2575"></a>
+<span class="sourceLineNo">2576</span>        int v = value[n];<a name="line.2576"></a>
+<span class="sourceLineNo">2577</span>        value[n] = -1;<a name="line.2577"></a>
+<span class="sourceLineNo">2578</span><a name="line.2578"></a>
+<span class="sourceLineNo">2579</span>        int rep;<a name="line.2579"></a>
+<span class="sourceLineNo">2580</span>        if (replacement == null) {<a name="line.2580"></a>
+<span class="sourceLineNo">2581</span>            rep = n;<a name="line.2581"></a>
+<span class="sourceLineNo">2582</span>            containsNullKey = true;<a name="line.2582"></a>
+<span class="sourceLineNo">2583</span>        } else {<a name="line.2583"></a>
+<span class="sourceLineNo">2584</span>            K curr;<a name="line.2584"></a>
+<span class="sourceLineNo">2585</span>            final K[] key = this.key;<a name="line.2585"></a>
+<span class="sourceLineNo">2586</span>            // The starting point.<a name="line.2586"></a>
+<span class="sourceLineNo">2587</span>            if ((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) &amp; mask]) != null) {<a name="line.2587"></a>
+<span class="sourceLineNo">2588</span>                if (hasher.areEqual(curr, replacement))<a name="line.2588"></a>
+<span class="sourceLineNo">2589</span>                    return v;<a name="line.2589"></a>
+<span class="sourceLineNo">2590</span>                while ((curr = key[rep = (rep + 1) &amp; mask]) != null)<a name="line.2590"></a>
+<span class="sourceLineNo">2591</span>                    if (hasher.areEqual(curr, replacement))<a name="line.2591"></a>
+<span class="sourceLineNo">2592</span>                        return v;<a name="line.2592"></a>
+<span class="sourceLineNo">2593</span>            }<a name="line.2593"></a>
+<span class="sourceLineNo">2594</span>            key[rep] = replacement;<a name="line.2594"></a>
+<span class="sourceLineNo">2595</span>            value[rep] = v;<a name="line.2595"></a>
+<span class="sourceLineNo">2596</span><a name="line.2596"></a>
+<span class="sourceLineNo">2597</span>        }<a name="line.2597"></a>
+<span class="sourceLineNo">2598</span>        fixOrder(n, rep);<a name="line.2598"></a>
+<span class="sourceLineNo">2599</span>        return v;<a name="line.2599"></a>
+<span class="sourceLineNo">2600</span>    }<a name="line.2600"></a>
+<span class="sourceLineNo">2601</span><a name="line.2601"></a>
+<span class="sourceLineNo">2602</span>    /**<a name="line.2602"></a>
+<span class="sourceLineNo">2603</span>     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration<a name="line.2603"></a>
+<span class="sourceLineNo">2604</span>     * order as original and keeping it associated with the same value (which also keeps its iteration index).<a name="line.2604"></a>
+<span class="sourceLineNo">2605</span>     * @param original the key to find and swap out<a name="line.2605"></a>
+<span class="sourceLineNo">2606</span>     * @param replacement the key to replace original with<a name="line.2606"></a>
+<span class="sourceLineNo">2607</span>     * @return the value associated with original before, and replacement now<a name="line.2607"></a>
+<span class="sourceLineNo">2608</span>     */<a name="line.2608"></a>
+<span class="sourceLineNo">2609</span>    public int alter(final K original, final K replacement) {<a name="line.2609"></a>
+<span class="sourceLineNo">2610</span>        if (original == null) {<a name="line.2610"></a>
+<span class="sourceLineNo">2611</span>            if (containsNullKey) {<a name="line.2611"></a>
+<span class="sourceLineNo">2612</span>                return alterNullEntry(replacement);<a name="line.2612"></a>
+<span class="sourceLineNo">2613</span>            }<a name="line.2613"></a>
+<span class="sourceLineNo">2614</span>            else<a name="line.2614"></a>
+<span class="sourceLineNo">2615</span>                return add(replacement);<a name="line.2615"></a>
+<span class="sourceLineNo">2616</span>        }<a name="line.2616"></a>
+<span class="sourceLineNo">2617</span>        else if(hasher.areEqual(original, replacement))<a name="line.2617"></a>
+<span class="sourceLineNo">2618</span>            return getInt(original);<a name="line.2618"></a>
+<span class="sourceLineNo">2619</span>        K curr;<a name="line.2619"></a>
+<span class="sourceLineNo">2620</span>        final K[] key = this.key;<a name="line.2620"></a>
+<span class="sourceLineNo">2621</span>        int pos;<a name="line.2621"></a>
+<span class="sourceLineNo">2622</span>        // The starting point.<a name="line.2622"></a>
+<span class="sourceLineNo">2623</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) &amp; mask]) == null)<a name="line.2623"></a>
+<span class="sourceLineNo">2624</span>            return add(replacement);<a name="line.2624"></a>
+<span class="sourceLineNo">2625</span>        if (hasher.areEqual(original, curr))<a name="line.2625"></a>
+<span class="sourceLineNo">2626</span>            return alterEntry(pos, replacement);<a name="line.2626"></a>
+<span class="sourceLineNo">2627</span>        while (true) {<a name="line.2627"></a>
+<span class="sourceLineNo">2628</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.2628"></a>
+<span class="sourceLineNo">2629</span>                return add(replacement);<a name="line.2629"></a>
+<span class="sourceLineNo">2630</span>            if (hasher.areEqual(original, curr))<a name="line.2630"></a>
+<span class="sourceLineNo">2631</span>                return alterEntry(pos, replacement);<a name="line.2631"></a>
+<span class="sourceLineNo">2632</span>        }<a name="line.2632"></a>
+<span class="sourceLineNo">2633</span>    }<a name="line.2633"></a>
+<span class="sourceLineNo">2634</span><a name="line.2634"></a>
+<span class="sourceLineNo">2635</span>    public int[] getArray(K[] keys)<a name="line.2635"></a>
+<span class="sourceLineNo">2636</span>    {<a name="line.2636"></a>
+<span class="sourceLineNo">2637</span>        if(keys == null)<a name="line.2637"></a>
+<span class="sourceLineNo">2638</span>            return new int[0];<a name="line.2638"></a>
+<span class="sourceLineNo">2639</span>        int len = keys.length;<a name="line.2639"></a>
+<span class="sourceLineNo">2640</span>        int[] vals = new int[len];<a name="line.2640"></a>
+<span class="sourceLineNo">2641</span>        for (int i = 0; i &lt; len; i++) {<a name="line.2641"></a>
+<span class="sourceLineNo">2642</span>            vals[i] = getInt(keys[i]);<a name="line.2642"></a>
+<span class="sourceLineNo">2643</span>        }<a name="line.2643"></a>
+<span class="sourceLineNo">2644</span>        return vals;<a name="line.2644"></a>
+<span class="sourceLineNo">2645</span>    }<a name="line.2645"></a>
+<span class="sourceLineNo">2646</span><a name="line.2646"></a>
+<span class="sourceLineNo">2647</span>    public int[] getArray(Collection&lt;? extends K&gt; keys)<a name="line.2647"></a>
+<span class="sourceLineNo">2648</span>    {<a name="line.2648"></a>
+<span class="sourceLineNo">2649</span>        if(keys == null)<a name="line.2649"></a>
+<span class="sourceLineNo">2650</span>            return new int[0];<a name="line.2650"></a>
+<span class="sourceLineNo">2651</span>        int len = keys.size(), i = 0;<a name="line.2651"></a>
+<span class="sourceLineNo">2652</span>        int[] vals = new int[len];<a name="line.2652"></a>
+<span class="sourceLineNo">2653</span>        for(K k : keys)<a name="line.2653"></a>
+<span class="sourceLineNo">2654</span>        {<a name="line.2654"></a>
+<span class="sourceLineNo">2655</span>            vals[i++] = getInt(k);<a name="line.2655"></a>
+<span class="sourceLineNo">2656</span>        }<a name="line.2656"></a>
+<span class="sourceLineNo">2657</span>        return vals;<a name="line.2657"></a>
+<span class="sourceLineNo">2658</span>    }<a name="line.2658"></a>
+<span class="sourceLineNo">2659</span><a name="line.2659"></a>
+<span class="sourceLineNo">2660</span>    public IntVLA getMany(Iterable&lt;? extends K&gt; keys)<a name="line.2660"></a>
 <span class="sourceLineNo">2661</span>    {<a name="line.2661"></a>
-<span class="sourceLineNo">2662</span>        return new MapEntry(order.getRandomElement(rng));<a name="line.2662"></a>
-<span class="sourceLineNo">2663</span>    }<a name="line.2663"></a>
-<span class="sourceLineNo">2664</span><a name="line.2664"></a>
-<span class="sourceLineNo">2665</span>    /**<a name="line.2665"></a>
-<span class="sourceLineNo">2666</span>     * Randomly alters the iteration order for this Arrangement using the given RNG to shuffle.<a name="line.2666"></a>
-<span class="sourceLineNo">2667</span>     * @param rng used to generate a random ordering<a name="line.2667"></a>
-<span class="sourceLineNo">2668</span>     * @return this for chaining<a name="line.2668"></a>
-<span class="sourceLineNo">2669</span>     */<a name="line.2669"></a>
-<span class="sourceLineNo">2670</span>    public Arrangement&lt;K&gt; shuffle(RNG rng)<a name="line.2670"></a>
-<span class="sourceLineNo">2671</span>    {<a name="line.2671"></a>
-<span class="sourceLineNo">2672</span>        if(size &lt; 2)<a name="line.2672"></a>
-<span class="sourceLineNo">2673</span>            return this;<a name="line.2673"></a>
-<span class="sourceLineNo">2674</span>        order.shuffle(rng);<a name="line.2674"></a>
-<span class="sourceLineNo">2675</span>        first = order.get(0);<a name="line.2675"></a>
-<span class="sourceLineNo">2676</span>        last = order.peek();<a name="line.2676"></a>
-<span class="sourceLineNo">2677</span>        fixValues(0);<a name="line.2677"></a>
-<span class="sourceLineNo">2678</span>        return this;<a name="line.2678"></a>
-<span class="sourceLineNo">2679</span>    }<a name="line.2679"></a>
-<span class="sourceLineNo">2680</span><a name="line.2680"></a>
-<span class="sourceLineNo">2681</span>    /**<a name="line.2681"></a>
-<span class="sourceLineNo">2682</span>     * Given an array or varargs of replacement indices for this Arrangement's iteration order, reorders this so the<a name="line.2682"></a>
-<span class="sourceLineNo">2683</span>     * first item in the returned version is the same as {@code getAt(ordering[0])} (with some care taken for negative<a name="line.2683"></a>
-<span class="sourceLineNo">2684</span>     * or too-large indices), the second item in the returned version is the same as {@code getAt(ordering[1])}, etc.<a name="line.2684"></a>
-<span class="sourceLineNo">2685</span>     * &lt;br&gt;<a name="line.2685"></a>
-<span class="sourceLineNo">2686</span>     * Negative indices are considered reversed distances from the end of ordering, so -1 refers to the same index as<a name="line.2686"></a>
-<span class="sourceLineNo">2687</span>     * {@code ordering[ordering.length - 1]}. If ordering is smaller than {@code size()}, only the indices up to the<a name="line.2687"></a>
-<span class="sourceLineNo">2688</span>     * length of ordering will be modified. If ordering is larger than {@code size()}, only as many indices will be<a name="line.2688"></a>
-<span class="sourceLineNo">2689</span>     * affected as {@code size()}, and reversed distances are measured from the end of this Map's entries instead of<a name="line.2689"></a>
-<span class="sourceLineNo">2690</span>     * the end of ordering. Duplicate values in ordering will produce duplicate values in the returned Map.<a name="line.2690"></a>
-<span class="sourceLineNo">2691</span>     * &lt;br&gt;<a name="line.2691"></a>
-<span class="sourceLineNo">2692</span>     * This method modifies this Arrangement in-place and also returns it for chaining.<a name="line.2692"></a>
-<span class="sourceLineNo">2693</span>     * @param ordering an array or varargs of int indices, where the nth item in ordering changes the nth item in this<a name="line.2693"></a>
-<span class="sourceLineNo">2694</span>     *                 Map to have the value currently in this Map at the index specified by the value in ordering<a name="line.2694"></a>
-<span class="sourceLineNo">2695</span>     * @return this for chaining, after modifying it in-place<a name="line.2695"></a>
-<span class="sourceLineNo">2696</span>     */<a name="line.2696"></a>
-<span class="sourceLineNo">2697</span>    public Arrangement&lt;K&gt; reorder(int... ordering)<a name="line.2697"></a>
-<span class="sourceLineNo">2698</span>    {<a name="line.2698"></a>
-<span class="sourceLineNo">2699</span>        if(ordering == null || ordering.length &lt;= 0)<a name="line.2699"></a>
-<span class="sourceLineNo">2700</span>            return this;<a name="line.2700"></a>
-<span class="sourceLineNo">2701</span>        order.reorder(ordering);<a name="line.2701"></a>
-<span class="sourceLineNo">2702</span>        first = order.get(0);<a name="line.2702"></a>
-<span class="sourceLineNo">2703</span>        last = order.peek();<a name="line.2703"></a>
-<span class="sourceLineNo">2704</span>        fixValues(0);<a name="line.2704"></a>
-<span class="sourceLineNo">2705</span>        return this;<a name="line.2705"></a>
-<span class="sourceLineNo">2706</span>    }<a name="line.2706"></a>
-<span class="sourceLineNo">2707</span>    private int alterEntry(final int pos, final K replacement) {<a name="line.2707"></a>
-<span class="sourceLineNo">2708</span>        final int[] value = this.value;<a name="line.2708"></a>
-<span class="sourceLineNo">2709</span>        final int v = value[pos], op = order.indexOf(pos);<a name="line.2709"></a>
-<span class="sourceLineNo">2710</span>        final boolean isFirst = op == 0, isLast = op == order.size - 1;<a name="line.2710"></a>
-<span class="sourceLineNo">2711</span>        shiftKeysValues(pos);<a name="line.2711"></a>
-<span class="sourceLineNo">2712</span><a name="line.2712"></a>
-<span class="sourceLineNo">2713</span>        int rep;<a name="line.2713"></a>
-<span class="sourceLineNo">2714</span>        if (replacement == null) {<a name="line.2714"></a>
-<span class="sourceLineNo">2715</span>            if (containsNullKey)<a name="line.2715"></a>
-<span class="sourceLineNo">2716</span>                return v;<a name="line.2716"></a>
-<span class="sourceLineNo">2717</span>            rep = n;<a name="line.2717"></a>
-<span class="sourceLineNo">2718</span>            containsNullKey = true;<a name="line.2718"></a>
-<span class="sourceLineNo">2719</span>        } else {<a name="line.2719"></a>
-<span class="sourceLineNo">2720</span>            K curr;<a name="line.2720"></a>
-<span class="sourceLineNo">2721</span>            final K[] key = this.key;<a name="line.2721"></a>
-<span class="sourceLineNo">2722</span><a name="line.2722"></a>
-<span class="sourceLineNo">2723</span>            // The starting point.<a name="line.2723"></a>
-<span class="sourceLineNo">2724</span>            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) &amp; mask]) == null)) {<a name="line.2724"></a>
-<span class="sourceLineNo">2725</span>                if (hasher.areEqual(curr, replacement))<a name="line.2725"></a>
-<span class="sourceLineNo">2726</span>                    return v;<a name="line.2726"></a>
-<span class="sourceLineNo">2727</span>                while (!((curr = key[rep = (rep + 1) &amp; mask]) == null))<a name="line.2727"></a>
-<span class="sourceLineNo">2728</span>                    if (hasher.areEqual(curr, replacement))<a name="line.2728"></a>
-<span class="sourceLineNo">2729</span>                        return v;<a name="line.2729"></a>
-<span class="sourceLineNo">2730</span>            }<a name="line.2730"></a>
-<span class="sourceLineNo">2731</span>            key[rep] = replacement;<a name="line.2731"></a>
-<span class="sourceLineNo">2732</span>            value[rep] = v;<a name="line.2732"></a>
-<span class="sourceLineNo">2733</span>        }<a name="line.2733"></a>
-<span class="sourceLineNo">2734</span>        order.set(op, rep);<a name="line.2734"></a>
-<span class="sourceLineNo">2735</span>        if(isFirst)<a name="line.2735"></a>
-<span class="sourceLineNo">2736</span>            first = rep;<a name="line.2736"></a>
-<span class="sourceLineNo">2737</span>        if(isLast)<a name="line.2737"></a>
-<span class="sourceLineNo">2738</span>            last = rep;<a name="line.2738"></a>
-<span class="sourceLineNo">2739</span>        return v;<a name="line.2739"></a>
-<span class="sourceLineNo">2740</span>    }<a name="line.2740"></a>
-<span class="sourceLineNo">2741</span>    private int alterNullEntry(final K replacement) {<a name="line.2741"></a>
-<span class="sourceLineNo">2742</span>        containsNullKey = false;<a name="line.2742"></a>
-<span class="sourceLineNo">2743</span>        key[n] = null;<a name="line.2743"></a>
-<span class="sourceLineNo">2744</span>        final int[] value = this.value;<a name="line.2744"></a>
-<span class="sourceLineNo">2745</span>        int v = value[n];<a name="line.2745"></a>
-<span class="sourceLineNo">2746</span>        value[n] = -1;<a name="line.2746"></a>
-<span class="sourceLineNo">2747</span><a name="line.2747"></a>
-<span class="sourceLineNo">2748</span>        int rep;<a name="line.2748"></a>
-<span class="sourceLineNo">2749</span>        if (replacement == null) {<a name="line.2749"></a>
-<span class="sourceLineNo">2750</span>            rep = n;<a name="line.2750"></a>
-<span class="sourceLineNo">2751</span>            containsNullKey = true;<a name="line.2751"></a>
-<span class="sourceLineNo">2752</span>        } else {<a name="line.2752"></a>
-<span class="sourceLineNo">2753</span>            K curr;<a name="line.2753"></a>
-<span class="sourceLineNo">2754</span>            final K[] key = this.key;<a name="line.2754"></a>
-<span class="sourceLineNo">2755</span>            // The starting point.<a name="line.2755"></a>
-<span class="sourceLineNo">2756</span>            if ((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) &amp; mask]) != null) {<a name="line.2756"></a>
-<span class="sourceLineNo">2757</span>                if (hasher.areEqual(curr, replacement))<a name="line.2757"></a>
-<span class="sourceLineNo">2758</span>                    return v;<a name="line.2758"></a>
-<span class="sourceLineNo">2759</span>                while ((curr = key[rep = (rep + 1) &amp; mask]) != null)<a name="line.2759"></a>
-<span class="sourceLineNo">2760</span>                    if (hasher.areEqual(curr, replacement))<a name="line.2760"></a>
-<span class="sourceLineNo">2761</span>                        return v;<a name="line.2761"></a>
-<span class="sourceLineNo">2762</span>            }<a name="line.2762"></a>
-<span class="sourceLineNo">2763</span>            key[rep] = replacement;<a name="line.2763"></a>
-<span class="sourceLineNo">2764</span>            value[rep] = v;<a name="line.2764"></a>
-<span class="sourceLineNo">2765</span><a name="line.2765"></a>
-<span class="sourceLineNo">2766</span>        }<a name="line.2766"></a>
-<span class="sourceLineNo">2767</span>        fixOrder(n, rep);<a name="line.2767"></a>
-<span class="sourceLineNo">2768</span>        return v;<a name="line.2768"></a>
+<span class="sourceLineNo">2662</span>        if(keys == null)<a name="line.2662"></a>
+<span class="sourceLineNo">2663</span>            return new IntVLA();<a name="line.2663"></a>
+<span class="sourceLineNo">2664</span>        IntVLA vals = new IntVLA();<a name="line.2664"></a>
+<span class="sourceLineNo">2665</span>        for(K k : keys)<a name="line.2665"></a>
+<span class="sourceLineNo">2666</span>        {<a name="line.2666"></a>
+<span class="sourceLineNo">2667</span>            vals.add(getInt(k));<a name="line.2667"></a>
+<span class="sourceLineNo">2668</span>        }<a name="line.2668"></a>
+<span class="sourceLineNo">2669</span>        return vals;<a name="line.2669"></a>
+<span class="sourceLineNo">2670</span>    }<a name="line.2670"></a>
+<span class="sourceLineNo">2671</span><a name="line.2671"></a>
+<span class="sourceLineNo">2672</span>    public OrderedSet&lt;K&gt; keysAt(int... positions)<a name="line.2672"></a>
+<span class="sourceLineNo">2673</span>    {<a name="line.2673"></a>
+<span class="sourceLineNo">2674</span>        if(keys == null || positions == null || positions.length &lt;= 0)<a name="line.2674"></a>
+<span class="sourceLineNo">2675</span>            return new OrderedSet&lt;K&gt;();<a name="line.2675"></a>
+<span class="sourceLineNo">2676</span>        OrderedSet&lt;K&gt; ks = new OrderedSet&lt;&gt;(positions.length);<a name="line.2676"></a>
+<span class="sourceLineNo">2677</span>        for(int i = 0; i &lt; positions.length; i++)<a name="line.2677"></a>
+<span class="sourceLineNo">2678</span>        {<a name="line.2678"></a>
+<span class="sourceLineNo">2679</span>            ks.add(keyAt(positions[i]));<a name="line.2679"></a>
+<span class="sourceLineNo">2680</span>        }<a name="line.2680"></a>
+<span class="sourceLineNo">2681</span>        return ks;<a name="line.2681"></a>
+<span class="sourceLineNo">2682</span>    }<a name="line.2682"></a>
+<span class="sourceLineNo">2683</span>    public OrderedSet&lt;K&gt; keysAt(IntVLA positions)<a name="line.2683"></a>
+<span class="sourceLineNo">2684</span>    {<a name="line.2684"></a>
+<span class="sourceLineNo">2685</span>        if(keys == null || positions == null || positions.size &lt;= 0)<a name="line.2685"></a>
+<span class="sourceLineNo">2686</span>            return new OrderedSet&lt;K&gt;();<a name="line.2686"></a>
+<span class="sourceLineNo">2687</span>        OrderedSet&lt;K&gt; ks = new OrderedSet&lt;&gt;(positions.size);<a name="line.2687"></a>
+<span class="sourceLineNo">2688</span>        for(int i = 0; i &lt; positions.size; i++)<a name="line.2688"></a>
+<span class="sourceLineNo">2689</span>        {<a name="line.2689"></a>
+<span class="sourceLineNo">2690</span>            ks.add(keyAt(positions.get(i)));<a name="line.2690"></a>
+<span class="sourceLineNo">2691</span>        }<a name="line.2691"></a>
+<span class="sourceLineNo">2692</span>        return ks;<a name="line.2692"></a>
+<span class="sourceLineNo">2693</span>    }<a name="line.2693"></a>
+<span class="sourceLineNo">2694</span><a name="line.2694"></a>
+<span class="sourceLineNo">2695</span>    /**<a name="line.2695"></a>
+<span class="sourceLineNo">2696</span>     * Produces a copy of this Arrangement, but only using up to the given amount of items to take. Does a shallow copy<a name="line.2696"></a>
+<span class="sourceLineNo">2697</span>     * of individual keys, so the references will be shared.<a name="line.2697"></a>
+<span class="sourceLineNo">2698</span>     * @param amount the number of items to copy from this Arrangement; will copy all items if greater than size<a name="line.2698"></a>
+<span class="sourceLineNo">2699</span>     * @return a new Arrangement with up to amount items copied from this into it.<a name="line.2699"></a>
+<span class="sourceLineNo">2700</span>     */<a name="line.2700"></a>
+<span class="sourceLineNo">2701</span>    public Arrangement&lt;K&gt; take(int amount)<a name="line.2701"></a>
+<span class="sourceLineNo">2702</span>    {<a name="line.2702"></a>
+<span class="sourceLineNo">2703</span>        amount = Math.min(size, Math.max(0, amount));<a name="line.2703"></a>
+<span class="sourceLineNo">2704</span>        Arrangement&lt;K&gt; nx = new Arrangement&lt;&gt;(amount, f);<a name="line.2704"></a>
+<span class="sourceLineNo">2705</span>        for (int i = 0; i &lt; amount; i++) {<a name="line.2705"></a>
+<span class="sourceLineNo">2706</span>            nx.add(keyAt(i));<a name="line.2706"></a>
+<span class="sourceLineNo">2707</span>        }<a name="line.2707"></a>
+<span class="sourceLineNo">2708</span>        return nx;<a name="line.2708"></a>
+<span class="sourceLineNo">2709</span>    }<a name="line.2709"></a>
+<span class="sourceLineNo">2710</span>    protected int positionOf(final Object k) {<a name="line.2710"></a>
+<span class="sourceLineNo">2711</span>        if (k == null)<a name="line.2711"></a>
+<span class="sourceLineNo">2712</span>        {<a name="line.2712"></a>
+<span class="sourceLineNo">2713</span>            return (containsNullKey) ? n : -1;<a name="line.2713"></a>
+<span class="sourceLineNo">2714</span>        }<a name="line.2714"></a>
+<span class="sourceLineNo">2715</span>        K curr;<a name="line.2715"></a>
+<span class="sourceLineNo">2716</span>        final K[] key = this.key;<a name="line.2716"></a>
+<span class="sourceLineNo">2717</span>        int pos;<a name="line.2717"></a>
+<span class="sourceLineNo">2718</span>        // The starting point.<a name="line.2718"></a>
+<span class="sourceLineNo">2719</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.2719"></a>
+<span class="sourceLineNo">2720</span>            return -1;<a name="line.2720"></a>
+<span class="sourceLineNo">2721</span>        if (hasher.areEqual(k, curr))<a name="line.2721"></a>
+<span class="sourceLineNo">2722</span>            return pos;<a name="line.2722"></a>
+<span class="sourceLineNo">2723</span>        // There's always an unused entry.<a name="line.2723"></a>
+<span class="sourceLineNo">2724</span>        while (true) {<a name="line.2724"></a>
+<span class="sourceLineNo">2725</span>            if ((curr = key[pos = pos + 1 &amp; mask]) == null)<a name="line.2725"></a>
+<span class="sourceLineNo">2726</span>                return -1;<a name="line.2726"></a>
+<span class="sourceLineNo">2727</span>            if (hasher.areEqual(k, curr))<a name="line.2727"></a>
+<span class="sourceLineNo">2728</span>                return pos;<a name="line.2728"></a>
+<span class="sourceLineNo">2729</span>        }<a name="line.2729"></a>
+<span class="sourceLineNo">2730</span>    }<a name="line.2730"></a>
+<span class="sourceLineNo">2731</span><a name="line.2731"></a>
+<span class="sourceLineNo">2732</span>    /**<a name="line.2732"></a>
+<span class="sourceLineNo">2733</span>     * Swaps the positions in the ordering for the given items, if they are both present. Returns true if the ordering<a name="line.2733"></a>
+<span class="sourceLineNo">2734</span>     * changed as a result of this call, or false if it stayed the same (which can be because left or right was not<a name="line.2734"></a>
+<span class="sourceLineNo">2735</span>     * present, or because left and right are the same reference (so swapping would do nothing)).<a name="line.2735"></a>
+<span class="sourceLineNo">2736</span>     * @param left an item that should be present in this OrderedSet<a name="line.2736"></a>
+<span class="sourceLineNo">2737</span>     * @param right an item that should be present in this OrderedSet<a name="line.2737"></a>
+<span class="sourceLineNo">2738</span>     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise<a name="line.2738"></a>
+<span class="sourceLineNo">2739</span>     */<a name="line.2739"></a>
+<span class="sourceLineNo">2740</span>    public boolean swap(final K left, final K right)<a name="line.2740"></a>
+<span class="sourceLineNo">2741</span>    {<a name="line.2741"></a>
+<span class="sourceLineNo">2742</span>        if(left == right) return false;<a name="line.2742"></a>
+<span class="sourceLineNo">2743</span>        int l = getInt(left);<a name="line.2743"></a>
+<span class="sourceLineNo">2744</span>        if(l &lt; 0) return false;<a name="line.2744"></a>
+<span class="sourceLineNo">2745</span>        int r = getInt(right);<a name="line.2745"></a>
+<span class="sourceLineNo">2746</span>        if(r &lt; 0) return false;<a name="line.2746"></a>
+<span class="sourceLineNo">2747</span>        int posL = order.get(l), posR = order.get(r);<a name="line.2747"></a>
+<span class="sourceLineNo">2748</span>        value[posL] = r;<a name="line.2748"></a>
+<span class="sourceLineNo">2749</span>        value[posR] = l;<a name="line.2749"></a>
+<span class="sourceLineNo">2750</span>        order.swap(l, r);<a name="line.2750"></a>
+<span class="sourceLineNo">2751</span>        return true;<a name="line.2751"></a>
+<span class="sourceLineNo">2752</span>    }<a name="line.2752"></a>
+<span class="sourceLineNo">2753</span>    /**<a name="line.2753"></a>
+<span class="sourceLineNo">2754</span>     * Swaps the given indices in the ordering, if they are both ints between 0 and size. Returns true if the ordering<a name="line.2754"></a>
+<span class="sourceLineNo">2755</span>     * changed as a result of this call, or false if it stayed the same (which can be because left or right referred to<a name="line.2755"></a>
+<span class="sourceLineNo">2756</span>     * an out-of-bounds index, or because left and right are equal (so swapping would do nothing)).<a name="line.2756"></a>
+<span class="sourceLineNo">2757</span>     * @param left an index of an item in this OrderedSet, at least 0 and less than {@link #size()}<a name="line.2757"></a>
+<span class="sourceLineNo">2758</span>     * @param right an index of an item in this OrderedSet, at least 0 and less than {@link #size()}<a name="line.2758"></a>
+<span class="sourceLineNo">2759</span>     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise<a name="line.2759"></a>
+<span class="sourceLineNo">2760</span>     */<a name="line.2760"></a>
+<span class="sourceLineNo">2761</span>    public boolean swapIndices(final int left, final int right)<a name="line.2761"></a>
+<span class="sourceLineNo">2762</span>    {<a name="line.2762"></a>
+<span class="sourceLineNo">2763</span>        if(left &lt; 0 || right &lt; 0 || left &gt;= order.size || right &gt;= order.size || left == right) return false;<a name="line.2763"></a>
+<span class="sourceLineNo">2764</span>        int posL = order.get(left), posR = order.get(right);<a name="line.2764"></a>
+<span class="sourceLineNo">2765</span>        value[posL] = right;<a name="line.2765"></a>
+<span class="sourceLineNo">2766</span>        value[posR] = left;<a name="line.2766"></a>
+<span class="sourceLineNo">2767</span>        order.swap(left, right);<a name="line.2767"></a>
+<span class="sourceLineNo">2768</span>        return true;<a name="line.2768"></a>
 <span class="sourceLineNo">2769</span>    }<a name="line.2769"></a>
 <span class="sourceLineNo">2770</span><a name="line.2770"></a>
 <span class="sourceLineNo">2771</span>    /**<a name="line.2771"></a>
-<span class="sourceLineNo">2772</span>     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration<a name="line.2772"></a>
-<span class="sourceLineNo">2773</span>     * order as original and keeping it associated with the same value (which also keeps its iteration index).<a name="line.2773"></a>
-<span class="sourceLineNo">2774</span>     * @param original the key to find and swap out<a name="line.2774"></a>
-<span class="sourceLineNo">2775</span>     * @param replacement the key to replace original with<a name="line.2775"></a>
-<span class="sourceLineNo">2776</span>     * @return the value associated with original before, and replacement now<a name="line.2776"></a>
+<span class="sourceLineNo">2772</span>     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.<a name="line.2772"></a>
+<span class="sourceLineNo">2773</span>     *<a name="line.2773"></a>
+<span class="sourceLineNo">2774</span>     * @param index       an index to replace the K key at<a name="line.2774"></a>
+<span class="sourceLineNo">2775</span>     * @param replacement another K key that will replace the original at the remembered index<a name="line.2775"></a>
+<span class="sourceLineNo">2776</span>     * @return the int associated with the possibly-altered key; should be equal to index<a name="line.2776"></a>
 <span class="sourceLineNo">2777</span>     */<a name="line.2777"></a>
-<span class="sourceLineNo">2778</span>    public int alter(final K original, final K replacement) {<a name="line.2778"></a>
-<span class="sourceLineNo">2779</span>        if (original == null) {<a name="line.2779"></a>
-<span class="sourceLineNo">2780</span>            if (containsNullKey) {<a name="line.2780"></a>
-<span class="sourceLineNo">2781</span>                return alterNullEntry(replacement);<a name="line.2781"></a>
-<span class="sourceLineNo">2782</span>            }<a name="line.2782"></a>
-<span class="sourceLineNo">2783</span>            else<a name="line.2783"></a>
-<span class="sourceLineNo">2784</span>                return add(replacement);<a name="line.2784"></a>
-<span class="sourceLineNo">2785</span>        }<a name="line.2785"></a>
-<span class="sourceLineNo">2786</span>        else if(hasher.areEqual(original, replacement))<a name="line.2786"></a>
-<span class="sourceLineNo">2787</span>            return getInt(original);<a name="line.2787"></a>
-<span class="sourceLineNo">2788</span>        K curr;<a name="line.2788"></a>
-<span class="sourceLineNo">2789</span>        final K[] key = this.key;<a name="line.2789"></a>
-<span class="sourceLineNo">2790</span>        int pos;<a name="line.2790"></a>
-<span class="sourceLineNo">2791</span>        // The starting point.<a name="line.2791"></a>
-<span class="sourceLineNo">2792</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) &amp; mask]) == null)<a name="line.2792"></a>
-<span class="sourceLineNo">2793</span>            return add(replacement);<a name="line.2793"></a>
-<span class="sourceLineNo">2794</span>        if (hasher.areEqual(original, curr))<a name="line.2794"></a>
-<span class="sourceLineNo">2795</span>            return alterEntry(pos, replacement);<a name="line.2795"></a>
-<span class="sourceLineNo">2796</span>        while (true) {<a name="line.2796"></a>
-<span class="sourceLineNo">2797</span>            if ((curr = key[pos = (pos + 1) &amp; mask]) == null)<a name="line.2797"></a>
-<span class="sourceLineNo">2798</span>                return add(replacement);<a name="line.2798"></a>
-<span class="sourceLineNo">2799</span>            if (hasher.areEqual(original, curr))<a name="line.2799"></a>
-<span class="sourceLineNo">2800</span>                return alterEntry(pos, replacement);<a name="line.2800"></a>
-<span class="sourceLineNo">2801</span>        }<a name="line.2801"></a>
-<span class="sourceLineNo">2802</span>    }<a name="line.2802"></a>
-<span class="sourceLineNo">2803</span><a name="line.2803"></a>
-<span class="sourceLineNo">2804</span>    public int[] getArray(K[] keys)<a name="line.2804"></a>
-<span class="sourceLineNo">2805</span>    {<a name="line.2805"></a>
-<span class="sourceLineNo">2806</span>        if(keys == null)<a name="line.2806"></a>
-<span class="sourceLineNo">2807</span>            return new int[0];<a name="line.2807"></a>
-<span class="sourceLineNo">2808</span>        int len = keys.length;<a name="line.2808"></a>
-<span class="sourceLineNo">2809</span>        int[] vals = new int[len];<a name="line.2809"></a>
-<span class="sourceLineNo">2810</span>        for (int i = 0; i &lt; len; i++) {<a name="line.2810"></a>
-<span class="sourceLineNo">2811</span>            vals[i] = getInt(keys[i]);<a name="line.2811"></a>
-<span class="sourceLineNo">2812</span>        }<a name="line.2812"></a>
-<span class="sourceLineNo">2813</span>        return vals;<a name="line.2813"></a>
-<span class="sourceLineNo">2814</span>    }<a name="line.2814"></a>
-<span class="sourceLineNo">2815</span><a name="line.2815"></a>
-<span class="sourceLineNo">2816</span>    public int[] getArray(Collection&lt;? extends K&gt; keys)<a name="line.2816"></a>
-<span class="sourceLineNo">2817</span>    {<a name="line.2817"></a>
-<span class="sourceLineNo">2818</span>        if(keys == null)<a name="line.2818"></a>
-<span class="sourceLineNo">2819</span>            return new int[0];<a name="line.2819"></a>
-<span class="sourceLineNo">2820</span>        int len = keys.size(), i = 0;<a name="line.2820"></a>
-<span class="sourceLineNo">2821</span>        int[] vals = new int[len];<a name="line.2821"></a>
-<span class="sourceLineNo">2822</span>        for(K k : keys)<a name="line.2822"></a>
-<span class="sourceLineNo">2823</span>        {<a name="line.2823"></a>
-<span class="sourceLineNo">2824</span>            vals[i++] = getInt(k);<a name="line.2824"></a>
-<span class="sourceLineNo">2825</span>        }<a name="line.2825"></a>
-<span class="sourceLineNo">2826</span>        return vals;<a name="line.2826"></a>
-<span class="sourceLineNo">2827</span>    }<a name="line.2827"></a>
-<span class="sourceLineNo">2828</span><a name="line.2828"></a>
-<span class="sourceLineNo">2829</span>    public IntVLA getMany(Iterable&lt;? extends K&gt; keys)<a name="line.2829"></a>
-<span class="sourceLineNo">2830</span>    {<a name="line.2830"></a>
-<span class="sourceLineNo">2831</span>        if(keys == null)<a name="line.2831"></a>
-<span class="sourceLineNo">2832</span>            return new IntVLA();<a name="line.2832"></a>
-<span class="sourceLineNo">2833</span>        IntVLA vals = new IntVLA();<a name="line.2833"></a>
-<span class="sourceLineNo">2834</span>        for(K k : keys)<a name="line.2834"></a>
-<span class="sourceLineNo">2835</span>        {<a name="line.2835"></a>
-<span class="sourceLineNo">2836</span>            vals.add(getInt(k));<a name="line.2836"></a>
-<span class="sourceLineNo">2837</span>        }<a name="line.2837"></a>
-<span class="sourceLineNo">2838</span>        return vals;<a name="line.2838"></a>
-<span class="sourceLineNo">2839</span>    }<a name="line.2839"></a>
-<span class="sourceLineNo">2840</span><a name="line.2840"></a>
-<span class="sourceLineNo">2841</span>    public OrderedSet&lt;K&gt; keysAt(int... positions)<a name="line.2841"></a>
-<span class="sourceLineNo">2842</span>    {<a name="line.2842"></a>
-<span class="sourceLineNo">2843</span>        if(keys == null || positions == null || positions.length &lt;= 0)<a name="line.2843"></a>
-<span class="sourceLineNo">2844</span>            return new OrderedSet&lt;K&gt;();<a name="line.2844"></a>
-<span class="sourceLineNo">2845</span>        OrderedSet&lt;K&gt; ks = new OrderedSet&lt;&gt;(positions.length);<a name="line.2845"></a>
-<span class="sourceLineNo">2846</span>        for(int i = 0; i &lt; positions.length; i++)<a name="line.2846"></a>
-<span class="sourceLineNo">2847</span>        {<a name="line.2847"></a>
-<span class="sourceLineNo">2848</span>            ks.add(keyAt(positions[i]));<a name="line.2848"></a>
-<span class="sourceLineNo">2849</span>        }<a name="line.2849"></a>
-<span class="sourceLineNo">2850</span>        return ks;<a name="line.2850"></a>
-<span class="sourceLineNo">2851</span>    }<a name="line.2851"></a>
-<span class="sourceLineNo">2852</span>    public OrderedSet&lt;K&gt; keysAt(IntVLA positions)<a name="line.2852"></a>
-<span class="sourceLineNo">2853</span>    {<a name="line.2853"></a>
-<span class="sourceLineNo">2854</span>        if(keys == null || positions == null || positions.size &lt;= 0)<a name="line.2854"></a>
-<span class="sourceLineNo">2855</span>            return new OrderedSet&lt;K&gt;();<a name="line.2855"></a>
-<span class="sourceLineNo">2856</span>        OrderedSet&lt;K&gt; ks = new OrderedSet&lt;&gt;(positions.size);<a name="line.2856"></a>
-<span class="sourceLineNo">2857</span>        for(int i = 0; i &lt; positions.size; i++)<a name="line.2857"></a>
-<span class="sourceLineNo">2858</span>        {<a name="line.2858"></a>
-<span class="sourceLineNo">2859</span>            ks.add(keyAt(positions.get(i)));<a name="line.2859"></a>
-<span class="sourceLineNo">2860</span>        }<a name="line.2860"></a>
-<span class="sourceLineNo">2861</span>        return ks;<a name="line.2861"></a>
-<span class="sourceLineNo">2862</span>    }<a name="line.2862"></a>
-<span class="sourceLineNo">2863</span><a name="line.2863"></a>
-<span class="sourceLineNo">2864</span>    /**<a name="line.2864"></a>
-<span class="sourceLineNo">2865</span>     * Produces a copy of this Arrangement, but only using up to the given amount of items to take. Does a shallow copy<a name="line.2865"></a>
-<span class="sourceLineNo">2866</span>     * of individual keys, so the references will be shared.<a name="line.2866"></a>
-<span class="sourceLineNo">2867</span>     * @param amount the number of items to copy from this Arrangement; will copy all items if greater than size<a name="line.2867"></a>
-<span class="sourceLineNo">2868</span>     * @return a new Arrangement with up to amount items copied from this into it.<a name="line.2868"></a>
-<span class="sourceLineNo">2869</span>     */<a name="line.2869"></a>
-<span class="sourceLineNo">2870</span>    public Arrangement&lt;K&gt; take(int amount)<a name="line.2870"></a>
-<span class="sourceLineNo">2871</span>    {<a name="line.2871"></a>
-<span class="sourceLineNo">2872</span>        amount = Math.min(size, Math.max(0, amount));<a name="line.2872"></a>
-<span class="sourceLineNo">2873</span>        Arrangement&lt;K&gt; nx = new Arrangement&lt;&gt;(amount, f);<a name="line.2873"></a>
-<span class="sourceLineNo">2874</span>        for (int i = 0; i &lt; amount; i++) {<a name="line.2874"></a>
-<span class="sourceLineNo">2875</span>            nx.add(keyAt(i));<a name="line.2875"></a>
-<span class="sourceLineNo">2876</span>        }<a name="line.2876"></a>
-<span class="sourceLineNo">2877</span>        return nx;<a name="line.2877"></a>
-<span class="sourceLineNo">2878</span>    }<a name="line.2878"></a>
-<span class="sourceLineNo">2879</span>    protected int positionOf(final Object k) {<a name="line.2879"></a>
-<span class="sourceLineNo">2880</span>        if (k == null)<a name="line.2880"></a>
-<span class="sourceLineNo">2881</span>        {<a name="line.2881"></a>
-<span class="sourceLineNo">2882</span>            return (containsNullKey) ? n : -1;<a name="line.2882"></a>
-<span class="sourceLineNo">2883</span>        }<a name="line.2883"></a>
-<span class="sourceLineNo">2884</span>        K curr;<a name="line.2884"></a>
-<span class="sourceLineNo">2885</span>        final K[] key = this.key;<a name="line.2885"></a>
-<span class="sourceLineNo">2886</span>        int pos;<a name="line.2886"></a>
-<span class="sourceLineNo">2887</span>        // The starting point.<a name="line.2887"></a>
-<span class="sourceLineNo">2888</span>        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) &amp; mask]) == null)<a name="line.2888"></a>
-<span class="sourceLineNo">2889</span>            return -1;<a name="line.2889"></a>
-<span class="sourceLineNo">2890</span>        if (hasher.areEqual(k, curr))<a name="line.2890"></a>
-<span class="sourceLineNo">2891</span>            return pos;<a name="line.2891"></a>
-<span class="sourceLineNo">2892</span>        // There's always an unused entry.<a name="line.2892"></a>
-<span class="sourceLineNo">2893</span>        while (true) {<a name="line.2893"></a>
-<span class="sourceLineNo">2894</span>            if ((curr = key[pos = pos + 1 &amp; mask]) == null)<a name="line.2894"></a>
-<span class="sourceLineNo">2895</span>                return -1;<a name="line.2895"></a>
-<span class="sourceLineNo">2896</span>            if (hasher.areEqual(k, curr))<a name="line.2896"></a>
-<span class="sourceLineNo">2897</span>                return pos;<a name="line.2897"></a>
-<span class="sourceLineNo">2898</span>        }<a name="line.2898"></a>
-<span class="sourceLineNo">2899</span>    }<a name="line.2899"></a>
-<span class="sourceLineNo">2900</span><a name="line.2900"></a>
-<span class="sourceLineNo">2901</span>    /**<a name="line.2901"></a>
-<span class="sourceLineNo">2902</span>     * Swaps the positions in the ordering for the given items, if they are both present. Returns true if the ordering<a name="line.2902"></a>
-<span class="sourceLineNo">2903</span>     * changed as a result of this call, or false if it stayed the same (which can be because left or right was not<a name="line.2903"></a>
-<span class="sourceLineNo">2904</span>     * present, or because left and right are the same reference (so swapping would do nothing)).<a name="line.2904"></a>
-<span class="sourceLineNo">2905</span>     * @param left an item that should be present in this OrderedSet<a name="line.2905"></a>
-<span class="sourceLineNo">2906</span>     * @param right an item that should be present in this OrderedSet<a name="line.2906"></a>
-<span class="sourceLineNo">2907</span>     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise<a name="line.2907"></a>
-<span class="sourceLineNo">2908</span>     */<a name="line.2908"></a>
-<span class="sourceLineNo">2909</span>    public boolean swap(final K left, final K right)<a name="line.2909"></a>
-<span class="sourceLineNo">2910</span>    {<a name="line.2910"></a>
-<span class="sourceLineNo">2911</span>        if(left == right) return false;<a name="line.2911"></a>
-<span class="sourceLineNo">2912</span>        int l = getInt(left);<a name="line.2912"></a>
-<span class="sourceLineNo">2913</span>        if(l &lt; 0) return false;<a name="line.2913"></a>
-<span class="sourceLineNo">2914</span>        int r = getInt(right);<a name="line.2914"></a>
-<span class="sourceLineNo">2915</span>        if(r &lt; 0) return false;<a name="line.2915"></a>
-<span class="sourceLineNo">2916</span>        int posL = order.get(l), posR = order.get(r);<a name="line.2916"></a>
-<span class="sourceLineNo">2917</span>        value[posL] = r;<a name="line.2917"></a>
-<span class="sourceLineNo">2918</span>        value[posR] = l;<a name="line.2918"></a>
-<span class="sourceLineNo">2919</span>        order.swap(l, r);<a name="line.2919"></a>
-<span class="sourceLineNo">2920</span>        return true;<a name="line.2920"></a>
-<span class="sourceLineNo">2921</span>    }<a name="line.2921"></a>
-<span class="sourceLineNo">2922</span>    /**<a name="line.2922"></a>
-<span class="sourceLineNo">2923</span>     * Swaps the given indices in the ordering, if they are both ints between 0 and size. Returns true if the ordering<a name="line.2923"></a>
-<span class="sourceLineNo">2924</span>     * changed as a result of this call, or false if it stayed the same (which can be because left or right referred to<a name="line.2924"></a>
-<span class="sourceLineNo">2925</span>     * an out-of-bounds index, or because left and right are equal (so swapping would do nothing)).<a name="line.2925"></a>
-<span class="sourceLineNo">2926</span>     * @param left an index of an item in this OrderedSet, at least 0 and less than {@link #size()}<a name="line.2926"></a>
-<span class="sourceLineNo">2927</span>     * @param right an index of an item in this OrderedSet, at least 0 and less than {@link #size()}<a name="line.2927"></a>
-<span class="sourceLineNo">2928</span>     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise<a name="line.2928"></a>
-<span class="sourceLineNo">2929</span>     */<a name="line.2929"></a>
-<span class="sourceLineNo">2930</span>    public boolean swapIndices(final int left, final int right)<a name="line.2930"></a>
-<span class="sourceLineNo">2931</span>    {<a name="line.2931"></a>
-<span class="sourceLineNo">2932</span>        if(left &lt; 0 || right &lt; 0 || left &gt;= order.size || right &gt;= order.size || left == right) return false;<a name="line.2932"></a>
-<span class="sourceLineNo">2933</span>        int posL = order.get(left), posR = order.get(right);<a name="line.2933"></a>
-<span class="sourceLineNo">2934</span>        value[posL] = right;<a name="line.2934"></a>
-<span class="sourceLineNo">2935</span>        value[posR] = left;<a name="line.2935"></a>
-<span class="sourceLineNo">2936</span>        order.swap(left, right);<a name="line.2936"></a>
-<span class="sourceLineNo">2937</span>        return true;<a name="line.2937"></a>
-<span class="sourceLineNo">2938</span>    }<a name="line.2938"></a>
-<span class="sourceLineNo">2939</span><a name="line.2939"></a>
-<span class="sourceLineNo">2940</span>    /**<a name="line.2940"></a>
-<span class="sourceLineNo">2941</span>     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.<a name="line.2941"></a>
-<span class="sourceLineNo">2942</span>     *<a name="line.2942"></a>
-<span class="sourceLineNo">2943</span>     * @param index       an index to replace the K key at<a name="line.2943"></a>
-<span class="sourceLineNo">2944</span>     * @param replacement another K key that will replace the original at the remembered index<a name="line.2944"></a>
-<span class="sourceLineNo">2945</span>     * @return the int associated with the possibly-altered key; should be equal to index<a name="line.2945"></a>
-<span class="sourceLineNo">2946</span>     */<a name="line.2946"></a>
-<span class="sourceLineNo">2947</span>    public int alterAt(int index, K replacement)<a name="line.2947"></a>
-<span class="sourceLineNo">2948</span>    {<a name="line.2948"></a>
-<span class="sourceLineNo">2949</span>        return alter(keyAt(index), replacement);<a name="line.2949"></a>
-<span class="sourceLineNo">2950</span>    }<a name="line.2950"></a>
-<span class="sourceLineNo">2951</span>}<a name="line.2951"></a>
+<span class="sourceLineNo">2778</span>    public int alterAt(int index, K replacement)<a name="line.2778"></a>
+<span class="sourceLineNo">2779</span>    {<a name="line.2779"></a>
+<span class="sourceLineNo">2780</span>        return alter(keyAt(index), replacement);<a name="line.2780"></a>
+<span class="sourceLineNo">2781</span>    }<a name="line.2781"></a>
+<span class="sourceLineNo">2782</span>}<a name="line.2782"></a>
 
 
 

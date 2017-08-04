@@ -459,8 +459,8 @@ extends com.badlogic.gdx.InputAdapter</pre>
  full game window.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>cellWidth</code> - </dd>
-<dd><code>cellHeight</code> - </dd>
+<dd><code>cellWidth</code> - the width of one cell in screen coordinates, usually pixels</dd>
+<dd><code>cellHeight</code> - the height of one cell in screen coordinates, usually pixels</dd>
 <dd><code>processor</code> - an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().</dd>
 </dl>
 </li>
@@ -471,7 +471,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SquidMouse</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.69">SquidMouse</a>(float&nbsp;cellWidth,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.70">SquidMouse</a>(float&nbsp;cellWidth,
                   float&nbsp;cellHeight,
                   float&nbsp;gridWidth,
                   float&nbsp;gridHeight,
@@ -482,7 +482,8 @@ extends com.badlogic.gdx.InputAdapter</pre>
  relative to the grid. Offsets can be specified for x and y if the grid
  is displayed at a position other than the full screen. Specify the
  width and height in grid cells of the area to receive input, as well as
- the offsets from the bottom and left edges also measured in grid cells.
+ the offsets from the bottom and left edges also measured in screen
+ coordinates, which are often pixels but may be stretched or shrunk.
  All input is passed to the provided InputProcessor once it's had its
  coordinates translated to grid coordinates.
 
@@ -490,12 +491,12 @@ extends com.badlogic.gdx.InputAdapter</pre>
  gridWidth, gridHeight, offsetX, and offsetY, the input will be clamped.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>cellWidth</code> - </dd>
-<dd><code>cellHeight</code> - </dd>
-<dd><code>gridWidth</code> - </dd>
-<dd><code>gridHeight</code> - </dd>
-<dd><code>offsetX</code> - </dd>
-<dd><code>offsetY</code> - </dd>
+<dd><code>cellWidth</code> - the width of one cell in screen coordinates, usually pixels</dd>
+<dd><code>cellHeight</code> - the height of one cell in screen coordinates, usually pixels</dd>
+<dd><code>gridWidth</code> - in number of cells horizontally on the grid</dd>
+<dd><code>gridHeight</code> - in number of cells vertically on the grid</dd>
+<dd><code>offsetX</code> - the horizontal offset in screen coordinates, usually pixels</dd>
+<dd><code>offsetY</code> - the vertical offset in screen coordinates, usually pixels</dd>
 <dd><code>processor</code> - an InputProcessor that implements some of touchUp(), touchDown(), touchDragged(), mouseMoved(), or scrolled().</dd>
 </dl>
 </li>
@@ -514,7 +515,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCellWidth</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.79">getCellWidth</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.80">getCellWidth</a>()</pre>
 </li>
 </ul>
 <a name="getCellHeight--">
@@ -523,7 +524,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCellHeight</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.83">getCellHeight</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.84">getCellHeight</a>()</pre>
 </li>
 </ul>
 <a name="getOffsetX--">
@@ -532,7 +533,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getOffsetX</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.87">getOffsetX</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.88">getOffsetX</a>()</pre>
 </li>
 </ul>
 <a name="getOffsetY--">
@@ -541,7 +542,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getOffsetY</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.91">getOffsetY</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.92">getOffsetY</a>()</pre>
 </li>
 </ul>
 <a name="getGridWidth--">
@@ -550,7 +551,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getGridWidth</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.95">getGridWidth</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.96">getGridWidth</a>()</pre>
 </li>
 </ul>
 <a name="getGridHeight--">
@@ -559,7 +560,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getGridHeight</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.99">getGridHeight</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.100">getGridHeight</a>()</pre>
 </li>
 </ul>
 <a name="setCellWidth-float-">
@@ -568,7 +569,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setCellWidth</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.103">setCellWidth</a>(float&nbsp;cellWidth)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.104">setCellWidth</a>(float&nbsp;cellWidth)</pre>
 </li>
 </ul>
 <a name="setCellHeight-float-">
@@ -577,7 +578,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setCellHeight</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.107">setCellHeight</a>(float&nbsp;cellHeight)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.108">setCellHeight</a>(float&nbsp;cellHeight)</pre>
 </li>
 </ul>
 <a name="setOffsetX-int-">
@@ -586,7 +587,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setOffsetX</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.111">setOffsetX</a>(int&nbsp;offsetX)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.112">setOffsetX</a>(int&nbsp;offsetX)</pre>
 </li>
 </ul>
 <a name="setOffsetY-int-">
@@ -595,7 +596,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setOffsetY</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.115">setOffsetY</a>(int&nbsp;offsetY)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.116">setOffsetY</a>(int&nbsp;offsetY)</pre>
 </li>
 </ul>
 <a name="setGridWidth-float-">
@@ -604,7 +605,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setGridWidth</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.119">setGridWidth</a>(float&nbsp;gridWidth)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.120">setGridWidth</a>(float&nbsp;gridWidth)</pre>
 </li>
 </ul>
 <a name="setGridHeight-float-">
@@ -613,7 +614,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setGridHeight</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.123">setGridHeight</a>(float&nbsp;gridHeight)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.124">setGridHeight</a>(float&nbsp;gridHeight)</pre>
 </li>
 </ul>
 <a name="reinitialize-float-float-">
@@ -622,7 +623,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>reinitialize</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.128">reinitialize</a>(float&nbsp;cellWidth,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.129">reinitialize</a>(float&nbsp;cellWidth,
                          float&nbsp;cellHeight)</pre>
 </li>
 </ul>
@@ -632,7 +633,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>reinitialize</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.137">reinitialize</a>(float&nbsp;cellWidth,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.138">reinitialize</a>(float&nbsp;cellWidth,
                          float&nbsp;cellHeight,
                          float&nbsp;gridWidth,
                          float&nbsp;gridHeight,
@@ -646,7 +647,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getProcessor</h4>
-<pre>public&nbsp;com.badlogic.gdx.InputProcessor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.151">getProcessor</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.InputProcessor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.152">getProcessor</a>()</pre>
 <div class="block">Gets the InputProcessor this object uses to handle mouse input.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -660,7 +661,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setProcessor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.159">setProcessor</a>(com.badlogic.gdx.InputProcessor&nbsp;processor)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.160">setProcessor</a>(com.badlogic.gdx.InputProcessor&nbsp;processor)</pre>
 <div class="block">Sets the InputProcessor this object uses to handle mouse input.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -674,7 +675,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>translateX</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.163">translateX</a>(int&nbsp;screenX)</pre>
+<pre>protected&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.164">translateX</a>(int&nbsp;screenX)</pre>
 </li>
 </ul>
 <a name="translateY-int-">
@@ -683,7 +684,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>translateY</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.167">translateY</a>(int&nbsp;screenY)</pre>
+<pre>protected&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.168">translateY</a>(int&nbsp;screenY)</pre>
 </li>
 </ul>
 <a name="onGrid-int-int-">
@@ -692,7 +693,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>onGrid</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.171">onGrid</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.172">onGrid</a>(int&nbsp;screenX,
                       int&nbsp;screenY)</pre>
 </li>
 </ul>
@@ -702,7 +703,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>touchDown</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.181">touchDown</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.182">touchDown</a>(int&nbsp;screenX,
                          int&nbsp;screenY,
                          int&nbsp;pointer,
                          int&nbsp;button)</pre>
@@ -720,7 +721,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>touchUp</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.188">touchUp</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.189">touchUp</a>(int&nbsp;screenX,
                        int&nbsp;screenY,
                        int&nbsp;pointer,
                        int&nbsp;button)</pre>
@@ -738,7 +739,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>touchDragged</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.195">touchDragged</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.196">touchDragged</a>(int&nbsp;screenX,
                             int&nbsp;screenY,
                             int&nbsp;pointer)</pre>
 <dl>
@@ -755,7 +756,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>mouseMoved</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.202">mouseMoved</a>(int&nbsp;screenX,
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.203">mouseMoved</a>(int&nbsp;screenX,
                           int&nbsp;screenY)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -771,7 +772,7 @@ extends com.badlogic.gdx.InputAdapter</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>scrolled</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.209">scrolled</a>(int&nbsp;amount)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMouse.html#line.210">scrolled</a>(int&nbsp;amount)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>scrolled</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.InputProcessor</code></dd>

@@ -373,8 +373,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Coord.html#hashCode--">hashCode</a></span>()</code>
 <div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
- generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
- XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.</div>
+ generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large long),
+ a XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.</div>
 </td>
 </tr>
 <tr id="i25" class="rowColor">
@@ -1164,13 +1164,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.454">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.456">hashCode</a>()</pre>
 <div class="block">Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
- generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large int), a
- XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
+ generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large long),
+ a XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
+ This uses long math so it will be replicable on desktop, Android, and GWT, where GWT would normally have issues
+ with overflow when using ints.
  <br>
- This changed at least twice in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the same
- across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
+ This changed at least three times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
+ same across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
  unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
  <a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> and <a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>; if you use the ordered kinds, then the only things that matter about
  this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
@@ -1189,7 +1191,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>encode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.465">encode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.467">encode</a>()</pre>
 <div class="block">Something like hashCode(), but reversible with <code>Coord.decode()</code>. Works for Coords between roughly -256 and
  32000 in each of x and y, but will probably only decode to pooled Coords if x and y are both between -3 and 255
  (inclusive for both).</div>
@@ -1205,7 +1207,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>pureEncode</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.477">pureEncode</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.479">pureEncode</a>(int&nbsp;x,
                              int&nbsp;y)</pre>
 <div class="block">An alternative to getting a Coord with Coord.get() only to encode() it as the next step. This doesn't create a
  Coord in the middle step. Can be decoded with Coord.decode() to get the (x,y) Coord.</div>
@@ -1224,7 +1226,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>decode</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.490">decode</a>(int&nbsp;code)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.492">decode</a>(int&nbsp;code)</pre>
 <div class="block">This can take an int produced by <code>someCoord.encode()</code> and get the original Coord back out of it. It
  works for all pooled Coords where the pool hasn't been expanded past about 32,000 in either dimension. It even
  works for Coords with negative x or y as well, if they are no lower than -256 in either dimension. This will
@@ -1244,7 +1246,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.496">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.498">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1257,7 +1259,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getCacheWidth</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.523">getCacheWidth</a>()</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.525">getCacheWidth</a>()</pre>
 <div class="block">Gets the width of the pool used as a cache for Coords, not including negative Coords.
  Unless expandPool() has been called, this should be 256.
  Useful for finding the upper (exclusive) bound for x values that can be used efficiently in Coords.
@@ -1276,7 +1278,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getCacheHeight</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.537">getCacheHeight</a>()</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.539">getCacheHeight</a>()</pre>
 <div class="block">Gets the height of the pool used as a cache for Coords, not including negative Coords.
  Unless expandPool() has been called, this should be 256.
  Useful for finding the upper (exclusive) bound for y values that can be used efficiently in Coords.
@@ -1295,7 +1297,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>expandPoolTo</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.555">expandPoolTo</a>(int&nbsp;width,
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.557">expandPoolTo</a>(int&nbsp;width,
                                 int&nbsp;height)</pre>
 <div class="block">Enlarges the pool of cached Coords to the given width and height, and doesn't change
  a dimension if it would be reduced in size.
@@ -1319,7 +1321,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>expandPool</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.570">expandPool</a>(int&nbsp;xIncrease,
+<pre>public static&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Coord.html#line.572">expandPool</a>(int&nbsp;xIncrease,
                               int&nbsp;yIncrease)</pre>
 <div class="block">Enlarges the pool of cached Coords by the given amount of expansion for x and y.
  Cached Coord values will be reused by Coord.get instead of re-allocated each time.
