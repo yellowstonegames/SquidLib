@@ -11,6 +11,9 @@ public class EverythingDemoLauncher {
 		config.title = "SquidLib GDX Everything Demo";
 		config.width = 90 * 12;
 		config.height = 30 * 25;
+		config.foregroundFPS = 0;
+		config.backgroundFPS = 30;
+		config.vSyncEnabled = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);

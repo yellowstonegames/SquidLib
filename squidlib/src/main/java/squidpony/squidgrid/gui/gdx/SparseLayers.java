@@ -35,7 +35,6 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
     public Array<SparseTextMap> layers;
     protected IntIntMap mapping;
     public TextCellFactory font;
-    public float xOffset, yOffset;
     protected int animationCount = 0;
     private SnapshotArray<TextCellFactory.Glyph> glyphs;
     public IColorCenter<Color> scc;
@@ -65,8 +64,6 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
         mapping = new IntIntMap(4);
         mapping.put(0, 0);
         glyphs = new SnapshotArray<>(true, 16, TextCellFactory.Glyph.class);
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
         scc = DefaultResources.getSCC();
         setBounds(xOffset, yOffset,
                 this.font.actualCellWidth * this.gridWidth, this.font.actualCellHeight * this.gridHeight);
@@ -557,7 +554,7 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
      */
     public float worldX(int gridX)
     {
-        return xOffset + gridX * font.actualCellWidth;
+        return getX() + gridX * font.actualCellWidth;
     }
     /**
      * Used internally to go between grid positions and world positions.
@@ -566,7 +563,7 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
      */
     public float worldY(int gridY)
     {
-        return yOffset + (gridHeight - gridY) * font.actualCellHeight;
+        return getY() + (gridHeight - gridY) * font.actualCellHeight;
     }
 
     /**
@@ -576,7 +573,7 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
      */
     public int gridX(float worldX)
     {
-        return Math.round((worldX - xOffset) / font.actualCellWidth);
+        return Math.round((worldX - getX()) / font.actualCellWidth);
     }
 
     /**
@@ -586,7 +583,7 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
      */
     public int gridY(float worldY)
     {
-        return Math.round((yOffset - worldY) / font.actualCellHeight + gridHeight);
+        return Math.round((getY() - worldY) / font.actualCellHeight + gridHeight);
     }
 
 
@@ -1066,11 +1063,11 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        font.draw(batch, backgrounds, xOffset, yOffset);
+        float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight;
+        font.draw(batch, backgrounds, xo, yo);
         int len = layers.size;
-        float yOff2 = yOffset + 1f + gridHeight * font.actualCellHeight;
         for (int i = 0; i < len; i++) {
-            layers.get(i).draw(batch, font, xOffset, yOff2);
+            layers.get(i).draw(batch, font, xo, yOff);
         }
         TextCellFactory.Glyph[] items = glyphs.begin();
         int x, y;
@@ -1080,8 +1077,8 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
                 continue;
             glyph.act(Gdx.graphics.getDeltaTime());
             if(
-                    (x = Math.round((glyph.getX() - xOffset) / font.actualCellWidth)) < 0 || x >= gridWidth ||
-                    (y = Math.round((glyph.getY() - yOffset)  / -font.actualCellHeight + gridHeight)) < 0 || y >= gridHeight ||
+                    (x = Math.round((glyph.getX() - xo) / font.actualCellWidth)) < 0 || x >= gridWidth ||
+                    (y = Math.round((glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) < 0 || y >= gridHeight ||
                     backgrounds[x][y] == 0f)
                 continue;
             glyph.draw(batch, 1f);
