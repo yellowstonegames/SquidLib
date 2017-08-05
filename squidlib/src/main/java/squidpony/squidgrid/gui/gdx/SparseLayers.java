@@ -25,7 +25,7 @@ import squidpony.squidmath.StatefulRNG;
 /**
  * Created by Tommy Ettinger on 7/28/2017.
  */
-public class SparseLayers extends Actor implements ISquidPanel<Color> {
+public class SparseLayers extends Actor implements IPackedColorPanel {
     public final int gridWidth, gridHeight;
     public float[][] backgrounds;
     public Color defaultForeground = SColor.WHITE,
@@ -315,6 +315,22 @@ public class SparseLayers extends Actor implements ISquidPanel<Color> {
             backgrounds[x][y] = background;
         if(foreground != 0f)
             layers.items[0].place(x, y, c, foreground);
+    }
+
+
+    /**
+     * Puts the char c at the position x,y with the given foreground color as an encoded float (the kind produced by
+     * {@link Color#toFloatBits()}). If foreground is 0f, then this does nothing. Does not filter the given color.
+     * @param x the x position to place the char at
+     * @param y the y position to place the char at
+     * @param c the char to place
+     * @param foreground the color to use for c; if 0f, this call does nothing
+     */
+    public void put(int x, int y, char c, float foreground)
+    {
+        if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight || foreground == 0f)
+            return;
+        layers.items[0].place(x, y, c, foreground);
     }
     /**
      * Puts the char c at the position x,y in the requested layer with the given foreground and background colors. If

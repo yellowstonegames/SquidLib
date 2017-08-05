@@ -36,7 +36,7 @@ import static com.badlogic.gdx.math.MathUtils.clamp;
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
-public class SquidPanel extends Group implements ISquidPanel<Color> {
+public class SquidPanel extends Group implements IPackedColorPanel {
 
     public float DEFAULT_ANIMATION_DURATION = 0.12F;
     protected int animationCount = 0;

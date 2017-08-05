@@ -501,7 +501,7 @@ public enum Radius {
                     if (surpassEdges || !(centerX + rndX < 0||
                             centerX + rndX >= width))
                         contents.add(Coord.get(centerX + rndX, centerY));
-                    for (float dy = high; dy >= 1f; --dy) {
+                    for (float dy = high; dy >= 0.75f; --dy) {
                         rndY = Math.round(dy - 0.25f);
                         if (surpassEdges || !(centerX + rndX < 0 || centerY + rndY < 0 ||
                                 centerX + rndX >= width || centerY + rndY >= height))
