@@ -158,7 +158,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
 
         for (int i = 0, ii = 0; i < 92; i++, ii += 4) {
             float x = grad3f[i][0], y = grad3f[i][1], z = grad3f[i][2];
-            final float len = 1f / (float)Math.sqrt(x * x + y * y + z * z), len3 = len * root2, len4 = len * root3;
+            final float len = 0.88888f / (float)Math.sqrt(x * x + y * y + z * z), len3 = len * root2, len4 = len * root3;
             //final float len = 2f / Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z))), len3 = len * 1.5f;
             grad3f[i][0] *= len3;
             grad3f[i][1] *= len3;

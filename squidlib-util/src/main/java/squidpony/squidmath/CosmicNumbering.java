@@ -87,7 +87,7 @@ public class CosmicNumbering implements Serializable {
      */
     public int getInt()
     {
-        return (int)(0x80000000 * -getDoubleBase());
+        return (int)(0x80000000 * getDoubleBase());
     }
 
     /**
