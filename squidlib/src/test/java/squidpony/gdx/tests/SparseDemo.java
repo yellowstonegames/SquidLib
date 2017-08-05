@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
-import squidpony.StringKit;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -76,8 +75,7 @@ public class SparseDemo extends ApplicationAdapter {
     private int langIndex = 0;
     private double[][] resistance;
     private double[][] visible;
-    private GreasedRegion blockage;
-    private GreasedRegion seen;
+    private GreasedRegion blockage, seen, floors;
     private TextCellFactory.Glyph pg;
     private static final float WHITE_FLOAT = NumberUtils.intToFloatColor(-1),
             GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444), CRIMSON_FLOAT = SColor.CRIMSON.toFloatBits(),
@@ -144,13 +142,13 @@ public class SparseDemo extends ApplicationAdapter {
         // being especially fast. Both of them can be seen as storing regions of points in 2D space as "on" and "off."
 
         // Here we fill a GreasedRegion so it stores the cells that contain a floor, the '.' char, as "on."
-        GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
+        floors = new GreasedRegion(bareDungeon, '.');
         //player is, here, just a Coord that stores his position. In a real game, you would probably have a class for
         //creatures, and possibly a subclass for the player. The singleRandom() method on GreasedRegion finds one Coord
         // in that region that is "on," or -1,-1 if there are no such cells. It takes an RNG object as a parameter, and
         // if you gave a seed to the RNG constructor, then the cell this chooses will be reliable for testing. If you
         // don't seed the RNG, any valid cell should be possible.
-        player = placement.singleRandom(rng);
+        player = floors.singleRandom(rng);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
         //There is no offset used here, but it's still a good practice here to set positions early on.
@@ -456,7 +454,16 @@ public class SparseDemo extends ApplicationAdapter {
         else
         {
             display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
-            display.burst(player.x, player.y, 1, Radius.CIRCLE, StringKit.PUNCTUATION, YELLOW_FLOAT, YELLOW_FADING_FLOAT, 0.45f);
+            display.addAction(new PanelEffect.GibberishEffect(display, 1f, floors, player, 6, new float[]{
+                    SColor.INTERNATIONAL_ORANGE.toFloatBits(),
+                    SColor.FLORAL_LEAF.toFloatBits(),
+                    SColor.LEMON.toFloatBits(),
+                    SColor.LEMON_CHIFFON.toFloatBits(),
+                    SColor.floatGet(0xFF6600EE),
+                    SColor.floatGet(0x595652DD),
+                    SColor.floatGet(0x59565299)}, new char[]{'\0'}
+            ));
+            //display.burst(player.x, player.y, 1, Radius.CIRCLE, StringKit.PUNCTUATION, YELLOW_FLOAT, YELLOW_FADING_FLOAT, 0.45f);
             //display.tint(0f, player.x, player.y, CRIMSON_FLOAT, 0.13f, null);
         }
         // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.

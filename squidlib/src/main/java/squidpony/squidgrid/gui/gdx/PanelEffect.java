@@ -12,34 +12,36 @@ import squidpony.squidmath.*;
 import java.util.List;
 
 /**
- * Various special effects that can be applied to a SquidPanel as an {@link com.badlogic.gdx.scenes.scene2d.Action}.
- * The PanelEffect class is abstract and has implementations as static inner classes, such as {@link ExplosionEffect}.
- * Each PanelEffect specifically affects one SquidPanel, which can be a layer in a SquidLayers object or a SquidPanel on
- * its own. By adding the PanelEffect to any actor using {@link com.badlogic.gdx.scenes.scene2d.Actor#addAction(Action)}
- * when the Actor has its act() method called after the normal map parts of the SquidPanel have been placed, the
- * PanelEffect will advance and change what chars/colors are in the SquidPanel as specified in its implementation of the
- * {@link #update(float)} method. Typically the Actor you add this to is the SquidPanel this affects, but it could also
- * be a SquidLayers. Most PanelEffect implementations should allow most configuration to be set in their constructors.
+ * Various special effects that can be applied to a {@link SquidPanel} or {@link SparseLayers} as an
+ * {@link com.badlogic.gdx.scenes.scene2d.Action}. The PanelEffect class is abstract and has implementations as static
+ * inner classes, such as {@link ExplosionEffect}. Each PanelEffect specifically affects one {@link IPackedColorPanel}
+ * (an interface that both SquidPanel and SparseLayers implement), which can be a layer in a SquidLayers object or a
+ * SquidPanel/SparseLayers on its own. By adding the PanelEffect to any actor using
+ * {@link com.badlogic.gdx.scenes.scene2d.Actor#addAction(Action)} when the Actor has its act() method called after the
+ * normal map parts of the panel have been placed, the PanelEffect will advance and change what chars/colors are in
+ * the panel as specified in its implementation of the {@link #update(float)} method. Typically the Actor you add this
+ * to is the SquidPanel or SparseLayers this affects, but it could also be a SquidLayers. Most PanelEffect
+ * implementations should allow most configuration to be set in their constructors.
  * <br>
  * Created by Tommy Ettinger on 5/24/2017.
  */
 @Beta
 public abstract class PanelEffect extends TemporalAction{
-    public SquidPanel target;
+    public IPackedColorPanel target;
     public GreasedRegion validCells;
 
-    protected PanelEffect(SquidPanel targeting)
+    protected PanelEffect(IPackedColorPanel targeting)
     {
         target = targeting;
         validCells = new GreasedRegion(targeting.gridWidth(), targeting.gridHeight()).allOn();
     }
-    protected PanelEffect(SquidPanel targeting, float duration)
+    protected PanelEffect(IPackedColorPanel targeting, float duration)
     {
         target = targeting;
         setDuration(duration);
         validCells = new GreasedRegion(targeting.gridWidth(), targeting.gridHeight()).allOn();
     }
-    protected PanelEffect(SquidPanel targeting, float duration, GreasedRegion valid)
+    protected PanelEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid)
     {
         target = targeting;
         setDuration(duration);
@@ -91,25 +93,25 @@ public abstract class PanelEffect extends TemporalAction{
         public List<Coord> affected;
         /**
          * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
-         * the full expanse of the SquidPanel. The duration will be 1 second.
-         * @param targeting the SquidPanel to affect
+         * the full expanse of the IPackedColorPanel. The duration will be 1 second.
+         * @param targeting the IPackedColorPanel to affect
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          */
 
-        public ExplosionEffect(SquidPanel targeting, Coord center, int radius)
+        public ExplosionEffect(IPackedColorPanel targeting, Coord center, int radius)
         {
             this(targeting, 1f, center, radius);
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
-         * the full expanse of the SquidPanel.
-         * @param targeting the SquidPanel to affect
+         * the full expanse of the IPackedColorPanel.
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          */
-        public ExplosionEffect(SquidPanel targeting, float duration, Coord center, int radius)
+        public ExplosionEffect(IPackedColorPanel targeting, float duration, Coord center, int radius)
         {
             super(targeting, duration);
             this.center = center;
@@ -121,13 +123,13 @@ public abstract class PanelEffect extends TemporalAction{
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields.
-         * @param targeting the SquidPanel to affect
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          */
-        public ExplosionEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)
+        public ExplosionEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)
         {
             super(targeting, duration, valid);
             this.center = center;
@@ -144,14 +146,14 @@ public abstract class PanelEffect extends TemporalAction{
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
          * objects that it will use to color the explosion instead of using fiery/smoke colors.
-         * @param targeting the SquidPanel to affect
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here
          */
-        public ExplosionEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring)
+        public ExplosionEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring)
         {
             this(targeting, duration, valid, center, radius);
             if(colors.length != coloring.size())
@@ -159,6 +161,25 @@ public abstract class PanelEffect extends TemporalAction{
             for (int i = 0; i < colors.length; i++) {
                 colors[i] = coloring.get(i).toFloatBits();
             }
+        }
+
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using fiery/smoke colors.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param coloring an array of colors as packed floats that will replace the default fire/smoke colors here
+         */
+        public ExplosionEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, float[] coloring)
+        {
+            this(targeting, duration, valid, center, radius);
+            if(coloring == null) return;
+            if(colors.length != coloring.length)
+                colors = new float[coloring.length];
+            System.arraycopy(coloring, 0, colors, 0, coloring.length);
         }
         /**
          * Called each frame.
@@ -192,7 +213,7 @@ public abstract class PanelEffect extends TemporalAction{
     public static class GibberishEffect extends ExplosionEffect
     {
         public char[] choices = "`~!@#$%^&*()-_=+\\|][}{'\";:/?.>,<".toCharArray();
-        public GibberishEffect(SquidPanel targeting, Coord center, int radius)
+        public GibberishEffect(IPackedColorPanel targeting, Coord center, int radius)
         {
             super(targeting, 1f, center, radius);
             colors[0] = SColor.PERIWINKLE.toFloatBits();
@@ -205,13 +226,13 @@ public abstract class PanelEffect extends TemporalAction{
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
-         * the full expanse of the SquidPanel.
-         * @param targeting the SquidPanel to affect
+         * the full expanse of the IPackedColorPanel.
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          */
-        public GibberishEffect(SquidPanel targeting, float duration, Coord center, int radius) {
+        public GibberishEffect(IPackedColorPanel targeting, float duration, Coord center, int radius) {
             super(targeting, duration, center, radius);
             colors[0] = SColor.PERIWINKLE.toFloatBits();
             colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
@@ -223,13 +244,13 @@ public abstract class PanelEffect extends TemporalAction{
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
-         * the full expanse of the SquidPanel.
-         * @param targeting the SquidPanel to affect
+         * the full expanse of the IPackedColorPanel.
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          */
-        public GibberishEffect(SquidPanel targeting, float duration, Coord center, int radius, char[] choices) {
+        public GibberishEffect(IPackedColorPanel targeting, float duration, Coord center, int radius, char[] choices) {
             super(targeting, duration, center, radius);
             this.choices = choices;
             colors[0] = SColor.PERIWINKLE.toFloatBits();
@@ -242,13 +263,13 @@ public abstract class PanelEffect extends TemporalAction{
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields.
-         * @param targeting the SquidPanel to affect
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          */
-        public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)
         {
             super(targeting, duration, valid, center, radius);
             colors[0] = SColor.PERIWINKLE.toFloatBits();
@@ -261,13 +282,13 @@ public abstract class PanelEffect extends TemporalAction{
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields.
-         * @param targeting the SquidPanel to affect
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          */
-        public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, char[] choices)
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, char[] choices)
         {
             super(targeting, duration, valid, center, radius);
             this.choices = choices;
@@ -283,28 +304,58 @@ public abstract class PanelEffect extends TemporalAction{
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
          * objects that it will use to color the explosion instead of using fiery/smoke colors.
-         * @param targeting the SquidPanel to affect
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here
          */
-        public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring)
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring)
         {
             super(targeting, duration, valid, center, radius, coloring);
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
          * objects that it will use to color the explosion instead of using fiery/smoke colors.
-         * @param targeting the SquidPanel to affect
+         * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
          * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here
          */
-        public GibberishEffect(SquidPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring, char[] choices)
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring, char[] choices)
+        {
+            super(targeting, duration, valid, center, radius, coloring);
+            this.choices = choices;
+        }
+
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using fiery/smoke colors.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param coloring an array of colors as packed floats that will replace the default fire/smoke colors here
+         */
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, float[] coloring)
+        {
+            super(targeting, duration, valid, center, radius, coloring);
+        }
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using fiery/smoke colors.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param coloring an array of colors as packed floats that will replace the default fire/smoke colors here
+         */
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, float[] coloring, char[] choices)
         {
             super(targeting, duration, valid, center, radius, coloring);
             this.choices = choices;
