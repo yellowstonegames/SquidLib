@@ -72,7 +72,6 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private int hashMode = 43, rngMode = 30, noiseMode = 76;
     private CrossHash.Storm storm, stormA, stormB, stormC;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private BeardRNG beard = new BeardRNG();
@@ -134,6 +133,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4),
             turingInhibit = TuringPattern.offsetsCircle(width, height, 8);
 
+    private final double[] connections = {0.0, 0.0, 0.0};
+    private final CosmicNumbering cosmos = new CosmicNumbering(connections);
+
     private final float[][][] fillField = new float[3][width][height],
             fillField3DR = new float[1][width][height],
             fillField3DG = new float[1][width][height],
@@ -145,6 +147,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
+    private int hashMode = 43, rngMode = 30, noiseMode = 80;
 
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
@@ -514,7 +517,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 80;
+                                    noiseMode %= 82;
                                 }
                                 switch (noiseMode)
                                 {
@@ -3177,6 +3180,38 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         ColorNoise.colorNoise(x * 0.03125f + 20f, y * 0.03125f + 30f, ctr * 0.045f, 1234));
+                            }
+                        }
+                        break;
+                    case 80:
+                        Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                connections[2] += ctr * 0.025;
+                                connections[0] += x * 0.3141592 + connections[2];
+                                connections[1] += y * 0.3141592 + connections[2] + connections[0];
+                                connections[0] = cosmos.getDouble();
+                                connections[1] = NumberTools.bounce(cosmos.getDouble()) * 0.5 + 0.5;
+                                connections[2] = NumberTools.bounce(cosmos.getDouble()) * 0.5 + 0.5;
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)connections[0],
+                                                (float)connections[1],
+                                                (float)connections[2],
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 81:
+                        Gdx.graphics.setTitle("Mead 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                connections[2] += ctr * 0.0045;
+                                connections[0] += x * 0.3141592 + connections[2];
+                                connections[1] += y * 0.3141592 + connections[2];
+                                connections[2] += cosmos.getDouble();
+                                bright = (float)cosmos.getDouble();
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
