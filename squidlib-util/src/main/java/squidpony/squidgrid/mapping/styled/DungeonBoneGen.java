@@ -1,7 +1,6 @@
 package squidpony.squidgrid.mapping.styled;
 
 import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.Random;
@@ -12,6 +11,20 @@ import java.util.Random;
  * @author Tommy Ettinger - https://github.com/tommyettinger
  */
 public class DungeonBoneGen {
+
+    /**
+     * The current {@link RNG}, a random number generator that can be seeded initially.
+     */
+    public RNG rng;
+    private int[][] c_color, h_color, v_color;
+    private int wide = 20;
+    private int high = 20;
+    /**
+     * A GreasedRegion that, after {@link #generate(TilesetType, int, int)} has been called, will hold the floor cells
+     * in its data as "on" cells and walls as "off" cells. This can be useful for inter-operating with code that expects
+     * a GreasedRegion, which can be for various reasons.
+     */
+    public GreasedRegion region = new GreasedRegion(wide, high);
 
     /**
      * Gets the current RNG.
@@ -30,12 +43,6 @@ public class DungeonBoneGen {
     }
 
     /**
-     * The current RNG, a squidpony.squidmath.RNG
-     */
-    public RNG rng;
-    private int[][] c_color, h_color, v_color;
-
-    /**
      * Returns the width, used as the first coordinate in any char[][] in this class.
      * @return
      */
@@ -50,9 +57,6 @@ public class DungeonBoneGen {
     public int getHeight() {
         return high;
     }
-
-    private int wide = 0;
-    private int high = 0;
 
     /**
      * Get the char[][] dungeon that was last returned by generate(), or null if generate() or setDungeon have not been
@@ -121,10 +125,10 @@ public class DungeonBoneGen {
     }
 
     /**
-     * Constructs a DungeonBoneGen that uses the default RNG.
+     * Constructs a DungeonBoneGen that uses a default RNG, randomly seeded.
      */
     public DungeonBoneGen() {
-        this(new RNG(new LightRNG()));
+        this(new RNG());
     }
 
     /*
@@ -329,13 +333,12 @@ public class DungeonBoneGen {
      * @return A row-major char[][] with h rows and w columns; it will be filled with '#' for walls and '.' for floors.
      */
     public char[][] generate(Tileset ts, int w, int h) {
-        wide = w;
-        high = h;
-        char[][] trans_output = new char[h][w];
-        GreasedRegion out = new GreasedRegion(wide, high);
+        wide = Math.max(1, w);
+        high = Math.max(1, h);
+        region.resizeAndEmpty(wide, high);
         int sidelen = ts.config.short_side_length;
-        int xmax = (w / sidelen) + 6;
-        int ymax = (h / sidelen) + 6;
+        int xmax = (wide / sidelen) + 6;
+        int ymax = (high / sidelen) + 6;
         if (xmax > 1006) {
             return null;
         }
@@ -382,7 +385,7 @@ public class DungeonBoneGen {
             }
 
 
-            for (j = -1; ypos < h; ++j) {
+            for (j = -1; ypos < high; ++j) {
                 // a general herringbone row consists of:
                 //    horizontal left block, the bottom of a previous vertical, the top of a new vertical
                 int phase = j & 3;
@@ -394,7 +397,7 @@ public class DungeonBoneGen {
                 }
                 for (; ; i += 4) {
                     int xpos = i * sidelen;
-                    if (xpos >= w)
+                    if (xpos >= wide)
                         break;
                     // horizontal left-block
                     if (xpos + sidelen * 2 >= 0 && ypos >= 0) {
@@ -407,13 +410,13 @@ public class DungeonBoneGen {
                             return null;
 
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
-                        out.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+                        region.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                     xpos += sidelen * 2;
                     // now we're at the end of a previous vertical one
                     xpos += sidelen;
                     // now we're at the start of a new vertical one
-                    if (xpos < w) {
+                    if (xpos < wide) {
                         Tile t = chooseTile(
                                 ts.v_tiles, ts.v_tiles.length,
                                 new int[]{j + 2, j + 3, j + 4, j + 2, j + 3, j + 4},
@@ -422,13 +425,13 @@ public class DungeonBoneGen {
                         if (t == null)
                             return null;
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
-                        out.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+                        region.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                 }
                 ypos += sidelen;
             }
         } else {
-            int i = 0, j = -1, ypos;
+            int i, j, ypos;
             v_color = new int[ymax][xmax];
             h_color = new int[ymax][xmax];
             for (int yy = 0; yy < ymax; yy++) {
@@ -439,7 +442,7 @@ public class DungeonBoneGen {
             }
 
             ypos = -1 * sidelen;
-            for (j = -1; ypos < h; ++j) {
+            for (j = -1; ypos < high; ++j) {
                 // a general herringbone row consists of:
                 //    horizontal left block, the bottom of a previous vertical, the top of a new vertical
                 int phase = j & 3;
@@ -451,7 +454,7 @@ public class DungeonBoneGen {
                 }
                 for (; ; i += 4) {
                     int xpos = i * sidelen;
-                    if (xpos >= w)
+                    if (xpos >= wide)
                         break;
                     // horizontal left-block
                     if (xpos + sidelen * 2 >= 0 && ypos >= 0) {
@@ -463,13 +466,13 @@ public class DungeonBoneGen {
                         if (t == null)
                             return null;
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
-                        out.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+                        region.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                     xpos += sidelen * 2;
                     // now we're at the end of a previous vertical one
                     xpos += sidelen;
                     // now we're at the start of a new vertical one
-                    if (xpos < w) {
+                    if (xpos < wide) {
                         Tile t = chooseTile(
                                 ts.v_tiles, ts.v_tiles.length, true,
                                 new int[]{j + 2, j + 2, j + 2, j + 3, j + 3, j + 4},
@@ -478,7 +481,7 @@ public class DungeonBoneGen {
                         if (t == null)
                             return null;
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
-                        out.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+                        region.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                 }
                 ypos += sidelen;
@@ -489,7 +492,7 @@ public class DungeonBoneGen {
                 output[x][y] = trans_output[y][x];
             }
         }*/
-        dungeon = out.toChars();
+        dungeon = region.toChars();
         return dungeon;
     }
 
