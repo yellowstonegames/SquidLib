@@ -25,6 +25,7 @@ public class DungeonBoneGen {
      * a GreasedRegion, which can be for various reasons.
      */
     public GreasedRegion region = new GreasedRegion(wide, high);
+    private GreasedRegion workingRegion = new GreasedRegion(wide, high);
 
     /**
      * Gets the current RNG.
@@ -336,6 +337,7 @@ public class DungeonBoneGen {
         wide = Math.max(1, w);
         high = Math.max(1, h);
         region.resizeAndEmpty(wide, high);
+        workingRegion.resizeAndEmpty(wide, high);
         int sidelen = ts.config.short_side_length;
         int xmax = (wide / sidelen) + 6;
         int ymax = (high / sidelen) + 6;
@@ -410,7 +412,7 @@ public class DungeonBoneGen {
                             return null;
 
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
-                        region.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+                        region.or(workingRegion.refill(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                     xpos += sidelen * 2;
                     // now we're at the end of a previous vertical one
@@ -425,7 +427,7 @@ public class DungeonBoneGen {
                         if (t == null)
                             return null;
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
-                        region.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+                        region.or(workingRegion.refill(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                 }
                 ypos += sidelen;
@@ -466,7 +468,7 @@ public class DungeonBoneGen {
                         if (t == null)
                             return null;
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
-                        region.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+                        region.or(workingRegion.refill(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                     xpos += sidelen * 2;
                     // now we're at the end of a previous vertical one
@@ -481,7 +483,7 @@ public class DungeonBoneGen {
                         if (t == null)
                             return null;
                         //trans_output = insert(trans_output, t.data, ypos, xpos);
-                        region.or(new GreasedRegion(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
+                        region.or(workingRegion.refill(t.data, t.width, t.height, wide, high).translate(xpos, ypos));
                     }
                 }
                 ypos += sidelen;
