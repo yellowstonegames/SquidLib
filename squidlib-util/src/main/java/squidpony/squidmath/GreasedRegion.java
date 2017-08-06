@@ -823,6 +823,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[i] = random.nextLong();
                 }
             }
+            if(ySections > 0 && yEndMask != -1) {
+                for (int a = ySections - 1; a < data.length; a += ySections) {
+                    data[a] &= yEndMask;
+                }
+            }
         }
         return this;
     }
@@ -911,6 +916,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[i] = random.approximateBits(bitCount);
                 }
             }
+            if(ySections > 0 && yEndMask != -1) {
+                for (int a = ySections - 1; a < data.length; a += ySections) {
+                    data[a] &= yEndMask;
+                }
+            }
+
         }
         return this;
     }
@@ -950,6 +961,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         System.arraycopy(data2, 0, data, 0, width * ySections);
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
     }
 
     /**
@@ -992,6 +1008,63 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
+    }
+    /**
+     * Primarily for internal use, this method copies data2 into the internal long array the new GreasedRegion will
+     * use, but treats data2 as having the dimensions [dataWidth][dataHeight], and uses the potentially-different
+     * dimensions [width][height] for this GreasedRegion, potentially re-allocating the internal data this uses if width
+     * and/or height are different from what they were. This will truncate data2 on width, height, or both if width or
+     * height is smaller than dataWidth or dataHeight. It will fill extra space with all "off" if width or height is
+     * larger than dataWidth or dataHeight. It will interpret data2 as the same 2D shape regardless of the width or
+     * height it is being assigned to, and data2 will not be reshaped by truncation.
+     * @param data2 a long array that is typically from another GreasedRegion, and would be hard to make otherwise
+     * @param dataWidth the width to interpret data2 as having
+     * @param dataHeight the height to interpret data2 as having
+     * @param width the width to set this GreasedRegion to have
+     * @param height the height to set this GreasedRegion to have
+     */
+    public GreasedRegion refill(final long[] data2, final int dataWidth, final int dataHeight, final int width, final int height)
+    {
+        if(width != this.width || height != this.height) {
+            this.width = width;
+            this.height = height;
+            ySections = (height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (height & 63));
+            data = new long[width * ySections];
+        }
+        else {
+            Arrays.fill(data, 0L);
+        }
+        final int ySections2 = (dataHeight + 63) >> 6;
+
+        if(ySections == 1) {
+            System.arraycopy(data2, 0, data, 0, dataWidth * Math.min(ySections, ySections2));
+        }
+        else
+        {
+            if(dataHeight >= height) {
+                for (int i = 0, j = 0; i < width && i < dataWidth; i += ySections2, j += ySections) {
+                    System.arraycopy(data2, i, data, j, ySections);
+                }
+            }
+            else
+            {
+                for (int i = 0, j = 0; i < width && i < dataWidth; i += ySections2, j += ySections) {
+                    System.arraycopy(data2, i, data, j, ySections2);
+                }
+            }
+        }
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
+        return this;
     }
 
     /**

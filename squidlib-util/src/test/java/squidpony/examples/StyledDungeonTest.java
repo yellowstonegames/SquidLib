@@ -9,9 +9,10 @@ import squidpony.squidmath.RNG;
  */
 public class StyledDungeonTest {
 
+    private static final int width = 60, height = 60;
     public static void main( String[] args )
     {
-        DungeonGenerator dg = new DungeonGenerator(60, 60, new RNG(0x1337DEADBEEFL));
+        DungeonGenerator dg = new DungeonGenerator(width, height, new RNG(0x1337DEADBEEFL));
         String[] names = {
                 "    /**\n" +
                         "     * A generally useful kind of dungeon for ruins or underground manufactured areas.",
@@ -91,19 +92,19 @@ public class StyledDungeonTest {
                         "    SQUARE_ROOMS_WITH_RANDOM_RECTS;\n"
         };
         TilesetType[] tts = TilesetType.values();
-        char[][] trans = new char[60][60], dungeon;
+        char[][] trans = new char[height][width], dungeon;
         for(int i = 0; i < tts.length; i++)
         {
             TilesetType tt = tts[i];
             System.out.println(names[i * 2]);
             System.out.println("     * <br>\n     * Example:\n     * <br>\n     * <pre>");
             dungeon = dg.generate(tt);
-            for (int x = 0; x < 60; x++) {
-                for (int y = 0; y < 60; y++) {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
                     trans[y][x] = dungeon[x][y];
                 }
             }
-            for (int row = 0; row < 60; row++) {
+            for (int row = 0; row < height; row++) {
                 System.out.print("     * ");
                 System.out.println(trans[row]);
             }
