@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd>com.badlogic.gdx.scenes.scene2d.utils.Cullable, <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/ISquidPanel.html?is-external=true" title="class or interface in squidpony.panel">ISquidPanel</a>&lt;com.badlogic.gdx.graphics.Color&gt;</dd>
+<dd>com.badlogic.gdx.scenes.scene2d.utils.Cullable, <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/ISquidPanel.html?is-external=true" title="class or interface in squidpony.panel">ISquidPanel</a>&lt;com.badlogic.gdx.graphics.Color&gt;, <a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -128,7 +128,7 @@ var activeTableTab = "activeTableTab";
 <br>
 <pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.39">SquidPanel</a>
 extends com.badlogic.gdx.scenes.scene2d.Group
-implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/ISquidPanel.html?is-external=true" title="class or interface in squidpony.panel">ISquidPanel</a>&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
+implements <a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></pre>
 <div class="block">Displays text and images in a grid pattern. Supports basic animations.
  
  Grid width and height settings are in terms of number of cells. Cell width and height
@@ -989,7 +989,10 @@ implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#put-int-int-float-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
-   float&nbsp;encodedColor)</code>&nbsp;</td>
+   float&nbsp;encodedColor)</code>
+<div class="block">Places a full cell of color at the given x,y position; this may be used as a background or foreground, depending
+ on the implementation.</div>
+</td>
 </tr>
 <tr id="i85" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -2170,6 +2173,18 @@ implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/
 <pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidPanel.html#line.463">put</a>(int&nbsp;x,
                 int&nbsp;y,
                 float&nbsp;encodedColor)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#put-int-int-float-">IPackedColorPanel</a></code></span></div>
+<div class="block">Places a full cell of color at the given x,y position; this may be used as a background or foreground, depending
+ on the implementation. The color is given as a packed float, the kind produced by <code>Color.toFloatBits()</code>.
+ If the implementation performs color filtering on Color objects, it generally won't on packed float colors.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#put-int-int-float-">put</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - x position of the cell</dd>
+<dd><code>y</code> - y position of the cell</dd>
+<dd><code>encodedColor</code> - color for the full cell as a packed float, as made by <code>Color.toFloatBits()</code></dd>
+</dl>
 </li>
 </ul>
 <a name="put-int-int-float-float-">
@@ -2301,6 +2316,8 @@ implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/
                 float&nbsp;encodedColor)</pre>
 <div class="block">Takes a unicode char for input.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#put-int-int-char-float-">put</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>x</code> - </dd>
 <dd><code>y</code> - </dd>

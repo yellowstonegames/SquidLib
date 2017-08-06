@@ -166,7 +166,7 @@
 <span class="sourceLineNo">158</span><a name="line.158"></a>
 <span class="sourceLineNo">159</span>        for (int i = 0, ii = 0; i &lt; 92; i++, ii += 4) {<a name="line.159"></a>
 <span class="sourceLineNo">160</span>            float x = grad3f[i][0], y = grad3f[i][1], z = grad3f[i][2];<a name="line.160"></a>
-<span class="sourceLineNo">161</span>            final float len = 1f / (float)Math.sqrt(x * x + y * y + z * z), len3 = len * root2, len4 = len * root3;<a name="line.161"></a>
+<span class="sourceLineNo">161</span>            final float len = 0.88888f / (float)Math.sqrt(x * x + y * y + z * z), len3 = len * root2, len4 = len * root3;<a name="line.161"></a>
 <span class="sourceLineNo">162</span>            //final float len = 2f / Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z))), len3 = len * 1.5f;<a name="line.162"></a>
 <span class="sourceLineNo">163</span>            grad3f[i][0] *= len3;<a name="line.163"></a>
 <span class="sourceLineNo">164</span>            grad3f[i][1] *= len3;<a name="line.164"></a>

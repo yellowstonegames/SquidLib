@@ -509,7 +509,7 @@
 <span class="sourceLineNo">501</span>                    if (surpassEdges || !(centerX + rndX &lt; 0||<a name="line.501"></a>
 <span class="sourceLineNo">502</span>                            centerX + rndX &gt;= width))<a name="line.502"></a>
 <span class="sourceLineNo">503</span>                        contents.add(Coord.get(centerX + rndX, centerY));<a name="line.503"></a>
-<span class="sourceLineNo">504</span>                    for (float dy = high; dy &gt;= 1f; --dy) {<a name="line.504"></a>
+<span class="sourceLineNo">504</span>                    for (float dy = high; dy &gt;= 0.75f; --dy) {<a name="line.504"></a>
 <span class="sourceLineNo">505</span>                        rndY = Math.round(dy - 0.25f);<a name="line.505"></a>
 <span class="sourceLineNo">506</span>                        if (surpassEdges || !(centerX + rndX &lt; 0 || centerY + rndY &lt; 0 ||<a name="line.506"></a>
 <span class="sourceLineNo">507</span>                                centerX + rndX &gt;= width || centerY + rndY &gt;= height))<a name="line.507"></a>

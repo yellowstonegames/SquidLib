@@ -107,6 +107,12 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#squidpony.squidgrid.mapping.styled">squidpony.squidgrid.mapping.styled</a></td>
+<td class="colLast">
+<div class="block">Support code for working with tiled dungeon generation; normally only TilesetType is used outside SquidLib.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -359,6 +365,27 @@
         double&nbsp;controlledFraction)</code>
 <div class="block">Produces a political map for the land stored in the "on" cells of the given GreasedRegion, with the given number
  of factions trying to take land in the world (essentially, nations).</div>
+</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.styled">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> in <a href="../../../squidpony/squidgrid/mapping/styled/package-summary.html">squidpony.squidgrid.mapping.styled</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../squidpony/squidgrid/mapping/styled/package-summary.html">squidpony.squidgrid.mapping.styled</a> declared as <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DungeonBoneGen.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#region">region</a></span></code>
+<div class="block">A GreasedRegion that, after <a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#generate-squidpony.squidgrid.mapping.styled.TilesetType-int-int-"><code>DungeonBoneGen.generate(TilesetType, int, int)</code></a> has been called, will hold the floor cells
+ in its data as "on" cells and walls as "off" cells.</div>
 </td>
 </tr>
 </tbody>
@@ -953,22 +980,38 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
-<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeIsolated--">removeIsolated</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeEdges--">removeEdges</a></span>()</code>
+<div class="block">Turns all cells that are adjacent to the boundaries of the GreasedRegion to "off".</div>
+</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeIsolated--">removeIsolated</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeRectangle-int-int-int-int-">removeRectangle</a></span>(int&nbsp;startX,
                int&nbsp;startY,
                int&nbsp;rectangleWidth,
                int&nbsp;rectangleHeight)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeSeveral-squidpony.squidmath.Coord...-">removeSeveral</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>...&nbsp;points)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#removeSeveral-java.lang.Iterable-">removeSeveral</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;points)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GreasedRegion.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GreasedRegion.html#resizeAndEmpty-int-int-">resizeAndEmpty</a></span>(int&nbsp;width,
+              int&nbsp;height)</code>
+<div class="block">If this GreasedRegion has the same width and height passed as parameters, this acts the same as <a href="../../../squidpony/squidmath/GreasedRegion.html#empty--"><code>empty()</code></a>,
+ makes no allocations, and returns this GreasedRegion with its contents all "off"; otherwise, this does allocate
+ a differently-sized amount of internal data to match the new width and height, sets the fields to all match the
+ new width and height, and returns this GreasedRegion with its new width and height, with all contents "off".</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>

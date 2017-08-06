@@ -167,13 +167,14 @@
 </dd>
 <dt><a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">PanelEffect</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
 <dd>
-<div class="block">Various special effects that can be applied to a SquidPanel as an <code>Action</code>.</div>
+<div class="block">Various special effects that can be applied to a <a href="../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> or <a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> as an
+ <code>Action</code>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-">PanelEffect(SquidPanel)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-">PanelEffect(IPackedColorPanel)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-">PanelEffect(SquidPanel, float)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-">PanelEffect(IPackedColorPanel, float)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-squidpony.squidmath.GreasedRegion-">PanelEffect(SquidPanel, float, GreasedRegion)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-">PanelEffect(IPackedColorPanel, float, GreasedRegion)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">PanelEffect.ExplosionEffect</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
 <dd>&nbsp;</dd>
@@ -375,6 +376,16 @@
 <dd>
 <div class="block">Color constant</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#put-int-int-float-">put(int, int, float)</a></span> - Method in interface squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></dt>
+<dd>
+<div class="block">Places a full cell of color at the given x,y position; this may be used as a background or foreground, depending
+ on the implementation.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#put-int-int-char-float-">put(int, int, char, float)</a></span> - Method in interface squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></dt>
+<dd>
+<div class="block">Places a char in the given color at the given x,y position; if the implementation has a separate background from
+ the foreground characters, this will not affect it.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-">put(int, int, char)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
 <dd>
 <div class="block">Puts the character <code>c</code> at <code>(x, y)</code> with the default foreground.</div>
@@ -406,6 +417,11 @@
 <dd>
 <div class="block">Puts the char c at the position x,y with the given foreground and background colors as encoded floats, such as
  those produced by <code>Color.toFloatBits()</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-float-">put(int, int, char, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
+<dd>
+<div class="block">Puts the char c at the position x,y with the given foreground color as an encoded float (the kind produced by
+ <code>Color.toFloatBits()</code>).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#put-int-int-char-com.badlogic.gdx.graphics.Color-com.badlogic.gdx.graphics.Color-int-">put(int, int, char, Color, Color, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>
 <dd>

@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.14">DungeonBoneGen</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.13">DungeonBoneGen</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Generate a dungeon using Sean T. Barrett's Herringbone Wang Tiles method. http://nothings.org/gamedev/herringbone/
  Created by Tommy Ettinger on 3/10/2015.</div>
@@ -136,9 +136,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#region">region</a></span></code>
+<div class="block">A GreasedRegion that, after <a href="../../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#generate-squidpony.squidgrid.mapping.styled.TilesetType-int-int-"><code>generate(TilesetType, int, int)</code></a> has been called, will hold the floor cells
+ in its data as "on" cells and walls as "off" cells.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#rng">rng</a></span></code>
-<div class="block">The current RNG, a squidpony.squidmath.RNG</div>
+<div class="block">The current <a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath"><code>RNG</code></a>, a random number generator that can be seeded initially.</div>
 </td>
 </tr>
 </table>
@@ -157,7 +164,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#DungeonBoneGen--">DungeonBoneGen</a></span>()</code>
-<div class="block">Constructs a DungeonBoneGen that uses the default RNG.</div>
+<div class="block">Constructs a DungeonBoneGen that uses a default RNG, randomly seeded.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -296,11 +303,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="rng">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.35">rng</a></pre>
-<div class="block">The current RNG, a squidpony.squidmath.RNG</div>
+<pre>public&nbsp;<a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.18">rng</a></pre>
+<div class="block">The current <a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath"><code>RNG</code></a>, a random number generator that can be seeded initially.</div>
+</li>
+</ul>
+<a name="region">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>region</h4>
+<pre>public&nbsp;<a href="../../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.27">region</a></pre>
+<div class="block">A GreasedRegion that, after <a href="../../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#generate-squidpony.squidgrid.mapping.styled.TilesetType-int-int-"><code>generate(TilesetType, int, int)</code></a> has been called, will hold the floor cells
+ in its data as "on" cells and walls as "off" cells. This can be useful for inter-operating with code that expects
+ a GreasedRegion, which can be for various reasons.</div>
 </li>
 </ul>
 </li>
@@ -317,7 +336,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>DungeonBoneGen</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.108">DungeonBoneGen</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.112">DungeonBoneGen</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a>&nbsp;random)</pre>
 <div class="block">Constructs a DungeonBoneGen that uses the given java.util.Random .</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -332,7 +351,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>DungeonBoneGen</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.116">DungeonBoneGen</a>(<a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.120">DungeonBoneGen</a>(<a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 <div class="block">Constructs a DungeonBoneGen that uses the given squidpony.squidmath.RNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -346,8 +365,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DungeonBoneGen</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.126">DungeonBoneGen</a>()</pre>
-<div class="block">Constructs a DungeonBoneGen that uses the default RNG.</div>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.130">DungeonBoneGen</a>()</pre>
+<div class="block">Constructs a DungeonBoneGen that uses a default RNG, randomly seeded.</div>
 </li>
 </ul>
 </li>
@@ -364,7 +383,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getRng</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.20">getRng</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.33">getRng</a>()</pre>
 <div class="block">Gets the current RNG.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -377,7 +396,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setRng</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.28">setRng</a>(<a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.41">setRng</a>(<a href="../../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Sets the current RNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -391,7 +410,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.42">getWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.49">getWidth</a>()</pre>
 <div class="block">Returns the width, used as the first coordinate in any char[][] in this class.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -404,7 +423,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.50">getHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.57">getHeight</a>()</pre>
 <div class="block">Returns the height, used as the second coordinate in any char[][] in this class.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -417,7 +436,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getDungeon</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.62">getDungeon</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.66">getDungeon</a>()</pre>
 <div class="block">Get the char[][] dungeon that was last returned by generate(), or null if generate() or setDungeon have not been
  called. Uses x,y indexing.</div>
 <dl>
@@ -431,7 +450,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setDungeon</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.70">setDungeon</a>(char[][]&nbsp;dungeon)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.74">setDungeon</a>(char[][]&nbsp;dungeon)</pre>
 <div class="block">Change the stored char[][] dungeon, using x,y indexing.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -445,7 +464,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;char&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.82">get</a>(int&nbsp;x,
+<pre>public&nbsp;char&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.86">get</a>(int&nbsp;x,
                 int&nbsp;y)</pre>
 <div class="block">Gets the char at a given x,y position.</div>
 <dl>
@@ -462,7 +481,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>put</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.93">put</a>(char&nbsp;elem,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.97">put</a>(char&nbsp;elem,
                 int&nbsp;x,
                 int&nbsp;y)</pre>
 <div class="block">Sets the char at the given x,y position, storing it in this object. The dungeon this modifies is accessible with
@@ -481,7 +500,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.265">generate</a>(<a href="../../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;tt,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.269">generate</a>(<a href="../../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;tt,
                          int&nbsp;w,
                          int&nbsp;h)</pre>
 <div class="block">Generate a dungeon given a TilesetType enum.
@@ -504,7 +523,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>wallWrap</h4>
-<pre>public static&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.275">wallWrap</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.279">wallWrap</a>(char[][]&nbsp;map)</pre>
 <div class="block">Changes the outer edge of a char[][] to the wall char, '#'.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -519,7 +538,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>wallWrap</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.294">wallWrap</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.298">wallWrap</a>()</pre>
 <div class="block">Changes the outer edge of this dungeon to the wall char, '#'.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -533,7 +552,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.331">generate</a>(<a href="../../../../squidpony/squidgrid/mapping/styled/Tileset.html" title="class in squidpony.squidgrid.mapping.styled">Tileset</a>&nbsp;ts,
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.335">generate</a>(<a href="../../../../squidpony/squidgrid/mapping/styled/Tileset.html" title="class in squidpony.squidgrid.mapping.styled">Tileset</a>&nbsp;ts,
                          int&nbsp;w,
                          int&nbsp;h)</pre>
 <div class="block">Generate a dungeon given a Tileset.
@@ -557,7 +576,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.502">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#line.505">toString</a>()</pre>
 <div class="block">Provides a string representation of the latest generated dungeon.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>

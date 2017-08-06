@@ -121,16 +121,18 @@
 <hr>
 <br>
 <pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/annotation/Beta.html?is-external=true" title="class or interface in squidpony.annotation">@Beta</a>
-public abstract class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.27">PanelEffect</a>
+public abstract class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.29">PanelEffect</a>
 extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
-<div class="block">Various special effects that can be applied to a SquidPanel as an <code>Action</code>.
- The PanelEffect class is abstract and has implementations as static inner classes, such as <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx"><code>PanelEffect.ExplosionEffect</code></a>.
- Each PanelEffect specifically affects one SquidPanel, which can be a layer in a SquidLayers object or a SquidPanel on
- its own. By adding the PanelEffect to any actor using <code>Actor.addAction(Action)</code>
- when the Actor has its act() method called after the normal map parts of the SquidPanel have been placed, the
- PanelEffect will advance and change what chars/colors are in the SquidPanel as specified in its implementation of the
- <code>TemporalAction.update(float)</code> method. Typically the Actor you add this to is the SquidPanel this affects, but it could also
- be a SquidLayers. Most PanelEffect implementations should allow most configuration to be set in their constructors.
+<div class="block">Various special effects that can be applied to a <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> as an
+ <code>Action</code>. The PanelEffect class is abstract and has implementations as static
+ inner classes, such as <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx"><code>PanelEffect.ExplosionEffect</code></a>. Each PanelEffect specifically affects one <a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx"><code>IPackedColorPanel</code></a>
+ (an interface that both SquidPanel and SparseLayers implement), which can be a layer in a SquidLayers object or a
+ SquidPanel/SparseLayers on its own. By adding the PanelEffect to any actor using
+ <code>Actor.addAction(Action)</code> when the Actor has its act() method called after the
+ normal map parts of the panel have been placed, the PanelEffect will advance and change what chars/colors are in
+ the panel as specified in its implementation of the <code>TemporalAction.update(float)</code> method. Typically the Actor you add this
+ to is the SquidPanel or SparseLayers this affects, but it could also be a SquidLayers. Most PanelEffect
+ implementations should allow most configuration to be set in their constructors.
  <br>
  Created by Tommy Ettinger on 5/24/2017.</div>
 </li>
@@ -175,7 +177,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></td>
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#target">target</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -206,16 +208,16 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-">PanelEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-">PanelEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-">PanelEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-">PanelEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
            float&nbsp;duration)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-squidpony.squidmath.GreasedRegion-">PanelEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-">PanelEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
            float&nbsp;duration,
            <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid)</code>&nbsp;</td>
 </tr>
@@ -269,7 +271,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>target</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.28">target</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.30">target</a></pre>
 </li>
 </ul>
 <a name="validCells">
@@ -278,7 +280,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>validCells</h4>
-<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.29">validCells</a></pre>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.31">validCells</a></pre>
 </li>
 </ul>
 </li>
@@ -289,32 +291,32 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-">
+<a name="PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.31">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting)</pre>
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.33">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting)</pre>
 </li>
 </ul>
-<a name="PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-">
+<a name="PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.36">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.38">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                       float&nbsp;duration)</pre>
 </li>
 </ul>
-<a name="PanelEffect-squidpony.squidgrid.gui.gdx.SquidPanel-float-squidpony.squidmath.GreasedRegion-">
+<a name="PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.42">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;targeting,
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.44">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                       float&nbsp;duration,
                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid)</pre>
 </li>

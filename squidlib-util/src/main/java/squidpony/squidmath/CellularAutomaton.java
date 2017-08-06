@@ -65,7 +65,7 @@ public class CellularAutomaton {
         neighbors[8].remake(current);
         ArrayTools.fill(sums, 0);
         GreasedRegion.sumInto(sums, neighbors);
-        return current.refill(sums, 0, 5);
+        return current.refill(sums, 5, 10);
     }
 
     /**

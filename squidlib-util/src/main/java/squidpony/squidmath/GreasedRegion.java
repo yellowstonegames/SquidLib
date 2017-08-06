@@ -678,6 +678,30 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
+     * If this GreasedRegion has the same width and height passed as parameters, this acts the same as {@link #empty()},
+     * makes no allocations, and returns this GreasedRegion with its contents all "off"; otherwise, this does allocate
+     * a differently-sized amount of internal data to match the new width and height, sets the fields to all match the
+     * new width and height, and returns this GreasedRegion with its new width and height, with all contents "off". This
+     * is meant for cases where a GreasedRegion may be reused effectively, but its size may not always be the same.
+     * @param width the width to potentially resize this GreasedRegion to
+     * @param height the height to potentially resize this GreasedRegion to
+     * @return this GreasedRegion, always with all contents "off", and with the height and width set.
+     */
+    public GreasedRegion resizeAndEmpty(final int width, final int height) {
+        if (width == this.width && height == this.height) {
+            Arrays.fill(data, 0L);
+        } else {
+            this.width = (width <= 0) ? 0 : width;
+            this.height = (height <= 0) ? 0 : height;
+            ySections = (this.height + 63) >> 6;
+            yEndMask = -1L >>> (64 - (this.height & 63));
+            data = new long[this.width * ySections];
+        }
+        return this;
+
+    }
+
+    /**
      * Constructor for a GreasedRegion that contains a single "on" cell, and has the given width and height.
      * Note that to avoid confusion with the constructor that takes multiple Coord values, this takes the single "on"
      * Coord first, while the multiple-Coord constructor takes its vararg or array of Coords last.
@@ -1611,6 +1635,33 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         else
         {
             Arrays.fill(data, 0L);
+        }
+        return this;
+    }
+    /**
+     * Turns all cells that are adjacent to the boundaries of the GreasedRegion to "off".
+     * @return this for chaining
+     */
+    public GreasedRegion removeEdges()
+    {
+        if(ySections > 0) {
+            for (int i = 0; i < ySections; i++) {
+                data[i] = 0L;
+                data[width * ySections - 1 - i] = 0L;
+            }
+            if (ySections == 1) {
+                for (int i = 0; i < width; i++) {
+                    data[i] &= yEndMask >>> 1 & -2L;
+                }
+            } else {
+                for (int i = ySections; i < data.length - ySections; i += ySections) {
+                    data[i] &= -2L;
+                }
+                for (int a = ySections * 2 - 1; a < data.length - ySections; a += ySections) {
+                    data[a] &= yEndMask >>> 1;
+                }
+
+            }
         }
         return this;
     }

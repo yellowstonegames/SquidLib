@@ -375,8 +375,7 @@ public class GreasedRegionTest {
             System.out.println();
             System.out.println(ca.runBasicSmoothing());
             System.out.println();
-            System.out.println(ca.runBasicSmoothing()
-                    .translate(-1, -1).translate(2, 2).translate(-1, -1));
+            System.out.println(ca.runBasicSmoothing().removeEdges());
             System.out.println();
         }
         int count = 0, t;
