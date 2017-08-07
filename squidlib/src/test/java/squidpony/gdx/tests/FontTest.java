@@ -61,8 +61,8 @@ public class FontTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 135, 135, 135, 135, 170, 200, 220};
-        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  25,  25,  25,  25,  25,  25,  25};
+        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 120, 120, 120, 120, 110, 110, 110, 110, 170, 200, 220};
+        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  22,  22,  22,  22,  25,  25,  25,  25,  25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabItalicFont().width(ZOOM * 14).height(28).initBySize(),
@@ -76,11 +76,17 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getStretchableCodeFont().width(ZOOM * 15).height(27).initBySize(),
                 DefaultResources.getStretchableDejaVuFont().width(ZOOM * 14).height(25).initBySize(),
                 //DefaultResources.getStretchableSciFiFont().width(ZOOM * 28).height(64).initBySize(),
-                DefaultResources.getStretchableSlabFont().width(ZOOM * 12).height(20).initBySize(),
-                DefaultResources.getStretchableSlabLightFont().width(ZOOM * 12).height(20).initBySize(),
+                DefaultResources.getStretchableSlabFont().width(ZOOM * 13).height(21).initBySize(),
+                DefaultResources.getStretchableSlabLightFont().width(ZOOM * 13).height(21).initBySize(),
                 //DefaultResources.getStretchableSquareFont().width(ZOOM * 20).height(20).initBySize(),
-                DefaultResources.getStretchableLeanFont().width(ZOOM * 12).height(20).initBySize(),
-                DefaultResources.getStretchableLeanLightFont().width(ZOOM * 12).height(20).initBySize(),
+                DefaultResources.getStretchableLeanFont().width(ZOOM * 13).height(21).initBySize(),
+                DefaultResources.getStretchableLeanLightFont().width(ZOOM * 13).height(21).initBySize(),
+
+                DefaultResources.getStretchableWideSlabFont().width(ZOOM * 14).height(20).initBySize(),
+                DefaultResources.getStretchableWideSlabLightFont().width(ZOOM * 14).height(20).initBySize(),
+                DefaultResources.getStretchableWideFont().width(ZOOM * 14).height(20).initBySize(),
+                DefaultResources.getStretchableWideLightFont().width(ZOOM * 14).height(20).initBySize(),
+
                 DefaultResources.getStretchableOrbitFont().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
                 DefaultResources.getStretchableCleanFont().initBySize(),
@@ -106,6 +112,10 @@ public class FontTest extends ApplicationAdapter {
                 new StretchViewport(factories[14].width() * widths[14], factories[14].height() * heights[14]),
                 new StretchViewport(factories[15].width() * widths[15], factories[15].height() * heights[15]),
                 new StretchViewport(factories[16].width() * widths[16], factories[16].height() * heights[16]),
+                new StretchViewport(factories[17].width() * widths[17], factories[17].height() * heights[17]),
+                new StretchViewport(factories[18].width() * widths[18], factories[18].height() * heights[18]),
+                new StretchViewport(factories[19].width() * widths[19], factories[19].height() * heights[19]),
+                new StretchViewport(factories[20].width() * widths[20], factories[20].height() * heights[20]),
         };
         displays = new SquidPanel[]{
                 new SquidPanel(widths[0], heights[0], factories[0]).setTextSize(factories[0].width() + 0.5f * ZOOM, factories[0].height() + 1f * ZOOM),
@@ -122,21 +132,25 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[11], heights[11], factories[11]).setTextSize(factories[11].width() + 2f * ZOOM, factories[11].height() + 2.25f * ZOOM),
                 new SquidPanel(widths[12], heights[12], factories[12]).setTextSize(factories[12].width() + 2f * ZOOM, factories[12].height() + 2.75f * ZOOM),
                 new SquidPanel(widths[13], heights[13], factories[13]).setTextSize(factories[13].width() + 2f * ZOOM, factories[13].height() + 2.75f * ZOOM),
-                new SquidPanel(widths[14], heights[14], factories[14]).setTextSize(factories[14].width() + 1f * ZOOM, factories[14].height() + 2f * ZOOM),
-                new SquidPanel(widths[15], heights[15], factories[15]).setTextSize(factories[15].width() + 1f * ZOOM, factories[15].height() + 2f * ZOOM),
-                new SquidPanel(widths[16], heights[16], factories[16]).setTextSize(factories[16].width() + 1f * ZOOM, factories[16].height() + 2f * ZOOM),
+                new SquidPanel(widths[14], heights[14], factories[14]).setTextSize(factories[14].width() + 2f * ZOOM, factories[12].height() + 2.75f * ZOOM),
+                new SquidPanel(widths[15], heights[15], factories[15]).setTextSize(factories[15].width() + 2f * ZOOM, factories[15].height() + 2.75f * ZOOM),
+                new SquidPanel(widths[16], heights[16], factories[16]).setTextSize(factories[16].width() + 2f * ZOOM, factories[16].height() + 2.75f * ZOOM),
+                new SquidPanel(widths[17], heights[17], factories[17]).setTextSize(factories[17].width() + 2f * ZOOM, factories[17].height() + 2.75f * ZOOM),
+                new SquidPanel(widths[18], heights[18], factories[18]).setTextSize(factories[18].width() + 1f * ZOOM, factories[18].height() + 2f * ZOOM),
+                new SquidPanel(widths[19], heights[19], factories[19]).setTextSize(factories[19].width() + 1f * ZOOM, factories[19].height() + 2f * ZOOM),
+                new SquidPanel(widths[20], heights[20], factories[20]).setTextSize(factories[20].width() + 1f * ZOOM, factories[20].height() + 2f * ZOOM),
         };
         final String[] samples = {"The quick brown fox jumps over the lazy dog.",
                 "HAMBURGEVONS",
                 "Black Sphinx Of Quartz: Judge Ye My Vow!"};
         texts = new ArrayList<>(4);
-        text = new TextPanel<Color>(null, factories[14]);
+        text = new TextPanel<Color>(null, factories[factories.length - 3]);
         text.init(totalWidth, totalHeight, Color.WHITE, samples);
         texts.add(text);
-        text = new TextPanel<Color>(null, factories[15]);
+        text = new TextPanel<Color>(null, factories[factories.length - 2]);
         text.init(totalWidth, totalHeight, Color.WHITE, samples);
         texts.add(text);
-        text = new TextPanel<Color>(null, factories[16]);
+        text = new TextPanel<Color>(null, factories[factories.length - 1]);
         text.init(totalWidth, totalHeight, Color.WHITE, samples);
         texts.add(text);
         for (int i = 0; i < factories.length; i++) {
@@ -187,9 +201,9 @@ public class FontTest extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyUp(int keycode) {
-                index = ((index + 1) % 17);
+                index = ((index + 1) % factories.length);
                 viewport = viewports[index];
-                if(index < 14) {
+                if(index < factories.length - 3) {
                     tcf = factories[index];
                     display = displays[index];
                     stage.clear();
@@ -198,7 +212,7 @@ public class FontTest extends ApplicationAdapter {
                 }
                 else
                 {
-                    text = texts.get(index - 14);
+                    text = texts.get(index - factories.length + 3);
                     stage.clear();
                     stage.setViewport(viewport);
                     stage.addActor(text.getScrollPane());
@@ -234,8 +248,8 @@ public class FontTest extends ApplicationAdapter {
         config.title = "SquidLib Demo: Fonts, preview 1/9 (press any key)";
 //        config.width = totalWidth = LwjglApplicationConfiguration.getDesktopDisplayMode().width - 10;
 //        config.height = totalHeight = LwjglApplicationConfiguration.getDesktopDisplayMode().height - 128;
-        config.width = totalWidth = 900;
-        config.height = totalHeight = 450;
+        config.width = totalWidth = 1000;
+        config.height = totalHeight = 500;
         config.x = 0;
         config.y = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
