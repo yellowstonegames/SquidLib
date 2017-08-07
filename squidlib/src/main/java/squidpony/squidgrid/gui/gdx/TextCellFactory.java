@@ -1809,7 +1809,7 @@ public class TextCellFactory implements Disposable {
             }
             else if (distanceField) {
                 batch.setShader(shader);
-                shader.setUniformf("u_smoothing", 0.35f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));
+                shader.setUniformf("u_smoothing", 0.35f / (1.9f * smoothingMultiplier * (bmpFont.getData().scaleX + bmpFont.getData().scaleY)));
             }
         }
     }

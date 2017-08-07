@@ -134,7 +134,7 @@ public class RotationDemo extends ApplicationAdapter {
         // cases but probably not all.
         //textFactory = DefaultResources.getStretchableDejaVuFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
         //        .width(cellWidth).height(cellHeight).initBySize();
-        textFactory = DefaultResources.getStretchableFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        textFactory = DefaultResources.getStretchableWideSlabFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
         //textFactory = DefaultResources.getStretchableSciFiFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
         //        .width(cellWidth).height(cellHeight).initBySize();
@@ -151,8 +151,8 @@ public class RotationDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM * 3);
-        display.setTextSize(cellWidth + INTERNAL_ZOOM, cellHeight + INTERNAL_ZOOM * 3);
+        messages.setTextSize(cellWidth * 1.1f, cellHeight * 1.125f);
+        display.setTextSize(cellWidth * 1.1f, cellHeight * 1.125f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
