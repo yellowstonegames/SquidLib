@@ -1787,6 +1787,13 @@ public class FakeLanguageGen implements Serializable {
 
 
     /**
+     * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
+     * nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric
+     * codes for languages in the {@link #serializeToString()} output, but neither is dependent on the other if this
+     * array is changed for some reason (which is not recommended, but not out of the question).
+     */
+    public static final FakeLanguageGen[] registered = registry.toArray(new FakeLanguageGen[0]);
+    /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
      */
     public FakeLanguageGen() {
