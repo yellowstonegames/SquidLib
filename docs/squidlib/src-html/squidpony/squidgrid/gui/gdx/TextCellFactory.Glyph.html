@@ -1817,7 +1817,7 @@
 <span class="sourceLineNo">1809</span>            }<a name="line.1809"></a>
 <span class="sourceLineNo">1810</span>            else if (distanceField) {<a name="line.1810"></a>
 <span class="sourceLineNo">1811</span>                batch.setShader(shader);<a name="line.1811"></a>
-<span class="sourceLineNo">1812</span>                shader.setUniformf("u_smoothing", 0.35f / (3.5f * smoothingMultiplier * bmpFont.getData().scaleX));<a name="line.1812"></a>
+<span class="sourceLineNo">1812</span>                shader.setUniformf("u_smoothing", 0.35f / (1.9f * smoothingMultiplier * (bmpFont.getData().scaleX + bmpFont.getData().scaleY)));<a name="line.1812"></a>
 <span class="sourceLineNo">1813</span>            }<a name="line.1813"></a>
 <span class="sourceLineNo">1814</span>        }<a name="line.1814"></a>
 <span class="sourceLineNo">1815</span>    }<a name="line.1815"></a>

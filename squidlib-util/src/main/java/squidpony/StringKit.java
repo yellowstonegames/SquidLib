@@ -1,10 +1,14 @@
 package squidpony;
 
+import regexodus.Matcher;
+import regexodus.Pattern;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.NumberTools;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Various utility functions for dealing with Strings, CharSequences, and char[]s; mostly converting numbers.
@@ -1195,6 +1199,62 @@ public class StringKit {
             c[i] = padChar;
         }
         return String.valueOf(c);
+    }
+
+    /**
+     * Word-wraps the given String (or other CharSequence, such as a StringBuilder) so it is split into zero or more
+     * Strings as lines of text, with the given width as the maximum width for a line. This correctly splits most (all?)
+     * text in European languages on spaces (treating all whitespace characters matched by the regex '\\s' as breaking),
+     * and also uses the English-language rule (probably used in other languages as well) of splitting on hyphens and
+     * other dash characters (Unicode category Pd) in the middle of a word. This means for a phrase like "UN Secretary
+     * General Ban-Ki Moon", if the width was 12, then the Strings in the List returned would be
+     * <br>
+     * <pre>
+     * "UN Secretary"
+     * "General Ban-"
+     * "Ki Moon"
+     * </pre>
+     * Spaces are not preserved if they were used to split something into two lines, but dashes are.
+     * @param longText a probably-large piece of text that needs to be split into multiple lines with a max width
+     * @param width the max width to use for any line, removing trailing whitespace at the end of a line
+     * @return a List of Strings for the lines after word-wrapping
+     */
+    public static List<String> wrap(CharSequence longText, int width)
+    {
+        if(width <= 0)
+            return new ArrayList<>(0);
+        return wrap(new ArrayList<String>(longText.length() / width + 2), longText, width);
+    }
+    /**
+     * Word-wraps the given String (or other CharSequence, such as a StringBuilder) so it is split into zero or more
+     * Strings as lines of text, with the given width as the maximum width for a line; appends the word-wrapped lines to
+     * the given List of Strings and does not create a new List. This correctly splits most (all?) text in European
+     * languages on spaces (treating all whitespace characters matched by the regex '\\s' as breaking), and also uses
+     * the English-language rule (probably used in other languages as well) of splitting on hyphens and other dash
+     * characters (Unicode category Pd) in the middle of a word. This means for a phrase like "UN Secretary General
+     * Ban-Ki Moon", if the width was 12, then the Strings in the List returned would be
+     * <br>
+     * <pre>
+     * "UN Secretary"
+     * "General Ban-"
+     * "Ki Moon"
+     * </pre>
+     * Spaces are not preserved if they were used to split something into two lines, but dashes are.
+     * @param receiving the List of String to append the word-wrapped lines to
+     * @param longText a probably-large piece of text that needs to be split into multiple lines with a max width
+     * @param width the max width to use for any line, removing trailing whitespace at the end of a line
+     * @return the given {@code receiving} parameter, after appending the lines from word-wrapping
+     */
+    public static List<String> wrap(List<String> receiving, CharSequence longText, int width)
+    {
+        if(width <= 0 || receiving == null)
+            return receiving;
+        Matcher widthMatcher = Pattern.compile("(?:({=Y}(?=\\S).{1," + width + "})((?<=\\p{Pd})|(\\s+)))|({=Y}\\S{1," + width + "})").matcher(longText + "\n");
+        while (widthMatcher.find())
+        {
+            receiving.add(widthMatcher.group("Y"));
+        }
+        return receiving;
     }
 
     /**

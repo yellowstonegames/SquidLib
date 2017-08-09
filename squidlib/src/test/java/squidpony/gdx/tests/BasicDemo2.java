@@ -23,7 +23,22 @@ import squidpony.squidmath.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+/**
+ * The main class of the game, constructed once in each of the platform-specific Launcher classes. Doesn't use any
+ * platform-specific code.
+ */
+// If this is an example project in SquidSetup, then squidlib-util (the core of squidlib's logic code, including
+// map generation and pathfinding), RegExodus (a dependency of squidlib-util, used for validating generated text and
+// some other usages in a way that works cross-platform) and the squidlib (the text-based display module) are always
+// dependencies. If you didn't change those dependencies, this class should run out of the box.
+//
+// This class is useful as a starting point, since it has dungeon generation and some of the trickier parts of input
+// handling (using the mouse to get a path for the player) already filled in. You can remove any imports or usages of
+// classes that you don't need.
 
+// A main game class that uses LibGDX to display, which is the default for SquidLib, needs to extend ApplicationAdapter
+// or something related, like Game. Game adds features that SquidLib doesn't currently use, so ApplicationAdapter is
+// perfectly fine for these uses.
 public class BasicDemo2 extends ApplicationAdapter {
     SpriteBatch batch;
 
@@ -35,37 +50,27 @@ public class BasicDemo2 extends ApplicationAdapter {
     private int[][] baseLightness;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
-    //We're displaying 24 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
-    //gridHeight is 24 because that variable will be used for generating the dungeon and handling movement within
-    //the upper 24 rows. The bonusHeight is the number of additional rows that aren't handled like the dungeon rows for
-    //UI reasons; here we use them for language samples. Next is gridWidth, which is 80 because we want 80 grid spaces
-    //across the whole screen. cellWidth and cellHeight are 10 and 22, which will match the starting dimensions of a
+    //We're displaying 30 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
+    //gridHeight is 30 because that variable will be used for generating the dungeon and handling movement within
+    //the upper 30 rows. The bonusHeight is the number of additional rows that aren't handled like the dungeon rows for
+    //UI reasons; here we show text generation in them. Next is gridWidth, which is 90 because we want 90 grid spaces
+    //across the whole screen. cellWidth and cellHeight are 9 and 19, which will match the starting dimensions of a
     //cell, but won't be stuck at that value because we use a "Stretchable" font, and the cells can change size. While
     //gridWidth and gridHeight are measured in spaces on the grid, cellWidth and cellHeight are the initial pixel
-    // dimensions of one cell. The font will look more crisp if the cell dimensions match the config multipliers
-    //exactly, and the stretchable fonts (technically, distance field fonts) can resize to non-square sizes and
-    //still retain most of that crispness.
+    //dimensions of one cell. If the screen is resized, one pixel on the original screen will take up more or less
+    //space on the resized screen, but the same measurements will be used (usually called world coordinates by libGDX).
 
-    /**
-     * In number of cells
-     */
-    private static final int gridWidth = 80;
-    /**
-     * In number of cells
-     */
-    private static final int gridHeight = 24;
-    /**
-     * In number of cells
-     */
-    private static final int bonusHeight = 8;
-    /**
-     * The pixel width of a cell
-     */
-    private static final int cellWidth = 10;
-    /**
-     * The pixel height of a cell
-     */
-    private static final int cellHeight = 22;
+    /** In number of cells */
+    public static final int gridWidth = 90;
+    /** In number of cells */
+    public static final int gridHeight = 30;
+    /** In number of cells */
+    public static final int bonusHeight = 7;
+    /** The initial pixel width of a cell */
+    public static final int cellWidth = 9;
+    /** The initial pixel height of a cell */
+    public static final int cellHeight = 19;
+
     private SquidInput input;
     private Color bgColor;
     private Stage stage;
@@ -151,31 +156,46 @@ public class BasicDemo2 extends ApplicationAdapter {
         // being especially fast. Both of them can be seen as storing regions of points in 2D space as "on" and "off."
 
         // Here we fill a GreasedRegion so it stores the cells that contain a floor, the '.' char, as "on."
-        GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
+        final GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
         //player is, here, just a Coord that stores his position. In a real game, you would probably have a class for
         //creatures, and possibly a subclass for the player. The singleRandom() method on GreasedRegion finds one Coord
         // in that region that is "on," or -1,-1 if there are no such cells. It takes an RNG object as a parameter, and
         // if you gave a seed to the RNG constructor, then the cell this chooses will be reliable for testing. If you
         // don't seed the RNG, any valid cell should be possible.
         playerPosition = placement.singleRandom(rng);
-        playerMobile = display.animateActor(playerPosition.x, playerPosition.y, '@', SColor.SAFETY_ORANGE);
+        playerMobile = display.animateActor(playerPosition.x, playerPosition.y, '@', SColor.CW_FLUSH_BLUE);
         // Uses shadowcasting FOV and reuses the visible array without creating new arrays constantly.
         FOV.reuseFOV(resistance, visible, playerPosition.x, playerPosition.y, 9.0, Radius.CIRCLE);
-        // 0.1 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.1 will _not_ be in
-        // the blockage Collection, but anything 0.1 or less will be in it. This lets us use blockage to prevent access
+        // 0.0 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.0 will _not_ be in
+        // the blockage Collection, but anything 0.0 or less will be in it. This lets us use blockage to prevent access
         // to cells we can't see from the start of the move.
         blockage = new GreasedRegion(visible, 0.0);
-        seen = blockage.copy().not();
-        blockage.surface8way();
+        // Here we mark the initially seen cells as anything that wasn't included in the unseen "blocked" region.
+        // We invert the copy's contents to prepare for a later step, which makes blockage contain only the cells that
+        // are above 0.0, then copy it to save this step as the seen cells. We will modify seen later independently of
+        // the blocked cells, so a copy is correct here. Most methods on GreasedRegion objects will modify the
+        // GreasedRegion they are called on, which can greatly help efficiency on long chains of operations.
+        seen = blockage.not().copy();
+        // Here is one of those methods on a GreasedRegion; fringe8way takes a GreasedRegion (here, the set of cells
+        // that are visible to the player), and modifies it to contain only cells that were not in the last step, but
+        // were adjacent to a cell that was present in the last step. This can be visualized as taking the area just
+        // beyond the border of a region, using 8-way adjacency here because we specified fringe8way instead of fringe.
+        // We do this because it means pathfinding will only have to work with a small number of cells (the area just
+        // out of sight, and no further) instead of all invisible cells when figuring out if something is currently
+        // impossible to enter.
+        blockage.fringe8way();
         //This is used to allow clicks or taps to take the player to the desired area.
         toCursor = new ArrayList<>(200);
         //When a path is confirmed by clicking, we draw from this List to find which cell is next to move into.
         awaitedMoves = new ArrayList<>(200);
-        //DijkstraMap is the pathfinding swiss-army knife we use here to find a path to the latest cursor position.
-        //DijkstraMap.Measurement is an enum that determines the possibility or preference to enter diagonals. Here, the
-        // MANHATTAN value is used, which means 4-way movement only, no diagonals possible. Alternatives are CHEBYSHEV,
-        // which allows 8 directions of movement at the same cost for all directions, and EUCLIDEAN, which allows 8
+        // DijkstraMap is the pathfinding swiss-army knife we use here to find a path to the latest cursor position.
+        // DijkstraMap.Measurement is an enum that determines the possibility or preference to enter diagonals. Here,
+        // MANHATTAN is used, which means 4-way movement only, no diagonals possible. Alternatives are CHEBYSHEV, which
+        // allows 8 directions of movement at the same cost for all directions, and EUCLIDEAN, which allows 8
         // directions, but will prefer orthogonal moves unless diagonal ones are clearly closer "as the crow flies."
+        // EUCLIDEAN is ideal for NPC movement when diagonals are allowed, because it will cause them to prefer paths in
+        // straight lines when they are optimal or tied for optimal, while CHEBYSHEV will make erratic zig-zagging paths
+        // just as optimal as straight lines, and that tends to make enemies look crazy or stupid.
         playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.MANHATTAN);
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
@@ -317,6 +337,11 @@ public class BasicDemo2 extends ApplicationAdapter {
                         Gdx.app.exit();
                         break;
                     }
+                    case '*': {
+                        if (ctrl)
+                            display.getForegroundLayer().burst(playerPosition.x, playerPosition.y, true, '@', SColor.CW_LIGHT_YELLOW, 0.75f);
+                        break;
+                    }
 
                 }
             }
@@ -432,12 +457,12 @@ public class BasicDemo2 extends ApplicationAdapter {
      * Draws the map, applies any highlighting for the path to the cursor, and then draws the player.
      */
     public void putMap() {
-        long tm = (System.currentTimeMillis() & 0xffffffL);
+        double tm = (System.currentTimeMillis() & 0xffffffL) * 0.001;
         for (int i = 0; i < gridWidth; i++) {
             for (int j = 0; j < gridHeight; j++) {
                 if (visible[i][j] > 0.1) {
-                    int bright = baseLightness[i][j] + (int) (-105 +
-                            180 * (visible[i][j] * (1.0 + 0.2 * SeededNoise.noise(i * 0.2, j * 0.2, tm * 0.001, 10000))));
+                    int bright = (int) (-65 +
+                            180 * (visible[i][j] * (1.0 + 0.2 * SeededNoise.noise(i * 0.2, j * 0.2, tm, 10000))));
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], bright);
                 } else if (seen.contains(i, j))
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bgColors[i][j], -80);
@@ -457,8 +482,8 @@ public class BasicDemo2 extends ApplicationAdapter {
         String spaces = String.valueOf(spaceArray);
 
         for (int i = 0; i < 6; i++) {
-            display.putString(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.CREAM);
-            display.putString(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.CREAM);
+            display.putString(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.COSMIC_LATTE);
+            display.putString(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.COSMIC_LATTE);
         }
     }
 
@@ -475,9 +500,12 @@ public class BasicDemo2 extends ApplicationAdapter {
             if (!display.hasActiveAnimations()) {
                 // this doesn't check for input, but instead processes and removes Coords from awaitedMoves.
                 Coord m = awaitedMoves.remove(0);
+                // sets up the line to the cursor from the player
                 line = OrthoLine.lineChars(toCursor);
-                if (!toCursor.isEmpty())
-                    toCursor.remove(0);
+                if (!toCursor.isEmpty()) // this check is necessary because we can't remove from an empty list
+                    toCursor.remove(0); // and this just removed the player's current position from the list
+                // move takes the relative distance to move for x and y, instead of an absolute position, so this is
+                // relative to the player's current position.
                 move(m.x - playerPosition.x, m.y - playerPosition.y);
                 // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to
                 // re-calculate the distances from all cells to the player. We don't need to calculate this information on
@@ -503,11 +531,16 @@ public class BasicDemo2 extends ApplicationAdapter {
         }
         // certain classes that use scene2d.ui widgets need to be told to act() to process input.
         stage.act();
+        // this next part is a minor optimization; of the next 6 lines of code, all but one are found in
+        // the body of stage.draw(). The difference is, we add the line that calls display.drawActor(),
+        // which if it was called separately from stage.draw(), would need stage to begin and end its
+        // Batch before the same Batch had begin and end called again for just this actor. Each flush of
+        // the Batch is slow, and happens on each batch.end(), so saving a flush every frame helps.
         Camera camera = stage.getCamera();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         stage.getRoot().draw(batch, 1f);
-        display.drawActor(batch, 1f, playerMobile);
+        display.drawActor(batch, 1f, playerMobile); // this line is different from Stage.draw()
         batch.end();
     }
 

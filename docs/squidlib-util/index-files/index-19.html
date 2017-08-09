@@ -771,6 +771,13 @@
 <div class="block">Reassigns this GreasedRegion randomly, reusing the current data storage (without extra allocations) if this.width
  == width and this.height == height, while trying to set the given fraction of cells to on.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#refill-long:A-int-int-int-int-">refill(long[], int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
+<dd>
+<div class="block">Primarily for internal use, this method copies data2 into the internal long array the new GreasedRegion will
+ use, but treats data2 as having the dimensions [dataWidth][dataHeight], and uses the potentially-different
+ dimensions [width][height] for this GreasedRegion, potentially re-allocating the internal data this uses if width
+ and/or height are different from what they were.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TuringPattern.html#refit-double:A-">refit(double[])</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></dt>
 <dd>
 <div class="block">Modifies the data parameter so no value in it is outside the range -1.0 inclusive to 1.0 exclusive.</div>
@@ -919,6 +926,11 @@
 <dd>
 <div class="block">Takes an x, y position and finds the room or corridor at that position and the rooms, corridors or caves that it
  directly connects to, and returns the group as one merged 2D char array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#registered">registered</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
+<dd>
+<div class="block">An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
+ nor does it store modifications or mixes of languages.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/StringConvert.html#registry">registry</a></span> - Static variable in class squidpony.<a href="../squidpony/StringConvert.html" title="class in squidpony">StringConvert</a></dt>
 <dd>&nbsp;</dd>
