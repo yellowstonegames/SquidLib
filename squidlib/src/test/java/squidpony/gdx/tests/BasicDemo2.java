@@ -391,8 +391,10 @@ public class BasicDemo2 extends ApplicationAdapter {
             display.getForegroundLayer().summon(0.35f, playerPosition.x, playerPosition.y, playerPosition.x, playerPosition.y - 1, '?', SColor.CW_BRIGHT_INDIGO, SColor.ELECTRIC_PURPLE.cpy().sub(0, 0, 0, 1), false, 0f, 0f, 0.8f);
             //display.getForegroundLayer().burst(0.1f, playerPosition.x, playerPosition.y, 2, true, '?', SColor.CW_BRIGHT_INDIGO, SColor.ELECTRIC_PURPLE.cpy().sub(0,0,0,1),  false, -1f, 0.8f);
         }
-        // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.
+        // removes the first line displayed of the Art of War text or its translation.
         lang.remove(0);
+        // if the last line reduced the number of lines we can show to less than what we try to show, we fill in more
+        // lines using a randomly selected fake language to translate the same Art of War text.
         while (lang.size() < bonusHeight - 1)
         {
             StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);

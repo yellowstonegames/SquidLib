@@ -59,7 +59,10 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         this.gridHeight = MathUtils.clamp(gridHeight, 1, 65535);
         backgrounds = ArrayTools.fill(0f, this.gridWidth, this.gridHeight);
         layers = new Array<>(true, 4, SparseTextMap.class);
-        this.font = font.width(cellWidth).height(cellHeight).initBySize();
+        if(font.initialized())
+            this.font = font;
+        else
+            this.font = font.width(cellWidth).height(cellHeight).initBySize();
         layers.add(new SparseTextMap(gridWidth * gridHeight >> 2));
         mapping = new IntIntMap(4);
         mapping.put(0, 0);
@@ -555,6 +558,16 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         for (int i = 0; i < layers.size; i++) {
             layers.get(i).clear();
         }
+    }
+
+    /**
+     * Removes all foreground chars in the requested layer; does not affect the background or other layers.
+     */
+    public void clear(int layer)
+    {
+        int lay = mapping.get(layer, -1);
+        if(lay >= 0)
+            layers.get(lay).clear();
     }
 
     @Override
