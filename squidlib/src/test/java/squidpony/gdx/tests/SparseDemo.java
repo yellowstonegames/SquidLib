@@ -9,7 +9,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
+import squidpony.NaturalLanguageCipher;
+import squidpony.StringKit;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -23,64 +26,93 @@ import squidpony.squidmath.RNG;
 import squidpony.squidmath.SeededNoise;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SparseDemo extends ApplicationAdapter {
     SpriteBatch batch;
 
     private RNG rng;
-    private SparseLayers display;
+    private SparseLayers display, languageDisplay;
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
     private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
-    //We're displaying 24 rows of dungeon, then 8 more rows of text generation to show some tricks with language.
-    //gridHeight is 24 because that variable will be used for generating the dungeon and handling movement within
-    //the upper 24 rows. The bonusHeight is the number of additional rows that aren't handled like the dungeon rows for
-    //UI reasons; here we use them for language samples. Next is gridWidth, which is 80 because we want 80 grid spaces
-    //across the whole screen. cellWidth and cellHeight are 10 and 22, which will match the starting dimensions of a
-    //cell, but won't be stuck at that value because we use a "Stretchable" font, and the cells can change size. While
-    //gridWidth and gridHeight are measured in spaces on the grid, cellWidth and cellHeight are the initial pixel
-    // dimensions of one cell. The font will look more crisp if the cell dimensions match the config multipliers
-    //exactly, and the stretchable fonts (technically, distance field fonts) can resize to non-square sizes and
-    //still retain most of that crispness.
+    //We're displaying 27 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
+    //gridHeight is 27 because that variable will be used for generating the dungeon (the actual size of the dungeon
+    //will be triple gridWidth and triple gridHeight), and determines how much off the dungeon is visible at any time.
+    //The bonusHeight is the number of additional rows that aren't handled like the dungeon rows and are shown in a
+    //separate area; here we use them for translations. The gridWidth is 100, which means we show 100 grid spaces
+    //across the whole screen, but the actual dungeon is larger. The cellWidth and cellHeight are 10 and 20, which will
+    //match the starting dimensions of a cell in pixels, but won't be stuck at that value because we use a "Stretchable"
+    //font, and so the cells can change size (they don't need to be scaled by equal amounts, either). While gridWidth
+    //and gridHeight are measured in spaces on the grid, cellWidth and cellHeight are the initial pixel dimensions of
+    //one cell; resizing the window can make the units cellWidth and cellHeight use smaller or larger than a pixel.
 
     /** In number of cells */
-    private static final int gridWidth = 80;
+    private static final int gridWidth = 100;
     /** In number of cells */
-    private static final int gridHeight = 24;
+    private static final int gridHeight = 27;
 
     /** In number of cells */
-    private static final int bigWidth = 80 * 3;
+    private static final int bigWidth = gridWidth * 3;
     /** In number of cells */
-    private static final int bigHeight = 24 * 3;
+    private static final int bigHeight = gridHeight * 3;
 
     /** In number of cells */
-    private static final int bonusHeight = 0;
+    private static final int bonusHeight = 7;
     /** The pixel width of a cell */
     private static final int cellWidth = 10;
     /** The pixel height of a cell */
-    private static final int cellHeight = 22;
+    private static final int cellHeight = 20;
     private SquidInput input;
     private Color bgColor;
-    private Stage stage;
+    private Stage stage, languageStage;
     private DijkstraMap playerToCursor;
     private Coord cursor, player;
     private List<Coord> toCursor;
     private List<Coord> awaitedMoves;
-    private String[] lang;
-    private FakeLanguageGen.SentenceForm[] forms;
-    private int langIndex = 0;
+    // a passage from the ancient text The Art of War, which remains relevant in any era but is mostly used as a basis
+    // for translation to imaginary languages using the NaturalLanguageCipher and FakeLanguageGen classes.
+    private final String artOfWar =
+            "Sun Tzu said: In the practical art of war, the best thing of all is to take the " +
+                    "enemy's country whole and intact; to shatter and destroy it is not so good. So, " +
+                    "too, it is better to recapture an army entire than to destroy it, to capture " +
+                    "a regiment, a detachment or a company entire than to destroy them. Hence to fight " +
+                    "and conquer in all your battles is not supreme excellence; supreme excellence " +
+                    "consists in breaking the enemy's resistance without fighting.";
+    // A translation dictionary for going back and forth between English and an imaginary language that this generates
+    // words for, using some of the rules that the English language tends to follow to determine if two words should
+    // share a common base word (such as "read" and "reader" needing similar translations). This is given randomly
+    // selected languages from the FakeLanguageGen class, which is able to produce text that matches a certain style,
+    // usually that of a natural language but some imitations of fictional languages, such as languages spoken by elves,
+    // goblins, or demons, are present as well. An unusual trait of FakeLanguageGen is that it can mix two or more
+    // languages to make a new one, which most other kinds of generators have a somewhat-hard time doing.
+    private NaturalLanguageCipher translator;
+    // this is initialized with the word-wrapped contents of artOfWar, then has translations of that text to imaginary
+    // languages appended after the plain-English version. The contents have the first item removed with each step, and
+    // have new translations added whenever the line count is too low.
+    private ArrayList<String> lang;
     private double[][] resistance;
     private double[][] visible;
-    private GreasedRegion blockage, seen, floors;
+    // GreasedRegion is a hard-to-explain class, but it's an incredibly useful one for map generation and many other
+    // tasks; it stores a region of "on" cells where everything not in that region is considered "off," and can be used
+    // as a Collection of Coord points. However, it's more than that! Because of how it is implemented, it can perform
+    // bulk operations on as many as 64 points at a time, and can efficiently do things like expanding the "on" area to
+    // cover adjacent cells that were "off", retracting the "on" area away from "off" cells to shrink it, getting the
+    // surface ("on" cells that are adjacent to "off" cells) or fringe ("off" cells that are adjacent to "on" cells),
+    // and generally useful things like picking a random point from all "on" cells.
+    // Here, we use a GreasedRegion to store all floors that the player can walk on, a small rim of cells just beyond
+    // the player's vision that blocks pathfinding to areas we can't see a path to, and we also store all cells that we
+    // have seen in the past in a GreasedRegion (in most roguelikes, there would be one of these per dungeon floor).
+    private GreasedRegion floors, blockage, seen;
+    // a Glyph is a kind of scene2d Actor that only holds one char in a specific color, but is drawn using the behavior
+    // of TextCellFactory (which most text in SquidLib is drawn with) instead of the different and not-very-compatible
+    // rules of Label, which older SquidLib code used when it needed text in an Actor. Glyphs are also lighter-weight in
+    // memory usage and time taken to draw than Labels.
     private TextCellFactory.Glyph pg;
     private static final float WHITE_FLOAT = NumberUtils.intToFloatColor(-1),
-            GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444), CRIMSON_FLOAT = SColor.CRIMSON.toFloatBits(),
-            YELLOW_FLOAT = SColor.CW_BRIGHT_GOLD.toFloatBits(),
-            YELLOW_FADING_FLOAT = SColor.translucentColor(SColor.CW_YELLOW.toFloatBits(), 0f);
+            GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444);
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -88,20 +120,39 @@ public class SparseDemo extends ApplicationAdapter {
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         batch = new SpriteBatch();
+        StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
+                languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
+        mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
+        languageViewport
+                .setScreenBounds(0, 0, gridWidth * cellWidth, bonusHeight * cellHeight);
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
-        stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + bonusHeight) * cellHeight), batch);
+        stage = new Stage(mainViewport, batch);
+        languageStage = new Stage(languageViewport, batch);
         // the font will try to load Iosevka Slab as an embedded bitmap font with a distance field effect.
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
                 DefaultResources.getStretchableSlabFont());
+
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
         display.font.tweakWidth(cellWidth * 1.1f).tweakHeight(cellHeight * 1.1f).initBySize();
 
+        languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
+        // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
+        // set the background colors directly as floats with the SparseDisplay.backgrounds field, and it can be handy
+        // to hold onto the current color we want to fill that with in the defaultPackedBackground field.
+        // Later in this demo, we fill the background completely with this code:
+        // ArrayTools.fill(languageDisplay.backgrounds, languageDisplay.defaultPackedBackground);
+        languageDisplay.defaultPackedBackground = SColor.COSMIC_LATTE.toFloatBits();
+
         //This uses the seeded RNG we made earlier to build a procedural dungeon using a method that takes rectangular
-        //sections of pre-drawn dungeon and drops them into place in a tiling pattern. It makes good "ruined" dungeons.
+        //sections of pre-drawn dungeon and drops them into place in a tiling pattern. It makes good winding dungeons
+        //with rooms by default, but in the later call to dungeonGen.generate(), you can use a TilesetType such as
+        //TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS or TilesetType.CAVES_LIMIT_CONNECTIVITY to change the sections that
+        //this will use, or just pass in a full 2D char array produced from some other generator, such as
+        //SerpentMapGenerator, OrganicMapGenerator, or DenseRoomMapGenerator.
         dungeonGen = new DungeonGenerator(bigWidth, bigHeight, rng);
         //uncomment this next line to randomly add water to the dungeon in pools.
         //dungeonGen.addWater(15);
@@ -111,7 +162,41 @@ public class SparseDemo extends ApplicationAdapter {
         //getBareDungeon provides the simplest representation of the generated dungeon -- '#' for walls, '.' for floors.
         bareDungeon = dungeonGen.getBareDungeon();
         //When we draw, we may want to use a nicer representation of walls. DungeonUtility has lots of useful methods
-        //for modifying char[][] dungeon grids, and this one takes each '#' and replaces it with a box-drawing character.
+        //for modifying char[][] dungeon grids, and this one takes each '#' and replaces it with a box-drawing char.
+        //The end result looks something like this, for a smaller 60x30 map:
+        //
+        // ┌───┐┌──────┬──────┐┌──┬─────┐   ┌──┐    ┌──────────┬─────┐
+        // │...││......│......└┘..│.....│   │..├───┐│..........│.....└┐
+        // │...││......│..........├──┐..├───┤..│...└┴────......├┐.....│
+        // │...││.................│┌─┘..│...│..│...............││.....│
+        // │...││...........┌─────┘│....│...│..│...........┌───┴┴───..│
+        // │...│└─┐....┌───┬┘      │........│..│......─────┤..........│
+        // │...└─┐│....│...│       │.......................│..........│
+        // │.....││........└─┐     │....│..................│.....┌────┘
+        // │.....││..........│     │....├─┬───────┬─┐......│.....│
+        // └┬──..└┼───┐......│   ┌─┴─..┌┘ │.......│ │.....┌┴──┐..│
+        //  │.....│  ┌┴─..───┴───┘.....└┐ │.......│┌┘.....└─┐ │..│
+        //  │.....└──┘..................└─┤.......││........│ │..│
+        //  │.............................│.......├┘........│ │..│
+        //  │.............┌──────┐........│.......│...─┐....│ │..│
+        //  │...........┌─┘      └──┐.....│..─────┘....│....│ │..│
+        // ┌┴─────......└─┐      ┌──┘..................│..──┴─┘..└─┐
+        // │..............└──────┘.....................│...........│
+        // │............................┌─┐.......│....│...........│
+        // │..│..│..┌┐..................│ │.......├────┤..──┬───┐..│
+        // │..│..│..│└┬──..─┬───┐......┌┘ └┐.....┌┘┌───┤....│   │..│
+        // │..├──┤..│ │.....│   │......├───┘.....│ │...│....│┌──┘..└──┐
+        // │..│┌─┘..└┐└┬─..─┤   │......│.........└─┘...│....││........│
+        // │..││.....│ │....│   │......│...............│....││........│
+        // │..││.....│ │....│   │......│..┌──┐.........├────┘│..│.....│
+        // ├──┴┤...│.└─┴─..┌┘   └┐....┌┤..│  │.....│...└─────┘..│.....│
+        // │...│...│.......└─────┴─..─┴┘..├──┘.....│............└─────┤
+        // │...│...│......................│........│..................│
+        // │.......├───┐..................│.......┌┤.......┌─┐........│
+        // │.......│   └──┐..┌────┐..┌────┤..┌────┘│.......│ │..┌──┐..│
+        // └───────┘      └──┘    └──┘    └──┘     └───────┘ └──┘  └──┘
+        //this is also good to compare against if the map looks incorrect, and you need an example of a correct map when
+        //no parameters are given to generate().
         lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
 
         resistance = DungeonUtility.generateResistances(decoDungeon);
@@ -201,74 +286,11 @@ public class SparseDemo extends ApplicationAdapter {
         //places the player as an '@' at his position in orange.
         pg = display.glyph('@', SColor.SAFETY_ORANGE.toFloatBits(), player.x, player.y);
 
-
-        // this creates an array of sentence builders, where each imitates one or more languages or linguistic styles.
-        // this serves to demonstrate the large amount of glyphs SquidLib supports.
-        // there's no need to put much effort into understanding this section yet, and many games won't use the language
-        // generation code at all. If you want to know what this does, the parameters are: the language to use,
-        // minimum words in a sentence, maximum words in a sentence, "mid" punctuation that can be after a word (like a
-        // comma), "end" punctuation that can be at the end of a sentence, frequency of "mid" punctuation (the chance in
-        // 1.0 that a word will have something like a comma appended after it), and the limit on how many chars to use.
-        forms = new FakeLanguageGen.SentenceForm[]
-                {
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ENGLISH, 5, 10, new String[]{",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GREEK_AUTHENTIC, 5, 11, new String[]{",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GREEK_ROMANIZED, 5, 11, new String[]{",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.LOVECRAFT, 3, 9, new String[]{",", ",", ";"},
-                                new String[]{".", ".", "!", "!", "?", "...", "..."}, 0.15, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FRENCH, 4, 12, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.RUSSIAN_AUTHENTIC, 6, 13, new String[]{",", ",", ",", ",", ";", " -"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.25, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.RUSSIAN_ROMANIZED, 6, 13, new String[]{",", ",", ",", ",", ";", " -"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.25, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.JAPANESE_ROMANIZED, 5, 13, new String[]{",", ",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SWAHILI, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SOMALI, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.HINDI_ROMANIZED, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.NORSE, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.INUKTITUT, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.NAHUATL, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FANTASY_NAME, 4, 8, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.22, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FANCY_FANTASY_NAME, 4, 8, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.22, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ELF, 5, 10, new String[]{",", ",", ",", ";", ";", " -"},
-                                new String[]{".", ".", ".", "...", "?"}, 0.22, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GOBLIN, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "...", "?"}, 0.1, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.DEMONIC, 4, 8, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", "!", "!", "!", "?!"}, 0.07, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.INFERNAL, 6, 13, new String[]{",", ",", ",", ";", ";", " -", "*", " ©"},
-                                new String[]{".", ".", ".", "...", "?", "...", "?"}, 0.25, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FRENCH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.65), 5, 9, new String[]{",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "?", "..."}, 0.14, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ENGLISH.addAccents(0.5, 0.15), 5, 10, new String[]{",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.5).mix(FakeLanguageGen.FRENCH, 0.35)
-                                .mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.25).mix(FakeLanguageGen.GREEK_ROMANIZED, 0.2).mix(FakeLanguageGen.ENGLISH, 0.15)
-                                .mix(FakeLanguageGen.FANCY_FANTASY_NAME, 0.12).mix(FakeLanguageGen.LOVECRAFT, 0.1)
-                                , 5, 10, new String[]{",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
-                };
-        /*
-         * Now we generate the initial sentences for each of those many languages. We cycle through the shown sentences
-         * by changing langIndex, and change the contents of each sentence once it is cycled out of being visible.
-         */
-        lang = new String[forms.length];
-        for (int i = 0; i < forms.length; i++) {
-            lang[i] = forms[i].sentence();
-        }
+        lang = new ArrayList<>(16);
+        StringKit.wrap(lang, artOfWar, gridWidth - 2);
+        translator = new NaturalLanguageCipher(rng.getRandomElement(FakeLanguageGen.registered));
+        StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
+        translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
 
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
@@ -429,6 +451,8 @@ public class SparseDemo extends ApplicationAdapter {
         //Gdx.input.setInputProcessor(input);
         // and then add display, our one visual component, to the list of things that act in Stage.
         stage.addActor(display);
+        languageStage.addActor(languageDisplay);
+
 
     }
     /**
@@ -463,13 +487,16 @@ public class SparseDemo extends ApplicationAdapter {
                     SColor.floatGet(0x595652DD),
                     SColor.floatGet(0x59565299)}, new char[]{'\0'}
             ));
-            //display.burst(player.x, player.y, 1, Radius.CIRCLE, StringKit.PUNCTUATION, YELLOW_FLOAT, YELLOW_FADING_FLOAT, 0.45f);
-            //display.tint(0f, player.x, player.y, CRIMSON_FLOAT, 0.13f, null);
         }
-        // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.
-        lang[langIndex] = forms[langIndex].sentence();
-        // cycles through the text snippets displayed whenever the player moves
-        langIndex = (langIndex + 1) % lang.length;
+        // removes the first line displayed of the Art of War text or its translation.
+        lang.remove(0);
+        // if the last line reduced the number of lines we can show to less than what we try to show, we fill in more
+        // lines using a randomly selected fake language to translate the same Art of War text.
+        while (lang.size() < bonusHeight - 1)
+        {
+            StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
+            translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
+        }
     }
 
     /**
@@ -483,7 +510,7 @@ public class SparseDemo extends ApplicationAdapter {
                 if(visible[i][j] > 0.01) {
                     float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(40f + 256f + (-105f +
                             180f * ((float)visible[i][j] * (1.0f + 0.2f * SeededNoise.noise(i * 0.2f, j * 0.2f, tm * 0.001f, 10000)))))
-                            * 0x1p-9f); // "* 0x1p-9f" is equivalent to "/ 512.0", just possibly faster
+                            * 0x1p-9f); // "* 0x1p-9f" is equivalent to "/ 512.0", just maybe faster
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bg);
                 }else if(seen.contains(i, j))
                     display.put(i, j, lineDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], GRAY_FLOAT, 0.3f));
@@ -495,15 +522,11 @@ public class SparseDemo extends ApplicationAdapter {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.put(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], WHITE_FLOAT, 0.75f));
         }
-        //this helps compatibility with the HTML target, which doesn't support String.format()
-        char[] spaceArray = new char[gridWidth];
-        Arrays.fill(spaceArray, ' ');
-        String spaces = String.valueOf(spaceArray);
-
-//        for (int i = 0; i < 6; i++) {
-//            display.put(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.CREAM);
-//            display.put(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.CREAM);
-//        }
+        languageDisplay.clear(0);
+        ArrayTools.fill(languageDisplay.backgrounds, languageDisplay.defaultPackedBackground);
+        for (int i = 0; i < 6; i++) {
+            languageDisplay.put(1, i, lang.get(i), SColor.DB_LEAD);
+        }
     }
     @Override
     public void render () {
@@ -551,9 +574,16 @@ public class SparseDemo extends ApplicationAdapter {
         else if(input.hasNext()) {
             input.next();
         }
+        // we need to do some work with viewports here so the language display (or game info messages in a real game)
+        // will display in the same place even though the map view will move around. We have the language stuff set up
+        // its viewport so it is in place and won't be altered by the map. Then we just tell the Stage for the language
+        // texts to draw.
+        languageStage.getViewport().apply(false);
+        languageStage.draw();
         // certain classes that use scene2d.ui widgets need to be told to act() to process input.
         stage.act();
-
+        // we have the main stage set itself up after the language stage has already drawn.
+        stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
         stage.draw();
         Gdx.graphics.setTitle("SparseLayers Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
@@ -562,8 +592,23 @@ public class SparseDemo extends ApplicationAdapter {
     @Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-        //very important to have the mouse behave correctly if the user fullscreens or resizes the game!
-		input.getMouse().reinitialize((float) width / gridWidth, (float)height / (gridHeight + bonusHeight), gridWidth, gridHeight, 0, 0);
+
+        // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
+        float currentZoomX = (float)width / gridWidth;
+        // total new screen height in pixels divided by total number of rows on the screen
+        float currentZoomY = (float)height / (gridHeight + bonusHeight);
+        // message box should be given updated bounds since I don't think it will do this automatically
+        languageDisplay.setBounds(0, 0, width, currentZoomY * bonusHeight);
+        // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
+        input.getMouse().reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight, 0, 0);
+        currentZoomX = cellWidth / currentZoomX;
+        currentZoomY = cellHeight / currentZoomY;
+        languageStage.getViewport().update(width, height, false);
+        languageStage.getViewport().setScreenBounds(0, 0, width, (int)languageDisplay.getHeight());
+        //input.update(width, height, false);
+        stage.getViewport().update(width, height, false);
+        stage.getViewport().setScreenBounds(0, (int)languageDisplay.getHeight(),
+                width, height - (int)languageDisplay.getHeight());
 	}
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
