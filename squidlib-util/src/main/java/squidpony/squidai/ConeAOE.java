@@ -212,8 +212,8 @@ public class ConeAOE implements AOE {
         if(totalTargets == 0)
             return bestPoints;
 
-        Coord[] ts = targets.toArray(new Coord[0]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
+        Coord[] ts = targets.toArray(new Coord[targets.size()]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
         Coord t = exs[0];
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
@@ -344,7 +344,7 @@ public class ConeAOE implements AOE {
 
         Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
         Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
-        Coord[] exs = requiredExclusions.toArray(new Coord[0]);
+        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
         Coord t = exs[0];
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];

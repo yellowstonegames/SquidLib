@@ -9,8 +9,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
+import squidpony.NaturalLanguageCipher;
+import squidpony.StringKit;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -47,7 +48,6 @@ public class BasicDemo2 extends ApplicationAdapter {
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
     private Color[][] colors, bgColors;
-    private int[][] baseLightness;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
     //We're displaying 30 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
@@ -79,9 +79,15 @@ public class BasicDemo2 extends ApplicationAdapter {
     private AnimatedEntity playerMobile;
     private List<Coord> toCursor;
     private List<Coord> awaitedMoves;
-    private String[] lang;
-    private FakeLanguageGen.SentenceForm[] forms;
-    private int langIndex = 0;
+    private final String artOfWar =
+            "Sun Tzu said: In the practical art of war, the best thing of all is to take the" +
+            " enemy's country whole and intact; to shatter and destroy it is not so good. So" +
+            ", too, it is better to recapture an army entire than to destroy it, to capture " +
+            "a regiment, a detachment or a company entire than to destroy them. Hence to fig" +
+            "ht and conquer in all your battles is not supreme excellence; supreme excellenc" +
+            "e consists in breaking the enemy's resistance without fighting.";
+    private ArrayList<String> lang;
+    private NaturalLanguageCipher translator;
     private char[] line;
     private double[][] resistance;
     private double[][] visible;
@@ -108,7 +114,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         display.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
 
         // this makes animations medium-slow, which makes multi-cell movement slower but nicer-looking.
-        display.setAnimationDuration(0.15f);
+        display.setAnimationDuration(0.11f);
 
         //These need to have their positions set before adding any entities if there is an offset involved.
         //There is no offset used here, but it's still a good practice here to set positions early on.
@@ -209,74 +215,11 @@ public class BasicDemo2 extends ApplicationAdapter {
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
         colors = MapUtility.generateDefaultColors(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
-        baseLightness = ArrayTools.fill(40, gridWidth, gridHeight);
-        // this creates an array of sentence builders, where each imitates one or more languages or linguistic styles.
-        // this serves to demonstrate the large amount of glyphs SquidLib supports.
-        // there's no need to put much effort into understanding this section yet, and many games won't use the language
-        // generation code at all. If you want to know what this does, the parameters are: the language to use,
-        // minimum words in a sentence, maximum words in a sentence, "mid" punctuation that can be after a word (like a
-        // comma), "end" punctuation that can be at the end of a sentence, frequency of "mid" punctuation (the chance in
-        // 1.0 that a word will have something like a comma appended after it), and the limit on how many chars to use.
-        forms = new FakeLanguageGen.SentenceForm[]
-                {
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ENGLISH, 5, 10, new String[]{",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GREEK_AUTHENTIC, 5, 11, new String[]{",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GREEK_ROMANIZED, 5, 11, new String[]{",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.LOVECRAFT, 3, 9, new String[]{",", ",", ";"},
-                                new String[]{".", ".", "!", "!", "?", "...", "..."}, 0.15, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FRENCH, 4, 12, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.RUSSIAN_AUTHENTIC, 6, 13, new String[]{",", ",", ",", ",", ";", " -"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.25, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.RUSSIAN_ROMANIZED, 6, 13, new String[]{",", ",", ",", ",", ";", " -"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.25, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.JAPANESE_ROMANIZED, 5, 13, new String[]{",", ",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "...", "..."}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SWAHILI, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SOMALI, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.HINDI_ROMANIZED, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.NORSE, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.INUKTITUT, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.NAHUATL, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?"}, 0.12, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FANTASY_NAME, 4, 8, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.22, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FANCY_FANTASY_NAME, 4, 8, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.22, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ELF, 5, 10, new String[]{",", ",", ",", ";", ";", " -"},
-                                new String[]{".", ".", ".", "...", "?"}, 0.22, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.GOBLIN, 4, 9, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", ".", "...", "?"}, 0.1, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.DEMONIC, 4, 8, new String[]{",", ",", ",", ";", ";"},
-                                new String[]{".", ".", "!", "!", "!", "?!"}, 0.07, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.INFERNAL, 6, 13, new String[]{",", ",", ",", ";", ";", " -", "*", " ©"},
-                                new String[]{".", ".", ".", "...", "?", "...", "?"}, 0.25, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.FRENCH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.65), 5, 9, new String[]{",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "?", "..."}, 0.14, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.ENGLISH.addAccents(0.5, 0.15), 5, 10, new String[]{",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.17, gridWidth - 4),
-                        new FakeLanguageGen.SentenceForm(FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.5).mix(FakeLanguageGen.FRENCH, 0.35)
-                                .mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.25).mix(FakeLanguageGen.GREEK_ROMANIZED, 0.2).mix(FakeLanguageGen.ENGLISH, 0.15)
-                                .mix(FakeLanguageGen.FANCY_FANTASY_NAME, 0.12).mix(FakeLanguageGen.LOVECRAFT, 0.1)
-                                , 5, 10, new String[]{",", ",", ",", ";"},
-                                new String[]{".", ".", ".", "!", "?", "..."}, 0.2, gridWidth - 4),
-                };
-        /*
-         * Now we generate the initial sentences for each of those many languages. We cycle through the shown sentences
-         * by changing langIndex, and change the contents of each sentence once it is cycled out of being visible.
-         */
-        lang = new String[forms.length];
-        for (int i = 0; i < forms.length; i++) {
-            lang[i] = forms[i].sentence();
-        }
+        lang = new ArrayList<>(16);
+        StringKit.wrap(lang, artOfWar, gridWidth - 2);
+        translator = new NaturalLanguageCipher(rng.getRandomElement(FakeLanguageGen.registered));
+        StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
+        translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
 
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
@@ -337,6 +280,7 @@ public class BasicDemo2 extends ApplicationAdapter {
                         Gdx.app.exit();
                         break;
                     }
+                    // Here, if you enter a '*' character (usually Shift+8) while holding Ctrl, a little effect appears.
                     case '*': {
                         if (ctrl)
                             display.getForegroundLayer().burst(playerPosition.x, playerPosition.y, true, '@', SColor.CW_LIGHT_YELLOW, 0.75f);
@@ -448,9 +392,12 @@ public class BasicDemo2 extends ApplicationAdapter {
             //display.getForegroundLayer().burst(0.1f, playerPosition.x, playerPosition.y, 2, true, '?', SColor.CW_BRIGHT_INDIGO, SColor.ELECTRIC_PURPLE.cpy().sub(0,0,0,1),  false, -1f, 0.8f);
         }
         // changes the top displayed sentence to a new one with the same language. the top will be cycled off next.
-        lang[langIndex] = forms[langIndex].sentence();
-        // cycles through the text snippets displayed whenever the player moves
-        langIndex = (langIndex + 1) % lang.length;
+        lang.remove(0);
+        while (lang.size() < bonusHeight - 1)
+        {
+            StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
+            translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
+        }
     }
 
     /**
@@ -474,16 +421,16 @@ public class BasicDemo2 extends ApplicationAdapter {
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.put(pt.x, pt.y, line[i + 1], SColor.CW_RICH_AZURE, bgColors[pt.x][pt.y], 130);
+            display.put(pt.x, pt.y, line[i + 1], SColor.CW_FLUSH_JADE, bgColors[pt.x][pt.y], 130);
         }
         //this helps compatibility with the HTML target, which doesn't support String.format()
         char[] spaceArray = new char[gridWidth];
         Arrays.fill(spaceArray, ' ');
         String spaces = String.valueOf(spaceArray);
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < bonusHeight - 1; i++) {
             display.putString(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.COSMIC_LATTE);
-            display.putString(2, gridHeight + i + 1, lang[(langIndex + i) % lang.length], SColor.BLACK, SColor.COSMIC_LATTE);
+            display.putString(1, gridHeight + i + 1, lang.get(i), SColor.BLACK, SColor.COSMIC_LATTE);
         }
     }
 

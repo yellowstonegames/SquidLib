@@ -1249,7 +1249,7 @@ public class StringKit {
     {
         if(width <= 0 || receiving == null)
             return receiving;
-        Matcher widthMatcher = Pattern.compile("(?:({=Y}(?=\\S).{1," + width + "})((?<=\\p{Pd})|(\\s+)))|({=Y}\\S{1," + width + "})").matcher(longText + "\n");
+        Matcher widthMatcher = Pattern.compile("(?:({=Y}(?!\\s).{1," + width + "})((?<=\\p{Pd})|(\\s+)))|({=Y}\\S{1," + width + "})").matcher(longText + "\n");
         while (widthMatcher.find())
         {
             receiving.add(widthMatcher.group("Y"));

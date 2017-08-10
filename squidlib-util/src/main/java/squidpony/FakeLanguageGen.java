@@ -1790,9 +1790,19 @@ public class FakeLanguageGen implements Serializable {
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
      * nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric
      * codes for languages in the {@link #serializeToString()} output, but neither is dependent on the other if this
-     * array is changed for some reason (which is not recommended, but not out of the question).
+     * array is changed for some reason (which is not recommended, but not out of the question). If this is modified,
+     * then it is probably a bad idea to assign null to any elements in registered; special care is taken to avoid null
+     * elements in its original state, so some code may rely on the items being usable and non-null.
      */
-    public static final FakeLanguageGen[] registered = registry.toArray(new FakeLanguageGen[0]);
+    public static final FakeLanguageGen[] registered;
+
+    static {
+        // the first item in registry is null so it can be a placeholder for random languages; we want to skip it.
+        registered = new FakeLanguageGen[registry.size()-1];
+        for (int i = 0; i < registered.length; i++) {
+            registered[i] = registry.getAt(i+1);
+        }
+    }
     /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
      */

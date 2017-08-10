@@ -128,7 +128,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
                     doors2.add(Coord.get(x, y));
             }
         }
-        if(!doors2.isEmpty()) this.validDoors = doors2.toArray(new Coord[0]);
+        if(!doors2.isEmpty()) this.validDoors = doors2.toArray(new Coord[doors2.size()]);
         initSides();
     }
 
