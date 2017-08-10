@@ -34,12 +34,12 @@ public class NaturalLanguageCipher implements Serializable{
 
     private static class SemiRandom implements StatefulRandomness, Serializable{
         private static final long serialVersionUID = 1287835632461186341L;
-        private long state;
-        public SemiRandom()
+        public long state;
+        SemiRandom()
         {
             state = (long) (Long.MAX_VALUE * (Math.random() * 2.0 - 1.0));
         }
-        public SemiRandom(long state)
+        SemiRandom(long state)
         {
             this.state = state;
         }
@@ -72,7 +72,7 @@ public class NaturalLanguageCipher implements Serializable{
          */
         @Override
         public int next(int bits) {
-            return (int) ((state += 0x41041041041041L) & ~(-1 << bits));
+            return (int) ((state += 0x41041041041041L) & ~(-1L << bits));
         }
 
         /**
@@ -294,7 +294,7 @@ se$->z
      */
     public int cacheLevel = 2;
 
-    public final long shift;
+    public long shift;
 
     /**
      * Constructs a LanguageCipher that will generate English-like or Dutch-like text by default.
@@ -368,12 +368,19 @@ se$->z
      */
     public NaturalLanguageCipher(FakeLanguageGen language, long shift)
     {
-        this.shift = shift;
-        this.language = language.copy();
         rs = new SemiRandom(0xDF58476D1CE4E5B9L + shift);
         rng = new RNG(rs);
         table = new HashMap<>(512);
         reverse = new HashMap<>(512);
+        initialize(language, shift);
+    }
+    public NaturalLanguageCipher initialize(FakeLanguageGen language, long shift)
+    {
+        rs.state = 0xDF58476D1CE4E5B9L + shift;
+        this.shift = shift;
+        this.language = language.copy();
+        table.clear();
+        reverse.clear();
         pluralSuffix = addPart("-s", 0);
         nounySuffix = addPart("-y", 0);
         nounicSuffix = addPart("-ic", 0);
@@ -397,7 +404,9 @@ se$->z
         disnounPrefix = addPart("dis-", 0);
         table.clear();
         reverse.clear();
+        return this;
     }
+
 
     /**
      * Copies another LanguageCipher and constructs this one with the information in the other. Copies the dictionary

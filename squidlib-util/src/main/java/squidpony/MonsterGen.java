@@ -360,9 +360,9 @@ public class MonsterGen {
             List<String> otherParts = other.parts.get(other.name),
                     p2 = rng.randomPortion(otherParts, (int)Math.round(otherParts.size() * otherInfluence * 0.5));
             next.parts.put(other.name, p2);
-            String[] unsaid = other.unsaidAdjectives.toArray(new String[0]),
-                    talentAdj = other.powerAdjectives.toArray(new String[0]),
-                    talentPhr = other.powerPhrases.toArray(new String[0]);
+            String[] unsaid = other.unsaidAdjectives.toArray(new String[other.unsaidAdjectives.size()]),
+                    talentAdj = other.powerAdjectives.toArray(new String[other.powerAdjectives.size()]),
+                    talentPhr = other.powerPhrases.toArray(new String[other.powerPhrases.size()]);
             unsaid = portion(rng, unsaid, (int)Math.round(unsaid.length * otherInfluence));
             talentAdj = portion(rng, talentAdj, (int)Math.round(talentAdj.length * otherInfluence));
             talentPhr = portion(rng, talentPhr, (int)Math.round(talentPhr.length * otherInfluence));

@@ -330,7 +330,7 @@ public class FOVCache extends FOV {
                 it.remove();
         }
 
-        lightSources = lights.keySet().toArray(new Coord[0]);
+        lightSources = lights.keySet().toArray(new Coord[lights.size()]);
         lightBrightnesses = new int[lights.size()];
         for (int i = 0; i < lightSources.length; i++) {
             lightBrightnesses[i] = lights.get(lightSources[i]);
@@ -1694,7 +1694,7 @@ public class FOVCache extends FOV {
             c = path[i];
             sorted.put(distance(c.x, c.y) + modifier, c);
         }
-        return sorted.values().toArray(new Coord[0]);
+        return sorted.values().toArray(new Coord[sorted.size()]);
     }
     /**
      * Given a path as a List of Coords (such as one produced by DijkstraMap.getPath()), this method will look up the
