@@ -39,7 +39,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     private SnapshotArray<TextCellFactory.Glyph> glyphs;
     public IColorCenter<Color> scc;
 
-
     public SparseLayers(int gridWidth, int gridHeight)
     {
         this(gridWidth, gridHeight, 10, 16, DefaultResources.getStretchableFont());
@@ -164,28 +163,84 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     @Override
     public void put(char[][] chars, Color[][] colors) {
-        if(colors == null)
-            return;
         if(chars == null)
         {
-            for (int i = 0; i < colors.length; i++) {
-                if(colors[i] == null)
-                    continue;
-                for (int j = 0; j < colors.length; j++) {
-                    backgrounds[i][j] = (colors[i][j] == null) ? 0f : scc.filter(colors[i][j]).toFloatBits();
+            if(colors != null)
+            {
+                for (int i = 0; i < colors.length; i++) {
+                    if (colors[i] == null)
+                        continue;
+                    for (int j = 0; j < colors[i].length; j++) {
+                        backgrounds[i][j] = (colors[i][j] == null) ? 0f : scc.filter(colors[i][j]).toFloatBits();
+                    }
                 }
             }
         }
         else
         {
-            for (int i = 0; i < chars.length && i < colors.length; i++) {
-                if(colors[i] == null || chars[i] == null)
-                    continue;
-                for (int j = 0; j < chars[i].length && j < colors[i].length; j++) {
-                    if(colors[i][j] == null)
+            if(colors == null)
+            {
+                for (int i = 0; i < chars.length; i++) {
+                    if(chars[i] == null)
+                        continue;
+                    for (int j = 0; j < chars[i].length; j++) {
                         put(i, j, chars[i][j], defaultPackedForeground, 0f);
-                    else
-                        put(i, j, chars[i][j], defaultPackedForeground, scc.filter(colors[i][j]).toFloatBits());
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < chars.length && i < colors.length; i++) {
+                    if(colors[i] == null || chars[i] == null)
+                        continue;
+                    for (int j = 0; j < chars[i].length && j < colors[i].length; j++) {
+                        if(colors[i][j] == null)
+                            put(i, j, chars[i][j], defaultPackedForeground, 0f);
+                        else
+                            put(i, j, chars[i][j], defaultPackedForeground, scc.filter(colors[i][j]).toFloatBits());
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0, while also
+     * setting the background colors to match the given Color 2D array. If the colors argument is null, does nothing. If
+     * the chars argument is null, only affects the background colors.
+     * @param chars Can be {@code null}, indicating that only colors must be put.
+     * @param colors the background colors for the given chars
+     */
+    public void put(char[][] chars, float[][] colors) {
+        if(chars == null)
+        {
+            if(colors != null) {
+                for (int i = 0; i < colors.length; i++) {
+                    if (colors[i] == null)
+                        continue;
+                    System.arraycopy(colors[i], 0, backgrounds[i], 0, colors[i].length);
+                }
+            }
+        }
+        else
+        {
+            if(colors == null)
+            {
+                for (int i = 0; i < chars.length; i++) {
+                    if(chars[i] == null)
+                        continue;
+                    for (int j = 0; j < chars[i].length; j++) {
+                        put(i, j, chars[i][j], defaultPackedForeground, 0f);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < chars.length && i < colors.length; i++) {
+                    if(colors[i] == null || chars[i] == null)
+                        continue;
+                    for (int j = 0; j < chars[i].length && j < colors[i].length; j++) {
+                        put(i, j, chars[i][j], defaultPackedForeground, colors[i][j]);
+                    }
                 }
             }
         }
@@ -503,9 +558,11 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     /**
      * Changes the background at position x,y to the given color as an encoded float. The color can be transparent,
      * which will show through to whatever is behind this SparseLayers, or the color the screen was last cleared with.
+     * Unlike other methods in this class, a float equal to 0f will be used instead of being used to skip over a cell,
+     * and will change the background at the given position to fully transparent.
      * @param x where to change the background color, x-coordinate
      * @param y where to change the background color, y-coordinate
-     * @param color the color, as an encoded float, to change to; may be transparent
+     * @param color the color, as an encoded float, to change to; may be transparent, and considers 0f a valid color
      */
     public void put(int x, int y, float color)
     {
@@ -569,11 +626,133 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         if(lay >= 0)
             layers.get(lay).clear();
     }
+    /**
+     * Fills all of the background with the given color as libGDX Color object.
+     * @param color the color to use for all of the background, as a libGDX Color or some subclass like SColor
+     */
+    public void fillBackground(Color color)
+    {
+        ArrayTools.fill(backgrounds, color == null ? 0f : scc.filter(color).toFloatBits());
+    }
 
+    /**
+     * Fills all of the background with the given color as a packed float.
+     * @param color the color to use for all of the background, as a packed float
+     */
+    public void fillBackground(float color)
+    {
+        ArrayTools.fill(backgrounds, color);
+    }
+
+    /**
+     * Changes the background color in an area to all have the given color, as a libGDX Color (or SColor, etc.).
+     * @param color a libGDX Color to fill the area with; may be null to make the background transparent
+     * @param x left edge's x coordinate, in cells
+     * @param y top edge's y coordinate, in cells
+     * @param width the width of the area to change the color on
+     * @param height the height of the area to change the color on
+     */
+    public void fillArea(Color color, int x, int y, int width, int height) {
+        fillArea(color == null ? 0f : scc.filter(color).toFloatBits(), x, y, width, height);
+    }
+    /**
+     * Changes the background color in an area to all have the given color, as a packed float.
+     * @param color a color as a packed float to fill the area with; may be 0f to make the background transparent
+     * @param x left edge's x coordinate, in cells
+     * @param y top edge's y coordinate, in cells
+     * @param width the width of the area to change the color on
+     * @param height the height of the area to change the color on
+     */
+    public void fillArea(float color, int x, int y, int width, int height) {
+        if (x < 0) {
+            width += x;
+            x = 0;
+        }
+        if (y < 0) {
+            height += y;
+            y = 0;
+        }
+        if (width <= 0 || height <= 0)
+            return;
+        for (int i = 0, xx = x; i < width && xx < gridWidth; i++, xx++) {
+            for (int j = 0, yy = y; j < height && yy < gridHeight; j++, yy++) {
+                backgrounds[xx][yy] = color;
+            }
+        }
+    }
+
+    /**
+     * Gets whether any animations or other scene2d Actions are running on this SparseLayers.
+     * @return true if any animations or Actions are currently running, false otherwise
+     */
     @Override
     public boolean hasActiveAnimations()
     {
-        return animationCount > 0;
+        return 0 < animationCount || 0 < getActions().size;
+    }
+
+    /**
+     * Gets a direct reference to the 2D float array this uses for background colors.
+     * @return a direct reference to the 2D float array this uses for background colors.
+     */
+    public float[][] getBackgrounds() {
+        return backgrounds;
+    }
+
+    /**
+     * Changes the reference this uses for the float array for background colors; this will not accept null parameters,
+     * nor will it accept any 2D array with dimensions that do not match the (unchanging) gridWidth and gridHeight of
+     * this SparseLayers.
+     * @param backgrounds a non-null 2D float array of colors; must have width == gridWidth and height == gridHeight
+     */
+    public void setBackgrounds(float[][] backgrounds) {
+        if(backgrounds == null || backgrounds[0] == null)
+            throw new IllegalArgumentException("SparseLayers.backgrounds must not be set to null");
+        if(backgrounds.length != gridWidth || backgrounds[0].length != gridHeight)
+            throw new IllegalArgumentException("Must be given a 2D array with equal dimensions to the current gridWidth and gridHeight");
+        this.backgrounds = backgrounds;
+    }
+
+    /**
+     * Gets a direct reference to the TextCellFactory this uses to draw and size its text items and cells.
+     * @return a direct reference to the TextCellFactory this uses to draw and size its text items and cells.
+     */
+    public TextCellFactory getFont() {
+        return font;
+    }
+
+    /**
+     * Sets the TextCellFactory this uses to draw and size its text items and cells. The given TextCellFactory must not
+     * be null. If font is uninitialized, this will initialize it using cellWidth and cellHeight. If font has been
+     * initialized with a different height and width, then the sizing of this SparseLayers will change.
+     * @param font a non-null TextCellFactory; if uninitialized, this will initialize it using cellWidth and cellHeight.
+     */
+    public void setFont(TextCellFactory font) {
+        if(font == null)
+            throw new IllegalArgumentException("SparseLayers.font must not be set to null");
+        if(!font.initialized())
+            font.width(cellWidth()).height(cellHeight()).initBySize();
+        this.font = font;
+    }
+
+    /**
+     * Gets the IColorCenter for Color objects (almost always a SquidColorCenter, but this isn't guaranteed) that this
+     * uses to cache and possibly alter Colors that given to it as parameters.
+     * @return the IColorCenter of Color that this uses to cache and modify Colors given to it
+     */
+    public IColorCenter<Color> getScc() {
+        return scc;
+    }
+
+    /**
+     * Sets the IColorCenter for Color objects that this uses to cache and modify Colors given to it; does not accept
+     * null parameters.
+     * @param scc a non-null IColorCenter of Color that this will use to cache and modify Colors given to it
+     */
+    public void setScc(IColorCenter<Color> scc) {
+        if(scc == null)
+            throw new IllegalArgumentException("The IColorCenter<Color> given to setScc() must not be null");
+        this.scc = scc;
     }
 
     /**

@@ -463,7 +463,7 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      */
     public ArrayList<Color> rainbow(int steps)
     {
-        return rainbow(1.0f, 1.0f, steps);
+        return rainbow(1f, 1f, 1f, steps);
     }
 
     /**
@@ -479,10 +479,27 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      */
     public ArrayList<Color> rainbow(float saturation, float value, int steps)
     {
+        return rainbow(saturation, value, 1f, steps);
+    }
+
+    /**
+     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and
+     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should
+     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more
+     * likely to see colors that appear for shorter spans on the color wheel, like orange.
+     * Uses the given saturation, value, and opacity for all colors in the rainbow, and only changes hue.
+     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale
+     * @param value the brightness of the rainbow's colors; 1.0 is brightest
+     * @param opacity the alpha value of all colors in the rainbow; 0.0 is fully transparent and 1.0 is opaque
+     * @param steps the number of different Color elements to generate in the returned ArrayList
+     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.
+     */
+    public ArrayList<Color> rainbow(float saturation, float value, float opacity, int steps)
+    {
         steps = (steps > 1) ? steps : 1;
         ArrayList<Color> colors = new ArrayList<>(steps);
         for (float i = 0; i < 1f - 0.5f / steps; i+= 1.0f / steps) {
-            colors.add(filter(getHSV(i, saturation, value)));
+            colors.add(filter(getHSV(i, saturation, value, opacity)));
         }
         return colors;
     }
@@ -500,7 +517,24 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      */
     public ArrayList<Color> rainbow(double saturation, double value, int steps)
     {
-        return rainbow((float)saturation, (float)value, steps);
+        return rainbow((float)saturation, (float)value, 1f, steps);
+    }
+
+    /**
+     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and
+     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should
+     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more
+     * likely to see colors that appear for shorter spans on the color wheel, like orange.
+     * Uses the given saturation, value, and opacity for all colors in the rainbow, and only changes hue.
+     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale
+     * @param value the brightness of the rainbow's colors; 1.0 is brightest
+     * @param opacity the alpha value of all colors in the rainbow; 0.0 is fully transparent and 1.0 is opaque
+     * @param steps the number of different Color elements to generate in the returned ArrayList
+     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.
+     */
+    public ArrayList<Color> rainbow(double saturation, double value, double opacity, int steps)
+    {
+        return rainbow((float)saturation, (float)value, (float)opacity, steps);
     }
     /**
      * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the
