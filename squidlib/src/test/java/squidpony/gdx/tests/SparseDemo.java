@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.NaturalLanguageCipher;
 import squidpony.StringKit;
@@ -28,6 +27,12 @@ import squidpony.squidmath.SeededNoise;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is a small, not-overly-simple demo that presents some important features of SquidLib and shows a faster,
+ * cleaner, and more recently-introduced way of displaying the map and other text. Features include dungeon map
+ * generation, field of view, pathfinding (to the mouse position), simplex noise (used for a flickering torch effect),
+ * language generation/ciphering,
+ */
 public class SparseDemo extends ApplicationAdapter {
     SpriteBatch batch;
 
@@ -38,11 +43,11 @@ public class SparseDemo extends ApplicationAdapter {
     private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
-    //We're displaying 27 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
-    //gridHeight is 27 because that variable will be used for generating the dungeon (the actual size of the dungeon
+    //We're displaying 25 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
+    //gridHeight is 25 because that variable will be used for generating the dungeon (the actual size of the dungeon
     //will be triple gridWidth and triple gridHeight), and determines how much off the dungeon is visible at any time.
     //The bonusHeight is the number of additional rows that aren't handled like the dungeon rows and are shown in a
-    //separate area; here we use them for translations. The gridWidth is 100, which means we show 100 grid spaces
+    //separate area; here we use them for translations. The gridWidth is 90, which means we show 90 grid spaces
     //across the whole screen, but the actual dungeon is larger. The cellWidth and cellHeight are 10 and 20, which will
     //match the starting dimensions of a cell in pixels, but won't be stuck at that value because we use a "Stretchable"
     //font, and so the cells can change size (they don't need to be scaled by equal amounts, either). While gridWidth
@@ -50,9 +55,9 @@ public class SparseDemo extends ApplicationAdapter {
     //one cell; resizing the window can make the units cellWidth and cellHeight use smaller or larger than a pixel.
 
     /** In number of cells */
-    private static final int gridWidth = 100;
+    private static final int gridWidth = 90;
     /** In number of cells */
-    private static final int gridHeight = 27;
+    private static final int gridHeight = 25;
 
     /** In number of cells */
     private static final int bigWidth = gridWidth * 3;
@@ -111,8 +116,20 @@ public class SparseDemo extends ApplicationAdapter {
     // rules of Label, which older SquidLib code used when it needed text in an Actor. Glyphs are also lighter-weight in
     // memory usage and time taken to draw than Labels.
     private TextCellFactory.Glyph pg;
+    // libGDX can use a kind of packed float (yes, the number type) to efficiently store colors, but it also uses a
+    // heavier-weight Color object sometimes; SquidLib has a large list of SColor objects that are often used as easy
+    // predefined colors since SColor extends Color. SparseLayers makes heavy use of packed float colors internally,
+    // but also allows Colors instead for most methods that take a packed float. Some cases, like very briefly-used
+    // colors that are some mix of two other colors, are much better to create as packed floats from other packed
+    // floats, usually using SColor.lerpFloatColors(), which avoids creating any objects. It's ideal to avoid creating
+    // new objects (such as Colors) frequently for only brief usage,because this can cause temporary garbage objects to
+    // build up and slow down the program while they get cleaned up (garbage collection, which is slower on Android).
     private static final float WHITE_FLOAT = NumberUtils.intToFloatColor(-1),
             GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444);
+    // here we store the colors we will use for a burst effect when the player bumps into a wall. We don't really need
+    // to recalculate this every time a wall gets bumped, and this lets us do more complex things with the colors.
+    private float[] burstColors;
+
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -143,8 +160,7 @@ public class SparseDemo extends ApplicationAdapter {
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
         // set the background colors directly as floats with the SparseDisplay.backgrounds field, and it can be handy
         // to hold onto the current color we want to fill that with in the defaultPackedBackground field.
-        // Later in this demo, we fill the background completely with this code:
-        // ArrayTools.fill(languageDisplay.backgrounds, languageDisplay.defaultPackedBackground);
+        //SparseLayers has fillBackground() and fillArea() methods for coloring all or part of the backgrounds.
         languageDisplay.defaultPackedBackground = SColor.COSMIC_LATTE.toFloatBits();
 
         //This uses the seeded RNG we made earlier to build a procedural dungeon using a method that takes rectangular
@@ -281,6 +297,18 @@ public class SparseDemo extends ApplicationAdapter {
             for (int j = 0; j < bigHeight; j++) {
                 bgColors[i][j] = temp[i][j].toFloatBits();
             }
+        }
+
+        // here we assign the colors that bumping into a wall (using the keyboard controls) will produce in a burst.
+        burstColors = new float[36];
+        for (int i = 0; i < 9; i++) {
+            // floatGetHSV makes a color as a packed float given its hue, saturation, value (lightness), and opacity.
+            // we use groups of 9 where each group goes through the hue rotation once.
+            // later groups become less saturated, darker, and more translucent as the animation continues.
+            burstColors[i   ] = SColor.floatGetHSV(i / 9f, 0.735f - i * 0.015f, 1f, 0.7f);
+            burstColors[i+9 ] = SColor.floatGetHSV(i / 9f, 0.6f, 1f - i * 0.015f, 0.7f);
+            burstColors[i+18] = SColor.floatGetHSV(i / 9f, 0.6f, 0.865f - i * 0.015f, 0.7f - i * 0.025f);
+            burstColors[i+27] = SColor.floatGetHSV(i / 9f, 0.6f - i * 0.015f, 0.73f - i * 0.015f, 0.475f - i * 0.03f);
         }
 
         //places the player as an '@' at his position in orange.
@@ -478,14 +506,9 @@ public class SparseDemo extends ApplicationAdapter {
         else
         {
             display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
-            display.addAction(new PanelEffect.GibberishEffect(display, 1f, floors, player, 6, new float[]{
-                    SColor.INTERNATIONAL_ORANGE.toFloatBits(),
-                    SColor.FLORAL_LEAF.toFloatBits(),
-                    SColor.LEMON.toFloatBits(),
-                    SColor.LEMON_CHIFFON.toFloatBits(),
-                    SColor.floatGet(0xFF6600EE),
-                    SColor.floatGet(0x595652DD),
-                    SColor.floatGet(0x59565299)}, new char[]{'\0'}
+            display.addAction(new PanelEffect.GibberishEffect(display, 1f, floors, player, 6,
+                    burstColors,
+                    new char[]{'\u0000'} // the char at Unicode 0 is used to mean a solid block that takes up the cell
             ));
         }
         // removes the first line displayed of the Art of War text or its translation.
@@ -504,10 +527,14 @@ public class SparseDemo extends ApplicationAdapter {
      */
     public void putMap()
     {
+        //In many other situations, you would clear the drawn characters to prevent things that had been drawn in the
+        //past from affecting the current frame. This isn't a problem here, but would probably be an issue if we had
+        //monsters running in and out of our vision. If artifacts from previous frames show up, uncomment the next line.
+        //display.clear();
         long tm = (System.currentTimeMillis() & 0xffffffL);
         for (int i = 0; i < bigWidth; i++) {
             for (int j = 0; j < bigHeight; j++) {
-                if(visible[i][j] > 0.01) {
+                if(visible[i][j] > 0.0) {
                     float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(40f + 256f + (-105f +
                             180f * ((float)visible[i][j] * (1.0f + 0.2f * SeededNoise.noise(i * 0.2f, j * 0.2f, tm * 0.001f, 10000)))))
                             * 0x1p-9f); // "* 0x1p-9f" is equivalent to "/ 512.0", just maybe faster
@@ -523,7 +550,7 @@ public class SparseDemo extends ApplicationAdapter {
             display.put(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], WHITE_FLOAT, 0.75f));
         }
         languageDisplay.clear(0);
-        ArrayTools.fill(languageDisplay.backgrounds, languageDisplay.defaultPackedBackground);
+        languageDisplay.fillBackground(languageDisplay.defaultPackedBackground);
         for (int i = 0; i < 6; i++) {
             languageDisplay.put(1, i, lang.get(i), SColor.DB_LEAD);
         }

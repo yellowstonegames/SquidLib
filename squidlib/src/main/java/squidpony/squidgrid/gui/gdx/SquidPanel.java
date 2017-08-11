@@ -2060,11 +2060,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
 
 	@Override
     public boolean hasActiveAnimations() {
-        //return animationCount != 0;
-        if (0 < animationCount)
-            return true;
-        else
-            return 0 < getActions().size;
+        return 0 < animationCount || 0 < getActions().size;
     }
 
     public OrderedSet<AnimatedEntity> getAnimatedEntities() {
