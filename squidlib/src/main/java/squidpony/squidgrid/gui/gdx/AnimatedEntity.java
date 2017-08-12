@@ -31,7 +31,7 @@ public class AnimatedEntity {
     }
     public void setText(String text)
     {
-        if(actor.getClass() == Label.class)
+        if(actor instanceof Label)
         {
             ((Label)actor).setText(text);
         }

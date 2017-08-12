@@ -11,9 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntIntMap;
-import com.badlogic.gdx.utils.SnapshotArray;
 import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
@@ -21,6 +19,8 @@ import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.StatefulRNG;
+
+import java.util.ArrayList;
 
 /**
  * Created by Tommy Ettinger on 7/28/2017.
@@ -32,11 +32,11 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             defaultBackground = SColor.BLACK;
     public float defaultPackedForeground = SColor.WHITE.toFloatBits(),
             defaultPackedBackground = SColor.BLACK.toFloatBits();
-    public Array<SparseTextMap> layers;
+    public ArrayList<SparseTextMap> layers;
     protected IntIntMap mapping;
     public TextCellFactory font;
     protected int animationCount = 0;
-    private SnapshotArray<TextCellFactory.Glyph> glyphs;
+    private ArrayList<TextCellFactory.Glyph> glyphs;
     public IColorCenter<Color> scc;
 
     public SparseLayers(int gridWidth, int gridHeight)
@@ -57,7 +57,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         this.gridWidth = MathUtils.clamp(gridWidth, 1, 65535);
         this.gridHeight = MathUtils.clamp(gridHeight, 1, 65535);
         backgrounds = ArrayTools.fill(0f, this.gridWidth, this.gridHeight);
-        layers = new Array<>(true, 4, SparseTextMap.class);
+        layers = new ArrayList<>(4);
         if(font.initialized())
             this.font = font;
         else
@@ -65,7 +65,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         layers.add(new SparseTextMap(gridWidth * gridHeight >> 2));
         mapping = new IntIntMap(4);
         mapping.put(0, 0);
-        glyphs = new SnapshotArray<>(true, 16, TextCellFactory.Glyph.class);
+        glyphs = new ArrayList<>(16);
         scc = DefaultResources.getSCC();
         setBounds(xOffset, yOffset,
                 this.font.actualCellWidth * this.gridWidth, this.font.actualCellHeight * this.gridHeight);
@@ -81,7 +81,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public int getLayerCount()
     {
-        return layers.size;
+        return layers.size();
     }
 
     /**
@@ -372,7 +372,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         if(background != 0f)
             backgrounds[x][y] = background;
         if(foreground != 0f)
-            layers.items[0].place(x, y, c, foreground);
+            layers.get(0).place(x, y, c, foreground);
     }
 
 
@@ -388,7 +388,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight || foreground == 0f)
             return;
-        layers.items[0].place(x, y, c, foreground);
+        layers.get(0).place(x, y, c, foreground);
     }
     /**
      * Puts the char c at the position x,y in the requested layer with the given foreground and background colors. If
@@ -436,9 +436,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         layer = mapping.get(layer, layer);
         if(foreground != 0f)
         {
-            if(layer >= layers.size)
+            if(layer >= layers.size())
             {
-                mapping.put(layer, layers.size);
+                mapping.put(layer, layers.size());
                 SparseTextMap stm = new SparseTextMap(gridWidth * gridHeight >> 4);
                 stm.place(x, y, c, foreground);
                 layers.add(stm);
@@ -528,8 +528,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         if (foreground != 0f)
         {
             layer = mapping.get(layer, layer);
-            if (layer >= layers.size) {
-                mapping.put(layer, layers.size);
+            if (layer >= layers.size()) {
+                mapping.put(layer, layers.size());
                 SparseTextMap stm = new SparseTextMap(gridWidth * gridHeight >> 4);
                 for (int i = 0; i < len; i++) {
                     stm.place(x + i, y, text.charAt(i), foreground);
@@ -584,7 +584,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             return;
         backgrounds[x][y] = 0f;
         int code = SparseTextMap.encodePosition(x, y);
-        for (int i = 0; i < layers.size; i++) {
+        for (int i = 0; i < layers.size(); i++) {
             layers.get(i).remove(code);
         }
     }
@@ -612,7 +612,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public void clear()
     {
         ArrayTools.fill(backgrounds, 0f);
-        for (int i = 0; i < layers.size; i++) {
+        for (int i = 0; i < layers.size(); i++) {
             layers.get(i).clear();
         }
     }
@@ -843,9 +843,10 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public TextCellFactory.Glyph glyphFromGrid(int x, int y)
     {
         int code = SparseTextMap.encodePosition(x, y);
-        char shown = layers.items[0].getChar(code, ' ');
-        float color = layers.items[0].getFloat(code, 0f);
-        layers.items[0].remove(code);
+        SparseTextMap stm = layers.get(0);
+        char shown = stm.getChar(code, ' ');
+        float color = stm.getFloat(code, 0f);
+        stm.remove(code);
         TextCellFactory.Glyph g =
                 font.glyph(shown, color, worldX(x), worldY(y));
         glyphs.add(g);
@@ -864,11 +865,11 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public TextCellFactory.Glyph glyphFromGrid(int x, int y, int layer) {
         layer = mapping.get(layer, -1);
         if (layer >= 0) {
-            SparseTextMap l = layers.get(layer);
+            SparseTextMap stm = layers.get(layer);
             int code = SparseTextMap.encodePosition(x, y);
-            char shown = l.getChar(code, ' ');
-            float color = l.getFloat(code, 0f);
-            l.remove(code);
+            char shown = stm.getChar(code, ' ');
+            float color = stm.getFloat(code, 0f);
+            stm.remove(code);
             TextCellFactory.Glyph g =
                     font.glyph(shown, color, worldX(x), worldY(y));
             glyphs.add(g);
@@ -887,8 +888,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public void recallToGrid(TextCellFactory.Glyph glyph)
     {
-        layers.items[0].place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
-        glyphs.removeValue(glyph, true);
+        layers.get(0).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
+        glyphs.remove(glyph);
     }
 
     /**
@@ -900,7 +901,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     {
         layer = mapping.get(layer, 0);
         layers.get(layer).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
-        glyphs.removeValue(glyph, true);
+        glyphs.remove(glyph);
     }
     /**
      * Start a bumping animation in the given direction that will last duration seconds.
@@ -1102,7 +1103,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                     @Override
                     public void run() {
                         --animationCount;
-                        glyphs.removeValue(glyph, true);
+                        glyphs.remove(glyph);
                     }
                 })));
     }
@@ -1142,7 +1143,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                     @Override
                     public void run() {
                         --animationCount;
-                        glyphs.removeValue(glyph, true);
+                        glyphs.remove(glyph);
                     }
                 })));
     }
@@ -1273,14 +1274,13 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         super.draw(batch, parentAlpha);
         float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight;
         font.draw(batch, backgrounds, xo, yo);
-        int len = layers.size;
+        int len = layers.size();
         for (int i = 0; i < len; i++) {
             layers.get(i).draw(batch, font, xo, yOff);
         }
-        TextCellFactory.Glyph[] items = glyphs.begin();
         int x, y;
-        for (int i = 0, n = glyphs.size; i < n; i++) {
-            TextCellFactory.Glyph glyph = items[i];
+        for (int i = 0, n = glyphs.size(); i < n; i++) {
+            TextCellFactory.Glyph glyph = glyphs.get(i);
             if(glyph == null)
                 continue;
             glyph.act(Gdx.graphics.getDeltaTime());
@@ -1291,6 +1291,5 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                 continue;
             glyph.draw(batch, 1f);
         }
-        glyphs.end();
     }
 }

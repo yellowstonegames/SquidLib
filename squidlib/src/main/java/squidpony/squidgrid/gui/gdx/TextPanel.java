@@ -162,7 +162,7 @@ public class TextPanel<T extends Color> {
                             return true;
                     }
                     throw new IllegalStateException(
-                            "Unmatched " + YMoveKind.class.getSimpleName() + ": " + d);
+                            "Unmatched YMoveKind: " + d);
                 }
             }
 
@@ -235,7 +235,7 @@ public class TextPanel<T extends Color> {
                             return true;
                     }
                     throw new IllegalStateException(
-                            "Unmatched " + YMoveKind.class.getSimpleName() + ": " + d);
+							"Unmatched YMoveKind: " + d);
                 }
             }
 
@@ -300,7 +300,7 @@ public class TextPanel<T extends Color> {
 
         if (tcf == null)
             throw new NullPointerException(
-                    "The font should be set before calling " + TextPanel.class.getSimpleName() + "::init");
+                    "The font should be set before calling TextPanel.init()");
 
         final BitmapFontCache cache = font.getCache();
         final List<String> toDisplay = getTypesetText();
