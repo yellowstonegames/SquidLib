@@ -1,6 +1,10 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -16,7 +20,14 @@ import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.MapUtility;
+import squidpony.squidgrid.gui.gdx.PanelEffect;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SparseLayers;
+import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.SquidMouse;
+import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
@@ -571,14 +582,10 @@ public class SparseDemo extends ApplicationAdapter {
         {
             // this doesn't check for input, but instead processes and removes Coords from awaitedMoves.
             if (!display.hasActiveAnimations()) {
-                //secondsWithoutMoves += Gdx.graphics.getDeltaTime();
-                //if (secondsWithoutMoves >= 0.01) {
-                //    secondsWithoutMoves = 0;
-                    Coord m = awaitedMoves.remove(0);
-                    if(!toCursor.isEmpty())
-                        toCursor.remove(0);
-                    move(m.x - player.x, m.y - player.y);
-                //}
+                Coord m = awaitedMoves.remove(0);
+                if(!toCursor.isEmpty())
+                    toCursor.remove(0);
+                move(m.x - player.x, m.y - player.y);
                 // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to
                 // re-calculate the distances from all cells to the player. We don't need to calculate this information on
                 // each part of a many-cell move (just the end), nor do we need to calculate it whenever the mouse moves.
@@ -627,12 +634,9 @@ public class SparseDemo extends ApplicationAdapter {
         // message box should be given updated bounds since I don't think it will do this automatically
         languageDisplay.setBounds(0, 0, width, currentZoomY * bonusHeight);
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-        input.getMouse().reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight, 0, 0);
-        currentZoomX = cellWidth / currentZoomX;
-        currentZoomY = cellHeight / currentZoomY;
+        input.getMouse().reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight, 0, (int) (currentZoomY * -0.5f));
         languageStage.getViewport().update(width, height, false);
         languageStage.getViewport().setScreenBounds(0, 0, width, (int)languageDisplay.getHeight());
-        //input.update(width, height, false);
         stage.getViewport().update(width, height, false);
         stage.getViewport().setScreenBounds(0, (int)languageDisplay.getHeight(),
                 width, height - (int)languageDisplay.getHeight());

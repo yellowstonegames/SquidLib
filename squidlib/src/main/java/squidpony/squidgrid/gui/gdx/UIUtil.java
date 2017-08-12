@@ -305,7 +305,7 @@ public class UIUtil {
 	 * 
 	 * @author smelC
 	 */
-	public static enum YMoveKind {
+	public enum YMoveKind {
 		/** The kind corresponding to arrow up */
 		UP,
 		/** The kind corresponding to arrow down */
