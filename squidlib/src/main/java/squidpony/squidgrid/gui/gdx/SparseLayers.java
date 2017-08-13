@@ -85,6 +85,81 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
+     * Gets the layer, as a SparseTextMap, that is associated with the given int. If none is associated, this returns
+     * null. The associating number does not necessarily have to be less than the number of layers in this SparseLayers.
+     * Returns a direct reference to the SparseTextMap layer.
+     * @param layer the int that is associated with a layer, usually the int used to add to that layer.
+     * @return the SparseTextMap layer associated with the given int
+     */
+    public SparseTextMap getLayer(int layer)
+    {
+        layer = mapping.get(layer, -1);
+        if(layer < 0)
+            return null;
+        else
+            return layers.get(layer);
+    }
+
+    /**
+     * Finds the layer number associated with layerMap, or -1 if the given SparseTextMap is not in this SparseLayers.
+     * @param layerMap a SparseTextMap that was likely returned by {@link #addLayer()}
+     * @return the int the layer is associated with, or -1 if it is not in this SparseLayers.
+     */
+    public int findLayer(SparseTextMap layerMap)
+    {
+        int a = layers.indexOf(layerMap);
+        if(a < 0)
+            return -1;
+        return mapping.findKey(a, -1);
+    }
+
+    /**
+     * Adds a layer as a SparseTextMap to this SparseLayers and returns the one just added. The layer will generally be
+     * associated with a layer number equal to the number of layers currently present, and will be rendered over the
+     * existing layers. It might not be associated with the same number if layers were added out-of-order or with skips
+     * between associations. If you want to add a layer at some alternate layer number (which can be confusing but may
+     * be needed for some reason), there is another overload that allows you to specify the association number.
+     * If you may have added some layers out of order or skipped some numbers, you can use
+     * {@link #findLayer(SparseTextMap)} on the returned SparseTextMap to get its association number.
+     * @return a SparseTextMap that was just added; null if something went wrong
+     */
+    public SparseTextMap addLayer()
+    {
+        int association = layers.size();
+        while (mapping.containsKey(association)) {
+            ++association;
+        }
+        return addLayer(association);
+    }
+    /**
+     * Adds a layer as a SparseTextMap to this SparseLayers and returns the one just added, or returns an existing layer
+     * if one is already associated with the given number. The layer can be greater than the number of layers currently
+     * present, which will add a layer to be rendered over the existing layers, but the number that refers to that layer
+     * will not change. It is recommended that to add a layer, you only add at the value equal to
+     * {@link #getLayerCount()}, which will maintain the order and layer numbers in a sane way, and this is the behavior
+     * of the addLayer overload that does not take a parameter.
+     * @param association the number to associate the layer with; should usually be between 0 and {@link #getLayerCount()} inclusive
+     * @return a SparseTextMap that either was just added or was already associated with the given layer number; null if something went wrong
+     */
+    public SparseTextMap addLayer(int association)
+    {
+        if(association < 0)
+            return null;
+        association = mapping.get(association, association);
+        if(association >= layers.size())
+        {
+            mapping.put(association, layers.size());
+            SparseTextMap stm = new SparseTextMap(gridWidth * gridHeight >> 4);
+            layers.add(stm);
+            return stm;
+        }
+        else
+        {
+            return layers.get(association);
+        }
+    }
+
+    /**
      * Puts the character {@code c} at {@code (x, y)} with the default foreground. Does not change the background.
      *
      * @param x the x position to place the char at
@@ -155,9 +230,29 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
+     * Sets the background colors to match the given Color 2D array. If the colors argument is null, does nothing.
+     * This will filter each Color in colors if the color center this uses has a filter.
+     * @param colors the background colors for the given chars
+     */
+    public void put(Color[][] colors)
+    {
+        put(null, colors);
+    }
+
+    /**
+     * Sets the background colors to match the given 2D array of colors as packed floats. If the colors argument is
+     * null, does nothing. This will not filter the passed colors at all.
+     * @param colors the background colors to use for this SparseLayers
+     */
+    public void put(float[][] colors)
+    {
+        put(null, colors);
+    }
+    /**
      * Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0, while also
      * setting the background colors to match the given Color 2D array. If the colors argument is null, does nothing. If
-     * the chars argument is null, only affects the background colors.
+     * the chars argument is null, only affects the background colors. This will filter each Color in colors if the
+     * color center this uses has a filter.
      * @param chars Can be {@code null}, indicating that only colors must be put.
      * @param colors the background colors for the given chars
      */
@@ -205,8 +300,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
     /**
      * Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0, while also
-     * setting the background colors to match the given Color 2D array. If the colors argument is null, does nothing. If
-     * the chars argument is null, only affects the background colors.
+     * setting the background colors to match the given 2D array of colors as packed floats. If the colors argument is
+     * null, does nothing. If the chars argument is null, only affects the background colors. This will not filter the
+     * passed colors at all.
      * @param chars Can be {@code null}, indicating that only colors must be put.
      * @param colors the background colors for the given chars
      */
