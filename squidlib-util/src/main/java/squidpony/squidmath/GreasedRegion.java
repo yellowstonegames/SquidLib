@@ -990,9 +990,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = new long[width * ySections];
 
         final int ySections2 = (dataHeight + 63) >> 6;
-
+        if(ySections2 == 0)
+            return;
         if(ySections == 1) {
-            System.arraycopy(data2, 0, data, 0, dataWidth * Math.min(ySections, ySections2));
+            System.arraycopy(data2, 0, data, 0, dataWidth);
         }
         else
         {
@@ -1041,9 +1042,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             Arrays.fill(data, 0L);
         }
         final int ySections2 = (dataHeight + 63) >> 6;
-
+        if(ySections2 == 0)
+            return this;
         if(ySections == 1) {
-            System.arraycopy(data2, 0, data, 0, dataWidth * Math.min(ySections, ySections2));
+            System.arraycopy(data2, 0, data, 0, dataWidth);
         }
         else
         {

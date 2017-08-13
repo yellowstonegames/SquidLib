@@ -66,9 +66,9 @@ public class SparseDemo extends ApplicationAdapter {
     //one cell; resizing the window can make the units cellWidth and cellHeight use smaller or larger than a pixel.
 
     /** In number of cells */
-    private static final int gridWidth = 90;
+    private static final int gridWidth = 91;
     /** In number of cells */
-    private static final int gridHeight = 25;
+    private static final int gridHeight = 24;
 
     /** In number of cells */
     private static final int bigWidth = gridWidth * 3;
@@ -273,8 +273,8 @@ public class SparseDemo extends ApplicationAdapter {
         // the blockage Collection, but anything 0.01 or less will be in it. This lets us use blockage to prevent access
         // to cells we can't see from the start of the move.
         blockage = new GreasedRegion(visible, 0.0);
-        seen = blockage.copy().not();
-        blockage.surface8way();
+        seen = blockage.not().copy();
+        blockage.fringe8way();
         //This is used to allow clicks or taps to take the player to the desired area.
         toCursor = new ArrayList<>(200);
         //When a path is confirmed by clicking, we draw from this List to find which cell is next to move into.
@@ -288,7 +288,7 @@ public class SparseDemo extends ApplicationAdapter {
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(player);
-        playerToCursor.scan(blockage);
+        playerToCursor.partialScan(13, blockage);
 
         //The next three lines set the background color for anything we don't draw on, but also create 2D arrays of the
         //same size as decoDungeon that store simple indexes into a common list of colors, using the colors that looks
@@ -510,7 +510,7 @@ public class SparseDemo extends ApplicationAdapter {
             FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
             // a new one just for this movement.
-            blockage.refill(visible, 0.01);
+            blockage.refill(visible, 0.0);
             seen.or(blockage.not());
             blockage.fringe8way();
         }
@@ -600,7 +600,7 @@ public class SparseDemo extends ApplicationAdapter {
                     // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
                     // currently-moused-over cell, which we only need to set where the mouse is being handled.
                     playerToCursor.setGoal(player);
-                    playerToCursor.scan(blockage);
+                    playerToCursor.partialScan(13, blockage);
                 }
             }
         }
@@ -634,7 +634,12 @@ public class SparseDemo extends ApplicationAdapter {
         // message box should be given updated bounds since I don't think it will do this automatically
         languageDisplay.setBounds(0, 0, width, currentZoomY * bonusHeight);
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
-        input.getMouse().reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight, 0, (int) (currentZoomY * -0.5f));
+        // a quirk of how the camera works requires the mouse to be offset by half a cell if the width or height is odd
+        // (gridWidth & 1) is 1 if gridWidth is odd or 0 if it is even; it's good to know and faster than using % , plus
+        // in some other cases it has useful traits (x % 2 can be 0, 1, or -1 depending on whether x is negative, while
+        // x & 1 will always be 0 or 1).
+        input.getMouse().reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight,
+                (gridWidth & 1) * (int)(currentZoomX * -0.5f), (gridHeight & 1) * (int) (currentZoomY * -0.5f));
         languageStage.getViewport().update(width, height, false);
         languageStage.getViewport().setScreenBounds(0, 0, width, (int)languageDisplay.getHeight());
         stage.getViewport().update(width, height, false);
