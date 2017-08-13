@@ -325,8 +325,8 @@
 <span class="sourceLineNo">317</span>        if(totalTargets == 0)<a name="line.317"></a>
 <span class="sourceLineNo">318</span>            return bestPoints;<a name="line.318"></a>
 <span class="sourceLineNo">319</span><a name="line.319"></a>
-<span class="sourceLineNo">320</span>        Coord[] ts = targets.toArray(new Coord[0]);<a name="line.320"></a>
-<span class="sourceLineNo">321</span>        Coord[] exs = requiredExclusions.toArray(new Coord[0]);<a name="line.321"></a>
+<span class="sourceLineNo">320</span>        Coord[] ts = targets.toArray(new Coord[targets.size()]);<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);<a name="line.321"></a>
 <span class="sourceLineNo">322</span>        Coord t;<a name="line.322"></a>
 <span class="sourceLineNo">323</span><a name="line.323"></a>
 <span class="sourceLineNo">324</span>        double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];<a name="line.324"></a>
@@ -471,7 +471,7 @@
 <span class="sourceLineNo">463</span><a name="line.463"></a>
 <span class="sourceLineNo">464</span>        Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);<a name="line.464"></a>
 <span class="sourceLineNo">465</span>        Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);<a name="line.465"></a>
-<span class="sourceLineNo">466</span>        Coord[] exs = requiredExclusions.toArray(new Coord[0]);<a name="line.466"></a>
+<span class="sourceLineNo">466</span>        Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);<a name="line.466"></a>
 <span class="sourceLineNo">467</span>        Coord t;// = rt.extend(origin, exs[0], length, false, dungeon.length, dungeon[0].length);<a name="line.467"></a>
 <span class="sourceLineNo">468</span><a name="line.468"></a>
 <span class="sourceLineNo">469</span>        double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];<a name="line.469"></a>

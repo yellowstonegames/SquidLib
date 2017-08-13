@@ -403,15 +403,18 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PermutationGenerator</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.81">PermutationGenerator</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;elements,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.84">PermutationGenerator</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;elements,
                             <a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;filler)</pre>
 <div class="block">Permutation generator that generates all possible orderings of
  the elements in the specified set.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>elements</code> - The elements to permute.</dd>
-<dd><code>filler</code> - An array of T with the same length as elements or less (ideally 0);
-               needed because GWT can't create a generic array.</dd>
+<dd><code>filler</code> - An array of T with the same length as elements or less (often 0);
+               needed because GWT can't create a generic array. If elements is not
+               a Collection defined in the JDK (by GWT), then this should have
+               exactly the same length as elements, since GWT can create larger
+               versions of an array on its own, but our code can't easily.</dd>
 </dl>
 </li>
 </ul>
@@ -429,7 +432,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>reset</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.90">reset</a>()</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.93">reset</a>()</pre>
 <div class="block">Resets the generator state.</div>
 </li>
 </ul>
@@ -439,7 +442,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>getRemainingPermutations</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.104">getRemainingPermutations</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.107">getRemainingPermutations</a>()</pre>
 <div class="block">Returns the number of permutations not yet generated.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -453,7 +456,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>getTotalPermutations</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.115">getTotalPermutations</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.118">getTotalPermutations</a>()</pre>
 <div class="block">Returns the total number of unique permutations that can be
  generated for the given set of elements.</div>
 <dl>
@@ -468,7 +471,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>getTotalPermutations</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.128">getTotalPermutations</a>(int&nbsp;count)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.131">getTotalPermutations</a>(int&nbsp;count)</pre>
 <div class="block">Returns the total number of unique permutations that can be
  generated for the given count of permute-able elements.
  Typically used with the static methods of this class that
@@ -487,7 +490,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>getBigTotalPermutations</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.142">getBigTotalPermutations</a>(int&nbsp;count)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.145">getBigTotalPermutations</a>(int&nbsp;count)</pre>
 <div class="block">Returns the total number of unique permutations that can be
  generated for the given count of permute-able elements.
  Typically used with the static methods of this class that
@@ -506,7 +509,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>hasMore</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.152">hasMore</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.155">hasMore</a>()</pre>
 <div class="block">Are there more permutations that have not yet been returned?</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -522,7 +525,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>nextPermutationAsArray</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.170">nextPermutationAsArray</a>(<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;destination)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.173">nextPermutationAsArray</a>(<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;destination)</pre>
 <div class="block">Generate the next permutation and return an array containing
  the elements in the appropriate order.  This overloaded method
  allows the caller to provide an array that will be used and returned.
@@ -545,7 +548,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>nextPermutationAsList</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.192">nextPermutationAsList</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.195">nextPermutationAsList</a>()</pre>
 <div class="block">Generate the next permutation and return a list containing
  the elements in the appropriate order.</div>
 <dl>
@@ -562,7 +565,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>nextPermutationAsList</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.214">nextPermutationAsList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;destination)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.217">nextPermutationAsList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;destination)</pre>
 <div class="block">Generate the next permutation and return a list containing
  the elements in the appropriate order.  This overloaded method
  allows the caller to provide a list that will be used and returned.
@@ -590,7 +593,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>encodePermutation</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.326">encodePermutation</a>(<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;perm)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.329">encodePermutation</a>(<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;perm)</pre>
 <div class="block">Given an array of T that constitutes a permutation of the elements this was constructed with, finds the specific
  index of the permutation given a factoradic numbering scheme (not used by the rest of this class, except the
  decodePermutation() method). The index can be passed to decodePermutation to reproduce the permutation passed to
@@ -612,7 +615,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>encodePermutation</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.349">encodePermutation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;perm)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.352">encodePermutation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;perm)</pre>
 <div class="block">Given a List of T that constitutes a permutation of the elements this was constructed with, finds the specific
  index of the permutation given a factoradic numbering scheme (not used by the rest of this class, except the
  decodePermutation() method). The index can be passed to decodePermutation to reproduce the permutation passed to
@@ -636,7 +639,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>decodePermutation</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.388">decodePermutation</a>(long&nbsp;encoded,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.391">decodePermutation</a>(long&nbsp;encoded,
                              <a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>[]&nbsp;destination)</pre>
 <div class="block">Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
  this) and an array of T with the same length as the elements this was constructed with, fills the array with the
@@ -660,7 +663,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>decodePermutation</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.433">decodePermutation</a>(long&nbsp;encoded)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.436">decodePermutation</a>(long&nbsp;encoded)</pre>
 <div class="block">Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
  this), creates a List filled with the permutation described by the long as a special (factoradic) index into the
  possible permutations. You can get an index for a specific permutation with encodePermutation() or by generating a
@@ -681,7 +684,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>decodePermutation</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.452">decodePermutation</a>(long&nbsp;encoded,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.455">decodePermutation</a>(long&nbsp;encoded,
                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&nbsp;destination)</pre>
 <div class="block">Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
  this) and a List of T with the same length as the elements this was constructed with, fills the List with the
@@ -705,7 +708,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.503">iterator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/PermutationGenerator.html" title="type parameter in PermutationGenerator">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.506">iterator</a>()</pre>
 <div class="block"><p>Provides a read-only iterator for iterating over the permutations
  generated by this object.  This method is the implementation of the
  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang"><code>Iterable</code></a> interface that permits instances of this class to be
@@ -735,7 +738,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>encodePermutation</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.558">encodePermutation</a>(int[]&nbsp;perm)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.561">encodePermutation</a>(int[]&nbsp;perm)</pre>
 <div class="block">Given an array of int that constitutes a permutation of indices, where no element in perm is repeated and all
  ints are less than perm.length, finds the specific index of the permutation given a factoradic numbering scheme
  (not used by the rest of this class, except the decodePermutation() method). The index can be passed to
@@ -759,7 +762,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>encodeBigPermutation</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.583">encodeBigPermutation</a>(int[]&nbsp;perm)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.586">encodeBigPermutation</a>(int[]&nbsp;perm)</pre>
 <div class="block">Given an array of int that constitutes a permutation of indices, where no element in perm is repeated and all
  ints are less than perm.length, finds the specific index of the permutation given a factoradic numbering scheme
  (not used by the rest of this class, except the decodePermutation() method). The index can be passed to
@@ -783,7 +786,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>decodePermutation</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.638">decodePermutation</a>(long&nbsp;encoded,
+<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.641">decodePermutation</a>(long&nbsp;encoded,
                                       int&nbsp;count)</pre>
 <div class="block">Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
  this) and an int count of how many indices to find a permutation of, returns an array with the permutation
@@ -807,7 +810,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>decodePermutation</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.685">decodePermutation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;encoded,
+<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.688">decodePermutation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;encoded,
                                       int&nbsp;count)</pre>
 <div class="block">Given a long between 0 and the total number of permutations possible (see getBigTotalPermutations() for how to
  access this) and an int count of how many indices to find a permutation of, returns an array with the permutation
@@ -831,7 +834,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>decodePermutation</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.734">decodePermutation</a>(long&nbsp;encoded,
+<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.737">decodePermutation</a>(long&nbsp;encoded,
                                       int&nbsp;count,
                                       int&nbsp;add)</pre>
 <div class="block">Given a long between 0 and the total number of permutations possible (see getTotalPermutations() for how to access
@@ -858,7 +861,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>decodePermutation</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.757">decodePermutation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;encoded,
+<pre>public static&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/PermutationGenerator.html#line.760">decodePermutation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;encoded,
                                       int&nbsp;count,
                                       int&nbsp;add)</pre>
 <div class="block">Given a long between 0 and the total number of permutations possible (see getBigTotalPermutations() for how to

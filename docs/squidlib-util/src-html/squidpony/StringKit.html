@@ -1257,7 +1257,7 @@
 <span class="sourceLineNo">1249</span>    {<a name="line.1249"></a>
 <span class="sourceLineNo">1250</span>        if(width &lt;= 0 || receiving == null)<a name="line.1250"></a>
 <span class="sourceLineNo">1251</span>            return receiving;<a name="line.1251"></a>
-<span class="sourceLineNo">1252</span>        Matcher widthMatcher = Pattern.compile("(?:({=Y}(?=\\S).{1," + width + "})((?&lt;=\\p{Pd})|(\\s+)))|({=Y}\\S{1," + width + "})").matcher(longText + "\n");<a name="line.1252"></a>
+<span class="sourceLineNo">1252</span>        Matcher widthMatcher = Pattern.compile("(?:({=Y}(?!\\s).{1," + width + "})((?&lt;=\\p{Pd})|(\\s+)))|({=Y}\\S{1," + width + "})").matcher(longText + "\n");<a name="line.1252"></a>
 <span class="sourceLineNo">1253</span>        while (widthMatcher.find())<a name="line.1253"></a>
 <span class="sourceLineNo">1254</span>        {<a name="line.1254"></a>
 <span class="sourceLineNo">1255</span>            receiving.add(widthMatcher.group("Y"));<a name="line.1255"></a>

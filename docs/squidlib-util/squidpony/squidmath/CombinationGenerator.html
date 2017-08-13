@@ -286,7 +286,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CombinationGenerator</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.93">CombinationGenerator</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&nbsp;elements,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.96">CombinationGenerator</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&nbsp;elements,
                             int&nbsp;combinationLength,
                             <a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>[]&nbsp;filler)</pre>
 <div class="block">Create a combination generator that generates all combinations of
@@ -295,8 +295,11 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>elements</code> - The set from which to generate combinations.</dd>
 <dd><code>combinationLength</code> - The length of the combinations to be generated.</dd>
-<dd><code>filler</code> - An array of T with the same length as elements or less (ideally 0);
-               needed because GWT can't create a generic array.</dd>
+<dd><code>filler</code> - An array of T with the same length as elements or less (often 0);
+               needed because GWT can't create a generic array. If elements is not
+               a Collection defined in the JDK (by GWT), then this should have
+               exactly the same length as elements, since GWT can create larger
+               versions of an array on its own, but our code can't easily.</dd>
 </dl>
 </li>
 </ul>
@@ -314,7 +317,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>reset</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.104">reset</a>()</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.107">reset</a>()</pre>
 <div class="block">Reset the combination generator.</div>
 </li>
 </ul>
@@ -324,7 +327,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>getRemainingCombinations</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.117">getRemainingCombinations</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.120">getRemainingCombinations</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The number of combinations not yet generated.</dd>
@@ -337,7 +340,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>hasMore</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.127">hasMore</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.130">hasMore</a>()</pre>
 <div class="block">Are there more combinations?</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -351,7 +354,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>getTotalCombinations</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.136">getTotalCombinations</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.139">getTotalCombinations</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The total number of combinations.</dd>
@@ -366,7 +369,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>nextCombinationAsArray</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.153">nextCombinationAsArray</a>(<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>[]&nbsp;destination)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.156">nextCombinationAsArray</a>(<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>[]&nbsp;destination)</pre>
 <div class="block">Generate the next combination and return an array containing
  the appropriate elements.  This overloaded method allows the caller
  to provide an array that will be used and returned.
@@ -388,7 +391,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>nextCombinationAsList</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.174">nextCombinationAsList</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.177">nextCombinationAsList</a>()</pre>
 <div class="block">Generate the next combination and return a list containing the
  appropriate elements.</div>
 <dl>
@@ -405,7 +408,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockList">
 <li class="blockList">
 <h4>nextCombinationAsList</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.194">nextCombinationAsList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&nbsp;destination)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.197">nextCombinationAsList</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&nbsp;destination)</pre>
 <div class="block">Generate the next combination and return a list containing
  the appropriate elements.  This overloaded method allows the caller
  to provide a list that will be used and returned.
@@ -430,7 +433,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.254">iterator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/CombinationGenerator.html" title="type parameter in CombinationGenerator">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/CombinationGenerator.html#line.257">iterator</a>()</pre>
 <div class="block"><p>Provides a read-only iterator for iterating over the combinations
  generated by this object.  This method is the implementation of the
  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang"><code>Iterable</code></a> interface that permits instances of this class to be
