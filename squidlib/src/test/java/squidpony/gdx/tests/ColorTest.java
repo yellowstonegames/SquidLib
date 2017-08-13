@@ -3,6 +3,7 @@ package squidpony.gdx.tests;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,6 +11,8 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
+
+import static squidpony.StringKit.safeSubstring;
 
 /**
  * Created by Tommy Ettinger on 12/27/2016.
@@ -74,18 +77,31 @@ public class ColorTest extends ApplicationAdapter {
 
         stage.addActor(display);
 
-//   This block, when uncommented, will generate the color wheel palette code for SColor and print it to stdout.
-//        String template = "/**\n" +
-//            "* Color constant<PRE>\n" +
-//            "* <font style='background-color: #FEDCBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
-//            "* <font style='background-color: #FEDCBA; color: #FEDCBA'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000;'>&nbsp;@&nbsp;</font><font style='background-color: #888888;'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff;'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
-//            "* <font style='background-color: #FEDCBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #ffffff'>&nbsp;@&nbsp;</font>\n" +
-//            "* <br>\n" +
-//            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>\n" +
-//            "* <font style='background-color: #ff0000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00;'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00;'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff;'>&nbsp;@&nbsp;</font><font style='background-color: #964b00;'>&nbsp;@&nbsp;</font>\n" +
-//            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>\n" +
-//            "*/\n" +
-//        "public static final SColor NAME = new SColor(0xFEDCBA, \"Name\");\n\n";
+   //This block, when uncommented, will generate the color wheel palette code for SColor and print it to stdout.
+        /*
+
+    /**
+     * Color constant<PRE>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ff0000; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ff0000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ff0000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ff0000'>&nbsp;@&nbsp;</font><font style='background-color: #ff0000; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ff0000; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #ff0000'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #ff0000'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #ff0000'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #ff0000'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #ff0000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></PRE>
+     */
+        String template = "/**\n" +
+            "* This color constant \"Name\" has RGB code 0xFEDCBA, hue `HUE, saturation `SAT, and value `VAL.\n" +
+            "* <pre>\n" +
+            "* <font style='background-color: #FEDCBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
+            "* <font style='background-color: #FEDCBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
+            "* <font style='background-color: #FEDCBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #ffffff'>&nbsp;@&nbsp;</font>\n" +
+            "* <br>\n" +
+            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>\n" +
+            "* <font style='background-color: #ff0000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #FEDCBA'>&nbsp;@&nbsp;</font>\n" +
+            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>\n" +
+            "*/\n" +
+        "public static final SColor NAME = new SColor(0xFEDCBA, \"Name\");\n\n";
 //        // 0 red, 2 orange, 3 apricot, 4 gold, 5 yellow, 6 chartreuse, 7 lime, 8 honeydew, 10 green, 12 jade,
 //        // 14 seafoam, 16 cyan, 17 azure, 19 blue, 21 sapphire, 22 indigo, 24 violet, 26 purple, 28 magenta, 30 rose
 //        String[] names = {"Red", null, "Orange", "Apricot", "Gold", "Yellow", "Chartreuse", "Lime", "Honeydew", null,
@@ -166,7 +182,36 @@ public class ColorTest extends ApplicationAdapter {
 //                    .replace("NAME", "CW_RICH_" + nm.toUpperCase())
 //                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.2f), 0.5f).toString().substring(0, 6)));
 //        }
-
+        String data = Gdx.files.classpath("ColorData.txt").readString();
+        String[] lines = StringKit.split(data, "\n"), rec = new String[3];
+        Color c = new Color();
+        StringBuilder sb = new StringBuilder(100000);
+        for (int i = 0; i < lines.length; i++) {
+            tabSplit(rec, lines[i]);
+            Color.argb8888ToColor(c, Integer.parseInt(rec[1], 16));
+            sb.append(template.replace("Name", rec[2])
+                    .replace("NAME", rec[0])
+                    .replace("FEDCBA", rec[1].toUpperCase())
+                    .replace("`HUE", Float.toString(scc.getHue(c)))
+                    .replace("`SAT", Float.toString(scc.getSaturation(c)))
+                    .replace("`VAL", Float.toString(scc.getValue(c)))
+            );
+        }
+        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
+    }
+    public static void tabSplit(String[] receiving, String source) {
+        int dl = 1, idx = -1, idx2;
+        for (int i = 0; i < 2; i++) {
+            receiving[i] = safeSubstring(source, idx+dl, idx = source.indexOf('\t', idx+dl));
+        }
+        if((idx2 = source.indexOf('\t', idx+dl)) < 0)
+        {
+            receiving[2] = safeSubstring(source, idx+dl, source.length());
+        }
+        else
+        {
+            receiving[2] = safeSubstring(source, idx+dl, idx2);
+        }
     }
 
     @Override
