@@ -51,10 +51,10 @@ public class CosmicNumbering implements Serializable {
         double diff, conn, result = 0.0;
         for (int i = 0; i < len; i++) {
             diff = (conn = connections[i]) - (floor = fastFloor(conn));
-            result += NumberTools.bounce(floor * 0x8329C6EB9E6AD3E3L) * (1.0 - diff);
-            result += NumberTools.bounce((floor + 1L) * 0x8329C6EB9E6AD3E3L) * diff;
+            result += (NumberTools.longBitsToDouble((floor * 0x9E3779B97F4A7C15L >>> 9 & 0xfffffffffffffL) | 0x4000000000000000L) - 3.0) * (1.0 - diff);
+            result += (NumberTools.longBitsToDouble(((floor + 1L) * 0x9E3779B97F4A7C15L >>> 9 & 0xfffffffffffffL) | 0x4000000000000000L) - 3.0) * diff;
         }
-        return NumberTools.bounce(result / (len) + 2.55);
+        return result / len;
     }
 
     /**

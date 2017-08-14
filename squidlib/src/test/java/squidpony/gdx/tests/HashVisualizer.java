@@ -3187,14 +3187,25 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                connections[2] += ctr * 0.025;
-                                connections[0] += x * 0.3141592 + connections[2];
-                                connections[1] += y * 0.3141592 + connections[2] + connections[0];
-                                connections[0] = cosmos.getDouble();
-                                connections[1] = NumberTools.bounce(cosmos.getDouble()) * 0.5 + 0.5;
-                                connections[2] = NumberTools.bounce(cosmos.getDouble()) * 0.5 + 0.5;
+                                connections[2] += ctr * 0.06;
+                                connections[0] += x * 0.06 - y * 0.015;
+                                connections[1] += y * 0.06 - x * 0.015;
+//                                connections[0] = NumberTools.bounce(cosmos.getDoubleBase() * 1.3 + 5.0) + 1.8;
+//                                connections[1] = NumberTools.bounce(cosmos.getDoubleBase() * 1.7 + 5.0) + 1.6;
+//                                connections[2] = NumberTools.bounce(cosmos.getDoubleBase() * 1.9 + 5.0) + 1.2;
+                                iBright = cosmos.getInt();
+                                connections[0] = NumberTools.intBitsToFloat((((iBright >> 3) * 17) >>> 9) | 0x40000000);
+                                connections[1] = NumberTools.intBitsToFloat((((iBright >> 3) * 19) >>> 9) | 0x40000000);
+                                connections[2] = NumberTools.intBitsToFloat((((iBright >> 3) * 23) >>> 9) | 0x40000000);
+                                //bright = (float)cosmos.getDouble();
                                 display.put(x, y,
                                         floatGet(
+//                                                NumberTools.intBitsToFloat((iBright * 5 >>> 9) | 0x40000000) * 0.5f + 0.5f,
+//                                                NumberTools.intBitsToFloat((iBright * 6 >>> 9) | 0x40000000) * 0.5f + 0.5f,
+//                                                NumberTools.intBitsToFloat((iBright * 7 >>> 9) | 0x40000000) * 0.5f + 0.5f,
+//                                                NumberTools.bounce(bright * 1.2233f) * 0.5f + 0.5f,
+//                                                NumberTools.bounce(bright * 3.2435f) * 0.5f + 0.5f,
+//                                                NumberTools.bounce(bright * 5.2637f) * 0.5f + 0.5f,
                                                 (float)connections[0],
                                                 (float)connections[1],
                                                 (float)connections[2],
@@ -3203,14 +3214,14 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 81:
-                        Gdx.graphics.setTitle("Mead 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Cosmic 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                connections[2] += ctr * 0.0045;
-                                connections[0] += x * 0.3141592 + connections[2];
-                                connections[1] += y * 0.3141592 + connections[2];
-                                connections[2] += cosmos.getDouble();
-                                bright = (float)cosmos.getDouble();
+                                connections[2] += ctr * 0.06;
+                                connections[0] += x * 0.06 - y * 0.015;
+                                connections[1] += y * 0.06 - x * 0.015;
+                                connections[2] = 1.09 * (connections[1] = 1.03 * (connections[0] = 0.98 * (bright =
+                                        NumberTools.intBitsToFloat((((cosmos.getInt() >> 3) * 17) >>> 9) | 0x40000000))));
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }

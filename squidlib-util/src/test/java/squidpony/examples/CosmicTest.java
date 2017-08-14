@@ -25,8 +25,11 @@ public class CosmicTest {
                 System.out.println(i);
                 break;
             }
-            data[i & 7] += NumberTools.randomSignedFloat(state += 98765) * 0.35;
-            data[i + 1 & 7] += NumberTools.randomSignedFloat(state += 777777777) * 0.25;
+            data[i - state & 7] += 0.18 * NumberTools.randomSignedFloat(state += 0x8E3779B9);
+            data[i + 1 & 7]     += 0.17 * NumberTools.randomSignedFloat(state += 0x9E3779B9);
+            data[i + 3 & 7]     += 0.15 * NumberTools.randomSignedFloat(state += 0xBE3779B9);
+            data[i + 5 & 7]     += 0.13 * NumberTools.randomSignedFloat(state += 0xDE3779B9);
+            data[i + 7 & 7]     += 0.11 * NumberTools.randomSignedFloat(state += 0xFE3779B9);
         }
         System.out.println("\nmin:   " + min);
         System.out.println("\nmax:   " + max);
