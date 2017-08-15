@@ -37,20 +37,20 @@ import java.util.NoSuchElementException;
  * @author Tommy Ettinger
  */
 public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
-    private static final int PRIME1 = 0xbe1f14b1;
+    //private static final int PRIME1 = 0xbe1f14b1;
     private static final int PRIME2 = 0xb4b82e39;
     private static final int PRIME3 = 0xced1c241;
     private static final int EMPTY = 0;
 
     public int size;
 
-    int[] keyTable;
-    char[] charValueTable;
-    float[] floatValueTable;
-    int capacity, stashSize;
-    char zeroChar;
-    float zeroFloat;
-    boolean hasZeroValue;
+    private int[] keyTable;
+    private char[] charValueTable;
+    private float[] floatValueTable;
+    private int capacity, stashSize;
+    private char zeroChar;
+    private float zeroFloat;
+    private boolean hasZeroValue;
 
     private float loadFactor;
     private int hashShift, mask, threshold;
@@ -158,14 +158,47 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     public void draw(Batch batch, TextCellFactory textFactory, float screenOffsetX, float screenOffsetY) {
         textFactory.configureShader(batch);
         float widthInc = textFactory.actualCellWidth, heightInc = -textFactory.actualCellHeight;
-
+        int n;
         for (Entry entry : entries()) {
-            int n = entry.key;
+            n = entry.key;
             n =    ((n & 0x22222222) << 1) | ((n >>> 1) & 0x22222222) | (n & 0x99999999);
             n =    ((n & 0x0c0c0c0c) << 2) | ((n >>> 2) & 0x0c0c0c0c) | (n & 0xc3c3c3c3);
             n =    ((n & 0x00f000f0) << 4) | ((n >>> 4) & 0x00f000f0) | (n & 0xf00ff00f);
             n =    ((n & 0x0000ff00) << 8) | ((n >>> 8) & 0x0000ff00) | (n & 0xff0000ff);
             textFactory.draw(batch, entry.charValue, entry.floatValue,
+                    (n & 0xFFFF) * widthInc + screenOffsetX, (n >>> 16) * heightInc + screenOffsetY);
+        }
+    }
+    /**
+     * Draws the contents of this SparseTextMap, using the keys as x,y pairs as they would be entered by calling
+     * {@link #place(int, int, char, float)} and drawing the char replacement at that x,y position, potentially with an
+     * offset on x and/or y. Treats the float value as a color for replacement, using the encoding for colors as floats
+     * that {@link Color#toFloatBits()} uses. Relies on the sizing information from the given TextCellFactory (its
+     * {@link TextCellFactory#actualCellWidth} and {@link TextCellFactory#actualCellHeight}, which may differ from its
+     * width and height if either of {@link TextCellFactory#tweakWidth(float)} or
+     * {@link TextCellFactory#tweakHeight(float)} were called). It also, of course, uses the TextCellFactory to
+     * determine what its text will look like (font, size, and so on). The TextCellFactory must have been initialized,
+     * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method
+     * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.
+     *
+     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
+     * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
+     * @param screenOffsetX offset to apply to the x position of each char rendered; positive moves chars right
+     * @param screenOffsetY offset to apply to the y position of each char rendered; positive moves chars up
+     * @param replacement a char that will be used in place of the normal char values stored in this; often the char
+     *                    with Unicode value 0, which renders as a solid block.
+     */
+    public void draw(Batch batch, TextCellFactory textFactory, float screenOffsetX, float screenOffsetY, char replacement) {
+        textFactory.configureShader(batch);
+        float widthInc = textFactory.actualCellWidth, heightInc = -textFactory.actualCellHeight;
+        int n;
+        for (Entry entry : entries()) {
+            n = entry.key;
+            n =    ((n & 0x22222222) << 1) | ((n >>> 1) & 0x22222222) | (n & 0x99999999);
+            n =    ((n & 0x0c0c0c0c) << 2) | ((n >>> 2) & 0x0c0c0c0c) | (n & 0xc3c3c3c3);
+            n =    ((n & 0x00f000f0) << 4) | ((n >>> 4) & 0x00f000f0) | (n & 0xf00ff00f);
+            n =    ((n & 0x0000ff00) << 8) | ((n >>> 8) & 0x0000ff00) | (n & 0xff0000ff);
+            textFactory.draw(batch, replacement, entry.floatValue,
                     (n & 0xFFFF) * widthInc + screenOffsetX, (n >>> 16) * heightInc + screenOffsetY);
         }
     }
