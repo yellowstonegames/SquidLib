@@ -27,16 +27,53 @@ import java.util.ArrayList;
  */
 public class SparseLayers extends Actor implements IPackedColorPanel {
     public final int gridWidth, gridHeight;
+    /**
+     * A 2D float array of background colors as packed floats. Must have dimensions matching {@link #gridWidth} and
+     * {@link #gridHeight}, and must be non-null with non-null interior arrays, but can otherwise be assigned 2D float
+     * arrays from other sources (that use floats to represent colors, not just any number).
+     */
     public float[][] backgrounds;
+    /**
+     * The default foreground color when none is specified, as a Color object. Defaults to white.
+     */
     public Color defaultForeground = SColor.WHITE,
+    /**
+     * Currently unused internally, but public so if some background color needs to be stored with this SparseLayers,
+     * then there will be a logical place for it. Defaults to black.
+     */
             defaultBackground = SColor.BLACK;
+    /**
+     * The value of {@link #defaultForeground} as a float, for easier usage with the methods that use floats for colors.
+     * Defaults to white.
+     */
     public float defaultPackedForeground = SColor.WHITE.toFloatBits(),
+    /**
+     * The value of {@link #defaultBackground} as a float, for easier usage with the methods that use floats for colors.
+     * Currently unused internally, but public so if some background color needs to be stored with this SparseLayers,
+     * then there will be a logical place for it. Defaults to black.
+     */
             defaultPackedBackground = SColor.BLACK.toFloatBits();
+    /**
+     * A list of SparseTextMap objects, with each representing a foreground layer.
+     */
     public ArrayList<SparseTextMap> layers;
     protected IntIntMap mapping;
+    /**
+     * The TextCellFactory that is used to determine font size as well as cell size; must be initialized, usually using
+     * {@link TextCellFactory#initBySize()}, if this is changed after construction.
+     */
     public TextCellFactory font;
     protected int animationCount = 0;
-    private ArrayList<TextCellFactory.Glyph> glyphs;
+    /**
+     * A list of individually-movable Glyph objects. This field is public, and though it shouldn't be assigned null (you
+     * don't really need to be told that), there may be cases where you may need manual control over what Glyph objects
+     * should be added or removed from this SparseLayers.
+     */
+    public ArrayList<TextCellFactory.Glyph> glyphs;
+    /**
+     * An IColorCenter to affect color caching and filtering; usually a SquidColorCenter, which can be easily obtained
+     * via {@link DefaultResources#getSCC()}.
+     */
     public IColorCenter<Color> scc;
 
     public SparseLayers(int gridWidth, int gridHeight)
@@ -98,6 +135,29 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             return null;
         else
             return layers.get(layer);
+    }
+
+    /**
+     * Sets the SparseTextMap associated with the given layerNumber to the given contents. If layerNumber is too high
+     * to set an existing layer, this will add contents as a new layer on top of the others.
+     * @param layerNumber must be 0 or greater
+     * @param contents a SparseTextMap, possibly obtained with {@link #getLayer(int)}
+     */
+    public void setLayer(int layerNumber, SparseTextMap contents)
+    {
+        if(layerNumber < 0)
+            return;
+        layerNumber = mapping.get(layerNumber, layerNumber);
+        if(layerNumber >= layers.size())
+        {
+            mapping.put(layerNumber, layers.size());
+            layers.add(contents);
+        }
+        else
+        {
+            layers.set(layerNumber, contents);
+        }
+
     }
 
     /**

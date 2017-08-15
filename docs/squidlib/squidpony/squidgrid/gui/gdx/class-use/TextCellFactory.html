@@ -88,7 +88,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SparseLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html#font">font</a></span></code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">SparseLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html#font">font</a></span></code>
+<div class="block">The TextCellFactory that is used to determine font size as well as cell size; must be initialized, usually using
+ <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initBySize--"><code>initBySize()</code></a>, if this is changed after construction.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
@@ -594,6 +597,18 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">SparseTextMap.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SparseTextMap.html#draw-com.badlogic.gdx.graphics.g2d.Batch-squidpony.squidgrid.gui.gdx.TextCellFactory-float-float-char-">draw</a></span>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+    <a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
+    float&nbsp;screenOffsetX,
+    float&nbsp;screenOffsetY,
+    char&nbsp;replacement)</code>
+<div class="block">Draws the contents of this SparseTextMap, using the keys as x,y pairs as they would be entered by calling
+ <a href="../../../../../squidpony/squidgrid/gui/gdx/SparseTextMap.html#place-int-int-char-float-"><code>SparseTextMap.place(int, int, char, float)</code></a> and drawing the char replacement at that x,y position, potentially with an
+ offset on x and/or y.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">VisualInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.util.Map-">init</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;available)</code>
 <div class="block">For each char and String in available, registers each keyboard key (as a char, such as 'A' or
@@ -601,14 +616,14 @@
  available as buttons on the right side of the screen if on a device with no hardware keyboard.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">VisualInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/VisualInput.html#init-squidpony.squidgrid.gui.gdx.TextCellFactory-java.lang.String...-">init</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;enabled)</code>
 <div class="block">Convenience method that does essentially the same thing as init(Map&lt;Character, String&gt;).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">SparseLayers.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html#setFont-squidpony.squidgrid.gui.gdx.TextCellFactory-">setFont</a></span>(<a href="../../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;font)</code>
 <div class="block">Sets the TextCellFactory this uses to draw and size its text items and cells.</div>
