@@ -1785,6 +1785,72 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen ALIEN_A = alien_a().register();
 
+    private static FakeLanguageGen korean()
+    {
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "ae", "ya", "yae", "eo", "e", "yeo", "ye", "o", "wa", "wae",
+                        "oe", "yo", "u", "wo", "we", "wi", "yu", "eu", "i",  "ui",
+                        "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "u", "u", "u", "u",
+                        "ae", "ya", "eo", "eo", "eu", "eu", "wa", "wae", "wo", "oe", "oe",
+                        "yo", "yo", "yu", "yu", "eu",
+                },
+                new String[]{},
+                new String[]{
+                        "g", "n", "d", "r", "m", "b", "s", "j", "ch", "k", "t", "p", "h",
+                        "g", "n", "d", "b", "p", "k", "j", "ch", "h",
+                        "g", "n", "d", "b", "p", "k", "j", "h",
+                        "g", "n", "p", "k", "j",
+                        "g", "p", "k",
+                        "g", "p", "k",
+                },
+                new String[]{
+                        "g", "kg", "ngn", "kd", "ngn", "ngm", "kb", "ks", "kj", "kch", "k-k", "kt", "kp", "k",
+                        "n", "n-g", "nn", "nd", "nn", "nm", "nb", "ns", "nj", "nch", "nk", "nt", "np", "nh",
+                        "d", "tg", "nn", "td", "nn", "nm", "tb", "ts", "tj", "tch", "tk", "t-t", "tp", "t",
+                        "r", "lg", "nn", "ld", "ll", "lm", "lb", "ls", "lj", "lch", "lk", "lt", "lp", "lh",
+                        "m", "mg", "mn", "md", "mn", "mm", "mb", "ms", "mj", "mch", "mk", "mt", "mp", "mh",
+                        "b", "pg", "mn", "pd", "mn", "mm", "pb", "ps", "pj", "pch", "pk", "pt", "p-p", "p",
+                        "s", "tg", "nn", "td", "nn", "nm", "tb", "ts", "tj", "tch", "tk", "t-t", "tp", "t",
+                        "ng-", "ngg", "ngn", "ngd", "ngn", "ngm", "ngb", "ngs", "ngj", "ngch", "ngk", "ngt", "ngp", "ngh",
+                        "j", "tg", "nn", "td", "nn", "nm", "tb", "ts", "tj", "tch", "tk", "t-t", "tp", "ch",
+                        "t", "t", "t", "j", "j", "j", "g", "g", "g", "g", "n", "n", "n", "n", "n", "ng", "ng", "ng",
+                        "d", "d", "d", "b", "b",
+                        "tt", "nn", "kk", "kk", "ks",
+                        "h", "k", "nn", "t", "nn", "nm", "p", "hs", "ch", "tch", "tk", "tt", "tp", "t",
+                        "kk", "pp", "ss", "tt", "jj", "ks", "nch", "nh", "r",
+                        "r", "r", "r", "r", "r", "r", "r", "r", "r", "r", "r", "r",
+                        "ngg", "ngn", "ngm", "ngj", "ngch", "ngk", "ngp",
+                        "mg", "mch", "mk", "md", "mb", "mp",
+                        "nj", "nch", "nd", "nk", "nb", "nj", "nch", "nd", "nk",
+                        "kg", "kj", "kch"
+                },
+                new String[]{
+                        "k", "n", "t", "l", "m", "p", "k", "ng", "h", "n", "n",
+                        "k", "n", "t", "l", "m", "p", "k", "ng", "h", "t",
+                },
+                new String[]{"ul", "eul", "eol", "ol",  "il", "yeol", "yol", "uk", "euk", "eok", "aek", "ok", "ak",
+                        "on", "ong", "eong", "yang", "yong", "yeong", "ung", "wong", "om", "am", "im", "yuh", "uh", "euh",
+                        "ap", "yaep", "eop", "wep", "yeop"
+                },
+                new String[]{"-"},
+                new int[]{1, 2, 3, 4}, new double[]{14, 9, 3, 1}, 0.14, 0.24, 0.02, 0.09,
+                null, true);
+    }
+    /**
+     * Imitation text from an approximation of Korean, using the Revised Romanization method that is official in South
+     * Korea today and is easier to type. The text this makes may be hard to pronounce. Korean is interesting as a
+     * language to imitate for a number of reasons; many of the sounds in it are rarely found elsewhere, it can cluster
+     * consonants rather tightly (most languages don't; English does to a similar degree but Japanese hardly has any
+     * groups of consonants), and there are many more vowel sounds without using tones (here, two or three letters are
+     * used for a vowel, where the first can be y or w and the rest can be a, e, i, o, or u in some combination). Some
+     * letter combinations possible here are impossible or very rare in correctly-Romanized actual Korean, such as the
+     * rare occurrence of a single 'l' before a vowel (it normally only appears in Romanized text before a consonant or
+     * at the end of a word).
+     * <br>
+     * Hyeop euryam, sonyon muk tyeok aengyankeon, koelgwaelmwak.
+     */
+    public static final FakeLanguageGen KOREAN_ROMANIZED = korean().register();
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages

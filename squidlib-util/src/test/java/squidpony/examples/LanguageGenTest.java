@@ -129,6 +129,14 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";", ","},
                     new String[]{".", ".", ".", ".", "!", "?", "..."}, 0.17));
         }
+
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.KOREAN_ROMANIZED;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";", ","},
+                    new String[]{".", ".", ".", ".", "!", "?", "..."}, 0.13));
+        }
+
         System.out.println("\n\nLANGUAGE MIXES:\n\n");
 
         rng.setState(0xf00df00L);
@@ -243,7 +251,7 @@ public class LanguageGenTest {
             System.out.print(", " + flg.word(rng, true, rng.between(2, 4)));
         }
         System.out.println("\n\nDEFAULT SENTENCES:\n\n");
-        System.out.println('"' + FakeLanguageGen.ENGLISH.sentence(rng, 4, 7,
+        System.out.println('"' + FakeLanguageGen.ENGLISH.sentence(rng, 4, 10,
                 new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
         System.out.println('"' + FakeLanguageGen.JAPANESE_ROMANIZED.sentence(rng, 4, 7,
                 new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
@@ -259,7 +267,7 @@ public class LanguageGenTest {
                 new String[]{" -", ",", ",", ",", ";"}, new String[]{"!", "!", ".", "...", ".", "?"}, 0.22) + "\",");
         System.out.println('"' + FakeLanguageGen.LOVECRAFT.sentence(rng, 4, 7,
                 new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
-        System.out.println('"' + FakeLanguageGen.SWAHILI.sentence(rng, 4, 7,
+        System.out.println('"' + FakeLanguageGen.SWAHILI.sentence(rng, 4, 8,
                 new String[]{",", ",", ";"}, new String[]{"!", "?", ".", ".", "."}, 0.12) + "\",");
         flg = FakeLanguageGen.FRENCH.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.65);
         System.out.println('"' + flg.sentence(rng, 6, 12, new String[]{",", ",", ",", ";"},
@@ -286,20 +294,23 @@ public class LanguageGenTest {
         System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
         flg = FakeLanguageGen.NORSE;
-        System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
+        System.out.println('"' + flg.sentence(rng, 4, 9, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
         flg = FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE);
-        System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{",", ",", ";"},
+        System.out.println('"' + flg.sentence(rng, 4, 9, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
         flg = FakeLanguageGen.NAHUATL;
         System.out.println('"' + flg.sentence(rng, 3, 6, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.1) + "\",");
         flg = FakeLanguageGen.MONGOLIAN;
-        System.out.println('"' + flg.sentence(rng, 3, 7, new String[]{",", ",", ";", ",", " -"},
+        System.out.println('"' + flg.sentence(rng, 3, 8, new String[]{",", ",", ";", ",", " -"},
                 new String[]{"!", "?", ".", ".", ".", ".", "..."}, 0.16) + "\",");
         flg = FakeLanguageGen.SIMPLISH;
-        System.out.println('"' + flg.sentence(rng, 4, 7, new String[]{" -", ",", ",", ";"},
+        System.out.println('"' + flg.sentence(rng, 4, 10, new String[]{" -", ",", ",", ";"},
                 new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
+        flg = FakeLanguageGen.KOREAN_ROMANIZED;
+        System.out.println('"' + flg.sentence(rng, 5, 9, new String[]{",", ",", ";", ","},
+                new String[]{"!", "?", ".", ".", ".", ".", "..."}, 0.13) + "\",");
 
         System.out.println("\n-----------------------------------------------------------------------------");
         System.out.println();
@@ -344,42 +355,40 @@ public class LanguageGenTest {
                 FakeLanguageGen.NAHUATL,
                 FakeLanguageGen.MONGOLIAN,
                 FakeLanguageGen.SIMPLISH,
-                FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
-                        FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
-                        FakeLanguageGen.modifier("ii", "ai"),
-                        FakeLanguageGen.modifier("uu", "ia"),
-                        FakeLanguageGen.modifier("([aeo])\\1", "$1"),
-                        FakeLanguageGen.modifier("^x", "v"),
-                        FakeLanguageGen.modifier("([^aeiou]|^)u([^aeiou]|$)", "$1a$2", 0.6),
-                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1v$2", 0.06),
-                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1l$2", 0.07),
-                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1n$2", 0.07),
-                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1z$2", 0.08),
-                        FakeLanguageGen.modifier("([^aeiou])[aeiou]+$", "$1ia", 0.35),
-                        FakeLanguageGen.modifier("([^aeiou])[bpdtkgj]", "$1"),
-                        FakeLanguageGen.modifier("[jg]$", "th"),
-                        FakeLanguageGen.modifier("g", "c", 0.92),
-                        FakeLanguageGen.modifier("([aeiou])[wy]$", "$1l", 0.6),
-                        FakeLanguageGen.modifier("([aeiou])[wy]$", "$1n"),
-                        FakeLanguageGen.modifier("[qf]$", "l", 0.4),
-                        FakeLanguageGen.modifier("[qf]$", "n", 0.65),
-                        FakeLanguageGen.modifier("[qf]$", "s"),
-                        FakeLanguageGen.modifier("cy", "sp"),
-                        FakeLanguageGen.modifier("kl", "sk"),
-                        FakeLanguageGen.modifier("qu+", "qui"),
-                        FakeLanguageGen.modifier("q([^u])", "qu$1"),
-                        FakeLanguageGen.modifier("cc", "ch"),
-                        FakeLanguageGen.modifier("[^aeiou]([^aeiou][^aeiou])", "$1"),
-                        FakeLanguageGen.Modifier.NO_DOUBLES
-                ),
-                FakeLanguageGen.GOBLIN,
-                FakeLanguageGen.ELF,
-                FakeLanguageGen.DEMONIC,
-                FakeLanguageGen.INFERNAL,
-                FakeLanguageGen.ALIEN_A,
-                //FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
-                //FakeLanguageGen.LOVECRAFT.mix(FakeLanguageGen.RUSSIAN_ROMANIZED, 0.4),
-                //FakeLanguageGen.randomLanguage(new StatefulRNG(2252637788195L)),
+                FakeLanguageGen.KOREAN_ROMANIZED,
+//                FakeLanguageGen.SOMALI.addModifiers(FakeLanguageGen.modifier("([kd])h", "$1"),
+//                        FakeLanguageGen.modifier("([pfsgkcb])([aeiouy])", "$1l$2", 0.35),
+//                        FakeLanguageGen.modifier("ii", "ai"),
+//                        FakeLanguageGen.modifier("uu", "ia"),
+//                        FakeLanguageGen.modifier("([aeo])\\1", "$1"),
+//                        FakeLanguageGen.modifier("^x", "v"),
+//                        FakeLanguageGen.modifier("([^aeiou]|^)u([^aeiou]|$)", "$1a$2", 0.6),
+//                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1v$2", 0.06),
+//                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1l$2", 0.07),
+//                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1n$2", 0.07),
+//                        FakeLanguageGen.modifier("([aeiou])[^aeiou]([aeiou])", "$1z$2", 0.08),
+//                        FakeLanguageGen.modifier("([^aeiou])[aeiou]+$", "$1ia", 0.35),
+//                        FakeLanguageGen.modifier("([^aeiou])[bpdtkgj]", "$1"),
+//                        FakeLanguageGen.modifier("[jg]$", "th"),
+//                        FakeLanguageGen.modifier("g", "c", 0.92),
+//                        FakeLanguageGen.modifier("([aeiou])[wy]$", "$1l", 0.6),
+//                        FakeLanguageGen.modifier("([aeiou])[wy]$", "$1n"),
+//                        FakeLanguageGen.modifier("[qf]$", "l", 0.4),
+//                        FakeLanguageGen.modifier("[qf]$", "n", 0.65),
+//                        FakeLanguageGen.modifier("[qf]$", "s"),
+//                        FakeLanguageGen.modifier("cy", "sp"),
+//                        FakeLanguageGen.modifier("kl", "sk"),
+//                        FakeLanguageGen.modifier("qu+", "qui"),
+//                        FakeLanguageGen.modifier("q([^u])", "qu$1"),
+//                        FakeLanguageGen.modifier("cc", "ch"),
+//                        FakeLanguageGen.modifier("[^aeiou]([^aeiou][^aeiou])", "$1"),
+//                        FakeLanguageGen.Modifier.NO_DOUBLES
+//                ),
+//                FakeLanguageGen.GOBLIN,
+//                FakeLanguageGen.ELF,
+//                FakeLanguageGen.DEMONIC,
+//                FakeLanguageGen.INFERNAL,
+//                FakeLanguageGen.ALIEN_A,
         };
         String[] oz = new String[]{
                 "Uncle Uncles Carbuncle Carbuncles Live Lives Lived Living Liver Livers Livery Liveries",
