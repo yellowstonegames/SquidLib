@@ -3187,16 +3187,16 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                connections[2] += ctr * 0.06;
-                                connections[0] += x * 0.06 - y * 0.015;
-                                connections[1] += y * 0.06 - x * 0.015;
+                                connections[2] = ctr * 0.017;
+                                connections[0] = x * 0.123 - y * 0.083 + ctr * 0.011;
+                                connections[1] = y * 0.123 - x * 0.083 + ctr * 0.011;
 //                                connections[0] = NumberTools.bounce(cosmos.getDoubleBase() * 1.3 + 5.0) + 1.8;
 //                                connections[1] = NumberTools.bounce(cosmos.getDoubleBase() * 1.7 + 5.0) + 1.6;
 //                                connections[2] = NumberTools.bounce(cosmos.getDoubleBase() * 1.9 + 5.0) + 1.2;
-                                iBright = cosmos.getInt();
-                                connections[0] = NumberTools.intBitsToFloat((((iBright >> 3) * 17) >>> 9) | 0x40000000);
-                                connections[1] = NumberTools.intBitsToFloat((((iBright >> 3) * 19) >>> 9) | 0x40000000);
-                                connections[2] = NumberTools.intBitsToFloat((((iBright >> 3) * 23) >>> 9) | 0x40000000);
+                                iBright = cosmos.getInt() >> 5;
+                                connections[0] = NumberTools.intBitsToFloat(((iBright * 61) >>> 9) | 0x40000000);
+                                connections[1] = NumberTools.intBitsToFloat(((iBright * 52) >>> 9) | 0x40000000);
+                                connections[2] = NumberTools.intBitsToFloat(((iBright * 33) >>> 9) | 0x40000000);
                                 //bright = (float)cosmos.getDouble();
                                 display.put(x, y,
                                         floatGet(
@@ -3217,11 +3217,11 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Cosmic 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                connections[2] += ctr * 0.06;
-                                connections[0] += x * 0.06 - y * 0.015;
-                                connections[1] += y * 0.06 - x * 0.015;
+                                connections[2] = ctr * 0.017;
+                                connections[0] = x * 0.123 - y * 0.083 + ctr * 0.011;
+                                connections[1] = y * 0.123 - x * 0.083 + ctr * 0.011;
                                 connections[2] = 1.09 * (connections[1] = 1.03 * (connections[0] = 0.98 * (bright =
-                                        NumberTools.intBitsToFloat((((cosmos.getInt() >> 3) * 17) >>> 9) | 0x40000000))));
+                                        NumberTools.intBitsToFloat((((cosmos.getInt() >> 5) * 41) >>> 9) | 0x40000000))));
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }

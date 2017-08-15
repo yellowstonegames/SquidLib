@@ -48,12 +48,20 @@ public class CosmicNumbering implements Serializable {
         double[] connections = this.connections;
         final int len = connections.length;
         long floor;
-        double diff, conn, result = 0.0;
+        double diff, conn, result = 0.0;//, total = 1.0;
         for (int i = 0; i < len; i++) {
             diff = (conn = connections[i]) - (floor = fastFloor(conn));
-            result += (NumberTools.longBitsToDouble((floor * 0x9E3779B97F4A7C15L >>> 9 & 0xfffffffffffffL) | 0x4000000000000000L) - 3.0) * (1.0 - diff);
-            result += (NumberTools.longBitsToDouble(((floor + 1L) * 0x9E3779B97F4A7C15L >>> 9 & 0xfffffffffffffL) | 0x4000000000000000L) - 3.0) * diff;
+            //  & 0xfffffffffffffL
+            result +=
+                    NumberTools.bounce((NumberTools.longBitsToDouble((floor * 0x9E3779B97F4A7C15L >>> 12) | 0x4000000000000000L) - 3.0)
+                            * (1.0 - diff)
+                            + (NumberTools.longBitsToDouble(((floor + 1L) * 0x9E3779B97F4A7C15L >>> 12) | 0x4000000000000000L) - 3.0)
+                            * diff
+                            + 5 + ~i * 0.618);
+//            result *= 1.618;
+//            total *= 1.618;
         }
+        //return NumberTools.bounce(result + (len * 2.5));
         return result / len;
     }
 
