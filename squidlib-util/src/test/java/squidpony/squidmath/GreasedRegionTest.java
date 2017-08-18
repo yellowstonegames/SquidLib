@@ -3,8 +3,8 @@ package squidpony.squidmath;
 import org.junit.Test;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 
 import java.util.ArrayList;
@@ -24,9 +24,9 @@ public class GreasedRegionTest {
     public static GreasedRegion box3 = new GreasedRegion(240, 240).insertRectangle(30, 30, 180, 180);
     public static StatefulRNG srng = new StatefulRNG(0xCAFEBEEFBABAD00CL);
     public static RNG rng = new RNG(0xCAFEBEEFBABAD00CL);
-    public static DungeonGenerator dungeonGen = new DungeonGenerator(64, 64, srng);
-    public static char[][] dungeon = dungeonGen.generate(TilesetType.CORNER_CAVES);
-    public static GreasedRegion dataDungeon = new GreasedRegion(dungeon, '.');
+    public static DungeonBoneGen dungeonGen = new DungeonBoneGen(srng);
+    public static char[][] dungeon = dungeonGen.generate(TilesetType.DEFAULT_DUNGEON, 64, 64);
+    public static GreasedRegion dataDungeon = dungeonGen.region.removeEdges();
     public static final char[] letters = ArrayTools.letterSpan(256);
     static {
         //printRegion(dataCross);
@@ -357,14 +357,13 @@ public class GreasedRegionTest {
         printRegion(midCross);
     }
     @Test
-    public void testCA()
-    {
+    public void testCA() {
         RNG rng = new RNG(0x1337BEEFAAAAAAAAL);
         GreasedRegion current = new GreasedRegion(rng, 0.52, 64, 64);
-        if(PRINTING)
+        if (PRINTING)
             System.out.println(current + "\n\n");
         CellularAutomaton ca = new CellularAutomaton(current);
-        if(PRINTING) {
+        if (PRINTING) {
             System.out.println(ca.runBasicSmoothing());
             System.out.println();
             System.out.println(ca.runBasicSmoothing());
@@ -378,17 +377,24 @@ public class GreasedRegionTest {
             System.out.println(ca.runBasicSmoothing().removeEdges());
             System.out.println();
         }
-        int count = 0, t;
-        for(GreasedRegion gr : ca.current.split())
-        {
-            if((t = gr.size()) > count)
-            {
-                count = t;
-                current = gr;
-            }
+        if (PRINTING)
+            System.out.println(current.largestPart() + "\n");
+        current.remake(dataDungeon);
+        if (PRINTING)
+            System.out.println(current + "\n\n");
+        ca.remake(current.copy());
+        if (PRINTING) {
+            System.out.println(current.and(ca.runBasicSmoothing()));
+            System.out.println();
+            System.out.println(current.and(ca.runBasicSmoothing()));
+            System.out.println();
+            ca.current.remake(current);
+            System.out.println(current.or(ca.runBasicSmoothing()).removeEdges());
+            System.out.println();
         }
-        if(PRINTING)
-            System.out.println(current);
+        if (PRINTING)
+            System.out.println(current.largestPart() + "\n");
+
     }
 
 }
