@@ -46,6 +46,29 @@ public class CellularAutomaton {
     }
 
     /**
+     * Re-initializes this CellularAutomaton using a different GreasedRegion as a basis. If the previous GreasedRegion
+     * used has the same dimensions as {@code next}, then this performs no allocations and simply sets the existing
+     * contents. Otherwise, it makes one new 2D array and also has all 9 of the internal GreasedRegions adjust in size,
+     * which involves some allocation. If {@code next} is null, this does nothing and returns itself without changes.
+     * @param next a GreasedRegion to set this CellularAutomaton to read from and adjust
+     * @return this, for chaining
+     */
+    public CellularAutomaton remake(GreasedRegion next)
+    {
+        if(next == null)
+            return this;
+        if(current.width != next.width || current.height != next.height)
+            sums = new int[next.width][next.height];
+        else
+            ArrayTools.fill(sums, 0);
+        current = next;
+        for (int i = 0; i < 9; i++) {
+            neighbors[i].remake(current);
+        }
+        return this;
+    }
+
+    /**
      * Reduces the sharpness of corners by only considering a cell on if the previous version has 5 of the 9 cells in
      * the containing 3x3 area as "on." Typically, this method is run repeatedly. It does not return itself for
      * chaining, because it returns a direct reference to the {@link #current} GreasedRegion that this will use for

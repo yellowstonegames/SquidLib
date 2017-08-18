@@ -3557,13 +3557,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public ArrayList<GreasedRegion> split()
     {
         ArrayList<GreasedRegion> scattered = new ArrayList<>(32);
-        Coord fst = first();
+        int fst = firstTight();
         GreasedRegion remaining = new GreasedRegion(this);
-        while (fst.x >= 0) {
-            GreasedRegion filled = new GreasedRegion(fst, width, height).flood(remaining, width * height);
+        while (fst >= 0) {
+            GreasedRegion filled = new GreasedRegion(width, height).insert(fst).flood(remaining, width * height);
             scattered.add(filled);
             remaining.andNot(filled);
-            fst = remaining.first();
+            fst = remaining.firstTight();
         }
         return scattered;
     }
@@ -3596,15 +3596,69 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public ArrayList<GreasedRegion> split8way()
     {
         ArrayList<GreasedRegion> scattered = new ArrayList<>(32);
-        Coord fst = first();
+        int fst = firstTight();
         GreasedRegion remaining = new GreasedRegion(this);
-        while (fst.x >= 0) {
-            GreasedRegion filled = new GreasedRegion(fst, width, height).flood8way(remaining, width * height);
+        while (fst >= 0) {
+            GreasedRegion filled = new GreasedRegion(width, height).insert(fst).flood8way(remaining, width * height);
             scattered.add(filled);
             remaining.andNot(filled);
-            fst = remaining.first();
+            fst = remaining.firstTight();
         }
         return scattered;
+    }
+
+    /**
+     * Finds the largest contiguous area of "on" cells in this GreasedRegion and returns it; does not modify this
+     * GreasedRegion. If there are multiple areas that are all equally large with no larger area, this returns the
+     * region it checks first and still is largest (first determined by the same ordering {@link #nth(int)} takes).
+     * This may return an empty GreasedRegion if there are no "on" cells, but it will never return null.
+     * Here, contiguous means adjacent on an orthogonal direction, and this doesn't consider diagonally-connected cells
+     * as contiguous unless they also have an orthogonal connection.
+     * @return a new GreasedRegion that corresponds to the largest contiguous sub-region of "on" cells in this.
+     */
+    public GreasedRegion largestPart()
+    {
+        int fst = firstTight(), bestSize = 0, currentSize;
+        GreasedRegion remaining = new GreasedRegion(this), filled = new GreasedRegion(width, height),
+                choice = new GreasedRegion(width, height);
+        while (fst >= 0) {
+            filled.empty().insert(fst).flood(remaining, width * height);
+            if((currentSize = filled.size()) > bestSize)
+            {
+                bestSize = currentSize;
+                choice.remake(filled);
+            }
+            remaining.andNot(filled);
+            fst = remaining.firstTight();
+        }
+        return choice;
+    }
+
+    /**
+     * Finds the largest contiguous area of "on" cells in this GreasedRegion and returns it; does not modify this
+     * GreasedRegion. If there are multiple areas that are all equally large with no larger area, this returns the
+     * region it checks first and still is largest (first determined by the same ordering {@link #nth(int)} takes).
+     * This may return an empty GreasedRegion if there are no "on" cells, but it will never return null.
+     * Here, contiguous means adjacent on any 8-way direction, and considers cells as part of a contiguous area even if
+     * all connections but one, which can be orthogonal or diagonal, are blocked by "off" cells.
+     * @return a new GreasedRegion that corresponds to the largest contiguous sub-region of "on" cells in this.
+     */
+    public GreasedRegion largestPart8way()
+    {
+        int fst = firstTight(), bestSize = 0, currentSize;
+        GreasedRegion remaining = new GreasedRegion(this), filled = new GreasedRegion(width, height),
+                choice = new GreasedRegion(width, height);
+        while (fst >= 0) {
+            filled.empty().insert(fst).flood8way(remaining, width * height);
+            if((currentSize = filled.size()) > bestSize)
+            {
+                bestSize = currentSize;
+                choice.remake(filled);
+            }
+            remaining.andNot(filled);
+            fst = remaining.firstTight();
+        }
+        return choice;
     }
 
     /**
@@ -3811,14 +3865,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public GreasedRegion removeIsolated()
     {
-        Coord fst = first();
+        int fst = firstTight();
         GreasedRegion remaining = new GreasedRegion(this), filled = new GreasedRegion(this);
-        while (fst.x >= 0) {
+        while (fst >= 0) {
             filled.empty().insert(fst).flood(remaining, 8);
             if(filled.size() <= 4)
                 andNot(filled);
             remaining.andNot(filled);
-            fst = remaining.first();
+            fst = remaining.firstTight();
         }
         return this;
     }
@@ -4629,6 +4683,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return Coord.get(-1, -1);
     }
 
+    public int firstTight()
+    {
+        long w;
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0) {
+                    return ((s << 6) | Long.numberOfTrailingZeros(w)) * width + x;
+                }
+            }
+        }
+        return -1;
+    }
     public Coord nth(final int index)
     {
         int ct = 0, tmp;
