@@ -3,6 +3,7 @@ package squidpony.examples;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
+import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
@@ -302,6 +303,24 @@ public class DungeonGeneratorTest {
         System.out.println(sdg);
         System.out.println("------------------------------------------------------------");
 
+        rng.setState(2252637788195L);
+        FlowingCaveGenerator flow = new FlowingCaveGenerator(width, height, TilesetType.DEFAULT_DUNGEON, rng);
+
+        dungeonGenerator.addDoors(0, false);
+        dungeonGenerator.clearEffects();
+        dungeonGenerator.generate(flow.generate());
+        //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        dungeon = dungeonGenerator.getDungeon();
+        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(
+                DungeonUtility.hashesToLines(dungeon, true));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
 
         /*
         dungeonGenerator = new DungeonGenerator(width, height, rng);
