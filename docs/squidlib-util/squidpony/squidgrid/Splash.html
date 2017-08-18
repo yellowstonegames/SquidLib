@@ -192,11 +192,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Splash.html#drunkinize-squidpony.squidmath.RNG-char:A:A-java.util.List-java.util.List-int-">drunkinize</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
-          char[][]&nbsp;map,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;zone,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;border,
-          int&nbsp;drunks)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Splash.html#inebriate-squidpony.squidmath.RNG-java.util.List-java.util.List-int-">inebriate</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;zone,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;border,
+         int&nbsp;drunks)</code>
+<div class="block">Uses drunken walkers to alter the edge of the splash.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
@@ -364,21 +365,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="drunkinize-squidpony.squidmath.RNG-char:A:A-java.util.List-java.util.List-int-">
+<a name="inebriate-squidpony.squidmath.RNG-java.util.List-java.util.List-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>drunkinize</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Splash.html#line.151">drunkinize</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
-                          char[][]&nbsp;map,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;zone,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;border,
-                          int&nbsp;drunks)</pre>
+<h4>inebriate</h4>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Splash.html#line.151">inebriate</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;zone,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;border,
+                         int&nbsp;drunks)</pre>
+<div class="block">Uses drunken walkers to alter the edge of the splash.
+ Formerly called drunkinize (sic); code that extends Splash may need to change the name of an overridden method.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rng</code> - </dd>
-<dd><code>map</code> - The map on which <code>zone</code> is a pool</dd>
+<dd><code>rng</code> - random number generator</dd>
 <dd><code>zone</code> - The zone to shrink</dd>
 <dd><code>border</code> - <code>zone</code>'s border</dd>
 <dd><code>drunks</code> - The number of drunken walkers to consider</dd>

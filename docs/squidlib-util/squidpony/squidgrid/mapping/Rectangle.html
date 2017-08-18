@@ -186,7 +186,7 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface i
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;squidpony.squidgrid.zone.<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></h3>
-<code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#contains-int-int-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidgrid.zone.Zone-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getCenter--">getCenter</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getDiagonal--">getDiagonal</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#isEmpty--">isEmpty</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#size--">size</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#x-boolean-">x</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#y-boolean-">y</a></code></li>
+<code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#contains-int-int-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidgrid.zone.Zone-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#extend--">extend</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getCenter--">getCenter</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getDiagonal--">getDiagonal</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getExternalBorder--">getExternalBorder</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#isEmpty--">isEmpty</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#size--">size</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#translate-squidpony.squidmath.Coord-">translate</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#translate-int-int-">translate</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#x-boolean-">x</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#y-boolean-">y</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Iterable">
@@ -234,7 +234,8 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface i
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getWidth--">getWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The distance between the leftmost cell and the rightmost cell, or
-         anything negative if <code>this</code> zone is empty.</dd>
+         anything negative if <code>this</code> zone is empty; may be 0 if all cells
+         are in one vertical line.</dd>
 </dl>
 </li>
 </ul>
@@ -250,7 +251,8 @@ extends <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface i
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getHeight--">getHeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The distance between the topmost cell and the lowest cell, or
-         anything negative if <code>this</code> zone is empty.</dd>
+         anything negative if <code>this</code> zone is empty; may be 0 if all cells
+         are in one horizontal line.</dd>
 </dl>
 </li>
 </ul>

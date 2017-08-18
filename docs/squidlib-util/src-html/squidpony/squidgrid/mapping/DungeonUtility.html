@@ -1388,209 +1388,210 @@
 <span class="sourceLineNo">1380</span>    }<a name="line.1380"></a>
 <span class="sourceLineNo">1381</span><a name="line.1381"></a>
 <span class="sourceLineNo">1382</span>    /**<a name="line.1382"></a>
-<span class="sourceLineNo">1383</span>     * An easy way to get the Coord items in a List of Coord that are at the edge of the region. Not the most<a name="line.1383"></a>
-<span class="sourceLineNo">1384</span>     * efficient way to do this; If you find you need to do more complicated manipulations of regions or are<a name="line.1384"></a>
-<span class="sourceLineNo">1385</span>     * calling this method often, consider using {@link squidpony.squidmath.GreasedRegion}, which should be<a name="line.1385"></a>
-<span class="sourceLineNo">1386</span>     * significantly faster and has better support for more intricate alterations on an area of Coords.<a name="line.1386"></a>
-<span class="sourceLineNo">1387</span>     * @param zone a List of Coord representing a region<a name="line.1387"></a>
-<span class="sourceLineNo">1388</span>     * @param buffer The list to fill if non null (i.e. if non-null, it is<a name="line.1388"></a>
-<span class="sourceLineNo">1389</span>     *               returned). If null, a fresh list will be allocated and<a name="line.1389"></a>
-<span class="sourceLineNo">1390</span>     *               returned.<a name="line.1390"></a>
-<span class="sourceLineNo">1391</span>     * @return Elements in {@code zone} that are neighbors to an element not in {@code zone}.<a name="line.1391"></a>
-<span class="sourceLineNo">1392</span>     */<a name="line.1392"></a>
-<span class="sourceLineNo">1393</span>    public static List&lt;Coord&gt; border(final List&lt;Coord&gt; zone, /* @Nullable */ List&lt;Coord&gt; buffer) {<a name="line.1393"></a>
-<span class="sourceLineNo">1394</span>        final int zsz = zone.size();<a name="line.1394"></a>
-<span class="sourceLineNo">1395</span>        final List&lt;Coord&gt; border = buffer == null ? new ArrayList&lt;Coord&gt;(zsz / 4) : buffer;<a name="line.1395"></a>
-<span class="sourceLineNo">1396</span>        for (int i = 0; i &lt; zsz; i++) {<a name="line.1396"></a>
-<span class="sourceLineNo">1397</span>            final Coord c = zone.get(i);<a name="line.1397"></a>
-<span class="sourceLineNo">1398</span>            if (hasANeighborNotIn(c, zone))<a name="line.1398"></a>
-<span class="sourceLineNo">1399</span>                border.add(c);<a name="line.1399"></a>
-<span class="sourceLineNo">1400</span>        }<a name="line.1400"></a>
-<span class="sourceLineNo">1401</span>        return border;<a name="line.1401"></a>
-<span class="sourceLineNo">1402</span>    }<a name="line.1402"></a>
-<span class="sourceLineNo">1403</span><a name="line.1403"></a>
-<span class="sourceLineNo">1404</span>    /**<a name="line.1404"></a>
-<span class="sourceLineNo">1405</span>     * Quickly counts the number of char elements in level that are equal to match.<a name="line.1405"></a>
-<span class="sourceLineNo">1406</span>     *<a name="line.1406"></a>
-<span class="sourceLineNo">1407</span>     * @param level the 2D char array to count cells in<a name="line.1407"></a>
-<span class="sourceLineNo">1408</span>     * @param match the char to search for<a name="line.1408"></a>
-<span class="sourceLineNo">1409</span>     * @return the number of cells that matched<a name="line.1409"></a>
-<span class="sourceLineNo">1410</span>     */<a name="line.1410"></a>
-<span class="sourceLineNo">1411</span>    public static int countCells(char[][] level, char match) {<a name="line.1411"></a>
-<span class="sourceLineNo">1412</span>        if (level == null || level.length == 0)<a name="line.1412"></a>
-<span class="sourceLineNo">1413</span>            return 0;<a name="line.1413"></a>
-<span class="sourceLineNo">1414</span>        int counter = 0;<a name="line.1414"></a>
-<span class="sourceLineNo">1415</span>        for (int x = 0; x &lt; level.length; x++) {<a name="line.1415"></a>
-<span class="sourceLineNo">1416</span>            for (int y = 0; y &lt; level[x].length; y++) {<a name="line.1416"></a>
-<span class="sourceLineNo">1417</span>                if (level[x][y] == match) counter++;<a name="line.1417"></a>
-<span class="sourceLineNo">1418</span>            }<a name="line.1418"></a>
-<span class="sourceLineNo">1419</span>        }<a name="line.1419"></a>
-<span class="sourceLineNo">1420</span>        return counter;<a name="line.1420"></a>
-<span class="sourceLineNo">1421</span>    }<a name="line.1421"></a>
-<span class="sourceLineNo">1422</span><a name="line.1422"></a>
-<span class="sourceLineNo">1423</span>    /**<a name="line.1423"></a>
-<span class="sourceLineNo">1424</span>     * For when you want to print a 2D char array. Prints on multiple lines, with a trailing newline.<a name="line.1424"></a>
-<span class="sourceLineNo">1425</span>     *<a name="line.1425"></a>
-<span class="sourceLineNo">1426</span>     * @param level a 2D char array to print with a trailing newline<a name="line.1426"></a>
-<span class="sourceLineNo">1427</span>     */<a name="line.1427"></a>
-<span class="sourceLineNo">1428</span>    public static void debugPrint(char[][] level) {<a name="line.1428"></a>
-<span class="sourceLineNo">1429</span>        if (level == null || level.length == 0 || level[0].length == 0)<a name="line.1429"></a>
-<span class="sourceLineNo">1430</span>            System.out.println("INVALID DUNGEON LEVEL");<a name="line.1430"></a>
-<span class="sourceLineNo">1431</span>        else {<a name="line.1431"></a>
-<span class="sourceLineNo">1432</span>            for (int y = 0; y &lt; level[0].length; y++) {<a name="line.1432"></a>
-<span class="sourceLineNo">1433</span>                for (int x = 0; x &lt; level.length; x++) {<a name="line.1433"></a>
-<span class="sourceLineNo">1434</span>                    System.out.print(level[x][y]);<a name="line.1434"></a>
-<span class="sourceLineNo">1435</span>                }<a name="line.1435"></a>
-<span class="sourceLineNo">1436</span>                System.out.println();<a name="line.1436"></a>
-<span class="sourceLineNo">1437</span><a name="line.1437"></a>
-<span class="sourceLineNo">1438</span>            }<a name="line.1438"></a>
-<span class="sourceLineNo">1439</span>        }<a name="line.1439"></a>
-<span class="sourceLineNo">1440</span>    }<a name="line.1440"></a>
-<span class="sourceLineNo">1441</span><a name="line.1441"></a>
-<span class="sourceLineNo">1442</span>    /**<a name="line.1442"></a>
-<span class="sourceLineNo">1443</span>     * Changes the outer edge of a char[][] to the wall char, '#'.<a name="line.1443"></a>
-<span class="sourceLineNo">1444</span>     *<a name="line.1444"></a>
-<span class="sourceLineNo">1445</span>     * @param map A char[][] that stores map data; will be modified in place<a name="line.1445"></a>
-<span class="sourceLineNo">1446</span>     * @return the modified-in-place map with its edge replaced with '#'<a name="line.1446"></a>
-<span class="sourceLineNo">1447</span>     */<a name="line.1447"></a>
-<span class="sourceLineNo">1448</span>    public static char[][] wallWrap(char[][] map) {<a name="line.1448"></a>
-<span class="sourceLineNo">1449</span>        int upperY = map[0].length - 1;<a name="line.1449"></a>
-<span class="sourceLineNo">1450</span>        int upperX = map.length - 1;<a name="line.1450"></a>
-<span class="sourceLineNo">1451</span>        for (int i = 0; i &lt; map.length; i++) {<a name="line.1451"></a>
-<span class="sourceLineNo">1452</span>            map[i][0] = '#';<a name="line.1452"></a>
-<span class="sourceLineNo">1453</span>            map[i][upperY] = '#';<a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>        }<a name="line.1454"></a>
-<span class="sourceLineNo">1455</span>        for (int i = 0; i &lt; map[0].length; i++) {<a name="line.1455"></a>
-<span class="sourceLineNo">1456</span>            map[0][i] = '#';<a name="line.1456"></a>
-<span class="sourceLineNo">1457</span>            map[upperX][i] = '#';<a name="line.1457"></a>
-<span class="sourceLineNo">1458</span>        }<a name="line.1458"></a>
-<span class="sourceLineNo">1459</span>        return map;<a name="line.1459"></a>
-<span class="sourceLineNo">1460</span>    }<a name="line.1460"></a>
-<span class="sourceLineNo">1461</span><a name="line.1461"></a>
-<span class="sourceLineNo">1462</span>    /**<a name="line.1462"></a>
-<span class="sourceLineNo">1463</span>     * Ensures a path exists in a rough ring around the map by first creating the path (using<a name="line.1463"></a>
-<span class="sourceLineNo">1464</span>     * SerpentMapGenerator.pointPath with the given RNG), then finding chars in blocking that are on that path and<a name="line.1464"></a>
-<span class="sourceLineNo">1465</span>     * replacing them with replacement. Modifies map in-place (!) and returns an ArrayList of Coord points that will<a name="line.1465"></a>
-<span class="sourceLineNo">1466</span>     * always be on the path.<a name="line.1466"></a>
-<span class="sourceLineNo">1467</span>     *<a name="line.1467"></a>
-<span class="sourceLineNo">1468</span>     * @param map         a 2D char array, x then y, etc. that will be modified directly; this is the "returned map"<a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>     * @param rng         used for random factors in the path choice<a name="line.1469"></a>
-<span class="sourceLineNo">1470</span>     * @param replacement the char that will fill be used where a path needs to be carved out; usually '.'<a name="line.1470"></a>
-<span class="sourceLineNo">1471</span>     * @param blocking    an array or vararg of char that are considered blocking for the path and will be replaced if<a name="line.1471"></a>
-<span class="sourceLineNo">1472</span>     *                    they are in the way<a name="line.1472"></a>
-<span class="sourceLineNo">1473</span>     * @return the ArrayList of Coord points that are on the carved path, including existing non-blocking cells; will be empty if any parameters are invalid<a name="line.1473"></a>
-<span class="sourceLineNo">1474</span>     */<a name="line.1474"></a>
-<span class="sourceLineNo">1475</span>    public static ArrayList&lt;Coord&gt; ensurePath(char[][] map, RNG rng, char replacement, char... blocking) {<a name="line.1475"></a>
-<span class="sourceLineNo">1476</span>        if (map == null || map.length &lt;= 0 || blocking == null || blocking.length &lt;= 0)<a name="line.1476"></a>
-<span class="sourceLineNo">1477</span>            return new ArrayList&lt;Coord&gt;(0);<a name="line.1477"></a>
-<span class="sourceLineNo">1478</span>        int width = map.length, height = map[0].length;<a name="line.1478"></a>
-<span class="sourceLineNo">1479</span>        ArrayList&lt;Coord&gt; points = SerpentMapGenerator.pointPath(width, height, rng);<a name="line.1479"></a>
-<span class="sourceLineNo">1480</span>        char[] blocks = new char[blocking.length];<a name="line.1480"></a>
-<span class="sourceLineNo">1481</span>        System.arraycopy(blocking, 0, blocks, 0, blocking.length);<a name="line.1481"></a>
-<span class="sourceLineNo">1482</span>        Arrays.sort(blocks);<a name="line.1482"></a>
-<span class="sourceLineNo">1483</span>        for (Coord c : points) {<a name="line.1483"></a>
-<span class="sourceLineNo">1484</span>            if (c.x &gt;= 0 &amp;&amp; c.x &lt; width &amp;&amp; c.y &gt;= 0 &amp;&amp; c.y &lt; height &amp;&amp; Arrays.binarySearch(blocks, map[c.x][c.y]) &gt;= 0) {<a name="line.1484"></a>
-<span class="sourceLineNo">1485</span>                map[c.x][c.y] = replacement;<a name="line.1485"></a>
-<span class="sourceLineNo">1486</span>            }<a name="line.1486"></a>
-<span class="sourceLineNo">1487</span>        }<a name="line.1487"></a>
-<span class="sourceLineNo">1488</span>        return points;<a name="line.1488"></a>
-<span class="sourceLineNo">1489</span>    }<a name="line.1489"></a>
-<span class="sourceLineNo">1490</span><a name="line.1490"></a>
-<span class="sourceLineNo">1491</span>    public static ArrayList&lt;Coord&gt; allMatching(char[][] map, char... matching) {<a name="line.1491"></a>
-<span class="sourceLineNo">1492</span>        if (map == null || map.length &lt;= 0 || matching == null || matching.length &lt;= 0)<a name="line.1492"></a>
-<span class="sourceLineNo">1493</span>            return new ArrayList&lt;Coord&gt;(0);<a name="line.1493"></a>
-<span class="sourceLineNo">1494</span>        int width = map.length, height = map[0].length;<a name="line.1494"></a>
-<span class="sourceLineNo">1495</span>        char[] matches = new char[matching.length];<a name="line.1495"></a>
-<span class="sourceLineNo">1496</span>        System.arraycopy(matching, 0, matches, 0, matching.length);<a name="line.1496"></a>
-<span class="sourceLineNo">1497</span>        Arrays.sort(matches);<a name="line.1497"></a>
-<span class="sourceLineNo">1498</span>        ArrayList&lt;Coord&gt; points = new ArrayList&lt;Coord&gt;(map.length * 4);<a name="line.1498"></a>
-<span class="sourceLineNo">1499</span>        for (int x = 0; x &lt; width; x++) {<a name="line.1499"></a>
-<span class="sourceLineNo">1500</span>            for (int y = 0; y &lt; height; y++) {<a name="line.1500"></a>
-<span class="sourceLineNo">1501</span>                if (Arrays.binarySearch(matches, map[x][y]) &gt;= 0)<a name="line.1501"></a>
-<span class="sourceLineNo">1502</span>                    points.add(Coord.get(x, y));<a name="line.1502"></a>
-<span class="sourceLineNo">1503</span>            }<a name="line.1503"></a>
-<span class="sourceLineNo">1504</span>        }<a name="line.1504"></a>
-<span class="sourceLineNo">1505</span>        return points;<a name="line.1505"></a>
-<span class="sourceLineNo">1506</span>    }<a name="line.1506"></a>
-<span class="sourceLineNo">1507</span><a name="line.1507"></a>
-<span class="sourceLineNo">1508</span>    /**<a name="line.1508"></a>
-<span class="sourceLineNo">1509</span>     * Gets a List of Coord that are within radius distance of (x,y), and appends them to buf if it is non-null or makes<a name="line.1509"></a>
-<span class="sourceLineNo">1510</span>     * a fresh List to append to otherwise. Returns buf if non-null, else the fresh List of Coord. May produce Coord<a name="line.1510"></a>
-<span class="sourceLineNo">1511</span>     * values that are not within the boundaries of a map, such as (-5,-4), if the center is too close to the edge or<a name="line.1511"></a>
-<span class="sourceLineNo">1512</span>     * radius is too high. You can use {@link squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List)}<a name="line.1512"></a>
-<span class="sourceLineNo">1513</span>     * with surpassEdges as false if you want to limit Coords to within the map, or the more general<a name="line.1513"></a>
-<span class="sourceLineNo">1514</span>     * {@link squidpony.squidgrid.Radius#pointsInside(int, int, int, boolean, int, int, List)} on a Radius.SQUARE or<a name="line.1514"></a>
-<span class="sourceLineNo">1515</span>     * Radius.DIAMOND enum value if you want a square or diamond shape.<a name="line.1515"></a>
-<span class="sourceLineNo">1516</span>     *<a name="line.1516"></a>
-<span class="sourceLineNo">1517</span>     * @param x      center x of the circle<a name="line.1517"></a>
-<span class="sourceLineNo">1518</span>     * @param y      center y of the circle<a name="line.1518"></a>
-<span class="sourceLineNo">1519</span>     * @param radius inclusive radius to extend from the center; radius 0 gives just the center<a name="line.1519"></a>
-<span class="sourceLineNo">1520</span>     * @param buf    Where to add the coordinates, or null for this method to<a name="line.1520"></a>
-<span class="sourceLineNo">1521</span>     *               allocate a fresh list.<a name="line.1521"></a>
-<span class="sourceLineNo">1522</span>     * @return The coordinates of a circle centered {@code (x, y)}, whose<a name="line.1522"></a>
-<span class="sourceLineNo">1523</span>     * diameter is {@code (radius * 2) + 1}.<a name="line.1523"></a>
-<span class="sourceLineNo">1524</span>     * @see squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List) if you want to keep the Coords within the bounds of the map<a name="line.1524"></a>
-<span class="sourceLineNo">1525</span>     */<a name="line.1525"></a>
-<span class="sourceLineNo">1526</span>    public static List&lt;Coord&gt; circle(int x, int y, int radius, /* @Nullable */ List&lt;Coord&gt; buf) {<a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>        final List&lt;Coord&gt; result = buf == null ? new ArrayList&lt;Coord&gt;() : buf;<a name="line.1527"></a>
-<span class="sourceLineNo">1528</span>        radius = Math.max(0, radius);<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>        for (int dx = -radius; dx &lt;= radius; ++dx) {<a name="line.1529"></a>
-<span class="sourceLineNo">1530</span>            final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.1530"></a>
-<span class="sourceLineNo">1531</span>            for (int dy = -high; dy &lt;= high; ++dy) {<a name="line.1531"></a>
-<span class="sourceLineNo">1532</span>                result.add(Coord.get(x + dx, y + dy));<a name="line.1532"></a>
-<span class="sourceLineNo">1533</span>            }<a name="line.1533"></a>
-<span class="sourceLineNo">1534</span>        }<a name="line.1534"></a>
-<span class="sourceLineNo">1535</span>        return result;<a name="line.1535"></a>
-<span class="sourceLineNo">1536</span>    }<a name="line.1536"></a>
-<span class="sourceLineNo">1537</span><a name="line.1537"></a>
-<span class="sourceLineNo">1538</span>    private static boolean hasANeighborNotIn(Coord c, Collection&lt;Coord&gt; others) {<a name="line.1538"></a>
-<span class="sourceLineNo">1539</span>        for (Direction dir : Direction.OUTWARDS) {<a name="line.1539"></a>
-<span class="sourceLineNo">1540</span>            if (!others.contains(c.translate(dir)))<a name="line.1540"></a>
-<span class="sourceLineNo">1541</span>                return true;<a name="line.1541"></a>
-<span class="sourceLineNo">1542</span>        }<a name="line.1542"></a>
-<span class="sourceLineNo">1543</span>        return false;<a name="line.1543"></a>
-<span class="sourceLineNo">1544</span>    }<a name="line.1544"></a>
-<span class="sourceLineNo">1545</span>    /**<a name="line.1545"></a>
-<span class="sourceLineNo">1546</span>     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.<a name="line.1546"></a>
-<span class="sourceLineNo">1547</span>     * @param array2d a 2D array that will be modified in-place<a name="line.1547"></a>
-<span class="sourceLineNo">1548</span>     * @param value the value to fill all of array2D with<a name="line.1548"></a>
-<span class="sourceLineNo">1549</span>     * @deprecated Use {@link ArrayTools#fill(boolean[][], boolean)} instead<a name="line.1549"></a>
-<span class="sourceLineNo">1550</span>     */<a name="line.1550"></a>
-<span class="sourceLineNo">1551</span>    @Deprecated<a name="line.1551"></a>
-<span class="sourceLineNo">1552</span>    public static void fill(boolean[][] array2d, boolean value) {<a name="line.1552"></a>
-<span class="sourceLineNo">1553</span>        ArrayTools.fill(array2d, value);<a name="line.1553"></a>
-<span class="sourceLineNo">1554</span>    }<a name="line.1554"></a>
-<span class="sourceLineNo">1555</span>    /**<a name="line.1555"></a>
-<span class="sourceLineNo">1556</span>     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.<a name="line.1556"></a>
-<span class="sourceLineNo">1557</span>     * @param array2d a 2D array that will be modified in-place<a name="line.1557"></a>
-<span class="sourceLineNo">1558</span>     * @param value the value to fill all of array2D with<a name="line.1558"></a>
-<span class="sourceLineNo">1559</span>     * @deprecated Use {@link ArrayTools#fill(char[][], char)} instead<a name="line.1559"></a>
-<span class="sourceLineNo">1560</span>     */<a name="line.1560"></a>
-<span class="sourceLineNo">1561</span>    @Deprecated<a name="line.1561"></a>
-<span class="sourceLineNo">1562</span>    public static void fill(char[][] array2d, char value) {<a name="line.1562"></a>
-<span class="sourceLineNo">1563</span>        ArrayTools.fill(array2d, value);<a name="line.1563"></a>
-<span class="sourceLineNo">1564</span>    }<a name="line.1564"></a>
-<span class="sourceLineNo">1565</span>    /**<a name="line.1565"></a>
-<span class="sourceLineNo">1566</span>     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.<a name="line.1566"></a>
-<span class="sourceLineNo">1567</span>     * @param array2d a 2D array that will be modified in-place<a name="line.1567"></a>
-<span class="sourceLineNo">1568</span>     * @param value the value to fill all of array2D with<a name="line.1568"></a>
-<span class="sourceLineNo">1569</span>     * @deprecated Use {@link ArrayTools#fill(int[][], int)} instead<a name="line.1569"></a>
-<span class="sourceLineNo">1570</span>     */<a name="line.1570"></a>
-<span class="sourceLineNo">1571</span>    @Deprecated<a name="line.1571"></a>
-<span class="sourceLineNo">1572</span>    public static void fill(int[][] array2d, int value) {<a name="line.1572"></a>
-<span class="sourceLineNo">1573</span>        ArrayTools.fill(array2d, value);<a name="line.1573"></a>
-<span class="sourceLineNo">1574</span>    }<a name="line.1574"></a>
-<span class="sourceLineNo">1575</span>    /**<a name="line.1575"></a>
-<span class="sourceLineNo">1576</span>     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.<a name="line.1576"></a>
-<span class="sourceLineNo">1577</span>     * @param array2d a 2D array that will be modified in-place<a name="line.1577"></a>
-<span class="sourceLineNo">1578</span>     * @param value the value to fill all of array2D with<a name="line.1578"></a>
-<span class="sourceLineNo">1579</span>     * @deprecated Use {@link ArrayTools#fill(double[][], double)} instead<a name="line.1579"></a>
-<span class="sourceLineNo">1580</span>     */<a name="line.1580"></a>
-<span class="sourceLineNo">1581</span>    @Deprecated<a name="line.1581"></a>
-<span class="sourceLineNo">1582</span>    public static void fill(double[][] array2d, double value) {<a name="line.1582"></a>
-<span class="sourceLineNo">1583</span>        ArrayTools.fill(array2d, value);<a name="line.1583"></a>
-<span class="sourceLineNo">1584</span>    }<a name="line.1584"></a>
-<span class="sourceLineNo">1585</span>}<a name="line.1585"></a>
+<span class="sourceLineNo">1383</span>     * An easy way to get the Coord items in a List of Coord that are at the edge of the region, using 8-way<a name="line.1383"></a>
+<span class="sourceLineNo">1384</span>     * adjacency (a corner is adjacent to both orthogonal and diagonal neighbors). This is not the most<a name="line.1384"></a>
+<span class="sourceLineNo">1385</span>     * efficient way to do this; If you find you need to do more complicated manipulations of regions or are<a name="line.1385"></a>
+<span class="sourceLineNo">1386</span>     * calling this method often, consider using {@link squidpony.squidmath.GreasedRegion}, which should be<a name="line.1386"></a>
+<span class="sourceLineNo">1387</span>     * significantly faster and has better support for more intricate alterations on an area of Coords.<a name="line.1387"></a>
+<span class="sourceLineNo">1388</span>     * @param zone a List of Coord representing a region<a name="line.1388"></a>
+<span class="sourceLineNo">1389</span>     * @param buffer The list to fill if non null (i.e. if non-null, it is<a name="line.1389"></a>
+<span class="sourceLineNo">1390</span>     *               returned). If null, a fresh list will be allocated and<a name="line.1390"></a>
+<span class="sourceLineNo">1391</span>     *               returned.<a name="line.1391"></a>
+<span class="sourceLineNo">1392</span>     * @return Elements in {@code zone} that are neighbors to an element not in {@code zone}.<a name="line.1392"></a>
+<span class="sourceLineNo">1393</span>     */<a name="line.1393"></a>
+<span class="sourceLineNo">1394</span>    public static List&lt;Coord&gt; border(final List&lt;Coord&gt; zone, /* @Nullable */ List&lt;Coord&gt; buffer) {<a name="line.1394"></a>
+<span class="sourceLineNo">1395</span>        final int zsz = zone.size();<a name="line.1395"></a>
+<span class="sourceLineNo">1396</span>        final List&lt;Coord&gt; border = buffer == null ? new ArrayList&lt;Coord&gt;(zsz / 4) : buffer;<a name="line.1396"></a>
+<span class="sourceLineNo">1397</span>        for (int i = 0; i &lt; zsz; i++) {<a name="line.1397"></a>
+<span class="sourceLineNo">1398</span>            final Coord c = zone.get(i);<a name="line.1398"></a>
+<span class="sourceLineNo">1399</span>            if (hasANeighborNotIn(c, zone))<a name="line.1399"></a>
+<span class="sourceLineNo">1400</span>                border.add(c);<a name="line.1400"></a>
+<span class="sourceLineNo">1401</span>        }<a name="line.1401"></a>
+<span class="sourceLineNo">1402</span>        return border;<a name="line.1402"></a>
+<span class="sourceLineNo">1403</span>    }<a name="line.1403"></a>
+<span class="sourceLineNo">1404</span><a name="line.1404"></a>
+<span class="sourceLineNo">1405</span>    /**<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>     * Quickly counts the number of char elements in level that are equal to match.<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span>     *<a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>     * @param level the 2D char array to count cells in<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>     * @param match the char to search for<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>     * @return the number of cells that matched<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span>     */<a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>    public static int countCells(char[][] level, char match) {<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span>        if (level == null || level.length == 0)<a name="line.1413"></a>
+<span class="sourceLineNo">1414</span>            return 0;<a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>        int counter = 0;<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>        for (int x = 0; x &lt; level.length; x++) {<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>            for (int y = 0; y &lt; level[x].length; y++) {<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span>                if (level[x][y] == match) counter++;<a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>            }<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>        }<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span>        return counter;<a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>    }<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span><a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>    /**<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span>     * For when you want to print a 2D char array. Prints on multiple lines, with a trailing newline.<a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>     *<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>     * @param level a 2D char array to print with a trailing newline<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span>     */<a name="line.1428"></a>
+<span class="sourceLineNo">1429</span>    public static void debugPrint(char[][] level) {<a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>        if (level == null || level.length == 0 || level[0].length == 0)<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>            System.out.println("INVALID DUNGEON LEVEL");<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>        else {<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>            for (int y = 0; y &lt; level[0].length; y++) {<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>                for (int x = 0; x &lt; level.length; x++) {<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>                    System.out.print(level[x][y]);<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>                }<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span>                System.out.println();<a name="line.1437"></a>
+<span class="sourceLineNo">1438</span><a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>            }<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>        }<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>    }<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span><a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>    /**<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>     * Changes the outer edge of a char[][] to the wall char, '#'.<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>     *<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span>     * @param map A char[][] that stores map data; will be modified in place<a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>     * @return the modified-in-place map with its edge replaced with '#'<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>     */<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>    public static char[][] wallWrap(char[][] map) {<a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>        int upperY = map[0].length - 1;<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>        int upperX = map.length - 1;<a name="line.1451"></a>
+<span class="sourceLineNo">1452</span>        for (int i = 0; i &lt; map.length; i++) {<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>            map[i][0] = '#';<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>            map[i][upperY] = '#';<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>        }<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>        for (int i = 0; i &lt; map[0].length; i++) {<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>            map[0][i] = '#';<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>            map[upperX][i] = '#';<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>        }<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>        return map;<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>    }<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span><a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>    /**<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>     * Ensures a path exists in a rough ring around the map by first creating the path (using<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>     * SerpentMapGenerator.pointPath with the given RNG), then finding chars in blocking that are on that path and<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>     * replacing them with replacement. Modifies map in-place (!) and returns an ArrayList of Coord points that will<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>     * always be on the path.<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>     *<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>     * @param map         a 2D char array, x then y, etc. that will be modified directly; this is the "returned map"<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>     * @param rng         used for random factors in the path choice<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>     * @param replacement the char that will fill be used where a path needs to be carved out; usually '.'<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>     * @param blocking    an array or vararg of char that are considered blocking for the path and will be replaced if<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>     *                    they are in the way<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>     * @return the ArrayList of Coord points that are on the carved path, including existing non-blocking cells; will be empty if any parameters are invalid<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>     */<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>    public static ArrayList&lt;Coord&gt; ensurePath(char[][] map, RNG rng, char replacement, char... blocking) {<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>        if (map == null || map.length &lt;= 0 || blocking == null || blocking.length &lt;= 0)<a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>            return new ArrayList&lt;Coord&gt;(0);<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>        int width = map.length, height = map[0].length;<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>        ArrayList&lt;Coord&gt; points = SerpentMapGenerator.pointPath(width, height, rng);<a name="line.1480"></a>
+<span class="sourceLineNo">1481</span>        char[] blocks = new char[blocking.length];<a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>        System.arraycopy(blocking, 0, blocks, 0, blocking.length);<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span>        Arrays.sort(blocks);<a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>        for (Coord c : points) {<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span>            if (c.x &gt;= 0 &amp;&amp; c.x &lt; width &amp;&amp; c.y &gt;= 0 &amp;&amp; c.y &lt; height &amp;&amp; Arrays.binarySearch(blocks, map[c.x][c.y]) &gt;= 0) {<a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>                map[c.x][c.y] = replacement;<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span>            }<a name="line.1487"></a>
+<span class="sourceLineNo">1488</span>        }<a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>        return points;<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>    }<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span><a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>    public static ArrayList&lt;Coord&gt; allMatching(char[][] map, char... matching) {<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span>        if (map == null || map.length &lt;= 0 || matching == null || matching.length &lt;= 0)<a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>            return new ArrayList&lt;Coord&gt;(0);<a name="line.1494"></a>
+<span class="sourceLineNo">1495</span>        int width = map.length, height = map[0].length;<a name="line.1495"></a>
+<span class="sourceLineNo">1496</span>        char[] matches = new char[matching.length];<a name="line.1496"></a>
+<span class="sourceLineNo">1497</span>        System.arraycopy(matching, 0, matches, 0, matching.length);<a name="line.1497"></a>
+<span class="sourceLineNo">1498</span>        Arrays.sort(matches);<a name="line.1498"></a>
+<span class="sourceLineNo">1499</span>        ArrayList&lt;Coord&gt; points = new ArrayList&lt;Coord&gt;(map.length * 4);<a name="line.1499"></a>
+<span class="sourceLineNo">1500</span>        for (int x = 0; x &lt; width; x++) {<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>            for (int y = 0; y &lt; height; y++) {<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>                if (Arrays.binarySearch(matches, map[x][y]) &gt;= 0)<a name="line.1502"></a>
+<span class="sourceLineNo">1503</span>                    points.add(Coord.get(x, y));<a name="line.1503"></a>
+<span class="sourceLineNo">1504</span>            }<a name="line.1504"></a>
+<span class="sourceLineNo">1505</span>        }<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>        return points;<a name="line.1506"></a>
+<span class="sourceLineNo">1507</span>    }<a name="line.1507"></a>
+<span class="sourceLineNo">1508</span><a name="line.1508"></a>
+<span class="sourceLineNo">1509</span>    /**<a name="line.1509"></a>
+<span class="sourceLineNo">1510</span>     * Gets a List of Coord that are within radius distance of (x,y), and appends them to buf if it is non-null or makes<a name="line.1510"></a>
+<span class="sourceLineNo">1511</span>     * a fresh List to append to otherwise. Returns buf if non-null, else the fresh List of Coord. May produce Coord<a name="line.1511"></a>
+<span class="sourceLineNo">1512</span>     * values that are not within the boundaries of a map, such as (-5,-4), if the center is too close to the edge or<a name="line.1512"></a>
+<span class="sourceLineNo">1513</span>     * radius is too high. You can use {@link squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List)}<a name="line.1513"></a>
+<span class="sourceLineNo">1514</span>     * with surpassEdges as false if you want to limit Coords to within the map, or the more general<a name="line.1514"></a>
+<span class="sourceLineNo">1515</span>     * {@link squidpony.squidgrid.Radius#pointsInside(int, int, int, boolean, int, int, List)} on a Radius.SQUARE or<a name="line.1515"></a>
+<span class="sourceLineNo">1516</span>     * Radius.DIAMOND enum value if you want a square or diamond shape.<a name="line.1516"></a>
+<span class="sourceLineNo">1517</span>     *<a name="line.1517"></a>
+<span class="sourceLineNo">1518</span>     * @param x      center x of the circle<a name="line.1518"></a>
+<span class="sourceLineNo">1519</span>     * @param y      center y of the circle<a name="line.1519"></a>
+<span class="sourceLineNo">1520</span>     * @param radius inclusive radius to extend from the center; radius 0 gives just the center<a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>     * @param buf    Where to add the coordinates, or null for this method to<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>     *               allocate a fresh list.<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>     * @return The coordinates of a circle centered {@code (x, y)}, whose<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>     * diameter is {@code (radius * 2) + 1}.<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>     * @see squidpony.squidgrid.Radius#inCircle(int, int, int, boolean, int, int, List) if you want to keep the Coords within the bounds of the map<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>     */<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span>    public static List&lt;Coord&gt; circle(int x, int y, int radius, /* @Nullable */ List&lt;Coord&gt; buf) {<a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>        final List&lt;Coord&gt; result = buf == null ? new ArrayList&lt;Coord&gt;() : buf;<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>        radius = Math.max(0, radius);<a name="line.1529"></a>
+<span class="sourceLineNo">1530</span>        for (int dx = -radius; dx &lt;= radius; ++dx) {<a name="line.1530"></a>
+<span class="sourceLineNo">1531</span>            final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));<a name="line.1531"></a>
+<span class="sourceLineNo">1532</span>            for (int dy = -high; dy &lt;= high; ++dy) {<a name="line.1532"></a>
+<span class="sourceLineNo">1533</span>                result.add(Coord.get(x + dx, y + dy));<a name="line.1533"></a>
+<span class="sourceLineNo">1534</span>            }<a name="line.1534"></a>
+<span class="sourceLineNo">1535</span>        }<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span>        return result;<a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>    }<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span><a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>    private static boolean hasANeighborNotIn(Coord c, Collection&lt;Coord&gt; others) {<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>        for (Direction dir : Direction.OUTWARDS) {<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>            if (!others.contains(c.translate(dir)))<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>                return true;<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>        }<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span>        return false;<a name="line.1544"></a>
+<span class="sourceLineNo">1545</span>    }<a name="line.1545"></a>
+<span class="sourceLineNo">1546</span>    /**<a name="line.1546"></a>
+<span class="sourceLineNo">1547</span>     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.<a name="line.1547"></a>
+<span class="sourceLineNo">1548</span>     * @param array2d a 2D array that will be modified in-place<a name="line.1548"></a>
+<span class="sourceLineNo">1549</span>     * @param value the value to fill all of array2D with<a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>     * @deprecated Use {@link ArrayTools#fill(boolean[][], boolean)} instead<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span>     */<a name="line.1551"></a>
+<span class="sourceLineNo">1552</span>    @Deprecated<a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>    public static void fill(boolean[][] array2d, boolean value) {<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span>        ArrayTools.fill(array2d, value);<a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>    }<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span>    /**<a name="line.1556"></a>
+<span class="sourceLineNo">1557</span>     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.<a name="line.1557"></a>
+<span class="sourceLineNo">1558</span>     * @param array2d a 2D array that will be modified in-place<a name="line.1558"></a>
+<span class="sourceLineNo">1559</span>     * @param value the value to fill all of array2D with<a name="line.1559"></a>
+<span class="sourceLineNo">1560</span>     * @deprecated Use {@link ArrayTools#fill(char[][], char)} instead<a name="line.1560"></a>
+<span class="sourceLineNo">1561</span>     */<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span>    @Deprecated<a name="line.1562"></a>
+<span class="sourceLineNo">1563</span>    public static void fill(char[][] array2d, char value) {<a name="line.1563"></a>
+<span class="sourceLineNo">1564</span>        ArrayTools.fill(array2d, value);<a name="line.1564"></a>
+<span class="sourceLineNo">1565</span>    }<a name="line.1565"></a>
+<span class="sourceLineNo">1566</span>    /**<a name="line.1566"></a>
+<span class="sourceLineNo">1567</span>     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.<a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>     * @param array2d a 2D array that will be modified in-place<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>     * @param value the value to fill all of array2D with<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span>     * @deprecated Use {@link ArrayTools#fill(int[][], int)} instead<a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>     */<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>    @Deprecated<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>    public static void fill(int[][] array2d, int value) {<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span>        ArrayTools.fill(array2d, value);<a name="line.1574"></a>
+<span class="sourceLineNo">1575</span>    }<a name="line.1575"></a>
+<span class="sourceLineNo">1576</span>    /**<a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>     * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span>     * @param array2d a 2D array that will be modified in-place<a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>     * @param value the value to fill all of array2D with<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>     * @deprecated Use {@link ArrayTools#fill(double[][], double)} instead<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span>     */<a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>    @Deprecated<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span>    public static void fill(double[][] array2d, double value) {<a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>        ArrayTools.fill(array2d, value);<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>    }<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span>}<a name="line.1586"></a>
 
 
 

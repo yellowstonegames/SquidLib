@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -184,13 +184,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CellularAutomaton.html" title="class in squidpony.squidmath">CellularAutomaton</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CellularAutomaton.html#remake-squidpony.squidmath.GreasedRegion-">remake</a></span>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;next)</code>
+<div class="block">Re-initializes this CellularAutomaton using a different GreasedRegion as a basis.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CellularAutomaton.html#runBasicSmoothing--">runBasicSmoothing</a></span>()</code>
 <div class="block">Reduces the sharpness of corners by only considering a cell on if the previous version has 5 of the 9 cells in
  the containing 3x3 area as "on." Typically, this method is run repeatedly.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CellularAutomaton.html#runGameOfLife--">runGameOfLife</a></span>()</code>
 <div class="block">Runs one step of the simulation called Conway's Game of Life, which has relatively simple rules:
@@ -294,13 +300,32 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="remake-squidpony.squidmath.GreasedRegion-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>remake</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CellularAutomaton.html" title="class in squidpony.squidmath">CellularAutomaton</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CellularAutomaton.html#line.56">remake</a>(<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;next)</pre>
+<div class="block">Re-initializes this CellularAutomaton using a different GreasedRegion as a basis. If the previous GreasedRegion
+ used has the same dimensions as <code>next</code>, then this performs no allocations and simply sets the existing
+ contents. Otherwise, it makes one new 2D array and also has all 9 of the internal GreasedRegions adjust in size,
+ which involves some allocation. If <code>next</code> is null, this does nothing and returns itself without changes.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>next</code> - a GreasedRegion to set this CellularAutomaton to read from and adjust</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this, for chaining</dd>
+</dl>
+</li>
+</ul>
 <a name="runBasicSmoothing--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>runBasicSmoothing</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CellularAutomaton.html#line.55">runBasicSmoothing</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CellularAutomaton.html#line.78">runBasicSmoothing</a>()</pre>
 <div class="block">Reduces the sharpness of corners by only considering a cell on if the previous version has 5 of the 9 cells in
  the containing 3x3 area as "on." Typically, this method is run repeatedly. It does not return itself for
  chaining, because it returns a direct reference to the <a href="../../squidpony/squidmath/CellularAutomaton.html#current"><code>current</code></a> GreasedRegion that this will use for
@@ -317,7 +342,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>runGameOfLife</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CellularAutomaton.html#line.86">runGameOfLife</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CellularAutomaton.html#line.109">runGameOfLife</a>()</pre>
 <div class="block">Runs one step of the simulation called Conway's Game of Life, which has relatively simple rules:
  <ul>
      <li>Any "on" cell with fewer than two "on" neighbors becomes "off."</li>

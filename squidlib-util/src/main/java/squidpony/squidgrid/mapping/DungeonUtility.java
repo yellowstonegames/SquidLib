@@ -1380,7 +1380,8 @@ public class DungeonUtility {
     }
 
     /**
-     * An easy way to get the Coord items in a List of Coord that are at the edge of the region. Not the most
+     * An easy way to get the Coord items in a List of Coord that are at the edge of the region, using 8-way
+     * adjacency (a corner is adjacent to both orthogonal and diagonal neighbors). This is not the most
      * efficient way to do this; If you find you need to do more complicated manipulations of regions or are
      * calling this method often, consider using {@link squidpony.squidmath.GreasedRegion}, which should be
      * significantly faster and has better support for more intricate alterations on an area of Coords.

@@ -442,14 +442,6 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="typeNameLabel">Splash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Splash.html#drunkinize-squidpony.squidmath.RNG-char:A:A-java.util.List-java.util.List-int-">drunkinize</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
-          char[][]&nbsp;map,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;zone,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;border,
-          int&nbsp;drunks)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>static boolean[][]</code></td>
 <td class="colLast"><span class="typeNameLabel">MimicFill.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MimicFill.html#fill-boolean:A:A-int-double-int-squidpony.squidmath.RNG-">fill</a></span>(boolean[][]&nbsp;sample,
     int&nbsp;size,
@@ -460,7 +452,7 @@
  sample, but can produce a larger or smaller output 2D array than the sample.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static boolean[]</code></td>
 <td class="colLast"><span class="typeNameLabel">MimicFill.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MimicFill.html#fillSolo-boolean:A:A-int-double-int-squidpony.squidmath.RNG-">fillSolo</a></span>(boolean[][]&nbsp;sample,
         int&nbsp;size,
@@ -469,6 +461,15 @@
         <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
 <div class="block">The main part of MimicFill; generates a 1D boolean array that, when used correctly, mimics the patterns present
  in the 2D boolean array sample, but can produce a larger or smaller output 1D array than the sample.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><span class="typeNameLabel">Splash.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Splash.html#inebriate-squidpony.squidmath.RNG-java.util.List-java.util.List-int-">inebriate</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;zone,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;border,
+         int&nbsp;drunks)</code>
+<div class="block">Uses drunken walkers to alter the edge of the splash.</div>
 </td>
 </tr>
 <tr class="rowColor">

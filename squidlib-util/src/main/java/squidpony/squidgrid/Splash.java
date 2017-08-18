@@ -132,15 +132,15 @@ public class Splash {
 		}
 
 		if (0 < drunks)
-			drunkinize(rng, level, result, DungeonUtility.border(result, null), drunks);
+			inebriate(rng, result, DungeonUtility.border(result, null), drunks);
 
 		return result;
 	}
 
 	/**
-	 * @param rng
-	 * @param map
-	 *            The map on which {@code zone} is a pool
+	 * Uses drunken walkers to alter the edge of the splash.
+	 * Formerly called drunkinize (sic); code that extends Splash may need to change the name of an overridden method.
+	 * @param rng random number generator
 	 * @param zone
 	 *            The zone to shrink
 	 * @param border
@@ -148,7 +148,7 @@ public class Splash {
 	 * @param drunks
 	 *            The number of drunken walkers to consider
 	 */
-	protected void drunkinize(RNG rng, char[][] map, List<Coord> zone, List<Coord> border, int drunks) {
+	protected void inebriate(RNG rng, List<Coord> zone, List<Coord> border, int drunks) {
 		if (drunks == 0)
 			return;
 
@@ -159,7 +159,7 @@ public class Splash {
 
 		assert !border.isEmpty();
 		for (int j = 0; j < nb && !zone.isEmpty(); j++) {
-			drunkinize0(rng, zone, border, drunks);
+			inebriate0(rng, zone, border, drunks);
 			if (border.isEmpty() || zone.isEmpty())
 				return;
 		}
@@ -176,7 +176,7 @@ public class Splash {
 	 * @param border
 	 *            {@code result}'s border.
 	 */
-	private void drunkinize0(RNG rng, List<Coord> zone, List<Coord> border, int nb) {
+	private void inebriate0(RNG rng, List<Coord> zone, List<Coord> border, int nb) {
 		assert !border.isEmpty();
 		assert !zone.isEmpty();
 
