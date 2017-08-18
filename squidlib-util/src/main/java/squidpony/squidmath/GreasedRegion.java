@@ -4578,11 +4578,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     */
     public Coord[] asCoords()
     {
-        int ct = 0, idx = 0;
-        for (int i = 0; i < width * ySections; i++) {
-            ct += Long.bitCount(data[i]);
-        }
-        Coord[] points = new Coord[ct];
+        return asCoords(new Coord[size()]);
+
+    }
+    public Coord[] asCoords(Coord[] points)
+    {
+        if(points == null)
+            points = new Coord[size()];
+        int idx = 0, len = points.length;
         long t, w;
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
@@ -4590,6 +4593,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 {
                     w = Long.lowestOneBit(t);
                     while (w != 0) {
+                        if(idx >= len) return points;
                         points[idx++] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                         t ^= w;
                         w = Long.lowestOneBit(t);
@@ -4697,6 +4701,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
     public Coord nth(final int index)
     {
+        if(index < 0)
+            return Coord.get(-1, -1);
         int ct = 0, tmp;
         int[] counts = new int[width * ySections];
         for (int i = 0; i < width * ySections; i++) {
@@ -5540,14 +5546,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        return asCoords();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a) {
         if(a instanceof Coord[])
-            return (a = (T[])asCoords());
+            return (T[])asCoords((Coord[])a);
         return a;
     }
 
@@ -5679,6 +5685,204 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             data[x * ySections + (y >> 6)] ^= (1L << (y & 63));
         return this;
 
+    }
+
+    @Override
+    public boolean intersectsWith(Zone other) {
+        if (other instanceof GreasedRegion)
+            return intersects((GreasedRegion) other);
+        long t, w;
+        for (int x = 0; x < width; x++) {
+            for (int s = 0; s < ySections; s++) {
+                if ((t = data[x * ySections + s]) != 0) {
+                    w = Long.lowestOneBit(t);
+                    while (w != 0) {
+                        if (other.contains(x, (s << 6) | Long.numberOfTrailingZeros(w)))
+                            return true;
+                        t ^= w;
+                        w = Long.lowestOneBit(t);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    /**
+     * Translates a copy of {@code this} by the x,y values in {@code c}.
+     * Implemented with {@code return copy().translate(c.x, c.y);}
+     * @return {@code this} copied and shifted by {@code (c.x,c.y)}
+     */
+    @Override
+    public Zone translate(Coord c) {
+        return copy().translate(c.x, c.y);
+    }
+    /**
+     * Gets a Collection of Coord values that are not in this GreasedRegion, but are
+     * adjacent to it, either orthogonally or diagonally. Related to the fringe()
+     * methods in CoordPacker and GreasedRegion, but guaranteed to use 8-way
+     * adjacency and to return a new Collection of Coord. This implementation returns
+     * a GreasedRegion produced simply by {@code return copy().fringe8way();} .
+     * @return Cells adjacent to {@code this} (orthogonally or diagonally) that
+     * aren't in {@code this}
+     */
+    @Override
+    public GreasedRegion getExternalBorder() {
+        return copy().fringe8way();
+    }
+
+    /**
+     * Gets a new Zone that contains all the Coords in {@code this} plus all
+     * neighboring Coords, which can be orthogonally or diagonally adjacent
+     * to any Coord this has in it. Related to the expand() methods in
+     * CoordPacker and GreasedRegion, but guaranteed to use 8-way adjacency
+     * and to return a new Zone. This implementation returns a GreasedRegion
+     * produced simply by {@code return copy().expand8way();} .
+     * @return A new GreasedRegion where "off" cells adjacent to {@code this}
+     *         (orthogonally or diagonally) have been added to the "on" cells
+     *         in {@code this}
+     */
+    @Override
+    public GreasedRegion extend() {
+        return copy().expand8way();
+    }
+
+    /**
+     * Checks if {@code c} is present in this GreasedRegion. Returns true if and only if c is present in this
+     * GreasedRegion as an "on" cell. This will never be true if c is null, has negative x or y, has a value for x that
+     * is equal to or greater than {@link #width}, or has a value for y that is equal to or greater than
+     * {@link #height}, but none of those conditions will cause Exceptions to be thrown.
+     * @param c a Coord to try to find in this GreasedRegion; if null this will always return false
+     * @return true if {@code c} is an "on" cell in this GreasedRegion, or false otherwise, including if c is null
+     */
+    @Override
+    public boolean contains(Coord c) {
+        return c != null && contains(c.x, c.y);
+    }
+
+    /**
+     * Checks whether all Coords in {@code other} are also present in {@code this}.
+     * Requires that {@code other} won't give a null Coord while this method iterates over it.
+     * @param other another Zone, such as a GreasedRegion or a {@link squidpony.squidgrid.zone.CoordPackerZone}
+     * @return true if all Coords in other are "on" in this GreasedRegion, or false otherwise
+     */
+    @Override
+    public boolean contains(Zone other) {
+        if(other instanceof Collection)
+            return containsAll((Collection) other);
+        for(Coord c : other)
+        {
+            if(!contains(c.x, c.y))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param smallestOrBiggest if true, finds the smallest x-coordinate value;
+     *                          if false, finds the biggest.
+     * @return The x-coordinate of the Coord within {@code this} that has the
+     * smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
+     */
+    @Override
+    public int x(boolean smallestOrBiggest) {
+        if(smallestOrBiggest)
+            return first().x;
+        else
+            return nth(size()-1).x;
+    }
+
+    /**
+     * @param smallestOrBiggest if true, finds the smallest y-coordinate value;
+     *                          if false, finds the biggest.
+     * @return The y-coordinate of the Coord within {@code this} that has the
+     * smallest (or biggest) y-coordinate. Or -1 if the zone is empty.
+     */
+    @Override
+    public int y(boolean smallestOrBiggest) {
+        long t, w;
+        if(smallestOrBiggest) {
+            int best = Integer.MAX_VALUE;
+            for (int x = 0; x < width; x++) {
+                for (int s = 0; s < ySections; s++) {
+                    if ((t = data[x * ySections + s]) != 0) {
+                        w = Long.lowestOneBit(t);
+                        while (w != 0) {
+                            best = Math.min(s << 6 | Long.numberOfTrailingZeros(w), best);
+                            if(best == 0)
+                                return 0;
+                            t ^= w;
+                            w = Long.lowestOneBit(t);
+                        }
+                    }
+                }
+            }
+            return best == Integer.MAX_VALUE ? -1 : best;
+        }
+        else
+        {
+            int best = -1;
+            for (int x = 0; x < width; x++) {
+                for (int s = 0; s < ySections; s++) {
+                    if ((t = data[x * ySections + s]) != 0) {
+                        w = Long.lowestOneBit(t);
+                        while (w != 0) {
+                            best = Math.max(s << 6 | Long.numberOfTrailingZeros(w), best);
+                            if(best == height - 1)
+                                return best;
+                            t ^= w;
+                            w = Long.lowestOneBit(t);
+                        }
+                    }
+                }
+            }
+            return best;
+        }
+    }
+
+    /**
+     * Gets the distance between the minimum x-value contained in this GreasedRegion and the maximum x-value in it.
+     * Not the same as accessing the field {@link #width} on a GreasedRegion! The field will get the span of the space
+     * that the GreasedRegion can use, including "on" and "off" cells. This method will only get the distance between
+     * the furthest-separated "on" cells on the x-axis, and won't consider "off" cells. This method can return -1 if the
+     * GreasedRegion is empty, 0 if the "on" cells are all in a vertical line (that is, when the minimum x is equal to
+     * the maximum x), or a positive int in other cases with multiple x-values.
+     * @return the distance on the x-axis between the "on" cell with the lowest x-value and the one with the highest
+     */
+    @Override
+    public int getWidth() {
+        if (super.width == -2)
+            super.width = isEmpty() ? -1 : x(false) - x(true);
+        return super.width;
+    }
+    /**
+     * Gets the distance between the minimum y-value contained in this GreasedRegion and the maximum y-value in it.
+     * Not the same as accessing the field {@link #height} on a GreasedRegion! The field will get the span of the space
+     * that the GreasedRegion can use, including "on" and "off" cells. This method will only get the distance between
+     * the furthest-separated "on" cells on the y-axis, and won't consider "off" cells. This method can return -1 if the
+     * GreasedRegion is empty, 0 if the "on" cells are all in a horizontal line (that is, when the minimum y is equal to
+     * the maximum y), or a positive int in other cases with multiple y-values.
+     * @return the distance on the y-axis between the "on" cell with the lowest y-value and the one with the highest
+     */
+    @Override
+    public int getHeight() {
+        if (super.height == -2)
+            super.height = isEmpty() ? -1 : y(false) - y(true);
+        return super.height;
+    }
+
+    /**
+     * Gets the diagonal distance from the point combining the lowest x-value present in this GreasedRegion with the
+     * lowest y-value in this, to the point combining the highest x-value and the highest y-value. These minimum and
+     * maximum values don't necessarily match a single "on" cell for each min and max corner, and can take their x and y
+     * values from two different points. The diagonal distance uses Euclidean measurement (basic Pythagorean Theorem
+     * math here), and will be a double.
+     * @return the diagonal distance from (min x, min y) to (max x, max y), as a double
+     */
+    @Override
+    public double getDiagonal() {
+        final int w = getWidth();
+        final int h = getHeight();
+        return Math.sqrt((w * w) + (h * h));
     }
 
     public class GRIterator implements Iterator<Coord>

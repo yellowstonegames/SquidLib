@@ -86,13 +86,15 @@ public interface Zone extends Serializable, Iterable<Coord> {
 
 	/**
 	 * @return The distance between the leftmost cell and the rightmost cell, or
-	 *         anything negative if {@code this} zone is empty.
+	 *         anything negative if {@code this} zone is empty; may be 0 if all cells
+	 *         are in one vertical line.
 	 */
 	int getWidth();
 
 	/**
 	 * @return The distance between the topmost cell and the lowest cell, or
-	 *         anything negative if {@code this} zone is empty.
+	 *         anything negative if {@code this} zone is empty; may be 0 if all cells
+	 *         are in one horizontal line.
 	 */
 	int getHeight();
 
@@ -103,14 +105,16 @@ public interface Zone extends Serializable, Iterable<Coord> {
 	double getDiagonal();
 
 	/**
-	 * @param smallestOrBiggest
+	 * @param smallestOrBiggest if true, finds the smallest x-coordinate value;
+	 *                          if false, finds the biggest.
 	 * @return The x-coordinate of the Coord within {@code this} that has the
 	 *         smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
 	 */
 	int x(boolean smallestOrBiggest);
 
 	/**
-	 * @param smallestOrBiggest
+	 * @param smallestOrBiggest if true, finds the smallest y-coordinate value;
+	 *                          if false, finds the biggest.
 	 * @return The y-coordinate of the Coord within {@code this} that has the
 	 *         smallest (or biggest) y-coordinate. Or -1 if the zone is empty.
 	 */
@@ -121,19 +125,31 @@ public interface Zone extends Serializable, Iterable<Coord> {
      */
     List<Coord> getAll();
 
-	/** @return {@code this} shifted by {@code c} */
+	/** @return {@code this} shifted by {@code (c.x,c.y)} */
 	Zone translate(Coord c);
 
 	/** @return {@code this} shifted by {@code (x,y)} */
 	Zone translate(int x, int y);
 
-	/** @return Cells adjacent to {@code this} that aren't in {@code this} */
+	/**
+	 * Gets a Collection of Coord values that are not in this Zone, but are
+	 * adjacent to it, either orthogonally or diagonally. Related to the fringe()
+	 * methods in CoordPacker and GreasedRegion, but guaranteed to use 8-way
+	 * adjacency and to return a new Collection of Coord.
+	 * @return Cells adjacent to {@code this} (orthogonally or diagonally) that
+	 * aren't in {@code this}
+	 */
 	Collection<Coord> getExternalBorder();
 
 	/**
+	 * Gets a new Zone that contains all the Coords in {@code this} plus all
+	 * neighboring Coords, which can be orthogonally or diagonally adjacent
+	 * to any Coord this has in it. Related to the expand() methods in
+	 * CoordPacker and GreasedRegion, but guaranteed to use 8-way adjacency
+	 * and to return a new Zone.
 	 * @return A variant of {@code this} where cells adjacent to {@code this}
-	 *         have been added (i.e. it's {@code this} plus
-	 *         {@link #getExternalBorder()}).
+	 *         (orthogonally or diagonally) have been added (i.e. it's {@code this}
+	 *         plus {@link #getExternalBorder()}).
 	 */
 	Zone extend();
 
@@ -147,8 +163,8 @@ public interface Zone extends Serializable, Iterable<Coord> {
     abstract class Skeleton implements Zone {
 
 		private transient Coord center = null;
-		private transient int width = -2;
-		private transient int height = -2;
+		protected transient int width = -2;
+		protected transient int height = -2;
 
 		private static final long serialVersionUID = 4436698111716212256L;
 
@@ -212,13 +228,23 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			final int h = getHeight();
 			return Math.sqrt((w * w) + (h * h));
 		}
-
+		/**
+		 * @param smallestOrBiggest if true, finds the smallest x-coordinate value;
+		 *                          if false, finds the biggest.
+		 * @return The x-coordinate of the Coord within {@code this} that has the
+		 *         smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
+		 */
 		@Override
 		/* Convenience implementation, feel free to override. */
 		public int x(boolean smallestOrBiggest) {
 			return smallestOrBiggest ? smallest(true) : biggest(true);
 		}
-
+		/**
+		 * @param smallestOrBiggest if true, finds the smallest y-coordinate value;
+		 *                          if false, finds the biggest.
+		 * @return The y-coordinate of the Coord within {@code this} that has the
+		 *         smallest (or biggest) y-coordinate. Or -1 if the zone is empty.
+		 */
 		@Override
 		/* Convenience implementation, feel free to override. */
 		public int y(boolean smallestOrBiggest) {
@@ -287,20 +313,38 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			if (isEmpty())
 				return -1;
 			int min = Integer.MAX_VALUE;
-			for (Coord c : this) {
-				final int val = xOrY ? c.x : c.y;
-				if (val < min)
-					min = val;
+			if(xOrY)
+			{
+				for (Coord c : this) {
+					if (c.x < min)
+						min = c.x;
+				}
+			}
+			else
+			{
+				for (Coord c : this) {
+					if (c.y < min)
+						min = c.y;
+				}
 			}
 			return min;
 		}
 
 		private int biggest(boolean xOrY) {
 			int max = -1;
-			for (Coord c : this) {
-				final int val = xOrY ? c.x : c.y;
-				if (max < val)
-					max = val;
+			if(xOrY)
+			{
+				for (Coord c : this) {
+					if (c.x > max)
+						max = c.x;
+				}
+			}
+			else
+			{
+				for (Coord c : this) {
+					if (c.y > max)
+						max = c.y;
+				}
 			}
 			return max;
 		}
