@@ -314,10 +314,6 @@ public interface Rectangle extends Zone {
 			this.height = height;
 		}
 
-		public Impl expand8way(int distance) {
-			return new Impl(bottomLeft.translate(-1,-1), width+2,height+2);
-		}
-
 		@Override
 		public Coord getBottomLeft() {
 			return bottomLeft;
@@ -410,6 +406,24 @@ public interface Rectangle extends Zone {
 		@Override
 		public List<Coord> getAll() {
 			return Utils.cellsList(this);
+		}
+
+		@Override
+		public Zone translate(int x, int y) {
+			return new Impl(bottomLeft.translate(x, y), width, height);
+		}
+
+		@Override
+		public Collection<Coord> getExternalBorder() {
+			final List<Coord> result = new ArrayList<Coord>((width + height) * 2);
+			for (Direction dir : Direction.CARDINALS)
+				Utils.getBorder(this, dir, result);
+			return result;
+		}
+
+		@Override
+		public Rectangle extend() {
+			return new Rectangle.Impl(bottomLeft.translate(Direction.DOWN_LEFT), width + 2, height + 2);
 		}
 
 		@Override

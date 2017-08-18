@@ -1,8 +1,11 @@
 package squidpony.squidgrid.zone;
 
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -118,6 +121,22 @@ public interface Zone extends Serializable, Iterable<Coord> {
      */
     List<Coord> getAll();
 
+	/** @return {@code this} shifted by {@code c} */
+	Zone translate(Coord c);
+
+	/** @return {@code this} shifted by {@code (x,y)} */
+	Zone translate(int x, int y);
+
+	/** @return Cells adjacent to {@code this} that aren't in {@code this} */
+	Collection<Coord> getExternalBorder();
+
+	/**
+	 * @return A variant of {@code this} where cells adjacent to {@code this}
+	 *         have been added (i.e. it's {@code this} plus
+	 *         {@link #getExternalBorder()}).
+	 */
+	Zone extend();
+
     /**
      * A convenience partial implementation. Please try for all new
      * implementations of {@link Zone} to be subtypes of this class. It usually
@@ -229,6 +248,39 @@ public interface Zone extends Serializable, Iterable<Coord> {
 				center = Coord.get(Math.round(x / nb), Math.round(y / nb));
 			}
 			return center;
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public Zone translate(Coord c) {
+			return translate(c.x, c.y);
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public Zone translate(int x, int y) {
+			final List<Coord> initial = getAll();
+			final List<Coord> shifted = new ArrayList<Coord>(initial);
+			final int sz = initial.size();
+			for (int i = 0; i < sz; i++) {
+				final Coord c = initial.get(i);
+				shifted.add(Coord.get(c.x + x, c.y + y));
+			}
+			return new ListZone(shifted);
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public Collection<Coord> getExternalBorder() {
+			return DungeonUtility.border(getAll(), null);
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public Zone extend() {
+			final List<Coord> list = new ArrayList<Coord>(getAll());
+			list.addAll(getExternalBorder());
+			return new ListZone(list);
 		}
 
 		private int smallest(boolean xOrY) {
