@@ -1775,7 +1775,7 @@ public class FakeLanguageGen implements Serializable {
 
     /**
      * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
-     * an alien species. This alien language emphasizes unusual consonant groups and prefers the vowels 'a' and 'a',
+     * an alien species. This alien language emphasizes unusual consonant groups and prefers the vowels 'a' and 'i',
      * sometimes with two different vowels in one syllable, like with 'ea', but never two of the same vowel, like 'ee'.
      * Many consonant groups may border on unpronounceable unless a different sound is meant by some letters, such as
      * 'c', 'h', 'q', 'x', 'w', and 'y'. In particular, 'x' and 'q' may need to sound like different breathy, guttural,
@@ -1851,6 +1851,72 @@ public class FakeLanguageGen implements Serializable {
      * Hyeop euryam, sonyon muk tyeok aengyankeon, koelgwaelmwak.
      */
     public static final FakeLanguageGen KOREAN_ROMANIZED = korean().register();
+
+    private static FakeLanguageGen alien_e(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "a", "aa", "aa",
+                             "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "ee", "ee", "ee", "ee",
+                             "i", "i", "i", "i", "i", "ii",
+                             "o", "o", "o", "o",
+                             "u", "u", "u"
+                },
+                new String[]{},
+                new String[]{"t", "k", "c", "g", "z", "s", "d", "r", "ts",
+                        "tr", "kr", "cr", "gr", "zr", "st", "sk", "dr",
+                        "tq", "kq", "cq", "gq", "zq", "sq", "dq",
+                        "tq", "kq", "cq", "gq", "zq", "sq", "dq",
+                        "tq", "kq", "cq", "gq", "zq", "sq", "dq",
+                        "t", "k", "c", "g", "r", "ts", "t", "k", "c", "g", "r", "ts",
+                        "t", "k", "c", "g", "r", "ts", "t", "k", "c", "g", "r", "ts",
+                        "t", "k", "c", "g", "r", "ts", "t", "k", "c", "g", "r", "ts",
+                        "t", "k", "ts", "t", "k", "ts", "t", "k", "ts", "t", "k", "ts",
+                        "t", "k", "ts", "t", "k", "ts", "t", "k", "ts", "t", "k", "ts",
+                        "t", "k", "t", "k", "t", "k", "t", "k", "t", "k", "t", "k",
+                        "tr", "kr", "st", "sk", "tq", "kq", "sq"
+                },
+                new String[]{
+                        "tt", "kk", "cc", "gg", "zz", "dd", "s", "r", "ts",
+                        "tr", "kr", "cr", "gr", "zr", "st", "sk", "dr",
+                        "tq", "kq", "cq", "gq", "zq", "sq", "dq",
+                        "tq", "kq", "cq", "gq", "zq", "sq", "dq",
+                        "tq", "kq", "cq", "gq", "zq", "sq", "dq",
+                        "tk", "kt", "tc", "ct", "gt", "tg", "zt", "tz", "td", "dt", "rt", "rtr", "tst",
+                        "kc", "ck", "gk", "kg", "zk", "kz", "kd", "dk", "rk", "rkr", "tsk", "kts",
+                        "gc", "cg", "zc", "cz", "cd", "dc", "rc", "rcr", "tsc", "cts",
+                        "zg", "gz", "gd", "dg", "rg", "rgr", "tsg", "gts",
+                        "zd", "dz", "rz", "rzr", "tsz", "zts",
+                        "rd", "rdr", "tsd", "dts",
+                        "tt", "tt", "tt", "tt", "tt", "tt",
+                        "tt", "tt", "tt", "tt", "tt", "tt",
+                        "kk", "kk", "kk", "kk", "kk", "kk",
+                        "kk", "kk", "kk", "kk", "kk", "kk",
+                        "kt", "tk", "kt", "tk", "kt", "tk", "kt", "tk",
+                },
+                new String[]{
+                        "t", "k", "c", "g", "z", "s", "d", "r", "ts",
+                        "t", "k", "t", "k", "t", "k", "ts",
+                        "t", "k", "c", "g", "z", "s", "d", "r", "ts",
+                        "t", "k", "t", "k", "t", "k", "ts",
+                        "st", "sk", "sc", "sg", "sz", "ds",
+                        "rt", "rk", "rc", "rg", "rz", "rd", "rts"
+                },
+                new String[]{},
+                new String[]{}, new int[]{1, 2, 3}, new double[]{5, 4, 2}, 0.45, 0.0, 0.0, 0.0, null, true);
+    }
+
+    /**
+     * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+     * an alien species. This alien language emphasizes hard sounds and prefers the vowels 'e' and a', sometimes with
+     * two of the same vowel, like 'ee', but never with two different vowels in one syllable, like with 'ea'.
+     * This language is meant to use click sounds, if pronunciation is given, where 'q' modifies a consonant to form a
+     * click, such as 'tq'. This is like how 'h' modifies letters in English to make 'th' different from 't' or 'h'.
+     * This may be ideal for a species with a beak (or one that lacks lips for some other reason), since it avoids using
+     * sounds that require lips (some clicks might be approximated by other species using their lips if this uses some
+     * alien-specific clicking organ).
+     * <br>
+     * Reds zasg izqekkek zagtsarg ukaard ac ots as!
+     */
+    public static final FakeLanguageGen ALIEN_E = alien_e().register();
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
