@@ -241,6 +241,12 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 5, 10, new String[]{","},
                     new String[]{".", ".", "?", "!", "!", ".", "..."}, 0.08));
         }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ALIEN_I;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ",", ";"},
+                    new String[]{".", ".", "?", "?", "...", "..."}, 0.14));
+        }
 
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
@@ -396,6 +402,7 @@ public class LanguageGenTest {
                 FakeLanguageGen.INFERNAL,
                 FakeLanguageGen.ALIEN_A,
                 FakeLanguageGen.ALIEN_E,
+                FakeLanguageGen.ALIEN_I,
         };
         String[] oz = new String[]{
                 "Uncle Uncles Carbuncle Carbuncles Live Lives Lived Living Liver Livers Livery Liveries",
