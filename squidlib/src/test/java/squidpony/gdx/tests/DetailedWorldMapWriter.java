@@ -5,7 +5,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
@@ -42,20 +41,20 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    private static final int width = 314 * 6, height = 600;
+    private static final int width = 314 * 5, height = 500;
 
     //private static final int width = 800, height = 800;
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
-    private FakeLanguageGen lang = FakeLanguageGen.SIMPLISH;
+    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(123456789L).removeAccents();
     private Pixmap pm;
-    Texture pt;
+    private Texture pt;
     private int counter = 0;
     private Color tempColor = Color.WHITE.cpy();
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
-    private Stage stage;
+    //private Stage stage;
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
@@ -313,7 +312,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         batch = new SpriteBatch();
         //display = new SquidPanel(width, height, cellWidth, cellHeight);
         view = new StretchViewport(width*cellWidth, height*cellHeight);
-        stage = new Stage(view, batch);
+        //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
         path = "out/worlds/" + date + "/";
         if(!Gdx.files.local(path).exists())

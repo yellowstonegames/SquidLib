@@ -3,7 +3,6 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 import static squidpony.squidmath.LightRNG.determine;
-import static squidpony.squidmath.LightRNG.determineBounded;
 
 /**
  * Another experimental noise class. Extends PerlinNoise and should have similar quality, but can be faster and has less
@@ -54,109 +53,49 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             {(float)Math.cos(phi*14), (float)Math.sin(phi*14)}, {(float)Math.cos(phi*15), (float)Math.sin(phi*15)},
     };
     /**
-     * The 92 3D vertices of a pentagonal hexecontahedron. These specific values were taken from Vladimir Bulatov's
+     * The 32 3D vertices of a rhombic triacontahedron. These specific values were taken from Vladimir Bulatov's
      * stellation applet, which has available source but is unlicensed, and is
      * <a href="http://www.bulatov.org/polyhedra/stellation_applet/index.html">available here</a>, but the vertices are
      * mathematical constants so copyright isn't an issue.
      */
     protected static final float[][] grad3f = {
-            { 0.098415901494919f,  0.944618547212300f,  0.086889031803113f },
-            {-0.098415901494923f,  0.944618547212300f, -0.086889031803107f },
-            {-0.340300460626875f,  0.890918172308408f,  0.000000000000003f },
-            {-0.371602384173985f,  0.840270596095933f,  0.255727563365808f },
-            {-0.000000000000002f,  0.850650808352026f,  0.525731112119124f },
-            { 0.432426756331305f,  0.741854694601012f,  0.414967837018052f },
-            { 0.512191790880984f,  0.786570221192041f,  0.168838531562698f },
-            { 0.340300460626872f,  0.890918172308408f,  0.000000000000003f },
-            { 0.371602384173983f,  0.840270596095934f, -0.255727563365803f },
-            {-0.000000000000002f,  0.850650808352029f, -0.525731112119120f },
-            {-0.432426756331308f,  0.741854694601014f, -0.414967837018047f },
-            {-0.512191790880988f,  0.786570221192041f, -0.168838531562693f },
-            {-0.850650808352023f,  0.525731112119131f,  0.000000000000001f },
-            {-0.573016163038312f,  0.688154319697119f,  0.328078805214941f },
-            {-0.550617711681530f,  0.550617711681534f,  0.550617711681529f },
-            {-0.328078805214941f,  0.573016163038316f,  0.688154319697115f },
-            { 0.168838531562694f,  0.512191790880993f,  0.786570221192036f },
-            { 0.414967837018049f,  0.432426756331314f,  0.741854694601007f },
-            { 0.550617711681525f,  0.550617711681535f,  0.550617711681530f },
-            { 0.741854694601004f,  0.414967837018058f,  0.432426756331309f },
-            { 0.850650808352019f,  0.525731112119131f,  0.000000000000003f },
-            { 0.573016163038308f,  0.688154319697121f, -0.328078805214937f },
-            { 0.550617711681528f,  0.550617711681538f, -0.550617711681525f },
-            { 0.328078805214940f,  0.573016163038319f, -0.688154319697111f },
-            {-0.168838531562697f,  0.512191790880997f, -0.786570221192035f },
-            {-0.414967837018053f,  0.432426756331317f, -0.741854694601006f },
-            {-0.550617711681530f,  0.550617711681536f, -0.550617711681527f },
-            {-0.741854694601009f,  0.414967837018059f, -0.432426756331305f },
-            {-0.840270596095931f,  0.255727563365812f,  0.371602384173985f },
-            {-0.688154319697117f,  0.328078805214945f,  0.573016163038312f },
-            {-0.525731112119129f,  0.000000000000002f,  0.850650808352025f },
-            {-0.255727563365808f,  0.371602384173987f,  0.840270596095931f },
-            {-0.000000000000003f,  0.340300460626876f,  0.890918172308407f },
-            { 0.086889031803109f,  0.098415901494923f,  0.944618547212299f },
-            { 0.525731112119125f,  0.000000000000004f,  0.850650808352025f },
-            { 0.786570221192034f,  0.168838531562704f,  0.512191790880989f },
-            { 0.890918172308403f,  0.000000000000009f,  0.340300460626876f },
-            { 0.944618547212296f,  0.086889031803121f,  0.098415901494923f },
-            { 0.840270596095927f,  0.255727563365817f, -0.371602384173981f },
-            { 0.688154319697114f,  0.328078805214951f, -0.573016163038307f },
-            { 0.525731112119129f,  0.000000000000012f, -0.850650808352020f },
-            { 0.255727563365808f,  0.371602384173994f, -0.840270596095926f },
-            {-0.000000000000000f,  0.340300460626881f, -0.890918172308404f },
-            {-0.086889031803109f,  0.098415901494928f, -0.944618547212299f },
-            {-0.525731112119130f,  0.000000000000001f, -0.850650808352026f },
-            {-0.786570221192041f,  0.168838531562702f, -0.512191790880986f },
-            {-0.890918172308409f,  0.000000000000008f, -0.340300460626871f },
-            {-0.944618547212299f,  0.086889031803118f, -0.098415901494920f },
-            {-0.944618547212300f, -0.086889031803100f,  0.098415901494925f },
-            {-0.890918172308407f,  0.000000000000012f,  0.340300460626874f },
-            {-0.786570221192040f, -0.168838531562684f,  0.512191790880988f },
-            {-0.086889031803113f, -0.098415901494924f,  0.944618547212299f },
-            {-0.000000000000003f, -0.340300460626881f,  0.890918172308406f },
-            { 0.255727563365812f, -0.371602384173993f,  0.840270596095928f },
-            { 0.688154319697119f, -0.328078805214943f,  0.573016163038308f },
-            { 0.840270596095930f, -0.255727563365801f,  0.371602384173987f },
-            { 0.850650808352029f, -0.525731112119114f, -0.000000000000006f },
-            { 0.944618547212297f, -0.086889031803100f, -0.098415901494920f },
-            { 0.890918172308405f,  0.000000000000007f, -0.340300460626872f },
-            { 0.786570221192044f, -0.168838531562691f, -0.512191790880981f },
-            { 0.086889031803113f, -0.098415901494914f, -0.944618547212299f },
-            { 0.000000000000009f, -0.340300460626870f, -0.890918172308406f },
-            {-0.255727563365796f, -0.371602384173988f, -0.840270596095931f },
-            {-0.688154319697120f, -0.328078805214943f, -0.573016163038309f },
-            {-0.840270596095935f, -0.255727563365805f, -0.371602384173982f },
-            {-0.850650808352032f, -0.525731112119107f,  0.000000000000012f },
-            {-0.741854694601016f, -0.414967837018035f,  0.432426756331311f },
-            {-0.550617711681541f, -0.550617711681511f,  0.550617711681534f },
-            {-0.414967837018066f, -0.432426756331290f,  0.741854694601011f },
-            {-0.168838531562693f, -0.512191790880986f,  0.786570221192041f },
-            {-0.000000000000022f, -0.850650808352035f,  0.525731112119117f },
-            { 0.328078805214949f, -0.573016163038333f,  0.688154319697101f },
-            { 0.550617711681525f, -0.550617711681556f,  0.550617711681518f },
-            { 0.573016163038319f, -0.688154319697138f,  0.328078805214909f },
-            { 0.741854694601021f, -0.414967837018041f, -0.432426756331300f },
-            { 0.550617711681540f, -0.550617711681530f, -0.550617711681523f },
-            { 0.414967837018065f, -0.432426756331319f, -0.741854694600999f },
-            { 0.168838531562735f, -0.512191790881005f, -0.786570221192023f },
-            { 0.000000000000037f, -0.850650808352064f, -0.525731112119095f },
-            {-0.328078805214933f, -0.573016163038341f, -0.688154319697099f },
-            {-0.550617711681517f, -0.550617711681560f, -0.550617711681519f },
-            {-0.573016163038295f, -0.688154319697146f, -0.328078805214925f },
-            {-0.512191790880984f, -0.786570221192040f,  0.168838531562715f },
-            {-0.432426756331320f, -0.741854694600996f,  0.414967837018059f },
-            { 0.371602384173965f, -0.840270596095972f,  0.255727563365750f },
-            { 0.340300460626838f, -0.890918172308444f, -0.000000000000082f },
-            { 0.512191790880927f, -0.786570221192080f, -0.168838531562769f },
-            { 0.432426756331317f, -0.741854694601025f, -0.414967837018036f },
-            {-0.371602384173950f, -0.840270596095964f, -0.255727563365787f },
-            {-0.340300460626839f, -0.890918172308430f,  0.000000000000014f },
-            {-0.098415901494953f, -0.944618547212300f,  0.086889031803118f },
-            { 0.098415901494961f, -0.944618547212302f, -0.086889031803149f }
+            {-0.324919696232904f,  0.850650808352036f,  0.000000000000001f },
+            { 0.000000000000001f,  0.850650808352035f,  0.525731112119131f },
+            { 0.324919696232906f,  0.850650808352036f,  0.000000000000001f },
+            { 0.000000000000001f,  0.850650808352036f, -0.525731112119131f },
+            {-0.525731112119131f,  0.525731112119132f, -0.525731112119130f },
+            {-0.850650808352035f,  0.525731112119132f,  0.000000000000001f },
+            {-0.525731112119130f,  0.525731112119131f,  0.525731112119132f },
+            { 0.525731112119132f,  0.525731112119131f,  0.525731112119131f },
+            { 0.850650808352036f,  0.525731112119132f,  0.000000000000000f },
+            { 0.525731112119132f,  0.525731112119132f, -0.525731112119131f },
+            {-0.525731112119132f,  0.000000000000002f, -0.850650808352036f },
+            {-0.850650808352036f,  0.000000000000002f, -0.324919696232905f },
+            { 0.000000000000000f,  0.324919696232906f, -0.850650808352037f },
+            {-0.525731112119131f,  0.000000000000001f,  0.850650808352037f },
+            { 0.000000000000001f,  0.324919696232905f,  0.850650808352037f },
+            {-0.850650808352037f,  0.000000000000001f,  0.324919696232905f },
+            { 0.525731112119133f,  0.000000000000001f,  0.850650808352036f },
+            { 0.850650808352037f,  0.000000000000001f,  0.324919696232905f },
+            { 0.525731112119132f,  0.000000000000001f, -0.850650808352038f },
+            { 0.850650808352038f,  0.000000000000001f, -0.324919696232906f },
+            {-0.525731112119134f, -0.525731112119130f, -0.525731112119133f },
+            {-0.850650808352038f, -0.525731112119130f, -0.000000000000001f },
+            {-0.000000000000001f, -0.324919696232905f, -0.850650808352038f },
+            {-0.000000000000001f, -0.324919696232905f,  0.850650808352038f },
+            {-0.525731112119132f, -0.525731112119131f,  0.525731112119133f },
+            { 0.525731112119133f, -0.525731112119131f,  0.525731112119134f },
+            { 0.850650808352039f, -0.525731112119130f,  0.000000000000001f },
+            { 0.525731112119132f, -0.525731112119134f, -0.525731112119133f },
+            {-0.000000000000003f, -0.850650808352038f, -0.525731112119134f },
+            {-0.324919696232908f, -0.850650808352038f, -0.000000000000002f },
+            {-0.000000000000002f, -0.850650808352042f,  0.525731112119130f },
+            { 0.324919696232902f, -0.850650808352041f,  0.000000000000002f }
     };
-    protected static final float[][] grad4f = new float[368][4];
+    protected static final float[][] grad4f = new float[128][4];
     static {
 
-        for (int i = 0, ii = 0; i < 92; i++, ii += 4) {
+        for (int i = 0, ii = 0; i < 32; i++, ii += 4) {
             float x = grad3f[i][0], y = grad3f[i][1], z = grad3f[i][2];
             final float len = 0.88888f / (float)Math.sqrt(x * x + y * y + z * z), len3 = len * root2, len4 = len * root3;
             //final float len = 2f / Math.max(Math.abs(x), Math.max(Math.abs(y), Math.abs(z))), len3 = len * 1.5f;
@@ -404,9 +343,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi1 = (hash >>>= 4) & 15;
         int gi2 = (hash >>> 4) & 15;
         */
-        int gi0 = determineBounded(seed + i + determine(j), 16);
-        int gi1 = determineBounded(seed + i + i1 + determine(j + j1), 16);
-        int gi2 = determineBounded(seed + i + 1 + determine(j + 1), 16);
+        int gi0 = (int)(determine(seed + i + determine(j)) & 15);
+        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) & 15);
+        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) & 15);
 
         // Calculate the contribution from the three corners
         double t0 = 0.5 - x0 * x0 - y0 * y0;
@@ -499,9 +438,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi1 = (hash >>>= 4) & 15;
         int gi2 = (hash >>> 4) & 15;
         */
-        int gi0 = determineBounded(i + determine(j), 16);
-        int gi1 = determineBounded(i + i1 + determine(j + j1), 16);
-        int gi2 = determineBounded(i + 1 + determine(j + 1), 16);
+        int gi0 = (int)(determine(i + determine(j)) & 15);
+        int gi1 = (int)(determine(i + i1 + determine(j + j1)) & 15);
+        int gi2 = (int)(determine(i + 1 + determine(j + 1)) & 15);
 
         // Calculate the contribution from the three corners
         float t0 = 0.5f - x0 * x0 - y0 * y0;
@@ -666,10 +605,10 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
-        int gi0 = determineBounded(seed + i + determine(j + determine(k)), 92);
-        int gi1 = determineBounded(seed + i + i1 + determine(j + j1 + determine(k + k1)), 92);
-        int gi2 = determineBounded(seed + i + i2 + determine(j + j2 + determine(k + k2)), 92);
-        int gi3 = determineBounded(seed + i + 1 + determine(j + 1 + determine(k + 1)), 92);
+        int gi0 = (int)(determine(seed + i + determine(j + determine(k))) & 31);
+        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1 + determine(k + k1))) & 31);
+        int gi2 = (int)(determine(seed + i + i2 + determine(j + j2 + determine(k + k2))) & 31);
+        int gi3 = (int)(determine(seed + i + 1 + determine(j + 1 + determine(k + 1))) & 31);
 
         /*
         int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),
@@ -838,11 +777,15 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
+        int gi0 = (int)(determine(i + determine(j + determine(k))) & 31);
+        int gi1 = (int)(determine(i + i1 + determine(j + j1 + determine(k + k1))) & 31);
+        int gi2 = (int)(determine(i + i2 + determine(j + j2 + determine(k + k2))) & 31);
+        int gi3 = (int)(determine(i + 1 + determine(j + 1 + determine(k + 1))) & 31);
 
-        int gi0 = determineBounded(i + determine(j + determine(k)), 92);
-        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 92);
-        int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2)), 92);
-        int gi3 = determineBounded(i + 1 + determine(j + 1 + determine(k + 1)), 92);
+//        int gi0 = determineBounded(i + determine(j + determine(k)), 92);
+//        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 92);
+//        int gi2 = determineBounded(i + i2 + determine(j + j2 + determine(k + k2)), 92);
+//        int gi3 = determineBounded(i + 1 + determine(j + 1 + determine(k + 1)), 92);
 
         /*
         int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),
@@ -1007,11 +950,11 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         double z4 = z0 - 1.0 + 4.0 * G4;
         double w4 = w0 - 1.0 + 4.0 * G4;
 
-        int gi0 = determineBounded(seed + i + determine(j + determine(k + determine(l))), 32);
-        int gi1 = determineBounded(seed + i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1))), 32);
-        int gi2 = determineBounded(seed + i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2))), 32);
-        int gi3 = determineBounded(seed + i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3))), 32);
-        int gi4 = determineBounded(seed + i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1))), 32);
+        int gi0 = (int)(determine(seed + i + determine(j + determine(k + determine(l)))) & 127);
+        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1)))) & 127);
+        int gi2 = (int)(determine(seed + i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2)))) & 127);
+        int gi3 = (int)(determine(seed + i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3)))) & 127);
+        int gi4 = (int)(determine(seed + i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1)))) & 127);
 
         // Noise contributions from the five corners are n0 to n4
 
