@@ -1855,10 +1855,10 @@ public class FakeLanguageGen implements Serializable {
     private static FakeLanguageGen alien_e(){
         return new FakeLanguageGen(
                 new String[]{"a", "a", "a", "a", "a", "a", "aa", "aa",
-                             "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "ee", "ee", "ee", "ee",
-                             "i", "i", "i", "i", "i", "ii",
-                             "o", "o", "o", "o",
-                             "u", "u", "u"
+                        "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "ee", "ee", "ee", "ee",
+                        "i", "i", "i", "i", "i", "ii",
+                        "o", "o", "o", "o",
+                        "u", "u", "u"
                 },
                 new String[]{},
                 new String[]{"t", "k", "c", "g", "z", "s", "d", "r", "ts",
@@ -1906,7 +1906,7 @@ public class FakeLanguageGen implements Serializable {
 
     /**
      * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
-     * an alien species. This alien language emphasizes hard sounds and prefers the vowels 'e' and a', sometimes with
+     * an alien species. This alien language emphasizes hard sounds and prefers the vowels 'i' and 'o', sometimes with
      * two of the same vowel, like 'ee', but never with two different vowels in one syllable, like with 'ea'.
      * This language is meant to use click sounds, if pronunciation is given, where 'q' modifies a consonant to form a
      * click, such as 'tq'. This is like how 'h' modifies letters in English to make 'th' different from 't' or 'h'.
@@ -1917,6 +1917,47 @@ public class FakeLanguageGen implements Serializable {
      * Reds zasg izqekkek zagtsarg ukaard ac ots as!
      */
     public static final FakeLanguageGen ALIEN_E = alien_e().register();
+
+    private static FakeLanguageGen alien_i(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "a", "a", "a", "à", "á", "â", "ā", "ä",
+                        "e", "e", "e", "e", "e", "e", "è", "é", "ê", "ē", "ë",
+                        "i", "i", "i", "i", "i", "i", "i", "i", "ì", "í", "î", "ï", "ī",
+                        "i", "i", "i", "i", "i", "i", "i", "i", "ì", "í", "î", "ï", "ī",
+                        "o", "o", "o", "o", "o", "o", "o", "o", "o", "o", "o", "o", "ò", "ó", "ô", "ō", "ö",
+                        "u", "u", "u", "u", "u", "u", "ù", "ú", "û", "ū", "ü",
+                },
+                new String[]{},
+                new String[]{
+                        "r", "l", "ch", "g", "z", "zh", "s", "sh", "th", "m", "n", "p", "b", "j", "v", "h", "r", "l",
+                        "r", "l", "ch", "g", "z", "zh", "s", "sh", "th", "m", "n", "p", "b", "j", "v", "h", "r", "l",
+                        "r", "l", "ch", "g", "z", "zh", "s", "sh", "th", "m", "n", "p", "b", "j", "v", "h", "r", "l",
+                        "r", "r", "r", "r", "r", "l", "l", "l", "l", "l",
+                        "gr", "gl", "zr", "zl", "sl", "shr", "thr", "mr", "nr", "pr", "pl", "br", "bl", "vr", "vl", "hr",
+                        "zv", "sp", "zg"
+                },
+                new String[]{
+                        "j", "h",
+                },
+                new String[]{
+                        "r", "l", "ch", "g", "z", "zh", "s", "sh", "th", "m", "n", "p", "b", "v", "r", "l",
+                        "th", "zh", "sh", "th", "zh", "sh", "lth", "lzh", "lsh", "rth", "rzh", "rsh",
+                },
+                new String[]{},
+                new String[]{"'"}, new int[]{1, 2, 3, 4}, new double[]{6, 9, 5, 1}, 0.6, 0.4, 0.075, 0.0, null, true);
+    }
+
+    /**
+     * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+     * an alien species. This alien language emphasizes "liquid" sounds such as 'l', 'r', and mixes with those and other
+     * consonants, and prefers the vowels 'e' and a', never with two of the same vowel, like 'ee', nor with two
+     * different vowels in one syllable, like with 'ea'; it uses accent marks heavily and could be a tonal language.
+     * It sometimes splits vowels with a single apostrophe, and rarely has large consonant clusters.
+     * <br>
+     * Asherzhäl zlómór ìsiv ázá nralthóshos, zlôbùsh.
+     */
+    public static final FakeLanguageGen ALIEN_I = alien_i().register();
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
