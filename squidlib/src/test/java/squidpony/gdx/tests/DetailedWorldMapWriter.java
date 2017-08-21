@@ -1,9 +1,17 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -41,13 +49,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Rocky                  = 11,
         River                  = 12;
 
-    private static final int width = 314 * 5, height = 500;
+    //private static final int width = 314 * 5, height = 500;
 
-    //private static final int width = 800, height = 800;
+    private static final int width = 700, height = 700;
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
-    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(123456789L).removeAccents();
+    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(1234567890L).removeAccents();
     private Pixmap pm;
     private Texture pt;
     private int counter = 0;
@@ -322,8 +330,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pt = new Texture(pm);
         rng = new StatefulRNG(CrossHash.Wisp.hash64(date));
         seed = rng.getState();
-        //world = new WorldMapGenerator.TilingMap(seed, width, height, SeededNoise.instance, 0.75);
-        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 1.0);
+        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.0);
+        //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 1.0);
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
