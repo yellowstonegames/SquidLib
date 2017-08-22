@@ -603,8 +603,8 @@ public abstract class WorldMapGenerator {
                 warmValueLower = 0.5,      warmValueUpper = 0.69,    // 3
                 warmerValueLower = 0.69,   warmerValueUpper = 0.85,  // 4
                 warmestValueLower = 0.85,  warmestValueUpper = 1.0,  // 5
-        
-                driestValueLower = 0.0,    driestValueUpper  = 0.27, // 0
+
+        driestValueLower = 0.0,    driestValueUpper  = 0.27, // 0
                 drierValueLower = 0.27,    drierValueUpper   = 0.4,  // 1
                 dryValueLower = 0.4,       dryValueUpper     = 0.6,  // 2
                 wetValueLower = 0.6,       wetValueUpper     = 0.8,  // 3
@@ -695,6 +695,245 @@ public abstract class WorldMapGenerator {
                     heatCodeData[x][y] = hc;
                     moistureCodeData[x][y] = mc;
                     biomeCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
+                }
+            }
+        }
+    }
+    /**
+     * A way to get biome information for the cells on a map when you want an area's biome to be a combination of two
+     * main biome types, such as "Grassland" or "TropicalRainforest", with the biomes varying in weight between areas.
+     * <br>
+     * To use: 1, Construct a DetailedBiomeMapper (constructor takes no arguments). 2, call
+     * {@link #makeBiomes(WorldMapGenerator)} with a WorldMapGenerator that has already produced at least one world map.
+     * 3, get biome codes from the {@link #biomeCodeData} field, where a code is an int that can be used with the
+     * extract methods in this class to get various information from it (these are {@link #extractBiomeA(int)},
+     * {@link #extractBiomeB(int)}, {@link #extractPartA(int)}, {@link #extractPartB(int)}, and
+     * {@link #extractMixAmount(int)}). You can get predefined names for biomes using the extractBiome methods (these
+     * names can be changed in {@link #biomeTable}), or raw indices into some (usually 54-element) collection or array
+     * with the extractPart methods. The extractMixAmount() method gets a float that is the amount by which biome B
+     * affects biome A; if this is higher than 0.5, then biome B is the "dominant" biome in the area.
+     */
+    public static class DetailedBiomeMapper
+    {
+        /**
+         * The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.
+         */
+        public int[][] heatCodeData,
+        /**
+         * The moisture codes for the analyzed map, from 0 to 5 inclusive, with 0 driest and 5 wettest.
+         */
+        moistureCodeData,
+        /**
+         * The biome codes for the analyzed map, using one int to store the codes for two biomes and the degree by which
+         * the second biome affects the first. These codes can be used with methods in this class like
+         * {@link #extractBiomeA(int)}, {@link #extractBiomeB(int)}, and {@link #extractMixAmount(int)} to find the two
+         * dominant biomes in an area, called biome A and biome B, and the mix amount, for finding how much biome B
+         * affects biome A.
+         */
+        biomeCodeData;
+
+        public static final double
+                coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0
+                colderValueLower = 0.15,   colderValueUpper = 0.31,  // 1
+                coldValueLower = 0.31,     coldValueUpper = 0.5,     // 2
+                warmValueLower = 0.5,      warmValueUpper = 0.69,     // 3
+                warmerValueLower = 0.69,    warmerValueUpper = 0.85,   // 4
+                warmestValueLower = 0.85,   warmestValueUpper = 1.0,  // 5
+
+        driestValueLower = 0.0,    driestValueUpper  = 0.27, // 0
+                drierValueLower = 0.27,    drierValueUpper   = 0.4,  // 1
+                dryValueLower = 0.4,       dryValueUpper     = 0.6,  // 2
+                wetValueLower = 0.6,       wetValueUpper     = 0.8,  // 3
+                wetterValueLower = 0.8,    wetterValueUpper  = 0.9,  // 4
+                wettestValueLower = 0.9,   wettestValueUpper = 1.0;  // 5
+
+        /**
+         * The default biome table to use with parts of biome codes from {@link #biomeCodeData}. Biomes are assigned by
+         * heat and moisture for the first 36 of 54 elements (coldest to warmest for each group of 6, with the first
+         * group as the dryest and the last group the wettest), then the next 6 are for coastlines (coldest to warmest),
+         * then rivers (coldest to warmest), then lakes (coldest to warmest). Unlike with {@link SimpleBiomeMapper}, you
+         * cannot use a biome code directly from biomeCodeData as an index into this in almost any case; you should pass
+         * the biome code to one of the extract methods. {@link #extractBiomeA(int)} or {@link #extractBiomeB(int)} will
+         * work if you want a biome name, or {@link #extractPartA(int)} or {@link #extractPartB(int)} should be used if
+         * you want a non-coded int that represents one of the biomes' indices into something like {@link #biomeTable}.
+         * You can also get the amount by which biome B is affecting biome A with {@link #extractMixAmount(int)}.
+         */
+        public static final String[] biomeTable = {
+                //COLDEST //COLDER        //COLD            //HOT                  //HOTTER              //HOTTEST
+                "Ice",    "Ice",          "Grassland",      "Desert",              "Desert",             "Desert",             //DRYEST
+                "Ice",    "Tundra",       "Grassland",      "Grassland",           "Desert",             "Desert",             //DRYER
+                "Ice",    "Tundra",       "Woodland",       "Woodland",            "Savanna",            "Desert",             //DRY
+                "Ice",    "Tundra",       "SeasonalForest", "SeasonalForest",      "Savanna",            "Savanna",            //WET
+                "Ice",    "Tundra",       "BorealForest",   "TemperateRainforest", "TropicalRainforest", "Savanna",            //WETTER
+                "Ice",    "BorealForest", "BorealForest",   "TemperateRainforest", "TropicalRainforest", "TropicalRainforest", //WETTEST
+                "Rocky",  "Rocky",        "Beach",          "Beach",               "Beach",              "Beach",              //COASTS
+                "Ice",    "River",        "River",          "River",               "River",              "River",              //RIVERS
+                "Ice",    "River",        "River",          "River",               "River",              "River",              //LAKES
+        };
+
+        /**
+         * Gets the int stored in part A of the given biome code, which can be used as an index into other collections.
+         * This int should almost always range from 0 to 53 (both inclusive), so collections this is used as an index
+         * for should have a length of at least 54.
+         * @param biomeCode a biome code that was probably received from {@link #biomeCodeData}
+         * @return an int stored in the biome code's part A; almost always between 0 and 53, inclusive.
+         */
+        public int extractPartA(int biomeCode)
+        {
+            return biomeCode & 1023;
+        }
+        /**
+         * Gets a String from {@link #biomeTable} that names the appropriate biome in part A of the given biome code.
+         * @param biomeCode a biome code that was probably received from {@link #biomeCodeData}
+         * @return a String that names the biome in part A of biomeCode, or "Ocean" if none can be found
+         */
+        public String extractBiomeA(int biomeCode)
+        {
+            biomeCode &= 1023;
+            if(biomeCode < 54)
+                return biomeTable[biomeCode];
+            return "Ocean";
+        }
+        /**
+         * Gets the int stored in part B of the given biome code, which can be used as an index into other collections.
+         * This int should almost always range from 0 to 53 (both inclusive), so collections this is used as an index
+         * for should have a length of at least 54.
+         * @param biomeCode a biome code that was probably received from {@link #biomeCodeData}
+         * @return an int stored in the biome code's part B; almost always between 0 and 53, inclusive.
+         */
+        public int extractPartB(int biomeCode)
+        {
+            return (biomeCode >>> 10) & 1023;
+        }
+
+        /**
+         * Gets a String from {@link #biomeTable} that names the appropriate biome in part B of the given biome code.
+         * @param biomeCode a biome code that was probably received from {@link #biomeCodeData}
+         * @return a String that names the biome in part B of biomeCode, or "Ocean" if none can be found
+         */
+        public String extractBiomeB(int biomeCode)
+        {
+            biomeCode = (biomeCode >>> 10) & 1023;
+            if(biomeCode < 54)
+                return biomeTable[biomeCode];
+            return "Ocean";
+        }
+
+        /**
+         * This gets the portion of a biome code that represents the amount of mixing between two biomes.
+         * Biome codes are normally obtained from the {@link #biomeCodeData} field, and aren't very usable on their own
+         * without calling methods like this, {@link #extractBiomeA(int)}, and {@link #extractBiomeB(int)}. This returns
+         * a float between 0.0f (inclusive) and 1.0f (exclusive), with 0.0f meaning biome B has no effect on an area and
+         * biome A is the only one used, 0.5f meaning biome A and biome B have equal effect, and 0.75f meaning biome B
+         * has most of the effect, three-fourths of the area, and biome A has less, one-fourth of the area.
+         * @param biomeCode a biome code that was probably received from {@link #biomeCodeData}
+         * @return a float between 0.0f (inclusive) and 1.0f (exclusive) representing mixing of biome B into biome A
+         */
+        public float extractMixAmount(int biomeCode)
+        {
+            return (biomeCode >>> 20) * 0x1p-10f;
+        }
+
+        /**
+         * Simple constructor; pretty much does nothing. Make sure to call {@link #makeBiomes(WorldMapGenerator)} before
+         * using fields like {@link #biomeCodeData}.
+         */
+        public DetailedBiomeMapper()
+        {
+            heatCodeData = null;
+            moistureCodeData = null;
+            biomeCodeData = null;
+        }
+
+        /**
+         * Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
+         * assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
+         * taken from {@link #biomeCodeData} and used with methods in this class like {@link #extractBiomeA(int)},
+         * {@link #extractBiomeB(int)}, and {@link #extractMixAmount(int)} to find the two dominant biomes in an area,
+         * called biome A and biome B, and the mix amount, for finding how much biome B affects biome A.
+         * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
+         */
+        protected void makeBiomes(WorldMapGenerator world) {
+            final int[][] heightCodeData = world.heightCodeData;
+            final double[][] heatData = world.heatData, moistureData = world.moistureData, heightData = world.heightData;
+            int hc, mc, heightCode, bc;
+            double hot, moist, high, i_hot = 1.0 / world.maxHeat;
+            for (int x = 0; x < world.width; x++) {
+                for (int y = 0; y < world.height; y++) {
+
+                    heightCode = heightCodeData[x][y];
+                    hot = heatData[x][y];
+                    moist = moistureData[x][y];
+                    high = heightData[x][y];
+                    boolean isLake = heightCode >= 4 && world.partialLakeData.contains(x, y),
+                            isRiver = heightCode >= 4 && world.partialRiverData.contains(x, y);
+                    if (moist >= (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)) {
+                        mc = 5;
+                    } else if (moist >= (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)) {
+                        mc = 4;
+                    } else if (moist >= (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2)) {
+                        mc = 3;
+                    } else if (moist >= (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2)) {
+                        mc = 2;
+                    } else if (moist >= (drierValueUpper - (driestValueUpper) * 0.2)) {
+                        mc = 1;
+                    } else {
+                        mc = 0;
+                    }
+
+                    if (hot >= (warmestValueUpper - (warmerValueUpper - warmerValueLower) * 0.2) * i_hot) {
+                        hc = 5;
+                    } else if (hot >= (warmerValueUpper - (warmValueUpper - warmValueLower) * 0.2) * i_hot) {
+                        hc = 4;
+                    } else if (hot >= (warmValueUpper - (coldValueUpper - coldValueLower) * 0.2) * i_hot) {
+                        hc = 3;
+                    } else if (hot >= (coldValueUpper - (colderValueUpper - colderValueLower) * 0.2) * i_hot) {
+                        hc = 2;
+                    } else if (hot >= (colderValueUpper - (coldestValueUpper) * 0.2) * i_hot) {
+                        hc = 1;
+                    } else {
+                        hc = 0;
+                    }
+
+                    heatCodeData[x][y] = hc;
+                    moistureCodeData[x][y] = mc;
+                    bc = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
+
+                    if (moist >= (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)) {
+                        mc = 5;
+                    } else if (moist >= (wetValueUpper + (wetterValueUpper - wetterValueLower) * 0.2)) {
+                        mc = 4;
+                    } else if (moist >= (dryValueUpper + (wetValueUpper - wetValueLower) * 0.2)) {
+                        mc = 3;
+                    } else if (moist >= (drierValueUpper + (dryValueUpper - dryValueLower) * 0.2)) {
+                        mc = 2;
+                    } else if (moist >= (driestValueUpper + (drierValueUpper - drierValueLower) * 0.2)) {
+                        mc = 1;
+                    } else {
+                        mc = 0;
+                    }
+
+                    if (hot >= (warmerValueUpper + (warmestValueUpper - warmestValueLower) * 0.2) * i_hot) {
+                        hc = 5;
+                    } else if (hot >= (warmValueUpper + (warmerValueUpper - warmerValueLower) * 0.2) * i_hot) {
+                        hc = 4;
+                    } else if (hot >= (coldValueUpper + (warmValueUpper - warmValueLower) * 0.2) * i_hot) {
+                        hc = 3;
+                    } else if (hot >= (colderValueUpper + (coldValueUpper - coldValueLower) * 0.2) * i_hot) {
+                        hc = 2;
+                    } else if (hot >= (coldestValueUpper + (colderValueUpper - colderValueLower) * 0.2) * i_hot) {
+                        hc = 1;
+                    } else {
+                        hc = 0;
+                    }
+
+                    bc |= (hc + mc * 6) << 10;
+
+                    if (isRiver || isLake)
+                        biomeCodeData[x][y] = bc | (int)(moist * 358.4 + 665.0) << 20;
+                    else
+                        biomeCodeData[x][y] = bc | (int) ((heightCode == 4) ? (0.18 - high) * 12800.0 :
+                                        NumberTools.bounce((high + moist) * (4.1 + high - hot)) * 512 + 512) << 20;
                 }
             }
         }
