@@ -95,80 +95,52 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     // Biome map colors
 
     private static float ice = SColor.ALICE_BLUE.toFloatBits();
-    private static float darkIce = SColor.lerpFloatColors(ice, black, 0.15f);
     private static float lightIce = white;
 
     private static float desert = SColor.floatGetI(248, 229, 180);
-    private static float darkDesert = SColor.lerpFloatColors(desert, black, 0.15f);
 
     private static float savanna = SColor.floatGetI(181, 200, 100);
-    private static float darkSavanna = SColor.lerpFloatColors(savanna, black, 0.15f);
 
     private static float tropicalRainforest = SColor.floatGetI(66, 123, 25);
-    private static float darkTropicalRainforest = SColor.lerpFloatColors(tropicalRainforest, black, 0.15f);
 
     private static float tundra = SColor.floatGetI(151, 175, 159);
-    private static float darkTundra = SColor.lerpFloatColors(tundra, black, 0.15f);
 
     private static float temperateRainforest = SColor.floatGetI(54, 113, 60);
-    private static float darkTemperateRainforest = SColor.lerpFloatColors(temperateRainforest, black, 0.15f);
 
     private static float grassland = SColor.floatGetI(169, 185, 105);
-    private static float darkGrassland = SColor.lerpFloatColors(grassland, black, 0.15f);
 
     private static float seasonalForest = SColor.floatGetI(100, 158, 75);
-    private static float darkSeasonalForest = SColor.lerpFloatColors(seasonalForest, black, 0.15f);
 
     private static float borealForest = SColor.floatGetI(75, 105, 45);
-    private static float darkBorealForest = SColor.lerpFloatColors(borealForest, black, 0.15f);
 
     private static float woodland = SColor.floatGetI(122, 170, 90);
-    private static float darkWoodland = SColor.lerpFloatColors(woodland, black, 0.15f);
 
     private static float rocky = SColor.floatGetI(171, 175, 145);
-    private static float darkRocky = SColor.lerpFloatColors(rocky, black, 0.15f);
 
     private static float beach = SColor.floatGetI(255, 235, 180);
-    private static float darkBeach = SColor.lerpFloatColors(beach, black, 0.15f);
 
     // water colors
     private static float deepColor = SColor.floatGetI(0, 68, 128);
-    private static float darkDeepColor = SColor.lerpFloatColors(deepColor, black, 0.15f);
     private static float mediumColor = SColor.floatGetI(0, 89, 159);
-    private static float darkMediumColor = SColor.lerpFloatColors(mediumColor, black, 0.15f);
     private static float shallowColor = SColor.floatGetI(0, 123, 167);
-    private static float darkShallowColor = SColor.lerpFloatColors(shallowColor, black, 0.15f);
     private static float coastalColor = SColor.lerpFloatColors(shallowColor, white, 0.3f);
-    private static float darkCoastalColor = SColor.lerpFloatColors(coastalColor, black, 0.15f);
     private static float foamColor = SColor.floatGetI(61,  162, 215);
-    private static float darkFoamColor = SColor.lerpFloatColors(foamColor, black, 0.15f);
-
-    private static float iceWater = SColor.floatGetI(210, 255, 252);
-    private static float coldWater = mediumColor;
-    private static float riverWater = shallowColor;
-
-    private static float riverColor = SColor.floatGetI(30, 120, 200);
-    private static float sandColor = SColor.floatGetI(240, 240, 64);
-    private static float grassColor = SColor.floatGetI(50, 220, 20);
-    private static float forestColor = SColor.floatGetI(16, 160, 0);
-    private static float rockColor = SColor.floatGetI(177, 167, 157);
-    private static float snowColor = SColor.floatGetI(255, 255, 255);
 
     // Heat map colors
-    private static float coldest = SColor.floatGetI(0, 255, 255);
-    private static float colder = SColor.floatGetI(170, 255, 255);
-    private static float cold = SColor.floatGetI(0, 229, 133);
-    private static float warm = SColor.floatGetI(255, 255, 100);
-    private static float warmer = SColor.floatGetI(255, 100, 0);
-    private static float warmest = SColor.floatGetI(241, 12, 0);
-
-    // Moisture map colors
-    private static float dryest = SColor.floatGetI(255, 139, 17);
-    private static float dryer = SColor.floatGetI(245, 245, 23);
-    private static float dry = SColor.floatGetI(80, 255, 0);
-    private static float wet = SColor.floatGetI(85, 255, 255);
-    private static float wetter = SColor.floatGetI(20, 70, 255);
-    private static float wettest = SColor.floatGetI(0, 0, 100);
+//    private static float coldest = SColor.floatGetI(0, 255, 255);
+//    private static float colder = SColor.floatGetI(170, 255, 255);
+//    private static float cold = SColor.floatGetI(0, 229, 133);
+//    private static float warm = SColor.floatGetI(255, 255, 100);
+//    private static float warmer = SColor.floatGetI(255, 100, 0);
+//    private static float warmest = SColor.floatGetI(241, 12, 0);
+//
+//    // Moisture map colors
+//    private static float dryest = SColor.floatGetI(255, 139, 17);
+//    private static float dryer = SColor.floatGetI(245, 245, 23);
+//    private static float dry = SColor.floatGetI(80, 255, 0);
+//    private static float wet = SColor.floatGetI(85, 255, 255);
+//    private static float wetter = SColor.floatGetI(20, 70, 255);
+//    private static float wettest = SColor.floatGetI(0, 0, 100);
 
     private static float[] biomeColors = {
             desert,
@@ -183,22 +155,24 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             ice,
             beach,
             rocky,
-            foamColor//SColor.floatGetI(255, 40, 80)
-    }, biomeDarkColors = {
-            darkDesert,
-            darkSavanna,
-            darkTropicalRainforest,
-            darkGrassland,
-            darkWoodland,
-            darkSeasonalForest,
-            darkTemperateRainforest,
-            darkBorealForest,
-            darkTundra,
-            darkIce,
-            darkBeach,
-            darkRocky,
-            darkFoamColor//SColor.floatGetI(225, 10, 20)
-    };
+            foamColor
+    }
+//    , biomeDarkColors = {
+//            darkDesert,
+//            darkSavanna,
+//            darkTropicalRainforest,
+//            darkGrassland,
+//            darkWoodland,
+//            darkSeasonalForest,
+//            darkTemperateRainforest,
+//            darkBorealForest,
+//            darkTundra,
+//            darkIce,
+//            darkBeach,
+//            darkRocky,
+//            darkFoamColor
+//    }
+    ;
 
     protected final static float[] BIOME_TABLE = {
         //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST

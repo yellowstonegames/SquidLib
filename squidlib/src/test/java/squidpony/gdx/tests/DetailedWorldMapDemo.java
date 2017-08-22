@@ -52,7 +52,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private final double[][] shadingData = new double[width][height];
     private final int[][]
             heatCodeData = new int[width][height],
-            //moistureCodeData = new int[width][height],
+            moistureCodeData = new int[width][height],
             biomeUpperCodeData = new int[width][height],
             biomeLowerCodeData = new int[width][height];
     private Noise.Noise4D cloudNoise, cloudNoise2;
@@ -212,7 +212,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
 
     protected void makeBiomes() {
-        final WorldMapGenerator.SphereMap world = this.world;
+        final WorldMapGenerator world = this.world;
         final int[][] heightCodeData = world.heightCodeData;
         final double[][] heatData = world.heatData, moistureData = world.moistureData, heightData = world.heightData;
         int hc, mc, heightCode;
@@ -255,7 +255,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 }
 
                 heatCodeData[x][y] = hc;
-                //moistureCodeData[x][y] = mc;
+                moistureCodeData[x][y] = mc;
                 biomeUpperCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
 
                 if (moist >= (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)) {
