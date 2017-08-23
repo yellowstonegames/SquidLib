@@ -67,16 +67,17 @@ public abstract class PanelEffect extends TemporalAction{
          * subclasses) to the constructor or change this array directly. The float items assigned to this should be the
          * result of calling {@link Color#toFloatBits()} or possibly the result of mixing multiple existing floats with
          * {@link SColor#lerpFloatColors(float, float, float)}; other floats that can be directly used by libGDX, that
-         * is, packed as ABGR floats (usually the docs will mention this), can also be used.
+         * is, packed as ABGR floats (usually the docs will call this a packed float), can also be used.
          */
         public float[] colors = {
-                SColor.INTERNATIONAL_ORANGE.toFloatBits(),
-                SColor.FLORAL_LEAF.toFloatBits(),
-                SColor.LEMON.toFloatBits(),
-                SColor.LEMON_CHIFFON.toFloatBits(),
-                SColor.floatGet(0xFF6600EE),  // SColor.SAFETY_ORANGE
-                SColor.floatGet(0x595652DD),  // SColor.DB_SOOT
-                SColor.floatGet(0x59565299)}; // SColor.DB_SOOT
+                SColor.floatGet(0xFF4F00FF), // SColor.INTERNATIONAL_ORANGE
+                SColor.floatGet(0xFFB94EFF), // SColor.FLORAL_LEAF
+                SColor.floatGet(0xFDE910FF), // SColor.LEMON
+                SColor.floatGet(0xFFFACDFF), // SColor.LEMON_CHIFFON
+                SColor.floatGet(0xFF6600EE), // SColor.SAFETY_ORANGE
+                SColor.floatGet(0x595652DD), // SColor.DB_SOOT
+                SColor.floatGet(0x59565299)  // SColor.DB_SOOT
+        };
         /**
          * Used internally to determine how the explosion should spread; derived from {@link #validCells}.
          */
@@ -182,6 +183,78 @@ public abstract class PanelEffect extends TemporalAction{
             System.arraycopy(coloring, 0, colors, 0, coloring.length);
         }
         /**
+         * Constructs an ExplosionEffect with explicit settings for most fields; this constructor allows the case where
+         * an explosion is directed in a cone or sector shape. It will center the sector on {@code angle} (in degrees)
+         * and will cover an amount of the circular area (in degrees) equal to {@code span}.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param angle the angle, in degrees, that will be the center of the sector-shaped effect
+         * @param span the span, in degrees, of the full arc at the end of the sector-shaped effect
+         */
+        public ExplosionEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span)
+        {
+            super(targeting, duration, valid);
+            this.center = center;
+            this.radius = radius;
+            resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);
+            validCells.writeDoublesInto(resMap, 0.0);
+            lightMap = new double[validCells.width][validCells.height];
+            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius + 0.5, Radius.CIRCLE, angle, span);
+            validCells.not().writeDoublesInto(lightMap, 0.0);
+            validCells.not();
+            affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);
+        }
+
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using fiery/smoke colors; this constructor allows
+         * the case where an explosion is directed in a cone or sector shape. It will center the sector on {@code angle}
+         * (in degrees) and will cover an amount of the circular area (in degrees) equal to {@code span}.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param angle the angle, in degrees, that will be the center of the sector-shaped effect
+         * @param span the span, in degrees, of the full arc at the end of the sector-shaped effect
+         * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here
+         */
+        public ExplosionEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span, List<? extends Color> coloring)
+        {
+            this(targeting, duration, valid, center, radius, angle, span);
+            if(colors.length != coloring.size())
+                colors = new float[coloring.size()];
+            for (int i = 0; i < colors.length; i++) {
+                colors[i] = coloring.get(i).toFloatBits();
+            }
+        }
+
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using fiery/smoke colors; this constructor allows
+         * the case where an explosion is directed in a cone or sector shape. It will center the sector on {@code angle}
+         * (in degrees) and will cover an amount of the circular area (in degrees) equal to {@code span}.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param angle the angle, in degrees, that will be the center of the sector-shaped effect
+         * @param span the span, in degrees, of the full arc at the end of the sector-shaped effect
+         * @param coloring an array of colors as packed floats that will replace the default fire/smoke colors here
+         */
+        public ExplosionEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span, float[] coloring)
+        {
+            this(targeting, duration, valid, center, radius, angle, span);
+            if(coloring == null) return;
+            if(colors.length != coloring.length)
+                colors = new float[coloring.length];
+            System.arraycopy(coloring, 0, colors, 0, coloring.length);
+        }
+        /**
          * Called each frame.
          *
          * @param percent The percentage of completion for this action, growing from 0 to 1 over the duration. If
@@ -212,17 +285,52 @@ public abstract class PanelEffect extends TemporalAction{
     }
     public static class GibberishEffect extends ExplosionEffect
     {
+        /**
+         * This char array contains all characters that can be used in the foreground of this effect. You can assign
+         * another char array, such as if you take {@link squidpony.StringKit#PUNCTUATION} and call
+         * {@link String#toCharArray()} on it, to this at any time between calls to {@link #update(float)} (which is
+         * usually called indirectly via Stage's {@link com.badlogic.gdx.scenes.scene2d.Stage#act()} method if this has
+         * been added to an Actor on that Stage). These chars are pseudo-randomly selected approximately once every
+         * eighth of a second, and may change sooner if the effect expands more quickly than that.
+         */
         public char[] choices = "`~!@#$%^&*()-_=+\\|][}{'\";:/?.>,<".toCharArray();
-        public GibberishEffect(IPackedColorPanel targeting, Coord center, int radius)
+
+        /**
+         * Sets the colors this GibberishEffect uses to go from through various shades of gray-purple before fading.
+         * Meant for electrical bursts, this will affect character foregrounds in a GibberishEffect. This should look
+         * like sparks in GibberishEffect if the chars in {@link #choices} are selected in a way that fits that theme.
+         */
+        public void useElectricColors()
         {
-            super(targeting, 1f, center, radius);
-            colors[0] = SColor.PERIWINKLE.toFloatBits();
-            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
-            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
-            colors[3] = SColor.LILAC.toFloatBits();
+            colors[0] = SColor.floatGet(0xCCCCFFEE); // SColor.PERIWINKLE
+            colors[1] = SColor.floatGet(0xBF00FFFF); // SColor.ELECTRIC_PURPLE
+            colors[2] = SColor.floatGet(0xCC99CCFF); // SColor.MEDIUM_LAVENDER_MAGENTA
+            colors[3] = SColor.floatGet(0xC8A2C8EE); // SColor.LILAC
             colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
             colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
             colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
+        }
+
+        /**
+         * Sets the colors this GibberishEffect uses to go from orange, to yellow, to orange, to dark gray, then fade.
+         * Meant for fiery explosions with smoke, this will affect character foregrounds in a GibberishEffect.
+         * This may look more like a fiery blast if used with {@link ExplosionEffect}.
+         */
+        public void useFieryColors()
+        {
+            colors[0] = SColor.floatGet(0xFF4F00FF); // SColor.INTERNATIONAL_ORANGE
+            colors[1] = SColor.floatGet(0xFFB94EFF); // SColor.FLORAL_LEAF
+            colors[2] = SColor.floatGet(0xFDE910FF); // SColor.LEMON
+            colors[3] = SColor.floatGet(0xFFFACDFF); // SColor.LEMON_CHIFFON
+            colors[4] = SColor.floatGet(0xFF6600EE); // SColor.SAFETY_ORANGE
+            colors[5] = SColor.floatGet(0x595652DD); // SColor.DB_SOOT
+            colors[6] = SColor.floatGet(0x59565299); // SColor.DB_SOOT
+
+        }
+        public GibberishEffect(IPackedColorPanel targeting, Coord center, int radius)
+        {
+            super(targeting, 1f, center, radius);
+            useElectricColors();
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
@@ -234,13 +342,7 @@ public abstract class PanelEffect extends TemporalAction{
          */
         public GibberishEffect(IPackedColorPanel targeting, float duration, Coord center, int radius) {
             super(targeting, duration, center, radius);
-            colors[0] = SColor.PERIWINKLE.toFloatBits();
-            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
-            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
-            colors[3] = SColor.LILAC.toFloatBits();
-            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
-            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
-            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
+            useElectricColors();
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
@@ -253,13 +355,7 @@ public abstract class PanelEffect extends TemporalAction{
         public GibberishEffect(IPackedColorPanel targeting, float duration, Coord center, int radius, char[] choices) {
             super(targeting, duration, center, radius);
             this.choices = choices;
-            colors[0] = SColor.PERIWINKLE.toFloatBits();
-            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
-            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
-            colors[3] = SColor.LILAC.toFloatBits();
-            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
-            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
-            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
+            useElectricColors();
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields.
@@ -272,13 +368,7 @@ public abstract class PanelEffect extends TemporalAction{
         public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius)
         {
             super(targeting, duration, valid, center, radius);
-            colors[0] = SColor.PERIWINKLE.toFloatBits();
-            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
-            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
-            colors[3] = SColor.LILAC.toFloatBits();
-            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
-            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
-            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
+            useElectricColors();
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields.
@@ -292,24 +382,18 @@ public abstract class PanelEffect extends TemporalAction{
         {
             super(targeting, duration, valid, center, radius);
             this.choices = choices;
-            colors[0] = SColor.PERIWINKLE.toFloatBits();
-            colors[1] = SColor.ELECTRIC_PURPLE.toFloatBits();
-            colors[2] = SColor.MEDIUM_LAVENDER_MAGENTA.toFloatBits();
-            colors[3] = SColor.LILAC.toFloatBits();
-            colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
-            colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
-            colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
-    }
+            useElectricColors();
+        }
 
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
-         * objects that it will use to color the explosion instead of using fiery/smoke colors.
+         * objects that it will use to color the explosion instead of using purple spark colors.
          * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
-         * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here
+         * @param coloring a List of Color or subclasses thereof that will replace the default purple spark colors here
          */
         public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring)
         {
@@ -317,13 +401,13 @@ public abstract class PanelEffect extends TemporalAction{
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
-         * objects that it will use to color the explosion instead of using fiery/smoke colors.
+         * objects that it will use to color the explosion instead of using purple spark colors.
          * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
-         * @param coloring a List of Color or subclasses thereof that will replace the default fire/smoke colors here
+         * @param coloring a List of Color or subclasses thereof that will replace the default purple spark colors here
          */
         public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring, char[] choices)
         {
@@ -333,13 +417,13 @@ public abstract class PanelEffect extends TemporalAction{
 
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
-         * objects that it will use to color the explosion instead of using fiery/smoke colors.
+         * objects that it will use to color the explosion instead of using purple spark colors.
          * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
-         * @param coloring an array of colors as packed floats that will replace the default fire/smoke colors here
+         * @param coloring an array of colors as packed floats that will replace the default purple spark colors here
          */
         public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, float[] coloring)
         {
@@ -347,17 +431,111 @@ public abstract class PanelEffect extends TemporalAction{
         }
         /**
          * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
-         * objects that it will use to color the explosion instead of using fiery/smoke colors.
+         * objects that it will use to color the explosion instead of using purple spark colors.
          * @param targeting the IPackedColorPanel to affect
          * @param duration the duration of this PanelEffect in seconds, as a float
          * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
          * @param center the center of the explosion
          * @param radius the radius of the explosion, in cells
-         * @param coloring an array of colors as packed floats that will replace the default fire/smoke colors here
+         * @param coloring an array of colors as packed floats that will replace the default purple spark colors here
          */
         public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, float[] coloring, char[] choices)
         {
             super(targeting, duration, valid, center, radius, coloring);
+            this.choices = choices;
+        }
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields; this constructor allows
+         * the case where an explosion is directed in a cone or sector shape. It will center the sector on {@code angle}
+         * (in degrees) and will cover an amount of the circular area (in degrees) equal to {@code span}.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param angle the angle, in degrees, that will be the center of the sector-shaped effect
+         * @param span the span, in degrees, of the full arc at the end of the sector-shaped effect
+         */
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span, char[] choices)
+        {
+            super(targeting, duration, valid, center, radius, angle, span);
+            this.choices = choices;
+            useElectricColors();
+        }
+
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+         * the case where an explosion is directed in a cone or sector shape. It will center the sector on {@code angle}
+         * (in degrees) and will cover an amount of the circular area (in degrees) equal to {@code span}.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param angle the angle, in degrees, that will be the center of the sector-shaped effect
+         * @param span the span, in degrees, of the full arc at the end of the sector-shaped effect
+         * @param coloring a List of Color or subclasses thereof that will replace the default purple spark colors here
+         */
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span, List<? extends Color> coloring)
+        {
+            super(targeting, duration, valid, center, radius, angle, span, coloring);
+        }
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+         * the case where an explosion is directed in a cone or sector shape. It will center the sector on {@code angle}
+         * (in degrees) and will cover an amount of the circular area (in degrees) equal to {@code span}.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param angle the angle, in degrees, that will be the center of the sector-shaped effect
+         * @param span the span, in degrees, of the full arc at the end of the sector-shaped effect
+         * @param coloring a List of Color or subclasses thereof that will replace the default purple spark colors here
+         */
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span, List<? extends Color> coloring, char[] choices)
+        {
+            super(targeting, duration, valid, center, radius, angle, span, coloring);
+            this.choices = choices;
+        }
+
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+         * the case where an explosion is directed in a cone or sector shape. It will center the sector on {@code angle}
+         * (in degrees) and will cover an amount of the circular area (in degrees) equal to {@code span}.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param angle the angle, in degrees, that will be the center of the sector-shaped effect
+         * @param span the span, in degrees, of the full arc at the end of the sector-shaped effect
+         * @param coloring an array of colors as packed floats that will replace the default purple spark colors here
+         */
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span,  float[] coloring)
+        {
+            super(targeting, duration, valid, center, radius, angle, span, coloring);
+        }
+        /**
+         * Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+         * objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+         * the case where an explosion is directed in a cone or sector shape. It will center the sector on {@code angle}
+         * (in degrees) and will cover an amount of the circular area (in degrees) equal to {@code span}.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param center the center of the explosion
+         * @param radius the radius of the explosion, in cells
+         * @param angle the angle, in degrees, that will be the center of the sector-shaped effect
+         * @param span the span, in degrees, of the full arc at the end of the sector-shaped effect
+         * @param coloring an array of colors as packed floats that will replace the default purple spark colors here
+         */
+        public GibberishEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span, float[] coloring, char[] choices)
+        {
+            super(targeting, duration, valid, center, radius, angle, span, coloring);
             this.choices = choices;
         }
         /**
