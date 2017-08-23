@@ -120,6 +120,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private Stage stage, messageStage;
     private int framesWithoutAnimation = 0;
     private Coord cursor;
+    private Coord playerPos;
     private List<Coord> toCursor;
     private List<Coord> awaitedMoves;
     private String lang;
@@ -289,12 +290,12 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // it's more efficient to get random floors from a set containing only tightly-stored floor positions.
         GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
-        Coord pl = placement.singleRandom(rng);
-        display.setGridOffsetX(pl.x - (width >> 1));
-        display.setGridOffsetY(pl.y - (height >> 1));
+        playerPos = placement.singleRandom(rng);
+        display.setGridOffsetX(playerPos.x - (width >> 1));
+        display.setGridOffsetY(playerPos.y - (height >> 1));
 
         fg = display.getForegroundLayer();
-        placement.remove(pl);
+        placement.remove(playerPos);
         int numMonsters = 200;
         monsters = new SpatialMap<>(numMonsters);
         for (int i = 0; i < numMonsters; i++) {
@@ -307,13 +308,13 @@ public class EverythingDemo extends ApplicationAdapter {
         fov = new FOV(FOV.RIPPLE_TIGHT);
         res = DungeonUtility.generateResistances(decoDungeon);
         floors = new GreasedRegion(res, 0.99);
-        fovmap = fov.calculateFOV(res, pl.x, pl.y, 8, Radius.SQUARE);
+        fovmap = fov.calculateFOV(res, playerPos.x, playerPos.y, 8, Radius.SQUARE);
         getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
-        getToPlayer.setGoal(pl);
+        getToPlayer.setGoal(playerPos);
         getToPlayer.scan(null);
 
-        player = display.animateActor(pl.x, pl.y, '@',
+        player = display.animateActor(playerPos.x, playerPos.y, '@',
                 fgCenter.loopingGradient(SColor.CAPE_JASMINE, SColor.HAN_PURPLE, 45), 1.5f, false);
 //                fgCenter.filter(display.getPalette().get(30)));
         cursor = Coord.get(-1, -1);
@@ -327,7 +328,7 @@ public class EverythingDemo extends ApplicationAdapter {
         playerToCursor = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.EUCLIDEAN);
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
-        playerToCursor.setGoal(pl);
+        playerToCursor.setGoal(playerPos);
         playerToCursor.scan(null);
         bgColor = SColor.DARK_SLATE_GRAY;
         colors = MapUtility.generateDefaultColors(decoDungeon);
@@ -360,7 +361,9 @@ public class EverythingDemo extends ApplicationAdapter {
                     case 'w':
                     case 'K':
                     case 'W': {
-                        move(0, -1);
+                        toCursor.clear();
+                        //-1 is up on the screen
+                        awaitedMoves.add(playerPos.translate(0, -1));
                         break;
                     }
                     case SquidInput.DOWN_ARROW:
@@ -368,7 +371,9 @@ public class EverythingDemo extends ApplicationAdapter {
                     case 's':
                     case 'J':
                     case 'S': {
-                        move(0, 1);
+                        toCursor.clear();
+                        //1 is down on the screen
+                        awaitedMoves.add(playerPos.translate(0, 1));
                         break;
                     }
                     case SquidInput.LEFT_ARROW:
@@ -376,7 +381,8 @@ public class EverythingDemo extends ApplicationAdapter {
                     case 'a':
                     case 'H':
                     case 'A': {
-                        move(-1, 0);
+                        toCursor.clear();
+                        awaitedMoves.add(playerPos.translate(-1, 0));
                         break;
                     }
                     case SquidInput.RIGHT_ARROW:
@@ -384,32 +390,37 @@ public class EverythingDemo extends ApplicationAdapter {
                     case 'd':
                     case 'L':
                     case 'D': {
-                        move(1, 0);
+                        toCursor.clear();
+                        awaitedMoves.add(playerPos.translate(1, 0));
                         break;
                     }
 
                     case SquidInput.UP_LEFT_ARROW:
                     case 'y':
                     case 'Y': {
-                        move(-1, -1);
+                        toCursor.clear();
+                        awaitedMoves.add(playerPos.translate(-1, -1));
                         break;
                     }
                     case SquidInput.UP_RIGHT_ARROW:
                     case 'u':
                     case 'U': {
-                        move(1, -1);
+                        toCursor.clear();
+                        awaitedMoves.add(playerPos.translate(1, -1));
                         break;
                     }
                     case SquidInput.DOWN_RIGHT_ARROW:
                     case 'n':
                     case 'N': {
-                        move(1, 1);
+                        toCursor.clear();
+                        awaitedMoves.add(playerPos.translate(1, 1));
                         break;
                     }
                     case SquidInput.DOWN_LEFT_ARROW:
                     case 'b':
                     case 'B': {
-                        move(-1, 1);
+                        toCursor.clear();
+                        awaitedMoves.add(playerPos.translate(-1, 1));
                         break;
                     }
                     case '?': {
@@ -544,7 +555,7 @@ public class EverythingDemo extends ApplicationAdapter {
      * @param xmod
      * @param ymod
      */
-    private void move(int xmod, int ymod) {
+    private void move(final int xmod, final int ymod) {
         clearHelp();
 
         if (health <= 0) return;
@@ -582,6 +593,7 @@ public class EverythingDemo extends ApplicationAdapter {
                                 midY > totalHeight - (height + 1) * 0.5f || midY < (height + 1) * 0.5f ? 0 : (-ymod * cellHeight),
                                 0);
                 display.slide(player, newX, newY);
+                playerPos = playerPos.translate(xmod, ymod);
                 display.addAction(
                         new TemporalAction(display.getAnimationDuration()) {
                             @Override
@@ -639,6 +651,8 @@ public class EverythingDemo extends ApplicationAdapter {
                     messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
+                    display.addAction(new PanelEffect.ProjectileEffect(display.getForegroundLayer(), 0.5f,
+                            floors, pos, playerArray[0], '!', SColor.CW_BRIGHT_RED));
                 }
                 getToPlayer.clearGoals();
                 nextMovePositions = getToPlayer.findPath(1, monplaces, null, pos, playerArray);
@@ -873,7 +887,8 @@ public class EverythingDemo extends ApplicationAdapter {
                         case WAIT:
                         case MONSTER_ANIM:
                             Coord m = awaitedMoves.remove(0);
-                            toCursor.remove(0);
+                            if(!toCursor.isEmpty())
+                                toCursor.remove(0);
                             move(m.x - player.gridX, m.y - player.gridY);
                             // this only happens if we just removed the last Coord from awaitedMoves, and it's only then that we need to
                             // re-calculate the distances from all cells to the player. We don't need to calculate this information on
