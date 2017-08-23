@@ -79,13 +79,9 @@ public abstract class PanelEffect extends TemporalAction{
                 SColor.floatGet(0x59565299)  // SColor.DB_SOOT
         };
         /**
-         * Used internally to determine how the explosion should spread; derived from {@link #validCells}.
-         */
-        public double[][] resMap,
-        /**
          * The internal representation of how affected each cell is by the explosion, based on proximity to center.
          */
-        lightMap;
+        public double[][] lightMap;
         /**
          * The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to
          * show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as
@@ -117,7 +113,7 @@ public abstract class PanelEffect extends TemporalAction{
             super(targeting, duration);
             this.center = center;
             this.radius = radius;
-            resMap = new double[validCells.width][validCells.height];
+            double[][] resMap = new double[validCells.width][validCells.height];
             lightMap = new double[validCells.width][validCells.height];
             FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius);
             affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);
@@ -135,7 +131,7 @@ public abstract class PanelEffect extends TemporalAction{
             super(targeting, duration, valid);
             this.center = center;
             this.radius = radius;
-            resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);
+            double[][] resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);
             validCells.writeDoublesInto(resMap, 0.0);
             lightMap = new double[validCells.width][validCells.height];
             FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius + 0.5);
@@ -199,7 +195,7 @@ public abstract class PanelEffect extends TemporalAction{
             super(targeting, duration, valid);
             this.center = center;
             this.radius = radius;
-            resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);
+            double[][] resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);
             validCells.writeDoublesInto(resMap, 0.0);
             lightMap = new double[validCells.width][validCells.height];
             FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius + 0.5, Radius.CIRCLE, angle, span);
@@ -569,4 +565,135 @@ public abstract class PanelEffect extends TemporalAction{
         }
 
     }
+    @Beta
+    public static class ProjectileEffect extends PanelEffect
+    {
+        /**
+         * Normally you should set this in the constructor, and not change it later.
+         */
+        public Coord startPoint;
+        /**
+         * Normally you should set this in the constructor, and not change it later.
+         */
+        public Coord endPoint;
+
+        /**
+         * The char to show at each stage of the projectile's path; defaults to a Unicode bullet symbol, '·'.
+         */
+        public char shown = '·';
+        /**
+         * The color used for the projectile as a packed float.
+         */
+        public float color = Color.WHITE.toFloatBits();
+        /**
+         * The raw list of Coords that might be affected by the projectile, or are on its (potential) path. You can edit
+         * this if you need to, but it isn't recommended; because it is an array you would need to assign a new Coord
+         * array if the length changes.
+         */
+        public Coord[] affected;
+        /**
+         * Constructs a ProjectileEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel. The duration will be 1 second.
+         * @param targeting the IPackedColorPanel to affect
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint the point to try to hit with the projectile; this should always succeed with no obstructions
+         */
+        public ProjectileEffect(IPackedColorPanel targeting, Coord startPoint, Coord endPoint)
+        {
+            this(targeting, 1f, startPoint, endPoint);
+        }
+        /**
+         * Constructs a ProjectileEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint the point to try to hit with the projectile; this should always succeed with no obstructions
+         */
+        public ProjectileEffect(IPackedColorPanel targeting, float duration, Coord startPoint, Coord endPoint)
+        {
+            super(targeting, duration);
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+            affected = Bresenham.line2D_(startPoint.x,  startPoint.y, endPoint.x, endPoint.y);
+        }
+        /**
+         * Constructs a ProjectileEffect with explicit settings for most fields.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint the point to try to hit with the projectile; this may not be reached if the path crosses a cell not in valid
+         */
+        public ProjectileEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord startPoint, Coord endPoint)
+        {
+            super(targeting, duration, valid);
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+            affected = Bresenham.line2D_(startPoint.x,  startPoint.y, endPoint.x, endPoint.y);
+            for (int i = 0; i < affected.length; i++) {
+                if(!validCells.contains(affected[i]))
+                    affected[i] = null;
+            }
+        }
+
+        /**
+         * Constructs a ProjectileEffect with explicit settings for most fields but also an alternate Color
+         * object for the projectile instead of the default white color.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint the point to try to hit with the projectile; this may not be reached if the path crosses a cell not in valid
+         * @param shown the char to show at each step of the projectile's path as it advances
+         * @param coloring a Color or subclass thereof that will replace the default white color here
+         */
+        public ProjectileEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord startPoint, Coord endPoint, char shown, Color coloring)
+        {
+            this(targeting, duration, valid, startPoint, endPoint);
+            this.shown = shown;
+            if(coloring != null)
+                color = coloring.toFloatBits();
+        }
+
+        /**
+         * Constructs a ProjectileEffect with explicit settings for most fields but also an alternate Color
+         * object for the projectile instead of the default white color.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint the point to try to hit with the projectile; this may not be reached if the path crosses a cell not in valid
+         * @param shown the char to show at each step of the projectile's path as it advances
+         * @param coloring an array of colors as packed floats that will replace the default white color here
+         */
+        public ProjectileEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord startPoint, Coord endPoint, char shown, float coloring)
+        {
+            this(targeting, duration, valid, startPoint, endPoint);
+            this.shown = shown;
+            color = coloring;
+        }
+        /**
+         * Called each frame.
+         *
+         * @param percent The percentage of completion for this action, growing from 0 to 1 over the duration. If
+         *                {@link #setReverse(boolean) reversed}, this will shrink from 1 to 0.
+         */
+        @Override
+        protected void update(float percent) {
+            int len = affected.length, index = (int)((len - 1) * percent);
+            if(index < 0 || index >= len) return;
+            Coord c = affected[index];
+            if(c != null)
+            {
+                target.put(c.x, c.y, shown, color);
+            }
+            else {
+                for (int i = index + 1; i < len; i++) {
+                    affected[i] = null;
+                }
+            }
+        }
+    }
+
 }
