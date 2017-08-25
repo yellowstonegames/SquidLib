@@ -1,14 +1,21 @@
 package squidpony.examples;
 
+import org.junit.Test;
+import squidpony.Maker;
 import squidpony.StringKit;
 
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Tommy Ettinger on 8/9/2017.
  */
 public class StringKitTest {
-    public static void main(String... args) {
+    //@Test
+    public void testWrapping()
+    {
         String[] ad = new String[]{
                 // I needed some text that would make sense with unorthodox punctuation.
                 // Naturally, Always Sunny in Philadelphia came to mind, with Charlie Day's
@@ -32,6 +39,68 @@ public class StringKitTest {
         System.out.println("0123456789ABCDEF0123456789ABCDEF");
         for(String line : lines) System.out.println(line);
         System.out.println("Done.");
+    }
+    @Test
+    public void testHex()
+    {
+        assertTrue(StringKit.intFromHex("FF") == 255);
+        assertTrue(StringKit.longFromHex("FF") == 255L);
+        assertTrue(StringKit.intFromHex("2") == 2);
+        assertTrue(StringKit.longFromHex("2") == 2L);
+        assertTrue(StringKit.intFromHex("FFFFFFFF") == -1);
+        assertTrue(StringKit.longFromHex("FFFFFFFFFFFFFFFF") == -1L);
+
+        assertTrue(StringKit.intFromHex("FF".toCharArray(), 0, 2) == 255);
+        assertTrue(StringKit.longFromHex("FF".toCharArray(), 0, 2) == 255L);
+        assertTrue(StringKit.intFromHex("2".toCharArray(), 0, 1) == 2);
+        assertTrue(StringKit.longFromHex("2".toCharArray(), 0, 1) == 2L);
+        assertTrue(StringKit.intFromHex("FFFFFFFF".toCharArray(), 0, 8) == -1);
+        assertTrue(StringKit.longFromHex("FFFFFFFFFFFFFFFF".toCharArray(), 0, 16) == -1L);
+
+        // in this next section, the '0' is disregarded because it is after the specified end
+        assertTrue(StringKit.intFromHex("FF0".toCharArray(), 0, 2) == 255);
+        assertTrue(StringKit.longFromHex("FF0".toCharArray(), 0, 2) == 255L);
+        assertTrue(StringKit.intFromHex("20".toCharArray(), 0, 1) == 2);
+        assertTrue(StringKit.longFromHex("20".toCharArray(), 0, 1) == 2L);
+        assertTrue(StringKit.intFromHex("FFFFFFFF0".toCharArray(), 0, 8) == -1);
+        assertTrue(StringKit.longFromHex("FFFFFFFFFFFFFFFF0".toCharArray(), 0, 16) == -1L);
+    }
+    @Test
+    public void testDec()
+    {
+        assertTrue(StringKit.intFromDec("255") == 255);
+        assertTrue(StringKit.longFromDec("255") == 255L);
+        assertTrue(StringKit.intFromDec("2") == 2);
+        assertTrue(StringKit.longFromDec("2") == 2L);
+        assertTrue(StringKit.intFromDec("-42") == -42);
+        assertTrue(StringKit.longFromDec("-42") == -42L);
+
+        // in this next section, the '0' is disregarded because it is after the specified end
+        assertTrue(StringKit.intFromDec("2550", 0, 3) == 255);
+        assertTrue(StringKit.longFromDec("2550", 0, 3) == 255L);
+        assertTrue(StringKit.intFromDec("20", 0, 1) == 2);
+        assertTrue(StringKit.longFromDec("20", 0, 1) == 2L);
+        assertTrue(StringKit.intFromDec("-420", 0, 3) == -42);
+        assertTrue(StringKit.longFromDec("-420", 0, 3) == -42L);
+    }
+
+    @Test
+    public void testJoin()
+    {
+        assertEquals(StringKit.join(",", 1, 2, 3), "1,2,3");
+        assertEquals(StringKit.join(",", 1L, 2L, 3L), "1,2,3");
+        assertEquals(StringKit.join(",", "a", "b", "c"), "a,b,c");
+        assertEquals(StringKit.join("", 1, 2, 3), "123");
+        assertEquals(StringKit.join("", 1L, 2L, 3L), "123");
+        assertEquals(StringKit.join("", "a", "b", "c"), "abc");
+        assertEquals(StringKit.join(":)", 1, 2, 3), "1:)2:)3");
+        assertEquals(StringKit.join(":)", 1L, 2L, 3L), "1:)2:)3");
+        assertEquals(StringKit.join(":)", "a", "b", "c"), "a:)b:)c");
+        assertEquals(StringKit.join(",", Maker.makeArrange("a", "b", "c")), "a,b,c");
+        assertEquals(StringKit.join("", Maker.makeArrange("a", "b", "c")), "abc");
+        assertEquals(StringKit.join(":)", Maker.makeArrange("a", "b", "c")), "a:)b:)c");
 
     }
+
+
 }

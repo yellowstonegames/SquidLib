@@ -178,6 +178,46 @@ public class StringKit {
     }
 
     /**
+     * Joins the items in {@code elements} by calling their toString method on them (or just using the String "null" for
+     * null items), and separating each item with {@code delimiter}. Unlike other join methods in this class, this does
+     * not take a vararg of Object items, since that would cause confusion with the overloads that take one object, such
+     * as {@link #join(CharSequence, Iterable)}; it takes a non-vararg Object array instead.
+     * @param delimiter the String or other CharSequence to separate items in elements with
+     * @param elements the Object items to stringify and join into one String; if the array is null or empty, this
+     *                 returns an empty String, and if items are null, they are shown as "null"
+     * @return the String representations of the items in elements, separated by delimiter and put in one String
+     */
+    public static String join(CharSequence delimiter, Object[] elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(elements[0]);
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]);
+        }
+        return sb.toString();
+    }
+    /**
+     * Joins the items in {@code elements} by calling their toString method on them (or just using the String "null" for
+     * null items), and separating each item with {@code delimiter}. This can take any Iterable of any type for its
+     * elements parameter.
+     * @param delimiter the String or other CharSequence to separate items in elements with
+     * @param elements the Object items to stringify and join into one String; if Iterable is null or empty, this
+     *                 returns an empty String, and if items are null, they are shown as "null"
+     * @return the String representations of the items in elements, separated by delimiter and put in one String
+     */
+    public static String join(CharSequence delimiter, Iterable<?> elements) {
+        if (elements == null) return "";
+        Iterator<?> it = elements.iterator();
+        if(!it.hasNext()) return "";
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(it.next());
+        while(it.hasNext()) {
+            sb.append(delimiter).append(it.next());
+        }
+        return sb.toString();
+    }
+
+    /**
      * Joins the boolean array {@code elements} without delimiters into a String, using "1" for true and "0" for false.
      * @param elements
      * @return
@@ -482,12 +522,10 @@ public class StringKit {
         if (c == '-') {
             len = -1;
             h = 0;
-            ++end;
             lim = 17;
         } else if (c == '+') {
             len = 1;
             h = 0;
-            ++end;
             lim = 17;
         } else if (c > 102 || (h = hexCodes[c]) < 0)
             return 0;
@@ -495,8 +533,63 @@ public class StringKit {
             len = 1;
         }
         long data = h;
-        for (int i = start; i < end && i < start + lim; i++) {
+        for (int i = start + 1; i < end && i < start + lim; i++) {
             if ((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0)
+                return data * len;
+            data <<= 4;
+            data |= h;
+        }
+        return data * len;
+    }
+    /**
+     * Reads in a char[] containing only hex digits (only 0-9, a-f, and A-F) with an optional sign at the start and
+     * returns the long they represent, reading at most 16 characters (17 if there is a sign) and returning the result
+     * if valid, or 0 if nothing could be read. The leading sign can be '+' or '-' if present. This can also represent
+     * negative numbers as they are printed by such methods as String.format given a %x in the formatting string, or
+     * this class' {@link #hex(long)} method; that is, if the first digit of a 16-char (or longer) char[] is a hex
+     * digit 8 or higher, then the whole number represents a negative number, using two's complement and so on. This
+     * means "FFFFFFFFFFFFFFFF" would return the long -1L when passed to this, though you could also simply use "-1 ".
+     * If you use both '-' at the start and have the most significant digit as 8 or higher, such as with
+     * "-FFFFFFFFFFFFFFFF", then both indicate a negative number, but the digits will be processed first (producing -1)
+     * and then the whole thing will be multiplied by -1 to flip the sign again (returning 1).
+     * <br>
+     * Should be fairly close to Java 8's Long.parseUnsignedLong method, which is an odd omission from earlier JDKs.
+     * This doesn't throw on invalid input, though, instead returning 0 if the first char is not a hex digit, or
+     * stopping the parse process early if a non-hex-digit char is read before end is reached. If the parse is stopped
+     * early, this behaves as you would expect for a number with less digits, and simply doesn't fill the larger places.
+     * @param cs a char array containing only hex digits with an optional sign (no 0x at the start)
+     * @param start the (inclusive) first character position in cs to read
+     * @param end the (exclusive) last character position in cs to read (this stops after 8 or 9 characters if end is too large, depending on sign)
+     * @return the long that cs represents
+     */
+    public static long longFromHex(final char[] cs, final int start, int end)
+    {
+        int len, h, lim = 16;
+        if(cs == null || start < 0 || end <=0 || end - start <= 0
+                || (len = cs.length) - start <= 0 || end > len)
+            return 0;
+        char c = cs[start];
+        if(c == '-')
+        {
+            len = -1;
+            h = 0;
+            lim = 17;
+        }
+        else if(c == '+')
+        {
+            len = 1;
+            h = 0;
+            lim = 17;
+        }
+        else if(c > 102 || (h = hexCodes[c]) < 0)
+            return 0;
+        else
+        {
+            len = 1;
+        }
+        int data = h;
+        for (int i = start + 1; i < end && i < start + lim; i++) {
+            if((c = cs[i]) > 102 || (h = hexCodes[c]) < 0)
                 return data * len;
             data <<= 4;
             data |= h;
@@ -559,14 +652,12 @@ public class StringKit {
         {
             len = -1;
             h = 0;
-            ++end;
             lim = 9;
         }
         else if(c == '+')
         {
             len = 1;
             h = 0;
-            ++end;
             lim = 9;
         }
         else if(c > 102 || (h = hexCodes[c]) < 0)
@@ -576,7 +667,7 @@ public class StringKit {
             len = 1;
         }
         int data = h;
-        for (int i = start; i < end && i < start + lim; i++) {
+        for (int i = start + 1; i < end && i < start + lim; i++) {
             if((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0)
                 return data * len;
             data <<= 4;
@@ -616,14 +707,12 @@ public class StringKit {
         {
             len = -1;
             h = 0;
-            ++end;
             lim = 9;
         }
         else if(c == '+')
         {
             len = 1;
             h = 0;
-            ++end;
             lim = 9;
         }
         else if(c > 102 || (h = hexCodes[c]) < 0)
@@ -633,7 +722,7 @@ public class StringKit {
             len = 1;
         }
         int data = h;
-        for (int i = start; i < end && i < start + lim; i++) {
+        for (int i = start + 1; i < end && i < start + lim; i++) {
             if((c = cs[i]) > 102 || (h = hexCodes[c]) < 0)
                 return data * len;
             data <<= 4;
@@ -690,18 +779,18 @@ public class StringKit {
         if(c == '-')
         {
             sign = -1L;
-            ++end;
             lim = 20;
+            h = 0;
         }
         else if(c == '+')
         {
-            ++end;
             lim = 20;
+            h = 0;
         }
         else if(c > 102 || (h = hexCodes[c]) < 0 || h > 9)
             return 0L;
-        long data = 0L;
-        for (int i = start; i < end && i < start + lim; i++) {
+        long data = h;
+        for (int i = start + 1; i < end && i < start + lim; i++) {
             if((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0 || h > 9)
                 return data * sign;
             data = data * 10 + h;
@@ -757,14 +846,14 @@ public class StringKit {
         if(c == '-')
         {
             len = -1;
-            ++end;
             lim = 11;
+            h = 0;
         }
         else if(c == '+')
         {
             len = 1;
-            ++end;
             lim = 11;
+            h = 0;
         }
         else if(c > 102 || (h = hexCodes[c]) < 0 || h > 9)
             return 0;
@@ -772,8 +861,8 @@ public class StringKit {
         {
             len = 1;
         }
-        int data = 0;
-        for (int i = start; i < end && i < start + lim; i++) {
+        int data = h;
+        for (int i = start + 1; i < end && i < start + lim; i++) {
             if((c = cs.charAt(i)) > 102 || (h = hexCodes[c]) < 0 || h > 9)
                 return data * len;
             data = data * 10 + h;
