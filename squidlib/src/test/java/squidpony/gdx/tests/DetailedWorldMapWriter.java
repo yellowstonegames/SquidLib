@@ -48,7 +48,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
-    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(1234567890L).removeAccents();
+    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(-1234567890L).removeAccents()
+            .mix(FakeLanguageGen.SIMPLISH, 0.6);
     private Pixmap pm;
     private Texture pt;
     private int counter = 0;
@@ -468,28 +469,29 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         batch.end();
         PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
         StringBuilder csv = new StringBuilder((width + 50) * height * 5);
-        csv.append("public static final int\n" +
-                "        DESERT                 = 0 ,\n" +
-                "        SAVANNA                = 1 ,\n" +
-                "        TROPICAL_RAINFOREST    = 2 ,\n" +
-                "        GRASSLAND              = 3 ,\n" +
-                "        WOODLAND               = 4 ,\n" +
-                "        SEASONAL_FOREST        = 5 ,\n" +
-                "        TEMPERATE_RAINFOREST   = 6 ,\n" +
-                "        BOREAL_FOREST          = 7 ,\n" +
-                "        TUDNRA                 = 8 ,\n" +
-                "        ICE                    = 9 ,\n" +
-                "        BEACH                  = 10,\n" +
-                "        ROCKY                  = 11,\n" +
-                "        RIVER                  = 12,\n" +
-                "        OCEAN                  = 13;\n\n" +
+        csv.append("public static final String[] BIOME_TABLE = {\n" +
+                "    //COLDEST //COLDER        //COLD            //HOT                  //HOTTER              //HOTTEST\n" +
+                "    \"Ice\",    \"Ice\",          \"Grassland\",      \"Desert\",              \"Desert\",             \"Desert\",             //DRYEST\n" +
+                "    \"Ice\",    \"Tundra\",       \"Grassland\",      \"Grassland\",           \"Desert\",             \"Desert\",             //DRYER\n" +
+                "    \"Ice\",    \"Tundra\",       \"Woodland\",       \"Woodland\",            \"Savanna\",            \"Desert\",             //DRY\n" +
+                "    \"Ice\",    \"Tundra\",       \"SeasonalForest\", \"SeasonalForest\",      \"Savanna\",            \"Savanna\",            //WET\n" +
+                "    \"Ice\",    \"Tundra\",       \"BorealForest\",   \"TemperateRainforest\", \"TropicalRainforest\", \"Savanna\",            //WETTER\n" +
+                "    \"Ice\",    \"BorealForest\", \"BorealForest\",   \"TemperateRainforest\", \"TropicalRainforest\", \"TropicalRainforest\", //WETTEST\n" +
+                "    \"Rocky\",  \"Rocky\",        \"Beach\",          \"Beach\",               \"Beach\",              \"Beach\",              //COASTS\n" +
+                "    \"Ice\",    \"River\",        \"River\",          \"River\",               \"River\",              \"River\",              //RIVERS\n" +
+                "    \"Ice\",    \"River\",        \"River\",          \"River\",               \"River\",              \"River\",              //LAKES\n" +
+                "    \"Ocean\",  \"Ocean\",        \"Ocean\",          \"Ocean\",               \"Ocean\",              \"Ocean\",              //OCEAN\n" +
+                "};\n\n" +
                 "public static float extractFloat(String[] mapData, int x, int y) {\n" +
                 "    return (mapData[y].codePointAt(x) - 93) * 0x1p-10f;\n" +
                 "}\n\n" +
                 "public static int extractInt(String[] mapData, int x, int y) {\n" +
                 "    return mapData[y].codePointAt(x) - 93;\n" +
+                "}\n\n" +
+                "public static String extractBiome(String[] mapData, int x, int y) {\n" +
+                "    return BIOME_TABLE[mapData[y].codePointAt(x) - 93];\n" +
                 "}\n\n");
-        csv.append("public String[] heightMap = new String[] {\n");
+        csv.append("/** Use with extractFloat() or extractInt() to get the height of this area, either between 0.0 and 1.0 or between 0 and 1023 */\npublic String[] heightMap = new String[] {\n");
         for (int y = 0; y < height; y++) {
             csv.append('"');
             for (int x = 0; x < width; x++) {
@@ -498,7 +500,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             csv.append("\",\n");
         }
         csv.append("};\n\n");
-        csv.append("public String[] heatMap = new String[] {\n");
+        csv.append("/** Use with extractFloat() to get a heat level between 0.0 and 1.0, as some kind of yearly average*/\n" +
+                "public String[] heatMap = new String[] {\n");
         for (int y = 0; y < height; y++) {
             csv.append('"');
             for (int x = 0; x < width; x++) {
@@ -507,7 +510,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             csv.append("\",\n");
         }
         csv.append("};\n\n");
-        csv.append("public String[] moistureMap = new String[] {\n");
+        csv.append("/** Use with extractFloat() to get moisture level between 0.0 and 1.0, as some kind of yearly average */\n" +
+                "public String[] moistureMap = new String[] {\n");
         for (int y = 0; y < height; y++) {
             csv.append('"');
             for (int x = 0; x < width; x++) {
@@ -519,10 +523,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         StringBuilder csv2 = new StringBuilder(width * height + 50);
         StringBuilder csv3 = new StringBuilder(width * height + 50);
         StringBuilder csv4 = new StringBuilder(width * height + 50);
-        csv.append("public String[] biomeMapA = new String[] {\n");
-        csv2.append("public String[] biomeMapB = new String[] {\n");
-        csv3.append("public String[] biomePortionMapA = new String[] {\n");
-        csv4.append("public String[] biomePortionMapB = new String[] {\n");
+        csv.append("/** Use with extractBiome() to get a biome name or extractInt() to get an index (0-59, inclusive); this is biome A */\n" +
+                "public String[] biomeMapA = new String[] {\n");
+        csv2.append("/** Use with extractBiome() to get a biome name or extractInt() to get an index (0-59, inclusive); this is biome B */\n" +
+                "public String[] biomeMapB = new String[] {\n");
+        csv3.append("/** Use with extractFloat(); how much biome A affects this area. */\npublic String[] biomePortionMapA = new String[] {\n");
+        csv4.append("/** Use with extractFloat(); how much biome B affects this area. */\npublic String[] biomePortionMapB = new String[] {\n");
         for (int y = 0; y < height; y++) {
             csv.append('"');
             csv2.append('"');
@@ -533,8 +539,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                 float mix = dbm.extractMixAmount(biome);
                 csv.append((char)(dbm.extractPartA(biome) + 93));
                 csv2.append((char)(dbm.extractPartB(biome) + 93));
-                csv3.append((char)(1024 + 93 - 1024.0 * mix));
-                csv4.append((char)(93 + 1024.0 * mix));
+                csv3.append((char)(93 + 1024.0 * mix));
+                csv4.append((char)(1024 + 93 - 1024.0 * mix));
             }
             csv.append("\",\n");
             csv2.append("\",\n");

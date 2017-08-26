@@ -755,7 +755,7 @@ public abstract class WorldMapGenerator {
          * cannot use a biome code directly from biomeCodeData as an index into this in almost any case; you should pass
          * the biome code to one of the extract methods. {@link #extractBiomeA(int)} or {@link #extractBiomeB(int)} will
          * work if you want a biome name, or {@link #extractPartA(int)} or {@link #extractPartB(int)} should be used if
-         * you want a non-coded int that represents one of the biomes' indices into something like {@link #biomeTable}.
+         * you want a non-coded int that represents one of the biomes' indices into something like this.
          * You can also get the amount by which biome B is affecting biome A with {@link #extractMixAmount(int)}.
          */
         public static final String[] biomeTable = {
@@ -769,6 +769,7 @@ public abstract class WorldMapGenerator {
                 "Rocky",  "Rocky",        "Beach",          "Beach",               "Beach",              "Beach",              //COASTS
                 "Ice",    "River",        "River",          "River",               "River",              "River",              //RIVERS
                 "Ice",    "River",        "River",          "River",               "River",              "River",              //LAKES
+                "Ocean",  "Ocean",        "Ocean",          "Ocean",               "Ocean",              "Ocean",              //OCEAN
         };
 
         /**
@@ -905,11 +906,11 @@ public abstract class WorldMapGenerator {
 
                     heatCodeData[x][y] = hc;
                     moistureCodeData[x][y] = mc;
-                    bc = heightCode < 4 ? hc + 78 // 78 == 13 * 6, 13 is used for Ocean
+                    bc = heightCode < 4 ? hc + 54 // 54 == 9 * 6, 9 is used for Ocean groups
                             : isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
 
                     if(heightCode < 4) {
-                        mc = 13;
+                        mc = 9;
                     }
                     else if (moist >= (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)) {
                         mc = 5;
