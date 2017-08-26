@@ -853,7 +853,15 @@ public abstract class WorldMapGenerator {
          * called biome A and biome B, and the mix amount, for finding how much biome B affects biome A.
          * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
          */
-        protected void makeBiomes(WorldMapGenerator world) {
+        public void makeBiomes(WorldMapGenerator world) {
+            if(world == null || world.width <= 0 || world.height <= 0)
+                return;
+            if(heatCodeData == null || (heatCodeData.length != world.width || heatCodeData[0].length != world.height))
+                heatCodeData = new int[world.width][world.height];
+            if(moistureCodeData == null || (moistureCodeData.length != world.width || moistureCodeData[0].length != world.height))
+                moistureCodeData = new int[world.width][world.height];
+            if(biomeCodeData == null || (biomeCodeData.length != world.width || biomeCodeData[0].length != world.height))
+                biomeCodeData = new int[world.width][world.height];
             final int[][] heightCodeData = world.heightCodeData;
             final double[][] heatData = world.heatData, moistureData = world.moistureData, heightData = world.heightData;
             int hc, mc, heightCode, bc;
@@ -897,9 +905,13 @@ public abstract class WorldMapGenerator {
 
                     heatCodeData[x][y] = hc;
                     moistureCodeData[x][y] = mc;
-                    bc = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
+                    bc = heightCode < 4 ? hc + 78 // 78 == 13 * 6, 13 is used for Ocean
+                            : isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
 
-                    if (moist >= (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)) {
+                    if(heightCode < 4) {
+                        mc = 13;
+                    }
+                    else if (moist >= (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)) {
                         mc = 5;
                     } else if (moist >= (wetValueUpper + (wetterValueUpper - wetterValueLower) * 0.2)) {
                         mc = 4;
@@ -928,8 +940,9 @@ public abstract class WorldMapGenerator {
                     }
 
                     bc |= (hc + mc * 6) << 10;
-
-                    if (isRiver || isLake)
+                    if(heightCode < 4)
+                        biomeCodeData[x][y] = bc | (int)((heightData[x][y] + 1.0) / 1.1) << 20;
+                    else if (isRiver || isLake)
                         biomeCodeData[x][y] = bc | (int)(moist * 358.4 + 665.0) << 20;
                     else
                         biomeCodeData[x][y] = bc | (int) ((heightCode == 4) ? (0.18 - high) * 12800.0 :

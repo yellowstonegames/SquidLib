@@ -3,25 +3,17 @@ package squidpony.gdx.tests;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.WhirlingNoise;
 
@@ -47,11 +39,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Ice                    = 9 ,
         Beach                  = 10,
         Rocky                  = 11,
-        River                  = 12;
+        River                  = 12,
+        Ocean                  = 13;
 
     //private static final int width = 314 * 5, height = 500;
 
-    private static final int width = 700, height = 700;
+    private static final int width = 640, height = 640;
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
@@ -67,12 +60,14 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private StatefulRNG rng;
     private long seed;
     private WorldMapGenerator world;
-    private final double[][] shadingData = new double[width][height];
+    private WorldMapGenerator.DetailedBiomeMapper dbm;
+/*    private final double[][] shadingData = new double[width][height];
     private final int[][]
             heatCodeData = new int[width][height],
             moistureCodeData = new int[width][height],
             biomeUpperCodeData = new int[width][height],
             biomeLowerCodeData = new int[width][height];
+            */
     private long ttg = 0; // time to generate
 
     public static final double
@@ -199,6 +194,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         }
     }
 
+    /*
     protected void makeBiomes() {
         final WorldMapGenerator world = this.world;
         final int[][] heightCodeData = world.heightCodeData;
@@ -286,6 +282,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             }
         }
     }
+    */
 
     private String date, path;
 
@@ -304,8 +301,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pt = new Texture(pm);
         rng = new StatefulRNG(CrossHash.Wisp.hash64(date));
         seed = rng.getState();
-        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.0);
+        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.2);
         //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 1.0);
+        dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -316,6 +314,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                         generate(seed);
                         rng.setState(seed);
                         break;
+                    /*
                     case '=':
                     case '+':
                         zoomIn();
@@ -324,6 +323,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                     case '_':
                         zoomOut();
                         break;
+                    */
                     case 'Q':
                     case 'q':
                     case SquidInput.ESCAPE: {
@@ -332,7 +332,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                 }
                 Gdx.graphics.requestRendering();
             }
-        }, new SquidMouse(1, 1, width, height, 0, 0, new InputAdapter()
+        }/*, new SquidMouse(1, 1, width, height, 0, 0, new InputAdapter()
         {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
@@ -348,7 +348,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                 }
                 return true;
             }
-        }));
+        })*/);
         generate(seed);
         rng.setState(seed);
         //Gdx.input.setInputProcessor(input);
@@ -365,7 +365,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     {
         long startTime = System.currentTimeMillis();
         world.zoomIn(1, zoomX, zoomY);
-        makeBiomes();
+        dbm.makeBiomes(world);
         ttg = System.currentTimeMillis() - startTime;
     }
     public void zoomOut()
@@ -376,14 +376,14 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     {
         long startTime = System.currentTimeMillis();
         world.zoomOut(1, zoomX, zoomY);
-        makeBiomes();
+        dbm.makeBiomes(world);
         ttg = System.currentTimeMillis() - startTime;
     }
     public void generate(final long seed)
     {
         long startTime = System.currentTimeMillis();
         world.generate(seed);
-        makeBiomes();
+        dbm.makeBiomes(world);
         ttg = System.currentTimeMillis() - startTime;
     }
 
@@ -394,14 +394,17 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
         generate(CrossHash.Wisp.hash64(name));
         //display.erase();
-        int hc, tc;
+        int hc, tc, bc;
         int[][] heightCodeData = world.heightCodeData;
         double[][] heightData = world.heightData;
+        int[][] heatCodeData = dbm.heatCodeData;
+        int[][] biomeCodeData = dbm.biomeCodeData;
         for (int y = 0; y < height; y++) {
             PER_CELL:
             for (int x = 0; x < width; x++) {
                 hc = heightCodeData[x][y];
                 tc = heatCodeData[x][y];
+                bc = biomeCodeData[x][y];
                 if(tc == 0)
                 {
                     switch (hc)
@@ -446,8 +449,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                                     + shadingData[x][y] * 13) * 0.03125f);
                         */
 
-                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
-                                BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]], (float) shadingData[x][y]));
+                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
+                                BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc)));
                         pm.drawPixel(x, y, Color.rgba8888(tempColor));
                         //display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
                         //        BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
@@ -464,9 +467,88 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         batch.draw(pt, 0, 0);
         batch.end();
         PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
-        if(++counter >= 64)
+        StringBuilder csv = new StringBuilder((width + 50) * height * 5);
+        csv.append("public static final int\n" +
+                "        DESERT                 = 0 ,\n" +
+                "        SAVANNA                = 1 ,\n" +
+                "        TROPICAL_RAINFOREST    = 2 ,\n" +
+                "        GRASSLAND              = 3 ,\n" +
+                "        WOODLAND               = 4 ,\n" +
+                "        SEASONAL_FOREST        = 5 ,\n" +
+                "        TEMPERATE_RAINFOREST   = 6 ,\n" +
+                "        BOREAL_FOREST          = 7 ,\n" +
+                "        TUDNRA                 = 8 ,\n" +
+                "        ICE                    = 9 ,\n" +
+                "        BEACH                  = 10,\n" +
+                "        ROCKY                  = 11,\n" +
+                "        RIVER                  = 12,\n" +
+                "        OCEAN                  = 13;\n\n" +
+                "public static float extractFloat(String[] mapData, int x, int y) {\n" +
+                "    return (mapData[y].codePointAt(x) - 93) * 0x1p-10f;\n" +
+                "}\n\n" +
+                "public static int extractInt(String[] mapData, int x, int y) {\n" +
+                "    return mapData[y].codePointAt(x) - 93;\n" +
+                "}\n\n");
+        csv.append("public String[] heightMap = new String[] {\n");
+        for (int y = 0; y < height; y++) {
+            csv.append('"');
+            for (int x = 0; x < width; x++) {
+                csv.append((char)((1.0 + world.heightData[x][y]) * 512 + 93));
+            }
+            csv.append("\",\n");
+        }
+        csv.append("};\n\n");
+        csv.append("public String[] heatMap = new String[] {\n");
+        for (int y = 0; y < height; y++) {
+            csv.append('"');
+            for (int x = 0; x < width; x++) {
+                csv.append((char)(world.heatData[x][y] * 1024 + 93));
+            }
+            csv.append("\",\n");
+        }
+        csv.append("};\n\n");
+        csv.append("public String[] moistureMap = new String[] {\n");
+        for (int y = 0; y < height; y++) {
+            csv.append('"');
+            for (int x = 0; x < width; x++) {
+                csv.append((char)(world.moistureData[x][y] * 1024 + 93));
+            }
+            csv.append("\",\n");
+        }
+        csv.append("};\n\n");
+        StringBuilder csv2 = new StringBuilder(width * height + 50);
+        StringBuilder csv3 = new StringBuilder(width * height + 50);
+        StringBuilder csv4 = new StringBuilder(width * height + 50);
+        csv.append("public String[] biomeMapA = new String[] {\n");
+        csv2.append("public String[] biomeMapB = new String[] {\n");
+        csv3.append("public String[] biomePortionMapA = new String[] {\n");
+        csv4.append("public String[] biomePortionMapB = new String[] {\n");
+        for (int y = 0; y < height; y++) {
+            csv.append('"');
+            csv2.append('"');
+            csv3.append('"');
+            csv4.append('"');
+            for (int x = 0; x < width; x++) {
+                int biome = dbm.biomeCodeData[x][y];
+                float mix = dbm.extractMixAmount(biome);
+                csv.append((char)(dbm.extractPartA(biome) + 93));
+                csv2.append((char)(dbm.extractPartB(biome) + 93));
+                csv3.append((char)(1024 + 93 - 1024.0 * mix));
+                csv4.append((char)(93 + 1024.0 * mix));
+            }
+            csv.append("\",\n");
+            csv2.append("\",\n");
+            csv3.append("\",\n");
+            csv4.append("\",\n");
+        }
+        csv.append("};\n\n");
+        csv2.append("};\n\n");
+        csv3.append("};\n\n");
+        csv4.append("};\n\n");
+        csv.append(csv2).append(csv3).append(csv4);
+        Gdx.files.local(path + name + ".java").writeString(csv.toString(), false);
+        if(++counter >= 32)
             Gdx.app.exit();
-
     }
     @Override
     public void render() {
