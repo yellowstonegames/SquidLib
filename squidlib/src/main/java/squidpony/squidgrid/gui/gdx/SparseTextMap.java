@@ -421,7 +421,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
                 case 1:
                     evictedKey = key2;
                     evictedChar = charTable[index2];
-                    evictedFloat = floatTable[index1];
+                    evictedFloat = floatTable[index2];
                     keyTable[index2] = insertKey;
                     charTable[index2] = insertChar;
                     floatTable[index2] = insertFloat;
