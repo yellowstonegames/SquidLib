@@ -378,7 +378,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         if (key2 == EMPTY) {
             keyTable[index2] = key;
             charValueTable[index2] = charValue;
-            floatValueTable[index1] = floatValue;
+            floatValueTable[index2] = floatValue;
             if (size++ >= threshold) resize(capacity << 1);
             return;
         }

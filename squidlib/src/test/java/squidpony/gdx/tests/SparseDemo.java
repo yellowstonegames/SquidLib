@@ -575,7 +575,6 @@ public class SparseDemo extends ApplicationAdapter {
         stage.getCamera().position.x = pg.getX();
         stage.getCamera().position.y =  pg.getY();
 
-        // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
         // if the user clicked, we have a list of moves to perform.
         if(!awaitedMoves.isEmpty())
