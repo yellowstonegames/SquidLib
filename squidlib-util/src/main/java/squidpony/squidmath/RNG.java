@@ -587,7 +587,7 @@ public class RNG implements Serializable {
 
     /**
      * Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy.
-     * Not GWT-compatible; use the overload that takes two arrays if you use GWT.
+     * GWT-compatible since GWT 2.8.0, which is the default if you use libGDX 1.9.5 or higher.
      * <br>
      * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
      *
@@ -595,14 +595,14 @@ public class RNG implements Serializable {
      * @param <T>      can be any non-primitive type.
      * @return a shuffled copy of elements
      */
-    @GwtIncompatible
-    public <T> T[] shuffle(T[] elements) {
-        int n = elements.length;
-        T[] array = Arrays.copyOf(elements, n);
-        for (int i = 0; i < n; i++) {
-            int r = i + nextInt(n - i);
+    public <T> T[] shuffle(final T[] elements) {
+        final int n = elements.length;
+        final T[] array = Arrays.copyOf(elements, n);
+        for (int i = 0; i < n - 1; i++) {
+            int r = i + nextIntHasty(n - i);
             T t = array[r];
-            array[r] = array[i];
+            if (r != i)
+                array[r] = array[i];
             array[i] = t;
         }
         return array;
@@ -620,23 +620,25 @@ public class RNG implements Serializable {
      * @return elements after shuffling it in-place
      */
     public <T> T[] shuffleInPlace(T[] elements) {
-        for (int i = elements.length - 1; i > 0; i--) {
-            int r = nextInt(i + 1);
+        final int n = elements.length;
+        for (int i = 0; i < n - 1; i++) {
+            int r = i + nextIntHasty(n - i);
             T t = elements[r];
-            elements[r] = elements[i];
+            if (r != i)
+                elements[r] = elements[i];
             elements[i] = t;
         }
         return elements;
     }
 
     /**
-     * Shuffle an array using the "inside-out" Fisher-Yates algorithm. DO NOT give the same array for both elements and
+     * Shuffle an array using the Fisher-Yates algorithm. DO NOT give the same array for both elements and
      * dest, since the prior contents of dest are rearranged before elements is used, and if they refer to the same
      * array, then you can end up with bizarre bugs where one previously-unique item shows up dozens of times. If
      * possible, create a new array with the same length as elements and pass it in as dest; the returned value can be
      * assigned to whatever you want and will have the same items as the newly-formed array.
      * <br>
-     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
      *
      * @param elements an array of T; will not be modified
      * @param <T>      can be any non-primitive type.
@@ -644,16 +646,11 @@ public class RNG implements Serializable {
      *                 randomPortion method of this class to fill the smaller dest. MUST NOT be the same array as elements!
      * @return {@code dest} after modifications
      */
-	/* This method has this prototype to be compatible with GWT. */
     public <T> T[] shuffle(T[] elements, T[] dest) {
         if (dest.length != elements.length)
             return randomPortion(elements, dest);
-        for (int i = 0; i < elements.length; i++) {
-            int r = nextInt(i + 1);
-            if (r != i)
-                dest[i] = dest[r];
-            dest[r] = elements[i];
-        }
+        System.arraycopy(elements, 0, dest, 0, elements.length);
+        shuffleInPlace(dest);
         return dest;
     }
 
@@ -686,7 +683,7 @@ public class RNG implements Serializable {
             al.addAll(elements);
         }
         int n = al.size();
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n - 1; i++) {
             Collections.swap(al, i + nextInt(n - i), i);
         }
         return al;
@@ -702,14 +699,7 @@ public class RNG implements Serializable {
     public int[] randomOrdering(int length) {
         if (length <= 0)
             return new int[0];
-        int[] dest = new int[length];
-        for (int i = 0; i < length; i++) {
-            int r = nextInt(i + 1);
-            if (r != i)
-                dest[i] = dest[r];
-            dest[r] = i;
-        }
-        return dest;
+        return randomOrdering(length, new int[length]);
     }
 
     /**
@@ -723,11 +713,17 @@ public class RNG implements Serializable {
      */
     public int[] randomOrdering(int length, int[] dest) {
         if (dest == null) return null;
-        for (int i = 0; i < length && i < dest.length; i++) {
-            int r = nextIntHasty(i + 1);
+
+        final int n = Math.min(length, dest.length);
+        for (int i = 0; i < n; i++) {
+            dest[i] = i;
+        }
+        for (int i = 0; i < n - 1; i++) {
+            int r = i + nextIntHasty(n - i),
+                    t = dest[r];
             if (r != i)
-                dest[i] = dest[r];
-            dest[r] = i;
+                dest[r] = dest[i];
+            dest[i] = t;
         }
         return dest;
     }
@@ -748,24 +744,11 @@ public class RNG implements Serializable {
      * was empty) if data is shorter than output
      */
     public <T> T[] randomPortion(T[] data, T[] output) {
-		/*
-		int length = data.length;
-		int[] mapping = new int[length];
-		for (int i = 0; i < length; i++) {
-			mapping[i] = i;
-		}
-		for (int i = 0; i < output.length && length > 0; i++) {
-			int r = nextInt(length);
-			output[i] = data[mapping[r]];
-			mapping[r] = length-1;
-		}
-		*/
-
         int length = data.length;
         int n = Math.min(length, output.length);
         int[] mapping = ArrayTools.range(n);
         for (int i = 0; i < n; i++) {
-            int r = nextInt(length);
+            int r = nextIntHasty(length);
             output[i] = data[mapping[r]];
             mapping[r] = mapping[--length];
         }
@@ -806,9 +789,10 @@ public class RNG implements Serializable {
             data[i++] = e;
         }
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n - 1; i++) {
             int r = i + nextInt(n - i), t = data[r];
-            data[r] = data[i];
+            if (r != i)
+                data[r] = data[i];
             data[i] = t;
         }
         int[] array = new int[Math.min(count, n)];

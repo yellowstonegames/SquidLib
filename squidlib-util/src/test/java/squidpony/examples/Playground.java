@@ -1,5 +1,8 @@
 package squidpony.examples;
 
+import squidpony.StringKit;
+import squidpony.squidmath.RNG;
+
 /**
  * This class is a scratchpad area to test things out.
  *
@@ -30,6 +33,13 @@ public class Playground {
     }
 
     private void go() {
+        RNG rng = new RNG(1L), rn2 = new RNG(1L), rn3 = new RNG(1L), rn4 = new RNG(1L);
+        for (int i = 0; i < 40; i++) {
+            System.out.println(StringKit.join(",", rng.shuffle(new Integer[]{0, 1, 2, 3})) + "   " +
+                    StringKit.join(",", rn2.randomOrdering(4)) + "   " +
+                    StringKit.join(",", rn3.shuffleInPlace(new Integer[]{0, 1, 2, 3})) + "   " +
+                    StringKit.join(",", rn4.shuffle(new Integer[]{0, 1, 2, 3}, new Integer[4])));
+        }
     }
 
 }
