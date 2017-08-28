@@ -55,7 +55,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             moistureCodeData = new int[width][height],
             biomeUpperCodeData = new int[width][height],
             biomeLowerCodeData = new int[width][height];
-    private Noise.Noise4D cloudNoise, cloudNoise2;
+    private Noise.Noise4D cloudNoise;
     private final float[][][] cloudData = new float[128][128][128];
     private int counter = 0;
     private long ttg = 0; // time to generate
@@ -316,7 +316,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         cloudNoise = new Noise.Layered4D(SeededNoise.instance, 2, 3.8);
-        cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
+        //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.9);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
