@@ -1,10 +1,6 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -20,14 +16,7 @@ import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.MapUtility;
-import squidpony.squidgrid.gui.gdx.PanelEffect;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SparseLayers;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidMouse;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
@@ -521,6 +510,7 @@ public class SparseDemo extends ApplicationAdapter {
                     burstColors,
                     new char[]{'\u0000'} // the char at Unicode 0 is used to mean a solid block that takes up the cell
             ));
+            //display.burst(newX, newY, 1, Radius.CIRCLE, StringKit.PUNCTUATION, burstColors[8], burstColors[35], 0.4f);
         }
         // removes the first line displayed of the Art of War text or its translation.
         lang.remove(0);

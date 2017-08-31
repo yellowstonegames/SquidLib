@@ -1435,7 +1435,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             layers.get(i).draw(batch, font, xo, yOff);
         }
         int x, y;
-        for (int i = 0, n = glyphs.size(); i < n; i++) {
+        for (int i = 0; i < glyphs.size(); i++) {
             TextCellFactory.Glyph glyph = glyphs.get(i);
             if(glyph == null)
                 continue;
