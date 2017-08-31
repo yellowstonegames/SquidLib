@@ -44,7 +44,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     //private static final int width = 314 * 5, height = 500;
 
-    private static final int width = 640, height = 640;
+    private static final int width = 256, height = 256;
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
@@ -54,7 +54,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private Texture pt;
     private int counter = 0;
     private Color tempColor = Color.WHITE.cpy();
-    private static final int cellWidth = 1, cellHeight = 1;
+    private static final int cellWidth = 2, cellHeight = 2;
     private SquidInput input;
     //private Stage stage;
     private Viewport view;
@@ -291,21 +291,21 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         //display = new SquidPanel(width, height, cellWidth, cellHeight);
-        view = new StretchViewport(width*cellWidth, height*cellHeight);
+        view = new StretchViewport(width * cellWidth, height * cellHeight);
         //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
         path = "out/worlds/" + date + "/";
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
-        pm = new Pixmap(width, height, Pixmap.Format.RGB888);
+        pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGB888);
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
-        rng = new StatefulRNG(CrossHash.Wisp.hash64(date));
+        rng = new StatefulRNG(CrossHash.hash64(date));
         seed = rng.getState();
-        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.2);
-        //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 1.0);
+        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.75);
+        //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.75);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
-        world.generateRivers = false;
+        //world.generateRivers = true;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -393,7 +393,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         while (Gdx.files.local(path + name + ".png").exists())
             name = lang.word(rng, true);
 
-        generate(CrossHash.Wisp.hash64(name));
+        generate(CrossHash.hash64(name));
         //display.erase();
         int hc, tc, bc;
         int[][] heightCodeData = world.heightCodeData;
@@ -416,14 +416,18 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                         case 3:
                             Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, ice,
                                     (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
-                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
+                            pm.setColor(tempColor);
+                            pm.drawRectangle(x << 1, y << 1, 2, 2);
+//                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
                             //display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
                             //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
                             continue PER_CELL;
                         case 4:
                             Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(lightIce, ice,
                                     (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
-                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
+                            pm.setColor(tempColor);
+                            pm.drawRectangle(x << 1, y << 1, 2, 2);
+//                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
                             //display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
                             //        (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
                             continue PER_CELL;
@@ -436,7 +440,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                     case 3:
                         Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
-                        pm.drawPixel(x, y, Color.rgba8888(tempColor));
+                        pm.setColor(tempColor);
+                        pm.drawRectangle(x << 1, y << 1, 2, 2);
+//                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
                         //display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
                         //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
                         break;
@@ -452,7 +458,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
                         Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
                                 BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc)));
-                        pm.drawPixel(x, y, Color.rgba8888(tempColor));
+                        pm.setColor(tempColor);
+                        pm.drawRectangle(x << 1, y << 1, 2, 2);
+//                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
                         //display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
                         //        BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
                         //        (float) //(((heightData[x][y] - lowers[hc]) / (differences[hc])) * 11 +
