@@ -63,7 +63,13 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * {@link TextCellFactory#initBySize()}, if this is changed after construction.
      */
     public TextCellFactory font;
-    protected int animationCount = 0;
+    /**
+     * The current count of how many animations are running; checked by {@link #hasActiveAnimations()}, and if certain
+     * states occur where this variable becomes out of step with the actual animations in process, hasActiveAnimations()
+     * can return incorrect values. This variable is public to allow manual correction of the animation count in such
+     * conditions, but shouldn't be changed frequently because various other methods may rely on it or change it.
+     */
+    public int animationCount = 0;
     /**
      * A list of individually-movable Glyph objects. This field is public, and though it shouldn't be assigned null (you
      * don't really need to be told that), there may be cases where you may need manual control over what Glyph objects
@@ -1058,6 +1064,18 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         layer = mapping.get(layer, 0);
         layers.get(layer).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
         glyphs.remove(glyph);
+    }
+
+    /**
+     * A way to remove a Glyph from the group of glyphs this renders, while also ending any animations or other Actions
+     * that the removed Glyph was scheduled to perform. This can be important to keep the animation count, for
+     * {@link #hasActiveAnimations()}, at the correct value if a Glyph is removed before its animations end.
+     * @param glyph a Glyph that should be removed from the {@link #glyphs} List this holds
+     */
+    public void removeGlyph(TextCellFactory.Glyph glyph)
+    {
+        if(glyphs.remove(glyph))
+            animationCount -= glyph.getActions().size;
     }
     /**
      * Start a bumping animation in the given direction that will last duration seconds.
