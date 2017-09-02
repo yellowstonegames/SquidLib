@@ -481,31 +481,29 @@ public class HashVisualizer extends ApplicationAdapter {
     }
 
     public static float tabbyNoise(final float x, final float y, final float z, final int seed) {
-        final int
-                xf = SeededNoise.fastFloor(x),
-                yf = SeededNoise.fastFloor(y),
-                zf = SeededNoise.fastFloor(z);
-        final long sx = ThrustRNG.determine(seed) | 1, sy = sx + 22256, sz = sy + 55512;
+        final int sx = seed | 5, sy = sx + 22256, sz = sy + 55512;
         final float
-                x0 = NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
-                x1 = NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
-                y0 = NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
-                y1 = NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
-                z0 = NumberTools.formCurvedFloat(NumberTools.splitMix64(zf * sz + 300)),
-                z1 = NumberTools.formCurvedFloat(NumberTools.splitMix64((zf+1) * sz + 300)),
-                lx = querp(
-                        x0,
-                        x1,
-                        x - xf),
-                ly = querp(
-                        y0,
-                        y1,
-                        y - yf),
-                lz = querp(
-                        z0,
-                        z1,
-                        z - zf);
-        return NumberTools.bounce(5f + 2.4f * (lx + ly + lz));
+                ax = NumberTools.randomFloat(sx) + 0.6f,
+                ay = NumberTools.randomFloat(sy) + 0.6f,
+                az = NumberTools.randomFloat(sz) + 0.6f,
+                mx = x + y * 0.89f * ax + z * 0.57f * ax,
+                my = y + z * 0.89f * ay + x * 0.57f * ay,
+                mz = z + x * 0.89f * az + y * 0.57f * az;
+        final long
+                xf = SeededNoise.fastFloor(mx),
+                yf = SeededNoise.fastFloor(my),
+                zf = SeededNoise.fastFloor(mz);
+        return NumberTools.bounce(5f + 2.4f *
+                (
+                          querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
+                                NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
+                                  mx - xf)
+                        + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
+                                NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
+                                  my - yf)
+                        + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(zf * sz + 300)),
+                                NumberTools.formCurvedFloat(NumberTools.splitMix64((zf+1) * sz + 300)),
+                                  mz - zf)));
     }
 
     @Override
@@ -3018,9 +3016,9 @@ public class HashVisualizer extends ApplicationAdapter {
                                                 1.0f));*/
                                 display.put(x, y,
                                         floatGet(
-                                                (tabbyNoise(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, 1234) * 0.50f) + 0.50f,
-                                                (tabbyNoise(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, 54321) * 0.50f) + 0.50f,
-                                                (tabbyNoise(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, 1234321) * 0.50f) + 0.50f,
+                                                (tabbyNoise(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, 12345678) * 0.50f) + 0.50f,
+                                                (tabbyNoise(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, -87654321) * 0.50f) + 0.50f,
+                                                (tabbyNoise(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, 543212345) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3034,7 +3032,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
                                         + */tabbyNoise(x * 0.11125f, y * 0.11125f, ctr  * 0.11125f,
-                                        123456) * 0.50f) + 0.50f;
+                                        123456789) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
