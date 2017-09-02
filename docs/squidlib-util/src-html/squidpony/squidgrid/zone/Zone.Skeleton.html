@@ -154,7 +154,7 @@
 <span class="sourceLineNo">146</span>         * @return Cells in {@code this} that are adjacent to a cell not in<a name="line.146"></a>
 <span class="sourceLineNo">147</span>         *         {@code this}<a name="line.147"></a>
 <span class="sourceLineNo">148</span>         */<a name="line.148"></a>
-<span class="sourceLineNo">149</span>        List&lt;Coord&gt; getInternalBorder();<a name="line.149"></a>
+<span class="sourceLineNo">149</span>        Collection&lt;Coord&gt; getInternalBorder();<a name="line.149"></a>
 <span class="sourceLineNo">150</span><a name="line.150"></a>
 <span class="sourceLineNo">151</span>        /**<a name="line.151"></a>
 <span class="sourceLineNo">152</span>         * Gets a Collection of Coord values that are not in this Zone, but are<a name="line.152"></a>
@@ -328,7 +328,7 @@
 <span class="sourceLineNo">320</span><a name="line.320"></a>
 <span class="sourceLineNo">321</span>                @Override<a name="line.321"></a>
 <span class="sourceLineNo">322</span>                /* Convenience implementation, feel free to override. */<a name="line.322"></a>
-<span class="sourceLineNo">323</span>                public List&lt;Coord&gt; getInternalBorder() {<a name="line.323"></a>
+<span class="sourceLineNo">323</span>                public Collection&lt;Coord&gt; getInternalBorder() {<a name="line.323"></a>
 <span class="sourceLineNo">324</span>                        final int sz = size();<a name="line.324"></a>
 <span class="sourceLineNo">325</span>                        if (sz &lt;= 1)<a name="line.325"></a>
 <span class="sourceLineNo">326</span>                                return getAll();<a name="line.326"></a>

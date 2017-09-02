@@ -4434,12 +4434,20 @@
 <td class="colLast"><span class="typeNameLabel">Zone.Skeleton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getExternalBorder--">getExternalBorder</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.html#getInternalBorder--">getInternalBorder</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CoordPackerZone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/CoordPackerZone.html#getExternalBorder--">getExternalBorder</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.html#getInternalBorder--">getInternalBorder</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Zone.Skeleton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getInternalBorder--">getInternalBorder</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CoordPackerZone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/CoordPackerZone.html#getInternalBorder--">getInternalBorder</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
@@ -4460,27 +4468,48 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">CoordPackerZone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/CoordPackerZone.html#add-squidpony.squidmath.Coord-">add</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;coord)</code>
+<div class="block">Does nothing (this Zone is immutable).</div>
+</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">Zone.Skeleton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">ListZone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/ListZone.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">CoordPackerZone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/CoordPackerZone.html#contains-squidpony.squidmath.Coord-">contains</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.html#translate-squidpony.squidmath.Coord-">translate</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Zone.Skeleton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#translate-squidpony.squidmath.Coord-">translate</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../squidpony/squidgrid/zone/package-summary.html">squidpony.squidgrid.zone</a> with type arguments of type <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">CoordPackerZone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/CoordPackerZone.html#addAll-java.util.Collection-">addAll</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;c)</code>
+<div class="block">Does nothing (this Zone is immutable).</div>
+</td>
 </tr>
 </tbody>
 </table>

@@ -146,7 +146,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 	 * @return Cells in {@code this} that are adjacent to a cell not in
 	 *         {@code this}
 	 */
-	List<Coord> getInternalBorder();
+	Collection<Coord> getInternalBorder();
 
 	/**
 	 * Gets a Collection of Coord values that are not in this Zone, but are
@@ -320,7 +320,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 
 		@Override
 		/* Convenience implementation, feel free to override. */
-		public List<Coord> getInternalBorder() {
+		public Collection<Coord> getInternalBorder() {
 			final int sz = size();
 			if (sz <= 1)
 				return getAll();
