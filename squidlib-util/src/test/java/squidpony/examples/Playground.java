@@ -1,7 +1,8 @@
 package squidpony.examples;
 
-import squidpony.StringKit;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.SeededNoise;
+import squidpony.squidmath.ThrustRNG;
 
 /**
  * This class is a scratchpad area to test things out.
@@ -25,20 +26,49 @@ public class Playground {
         int s = (index+1 & 0x7fffffff), leading = Integer.numberOfLeadingZeros(s);
         return (Integer.reverse(s) >>> leading) / (double)(1 << (32 - leading));
     }
+    /*
+     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    private static float querp(final float start, final float end, float a){
+        return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
+    }
 
-    public static double determine2_scrambled(int index)
-    {
-        int s = ((++index ^ index << 1 ^ index >> 1) & 0x7fffffff), leading = Integer.numberOfLeadingZeros(s);
-        return (Integer.reverse(s) >>> leading) / (double)(1 << (32 - leading));
+    public static float tabbyNoise(final float x, final float y, final float z, final int seed) {
+        final int
+                xf = SeededNoise.fastFloor(x),
+                yf = SeededNoise.fastFloor(y),
+                zf = SeededNoise.fastFloor(z);
+        final long sx = ThrustRNG.determine(seed) | 1, sy = sx + 256, sz = sy + 512;
+        final float
+                lx = querp(
+                        NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
+                        NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
+                        x - xf),
+                ly = querp(
+                        NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
+                        NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
+                        y - yf),
+                lz = querp(
+                        NumberTools.formCurvedFloat(NumberTools.splitMix64(zf * sz + 300)),
+                        NumberTools.formCurvedFloat(NumberTools.splitMix64((zf+1) * sz + 300)),
+                        z - zf);
+        return NumberTools.bounce(20f + (lx + ly + lz) * 1.4f);
     }
 
     private void go() {
-        RNG rng = new RNG(1L), rn2 = new RNG(1L), rn3 = new RNG(1L), rn4 = new RNG(1L);
-        for (int i = 0; i < 40; i++) {
-            System.out.println(StringKit.join(",", rng.shuffle(new Integer[]{0, 1, 2, 3})) + "   " +
-                    StringKit.join(",", rn2.randomOrdering(4)) + "   " +
-                    StringKit.join(",", rn3.shuffleInPlace(new Integer[]{0, 1, 2, 3})) + "   " +
-                    StringKit.join(",", rn4.shuffle(new Integer[]{0, 1, 2, 3}, new Integer[4])));
+//        for (float n = 0f; n <= 1f; n += 0.0625f) {
+//            System.out.println(n + ": " + querp(0f, 1f, n));
+//        }
+        for (float y = 0f; y < 1.1f; y += 0.0625f) {
+            for (float x = 0f; x < 1.1f; x+= 0.0625f) {
+                System.out.printf("%04X ", (int)(tabbyNoise(x, y, 1f, 10) * 0x7FFF + 0x8000));
+            }
+            System.out.println();
         }
     }
 

@@ -147,7 +147,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 43, rngMode = 30, noiseMode = 80;
+    private int hashMode = 43, rngMode = 30, noiseMode = 57;
 
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
@@ -408,55 +408,106 @@ public class HashVisualizer extends ApplicationAdapter {
     {
         return ((seed >>> 19 | seed << 13) ^ 0x13A5BA1D);
     }
-    public static double tabbyNoise(final float ox, final float oy, final float oz, final int seed) {
-        final float skew = (ox + oy + oz) / 128f,
-                c = (float) Math.cos(ox + oy + oz) * 0.125f,
-                s = (float) Math.sin(ox - oy - oz) * 0.125f,
-                x = ((ox - oz) * 1.3f + oy * 0.8f * s - oz * c * 0.5f) * skew,
-                y = ((oy - ox) * 1.3f + oz * 0.8f * s - ox * c * 0.5f) * skew,
-                z = ((oz - oy) * 1.3f + ox * 0.8f * s - oy * c * 0.5f) * skew;
+//    public static float tabbyNoise(final float ox, final float oy, final float oz, final int seed) {
+//        final float skew = (ox + oy + oz) / 128f,
+//                c = (float) Math.cos(ox + oy + oz) * 0.125f,
+//                s = (float) Math.sin(ox - oy - oz) * 0.125f,
+//                x = ((ox - oz) * 1.3f + oy * 0.8f * s - oz * c * 0.5f) * skew,
+//                y = ((oy - ox) * 1.3f + oz * 0.8f * s - ox * c * 0.5f) * skew,
+//                z = ((oz - oy) * 1.3f + ox * 0.8f * s - oy * c * 0.5f) * skew;
+//
+//        final int
+//                xf = SeededNoise.fastFloor(x),
+//                yf = SeededNoise.fastFloor(y),
+//                zf = SeededNoise.fastFloor(z);
+//
+//        final float
+//                dx = (x - xf),
+//                dy = (y - yf),
+//                dz = (z - zf);
+//        final int
+//                mx = SeededNoise.fastFloor(dx * 3 - 1),
+//                my = SeededNoise.fastFloor(dy * 3 - 1),
+//                mz = SeededNoise.fastFloor(dz * 3 - 1);
+//        final float
+//                xrl = NumberTools.randomSignedFloat(prepareSeed(xf + seed * 65537)),
+//                yrl = NumberTools.randomSignedFloat(prepareSeed(yf + seed * 31)),
+//                zrl = NumberTools.randomSignedFloat(prepareSeed(zf + seed * 421)),
+//                spot = NumberTools.randomSignedFloat(prepareSeed(xf + yf + zf - seed)) * 0.75f + s + c,
+//                ax = (dx - 0.5f) * (dx - 0.5f) * 2f,
+//                ay = (dy - 0.5f) * (dy - 0.5f) * 2f,
+//                az = (dz - 0.5f) * (dz - 0.5f) * 2f;
+//
+//        return NumberTools.bounce(5f +
+//                (xrl * (1f - ax)
+//                        + yrl * (1f - ay)
+//                        + zrl * (1f - az)
+//                        + ((mx == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(xf + mx + seed * 65537))) * ax
+//                        + ((my == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(yf + my + seed * 31   ))) * ay
+//                        + ((mz == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(zf + mz + seed * 421  ))) * az
+//                ));
+//
+//
+//        /*final double spot = (Math.sin(x + y + z) - (c + s) * 6f) * 0.0625f;
+//        return Math.sin(
+//                +
+//              ( Math.cos(ox - oy + y + z - x * spot)
+//              + Math.cos(x + oy - oz + z - y * spot)
+//              + Math.cos(x + oz - ox + y - z * spot)
+//              ));
+//              */
+//    }
+    /*
+     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    private static float querp(final float start, final float end, float a){
+        return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
+    }
+    /*
+     * Linearly interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    private static float interpolate(final float start, final float end, final float a)
+    {
+        return (1f - a) * start + a * end;
+    }
 
+    public static float tabbyNoise(final float x, final float y, final float z, final int seed) {
         final int
                 xf = SeededNoise.fastFloor(x),
                 yf = SeededNoise.fastFloor(y),
                 zf = SeededNoise.fastFloor(z);
-
+        final long sx = ThrustRNG.determine(seed) | 1, sy = sx + 22256, sz = sy + 55512;
         final float
-                dx = (x - xf),
-                dy = (y - yf),
-                dz = (z - zf);
-        final int
-                mx = SeededNoise.fastFloor(dx * 3 - 1),
-                my = SeededNoise.fastFloor(dy * 3 - 1),
-                mz = SeededNoise.fastFloor(dz * 3 - 1);
-        final float
-                xrl = NumberTools.randomSignedFloat(prepareSeed(xf + seed * 65537)),
-                yrl = NumberTools.randomSignedFloat(prepareSeed(yf + seed * 31)),
-                zrl = NumberTools.randomSignedFloat(prepareSeed(zf + seed * 421)),
-                spot = NumberTools.randomSignedFloat(prepareSeed(xf + yf + zf - seed)) * 0.75f + s + c,
-                ax = (dx - 0.5f) * (dx - 0.5f) * 2f,
-                ay = (dy - 0.5f) * (dy - 0.5f) * 2f,
-                az = (dz - 0.5f) * (dz - 0.5f) * 2f;
-
-        return NumberTools.bounce(5f +
-               (xrl * (1f - ax)
-              + yrl * (1f - ay)
-              + zrl * (1f - az)
-                + ((mx == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(xf + mx + seed * 65537))) * ax
-                + ((my == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(yf + my + seed * 31   ))) * ay
-                + ((mz == 0) ? spot : NumberTools.randomSignedFloat(prepareSeed(zf + mz + seed * 421  ))) * az
-               ));
-
-
-        /*final double spot = (Math.sin(x + y + z) - (c + s) * 6f) * 0.0625f;
-        return Math.sin(
-                +
-              ( Math.cos(ox - oy + y + z - x * spot)
-              + Math.cos(x + oy - oz + z - y * spot)
-              + Math.cos(x + oz - ox + y - z * spot)
-              ));
-              */
+                x0 = NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
+                x1 = NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
+                y0 = NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
+                y1 = NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
+                z0 = NumberTools.formCurvedFloat(NumberTools.splitMix64(zf * sz + 300)),
+                z1 = NumberTools.formCurvedFloat(NumberTools.splitMix64((zf+1) * sz + 300)),
+                lx = querp(
+                        x0,
+                        x1,
+                        x - xf),
+                ly = querp(
+                        y0,
+                        y1,
+                        y - yf),
+                lz = querp(
+                        z0,
+                        z1,
+                        z - zf);
+        return NumberTools.bounce(5f + 2.4f * (lx + ly + lz));
     }
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -2967,9 +3018,9 @@ public class HashVisualizer extends ApplicationAdapter {
                                                 1.0f));*/
                                 display.put(x, y,
                                         floatGet(
-                                                ((float)tabbyNoise(x * 0.03125f + 20, y * 0.03125f + 30, ctr * 0.05125f + 10, 1234) * 0.50f) + 0.50f,
-                                                ((float)tabbyNoise(x * 0.03125f + 30, y * 0.03125f + 10, ctr * 0.05125f + 20, 54321) * 0.50f) + 0.50f,
-                                                ((float)tabbyNoise(x * 0.03125f + 10, y * 0.03125f + 20, ctr * 0.05125f + 30, 1234321) * 0.50f) + 0.50f,
+                                                (tabbyNoise(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, 1234) * 0.50f) + 0.50f,
+                                                (tabbyNoise(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, 54321) * 0.50f) + 0.50f,
+                                                (tabbyNoise(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, 1234321) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -2982,7 +3033,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                         20.0, 20.0, 20.0, 12) * 0.5
                                         + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
                                         40.0, 40.0, 20.0, 1234)
-                                        + */tabbyNoise(x * 0.03125f, y * 0.03125f, ctr  * 0.05125f,
+                                        + */tabbyNoise(x * 0.11125f, y * 0.11125f, ctr  * 0.11125f,
                                         123456) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }

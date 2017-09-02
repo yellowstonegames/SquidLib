@@ -3490,7 +3490,7 @@
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><span class="typeNameLabel">Rectangle.Utils.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Utils.html#getCorner-squidpony.squidgrid.mapping.Rectangle-squidpony.squidgrid.Direction-">getCorner</a></span>(<a href="../../../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a>&nbsp;r,
-         <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;diagonal)</code>&nbsp;</td>
+         <a href="../../../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a>&nbsp;dir)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
@@ -3668,56 +3668,54 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">Rectangle.Impl.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Rectangle.Impl.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#getInternalBorder--">getInternalBorder</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SymmetryDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html#listToMap-java.util.List-">listToMap</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;sequence)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Rectangle.Impl.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/Rectangle.Impl.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SymmetryDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html#listToMap-java.util.List-">listToMap</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;sequence)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SymmetryDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html#listToMap-java.util.List-">listToMap</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;sequence)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SerpentMapGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SerpentMapGenerator.html#pointPath-int-int-squidpony.squidmath.RNG-">pointPath</a></span>(int&nbsp;width,
          int&nbsp;height,
          <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SectionDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeAdjacent-squidpony.squidmath.OrderedSet-squidpony.squidmath.Coord-">removeAdjacent</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
               <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html#removeAdjacent-squidpony.squidmath.OrderedSet-squidpony.squidmath.Coord-">removeAdjacent</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
               <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SectionDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeAdjacent-squidpony.squidmath.OrderedSet-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">removeAdjacent</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
               <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt1,
               <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt2)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html#removeAdjacent-squidpony.squidmath.OrderedSet-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">removeAdjacent</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
               <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt1,
               <a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt2)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SectionDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#removeNearby-squidpony.squidmath.OrderedSet-char:A:A-">removeNearby</a></span>(<a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;coll,
             char[][]&nbsp;disallowed)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SymmetryDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html#removeSomeOverlap-int-int-java.util.List-">removeSomeOverlap</a></span>(int&nbsp;width,
-                 int&nbsp;height,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;sequence)</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SymmetryDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html#removeSomeOverlap-int-int-java.util.List-">removeSomeOverlap</a></span>(int&nbsp;width,
@@ -3726,9 +3724,9 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SymmetryDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html#removeSomeOverlap-int-int-java.util.Map-">removeSomeOverlap</a></span>(int&nbsp;width,
+<td class="colLast"><span class="typeNameLabel">SymmetryDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html#removeSomeOverlap-int-int-java.util.List-">removeSomeOverlap</a></span>(int&nbsp;width,
                  int&nbsp;height,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;connections)</code>&nbsp;</td>
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;sequence)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
@@ -3737,11 +3735,17 @@
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;connections)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SymmetryDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SymmetryDungeonGenerator.html#removeSomeOverlap-int-int-java.util.Map-">removeSomeOverlap</a></span>(int&nbsp;width,
+                 int&nbsp;height,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&gt;&nbsp;connections)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html#viableDoorways-boolean-char:A:A-">viableDoorways</a></span>(boolean&nbsp;doubleDoors,
               char[][]&nbsp;map)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">SectionDungeonGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#viableDoorways-boolean-char:A:A-char:A:A-char:A:A-">viableDoorways</a></span>(boolean&nbsp;doubleDoors,
               char[][]&nbsp;map,
@@ -4428,6 +4432,14 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">Zone.Skeleton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getExternalBorder--">getExternalBorder</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Zone.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.html#getInternalBorder--">getInternalBorder</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">Zone.Skeleton.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getInternalBorder--">getInternalBorder</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>

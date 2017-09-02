@@ -183,6 +183,20 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#ALIEN_E">ALIEN_E</a></span></code>
+<div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+ an alien species.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#ALIEN_I">ALIEN_I</a></span></code>
+<div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+ an alien species.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#ARABIC_ROMANIZED">ARABIC_ROMANIZED</a></span></code>
 <div class="block">Imitation Arabic, using mostly the Latin alphabet but with some Greek letters for tough transliteration topics.</div>
 </td>
@@ -1333,7 +1347,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <h4>ALIEN_A</h4>
 <pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a> <a href="../src-html/squidpony/FakeLanguageGen.html#line.1786">ALIEN_A</a></pre>
 <div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
- an alien species. This alien language emphasizes unusual consonant groups and prefers the vowels 'a' and 'a',
+ an alien species. This alien language emphasizes unusual consonant groups and prefers the vowels 'a' and 'i',
  sometimes with two different vowels in one syllable, like with 'ea', but never two of the same vowel, like 'ee'.
  Many consonant groups may border on unpronounceable unless a different sound is meant by some letters, such as
  'c', 'h', 'q', 'x', 'w', and 'y'. In particular, 'x' and 'q' may need to sound like different breathy, guttural,
@@ -1362,13 +1376,48 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
  Hyeop euryam, sonyon muk tyeok aengyankeon, koelgwaelmwak.</div>
 </li>
 </ul>
+<a name="ALIEN_E">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ALIEN_E</h4>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a> <a href="../src-html/squidpony/FakeLanguageGen.html#line.1919">ALIEN_E</a></pre>
+<div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+ an alien species. This alien language emphasizes hard sounds and prefers the vowels 'i' and 'o', sometimes with
+ two of the same vowel, like 'ee', but never with two different vowels in one syllable, like with 'ea'.
+ This language is meant to use click sounds, if pronunciation is given, where 'q' modifies a consonant to form a
+ click, such as 'tq'. This is like how 'h' modifies letters in English to make 'th' different from 't' or 'h'.
+ This may be ideal for a species with a beak (or one that lacks lips for some other reason), since it avoids using
+ sounds that require lips (some clicks might be approximated by other species using their lips if this uses some
+ alien-specific clicking organ).
+ <br>
+ Reds zasg izqekkek zagtsarg ukaard ac ots as!</div>
+</li>
+</ul>
+<a name="ALIEN_I">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ALIEN_I</h4>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a> <a href="../src-html/squidpony/FakeLanguageGen.html#line.1960">ALIEN_I</a></pre>
+<div class="block">Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+ an alien species. This alien language emphasizes "liquid" sounds such as 'l', 'r', and mixes with those and other
+ consonants, and prefers the vowels 'e' and a', never with two of the same vowel, like 'ee', nor with two
+ different vowels in one syllable, like with 'ea'; it uses accent marks heavily and could be a tonal language.
+ It sometimes splits vowels with a single apostrophe, and rarely has large consonant clusters.
+ <br>
+ Asherzhäl zlómór ìsiv ázá nralthóshos, zlôbùsh.</div>
+</li>
+</ul>
 <a name="registered">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>registered</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>[] <a href="../src-html/squidpony/FakeLanguageGen.html#line.1863">registered</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>[] <a href="../src-html/squidpony/FakeLanguageGen.html#line.1970">registered</a></pre>
 <div class="block">An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
  nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric
  codes for languages in the <a href="../squidpony/FakeLanguageGen.html#serializeToString--"><code>serializeToString()</code></a> output, but neither is dependent on the other if this
@@ -1391,7 +1440,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>FakeLanguageGen</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.1875">FakeLanguageGen</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.1982">FakeLanguageGen</a>()</pre>
 <div class="block">Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .</div>
 </li>
 </ul>
@@ -1401,7 +1450,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>FakeLanguageGen</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.1953">FakeLanguageGen</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;openingVowels,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2060">FakeLanguageGen</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;openingVowels,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midVowels,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;openingConsonants,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midConsonants,
@@ -1456,7 +1505,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FakeLanguageGen</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2000">FakeLanguageGen</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;openingVowels,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2107">FakeLanguageGen</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;openingVowels,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midVowels,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;openingConsonants,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midConsonants,
@@ -1542,7 +1591,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomLanguage</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2230">randomLanguage</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2337">randomLanguage</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 </li>
 </ul>
 <a name="randomLanguage-long-">
@@ -1551,7 +1600,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomLanguage</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2234">randomLanguage</a>(long&nbsp;seed)</pre>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2341">randomLanguage</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 <a name="checkAll-java.lang.CharSequence-regexodus.Pattern:A-">
@@ -1560,7 +1609,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>checkAll</h4>
-<pre>protected static&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2378">checkAll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;testing,
+<pre>protected static&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2485">checkAll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;testing,
                                   regexodus.Pattern[]&nbsp;checks)</pre>
 </li>
 </ul>
@@ -1570,7 +1619,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>checkVulgarity</h4>
-<pre>public static&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2395">checkVulgarity</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;testing)</pre>
+<pre>public static&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2502">checkVulgarity</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;testing)</pre>
 <div class="block">Checks a CharSequence, such as a String, against an overzealous vulgarity filter, returning true if the text
  could contain vulgar elements or words that could seem vulgar or juvenile. The idea here is that false positives
  are OK as long as there are very few false negatives (missed vulgar words). Does not check punctuation or numbers
@@ -1589,7 +1638,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>word</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2414">word</a>(boolean&nbsp;capitalize)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2521">word</a>(boolean&nbsp;capitalize)</pre>
 <div class="block">Generate a word from this FakeLanguageGen, using and changing the current seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1605,7 +1654,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>word</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2425">word</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2532">word</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                    boolean&nbsp;capitalize)</pre>
 <div class="block">Generate a word from this FakeLanguageGen using the specified RNG.</div>
 <dl>
@@ -1623,7 +1672,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>word</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2529">word</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2636">word</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                    boolean&nbsp;capitalize,
                    int&nbsp;approxSyllables)</pre>
 <div class="block">Generate a word from this FakeLanguageGen using the specified RNG.</div>
@@ -1642,7 +1691,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>word</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2540">word</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2647">word</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                    boolean&nbsp;capitalize,
                    int&nbsp;approxSyllables,
                    regexodus.Pattern[]&nbsp;additionalChecks)</pre>
@@ -1662,7 +1711,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>word</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2647">word</a>(<a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2754">word</a>(<a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng,
                    boolean&nbsp;capitalize,
                    int&nbsp;approxSyllables,
                    long...&nbsp;reseeds)</pre>
@@ -1682,7 +1731,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sentence</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2756">sentence</a>(int&nbsp;minWords,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2863">sentence</a>(int&nbsp;minWords,
                        int&nbsp;maxWords)</pre>
 <div class="block">Generate a sentence from this FakeLanguageGen, using and changing the current seed.</div>
 <dl>
@@ -1700,7 +1749,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sentence</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2768">sentence</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2875">sentence</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                        int&nbsp;minWords,
                        int&nbsp;maxWords)</pre>
 <div class="block">Generate a sentence from this FakeLanguageGen, using and changing the current seed.</div>
@@ -1719,7 +1768,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sentence</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2786">sentence</a>(int&nbsp;minWords,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2893">sentence</a>(int&nbsp;minWords,
                        int&nbsp;maxWords,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
@@ -1746,7 +1795,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sentence</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2805">sentence</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2912">sentence</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                        int&nbsp;minWords,
                        int&nbsp;maxWords,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
@@ -1775,7 +1824,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sentence</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2849">sentence</a>(int&nbsp;minWords,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2956">sentence</a>(int&nbsp;minWords,
                        int&nbsp;maxWords,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
@@ -1804,7 +1853,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sentence</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2869">sentence</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2976">sentence</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                        int&nbsp;minWords,
                        int&nbsp;maxWords,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
@@ -1835,7 +1884,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>merge1000</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2936">merge1000</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3043">merge1000</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;me,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;other,
                              double&nbsp;otherInfluence)</pre>
@@ -1847,7 +1896,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>accentVowels</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2964">accentVowels</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3071">accentVowels</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;me,
                                 double&nbsp;influence)</pre>
 </li>
@@ -1858,7 +1907,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>accentConsonants</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.2992">accentConsonants</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3099">accentConsonants</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;me,
                                     double&nbsp;influence)</pre>
 </li>
@@ -1869,7 +1918,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>accentBoth</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3037">accentBoth</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3144">accentBoth</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;me,
                               double&nbsp;vowelInfluence,
                               double&nbsp;consonantInfluence)</pre>
@@ -1881,7 +1930,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>mix</h4>
-<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3128">mix</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;other,
+<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3235">mix</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;other,
                            double&nbsp;otherInfluence)</pre>
 </li>
 </ul>
@@ -1891,7 +1940,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>mix</h4>
-<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3202">mix</a>(double&nbsp;myWeight,
+<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3309">mix</a>(double&nbsp;myWeight,
                            <a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;other1,
                            double&nbsp;weight1,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;pairs)</pre>
@@ -1931,7 +1980,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>mixAll</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3272">mixAll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;pairs)</pre>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3379">mixAll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;pairs)</pre>
 <div class="block">Produces a FakeLanguageGen from a group of FakeLanguageGen parameters and the weights for those parameters.
  Requires the first Object in pairs to be a FakeLanguageGen, the next to be a number of some kind that will be the
  weight for the previous FakeLanguageGen(this method can handle non-Double weights, and converts them to Double
@@ -1959,7 +2008,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>addAccents</h4>
-<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3284">addAccents</a>(double&nbsp;vowelInfluence,
+<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3391">addAccents</a>(double&nbsp;vowelInfluence,
                                   double&nbsp;consonantInfluence)</pre>
 </li>
 </ul>
@@ -1969,7 +2018,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>removeAccents</h4>
-<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3311">removeAccents</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3418">removeAccents</a>()</pre>
 </li>
 </ul>
 <a name="addModifiers-java.util.Collection-">
@@ -1978,7 +2027,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>addModifiers</h4>
-<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3353">addModifiers</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&gt;&nbsp;mods)</pre>
+<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3460">addModifiers</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&gt;&nbsp;mods)</pre>
 <div class="block">Adds the specified Modifier objects from a Collection to a copy of this FakeLanguageGen and returns it.
  You can obtain a Modifier with the static constants in the FakeLanguageGen.Modifier nested class, the
  FakeLanguageGen.modifier() method, or Modifier's constructor.</div>
@@ -1996,7 +2045,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>addModifiers</h4>
-<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3367">addModifiers</a>(<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>...&nbsp;mods)</pre>
+<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3474">addModifiers</a>(<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>...&nbsp;mods)</pre>
 <div class="block">Adds the specified Modifier objects to a copy of this FakeLanguageGen and returns it.
  You can obtain a Modifier with the static constants in the FakeLanguageGen.Modifier nested class, the
  FakeLanguageGen.modifier() method, or Modifier's constructor.</div>
@@ -2014,7 +2063,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>removeModifiers</h4>
-<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3378">removeModifiers</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3485">removeModifiers</a>()</pre>
 <div class="block">Creates a copy of this FakeLanguageGen with no modifiers.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2028,7 +2077,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>modifier</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3384">modifier</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3491">modifier</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replacement)</pre>
 </li>
 </ul>
@@ -2038,7 +2087,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>modifier</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3388">modifier</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3495">modifier</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
                                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replacement,
                                                 double&nbsp;chance)</pre>
 </li>
@@ -2049,7 +2098,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3393">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3500">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -2062,7 +2111,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3426">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3533">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -2075,7 +2124,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3454">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3561">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -2088,7 +2137,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3475">copy</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3582">copy</a>()</pre>
 </li>
 </ul>
 <a name="serializeToString--">
@@ -2097,7 +2146,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>serializeToString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3483">serializeToString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3590">serializeToString</a>()</pre>
 </li>
 </ul>
 <a name="deserializeFromString-java.lang.String-">
@@ -2106,7 +2155,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>deserializeFromString</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3487">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.html#line.3594">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
 </li>
 </ul>
 </li>

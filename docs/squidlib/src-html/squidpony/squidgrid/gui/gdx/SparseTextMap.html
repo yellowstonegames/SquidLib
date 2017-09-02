@@ -386,7 +386,7 @@
 <span class="sourceLineNo">378</span>        if (key2 == EMPTY) {<a name="line.378"></a>
 <span class="sourceLineNo">379</span>            keyTable[index2] = key;<a name="line.379"></a>
 <span class="sourceLineNo">380</span>            charValueTable[index2] = charValue;<a name="line.380"></a>
-<span class="sourceLineNo">381</span>            floatValueTable[index1] = floatValue;<a name="line.381"></a>
+<span class="sourceLineNo">381</span>            floatValueTable[index2] = floatValue;<a name="line.381"></a>
 <span class="sourceLineNo">382</span>            if (size++ &gt;= threshold) resize(capacity &lt;&lt; 1);<a name="line.382"></a>
 <span class="sourceLineNo">383</span>            return;<a name="line.383"></a>
 <span class="sourceLineNo">384</span>        }<a name="line.384"></a>
@@ -429,7 +429,7 @@
 <span class="sourceLineNo">421</span>                case 1:<a name="line.421"></a>
 <span class="sourceLineNo">422</span>                    evictedKey = key2;<a name="line.422"></a>
 <span class="sourceLineNo">423</span>                    evictedChar = charTable[index2];<a name="line.423"></a>
-<span class="sourceLineNo">424</span>                    evictedFloat = floatTable[index1];<a name="line.424"></a>
+<span class="sourceLineNo">424</span>                    evictedFloat = floatTable[index2];<a name="line.424"></a>
 <span class="sourceLineNo">425</span>                    keyTable[index2] = insertKey;<a name="line.425"></a>
 <span class="sourceLineNo">426</span>                    charTable[index2] = insertChar;<a name="line.426"></a>
 <span class="sourceLineNo">427</span>                    floatTable[index2] = insertFloat;<a name="line.427"></a>

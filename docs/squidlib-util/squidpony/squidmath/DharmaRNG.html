@@ -489,7 +489,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DharmaRNG.html#shuffle-T:A-T:A-">shuffle</a></span>(T[]&nbsp;elements,
        T[]&nbsp;dest)</code>
-<div class="block">Shuffle an array using the "inside-out" Fisher-Yates algorithm.</div>
+<div class="block">Shuffle an array using the Fisher-Yates algorithm.</div>
 </td>
 </tr>
 <tr id="i38" class="altColor">
@@ -1081,13 +1081,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/DharmaRNG.html#line.407">shuffle</a>(T[]&nbsp;elements,
                        T[]&nbsp;dest)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-T:A-">RNG</a></code></span></div>
-<div class="block">Shuffle an array using the "inside-out" Fisher-Yates algorithm. DO NOT give the same array for both elements and
+<div class="block">Shuffle an array using the Fisher-Yates algorithm. DO NOT give the same array for both elements and
  dest, since the prior contents of dest are rearranged before elements is used, and if they refer to the same
  array, then you can end up with bizarre bugs where one previously-unique item shows up dozens of times. If
  possible, create a new array with the same length as elements and pass it in as dest; the returned value can be
  assigned to whatever you want and will have the same items as the newly-formed array.
  <br>
- https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm</div>
+ https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-T:A-">shuffle</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>

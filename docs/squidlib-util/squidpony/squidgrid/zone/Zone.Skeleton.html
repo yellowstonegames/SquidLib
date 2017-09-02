@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -121,7 +121,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public abstract static class <a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.163">Zone.Skeleton</a>
+<pre>public abstract static class <a href="../../../src-html/squidpony/squidgrid/zone/Zone.html#line.180">Zone.Skeleton</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></pre>
 <div class="block">A convenience partial implementation. Please try for all new
@@ -212,9 +212,14 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#contains-squidpony.squidgrid.zone.Zone-">contains</a></span>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#contains-int-int-">contains</a></span>(int&nbsp;x,
+        int&nbsp;y)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#contains-squidpony.squidgrid.zone.Zone-">contains</a></span>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#extend--">extend</a></span>()</code>
 <div class="block">Gets a new Zone that contains all the Coords in <code>this</code> plus all
@@ -222,51 +227,59 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
  to any Coord this has in it.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getCenter--">getCenter</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getDiagonal--">getDiagonal</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getExternalBorder--">getExternalBorder</a></span>()</code>
 <div class="block">Gets a Collection of Coord values that are not in this Zone, but are
  adjacent to it, either orthogonally or diagonally.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getHeight--">getHeight</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getInternalBorder--">getInternalBorder</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#getWidth--">getWidth</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></span>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#size--">size</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#translate-squidpony.squidmath.Coord-">translate</a></span>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#translate-int-int-">translate</a></span>(int&nbsp;x,
          int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#x-boolean-">x</a></span>(boolean&nbsp;smallestOrBiggest)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/zone/Zone.Skeleton.html#y-boolean-">y</a></span>(boolean&nbsp;smallestOrBiggest)</code>&nbsp;</td>
 </tr>
@@ -283,7 +296,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;squidpony.squidgrid.zone.<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></h3>
-<code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-int-int-">contains</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#isEmpty--">isEmpty</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#size--">size</a></code></li>
+<code><a href="../../../squidpony/squidgrid/zone/Zone.html#getAll--">getAll</a>, <a href="../../../squidpony/squidgrid/zone/Zone.html#isEmpty--">isEmpty</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Iterable">
@@ -312,7 +325,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>protected transient&nbsp;int <a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.166">width</a></pre>
+<pre>protected transient&nbsp;int <a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.183">width</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -321,7 +334,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>height</h4>
-<pre>protected transient&nbsp;int <a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.167">height</a></pre>
+<pre>protected transient&nbsp;int <a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.184">height</a></pre>
 </li>
 </ul>
 </li>
@@ -338,7 +351,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Skeleton</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.163">Skeleton</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.180">Skeleton</a>()</pre>
 </li>
 </ul>
 </li>
@@ -349,13 +362,45 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="size--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>size</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.190">size</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#size--">size</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The number of cells that this zone contains (the size
+ <a href="../../../squidpony/squidgrid/zone/Zone.html#getAll--"><code>Zone.getAll()</code></a>).</dd>
+</dl>
+</li>
+</ul>
+<a name="contains-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>contains</h4>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.196">contains</a>(int&nbsp;x,
+                        int&nbsp;y)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-int-int-">contains</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Whether this zone contains the coordinate (x,y).</dd>
+</dl>
+</li>
+</ul>
 <a name="contains-squidpony.squidmath.Coord-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.173">contains</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.206">contains</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidmath.Coord-">contains</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -370,7 +415,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>contains</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.179">contains</a>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.212">contains</a>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#contains-squidpony.squidgrid.zone.Zone-">contains</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -385,7 +430,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>intersectsWith</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.188">intersectsWith</a>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.221">intersectsWith</a>(<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;other)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#intersectsWith-squidpony.squidgrid.zone.Zone-">intersectsWith</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -400,7 +445,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.205">iterator</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.238">iterator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></dd>
@@ -413,7 +458,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getWidth</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.211">getWidth</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.244">getWidth</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getWidth--">getWidth</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -430,7 +475,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.219">getHeight</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.252">getHeight</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getHeight--">getHeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -447,7 +492,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getDiagonal</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.226">getDiagonal</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.259">getDiagonal</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getDiagonal--">getDiagonal</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -463,7 +508,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>x</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.239">x</a>(boolean&nbsp;smallestOrBiggest)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.267">x</a>(boolean&nbsp;smallestOrBiggest)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#x-boolean-">x</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -482,7 +527,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>y</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.250">y</a>(boolean&nbsp;smallestOrBiggest)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.273">y</a>(boolean&nbsp;smallestOrBiggest)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#y-boolean-">y</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -501,7 +546,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getCenter</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.261">getCenter</a>()</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.284">getCenter</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getCenter--">getCenter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -517,7 +562,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.281">translate</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.304">translate</a>(<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#translate-squidpony.squidmath.Coord-">translate</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
@@ -532,7 +577,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.287">translate</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.310">translate</a>(int&nbsp;x,
                       int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -542,13 +587,29 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 </dl>
 </li>
 </ul>
+<a name="getInternalBorder--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInternalBorder</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.323">getInternalBorder</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../squidpony/squidgrid/zone/Zone.html#getInternalBorder--">getInternalBorder</a></code>&nbsp;in interface&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>Cells in <code>this</code> that are adjacent to a cell not in
+         <code>this</code></dd>
+</dl>
+</li>
+</ul>
 <a name="getExternalBorder--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getExternalBorder</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.300">getExternalBorder</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.345">getExternalBorder</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html#getExternalBorder--">Zone</a></code></span></div>
 <div class="block">Gets a Collection of Coord values that are not in this Zone, but are
  adjacent to it, either orthogonally or diagonally. Related to the fringe()
@@ -569,7 +630,7 @@ implements <a href="../../../squidpony/squidgrid/zone/Zone.html" title="interfac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>extend</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.306">extend</a>()</pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/zone/Zone.Skeleton.html#line.351">extend</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../squidpony/squidgrid/zone/Zone.html#extend--">Zone</a></code></span></div>
 <div class="block">Gets a new Zone that contains all the Coords in <code>this</code> plus all
  neighboring Coords, which can be orthogonally or diagonally adjacent

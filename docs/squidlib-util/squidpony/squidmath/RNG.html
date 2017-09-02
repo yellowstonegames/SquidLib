@@ -597,7 +597,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-T:A-">shuffle</a></span>(T[]&nbsp;elements,
        T[]&nbsp;dest)</code>
-<div class="block">Shuffle an array using the "inside-out" Fisher-Yates algorithm.</div>
+<div class="block">Shuffle an array using the Fisher-Yates algorithm.</div>
 </td>
 </tr>
 <tr id="i44" class="altColor">
@@ -1128,9 +1128,9 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.599">shuffle</a>(T[]&nbsp;elements)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.598">shuffle</a>(T[]&nbsp;elements)</pre>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy.
- Not GWT-compatible; use the overload that takes two arrays if you use GWT.
+ GWT-compatible since GWT 2.8.0, which is the default if you use libGDX 1.9.5 or higher.
  <br>
  https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle</div>
 <dl>
@@ -1175,15 +1175,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.648">shuffle</a>(T[]&nbsp;elements,
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.649">shuffle</a>(T[]&nbsp;elements,
                        T[]&nbsp;dest)</pre>
-<div class="block">Shuffle an array using the "inside-out" Fisher-Yates algorithm. DO NOT give the same array for both elements and
+<div class="block">Shuffle an array using the Fisher-Yates algorithm. DO NOT give the same array for both elements and
  dest, since the prior contents of dest are rearranged before elements is used, and if they refer to the same
  array, then you can end up with bizarre bugs where one previously-unique item shows up dozens of times. If
  possible, create a new array with the same length as elements and pass it in as dest; the returned value can be
  assigned to whatever you want and will have the same items as the newly-formed array.
  <br>
- https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm</div>
+ https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
 <dd><code>T</code> - can be any non-primitive type.</dd>
@@ -1202,7 +1202,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.667">shuffle</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;elements)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.664">shuffle</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;elements)</pre>
 <div class="block">Shuffles a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> of T using the Fisher-Yates algorithm and returns an ArrayList of T.</div>
 <dl>
 <dt><span class="paramLabel">Type Parameters:</span></dt>
@@ -1220,7 +1220,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>shuffle</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.680">shuffle</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;elements,
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.677">shuffle</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;elements,
                                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;buf)</pre>
 <div class="block">Shuffles a <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> of T using the Fisher-Yates algorithm. The result
  is allocated if <code>buf</code> is null or if <code>buf</code> isn't empty,
@@ -1241,7 +1241,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomOrdering</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.702">randomOrdering</a>(int&nbsp;length)</pre>
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.699">randomOrdering</a>(int&nbsp;length)</pre>
 <div class="block">Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
  Useful for passing to OrderedMap or OrderedSet's reorder() methods.</div>
 <dl>
@@ -1258,7 +1258,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomOrdering</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.724">randomOrdering</a>(int&nbsp;length,
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.714">randomOrdering</a>(int&nbsp;length,
                             int[]&nbsp;dest)</pre>
 <div class="block">Generates a random permutation of the range from 0 (inclusive) to length (exclusive) and stores it in
  the dest parameter, avoiding allocations.
@@ -1280,7 +1280,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomPortion</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.750">randomPortion</a>(T[]&nbsp;data,
+<pre>public&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.746">randomPortion</a>(T[]&nbsp;data,
                              T[]&nbsp;output)</pre>
 <div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
  it can, and then returns output. Will only use a given position in the given data at most once; does this by
@@ -1307,7 +1307,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomPortion</h4>
-<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.785">randomPortion</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;data,
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.768">randomPortion</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;data,
                                  int&nbsp;count)</pre>
 <div class="block">Gets a random portion of a List and returns it as a new List. Will only use a given position in the given
  List at most once; does this by shuffling a copy of the List and getting a section of it.</div>
@@ -1328,7 +1328,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomRange</h4>
-<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.798">randomRange</a>(int&nbsp;start,
+<pre>public&nbsp;int[]&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.781">randomRange</a>(int&nbsp;start,
                          int&nbsp;end,
                          int&nbsp;count)</pre>
 <div class="block">Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.
@@ -1349,7 +1349,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextGaussian</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.822">nextGaussian</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.806">nextGaussian</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a value from the gaussian distribution</dd>
@@ -1362,7 +1362,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.846">nextDouble</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.830">nextDouble</a>()</pre>
 <div class="block">This returns a maximum of 0.9999999999999999 because that is the largest
  Double value that is less than 1.0</div>
 <dl>
@@ -1377,7 +1377,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.857">nextDouble</a>(double&nbsp;max)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.841">nextDouble</a>(double&nbsp;max)</pre>
 <div class="block">This returns a random double between 0.0 (inclusive) and max (exclusive).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1391,7 +1391,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextFloat</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.867">nextFloat</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.851">nextFloat</a>()</pre>
 <div class="block">This returns a maximum of 0.99999994 because that is the largest Float
  value that is less than 1.0f</div>
 <dl>
@@ -1406,7 +1406,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBoolean</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.876">nextBoolean</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.860">nextBoolean</a>()</pre>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1420,7 +1420,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.885">nextLong</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.869">nextLong</a>()</pre>
 <div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1434,7 +1434,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.896">nextLong</a>(long&nbsp;bound)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.880">nextLong</a>(long&nbsp;bound)</pre>
 <div class="block">Returns a random long below the given bound, or 0 if the bound is 0 or
  negative.</div>
 <dl>
@@ -1451,7 +1451,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.913">nextInt</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.897">nextInt</a>(int&nbsp;bound)</pre>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
  negative.</div>
 <dl>
@@ -1468,7 +1468,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextIntHasty</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.936">nextIntHasty</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.920">nextIntHasty</a>(int&nbsp;bound)</pre>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
  Uses an aggressively optimized technique that has some bias, but mostly for values of
  bound over 1 billion. This method is considered "hasty" since it should be faster than
@@ -1491,7 +1491,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBytes</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.951">nextBytes</a>(byte[]&nbsp;bytes)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.935">nextBytes</a>(byte[]&nbsp;bytes)</pre>
 <div class="block">Generates random bytes and places them into the given byte array, modifying it in-place.
  The number of random bytes produced is equal to the length of the byte array. Unlike the
  method in java.util.Random, this generates 8 bytes at a time, which can be more efficient
@@ -1513,7 +1513,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextCoord</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.972">nextCoord</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.956">nextCoord</a>(int&nbsp;width,
                        int&nbsp;height)</pre>
 <div class="block">Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)
  and height (exclusive). This makes one call to randomLong to generate (more than) 31 random bits for
@@ -1540,7 +1540,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.982">nextInt</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.966">nextInt</a>()</pre>
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -1554,7 +1554,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.992">next</a>(int&nbsp;bits)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.976">next</a>(int&nbsp;bits)</pre>
 <div class="block">Get up to 32 bits (inclusive) of random state from the RandomnessSource.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1570,7 +1570,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getRandomness</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.996">getRandomness</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.980">getRandomness</a>()</pre>
 </li>
 </ul>
 <a name="setRandomness-squidpony.squidmath.RandomnessSource-">
@@ -1579,7 +1579,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setRandomness</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1000">setRandomness</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.984">setRandomness</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</pre>
 </li>
 </ul>
 <a name="copy--">
@@ -1588,7 +1588,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1010">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.994">copy</a>()</pre>
 <div class="block">Creates a copy of this RNG; it will generate the same random numbers, given the same calls in order, as this RNG
  at the point copy() is called. The copy will not share references with this RNG.</div>
 <dl>
@@ -1603,7 +1603,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>approximateBits</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1033">approximateBits</a>(int&nbsp;bitCount)</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1017">approximateBits</a>(int&nbsp;bitCount)</pre>
 <div class="block">Generates a random 64-bit long with a number of '1' bits (Hamming weight) approximately equal to bitCount.
  For example, calling this with a parameter of 32 will be equivalent to calling nextLong() on this object's
  RandomnessSource (it doesn't consider overridden nextLong() methods, where present, on subclasses of RNG).
@@ -1632,7 +1632,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>randomInterleave</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1058">randomInterleave</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1042">randomInterleave</a>()</pre>
 <div class="block">Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit
  2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.</div>
 <dl>
@@ -1647,7 +1647,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1084">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1068">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1660,7 +1660,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1089">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1073">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1673,7 +1673,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1099">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.html#line.1083">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

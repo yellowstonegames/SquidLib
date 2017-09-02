@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html" target="_top">Frames</a></li>
@@ -136,7 +136,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.213">PanelEffect.GibberishEffect</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.282">PanelEffect.GibberishEffect</a>
 extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a></pre>
 </li>
 </ul>
@@ -155,7 +155,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <!--   -->
 </a>
 <h3>Nested classes/interfaces inherited from class&nbsp;squidpony.squidgrid.gui.gdx.<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></h3>
-<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.GibberishEffect</a></code></li>
+<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.GibberishEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a></code></li>
 </ul>
 </li>
 </ul>
@@ -173,7 +173,9 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>char[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#choices">choices</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#choices">choices</a></span></code>
+<div class="block">This char array contains all characters that can be used in the foreground of this effect.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -181,7 +183,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;squidpony.squidgrid.gui.gdx.<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a></h3>
-<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#affected">affected</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#center">center</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#colors">colors</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#lightMap">lightMap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#radius">radius</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#resMap">resMap</a></code></li>
+<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#affected">affected</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#center">center</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#colors">colors</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#lightMap">lightMap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#radius">radius</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.squidpony.squidgrid.gui.gdx.PanelEffect">
@@ -252,6 +254,77 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-char:A-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+               int&nbsp;radius,
+               double&nbsp;angle,
+               double&nbsp;span,
+               char[]&nbsp;choices)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields; this constructor allows
+ the case where an explosion is directed in a cone or sector shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-float:A-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+               int&nbsp;radius,
+               double&nbsp;angle,
+               double&nbsp;span,
+               float[]&nbsp;coloring)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-float:A-char:A-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+               int&nbsp;radius,
+               double&nbsp;angle,
+               double&nbsp;span,
+               float[]&nbsp;coloring,
+               char[]&nbsp;choices)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-java.util.List-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+               int&nbsp;radius,
+               double&nbsp;angle,
+               double&nbsp;span,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-java.util.List-char:A-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+               int&nbsp;radius,
+               double&nbsp;angle,
+               double&nbsp;span,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring,
+               char[]&nbsp;choices)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-float:A-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                float&nbsp;duration,
                <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
@@ -259,10 +332,10 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
                int&nbsp;radius,
                float[]&nbsp;coloring)</code>
 <div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
- objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+ objects that it will use to color the explosion instead of using purple spark colors.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-float:A-char:A-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                float&nbsp;duration,
                <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
@@ -271,10 +344,10 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
                float[]&nbsp;coloring,
                char[]&nbsp;choices)</code>
 <div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
- objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+ objects that it will use to color the explosion instead of using purple spark colors.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-java.util.List-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                float&nbsp;duration,
                <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
@@ -282,10 +355,10 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
                int&nbsp;radius,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</code>
 <div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
- objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+ objects that it will use to color the explosion instead of using purple spark colors.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-java.util.List-char:A-">GibberishEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                float&nbsp;duration,
                <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
@@ -294,7 +367,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring,
                char[]&nbsp;choices)</code>
 <div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
- objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+ objects that it will use to color the explosion instead of using purple spark colors.</div>
 </td>
 </tr>
 </table>
@@ -316,6 +389,18 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#update-float-">update</a></span>(float&nbsp;percent)</code>
 <div class="block">Called each frame.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#useElectricColors--">useElectricColors</a></span>()</code>
+<div class="block">Sets the colors this GibberishEffect uses to go from through various shades of gray-purple before fading.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#useFieryColors--">useFieryColors</a></span>()</code>
+<div class="block">Sets the colors this GibberishEffect uses to go from orange, to yellow, to orange, to dark gray, then fade.</div>
 </td>
 </tr>
 </table>
@@ -360,7 +445,13 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockListLast">
 <li class="blockList">
 <h4>choices</h4>
-<pre>public&nbsp;char[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.215">choices</a></pre>
+<pre>public&nbsp;char[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.292">choices</a></pre>
+<div class="block">This char array contains all characters that can be used in the foreground of this effect. You can assign
+ another char array, such as if you take <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/StringKit.html?is-external=true#PUNCTUATION" title="class or interface in squidpony"><code>StringKit.PUNCTUATION</code></a> and call
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true#toCharArray--" title="class or interface in java.lang"><code>String.toCharArray()</code></a> on it, to this at any time between calls to <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#update-float-"><code>update(float)</code></a> (which is
+ usually called indirectly via Stage's <code>Stage.act()</code> method if this has
+ been added to an Actor on that Stage). These chars are pseudo-randomly selected approximately once every
+ eighth of a second, and may change sooner if the effect expands more quickly than that.</div>
 </li>
 </ul>
 </li>
@@ -377,7 +468,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.216">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.326">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius)</pre>
 </li>
@@ -388,7 +479,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.235">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.339">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius)</pre>
@@ -409,7 +500,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.253">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.351">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius,
@@ -431,7 +522,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.272">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.364">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -453,7 +544,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.291">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.377">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -476,14 +567,14 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.314">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.394">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</pre>
 <div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
- objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+ objects that it will use to color the explosion instead of using purple spark colors.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
@@ -491,7 +582,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
 <dd><code>center</code> - the center of the explosion</dd>
 <dd><code>radius</code> - the radius of the explosion, in cells</dd>
-<dd><code>coloring</code> - a List of Color or subclasses thereof that will replace the default fire/smoke colors here</dd>
+<dd><code>coloring</code> - a List of Color or subclasses thereof that will replace the default purple spark colors here</dd>
 </dl>
 </li>
 </ul>
@@ -501,7 +592,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.328">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.408">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -509,7 +600,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring,
                        char[]&nbsp;choices)</pre>
 <div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
- objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+ objects that it will use to color the explosion instead of using purple spark colors.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
@@ -517,7 +608,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
 <dd><code>center</code> - the center of the explosion</dd>
 <dd><code>radius</code> - the radius of the explosion, in cells</dd>
-<dd><code>coloring</code> - a List of Color or subclasses thereof that will replace the default fire/smoke colors here</dd>
+<dd><code>coloring</code> - a List of Color or subclasses thereof that will replace the default purple spark colors here</dd>
 </dl>
 </li>
 </ul>
@@ -527,14 +618,14 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.344">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.424">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius,
                        float[]&nbsp;coloring)</pre>
 <div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
- objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+ objects that it will use to color the explosion instead of using purple spark colors.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
@@ -542,17 +633,17 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
 <dd><code>center</code> - the center of the explosion</dd>
 <dd><code>radius</code> - the radius of the explosion, in cells</dd>
-<dd><code>coloring</code> - an array of colors as packed floats that will replace the default fire/smoke colors here</dd>
+<dd><code>coloring</code> - an array of colors as packed floats that will replace the default purple spark colors here</dd>
 </dl>
 </li>
 </ul>
 <a name="GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-float:A-char:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>GibberishEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.358">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.438">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -560,7 +651,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
                        float[]&nbsp;coloring,
                        char[]&nbsp;choices)</pre>
 <div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
- objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
+ objects that it will use to color the explosion instead of using purple spark colors.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
@@ -568,7 +659,162 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
 <dd><code>center</code> - the center of the explosion</dd>
 <dd><code>radius</code> - the radius of the explosion, in cells</dd>
-<dd><code>coloring</code> - an array of colors as packed floats that will replace the default fire/smoke colors here</dd>
+<dd><code>coloring</code> - an array of colors as packed floats that will replace the default purple spark colors here</dd>
+</dl>
+</li>
+</ul>
+<a name="GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-char:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GibberishEffect</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.455">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+                       float&nbsp;duration,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+                       int&nbsp;radius,
+                       double&nbsp;angle,
+                       double&nbsp;span,
+                       char[]&nbsp;choices)</pre>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields; this constructor allows
+ the case where an explosion is directed in a cone or sector shape. It will center the sector on <code>angle</code>
+ (in degrees) and will cover an amount of the circular area (in degrees) equal to <code>span</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
+<dd><code>duration</code> - the duration of this PanelEffect in seconds, as a float</dd>
+<dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
+<dd><code>center</code> - the center of the explosion</dd>
+<dd><code>radius</code> - the radius of the explosion, in cells</dd>
+<dd><code>angle</code> - the angle, in degrees, that will be the center of the sector-shaped effect</dd>
+<dd><code>span</code> - the span, in degrees, of the full arc at the end of the sector-shaped effect</dd>
+</dl>
+</li>
+</ul>
+<a name="GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-java.util.List-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GibberishEffect</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.476">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+                       float&nbsp;duration,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+                       int&nbsp;radius,
+                       double&nbsp;angle,
+                       double&nbsp;span,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</pre>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape. It will center the sector on <code>angle</code>
+ (in degrees) and will cover an amount of the circular area (in degrees) equal to <code>span</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
+<dd><code>duration</code> - the duration of this PanelEffect in seconds, as a float</dd>
+<dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
+<dd><code>center</code> - the center of the explosion</dd>
+<dd><code>radius</code> - the radius of the explosion, in cells</dd>
+<dd><code>angle</code> - the angle, in degrees, that will be the center of the sector-shaped effect</dd>
+<dd><code>span</code> - the span, in degrees, of the full arc at the end of the sector-shaped effect</dd>
+<dd><code>coloring</code> - a List of Color or subclasses thereof that will replace the default purple spark colors here</dd>
+</dl>
+</li>
+</ul>
+<a name="GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-java.util.List-char:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GibberishEffect</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.494">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+                       float&nbsp;duration,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+                       int&nbsp;radius,
+                       double&nbsp;angle,
+                       double&nbsp;span,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring,
+                       char[]&nbsp;choices)</pre>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape. It will center the sector on <code>angle</code>
+ (in degrees) and will cover an amount of the circular area (in degrees) equal to <code>span</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
+<dd><code>duration</code> - the duration of this PanelEffect in seconds, as a float</dd>
+<dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
+<dd><code>center</code> - the center of the explosion</dd>
+<dd><code>radius</code> - the radius of the explosion, in cells</dd>
+<dd><code>angle</code> - the angle, in degrees, that will be the center of the sector-shaped effect</dd>
+<dd><code>span</code> - the span, in degrees, of the full arc at the end of the sector-shaped effect</dd>
+<dd><code>coloring</code> - a List of Color or subclasses thereof that will replace the default purple spark colors here</dd>
+</dl>
+</li>
+</ul>
+<a name="GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-float:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GibberishEffect</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.514">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+                       float&nbsp;duration,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+                       int&nbsp;radius,
+                       double&nbsp;angle,
+                       double&nbsp;span,
+                       float[]&nbsp;coloring)</pre>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape. It will center the sector on <code>angle</code>
+ (in degrees) and will cover an amount of the circular area (in degrees) equal to <code>span</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
+<dd><code>duration</code> - the duration of this PanelEffect in seconds, as a float</dd>
+<dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
+<dd><code>center</code> - the center of the explosion</dd>
+<dd><code>radius</code> - the radius of the explosion, in cells</dd>
+<dd><code>angle</code> - the angle, in degrees, that will be the center of the sector-shaped effect</dd>
+<dd><code>span</code> - the span, in degrees, of the full arc at the end of the sector-shaped effect</dd>
+<dd><code>coloring</code> - an array of colors as packed floats that will replace the default purple spark colors here</dd>
+</dl>
+</li>
+</ul>
+<a name="GibberishEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-float:A-char:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>GibberishEffect</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.532">GibberishEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+                       float&nbsp;duration,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+                       int&nbsp;radius,
+                       double&nbsp;angle,
+                       double&nbsp;span,
+                       float[]&nbsp;coloring,
+                       char[]&nbsp;choices)</pre>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using purple spark colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape. It will center the sector on <code>angle</code>
+ (in degrees) and will cover an amount of the circular area (in degrees) equal to <code>span</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
+<dd><code>duration</code> - the duration of this PanelEffect in seconds, as a float</dd>
+<dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
+<dd><code>center</code> - the center of the explosion</dd>
+<dd><code>radius</code> - the radius of the explosion, in cells</dd>
+<dd><code>angle</code> - the angle, in degrees, that will be the center of the sector-shaped effect</dd>
+<dd><code>span</code> - the span, in degrees, of the full arc at the end of the sector-shaped effect</dd>
+<dd><code>coloring</code> - an array of colors as packed floats that will replace the default purple spark colors here</dd>
 </dl>
 </li>
 </ul>
@@ -580,13 +826,37 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="useElectricColors--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>useElectricColors</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.299">useElectricColors</a>()</pre>
+<div class="block">Sets the colors this GibberishEffect uses to go from through various shades of gray-purple before fading.
+ Meant for electrical bursts, this will affect character foregrounds in a GibberishEffect. This should look
+ like sparks in GibberishEffect if the chars in <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#choices"><code>choices</code></a> are selected in a way that fits that theme.</div>
+</li>
+</ul>
+<a name="useFieryColors--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>useFieryColors</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.315">useFieryColors</a>()</pre>
+<div class="block">Sets the colors this GibberishEffect uses to go from orange, to yellow, to orange, to dark gray, then fade.
+ Meant for fiery explosions with smoke, this will affect character foregrounds in a GibberishEffect.
+ This may look more like a fiery blast if used with <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx"><code>PanelEffect.ExplosionEffect</code></a>.</div>
+</li>
+</ul>
 <a name="update-float-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>update</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.370">update</a>(float&nbsp;percent)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html#line.544">update</a>(float&nbsp;percent)</pre>
 <div class="block">Called each frame.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -625,7 +895,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEf
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html" target="_top">Frames</a></li>

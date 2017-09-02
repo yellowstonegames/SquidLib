@@ -180,8 +180,8 @@ public interface Zone extends Serializable, Iterable<Coord> {
     abstract class Skeleton implements Zone {
 
 		private transient Coord center = null;
-		private transient int width = -2;
-		private transient int height = -2;
+		protected transient int width = -2;
+		protected transient int height = -2;
 
 		private static final long serialVersionUID = 4436698111716212256L;
 

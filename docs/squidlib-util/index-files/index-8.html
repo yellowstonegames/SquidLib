@@ -160,6 +160,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#gen">gen</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#gen">gen</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html" title="class in squidpony.squidgrid.mapping">FlowingCaveGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#GENERAL_CLEANUP">GENERAL_CLEANUP</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></dt>
 <dd>
 <div class="block">Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
@@ -191,6 +193,14 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#generate-char:A:A-">generate(char[][])</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
 <dd>
 <div class="block">Generate a char[][] dungeon with extra features given a baseDungeon that has already been generated.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#generate--">generate()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html" title="class in squidpony.squidgrid.mapping">FlowingCaveGenerator</a></dt>
+<dd>
+<div class="block">Generates a dungeon or other map as a 2D char array.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#generate-squidpony.squidgrid.mapping.styled.TilesetType-">generate(TilesetType)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html" title="class in squidpony.squidgrid.mapping">FlowingCaveGenerator</a></dt>
+<dd>
+<div class="block">Generates a flowing cave dungeon with a different <a href="../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled"><code>TilesetType</code></a> than this generator was made with.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/IDungeonGenerator.html#generate--">generate()</a></span> - Method in interface squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></dt>
 <dd>
@@ -822,6 +832,11 @@
 <dd>
 <div class="block">Get the most recently generated char[][] dungeon out of this class.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#getDungeon--">getDungeon()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html" title="class in squidpony.squidgrid.mapping">FlowingCaveGenerator</a></dt>
+<dd>
+<div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#generate--"><code>FlowingCaveGenerator.generate()</code></a> or
+ some similar method present in a specific implementation.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/IDungeonGenerator.html#getDungeon--">getDungeon()</a></span> - Method in interface squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></dt>
 <dd>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../squidpony/squidgrid/mapping/IDungeonGenerator.html#generate--"><code>IDungeonGenerator.generate()</code></a> or
@@ -1077,6 +1092,12 @@
 <div class="block">Gets an int determined by the current values in the connections, accessible via <a href="../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>CosmicNumbering.getConnections()</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/Room.html#getIntensity--">getIntensity()</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html#getInternalBorder--">getInternalBorder()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/Zone.html#getInternalBorder--">getInternalBorder()</a></span> - Method in interface squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone">Zone</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/Zone.Skeleton.html#getInternalBorder--">getInternalBorder()</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html#getIntKey--">getIntKey()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></dt>
 <dd>&nbsp;</dd>
@@ -2000,6 +2021,10 @@
 <dd>
 <div class="block">Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustRNG.html#getState--">getState()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath">ThrustRNG</a></dt>
+<dd>
+<div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#getState--">getState()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LapRNG.html#getState0--">getState0()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LapRNG.html" title="class in squidpony.squidmath">LapRNG</a></dt>
@@ -2183,7 +2208,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#grad3f">grad3f</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
-<div class="block">The 92 3D vertices of a pentagonal hexecontahedron.</div>
+<div class="block">The 32 3D vertices of a rhombic triacontahedron.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PerlinNoise.html#grad4">grad4</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath">PerlinNoise</a></dt>
 <dd>&nbsp;</dd>

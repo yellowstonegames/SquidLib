@@ -439,6 +439,10 @@
 <dd>
 <div class="block">Shuts down any threads that may prevent the game from closing properly.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#DetailedBiomeMapper--">DetailedBiomeMapper()</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a></dt>
+<dd>
+<div class="block">Simple constructor; pretty much does nothing.</div>
+</dd>
 <dt><a href="../squidpony/squidgrid/DetailedMimic.html" title="class in squidpony.squidgrid"><span class="typeNameLink">DetailedMimic</span></a> - Class in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
 <dd>
 <div class="block">Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on
@@ -510,6 +514,11 @@
 <div class="block">A simple "output stage" applied to a two-part state like what SlapRNG uses normally; this method does not update
  state0 or state1 on its own.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath">ThrustRNG</a></dt>
+<dd>
+<div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
+ number.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determine-long-long-">determine(long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
@@ -580,6 +589,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#determineBounded-int-int-int-">determineBounded(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
 <dd>
 <div class="block">Like <a href="../squidpony/squidmath/SlapRNG.html#determine-int-int-"><code>SlapRNG.determine(int, int)</code></a>, but limits its results to between 0 (inclusive) and bound (exclusive).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath">ThrustRNG</a></dt>
+<dd>
+<div class="block">Given a state that should usually change each time this is called, and a bound that limits the result to some
+ (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThunderRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></dt>
 <dd>&nbsp;</dd>
@@ -969,15 +983,27 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/iterator/SquidIterators.Down.html#Down-int-int-int-int-">Down(int, int, int, int)</a></span> - Constructor for class squidpony.squidgrid.iterator.<a href="../squidpony/squidgrid/iterator/SquidIterators.Down.html" title="class in squidpony.squidgrid.iterator">SquidIterators.Down</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#drierValueLower">drierValueLower</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html#drierValueLower">drierValueLower</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SimpleBiomeMapper</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#drierValueUpper">drierValueUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html#drierValueUpper">drierValueUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SimpleBiomeMapper</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#driestValueLower">driestValueLower</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html#driestValueLower">driestValueLower</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SimpleBiomeMapper</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#driestValueUpper">driestValueUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html#driestValueUpper">driestValueUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SimpleBiomeMapper</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#dryValueLower">dryValueLower</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html#dryValueLower">dryValueLower</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SimpleBiomeMapper</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html#dryValueUpper">dryValueUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html#dryValueUpper">dryValueUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SimpleBiomeMapper</a></dt>
 <dd>&nbsp;</dd>

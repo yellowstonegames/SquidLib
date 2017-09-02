@@ -155,7 +155,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <!--   -->
 </a>
 <h3>Nested classes/interfaces inherited from class&nbsp;squidpony.squidgrid.gui.gdx.<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></h3>
-<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.GibberishEffect</a></code></li>
+<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GibberishEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.GibberishEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a></code></li>
 </ul>
 </li>
 </ul>
@@ -196,19 +196,13 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <tr class="rowColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#lightMap">lightMap</a></span></code>
-<div class="block">Used internally to determine how the explosion should spread; derived from <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#validCells"><code>PanelEffect.validCells</code></a>.</div>
+<div class="block">The internal representation of how affected each cell is by the explosion, based on proximity to center.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#radius">radius</a></span></code>
 <div class="block">Normally you should set this in the constructor, and not change it later.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>double[][]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#resMap">resMap</a></span></code>
-<div class="block">Used internally to determine how the explosion should spread; derived from <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#validCells"><code>PanelEffect.validCells</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -264,6 +258,46 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-">ExplosionEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+               int&nbsp;radius,
+               double&nbsp;angle,
+               double&nbsp;span)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields; this constructor allows the case where
+ an explosion is directed in a cone or sector shape.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-float:A-">ExplosionEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+               int&nbsp;radius,
+               double&nbsp;angle,
+               double&nbsp;span,
+               float[]&nbsp;coloring)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using fiery/smoke colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-java.util.List-">ExplosionEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+               float&nbsp;duration,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+               <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+               int&nbsp;radius,
+               double&nbsp;angle,
+               double&nbsp;span,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</code>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using fiery/smoke colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-float:A-">ExplosionEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                float&nbsp;duration,
                <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
@@ -274,7 +308,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
  objects that it will use to color the explosion instead of using fiery/smoke colors.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-java.util.List-">ExplosionEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                float&nbsp;duration,
                <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
@@ -377,17 +411,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
  subclasses) to the constructor or change this array directly. The float items assigned to this should be the
  result of calling <code>Color.toFloatBits()</code> or possibly the result of mixing multiple existing floats with
  <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#lerpFloatColors-float-float-float-"><code>SColor.lerpFloatColors(float, float, float)</code></a>; other floats that can be directly used by libGDX, that
- is, packed as ABGR floats (usually the docs will mention this), can also be used.</div>
-</li>
-</ul>
-<a name="resMap">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>resMap</h4>
-<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.83">resMap</a></pre>
-<div class="block">Used internally to determine how the explosion should spread; derived from <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#validCells"><code>PanelEffect.validCells</code></a>.</div>
+ is, packed as ABGR floats (usually the docs will call this a packed float), can also be used.</div>
 </li>
 </ul>
 <a name="lightMap">
@@ -396,8 +420,8 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>lightMap</h4>
-<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.87">lightMap</a></pre>
-<div class="block">Used internally to determine how the explosion should spread; derived from <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#validCells"><code>PanelEffect.validCells</code></a>.</div>
+<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.84">lightMap</a></pre>
+<div class="block">The internal representation of how affected each cell is by the explosion, based on proximity to center.</div>
 </li>
 </ul>
 <a name="affected">
@@ -406,7 +430,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockListLast">
 <li class="blockList">
 <h4>affected</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.93">affected</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.90">affected</a></pre>
 <div class="block">The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to
  show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as
  such (no false negatives). You can edit this if you need to, but it isn't recommended.</div>
@@ -426,7 +450,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.102">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.99">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius)</pre>
 <div class="block">Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
@@ -445,7 +469,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.114">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.111">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius)</pre>
@@ -466,7 +490,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.132">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.129">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -488,7 +512,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.156">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.153">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -510,10 +534,10 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <a name="ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-float:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.176">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.173">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -532,6 +556,96 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 </dl>
 </li>
 </ul>
+<a name="ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ExplosionEffect</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.193">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+                       float&nbsp;duration,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+                       int&nbsp;radius,
+                       double&nbsp;angle,
+                       double&nbsp;span)</pre>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields; this constructor allows the case where
+ an explosion is directed in a cone or sector shape. It will center the sector on <code>angle</code> (in degrees)
+ and will cover an amount of the circular area (in degrees) equal to <code>span</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
+<dd><code>duration</code> - the duration of this PanelEffect in seconds, as a float</dd>
+<dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
+<dd><code>center</code> - the center of the explosion</dd>
+<dd><code>radius</code> - the radius of the explosion, in cells</dd>
+<dd><code>angle</code> - the angle, in degrees, that will be the center of the sector-shaped effect</dd>
+<dd><code>span</code> - the span, in degrees, of the full arc at the end of the sector-shaped effect</dd>
+</dl>
+</li>
+</ul>
+<a name="ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-java.util.List-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ExplosionEffect</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.221">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+                       float&nbsp;duration,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+                       int&nbsp;radius,
+                       double&nbsp;angle,
+                       double&nbsp;span,
+                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;? extends com.badlogic.gdx.graphics.Color&gt;&nbsp;coloring)</pre>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using fiery/smoke colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape. It will center the sector on <code>angle</code>
+ (in degrees) and will cover an amount of the circular area (in degrees) equal to <code>span</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
+<dd><code>duration</code> - the duration of this PanelEffect in seconds, as a float</dd>
+<dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
+<dd><code>center</code> - the center of the explosion</dd>
+<dd><code>radius</code> - the radius of the explosion, in cells</dd>
+<dd><code>angle</code> - the angle, in degrees, that will be the center of the sector-shaped effect</dd>
+<dd><code>span</code> - the span, in degrees, of the full arc at the end of the sector-shaped effect</dd>
+<dd><code>coloring</code> - a List of Color or subclasses thereof that will replace the default fire/smoke colors here</dd>
+</dl>
+</li>
+</ul>
+<a name="ExplosionEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Coord-int-double-double-float:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ExplosionEffect</h4>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.245">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+                       float&nbsp;duration,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
+                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
+                       int&nbsp;radius,
+                       double&nbsp;angle,
+                       double&nbsp;span,
+                       float[]&nbsp;coloring)</pre>
+<div class="block">Constructs an ExplosionEffect with explicit settings for most fields but also an alternate group of Color
+ objects that it will use to color the explosion instead of using fiery/smoke colors; this constructor allows
+ the case where an explosion is directed in a cone or sector shape. It will center the sector on <code>angle</code>
+ (in degrees) and will cover an amount of the circular area (in degrees) equal to <code>span</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>targeting</code> - the IPackedColorPanel to affect</dd>
+<dd><code>duration</code> - the duration of this PanelEffect in seconds, as a float</dd>
+<dd><code>valid</code> - the valid cells that can be changed by this PanelEffect, as a GreasedRegion</dd>
+<dd><code>center</code> - the center of the explosion</dd>
+<dd><code>radius</code> - the radius of the explosion, in cells</dd>
+<dd><code>angle</code> - the angle, in degrees, that will be the center of the sector-shaped effect</dd>
+<dd><code>span</code> - the span, in degrees, of the full arc at the end of the sector-shaped effect</dd>
+<dd><code>coloring</code> - an array of colors as packed floats that will replace the default fire/smoke colors here</dd>
+</dl>
+</li>
+</ul>
 </li>
 </ul>
 <!-- ============ METHOD DETAIL ========== -->
@@ -546,7 +660,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockListLast">
 <li class="blockList">
 <h4>update</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.191">update</a>(float&nbsp;percent)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.260">update</a>(float&nbsp;percent)</pre>
 <div class="block">Called each frame.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
