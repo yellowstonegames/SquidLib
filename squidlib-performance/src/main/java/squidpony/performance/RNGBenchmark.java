@@ -40,7 +40,14 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
-import squidpony.squidmath.*;
+import squidpony.squidmath.FlapRNG;
+import squidpony.squidmath.LFSR;
+import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.PermutedRNG;
+import squidpony.squidmath.PintRNG;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.ThunderRNG;
+import squidpony.squidmath.XoRoRNG;
 
 import java.util.concurrent.TimeUnit;
 

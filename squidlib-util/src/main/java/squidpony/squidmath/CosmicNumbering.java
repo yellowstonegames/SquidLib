@@ -37,6 +37,28 @@ public class CosmicNumbering implements Serializable {
         else
             this.connections = connections;
     }
+    /*
+     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    public static double querp(final double start, final double end, double a){
+        return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
+    }
+    /*
+     * Linearly interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    public static double interpolate(final double start, final double end, final double a)
+    {
+        return (1.0 - a) * start + a * end;
+    }
 
     /**
      * Gets a double determined by the current values in the connections, accessible via {@link #getConnections()}.
@@ -47,23 +69,37 @@ public class CosmicNumbering implements Serializable {
     {
         double[] connections = this.connections;
         final int len = connections.length;
-        long floor;
-        double diff, conn, result = 0.0;//, total = 1.0;
+        long floor, seed = 1234567;
+        double diff, conn, result = 0.0;
         for (int i = 0; i < len; i++) {
             diff = (conn = connections[i]) - (floor = fastFloor(conn));
-            //  & 0xfffffffffffffL
-            result +=
-                    NumberTools.bounce((NumberTools.longBitsToDouble((floor * 0x9E3779B97F4A7C15L >>> 12) | 0x4000000000000000L) - 3.0)
-                            * (1.0 - diff)
-                            + (NumberTools.longBitsToDouble(((floor + 1L) * 0x9E3779B97F4A7C15L >>> 12) | 0x4000000000000000L) - 3.0)
-                            * diff
-                            + 5 + ~i * 0.618);
-//            result *= 1.618;
-//            total *= 1.618;
+            seed += 10000;
+            result += querp(
+                    NumberTools.formCurvedFloat(NumberTools.splitMix64(floor * seed + 100 * (i + 1))),
+                    NumberTools.formCurvedFloat(NumberTools.splitMix64((floor + 1L) * seed + 100 * (i + 1))),
+                    diff
+            );
         }
-        //return NumberTools.bounce(result + (len * 2.5));
-        return result / len;
+        return NumberTools.bounce(5.0 + 2.4 * result);
     }
+
+//    {
+//        double[] connections = this.connections;
+//        final int len = connections.length;
+//        long floor;
+//        double diff, conn, result = 0.0;//, total = 1.0;
+//        for (int i = 0; i < len; i++) {
+//            diff = (conn = connections[i]) - (floor = fastFloor(conn));
+//            //  & 0xfffffffffffffL
+//            result +=
+//                    NumberTools.bounce((NumberTools.longBitsToDouble((floor * 0x9E3779B97F4A7C15L >>> 12) | 0x4000000000000000L) - 3.0)
+//                            * (1.0 - diff)
+//                            + (NumberTools.longBitsToDouble(((floor + 1L) * 0x9E3779B97F4A7C15L >>> 12) | 0x4000000000000000L) - 3.0)
+//                            * diff
+//                            + 5 + ~i * 0.618);
+//        }
+//        return result / len;
+//    }
 
     /**
      * Gets a double determined by the current values in the connections, accessible via {@link #getConnections()}.
