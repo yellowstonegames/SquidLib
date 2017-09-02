@@ -1,5 +1,6 @@
 package squidpony.squidgrid.zone;
 
+import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 
@@ -36,6 +37,16 @@ import java.util.List;
  * planned), GreasedRegion is mutable for performance reasons, and may need copies
  * to be created if you want to keep around older GreasedRegions.
  * </p>
+ * 
+ * <p>
+ * The correct method to implement a {@link Zone} efficiently is to first try
+ * implementing the interface directly, looking at each method and thinking
+ * whether you can do something smart for it. Once you've inspected all methods,
+ * then extend {@link Zone.Skeleton} (instead of Object in the first place) so
+ * that it'll fill for you the methods for which you cannot provide a smart
+ * implementation.
+ * </p>
+ * 
  * @author smelC
  * @see squidpony.squidmath.CoordPacker
  * @see squidpony.squidmath.GreasedRegion
@@ -132,6 +143,12 @@ public interface Zone extends Serializable, Iterable<Coord> {
 	Zone translate(int x, int y);
 
 	/**
+	 * @return Cells in {@code this} that are adjacent to a cell not in
+	 *         {@code this}
+	 */
+	List<Coord> getInternalBorder();
+
+	/**
 	 * Gets a Collection of Coord values that are not in this Zone, but are
 	 * adjacent to it, either orthogonally or diagonally. Related to the fringe()
 	 * methods in CoordPacker and GreasedRegion, but guaranteed to use 8-way
@@ -163,10 +180,26 @@ public interface Zone extends Serializable, Iterable<Coord> {
     abstract class Skeleton implements Zone {
 
 		private transient Coord center = null;
-		protected transient int width = -2;
-		protected transient int height = -2;
+		private transient int width = -2;
+		private transient int height = -2;
 
 		private static final long serialVersionUID = 4436698111716212256L;
+
+		@Override
+		/* Convenience implementation, feel free to override */
+		public int size() {
+			return getAll().size();
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override */
+		public boolean contains(int x, int y) {
+			for (Coord in : this) {
+				if (in.x == x && in.y == y)
+					return true;
+			}
+			return false;
+		}
 
 		@Override
 		/* Convenience implementation, feel free to override */
@@ -228,23 +261,13 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			final int h = getHeight();
 			return Math.sqrt((w * w) + (h * h));
 		}
-		/**
-		 * @param smallestOrBiggest if true, finds the smallest x-coordinate value;
-		 *                          if false, finds the biggest.
-		 * @return The x-coordinate of the Coord within {@code this} that has the
-		 *         smallest (or biggest) x-coordinate. Or -1 if the zone is empty.
-		 */
+
 		@Override
 		/* Convenience implementation, feel free to override. */
 		public int x(boolean smallestOrBiggest) {
 			return smallestOrBiggest ? smallest(true) : biggest(true);
 		}
-		/**
-		 * @param smallestOrBiggest if true, finds the smallest y-coordinate value;
-		 *                          if false, finds the biggest.
-		 * @return The y-coordinate of the Coord within {@code this} that has the
-		 *         smallest (or biggest) y-coordinate. Or -1 if the zone is empty.
-		 */
+
 		@Override
 		/* Convenience implementation, feel free to override. */
 		public int y(boolean smallestOrBiggest) {
@@ -293,6 +316,28 @@ public interface Zone extends Serializable, Iterable<Coord> {
 				shifted.add(Coord.get(c.x + x, c.y + y));
 			}
 			return new ListZone(shifted);
+		}
+
+		@Override
+		/* Convenience implementation, feel free to override. */
+		public List<Coord> getInternalBorder() {
+			final int sz = size();
+			if (sz <= 1)
+				return getAll();
+			final List<Coord> result = new ArrayList<Coord>(sz);
+			final List<Coord> all = getAll();
+			assert sz == all.size();
+			nextCell: for (int i = 0; i < sz; i++) {
+				final Coord c = all.get(i);
+				for (Direction out : Direction.OUTWARDS) {
+					final Coord neighbor = c.translate(out);
+					if (!contains(neighbor)) {
+						result.add(c);
+						continue nextCell;
+					}
+				}
+			}
+			return result;
 		}
 
 		@Override

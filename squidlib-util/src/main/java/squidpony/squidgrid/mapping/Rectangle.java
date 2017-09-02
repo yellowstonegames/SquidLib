@@ -52,8 +52,8 @@ public interface Rectangle extends Zone {
 		};
 
 		/**
-     * @param r a Rectangle
-     * @param c a Coord to check against r for presence
+         * @param r a Rectangle
+         * @param c a Coord to check against r for presence
 		 * @return Whether {@code r} contains {@code c}.
 		 */
 		public static boolean contains(Rectangle r, Coord c) {
@@ -189,13 +189,12 @@ public interface Rectangle extends Zone {
 
 		/**
 		 * @param r
-         * @param diagonal A diagonal direction.
-		 * @return The coord at the corner identified by {@code diagonal} in
+		 * @param dir
+		 * @return The coord at the corner identified by {@code dir} in
 		 *         {@code r}.
 		 */
-		public static Coord getCorner(Rectangle r, Direction diagonal) {
-			assert diagonal.isDiagonal();
-			switch (diagonal) {
+		public static Coord getCorner(Rectangle r, Direction dir) {
+			switch (dir) {
 			case DOWN_LEFT:
 				return r.getBottomLeft();
 			case DOWN_RIGHT:
@@ -206,15 +205,17 @@ public interface Rectangle extends Zone {
 			case UP_RIGHT:
 				/* -y because in SquidLib higher y is smaller */
 				return r.getBottomLeft().translate(r.getWidth() - 1, -(r.getHeight() - 1));
+			case NONE:
+				return r.getCenter();
 			case DOWN:
 			case LEFT:
-			case NONE:
 			case RIGHT:
 			case UP:
-				throw new IllegalStateException(
-						"Expected a diagonal direction in Rectangle.Utils::getCorner. Received: " + diagonal);
+				final Coord c1 = getCorner(r, dir.clockwise());
+				final Coord c2 = getCorner(r, dir.counterClockwise());
+				return Coord.get((c1.x + c2.x) / 2, (c1.y + c2.y) / 2);
 			}
-			throw new IllegalStateException("Unmatched direction in Rectangle.Utils::getCorner: " + diagonal);
+			throw new IllegalStateException("Unmatched direction in Rectangle.Utils::getCorner: " + dir);
 		}
 
 		/**
@@ -223,7 +224,7 @@ public interface Rectangle extends Zone {
 		 *            An array of (at least) size 4, to hold the 4 corners. It
 		 *            is returned, except if {@code null} or too small, in which
 		 *            case a fresh array is returned.
-		 * @return buf, if it had length of at least 4, or a new 4-element array; it contains this Rectangle's 4 corners
+		 * @return {@code buf}, if it had length of at least 4, or a new 4-element array; it contains this Rectangle's 4 corners
 		 */
 		public static Coord[] getAll4Corners(Rectangle r, Coord[] buf) {
 			final Coord[] result = buf == null || buf.length < 4 ? new Coord[4] : buf;
@@ -411,6 +412,54 @@ public interface Rectangle extends Zone {
 		@Override
 		public Zone translate(int x, int y) {
 			return new Impl(bottomLeft.translate(x, y), width, height);
+		}
+
+		@Override
+		public List<Coord> getInternalBorder() {
+			if (width <= 1 || height <= 1)
+				return getAll();
+			final int expectedSize = width + (height - 1) + (width - 1) + (height - 2);
+			final List<Coord> result = new ArrayList<Coord>(expectedSize);
+			Coord current = Utils.getCorner(this, Direction.DOWN_LEFT);
+			for (int i = 0; i < width; i++) {
+				assert !result.contains(current);
+				result.add(current);
+				current = current.translate(Direction.RIGHT);
+			}
+			current = Utils.getCorner(this, Direction.UP_LEFT);
+			for (int i = 0; i < width; i++) {
+				assert !result.contains(current);
+				result.add(current);
+				current = current.translate(Direction.RIGHT);
+			}
+			current = Utils.getCorner(this, Direction.DOWN_LEFT);
+			/* Stopping at height - 1 to avoid doublons */
+			for (int i = 0; i < height - 1; i++) {
+				if (0 < i) {
+					/*
+					 * To avoid doublons (with the very first value of 'current'
+					 * atop this method.
+					 */
+					assert !result.contains(current);
+					result.add(current);
+				}
+				current = current.translate(Direction.UP);
+			}
+			current = Utils.getCorner(this, Direction.DOWN_RIGHT);
+			/* Stopping at height - 1 to avoid doublons */
+			for (int i = 0; i < height - 1; i++) {
+				if (0 < i) {
+					/*
+					 * To avoid doublons (with the very first value of 'current'
+					 * atop this method.
+					 */
+					assert !result.contains(current);
+					result.add(current);
+				}
+				current = current.translate(Direction.UP);
+			}
+			assert result.size() == expectedSize;
+			return result;
 		}
 
 		@Override
