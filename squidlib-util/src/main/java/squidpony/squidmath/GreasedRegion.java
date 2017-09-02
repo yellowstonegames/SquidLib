@@ -5884,6 +5884,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         final int h = getHeight();
         return Math.sqrt((w * w) + (h * h));
     }
+//////Not duplicated because the superclass does this just fine.
+//    @Override
+//    public Coord getCenter() {
+//        return super.getCenter();
+//    }
+
+    @Override
+    public GreasedRegion getInternalBorder() {
+        return copy().surface8way();
+    }
 
     public class GRIterator implements Iterator<Coord>
     {
