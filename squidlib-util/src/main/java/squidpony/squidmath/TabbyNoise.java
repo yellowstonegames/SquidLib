@@ -47,19 +47,23 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(double x, double y, int seed) {
         final int sx = seed | 5, sy = sx + 22222;
+        final long
+                rx = NumberTools.splitMix64(sx),
+                ry = NumberTools.splitMix64(sy);
         final double
-                mx = x + y * 0.89f * NumberTools.randomFloat(sx) + 0.6,
-                my = y + x * 0.89f * NumberTools.randomFloat(sy) + 0.6;
+                mx = ((((rx & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * x + ((((rx & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * y,
+                my = ((((ry & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * y + ((((ry & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * x;
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my);
-        return NumberTools.bounce(5f + 2.4f *
-                (querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
-                        NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
-                        mx - xf)
-                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
-                        NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
-                        my - yf)));
+        return NumberTools.bounce(5.5 + 2.5 *
+                (
+                        querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
+                                NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
+                                mx - xf)
+                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
+                                NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
+                                my - yf)));
     }
 
     @Override
@@ -69,15 +73,19 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
         final int sx = seed | 5, sy = sx + 22222, sz = sy + 33333;
+        final long
+                rx = NumberTools.splitMix64(sx),
+                ry = NumberTools.splitMix64(sy),
+                rz = NumberTools.splitMix64(sz);
         final double
-                mx = x + (NumberTools.randomFloat(sx) * 1.4 + 0.6) * (y * 0.89 + z * 0.57),
-                my = y + (NumberTools.randomFloat(sy) * 1.4 + 0.6) * (z * 0.89 + x * 0.57),
-                mz = z + (NumberTools.randomFloat(sz) * 1.4 + 0.6) * (x * 0.89 + y * 0.57);
+                mx = ((((rx & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * x + ((((rx & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * y + ((((rx & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.57p-8) * z,
+                my = ((((ry & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * y + ((((ry & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * z + ((((ry & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.57p-8) * x,
+                mz = ((((rz & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * z + ((((rz & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * x + ((((rz & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.57p-8) * y;
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my),
                 zf = fastFloor(mz);
-        return NumberTools.bounce(5.0 + 2.4 *
+        return NumberTools.bounce(5.5 + 2.5 *
                 (
                         querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
                                 NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
@@ -98,17 +106,22 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, int seed) {
         final int sx = seed | 5, sy = sx + 22222, sz = sy + 33333, sw = sz + 44444;
+        final long
+                rx = NumberTools.splitMix64(sx),
+                ry = NumberTools.splitMix64(sy),
+                rz = NumberTools.splitMix64(sz),
+                rw = NumberTools.splitMix64(sw);
         final double
-                mx = x + (NumberTools.randomFloat(sx) + 0.6) * (w * 0.79 + z * 0.47 + y * 0.21),
-                my = y + (NumberTools.randomFloat(sy) + 0.6) * (x * 0.79 + w * 0.47 + z * 0.21),
-                mz = z + (NumberTools.randomFloat(sz) + 0.6) * (y * 0.79 + x * 0.47 + w * 0.21),
-                mw = w + (NumberTools.randomFloat(sw) + 0.6) * (z * 0.79 + y * 0.47 + x * 0.21);
+                mx = ((((rx & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * x + ((((rx & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.79p-8) * w + ((((rx & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.47p-8) * z + ((((rx & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.21p-8) * y,
+                my = ((((ry & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * y + ((((ry & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.79p-8) * x + ((((ry & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.47p-8) * w + ((((ry & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.21p-8) * z,
+                mz = ((((rz & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * z + ((((rz & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.79p-8) * y + ((((rz & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.47p-8) * x + ((((rz & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.21p-8) * w,
+                mw = ((((rw & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * w + ((((rw & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.79p-8) * z + ((((rw & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.47p-8) * y + ((((rw & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.21p-8) * x;
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my),
                 zf = fastFloor(mz),
                 wf = fastFloor(mw);
-        return NumberTools.bounce(5f + 2.4f *
+        return NumberTools.bounce(5.5f + 2.5f *
                 (
                         querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
                                 NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
@@ -132,13 +145,21 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, int seed) {
         final int sx = seed | 5, sy = sx + 22222, sz = sy + 33333, sw = sz + 44444, su = sw + 55555, sv = su + 66666;
+
+        final long
+                rx = NumberTools.splitMix64(sx),
+                ry = NumberTools.splitMix64(sy),
+                rz = NumberTools.splitMix64(sz),
+                rw = NumberTools.splitMix64(sw),
+                ru = NumberTools.splitMix64(su),
+                rv = NumberTools.splitMix64(sv);
         final double
-                mx = x + (NumberTools.randomFloat(sx) + 0.6) * (v * 0.67 + u * 0.41 + w * 0.17 + z * 0.13 + y * 0.07),
-                my = y + (NumberTools.randomFloat(sy) + 0.6) * (x * 0.67 + v * 0.41 + u * 0.17 + w * 0.13 + z * 0.07),
-                mz = z + (NumberTools.randomFloat(sz) + 0.6) * (y * 0.67 + x * 0.41 + v * 0.17 + u * 0.13 + w * 0.07),
-                mw = w + (NumberTools.randomFloat(sw) + 0.6) * (z * 0.67 + y * 0.41 + x * 0.17 + v * 0.13 + u * 0.07),
-                mu = u + (NumberTools.randomFloat(su) + 0.6) * (w * 0.67 + z * 0.41 + y * 0.17 + x * 0.13 + v * 0.07),
-                mv = v + (NumberTools.randomFloat(sv) + 0.6) * (u * 0.67 + w * 0.41 + z * 0.17 + y * 0.13 + x * 0.07);
+                mx = ((((rx & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * x + ((((rx & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * v + ((((rx & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * u + ((((rx & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * w + ((((rx & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * z + ((((rx & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * y,
+                my = ((((ry & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * y + ((((ry & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * x + ((((ry & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * v + ((((ry & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * u + ((((ry & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * w + ((((ry & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * z,
+                mz = ((((rz & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * z + ((((rz & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * y + ((((rz & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * x + ((((rz & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * v + ((((rz & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * u + ((((rz & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * w,
+                mw = ((((rw & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * w + ((((rw & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * z + ((((rw & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * y + ((((rw & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * x + ((((rw & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * v + ((((rw & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * u,
+                mu = ((((ru & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * u + ((((rz & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * w + ((((rz & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * z + ((((rz & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * y + ((((rz & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * x + ((((rz & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * v,
+                mv = ((((rv & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * v + ((((rw & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * u + ((((rw & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * w + ((((rw & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * z + ((((rw & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * y + ((((rw & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * x;
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my),
@@ -146,7 +167,7 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 wf = fastFloor(mw),
                 uf = fastFloor(mu),
                 vf = fastFloor(mv);
-        return NumberTools.bounce(5f + 2.4f *
+        return NumberTools.bounce(5.5f + 2.5f *
                 (
                         querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
                                 NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),

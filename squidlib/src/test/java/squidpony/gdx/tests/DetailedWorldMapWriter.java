@@ -15,7 +15,7 @@ import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.WhirlingNoise;
+import squidpony.squidmath.TabbyNoise;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -302,7 +302,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pt = new Texture(pm);
         rng = new StatefulRNG(CrossHash.hash64(date));
         seed = rng.getState();
-        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.75);
+        world = new WorldMapGenerator.TilingMap(seed, width, height, TabbyNoise.instance, 0.9);
         //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.75);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         //world.generateRivers = true;

@@ -335,6 +335,27 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case '_':
                         zoomOut();
                         break;
+                    case 'T':
+                    case 't':
+                        world = new WorldMapGenerator.SphereMap(seed, width, height, TabbyNoise.instance, 1.1);
+                        seed = rng.nextLong();
+                        generate(seed);
+                        rng.setState(seed);
+                        break;
+                    case 'W':
+                    case 'w':
+                        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
+                        seed = rng.nextLong();
+                        generate(seed);
+                        rng.setState(seed);
+                        break;
+                    case 'S':
+                    case 's':
+                        world = new WorldMapGenerator.SphereMap(seed, width, height, SeededNoise.instance, 1.0);
+                        seed = rng.nextLong();
+                        generate(seed);
+                        rng.setState(seed);
+                        break;
                     case 'Q':
                     case 'q':
                     case SquidInput.ESCAPE: {
