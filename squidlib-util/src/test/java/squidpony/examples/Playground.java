@@ -61,15 +61,20 @@ public class Playground {
     }
 
     private void go() {
-//        for (float n = 0f; n <= 1f; n += 0.0625f) {
-//            System.out.println(n + ": " + querp(0f, 1f, n));
-//        }
-        for (float y = 0f; y < 1.1f; y += 0.0625f) {
-            for (float x = 0f; x < 1.1f; x+= 0.0625f) {
-                System.out.printf("%04X ", (int)(tabbyNoise(x, y, 1f, 10) * 0x7FFF + 0x8000));
-            }
-            System.out.println();
+        float value = 2f, power = 3f, min = (float)Math.pow(value, -power), scale = 1 / (1 - min);
+        System.out.println("min = " + min + "f, scale = " + scale + "f");
+        for (float n = 0f; n <= 1f; n += 0.0625f) {
+            if (n <= 0.5f) System.out.println(n + ": " + (1 - ((float)Math.pow(value, -power * (n * 2)) - min) * scale) / 2);
+            else System.out.println(n + ": " + (1 + (float)Math.pow(value, power * (n * 2 - 2)) - min * 2) * scale / 2);
+
+            //System.out.println(n + ": " + querp(0f, 1f, n));
         }
+//        for (float y = 0f; y < 1.1f; y += 0.0625f) {
+//            for (float x = 0f; x < 1.1f; x+= 0.0625f) {
+//                System.out.printf("%04X ", (int)(tabbyNoise(x, y, 1f, 10) * 0x7FFF + 0x8000));
+//            }
+//            System.out.println();
+//        }
     }
 
 }
