@@ -1,6 +1,7 @@
 package squidpony.squidmath;
 
 import squidpony.StringKit;
+import squidpony.annotation.Beta;
 
 /**
  * A hybrid of the type of algorithm LightRNG uses with some of the specific steps of a linear congruential generator.
@@ -21,13 +22,23 @@ import squidpony.StringKit;
  * provides the random number generator SplittableRandom, which uses SplitMix64 and does use different increments).
  * <br>
  * The speed of this generator is fairly good, and it is the fastest generator to pass PractRand with no anomalies, and
- * remains faster than all generators without failures in PractRand. LapRNG, FlapRNG, and ThunderRNG are faster but all
- * have significant amounts of PractRand testing failures, indicating flaws in quality.
+ * remains faster than all generators without failures in PractRand. LapRNG, FlapRNG (when FlapRNG produces ints), and
+ * (narrowly) ThunderRNG are faster, but all have significant amounts of PractRand testing failures, indicating flaws in
+ * quality. The performance of this RandomnessSource has been surprisingly reasonable to improve beyond the baseline of
+ * SplitMix64; where LightRNG takes 1.385 seconds to generate a billion pseudo-random long values, this takes just under
+ * a second (0.958 seconds, to be exact) to generate the same quantity. This speed will vary depending on hardware, and
+ * was benchmarked using JMH on a relatively-recent laptop (with a i7-6700HQ processor and DDR4 RAM, using a Zulu build
+ * of OpenJDK 8); you can expect better performance on most desktops or dedicated "gaming PCs," or potentially much
+ * slower speeds on Android or especially GWT (still, while GWT's emulation of the long data type is not fast, this
+ * generator should yield the same results on GWT as on desktop or Android if the seed given is the same).
+ * <br>
+ * This is marked as Beta because there may be more improvements that can be made, and that would change the results.
  * <br>
  * Thanks to Ashiren, for advice on this in #libgdx on Freenode, and to Pierre L'Ecuyer and Donald Knuth for finding the
  * constants used (originally for linear congruential generators).
  * Created by Tommy Ettinger on 8/3/2017.
  */
+@Beta
 public class ThrustRNG implements StatefulRandomness {
     /**
      * Can be any long value.
@@ -75,15 +86,10 @@ public class ThrustRNG implements StatefulRandomness {
      */
     @Override
     public final int next(int bits) {
-        //return (int)(((state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state >> 28)) >>> (64 - bits));
         long z = (state += 0x9E3779B97F4A7C15L);
-        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL + 0x632BE59BD9B4E019L;
-        return (int)(z ^ (z >>> 28) * 0x27BB2EE687B0B0FDL) >>> (32 - bits);
-                //(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state >> 28)
-
-                //(state *= 0x2545F4914F6CDD1DL) + (state >> 28)
-                //((state += 0x2545F4914F6CDD1DL) ^ (state >>> 30 & state >> 27) * 0xBF58476D1CE4E5B9L)
-                //(state ^ (state += 0x2545F4914F6CDD1DL)) * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL
+        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL;
+        return (int)(z ^ z >>> 28) >>> (32 - bits);
+        //(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state >> 28)
     }
 
     /**
@@ -97,15 +103,10 @@ public class ThrustRNG implements StatefulRandomness {
     @Override
     public final long nextLong() {
         long z = (state += 0x9E3779B97F4A7C15L);
-        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL + 0x632BE59BD9B4E019L;
-        return z ^ (z >>> 28) * 0x27BB2EE687B0B0FDL;
+        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL;// + 0x632BE59BD9B4E019L;
+        return z ^ z >>> 28;
+        // * 0x27BB2EE687B0B0FDL;
         //return ((state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state >> 28));
-
-        //return (state = state * 0x59A2B8F555F5828FL % 0x7FFFFFFFFFFFFFE7L) ^ state << 2;
-        //return (state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL);
-        //return (state ^ (state += 0x2545F4914F6CDD1DL)) * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL;
-        //return (state * 0x5851F42D4C957F2DL) + ((state += 0x14057B7EF767814FL) >> 28);
-        //return (((state += 0x14057B7EF767814FL) >>> 28) * 0x5851F42D4C957F2DL + (state >>> 1));
     }
 
     /**
@@ -118,8 +119,8 @@ public class ThrustRNG implements StatefulRandomness {
      */
     public final long skip(long advance) {
         long z = (state += 0x9E3779B97F4A7C15L * advance);
-        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL + 0x632BE59BD9B4E019L;
-        return z ^ (z >>> 28) * 0x27BB2EE687B0B0FDL;
+        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL;
+        return z ^ z >>> 28;
     }
 
 
@@ -167,8 +168,8 @@ public class ThrustRNG implements StatefulRandomness {
      */
     public static long determine(long state)
     {
-        state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0x5851F42D4C957F2DL + 0x632BE59BD9B4E019L;
-        return state ^ (state >>> 28) * 0x27BB2EE687B0B0FDL;
+        state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        return state ^ state >>> 28;
     }
 
     /**
@@ -185,8 +186,8 @@ public class ThrustRNG implements StatefulRandomness {
      */
     public static int determineBounded(long state, final int bound)
     {
-        state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0x5851F42D4C957F2DL + 0x632BE59BD9B4E019L;
-        return (int)((bound * ((state ^ (state >>> 28) * 0x27BB2EE687B0B0FDL) & 0x7FFFFFFFL)) >> 31);
+        state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        return (int)((bound * ((state ^ state >>> 28) & 0x7FFFFFFFL)) >> 31);
     }
 
 }
