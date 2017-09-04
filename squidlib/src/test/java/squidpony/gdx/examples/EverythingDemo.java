@@ -651,6 +651,8 @@ public class EverythingDemo extends ApplicationAdapter {
                     messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
+//                    display.addAction(PanelEffect.makeGrenadeEffect(new PanelEffect.ProjectileEffect(display.getForegroundLayer(), 0.6f, floors, pos, playerArray[0], '*', SColor.DB_GRAPHITE),
+//                            new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 0.8f, floors, playerArray[0], 6)));
                     display.addAction(new PanelEffect.ProjectileEffect(display.getForegroundLayer(), 0.5f,
                             floors, pos, playerArray[0], '!', SColor.CW_BRIGHT_RED));
                 }

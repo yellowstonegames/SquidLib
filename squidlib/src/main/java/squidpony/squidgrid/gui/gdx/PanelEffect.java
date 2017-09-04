@@ -1,7 +1,9 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import squidpony.ArrayTools;
 import squidpony.annotation.Beta;
@@ -673,6 +675,23 @@ public abstract class PanelEffect extends TemporalAction{
             this.shown = shown;
             color = coloring;
         }
+
+        /**
+         * Makes this ProjectileEffect take an "arc-like" path toward the target, where it is fast at the
+         * beginning and end of its motion and is reaching the height of its arc at the center.
+         */
+        public void useArcPathInterpolation()
+        {
+            setInterpolation(fastInSlowMidFastOut);
+        }
+
+        /**
+         * Makes this ProjectileEffect take a direct path to the target, traveling at uniform speed throughout its path.
+         */
+        public void useStraightPathInterpolation()
+        {
+            setInterpolation(Interpolation.linear);
+        }
         /**
          * Called each frame.
          *
@@ -696,4 +715,27 @@ public abstract class PanelEffect extends TemporalAction{
         }
     }
 
+    public static Interpolation fastInSlowMidFastOut = new Interpolation() {
+        private final float value = 2, power = 3;
+        @Override
+        public float apply(float a) {
+            if (a <= 0.5f) return (1 - ((float)Math.pow(value, -power * (a * 2)) - 0.125f) * 1.1428572f) * 0.5f;
+            return (1 + (float) Math.pow(value, power * (a * 2 - 2)) - 0.25f) * 0.5714286f;
+        }
+    };
+
+    /**
+     * Convenience method to make a ProjectileEffect take an "arc-like" path toward the target, where it is fast at the
+     * beginning and end of its motion and is reaching the height of its arc at the center, before triggering another
+     * Action when the projectile stops (often this might be an {@link PanelEffect.ExplosionEffect}, but could be any
+     * scene2d Action).
+     * @param projectile a {@link PanelEffect.ProjectileEffect} to run as the first step
+     * @param result an {@link Action} to run after the ProjectileEffect completes
+     * @return an Action that can be added to a scene2d Actor, such as a SquidLayers or SparseLayers
+     */
+    public static Action makeGrenadeEffect(ProjectileEffect projectile, Action result)
+    {
+        projectile.useArcPathInterpolation();
+        return Actions.sequence(projectile, result);
+    }
 }
