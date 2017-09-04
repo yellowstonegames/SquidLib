@@ -113,7 +113,8 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.31">ThrustRNG</a>
+<pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
+public class <a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.42">ThrustRNG</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></pre>
 <div class="block">A hybrid of the type of algorithm LightRNG uses with some of the specific steps of a linear congruential generator.
@@ -134,8 +135,17 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  provides the random number generator SplittableRandom, which uses SplitMix64 and does use different increments).
  <br>
  The speed of this generator is fairly good, and it is the fastest generator to pass PractRand with no anomalies, and
- remains faster than all generators without failures in PractRand. LapRNG, FlapRNG, and ThunderRNG are faster but all
- have significant amounts of PractRand testing failures, indicating flaws in quality.
+ remains faster than all generators without failures in PractRand. LapRNG, FlapRNG (when FlapRNG produces ints), and
+ (narrowly) ThunderRNG are faster, but all have significant amounts of PractRand testing failures, indicating flaws in
+ quality. The performance of this RandomnessSource has been surprisingly reasonable to improve beyond the baseline of
+ SplitMix64; where LightRNG takes 1.385 seconds to generate a billion pseudo-random long values, this takes just under
+ a second (0.958 seconds, to be exact) to generate the same quantity. This speed will vary depending on hardware, and
+ was benchmarked using JMH on a relatively-recent laptop (with a i7-6700HQ processor and DDR4 RAM, using a Zulu build
+ of OpenJDK 8); you can expect better performance on most desktops or dedicated "gaming PCs," or potentially much
+ slower speeds on Android or especially GWT (still, while GWT's emulation of the long data type is not fast, this
+ generator should yield the same results on GWT as on desktop or Android if the seed given is the same).
+ <br>
+ This is marked as Beta because there may be more improvements that can be made, and that would change the results.
  <br>
  Thanks to Ashiren, for advice on this in #libgdx on Freenode, and to Pierre L'Ecuyer and Donald Knuth for finding the
  constants used (originally for linear congruential generators).
@@ -299,7 +309,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>state</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.35">state</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.46">state</a></pre>
 <div class="block">Can be any long value.</div>
 </li>
 </ul>
@@ -317,7 +327,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>ThrustRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.40">ThrustRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.51">ThrustRNG</a>()</pre>
 <div class="block">Creates a new generator seeded using Math.random.</div>
 </li>
 </ul>
@@ -327,7 +337,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ThrustRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.45">ThrustRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.56">ThrustRNG</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -344,7 +354,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.55">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.66">getState</a>()</pre>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -360,7 +370,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.65">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.76">setState</a>(long&nbsp;state)</pre>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -376,7 +386,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.77">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.88">next</a>(int&nbsp;bits)</pre>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 <dl>
@@ -395,7 +405,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.98">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.104">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  <p>
@@ -414,7 +424,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>skip</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.119">skip</a>(long&nbsp;advance)</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.120">skip</a>(long&nbsp;advance)</pre>
 <div class="block">Advances or rolls back the ThrustRNG's state without actually generating each number. Skips forward
  or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
  and returns the random number produced at that step (you can get the state with <a href="../../squidpony/squidmath/ThrustRNG.html#getState--"><code>getState()</code></a>).</div>
@@ -432,7 +442,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.134">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.135">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -450,7 +460,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.138">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.139">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -463,7 +473,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.143">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.144">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -476,7 +486,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.153">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.154">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -489,7 +499,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.168">determine</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.169">determine</a>(long&nbsp;state)</pre>
 <div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
  number. This is expected to be called with some changing variable, e.g. <code>randomize(++state)</code>, where
  the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
@@ -511,7 +521,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.186">determineBounded</a>(long&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustRNG.html#line.187">determineBounded</a>(long&nbsp;state,
                                    int&nbsp;bound)</pre>
 <div class="block">Given a state that should usually change each time this is called, and a bound that limits the result to some
  (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive). The bound can be
