@@ -1959,6 +1959,80 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen ALIEN_I = alien_i().register();
 
+    private static FakeLanguageGen alien_o(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "e", "i", "o", "o", "o", "o", "u",
+                        "aa", "ea", "ia", "oa", "oa", "oa", "ua", "ae", "ai", "ao", "ao", "ao", "au",
+                        "ee", "ie", "oe", "oe", "oe", "ue", "ei", "eo", "eo", "eo", "eu",
+                        "ii", "oi", "oi", "oi", "ui", "io", "io", "io", "iu",
+                        "oo", "ou", "uo", "oo", "ou", "uo", "oo", "ou", "uo", "uu",
+                        "aa", "ea", "ia", "oa", "oa", "oa", "ua", "ae", "ai", "ao", "ao", "ao", "au",
+                        "ee", "ie", "oe", "oe", "oe", "ue", "ei", "eo", "eo", "eo", "eu",
+                        "ii", "oi", "ui", "io", "io", "io", "iu",
+                        "oo", "ou", "uo", "oo", "ou", "uo", "oo", "ou", "uo", "uu",
+                        "aea", "aia", "aoa", "aoa", "aoa", "aua", "eae", "eie", "eoe", "eoe", "eoe", "eue",
+                        "iai", "iei", "ioi", "ioi", "ioi", "iui", "uau", "ueu", "uiu", "uou",
+                        "oao", "oeo", "oio", "ouo", "oao", "oeo", "oio", "ouo", "oao", "oeo", "oio", "ouo",
+                        "aei", "aeo", "aeo", "aeo", "aeu", "aie", "aio", "aio", "aio", "aiu",
+                        "aoe", "aoi", "aou", "aoe", "aoi", "aou", "aoe", "aoi", "aou", "aue", "aui", "auo", "auo", "auo",
+                        "eai", "eao", "eao", "eao", "eau", "eia", "eio", "eio", "eio", "eiu",
+                        "eoa", "eoi", "eou", "eoa", "eoi", "eou", "eoa", "eoi", "eou", "eua", "eui", "euo", "euo", "euo",
+                        "iae", "iao", "iao", "iao", "iau", "iea", "ieo", "ieo", "ieo", "ieu",
+                        "ioa", "ioe", "iou", "ioa", "ioe", "iou", "ioa", "ioe", "iou", "iua", "iue", "iuo", "iuo", "iuo",
+                        "oae", "oai", "oau", "oea", "oei", "oeu", "oia", "oie", "oiu", "oua", "oue", "oui",
+                        "oae", "oai", "oau", "oea", "oei", "oeu", "oia", "oie", "oiu", "oua", "oue", "oui",
+                        "oae", "oai", "oau", "oea", "oei", "oeu", "oia", "oie", "oiu", "oua", "oue", "oui",
+                        "uae", "uai", "uao", "uao", "uao", "uea", "uei", "ueo", "ueo", "ueo", "uia", "uie",
+                        "uio", "uoa", "uoe", "uoi", "uio", "uoa", "uoe", "uoi", "uio", "uoa", "uoe", "uoi",
+                },
+                new String[]{},
+                new String[]{
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "hm", "hn", "hr", "hw", "hv", "hl", "hy",
+                        "fm", "fn", "fr", "fw", "fv", "fl", "fy",
+                        "mr", "vr", "ry"
+                },
+                new String[]{
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "m", "n", "r", "w", "h", "v", "f", "l", "y",
+                        "mm", "nn", "rr", "ww", "hh", "vv", "ff", "ll", "yy",
+                        "mm", "nn", "rr", "ww", "hh", "vv", "ff", "ll", "yy",
+                        "hm", "hn", "hr", "hw", "hv", "hl", "hy",
+                        "fm", "fn", "fr", "fw", "fv", "fl", "fy",
+                        "mr", "vr", "ry"
+                },
+                new String[]{
+                        "m", "n", "r", "h", "v", "f", "l",
+                        "m", "n", "r", "h", "v", "f", "l",
+                        "m", "n", "r", "h", "v", "f", "l",
+                        "rm", "rn", "rv", "rf", "rl",
+                        "lm", "ln", "lv", "lf"
+                },
+                new String[]{},
+                new String[]{}, new int[]{1, 2, 3}, new double[]{3, 6, 4}, 0.0, 0.55, 0.0, 0.0, null, true);
+    }
+
+    /**
+     * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+     * an alien species. This alien language emphasizes large clusters of vowels, typically with 2 or 3 vowel sounds
+     * between consonants, though some vowel groups could be interpreted in multiple ways (such as English "maim" and
+     * "bail", which also have regional differences in pronunciation). As the name would suggest, it strongly prefers
+     * using the vowel "o", with it present in about half the groups, but doesn't have any preference toward or against
+     * the other vowels it uses, "a", "e", "i", and "u". The consonants completely avoid hard sounds like "t" and "k",
+     * medium-hard sounds like "g" and "b", and also sibilants like "s" and "z".  This should be fairly hard to
+     * pronounce, but possible.
+     * <br>
+     * Foiuhoeorfeaorm novruol naionouffeu meuif; hmoieloreo naemriou.
+     */
+    public static final FakeLanguageGen ALIEN_O = alien_o().register();
+
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
      * nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric

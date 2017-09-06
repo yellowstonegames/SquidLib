@@ -18,8 +18,11 @@ import java.util.EnumMap;
 public class SquidStorageTest extends ApplicationAdapter {
     public static class TestClass
     {
-        EnumMapPlus<Direction, String> em = new EnumMapPlus<>(Direction.class);
-
+        public EnumMapPlus<Direction, String> em = new EnumMapPlus<>(Direction.class);
+        public TestClass()
+        {
+        }
+        public void initialize()
         {
             em.put(Direction.DOWN_LEFT, "California");
             em.put(Direction.DOWN_RIGHT, "Florida");
@@ -84,6 +87,7 @@ public class SquidStorageTest extends ApplicationAdapter {
 
             EnumMap<Direction, String> empty = new EnumMap<>(Direction.class);
             TestClass em = new TestClass();
+            em.initialize();
             noCompression.json.setElementType(TestClass.class, "em", String.class);
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme");
             world.generate(15, true);
