@@ -298,7 +298,7 @@ public class JsonConverter extends Json {
                 json.writeObjectStart();
                 json.writeValue("k", object.keys[0], null);
                 if(!object.isEmpty()) {
-                    json.writeValue("v", object.vals, null, knownType);
+                    json.writeValue("v", object.vals, Object[].class, knownType);
                 }
                 else
                 {
