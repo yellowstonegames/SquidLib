@@ -6,10 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.SpillWorldMap;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.ProbabilityTable;
-import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.ThunderRNG;
+import squidpony.squidmath.*;
 
 import java.util.Arrays;
 import java.util.EnumMap;
@@ -19,10 +16,27 @@ import java.util.EnumMap;
  * Created by Tommy Ettinger on 9/17/2016.
  */
 public class SquidStorageTest extends ApplicationAdapter {
+    public static class TestClass
+    {
+        EnumMapPlus<Direction, String> em = new EnumMapPlus<>(Direction.class);
+
+        {
+            em.put(Direction.DOWN_LEFT, "California");
+            em.put(Direction.DOWN_RIGHT, "Florida");
+            em.put(Direction.UP_RIGHT, "Maine");
+            em.put(Direction.UP_LEFT, "Washington");
+            em.put(Direction.DOWN, "Texas");
+        }
+
+        @Override
+        public String toString() {
+            return em.toString();
+        }
+    }
     @Override
     public void create() {
         super.create();
-        if(true) {
+        if(false) {
             SquidStorage store = new SquidStorage("StorageTest", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             store.compress = true;
             System.out.println(store.preferences.get().values());
@@ -68,14 +82,9 @@ public class SquidStorageTest extends ApplicationAdapter {
 
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3);
 
-            EnumMap<Direction, String> em = new EnumMap<>(Direction.class), empty = new EnumMap<>(Direction.class);
-
-            em.put(Direction.DOWN_LEFT, "California");
-            em.put(Direction.DOWN_RIGHT, "Florida");
-            em.put(Direction.UP_RIGHT, "Maine");
-            em.put(Direction.UP_LEFT, "Washington");
-            em.put(Direction.DOWN, "Texas");
-
+            EnumMap<Direction, String> empty = new EnumMap<>(Direction.class);
+            TestClass em = new TestClass();
+            noCompression.json.setElementType(TestClass.class, "em", String.class);
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme");
             world.generate(15, true);
             GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75);
@@ -120,7 +129,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             System.out.println(yesCompression.get("Compressed", "language", FakeLanguageGen.class).sentence(srng.copy(), 5, 8));
             System.out.println(yesCompression.get("Compressed", "drawn", String.class));
             System.out.println(em);
-            System.out.println(yesCompression.get("Compressed", "enum_map", EnumMap.class));
+            System.out.println(yesCompression.get("Compressed", "enum_map", TestClass.class));
 
             //note, these are different because EnumMap needs the enum's Class to be constructed, and an empty EnumMap
             //can't have any keys' Class queried (no keys are present). EnumMap has a field that stores the Class as a
