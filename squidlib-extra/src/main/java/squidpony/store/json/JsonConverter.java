@@ -287,6 +287,41 @@ public class JsonConverter extends Json {
                 //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
             }
         });
+        json.setSerializer(EnumMapPlus.class, new Serializer<EnumMapPlus>() {
+            @Override
+            public void write(Json json, EnumMapPlus object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeObjectStart();
+                json.writeValue("k", object.keys[0], null);
+                if(!object.isEmpty()) {
+                    json.writeValue("v", object.vals, null, knownType);
+                }
+                else
+                {
+                    json.writeValue("v", (Object) null, null);
+                }
+                json.writeObjectEnd();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public EnumMapPlus read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull() || jsonData.size == 0) return null;
+                EnumMapPlus emp = new EnumMapPlus(json.readValue("k", Enum.class, jsonData).getClass());
+                Object[] arr = json.readValue(Object[].class, jsonData.get("v"));
+                if(arr == null) return null;
+                Object o;
+                for (int i = 0; i < arr.length; i++) {
+                    if((o = arr[i]) != null)
+                        emp.putAt(i, o);
+                }
+                return emp;
+            }
+        });
 
         json.setSerializer(Arrangement.class, new Serializer<Arrangement>() {
             @Override
