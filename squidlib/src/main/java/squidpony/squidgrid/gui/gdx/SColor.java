@@ -10482,11 +10482,134 @@ public class SColor extends Color {
      * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
      * @return the Color that can be represented by encoded
      */
-    public static Color colorFromFloat(float encoded) {
+    public static Color colorFromFloat(final float encoded) {
         int c = NumberUtils.floatToIntColor(encoded);
         return new Color(((c & 0x000000ff)) / 255f, ((c & 0x0000ff00) >>> 8) / 255f,
                 ((c & 0x00ff0000) >>> 16) / 255f, ((c & 0xff000000) >>> 24) / 255f);
     }
+
+    /**
+     * Gets the red channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return an int from 0 to 255, inclusive, representing the red channel value of the given encoded color
+     */
+    public static int redOfFloat(final float encoded)
+    {
+        return NumberUtils.floatToIntColor(encoded) & 0x000000ff;
+    }
+
+    /**
+     * Gets the green channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return an int from 0 to 255, inclusive, representing the green channel value of the given encoded color
+     */
+    public static int greenOfFloat(final float encoded)
+    {
+        return (NumberUtils.floatToIntColor(encoded) & 0x0000ff00) >>> 8;
+    }
+
+    /**
+     * Gets the blue channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return an int from 0 to 255, inclusive, representing the blue channel value of the given encoded color
+     */
+    public static int blueOfFloat(final float encoded)
+    {
+        return (NumberUtils.floatToIntColor(encoded) & 0x00ff0000) >>> 16;
+    }
+
+    /**
+     * Gets the alpha channel value of the given encoded color, as an even int ranging from 0 to 254, inclusive. Because
+     * of how alpha is stored in libGDX, no odd-number values are possible for alpha.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return an even int from 0 to 254, inclusive, representing the alpha channel value of the given encoded color
+     */
+    public static int alphaOfFloat(final float encoded)
+    {
+        return (NumberUtils.floatToIntColor(encoded) & 0xfe000000) >>> 24;
+    }
+    /**
+     * Gets the saturation of the given encoded color, as a float ranging from 0.0f to 1.0f, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a
+     * bright color, exclusive)
+     */
+    public static float saturationOfFloat(float encoded) {
+        final int e = NumberUtils.floatToIntColor(encoded),
+                r = (e & 255), g = (e >>> 8 & 255),
+                b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
+        final float min = Math.min(Math.min(r, g ), b) / 255f;    //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b) / 255f;    //Min. value of RGB
+        final float delta = max - min;                     //Delta RGB value
+
+        if ( delta < 0.0001f )                     //This is a gray, no chroma...
+        {
+            return 0f;
+        }
+        else                                    //Chromatic data...
+        {
+            return delta / max;
+        }
+    }
+
+    /**
+     * Gets the value (lightness/brightness) of the given encoded color, as a float ranging from 0f to 1f, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return the value (essentially lightness) of the color from 0.0f (black, inclusive) to
+     * 1.0f (very bright, inclusive).
+     */
+    public static float valueOfFloat(final float encoded)
+    {
+        final int e = NumberUtils.floatToIntColor(encoded);
+        final int r = (e & 255), g = (e >>> 8 & 255),
+                b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
+        return Math.max(Math.max(r, g), b) / 255f;
+    }
+
+    /**
+     * Gets the hue of the given encoded color, as a float from 0f (inclusive, red and approaching orange if increased)
+     * to 1f (exclusive, red and approaching purple if decreased).
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
+     * eventually to purple before looping back to almost the same red (1.0, exclusive)
+     */
+    public static float hueOfFloat(final float encoded) {
+        final int e = NumberUtils.floatToIntColor(encoded);
+        final float r = (e & 255) / 255f, g = (e >>> 8 & 255) / 255f,
+                b = (e >>> 16 & 255) / 255f;//, a = (e >>> 24 & 254) / 254f;
+        final float min = Math.min(Math.min(r, g ), b);   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b);    //Min. value of RGB
+        final float delta = max - min;                           //Delta RGB value
+
+        float hue;
+
+        if ( delta < 0.0001f )                     //This is a gray, no chroma...
+        {
+            return 0f;
+        }
+        else                                    //Chromatic data...
+        {
+            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;
+            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;
+            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;
+
+            if      (r == max) hue = bDelta - gDelta;
+            else if (g == max) hue = (1f / 3f) + rDelta - bDelta;
+            else               hue = (2f / 3f) + gDelta - rDelta;
+            return (hue + 1f) % 1f;
+        }
+    }
+
+
+
+    /**
+     * A constant that stores opaque white color as a packed float, for convenience when using the float-based APIs.
+     */
+    public static final float FLOAT_WHITE = -0x1.fffffep126f;
+    /**
+     * A constant that stores opaque black color as a packed float, for convenience when using the float-based APIs.
+     */
+    public static final float FLOAT_BLACK = -0x1.0p125f;
 
     /**
      * Given a color stored as a packed float, and a desired alpha to set for that color (between 0.0 and 1.0, inclusive
