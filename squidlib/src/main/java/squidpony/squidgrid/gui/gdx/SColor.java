@@ -7,6 +7,7 @@ import squidpony.ArrayTools;
 import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.RNG;
 
 /**
  * Allows for the use of custom colors with custom names.
@@ -10538,8 +10539,8 @@ public class SColor extends Color {
         final int e = NumberUtils.floatToIntColor(encoded),
                 r = (e & 255), g = (e >>> 8 & 255),
                 b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
-        final float min = Math.min(Math.min(r, g ), b) / 255f;    //Min. value of RGB
-        final float max = Math.max(Math.max(r, g), b) / 255f;    //Min. value of RGB
+        final float min = Math.min(Math.min(r, g ), b) / 255f;   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b) / 255f;    //Max. value of RGB
         final float delta = max - min;                     //Delta RGB value
 
         if ( delta < 0.0001f )                     //This is a gray, no chroma...
@@ -10577,8 +10578,8 @@ public class SColor extends Color {
         final int e = NumberUtils.floatToIntColor(encoded);
         final float r = (e & 255) / 255f, g = (e >>> 8 & 255) / 255f,
                 b = (e >>> 16 & 255) / 255f;//, a = (e >>> 24 & 254) / 254f;
-        final float min = Math.min(Math.min(r, g ), b);   //Min. value of RGB
-        final float max = Math.max(Math.max(r, g), b);    //Min. value of RGB
+        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB
         final float delta = max - min;                           //Delta RGB value
 
         float hue;
@@ -10855,9 +10856,120 @@ public class SColor extends Color {
         } else {
             final float h = ((hue + 6f) % 1f) * 6f;
             final int i = (int) h;
+            value = MathUtils.clamp(value, 0f, 1f);
+            saturation = MathUtils.clamp(saturation, 0f, 1f);
             final float a = value * (1 - saturation);
             final float b = value * (1 - saturation * (h - i));
             final float c = value * (1 - saturation * (1 - (h - i)));
+
+            switch (i) {
+                case 0:
+                    return floatGet(value, c, a, opacity);
+                case 1:
+                    return floatGet(b, value, a, opacity);
+                case 2:
+                    return floatGet(a, value, c, opacity);
+                case 3:
+                    return floatGet(a, b, value, opacity);
+                case 4:
+                    return floatGet(c, a, value, opacity);
+                default:
+                    return floatGet(value, a, b, opacity);
+            }
+        }
+    }
+
+    /**
+     * Gets a variation on this SColor as a packed float that can have its hue, saturation, and value changed to
+     * specified degrees using a random number generator. Takes an RNG object (if the colors don't have a specific need
+     * to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an RNG), as well as
+     * floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that
+     * can be used as a packed or encoded color with methods like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
+     * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
+     * <br>
+     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway
+     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or
+     * higher than 1, with an exception for hue, which can rotate around somewhat if lower or higher hues would be used.
+     * As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the possible
+     * saturations that could be used would have the specified 0.4f range centered on 0.7f, or 0.5f to 0.9f. If you gave
+     * this 1f for saturation and the current color still has saturation 0.7f, then the range would be truncated at the
+     * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely
+     * to be at the truncated max or min amount.
+     *
+     * @param random     an RNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
+     * @param hue        0f to 1f, the span of hue change that can be applied to the new float color
+     * @param saturation 0f to 1f, the span of saturation change that can be applied to the new float color
+     * @param value      0f to 1f, the span of value/brightness change that can be applied to the new float color
+     * @return a float encoding a color with the given properties
+     */
+    public float toRandomizedFloat(RNG random, float hue, float saturation, float value) {
+        return toRandomizedFloat(random, hue, saturation, value, 0f);
+
+    }
+    /**
+     * Gets a variation on this SColor as a packed float that can have its hue, saturation, value, and opacity changed
+     * to specified degrees using a random number generator. Takes an RNG object (if the colors don't have a specific
+     * need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an RNG), as well
+     * as floats representing the amounts of change that can be applied to hue, saturation, value, and opacity. Returns
+     * a float that can be used as a packed or encoded color with methods like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
+     * saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any objects.
+     * <br>
+     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway
+     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or
+     * higher than 1, with an exception for hue, which can rotate around somewhat if lower or higher hues would be used.
+     * As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the possible
+     * saturations that could be used would have the specified 0.4f range centered on 0.7f, or 0.5f to 0.9f. If you gave
+     * this 1f for saturation and the current color still has saturation 0.7f, then the range would be truncated at the
+     * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely
+     * to be at the truncated max or min amount.
+     *
+     * @param random     an RNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
+     * @param hue        0f to 2f, the span of hue change that can be applied to the new float color
+     * @param saturation 0f to 2f, the span of saturation change that can be applied to the new float color
+     * @param value      0f to 2f, the span of value/brightness change that can be applied to the new float color
+     * @param opacity    0f to 2f, the span of opacity/alpha change that can be applied to the new float color
+     * @return a float encoding a variation of this SColor with changes up to the given properties
+     */
+    public float toRandomizedFloat(RNG random, float hue, float saturation, float value, float opacity) {
+        final float h, s;
+        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value
+        final float delta = max - min;                   //Delta RGB value
+        if ( delta < 0.0039f )                           //This is a gray, no chroma...
+        {
+            s = 0f;
+            h = 0f;
+            hue = 1f;
+        }
+        else                                             //Chromatic data...
+        {
+            s = delta / max;
+            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;
+            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;
+            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;
+
+            if      (r == max) h = (bDelta - gDelta + 1f) % 1f;
+            else if (g == max) h = ((1f / 3f) + rDelta - bDelta + 1f) % 1f;
+            else               h = ((2f / 3f) + gDelta - rDelta + 1f) % 1f;
+        }
+        saturation = MathUtils.clamp(s + (random.nextFloat() - 0.5f) * saturation, 0f, 1f);
+        value = MathUtils.clamp(max + (random.nextFloat() - 0.5f) * value, 0f, 1f);
+        opacity = MathUtils.clamp(a + (random.nextFloat() - 0.5f) * opacity, 0f, 1f);
+
+        if (saturation <= 0.0039f) {
+            return floatGet(value, value, value, opacity);
+        } else if (value <= 0.0039f) {
+            return NumberUtils.intToFloatColor((int) (opacity * 254f) << 24);
+        } else {
+            final float hu = ((h + (random.nextFloat() - 0.5f) * hue + 6f) % 1f) * 6f;
+            final int i = (int) hu;
+            final float a = value * (1 - saturation);
+            final float b = value * (1 - saturation * (hu - i));
+            final float c = value * (1 - saturation * (1 - (hu - i)));
 
             switch (i) {
                 case 0:
