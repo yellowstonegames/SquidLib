@@ -78,8 +78,7 @@ public interface IColorCenter<T> {
      * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)
      *                   to 1.0 (a bright color, inclusive)
      * @param value the value (essentially lightness) of the color from 0.0 (black,
-     *                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high
-     *                   for HDR colors.
+     *                   inclusive) to 1.0 (very bright, inclusive).
      * @param opacity the alpha component as a float; 0.0f is clear, 1.0f is opaque.
      * @return a possibly transparent color
      */
@@ -93,8 +92,7 @@ public interface IColorCenter<T> {
      * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)
      *                   to 1.0 (a bright color, exclusive)
      * @param value the value (essentially lightness) of the color from 0.0 (black,
-     *                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high
-     *                   for HDR colors.
+	 *                   inclusive) to 1.0 (very bright, inclusive).
      * @return an opaque color
      */
     T getHSV(float hue, float saturation, float value);
@@ -169,7 +167,7 @@ public interface IColorCenter<T> {
      *
      * @param c a concrete color
      * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to
-     * 1.0 (inclusive) for screen colors or arbitrarily high for HDR colors.
+     * 1.0 (very bright, inclusive).
      */
     float getValue(T c);
 
@@ -451,7 +449,7 @@ public interface IColorCenter<T> {
          * @param g the green component in 0.0 to 1.0 range, typically
          * @param b the blue component in 0.0 to 1.0 range, typically
          * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to
-         * 1.0 (inclusive) for screen colors or arbitrarily high for HDR colors.
+         * 1.0 (very bright, inclusive).
          */
         public float getValue(float r, float g, float b)
         {
@@ -460,8 +458,8 @@ public interface IColorCenter<T> {
         /**
          * @param c a concrete color
          * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to
-         * 1.0 (inclusive) for screen colors or arbitrarily high for HDR colors.
-         */
+		 * 1.0 (very bright, inclusive).
+		 */
         @Override
         public float getValue(T c) {
             float r = getRed(c) / 255f;                     //RGB from 0 to 255
