@@ -175,6 +175,16 @@ public class NumberTools {
         wia.set(1, (int)(state >>> 40) | 0x3f800000);
         return (wfa.get(0) - 1f) * (wfa.get(1) - 1f) * (state >> 63 | 1L);
     }
+    public static float formFloat(final int seed)
+    {
+        wia.set(0, (seed & 0x7FFFFF) | 0x3f800000);
+        return wfa.get(0) - 1f;
+    }
+    public static float formSignedFloat(final int seed)
+    {
+        wia.set(0, (seed & 0x7FFFFF) | 0x40000000);
+        return wfa.get(0) - 3f;
+    }
     public static float formCurvedFloat(final long start) {
         return   (intBitsToFloat((int)start >>> 9 | 0x3F000000)
                 + intBitsToFloat(((int)~start & 0x007FFFFF) | 0x3F000000)

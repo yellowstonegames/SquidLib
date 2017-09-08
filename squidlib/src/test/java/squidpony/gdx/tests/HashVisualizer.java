@@ -147,7 +147,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 43, rngMode = 30, noiseMode = 57;
+    private int hashMode = 43, rngMode = 30, noiseMode = 81;
 
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
@@ -566,7 +566,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 82;
+                                    noiseMode %= 84;
                                 }
                                 switch (noiseMode)
                                 {
@@ -3275,80 +3275,26 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
-
-                    /*
-                                        case 2:
-                        Gdx.graphics.setTitle("LightRNG");
-                        random = new LightRNG(seed);
+                    case 82:
+                        Gdx.graphics.setTitle("Wavelet 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                display.put(x, y,
+                                        floatGet(bright = WaveletNoise.instance.getValue(x * 0.03125f, y * 0.03125f) * 0.5f + 0.5f, bright, bright, 1f));
                             }
                         }
                         break;
-                    case 3:
-                        Gdx.graphics.setTitle("XorRNG");
-                        random = new XorRNG(seed);
+                    case 83:
+                        Gdx.graphics.setTitle("Wavelet 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
-                    case 4:
-                        Gdx.graphics.setTitle("XoRoRNG");
-                        random = new XoRoRNG(seed);
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
-                    case 5:
-                        Gdx.graphics.setTitle("PermutedRNG");
-                        random = new PermutedRNG(seed);
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
-                    case 6:
-                        Gdx.graphics.setTitle("LongPeriodRNG");
-                        random = new LongPeriodRNG(seed);
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
-                    case 7:
-                        Gdx.graphics.setTitle("IsaacRNG");
-                        random = new IsaacRNG(seed);
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = toFloat(random.next(32));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
-                    case 8:
-                        Gdx.graphics.setTitle("RandomXS128 from LibGDX");
-                        gdxRandom = new RandomXS128(seed);
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = toFloat(gdxRandom.nextInt());
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                display.put(x, y,
+                                        floatGet(bright = WaveletNoise.instance.getValue(x * 0.03125f, y * 0.03125f, ctr * 0.05f) * 0.5f + 0.5f,
+                                                bright, bright, 1f));
                             }
                         }
                         break;
 
-                     */
                 }
             }
             break;

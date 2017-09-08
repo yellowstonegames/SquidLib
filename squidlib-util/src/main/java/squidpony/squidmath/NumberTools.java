@@ -269,6 +269,27 @@ public class NumberTools {
     }
 
     /**
+     * Given an int as a seed, this uses its least-significant 23 bits to produce a float between 0f (inclusive) and 1f
+     * (exclusive). This does not randomize the seed at all, and the upper 9 bits of the seed are ignored.
+     * @param seed an int; only the bottom 23 bits will be used
+     * @return a float between 0f (inclusive) and 1f (exclusive)
+     */
+    public static float formFloat(final int seed)
+    {
+        return Float.intBitsToFloat((seed & 0x7FFFFF) | 0x3f800000) - 1f;
+    }
+    /**
+     * Given an int as a seed, this uses its least-significant 23 bits to produce a float between -1f (inclusive) and 1f
+     * (exclusive). This does not randomize the seed at all, and the upper 9 bits of the seed are ignored.
+     * @param seed an int; only the bottom 23 bits will be used
+     * @return a float between -1f (inclusive) and 1f (exclusive)
+     */
+    public static float formSignedFloat(final int seed)
+    {
+        return Float.intBitsToFloat((seed & 0x7FFFFF) | 0x40000000) - 3f;
+    }
+
+    /**
      * A different kind of determine-like method that expects to be given a random long and produces a random float with
      * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
      * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
