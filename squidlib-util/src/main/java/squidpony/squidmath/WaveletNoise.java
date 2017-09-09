@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2014-2017 Steven T Sell (ssell@vertexfragment.com)
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,10 +30,7 @@ package squidpony.squidmath;
  * <br>
  * Created by Tommy Ettinger on 9/8/2017.
  */
-public class WaveletNoise {
-    public int seed = 0x1337BEEF;
-    public static final WaveletNoise instance = new WaveletNoise(48);
-
+public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D{
     private static int mod(final int x, final int n) {
         final int m = x % n;
         return (m < 0) ? m + n : m;
@@ -41,73 +38,128 @@ public class WaveletNoise {
 
     private final int m_Dimensions;
     private final int m_NoiseSize;
-    private final float[] m_Noise;
+    private final float[] m_Noise, temp1, temp2, noise;
+    ;
+    private final int[] f = new int[3],
+            c = new int[3],
+            mid = new int[3];
+    private final float[][] w = new float[3][3];
+
+    private static final float[] downCoefficients =
+            {
+                    0.000334f, -0.001528f, 0.000410f, 0.003545f, -0.000938f, -0.008233f, 0.002172f, 0.019120f,
+                    -0.005040f, -0.044412f, 0.011655f, 0.103311f, -0.025936f, -0.243780f, 0.033979f, 0.655340f,
+                    0.655340f, 0.033979f, -0.243780f, -0.025936f, 0.103311f, 0.011655f, -0.044412f, -0.005040f,
+                    0.019120f, 0.002172f, -0.008233f, -0.000938f, 0.003546f, 0.000410f, -0.001528f, 0.000334f
+            }, upCoefficients = {0.25f, 0.75f, 0.75f, 0.25f};
     public float m_Scale;
+
+    public int seed = 0x1337BEEF;
+    public static final WaveletNoise instance = new WaveletNoise();
+
 
     public WaveletNoise()
     {
         this(48);
     }
 
-    public WaveletNoise(final int dimensions) // may fix this at 64; it's the length/height/width of all axes
+    public WaveletNoise(final int dimensions) // may fix this at 48; it's the length/height/width of all axes
     {
         m_Dimensions = dimensions + (dimensions & 1); // make m_Dimensions an even number, increasing if needed
 
         m_NoiseSize = (m_Dimensions * m_Dimensions * m_Dimensions);
         m_Noise = new float[m_NoiseSize];
-        m_Scale = 1.0f;
+        temp1 = new float[m_NoiseSize];
+        temp2 = new float[m_NoiseSize];
+        noise = new float[m_NoiseSize];
+        m_Scale = 6.0f;
 
         generate();
     }
 
-    //------------------------------------------------------------------------------
-    // PUBLIC METHODS
-    //------------------------------------------------------------------------------
-
-    public float getValue(final float x) {
-        return getValue(x, 0.0f, 0.0f);
+    @Override
+    public double getNoise(double x) {
+        return getRawNoise((float) x * m_Scale, 0f, 0f, seed);
     }
 
-    public float getValue(final float x, final float y) {
-        return getValue(x, y, 0.0f);
+    @Override
+    public double getNoiseWithSeed(double x, int seed) {
+        return getRawNoise((float) x * m_Scale, 0f, 0f, seed);
     }
 
-    public float getValue(final float x, final float y, final float z) {
-        return getRawNoise(x * m_Scale, y * m_Scale, z * m_Scale);
+    @Override
+    public double getNoise(double x, double y) {
+        return getRawNoise((float) x * m_Scale, (float) y * m_Scale, 0f, seed);
+
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, int seed) {
+        return getRawNoise((float) x * m_Scale, (float) y * m_Scale, 0f, seed);
+    }
+
+    @Override
+    public double getNoise(double x, double y, double z) {
+        return getRawNoise((float) x * m_Scale, (float) y * m_Scale, (float) z * m_Scale, seed);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, int seed) {
+        return getRawNoise((float) x * m_Scale, (float) y * m_Scale, (float) z * m_Scale, seed);
+    }
+
+    public float getNoise(final float x) {
+        return getRawNoise(x * m_Scale, 0f, 0f, seed);
+    }
+
+    public float getNoise(final float x, final float y) {
+        return getRawNoise(x * m_Scale, y * m_Scale, 0f, seed);
+    }
+
+    public float getNoise(final float x, final float y, final float z) {
+        return getRawNoise(x * m_Scale, y * m_Scale, z * m_Scale, seed);
     }
 
     public void setScale(final float scale) {
         m_Scale = scale;
     }
 
-    //------------------------------------------------------------------------------
-    // PROTECTED METHODS
-    //------------------------------------------------------------------------------
-
-    public float getRawNoise(final float p0, final float p1, final float p2) {
+    /**
+     * The basis for all getNoise methods in this class; takes x, y, and z coordinates as floats, plus a seed that will
+     * alter the noise effectively by just moving the section this samples in an unrelated way to changing x, y, and z
+     * normally. Returns a float between -1.0f (inclusive, in theory) and 1.0f exclusive.
+     * @param x x position
+     * @param y y position
+     * @param z z position
+     * @param seed seed as an int to modify the noise produced
+     * @return a float between -1.0f (inclusive) and 1.0f (exclusive)
+     */
+    public float getRawNoise(float x, float y, float z, int seed) {
         int n = m_Dimensions;
-        int[] f = {0, 0, 0};
-        int[] c = {0, 0, 0};
-        int[] mid = {0, 0, 0};
-
-        float[][] w = new float[3][3];
+        int[] f = this.f;
+        int[] c = this.c;
+        int[] mid = this.mid;
+        float[][] w = this.w;
         float t;
         float result = 0.0f;
-
+        seed = ThrustRNG.determineBounded(seed, 0xfffff);
+        x += seed;
+        y += seed;
+        z += seed;
         //---------------------------------------------------
         // Evaluate quadratic B-spline basis functions
-        mid[0] = Math.round(p0);
-        t = mid[0] - (p0 - 0.5f);
+        mid[0] = Math.round(x);
+        t = mid[0] - (x - 0.5f);
         w[0][0] = t * t * 0.5f;
         w[0][2] = (1.0f - t) * (1.0f - t) * 0.5f;
         w[0][1] = 1.0f - w[0][0] - w[0][2];
-        mid[1] = Math.round(p1);
-        t = mid[1] - (p1 - 0.5f);
+        mid[1] = Math.round(y);
+        t = mid[1] - (y - 0.5f);
         w[1][0] = t * t * 0.5f;
         w[1][2] = (1.0f - t) * (1.0f - t) * 0.5f;
         w[1][1] = 1.0f - w[1][0] - w[1][2];
-        mid[2] = Math.round(p2);
-        t = mid[2] - (p2 - 0.5f);
+        mid[2] = Math.round(z);
+        t = mid[2] - (z - 0.5f);
         w[2][0] = t * t * 0.5f;
         w[2][2] = (1.0f - t) * (1.0f - t) * 0.5f;
         w[2][1] = 1.0f - w[2][0] - w[2][2];
@@ -132,22 +184,25 @@ public class WaveletNoise {
         return result;
     }
 
+    /**
+     * Only needs to be called if you change the {@link #seed} field and want the cube of random values re-created.
+     */
     public void generate() {
-        int x = 0;
-        int y = 0;
-        int z = 0;
-        int i = 0;
+        int x;
+        int y;
+        int z;
+        int i;
 
-        float[] temp1 = new float[m_NoiseSize];
-        float[] temp2 = new float[m_NoiseSize];
-        float[] noise = new float[m_NoiseSize];
+        float[] temp1 = this.temp1;
+        float[] temp2 = this.temp2;
+        float[] noise = this.noise;
 
         //---------------------------------------------------
-        // Step 1: Fill the tile with random numbers on range [0.0, 1.0]
+        // Step 1: Fill the tile with random numbers on range [-1.0, 1.0)
 
 
         for (i = 0; i < m_NoiseSize; i++) {
-            noise[i] = NumberTools.formCurvedFloat(ThrustRNG.determine(seed + i));
+            noise[i] = NumberTools.formCurvedFloat(ThrustRNG.determine(seed + i * 181L));
         }
 
         //---------------------------------------------------
@@ -205,14 +260,7 @@ public class WaveletNoise {
         }
     }
 
-    public void downsample(float[] from, float[] to, int idx, int n, int stride) {
-        float coefficients[] =
-                {
-                        0.000334f, -0.001528f, 0.000410f, 0.003545f, -0.000938f, -0.008233f, 0.002172f, 0.019120f,
-                        -0.005040f, -0.044412f, 0.011655f, 0.103311f, -0.025936f, -0.243780f, 0.033979f, 0.655340f,
-                        0.655340f, 0.033979f, -0.243780f, -0.025936f, 0.103311f, 0.011655f, -0.044412f, -0.005040f,
-                        0.019120f, 0.002172f, -0.008233f, -0.000938f, 0.003546f, 0.000410f, -0.001528f, 0.000334f
-                };
+    protected void downsample(float[] from, float[] to, int idx, int n, int stride) {
 
         int tindex;
         int findex;
@@ -226,25 +274,21 @@ public class WaveletNoise {
                 tindex = i * stride + idx;
                 findex = mod(j, n) * stride + idx;
 
-                to[tindex] += coefficients[cindex] * from[findex];
+                to[tindex] += downCoefficients[cindex] * from[findex];
             }
         }
     }
 
 
-    public void upsample(float[] from, float[] to, int idx, int n, int stride) {
-        float coefficients[] =
-                {
-                        0.25f, 0.75f, 0.75f, 0.25f
-                };
+    protected void upsample(float[] from, float[] to, int idx, int n, int stride) {
 
         //int cindex;
         //int tindex;
         //int findex;
 
         for (int i = 0; i < n; i++) {
-            to[i * stride + idx] = coefficients[2 + (i & 1)] * from[mod((i >> 1), (n >> 1)) * stride + idx]
-            + coefficients[2 + (i - 2 * ((i >> 1) + 1))] * from[mod((i >> 1) + 1, (n >> 1)) * stride + idx];
+            to[i * stride + idx] = upCoefficients[2 + (i & 1)] * from[mod((i >> 1), (n >> 1)) * stride + idx]
+            + upCoefficients[2 + (i - 2 * ((i >> 1) + 1))] * from[mod((i >> 1) + 1, (n >> 1)) * stride + idx];
             /*
             for (int j = (i >> 1); j <= ((i >> 1) + 1); j++) {
                 cindex = 2 + (i - (2 * j));
@@ -255,60 +299,4 @@ public class WaveletNoise {
             */
         }
     }
-
-    /*
-    void Downsample (float[] from, float[] to, int idx, int n, int stride ) {
-
-        float[] aCoeffs =
-                {
-                        0.000334f, -0.001528f, 0.000410f, 0.003545f, -0.000938f, -0.008233f, 0.002172f, 0.019120f,
-                        -0.005040f, -0.044412f, 0.011655f, 0.103311f, -0.025936f, -0.243780f, 0.033979f, 0.655340f,
-                        0.655340f, 0.033979f, -0.243780f, -0.025936f, 0.103311f, 0.011655f, -0.044412f, -0.005040f,
-                        0.019120f, 0.002172f, -0.008233f, -0.000938f, 0.003546f, 0.000410f, -0.001528f, 0.000334f
-                };
-        for (int i=0; i<n>>1; i++) {
-            to[i*stride+idx] = 0;
-            for (int k=2*i-16; k<=2*i+16; k++)
-                to[i*stride+idx] += aCoeffs[k-2*i+16] * from[mod(k,n)*stride+idx];
-        }
-    }
-
-    void Upsample( float *from, float *to, int n, int stride) {
-        float *p, pCoeffs[4] = { 0.25, 0.75, 0.75, 0.25 };
-        p = &pCoeffs[2];
-        for (int i=0; i<n; i++) {
-            to[i*stride] = 0;
-            for (int k=i/2; k<=i/2+1; k++)
-                to[i*stride] += p[i-2*k] * from[Mod(k,n/2)*stride];
-        }
-    }
-    void GenerateNoiseTile( int n, int olap) {
-        n += n & 1;
-        int ix, iy, iz, i, sz=n*n*n*sizeof(float);
-        float *temp1=(float *)malloc(sz),*temp2=(float *)malloc(sz),*noise=(float *)malloc(sz);
-        // Step 1. Fill the tile with random numbers in the range -1 to 1.
-        for (i=0; i<n*n*n; i++) noise[i] = gaussianNoise();
-        // Steps 2 and 3. Downsample and upsample the tile
-        for (iy=0; iy<n; iy++) for (iz=0; iz<n; iz++) { // each x row
-            i = iy*n + iz*n*n; Downsample( &noise[i], &temp1[i], n, 1 );
-            Upsample( &temp1[i], &temp2[i], n, 1 );
-        }
-        for (ix=0; ix<n; ix++) for (iz=0; iz<n; iz++) { // each y row
-            i = ix + iz*n*n; Downsample( &temp2[i], &temp1[i], n, n );
-            Upsample( &temp1[i], &temp2[i], n, n );
-        }
-        for (ix=0; ix<n; ix++) for (iy=0; iy<n; iy++) { // each z row
-            i = ix + iy*n; Downsample( &temp2[i], &temp1[i], n, n*n );
-            Upsample( &temp1[i], &temp2[i], n, n*n );
-        }
-// Step 4. Subtract out the coarse-scale contribution
-        for (i=0; i<n*n*n; i++) {noise[i]-=temp2[i];}
-// Avoid even/odd variance difference by adding odd-offset version of noise to itself
-        int offset=n/2; if (offset%2==0) offset++;
-        for (i=0,ix=0; ix<n; ix++) for (iy=0; iy<n; iy++) for (iz=0; iz<n; iz++)
-            temp1[i++] = noise[ Mod(ix+offset,n) + Mod(iy+offset,n)*n + Mod(iz+offset,n)*n*n ];
-        for (i=0; i<n*n*n; i++) {noise[i]+=temp1[i];}
-        noiseTileData=noise; noiseTileSize=n; free(temp1); free(temp2);
-    }
-    */
 }
