@@ -198,12 +198,18 @@ public class CoordPacker {
             hilbert3Z = new short[0x200], hilbert3Distances = new short[0x200],
             ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
     static {
+        /*
         Coord c;
         for (int i = 0; i < 0x10000; i++) {
             c = hilbertToCoordNoLUT(i);
             hilbertX[i] = (short) c.x;
             hilbertY[i] = (short) c.y;
             hilbertDistances[c.x + (c.y << 8)] = (short) i;
+        }*/
+        for (int x = 0; x < 256; x++) {
+            for (int y = 0; y < 256; y++) {
+                computeHilbert2D(x, y);
+            }
         }
 
         for (int x = 0; x < 8; x++) {
@@ -5210,7 +5216,7 @@ public class CoordPacker {
      * @param hilbert
      * @return
      */
-
+    /*
     private static Coord hilbertToCoordNoLUT( final int hilbert )
     {
         int x = 0, y = 0;
@@ -5227,7 +5233,7 @@ public class CoordPacker {
         }
         return Coord.get(x, y);
     }
-
+    */
     /**
      * Takes a position as a Coord called pt and returns the length to travel along the 256x256 Hilbert curve to reach
      * that position.
@@ -5328,6 +5334,54 @@ public class CoordPacker {
         value3 &= 0x0000001f;
         return value1 | (value2 << 5) | (value3 << 10);
     }
+
+    private static void computeHilbert2D(int x, int y)
+    {
+        int hilbert = 0, remap = 0xb4, mcode, hcode;
+
+        mcode = ( ( x >> 7 ) & 1 ) | ( ( ( y >> ( 7 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 6 ) & 1 ) | ( ( ( y >> ( 6 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 5 ) & 1 ) | ( ( ( y >> ( 5 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 4 ) & 1 ) | ( ( ( y >> ( 4 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 3 ) & 1 ) | ( ( ( y >> ( 3 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 2 ) & 1 ) | ( ( ( y >> ( 2 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( ( x >> 1 ) & 1 ) | ( ( ( y >> ( 1 ) ) & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+        remap ^= ( 0x82000028 >> ( hcode << 3 ) );
+        hilbert = ( ( hilbert << 2 ) + hcode );
+
+        mcode = ( x & 1 ) | ( ( y & 1 ) << 1);
+        hcode = ( ( remap >> ( mcode << 1 ) ) & 3 );
+
+        hilbertDistances[x | (y << 8)] = (short) ( hilbert = ( hilbert << 2 ) + hcode );
+        hilbertX[hilbert] = (short)x;
+        hilbertY[hilbert] = (short)y;
+    }
+
     private static void computeHilbert3D(int x, int y, int z)
     {
         int hilbert = mortonEncode3D(x, y, z);
