@@ -30,7 +30,8 @@ public class Playground {
     public static double determine3(final double base, final int index)
     {
         //int s = ;//, highest = Integer.highestOneBit(s);
-        return NumberTools.setExponent( Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff)), 0x3ff) - 1.0;
+        //return Double.longBitsToDouble((Double.doubleToLongBits(Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff))) & 0xfffffffffffffL) | 0x3FFFFFFFFFFFFFFFL);
+        return NumberTools.setExponent(Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff)), 0x3ff) - 1.0;
     }
     /*
      * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
@@ -43,10 +44,22 @@ public class Playground {
     private static float querp(final float start, final float end, float a){
         return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
     }
-
+    private int state = 0;
+    private float nextFloat()
+    {
+        return (((state += 0x4) * 0xDE45) & 0xFFFF) * 0x1p-16f;
+        /*
+        return NumberTools.intBitsToFloat((state = state >>> 1 | (0x400000 & (
+                (state << 22) //0
+                        ^ (state << 19) //3
+                        ^ ((state << 9) & (state << 3)) //13 19
+                        ^ ((state << 4) & (state << 3)) //18 19
+        ))) | 0x3f800000) - 1f;
+        */
+    }
     private void go() {
         double d;
-        ShortSet s = new ShortSet(256);
+        ShortSet s = new ShortSet(1 << 14);
         /*
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
@@ -59,22 +72,45 @@ public class Playground {
         System.out.println(s.size);
         s.clear();
         */
-        System.out.println("\n");
+//        System.out.println("\n");
+//        for (int r = 0; r < 50; r++) {
+//            double b = NumberTools.randomDouble(r * 181 + 421);
+//            double p = NumberTools.setExponent(1.6180339887498948482 * b, 0x3ff);
+//            System.out.println("With base number " + b + "...");
+//            for (int i = 0; i < 32; i++) {
+//                for (int j = 0; j < 16; j++) {
+//                    //d = determine3(b, i << 4 | j);
+//                    d = (p = NumberTools.setExponent(p + p * 1.6180339887498948482,0x3ff)) - 1.0;
+//                    //System.out.print((i << 4 | j) + ": " + d + ", ");
+//                    if (!s.add((short) (d * 1024)))
+//                        System.out.println("!!!" + (i << 4 | j) + "!!! "  + d);
+//                }
+//                //System.out.println();
+//            }
+//            System.out.println(s.size);
+//            if(s.size >= 500) System.out.println("yay!");
+//            s.clear();
+//        }
+
         for (int r = 0; r < 50; r++) {
-            double b = NumberTools.randomDouble(r * 181 + 421);
-            System.out.println("With base number " + b + "...");
-            for (int i = 0; i < 16; i++) {
-                for (int j = 0; j < 16; j++) {
-                    d = determine3(b, i << 4 | j);
+            state = ((int)NumberTools.splitMix64(r + 2000)) & 0xFFFF;
+            System.out.printf("With state %04X ...", state);
+            for (int i = 0; i < (1 << 14); i++) {
+//                for (int j = 0; j < 32; j++) {
+                    //d = determine3(b, i << 4 | j);
+                    d = nextFloat();
                     //System.out.print((i << 4 | j) + ": " + d + ", ");
-                    if (!s.add((short) (d * 512)))
-                        System.out.println("!!!" + (i << 4 | j) + "!!!");
-                }
+                s.add((short) (d * (1 << 15)));//if (!s.add((short) (d * (1 << 12))))
+                    //    System.out.println("!!!" + (i << 4 | j) + "!!! "  + d);
+//                }
                 //System.out.println();
             }
             System.out.println(s.size);
+            if(s.size >= 16000) System.out.println("yay!");
+            else System.out.println(":(");
             s.clear();
         }
+
 //        long r;
 //        for (int n = 0; n < 300000; n++) {
 //            r = ThrustRNG.determine(n) | 1L;
