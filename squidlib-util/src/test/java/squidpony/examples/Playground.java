@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.SaltyQRNG;
 import squidpony.squidmath.ShortSet;
 import squidpony.squidmath.ThrustRNG;
 
@@ -45,9 +46,23 @@ public class Playground {
         return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
     }
     private int state = 0;
-    private float nextFloat()
+    private int mul = 0xF7910000;
+    private float nextFloat(final int salt)
     {
-        return (((state += 0x4) * 0xDE45) & 0xFFFF) * 0x1p-16f;
+        return (((state >>> 1) * mul ^ ((state += salt) * mul)) & 0xFFFF) * 0x1p-16f;
+        /*
+        return NumberTools.intBitsToFloat((state = state >>> 1 | (0x400000 & (
+                (state << 22) //0
+                        ^ (state << 19) //3
+                        ^ ((state << 9) & (state << 3)) //13 19
+                        ^ ((state << 4) & (state << 3)) //18 19
+        ))) | 0x3f800000) - 1f;
+        */
+    }
+    private int nextInt(final int salt)
+    {
+        final int t = (state += salt) * 0xF7910000;
+        return (t >>> 26 | t >>> 10) & 0xFFFF;
         /*
         return NumberTools.intBitsToFloat((state = state >>> 1 | (0x400000 & (
                 (state << 22) //0
@@ -60,6 +75,7 @@ public class Playground {
     private void go() {
         double d;
         ShortSet s = new ShortSet(1 << 14);
+        SaltyQRNG qrng = new SaltyQRNG(1234);
         /*
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
@@ -91,26 +107,51 @@ public class Playground {
 //            if(s.size >= 500) System.out.println("yay!");
 //            s.clear();
 //        }
-
-        for (int r = 0; r < 50; r++) {
-            state = ((int)NumberTools.splitMix64(r + 2000)) & 0xFFFF;
-            System.out.printf("With state %04X ...", state);
-            for (int i = 0; i < (1 << 14); i++) {
-//                for (int j = 0; j < 32; j++) {
-                    //d = determine3(b, i << 4 | j);
-                    d = nextFloat();
-                    //System.out.print((i << 4 | j) + ": " + d + ", ");
-                s.add((short) (d * (1 << 15)));//if (!s.add((short) (d * (1 << 12))))
-                    //    System.out.println("!!!" + (i << 4 | j) + "!!! "  + d);
-//                }
-                //System.out.println();
-            }
-            System.out.println(s.size);
-            if(s.size >= 16000) System.out.println("yay!");
-            else System.out.println(":(");
-            s.clear();
+        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X\n",  qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+        for (int i = 0; i < (1 << 14); i++) {
+            s.add((short) (qrng.nextFloat() * (1 << 15)));//if (!s.add((short) (d * (1 << 12))))
+            //s.add(t);//if (!s.add((short) (d * (1 << 12))))
         }
+        System.out.println(s.size);
 
+        /*
+        MULTIPLIERS:
+        for (int n = 0; n < 32768; n++) {
+
+            for (int r = 0; r < 50; r++) {
+                s.clear();
+                state = ((int) NumberTools.splitMix64(r + 2000)) & 0xFFFF;
+                for (int i = 0; i < (1 << 14); i++) {
+//                    d = nextFloat(r << 2 | 2);
+//                    s.add(t = (short) ((short) (d * (1 << 15)) & 0x7fff));//if (!s.add((short) (d * (1 << 12))))
+                    t = (short)nextInt(r << 2 | 2);
+                    //System.out.println(t);
+                    s.add(t);//if (!s.add((short) (d * (1 << 12))))
+                }
+                //System.out.println(s.size);
+//            if(s.size >= 16000) System.out.println("yay!");
+//            else System.out.println(":(");
+                if (s.size < 16000) {
+                    System.out.println("WAT??? mul " + mul + " with size " + s.size);
+                    mul += 0x20000;
+                    mul &= 0xFFFF0000;
+                    break MULTIPLIERS;
+                }
+            }
+            //System.out.printf("Working with mul %04X !\n", mul);
+            //System.out.println(s);
+            mul += 0x20000;
+            mul &= 0xFFFF0000;
+            //break;
+        }
+*/
 //        long r;
 //        for (int n = 0; n < 300000; n++) {
 //            r = ThrustRNG.determine(n) | 1L;
