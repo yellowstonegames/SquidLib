@@ -45,8 +45,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
             mid = new int[3];
     private final float[][] w = new float[3][3];
 
-    private static final float[] downCoefficients =
-            {
+    private static final float[] downCoefficients = {
                     0.000334f, -0.001528f, 0.000410f, 0.003545f, -0.000938f, -0.008233f, 0.002172f, 0.019120f,
                     -0.005040f, -0.044412f, 0.011655f, 0.103311f, -0.025936f, -0.243780f, 0.033979f, 0.655340f,
                     0.655340f, 0.033979f, -0.243780f, -0.025936f, 0.103311f, 0.011655f, -0.044412f, -0.005040f,
@@ -124,6 +123,25 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
         m_Scale = scale;
     }
 
+
+
+    /**
+     * Like {@link Math#floor}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
+     * @param t the float to find the floor for
+     * @return the floor of t, as an int
+     */
+    public static int fastFloor(float t) {
+        return t >= 0 ? (int) t : (int) t - 1;
+    }
+
+    /**
+     * Like {@link Math#ceil(double)}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
+     * @param t the float to find the ceiling for
+     * @return the ceiling of t, as an int
+     */
+    private static int fastCeil(float t) {
+        return t >= 0 ? -(int) -t + 1: -(int)-t;    }
+
     /**
      * The basis for all getNoise methods in this class; takes x, y, and z coordinates as floats, plus a seed that will
      * alter the noise effectively by just moving the section this samples in an unrelated way to changing x, y, and z
@@ -142,23 +160,23 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
         float[][] w = this.w;
         float t;
         float result = 0.0f;
-        seed = ThrustRNG.determineBounded(seed, 0xfffff);
-        x += seed;
-        y += seed;
-        z += seed;
+        final float rnd = (ThrustRNG.determine(seed) >> 41) * 0x1p-16f;
+        x += rnd;
+        y += rnd;
+        z += rnd;
         //---------------------------------------------------
         // Evaluate quadratic B-spline basis functions
-        mid[0] = Math.round(x);
+        mid[0] = fastCeil(x - 0.5f); //Math.round(x);
         t = mid[0] - (x - 0.5f);
         w[0][0] = t * t * 0.5f;
         w[0][2] = (1.0f - t) * (1.0f - t) * 0.5f;
         w[0][1] = 1.0f - w[0][0] - w[0][2];
-        mid[1] = Math.round(y);
+        mid[1] = fastCeil(y - 0.5f); //Math.round(y);
         t = mid[1] - (y - 0.5f);
         w[1][0] = t * t * 0.5f;
         w[1][2] = (1.0f - t) * (1.0f - t) * 0.5f;
         w[1][1] = 1.0f - w[1][0] - w[1][2];
-        mid[2] = Math.round(z);
+        mid[2] = fastCeil(z - 0.5f); //Math.round(z);
         t = mid[2] - (z - 0.5f);
         w[2][0] = t * t * 0.5f;
         w[2][2] = (1.0f - t) * (1.0f - t) * 0.5f;
@@ -180,7 +198,8 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
                 }
             }
         }
-
+//        if(result < -1f || result >= 1f)
+//            System.out.println("BAD: result "+ result + ", x " + x + ", y " + y + ", z" + z + ", mid[0] " + mid[0] + ", mid[1] " + mid[1] + ", mid[2] " + mid[2]);
         return result;
     }
 
@@ -202,7 +221,8 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
 
 
         for (i = 0; i < m_NoiseSize; i++) {
-            noise[i] = NumberTools.formCurvedFloat(ThrustRNG.determine(seed + i * 181L));
+            noise[i] = //(ThrustRNG.determine(seed + i * 421L) >> 41) * 0x1p-22f;
+                    NumberTools.formCurvedFloat(ThrustRNG.determine(seed + i * 181L));
         }
 
         //---------------------------------------------------
@@ -267,11 +287,11 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
         int cindex;
 
         for (int i = 0; i < (n >> 1); i++) {
-            to[i * stride+idx] = 0.0f;
+            tindex = i * stride + idx;
+            to[tindex] = 0.0f;
 
             for (int j = ((2 * i) - 16); j < ((2 * i) + 16); j++) {
                 cindex = 16 + (j - 2 * i);
-                tindex = i * stride + idx;
                 findex = mod(j, n) * stride + idx;
 
                 to[tindex] += downCoefficients[cindex] * from[findex];
