@@ -3290,8 +3290,10 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
-                                        floatGet(bright = WaveletNoise.instance.getRawNoise(x * 0.23125f, y * 0.23125f, ctr * 0.25125f, -654321) * 0.5f + 0.5f,
+                                        floatGet(bright = WaveletNoise.instance.getRawNoise(x * 0.23125f, y * 0.23125f, ctr * 0.25125f, -54321) * 0.5f + 0.5f,
                                                 bright, bright, 1f));
+//                                if(bright < -1.0f || bright >= 1.0f)
+//                                    System.out.println("UH OH " + bright);
                             }
                         }
                         break;
