@@ -136,6 +136,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private final double[] connections = {0.0, 0.0, 0.0};
     private final CosmicNumbering cosmos = new CosmicNumbering(connections);
 
+    private final float[] bandsGaussian = WaveletNoise.prepareBands(0.7f, 1.3f, 2.1f, 2.0f, 1.2f, 0.6f),
+            bandsWhite = WaveletNoise.prepareBands(1.3f, 0.8f, 0f, 0.2f, 0.6f, 0.5f);
+
     private final float[][][] fillField = new float[3][width][height],
             fillField3DR = new float[1][width][height],
             fillField3DG = new float[1][width][height],
@@ -566,7 +569,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 84;
+                                    noiseMode %= 86;
                                 }
                                 switch (noiseMode)
                                 {
@@ -3292,8 +3295,26 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y,
                                         floatGet(bright = WaveletNoise.instance.getRawNoise(x * 0.23125f, y * 0.23125f, ctr * 0.25125f, -54321) * 0.5f + 0.5f,
                                                 bright, bright, 1f));
-//                                if(bright < -1.0f || bright >= 1.0f)
-//                                    System.out.println("UH OH " + bright);
+                            }
+                        }
+                        break;
+                    case 84:
+                        Gdx.graphics.setTitle("Wavelet 3D Noise with Gaussian bands at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(bright = WaveletNoise.instance.getBandedNoise(x * 0.023125f, y * 0.023125f, ctr * 0.15125f, 4321, bandsGaussian) * 0.5f + 0.5f,
+                                                bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 85:
+                        Gdx.graphics.setTitle("Wavelet 3D Noise with White Noise bands at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(bright = WaveletNoise.instance.getBandedNoise(x * 0.023125f, y * 0.023125f, ctr * 0.15125f, -4321, bandsWhite) * 0.5f + 0.5f,
+                                                bright, bright, 1f));
                             }
                         }
                         break;

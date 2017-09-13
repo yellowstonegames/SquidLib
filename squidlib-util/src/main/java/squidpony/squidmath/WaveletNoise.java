@@ -160,7 +160,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
         float[][] w = this.w;
         float t;
         float result = 0.0f;
-        final float rnd = (ThrustRNG.determine(seed) >> 41) * 0x1p-16f;
+        final float rnd = (ThrustRNG.determine(seed) >> 41) * 0x1p-15f;
         x += rnd;
         y += rnd;
         z += rnd;
@@ -201,6 +201,61 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
 //        if(result < -1f || result >= 1f)
 //            System.out.println("BAD: result "+ result + ", x " + x + ", y " + y + ", z" + z + ", mid[0] " + mid[0] + ", mid[1] " + mid[1] + ", mid[2] " + mid[2]);
         return result;
+    }
+
+    /**
+     * Makes a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, int, float[])}.
+     * This takes an array or varargs of floats, which are used in order as weights for successively doubled frequencies
+     * for the noise. It may be good to experiment with this; {@code 0.5f, 1.1f, 1.9f, 1.2f, 0.6f} will be different
+     * from {@code 2f, 0.8f, 0f, 0.4f, 1.3f}. Lengths for the weights array of 10 or more can yield nice results, but
+     * take longer to compute. Weights of 0 do not require calculating any noise when they are used.
+     * @param weights an array or varargs of float, where each float, in order, corresponds to a weight for a higher frequency of noise
+     * @return a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, int, float[])}
+     */
+    public static float[] prepareBands(float... weights)
+    {
+        final int len = weights.length;
+        final float[] bands = new float[len+1];
+        float variance = 0f, t;
+        for (int i = 0; i < len; i++) {
+            t = (bands[i] = Math.max(0f, weights[i]));
+            variance += t * t;
+        }
+        bands[len] = (variance != 0f)
+                ? (float)(1.0 / Math.sqrt(variance * len * 0.11))
+                : 1f;
+        return bands;
+    }
+
+    /**
+     * A 3D noise function that allows different frequencies to be mixed in unusual ways, similarly to octaves in other
+     * noise functions but allowing arbitrary weights for frequencies. This takes x, y, and z coordinates as floats, a
+     * seed that will alter the noise calls like it does in {@link #getRawNoise(float, float, float, int)}, and a float
+     * array of bands. The bands must be readied by {@link #prepareBands(float...)}, which creates a specially formatted
+     * float array that can (and probably should) be reused; the items given to prepareBands are each weights for
+     * successively doubled frequencies. Returns a float between -1.0f (inclusive, in theory) and 1.0f exclusive.
+     * @param x x position
+     * @param y y position
+     * @param z z position
+     * @param seed seed as an int to modify the noise produced
+     * @param bands a float array that was created by {@link #prepareBands(float...)}; holds frequency band data
+     * @return a float between -1.0f (inclusive) and 1.0f (exclusive)
+     */
+    public float getBandedNoise(float x, float y, float z, int seed, float[] bands) {
+        float result=0, ax, ay, az, t;
+        final int len = bands.length - 1;
+        for (int b = 0; b < len; b++) {
+            if((t = bands[b]) == 0)
+                continue;;
+            ax = x * (2 << b);
+            ay = y * (2 << b);
+            az = z * (2 << b);
+            result += t * getRawNoise(ax, ay, az, seed);
+        }
+        return result * bands[len];
+//        if(result < -1f || result >= 1f)
+//            System.out.println("BAD: result "+ result + ", x " + x + ", y " + y + ", z" + z);
+//        return result;
     }
 
     /**
