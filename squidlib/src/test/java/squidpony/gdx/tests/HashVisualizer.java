@@ -150,7 +150,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 43, rngMode = 30, noiseMode = 81;
+    private int hashMode = 43, rngMode = 30, noiseMode = 57;
 
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
@@ -3019,9 +3019,9 @@ public class HashVisualizer extends ApplicationAdapter {
                                                 1.0f));*/
                                 display.put(x, y,
                                         floatGet(
-                                                (tabbyNoise(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, 12345678) * 0.50f) + 0.50f,
-                                                (tabbyNoise(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, -87654321) * 0.50f) + 0.50f,
-                                                (tabbyNoise(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, 543212345) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, 12345678) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, -87654321) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, 543212345) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3030,11 +3030,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Tabby 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
-                                        20.0, 20.0, 20.0, 12) * 0.5
-                                        + Noise.seamless3D(x * 0.125, y * 0.125, ctr  * 0.05125,
-                                        40.0, 40.0, 20.0, 1234)
-                                        + */tabbyNoise(x * 0.11125f, y * 0.11125f, ctr  * 0.11125f,
+                                bright = (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.11125f + 10,
                                         123456789) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }

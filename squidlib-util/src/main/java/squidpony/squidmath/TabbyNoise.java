@@ -38,7 +38,14 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     public static int fastFloor(double t) {
         return t >= 0 ? (int) t : (int) t - 1;
     }
-
+    public static double gauss(final long state) {
+        final long s1 = state + 0x9E3779B97F4A7C15L,
+                s2 = s1 + 0x9E3779B97F4A7C15L,
+                y = (s1 ^ s1 >>> 30) * 0x5851F42D4C957F2DL,
+                z = (s2 ^ s2 >>> 30) * 0x5851F42D4C957F2DL;
+        return ((((y ^ y >>> 28) & 0x7FFFFFL) + ((y ^ y >>> 28) >>> 41))
+                + (((z ^ z >>> 28) & 0x7FFFFFL) + ((z ^ z >>> 28) >>> 41))) * 0x1p-24 - 1.0;
+    }
     @Override
     public double getNoise(double x, double y) {
         return getNoiseWithSeed(x, y, seed);
@@ -72,29 +79,37 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
-        final int sx = seed | 5, sy = sx + 22222, sz = sy + 33333;
         final long
-                rx = NumberTools.splitMix64(sx),
-                ry = NumberTools.splitMix64(sy),
-                rz = NumberTools.splitMix64(sz);
+                s = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = (seed - s) ^ (s >>> 29 ^ s << 23),
+                ry = (seed + rx) ^ (s >>> 17 ^ s << 36),
+                rz = (ry - seed) ^ (s >>> 22 ^ s << 31);
         final double
-                mx = ((((rx & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * x + ((((rx & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * y + ((((rx & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.57p-8) * z,
-                my = ((((ry & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * y + ((((ry & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * z + ((((ry & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.57p-8) * x,
-                mz = ((((rz & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * z + ((((rz & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * x + ((((rz & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.57p-8) * y;
+        /*
+                mx = ((((rx & 0x1FL) << 4 | 47L) - 255.5) * 0x1.4p-7) * x + ((((rx & 0x1F00L) >>> 4 | 47L) - 255.5) * 0x0.89p-7) * y + ((((rx & 0x1F0000L) >>> 12 | 47L) - 255.5) * 0x0.57p-7) * z,
+                my = ((((ry & 0x1FL) << 4 | 47L) - 255.5) * 0x1.4p-7) * y + ((((ry & 0x1F00L) >>> 4 | 47L) - 255.5) * 0x0.89p-7) * z + ((((ry & 0x1F0000L) >>> 12 | 47L) - 255.5) * 0x0.57p-7) * x,
+                mz = ((((rz & 0x1FL) << 4 | 47L) - 255.5) * 0x1.4p-7) * z + ((((rz & 0x1F00L) >>> 4 | 47L) - 255.5) * 0x0.89p-7) * x + ((((rz & 0x1F0000L) >>> 12 | 47L) - 255.5) * 0x0.57p-7) * y;
+        */
+
+                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.7p-24) * z,
+                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * z + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.7p-24) * x,
+                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * z + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.7p-24) * y;
+                //mx = dx + dy, my = dy + dz, mz = dx + dz;
+
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my),
                 zf = fastFloor(mz);
-        return NumberTools.bounce(5.5 + 2.5 *
-                (
-                        querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
+        return
+                NumberTools.bounce(5.875 + 2.0625 * (
+                                querp(gauss(xf * 0xAE3779B97F4A7E35L),
+                                gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
+                                + querp(gauss(yf * 0xBE3779B97F4A7C55L),
+                                gauss((yf+1) * 0xBE3779B97F4A7C55L),
                                 my - yf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(zf * sz + 300)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((zf+1) * sz + 300)),
+                                + querp(gauss(zf * 0xCE3779B97F4A7A75L),
+                                gauss((zf+1) * 0xCE3779B97F4A7A75L),
                                 mz - zf)));
     }
 
