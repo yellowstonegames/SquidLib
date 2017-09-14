@@ -53,23 +53,24 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 
     @Override
     public double getNoiseWithSeed(double x, double y, int seed) {
-        final int sx = seed | 5, sy = sx + 22222;
         final long
-                rx = NumberTools.splitMix64(sx),
-                ry = NumberTools.splitMix64(sy);
+                s = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = (seed - s) ^ (s >>> 29 ^ s << 23),
+                ry = (seed + rx) ^ (s >>> 17 ^ s << 36);
         final double
-                mx = ((((rx & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * x + ((((rx & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * y,
-                my = ((((ry & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * y + ((((ry & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.89p-8) * x;
+                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y,
+                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x;
+
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my);
-        return NumberTools.bounce(5.5 + 2.5 *
-                (
-                        querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
+        return
+                NumberTools.bounce(5.875 + 2.0625 * (
+                        querp(gauss(xf * 0xAE3779B97F4A7E35L),
+                                gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
+                                + querp(gauss(yf * 0xBE3779B97F4A7C55L),
+                                gauss((yf+1) * 0xBE3779B97F4A7C55L),
                                 my - yf)));
     }
 
@@ -85,16 +86,9 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 ry = (seed + rx) ^ (s >>> 17 ^ s << 36),
                 rz = (ry - seed) ^ (s >>> 22 ^ s << 31);
         final double
-        /*
-                mx = ((((rx & 0x1FL) << 4 | 47L) - 255.5) * 0x1.4p-7) * x + ((((rx & 0x1F00L) >>> 4 | 47L) - 255.5) * 0x0.89p-7) * y + ((((rx & 0x1F0000L) >>> 12 | 47L) - 255.5) * 0x0.57p-7) * z,
-                my = ((((ry & 0x1FL) << 4 | 47L) - 255.5) * 0x1.4p-7) * y + ((((ry & 0x1F00L) >>> 4 | 47L) - 255.5) * 0x0.89p-7) * z + ((((ry & 0x1F0000L) >>> 12 | 47L) - 255.5) * 0x0.57p-7) * x,
-                mz = ((((rz & 0x1FL) << 4 | 47L) - 255.5) * 0x1.4p-7) * z + ((((rz & 0x1F00L) >>> 4 | 47L) - 255.5) * 0x0.89p-7) * x + ((((rz & 0x1F0000L) >>> 12 | 47L) - 255.5) * 0x0.57p-7) * y;
-        */
-
-                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.7p-24) * z,
-                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * z + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.7p-24) * x,
-                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * z + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.7p-24) * y;
-                //mx = dx + dy, my = dy + dz, mz = dx + dz;
+                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * z,
+                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * z + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * x,
+                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * z + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * y;
 
         final long
                 xf = fastFloor(mx),
@@ -120,35 +114,36 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, int seed) {
-        final int sx = seed | 5, sy = sx + 22222, sz = sy + 33333, sw = sz + 44444;
         final long
-                rx = NumberTools.splitMix64(sx),
-                ry = NumberTools.splitMix64(sy),
-                rz = NumberTools.splitMix64(sz),
-                rw = NumberTools.splitMix64(sw);
+                s = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = (seed - s) ^ (s >>> 29 ^ s << 23),
+                ry = (seed + rx) ^ (s >>> 17 ^ s << 36),
+                rz = (ry - seed) ^ (s >>> 22 ^ s << 31),
+                rw = (seed + rz - ry - rx) ^ (s >>> 19 ^ s << 29);
         final double
-                mx = ((((rx & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * x + ((((rx & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.79p-8) * w + ((((rx & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.47p-8) * z + ((((rx & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.21p-8) * y,
-                my = ((((ry & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * y + ((((ry & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.79p-8) * x + ((((ry & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.47p-8) * w + ((((ry & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.21p-8) * z,
-                mz = ((((rz & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * z + ((((rz & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.79p-8) * y + ((((rz & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.47p-8) * x + ((((rz & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.21p-8) * w,
-                mw = ((((rw & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * w + ((((rw & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.79p-8) * z + ((((rw & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.47p-8) * y + ((((rw & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.21p-8) * x;
+                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * w + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * z + ((((rx & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * y,
+                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * w + ((((ry & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * z,
+                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * z + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * x + ((((rz & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * w,
+                mw = ((((rw & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * w + ((((rw & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * z + ((((rw & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * y + ((((rw & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * x;
+
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my),
                 zf = fastFloor(mz),
                 wf = fastFloor(mw);
-        return NumberTools.bounce(5.5f + 2.5f *
-                (
-                        querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
+        return
+                NumberTools.bounce(5.875 + 2.0625 * (
+                        querp(gauss(xf * 0xAE3779B97F4A7E35L),
+                                gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
+                                + querp(gauss(yf * 0xBE3779B97F4A7C55L),
+                                gauss((yf+1) * 0xBE3779B97F4A7C55L),
                                 my - yf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(zf * sz + 300)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((zf+1) * sz + 300)),
+                                + querp(gauss(zf * 0xCE3779B97F4A7A75L),
+                                gauss((zf+1) * 0xCE3779B97F4A7A75L),
                                 mz - zf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(wf * sw + 400)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((wf+1) * sw + 400)),
+                                + querp(gauss(wf * 0xDE3779B97F4A7895L),
+                                gauss((wf+1) * 0xDE3779B97F4A7895L),
                                 mw - wf)));
     }
 
@@ -159,22 +154,22 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, int seed) {
-        final int sx = seed | 5, sy = sx + 22222, sz = sy + 33333, sw = sz + 44444, su = sw + 55555, sv = su + 66666;
-
         final long
-                rx = NumberTools.splitMix64(sx),
-                ry = NumberTools.splitMix64(sy),
-                rz = NumberTools.splitMix64(sz),
-                rw = NumberTools.splitMix64(sw),
-                ru = NumberTools.splitMix64(su),
-                rv = NumberTools.splitMix64(sv);
+                s = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = (seed - s) ^ (s >>> 29 ^ s << 23),
+                ry = (seed + rx) ^ (s >>> 17 ^ s << 36),
+                rz = (ry - seed) ^ (s >>> 22 ^ s << 31),
+                rw = (seed + rz - ry * rx) ^ (s >>> 19 ^ s << 29),
+                ru = (seed - rw + rz * ry) ^ (s >>> 24 ^ s << 27),
+                rv = (seed + ru * rw - rx * rz) ^ (s >>> 21 ^ s << 34);
         final double
-                mx = ((((rx & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * x + ((((rx & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * v + ((((rx & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * u + ((((rx & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * w + ((((rx & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * z + ((((rx & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * y,
-                my = ((((ry & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * y + ((((ry & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * x + ((((ry & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * v + ((((ry & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * u + ((((ry & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * w + ((((ry & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * z,
-                mz = ((((rz & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * z + ((((rz & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * y + ((((rz & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * x + ((((rz & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * v + ((((rz & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * u + ((((rz & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * w,
-                mw = ((((rw & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * w + ((((rw & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * z + ((((rw & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * y + ((((rw & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * x + ((((rw & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * v + ((((rw & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * u,
-                mu = ((((ru & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * u + ((((rz & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * w + ((((rz & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * z + ((((rz & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * y + ((((rz & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * x + ((((rz & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * v,
-                mv = ((((rv & 0x1FL) << 4 | 15L) - 255.5) * 0x1.4p-8) * v + ((((rw & 0x1F00L) >>> 4 | 15L) - 255.5) * 0x0.67p-8) * u + ((((rw & 0x1F0000L) >>> 12 | 15L) - 255.5) * 0x0.41p-8) * w + ((((rw & 0x1F000000L) >>> 20 | 15L) - 255.5) * 0x0.17p-8) * z + ((((rw & 0x1F00000000L) >>> 28 | 15L) - 255.5) * 0x0.13p-8) * y + ((((rw & 0x1F0000000000L) >>> 36 | 15L) - 255.5) * 0x0.07p-8) * x;
+                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * v + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * u + ((((rx & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * w + ((((rx & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * z + ((((rx & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * y,
+                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * v + ((((ry & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * u + ((((ry & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * w + ((((ry & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * z,
+                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * z + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * x + ((((rz & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * v + ((((rz & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * u + ((((rz & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * w,
+                mw = ((((rw & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * w + ((((rw & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * z + ((((rw & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * y + ((((rw & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * x + ((((rw & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * v + ((((rw & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * u,
+                mu = ((((ru & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * u + ((((ru & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * w + ((((ru & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * z + ((((ru & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * y + ((((ru & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * x + ((((ru & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * v,
+                mv = ((((rv & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * v + ((((rv & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * u + ((((rv & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * w + ((((rv & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * z + ((((rv & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * y + ((((rv & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * x;
+
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my),
@@ -182,25 +177,25 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 wf = fastFloor(mw),
                 uf = fastFloor(mu),
                 vf = fastFloor(mv);
-        return NumberTools.bounce(5.5f + 2.5f *
-                (
-                        querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
+        return
+                NumberTools.bounce(5.875 + 2.0625 * (
+                        querp(gauss(xf * 0xAE3779B97F4A7E35L),
+                                gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
+                                + querp(gauss(yf * 0xBE3779B97F4A7C55L),
+                                gauss((yf+1) * 0xBE3779B97F4A7C55L),
                                 my - yf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(zf * sz + 300)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((zf+1) * sz + 300)),
+                                + querp(gauss(zf * 0xCE3779B97F4A7A75L),
+                                gauss((zf+1) * 0xCE3779B97F4A7A75L),
                                 mz - zf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(wf * sw + 400)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((wf+1) * sw + 400)),
+                                + querp(gauss(wf * 0xDE3779B97F4A7895L),
+                                gauss((wf+1) * 0xDE3779B97F4A7895L),
                                 mw - wf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(uf * su + 500)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((uf+1) * su + 500)),
+                                + querp(gauss(uf * 0xEE3779B97F4A76B5L),
+                                gauss((uf+1) * 0xEE3779B97F4A76B5L),
                                 mu - uf)
-                                + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(vf * sv + 600)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((vf+1) * sv + 600)),
+                                + querp(gauss(vf * 0xFE3779B97F4A74D5L),
+                                gauss((vf+1) * 0xFE3779B97F4A74D5L),
                                 mv - vf)));
     }
 }

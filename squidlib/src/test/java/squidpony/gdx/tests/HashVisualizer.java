@@ -63,6 +63,15 @@ import static squidpony.squidgrid.gui.gdx.SColor.floatGetI;
  * Created by Tommy Ettinger on 8/20/2016.
  */
 public class HashVisualizer extends ApplicationAdapter {
+
+    // 0 commonly used hashes
+    // 1 variants on Storm and other hashes
+    // 3 artistic visualizations of hash functions and misc. other
+    // 4 noise
+    // 5 RNG results
+    private int testType = 4;
+    private int hashMode = 43, rngMode = 30, noiseMode = 85;
+
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
     private SquidPanel display;//, overlay;
@@ -143,14 +152,6 @@ public class HashVisualizer extends ApplicationAdapter {
             fillField3DR = new float[1][width][height],
             fillField3DG = new float[1][width][height],
             fillField3DB = new float[1][width][height];
-
-    // 0 commonly used hashes
-    // 1 variants on Storm and other hashes
-    // 3 artistic visualizations of hash functions and misc. other
-    // 4 noise
-    // 5 RNG results
-    private int testType = 4;
-    private int hashMode = 43, rngMode = 30, noiseMode = 57;
 
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
@@ -569,7 +570,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 86;
+                                    noiseMode %= 92;
                                 }
                                 switch (noiseMode)
                                 {
@@ -3007,6 +3008,7 @@ public class HashVisualizer extends ApplicationAdapter {
                     }
                     break;
                     case 58:
+                    case 86:
                         Gdx.graphics.setTitle("Tabby 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3027,6 +3029,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         }
                         break;
                     case 59:
+                    case 87:
                         Gdx.graphics.setTitle("Tabby 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3311,6 +3314,52 @@ public class HashVisualizer extends ApplicationAdapter {
                                 display.put(x, y,
                                         floatGet(bright = WaveletNoise.instance.getBandedNoise(x * 0.023125f, y * 0.023125f, ctr * 0.15125f, -4321, bandsWhite) * 0.5f + 0.5f,
                                                 bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 88:
+                        Gdx.graphics.setTitle("Tabby 4D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (x + y + ctr + 100) * 0.11125f, 12345678) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (x + y + ctr + 500) * 0.11125f, -87654321) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, (x + y + ctr + 900) * 0.11125f, 543212345) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 89:
+                        Gdx.graphics.setTitle("Tabby 4D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
+                                        (x + y + ctr + 300) * 0.11125f, 123456789) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 90:
+                        Gdx.graphics.setTitle("Tabby 6D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                               display.put(x, y,
+                                        floatGet(
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (x + y + ctr + 100) * 0.11125f, Math.sin((x - ctr) * 0.11125f),Math.cos((ctr - y) * 0.11125f),  12345678) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (x + y + ctr + 500) * 0.11125f, Math.sin((x - ctr) * 0.11125f),Math.cos((ctr - y) * 0.11125f),  -87654321) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, (x + y + ctr + 900) * 0.11125f, Math.sin((x - ctr) * 0.11125f),Math.cos((ctr - y) * 0.11125f),  543212345) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 91:
+                        Gdx.graphics.setTitle("Tabby 6D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
+                                         (x + y + ctr + 100) * 0.11125f, Math.sin((x - ctr) * 0.11125f),Math.cos((ctr - y) * 0.11125f), 123456789) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
