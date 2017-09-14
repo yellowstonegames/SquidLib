@@ -84,7 +84,7 @@ public class NumberTools {
      */
     public static double bounce(final double value)
     {
-        long s = Double.doubleToLongBits(value) & 0xfffffffffffffL;
+        final long s = Double.doubleToLongBits(value);
         return Double.longBitsToDouble(((s ^ -((s & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
                 | 0x4010000000000000L) - 5.0;
     }
@@ -98,7 +98,7 @@ public class NumberTools {
      */
     public static float bounce(final float value)
     {
-        int s = Float.floatToIntBits(value) & 0x007fffff;
+        final int s = Float.floatToIntBits(value);
         return Float.intBitsToFloat(((s ^ -((s & 0x00400000)>>22)) & 0x007fffff)
                 | 0x40800000) - 5f;
     }
@@ -112,8 +112,7 @@ public class NumberTools {
      */
     public static double bounce(final long value)
     {
-        long s = value & 0xfffffffffffffL;
-        return Double.longBitsToDouble(((s ^ -((s & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+        return Double.longBitsToDouble(((value ^ -((value & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
                 | 0x4010000000000000L) - 5.0;
     }
     /**
@@ -129,9 +128,48 @@ public class NumberTools {
 
     public static double bounce(final int valueLow, final int valueHigh)
     {
-        long s = (((long) valueHigh) << 32 | valueLow) & 0xfffffffffffffL;
+        final long s = (((long) valueHigh) << 32 | valueLow);
         return Double.longBitsToDouble(((s ^ -((s & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
                 | 0x4010000000000000L) - 5.0;
+    }
+
+    /**
+     * Limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+     * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
+     * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value. It is
+     * very similar to {@link #bounce(double)}, but unlike bounce() this will maintain a continuous rate regardless of
+     * the magnitude of its input. An input of any even number should produce something very close to -1.0, any odd
+     * number should produce something very close to 1.0, and any number halfway between two incremental integers (like
+     * 8.5 or -10.5) should produce 0.0 or a very small fraction.
+     * @param value any double
+     * @return a double from -1.0 (inclusive) to 1.0 (inclusive)
+     */
+    public static double zigzag(final double value)
+    {
+        final double sign = value < 0.0 ? -2.0 : 2.0;
+        final long s = Double.doubleToLongBits(value + sign), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
+        return (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+                | 0x4010000000000000L) - 5.0);
+    }
+
+    /**
+     * Limited-use. Takes any float and produces a float in the -1f to 1f range, with similar inputs producing
+     * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
+     * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value. It is
+     * very similar to {@link #bounce(float)}, but unlike bounce() this will maintain a continuous rate regardless of
+     * the magnitude of its input. An input of any even number should produce something very close to -1f, any odd
+     * number should produce something very close to 1f, and any number halfway between two incremental integers (like
+     * 8.5f or -10.5f) should produce 0f or a very small fraction.
+     * @param value any float
+     * @return a float from -1f (inclusive) to 1f (inclusive)
+     */
+    public static float zigzag(final float value)
+    {
+        final float sign = value < 0f ? -2f : 2f;
+        final int s = Float.floatToIntBits(value + sign), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        return (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff)
+                | 0x40800000) - 5f);
+
     }
 
     public static int floatToIntBits(final float value)

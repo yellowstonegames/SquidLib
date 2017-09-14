@@ -35,8 +35,8 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      * @param t the double to find the floor for
      * @return the floor of t, as an int
      */
-    public static int fastFloor(double t) {
-        return t >= 0 ? (int) t : (int) t - 1;
+    public static long fastFloor(double t) {
+        return t >= 0 ? (long) t : (long) t - 1;
     }
     public static double gauss(final long state) {
         final long s1 = state + 0x9E3779B97F4A7C15L,
@@ -80,16 +80,21 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
-        final long
-                s = ThrustRNG.determine(seed ^ (long)~seed << 32),
-                rx = (seed - s) ^ (s >>> 29 ^ s << 23),
-                ry = (seed + rx) ^ (s >>> 17 ^ s << 36),
-                rz = (ry - seed) ^ (s >>> 22 ^ s << 31);
+/*        long s = seed ^ (long)~seed << 32;
         final double
-                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * z,
-                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * z + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * x,
-                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * z + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * y;
-
+                rx = gauss(s += 0x763779B97F4A7C17L),
+                ry = gauss(s += 0x663779B97F4A7C17L),
+                rz = gauss(s += 0x563779B97F4A7C17L),
+                ax = NumberTools.zigzag(x * rx),
+                ay = NumberTools.zigzag(y * ry),
+                az = NumberTools.zigzag(z * rz),
+                dx = ((ay + az) * x),
+                dy = ((az + ax) * y),
+                dz = ((ax + ay) * z),
+                mx = dx + dy * ax - dz * ay * az,
+                my = dy + dz * ay - dx * az * ax,
+                mz = dz + dx * az - dy * ax * ay
+        ;
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my),
@@ -97,6 +102,41 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         return
                 NumberTools.bounce(5.875 + 2.0625 * (
                                 querp(gauss(xf * 0xAE3779B97F4A7E35L),
+                                gauss((xf+1) * 0xAE3779B97F4A7E35L),
+                                mx - xf)
+                                + querp(gauss(yf * 0xBE3779B97F4A7C55L),
+                                gauss((yf+1) * 0xBE3779B97F4A7C55L),
+                                my - yf)
+                                + querp(gauss(zf * 0xCE3779B97F4A7A75L),
+                                gauss((zf+1) * 0xCE3779B97F4A7A75L),
+                                mz - zf)));
+                                */
+        final long
+                s  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = s >>> 27 ^ s << 27,
+                ry = s >>> 23 ^ s << 23,
+                rz = s >>> 29 ^ s << 29;
+        final double
+                grx = gauss(rx) + 0.75,
+                gry = gauss(ry) + 0.75,
+                grz = gauss(rz) + 0.75,
+                cx = NumberTools.zigzag(x) * (gry * grz + 1.125) * 0x0.93p-1,
+                cy = NumberTools.zigzag(y) * (grz * grx + 1.125) * 0x0.93p-1,
+                cz = NumberTools.zigzag(z) * (grx * gry + 1.125) * 0x0.93p-1,
+                ax = x + (cy * cz),
+                ay = y + (cz * cx),
+                az = z + (cx * cy),
+                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ax + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ay + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * az,
+                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ay + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * az + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ax,
+                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * az + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ax + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ay;
+
+        final long
+                xf = fastFloor(mx),
+                yf = fastFloor(my),
+                zf = fastFloor(mz);
+        return
+                NumberTools.bounce(5.875 + 2.0625 * (
+                        querp(gauss(xf * 0xAE3779B97F4A7E35L),
                                 gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)
                                 + querp(gauss(yf * 0xBE3779B97F4A7C55L),
