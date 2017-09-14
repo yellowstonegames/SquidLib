@@ -121,7 +121,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public abstract static class <a href="../src-html/squidpony/IColorCenter.html#line.272">IColorCenter.Skeleton</a>&lt;T&gt;
+<pre>public abstract static class <a href="../src-html/squidpony/IColorCenter.html#line.270">IColorCenter.Skeleton</a>&lt;T&gt;
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;T&gt;</pre>
 <div class="block">A skeletal implementation of <a href="../squidpony/IColorCenter.html" title="interface in squidpony"><code>IColorCenter</code></a>.</div>
@@ -415,7 +415,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>filter</h4>
-<pre>protected&nbsp;<a href="../squidpony/IFilter.html" title="interface in squidpony">IFilter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt; <a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.276">filter</a></pre>
+<pre>protected&nbsp;<a href="../squidpony/IFilter.html" title="interface in squidpony">IFilter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt; <a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.274">filter</a></pre>
 </li>
 </ul>
 <a name="tempValue">
@@ -424,7 +424,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockListLast">
 <li class="blockList">
 <h4>tempValue</h4>
-<pre>protected transient&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a> <a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.336">tempValue</a></pre>
+<pre>protected transient&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a> <a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.334">tempValue</a></pre>
 </li>
 </ul>
 </li>
@@ -441,7 +441,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Skeleton</h4>
-<pre>protected&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.282">Skeleton</a>(<a href="../squidpony/IFilter.html" title="interface in squidpony">IFilter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;filter)</pre>
+<pre>protected&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.280">Skeleton</a>(<a href="../squidpony/IFilter.html" title="interface in squidpony">IFilter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;filter)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>filter</code> - The filter to use, or <code>null</code> for no filter.</dd>
@@ -462,7 +462,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>clearCache</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.291">clearCache</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.289">clearCache</a>()</pre>
 <div class="block">It clears the cache. You may need to do this to limit the cache to the colors used in a specific section.
  This is also useful if a Filter changes what colors it should return on a frame-by-frame basis; in that case,
  you can call clearCache() at the start or end of a frame to ensure the next frame gets different colors.</div>
@@ -474,7 +474,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>cacheSize</h4>
-<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.303">cacheSize</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.301">cacheSize</a>()</pre>
 <div class="block">The actual cache is not public, but there are cases where you may want to know how many different colors are
  actually used in a frame or a section of the game. If the cache was emptied (which might be from calling
  <a href="../squidpony/IColorCenter.Skeleton.html#clearCache--"><code>clearCache()</code></a>), some colors were requested, then this is called, the returned int should be the
@@ -490,7 +490,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>copyCache</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.314">copyCache</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;other)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.312">copyCache</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;other)</pre>
 <div class="block">You may want to copy colors between IColorCenter instances that have different create() methods -- and as
  such, will have different values for the same keys in the cache. This allows you to copy the cache from other
  into this Skeleton, but using this Skeleton's create() method.</div>
@@ -506,7 +506,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>setFilter</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.331">setFilter</a>(<a href="../squidpony/IFilter.html" title="interface in squidpony">IFilter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;filter)</pre>
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.329">setFilter</a>(<a href="../squidpony/IFilter.html" title="interface in squidpony">IFilter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;filter)</pre>
 <div class="block">If you're changing the filter, you should likely call
  <a href="../squidpony/IColorCenter.Skeleton.html#clearCache--"><code>clearCache()</code></a>.</div>
 <dl>
@@ -523,7 +523,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.339">get</a>(int&nbsp;red,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.337">get</a>(int&nbsp;red,
              int&nbsp;green,
              int&nbsp;blue,
              int&nbsp;opacity)</pre>
@@ -550,7 +550,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.352">get</a>(int&nbsp;red,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.350">get</a>(int&nbsp;red,
              int&nbsp;green,
              int&nbsp;blue)</pre>
 <dl>
@@ -574,7 +574,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getHSV</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.357">getHSV</a>(float&nbsp;hue,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.355">getHSV</a>(float&nbsp;hue,
                 float&nbsp;saturation,
                 float&nbsp;value,
                 float&nbsp;opacity)</pre>
@@ -589,8 +589,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <dd><code>saturation</code> - the saturation of the color from 0.0 (a grayscale color; inclusive)
                    to 1.0 (a bright color, inclusive)</dd>
 <dd><code>value</code> - the value (essentially lightness) of the color from 0.0 (black,
-                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high
-                   for HDR colors.</dd>
+                   inclusive) to 1.0 (very bright, inclusive).</dd>
 <dd><code>opacity</code> - the alpha component as a float; 0.0f is clear, 1.0f is opaque.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a possibly transparent color</dd>
@@ -603,7 +602,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getHSV</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.391">getHSV</a>(float&nbsp;hue,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.389">getHSV</a>(float&nbsp;hue,
                 float&nbsp;saturation,
                 float&nbsp;value)</pre>
 <dl>
@@ -616,8 +615,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <dd><code>saturation</code> - the saturation of the color from 0.0 (a grayscale color; inclusive)
                    to 1.0 (a bright color, exclusive)</dd>
 <dd><code>value</code> - the value (essentially lightness) of the color from 0.0 (black,
-                   inclusive) to 1.0 (inclusive) for screen colors or arbitrarily high
-                   for HDR colors.</dd>
+                   inclusive) to 1.0 (very bright, inclusive).</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an opaque color</dd>
 </dl>
@@ -629,7 +627,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getWhite</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.396">getWhite</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.394">getWhite</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidpony/IColorCenter.html#getWhite--">getWhite</a></code>&nbsp;in interface&nbsp;<code><a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;</code></dd>
@@ -644,7 +642,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlack</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.401">getBlack</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.399">getBlack</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidpony/IColorCenter.html#getBlack--">getBlack</a></code>&nbsp;in interface&nbsp;<code><a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;</code></dd>
@@ -659,7 +657,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getTransparent</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.406">getTransparent</a>()</pre>
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.404">getTransparent</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidpony/IColorCenter.html#getTransparent--">getTransparent</a></code>&nbsp;in interface&nbsp;<code><a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;</code></dd>
@@ -674,7 +672,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getRandom</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.411">getRandom</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.409">getRandom</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                    int&nbsp;opacity)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -694,7 +692,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getSaturation</h4>
-<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.422">getSaturation</a>(float&nbsp;r,
+<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.420">getSaturation</a>(float&nbsp;r,
                            float&nbsp;g,
                            float&nbsp;b)</pre>
 <dl>
@@ -716,7 +714,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getSaturation</h4>
-<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.445">getSaturation</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;c)</pre>
+<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.443">getSaturation</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidpony/IColorCenter.html#getSaturation-T-">getSaturation</a></code>&nbsp;in interface&nbsp;<code><a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;</code></dd>
@@ -734,7 +732,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.456">getValue</a>(float&nbsp;r,
+<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.454">getValue</a>(float&nbsp;r,
                       float&nbsp;g,
                       float&nbsp;b)</pre>
 <dl>
@@ -744,7 +742,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <dd><code>b</code> - the blue component in 0.0 to 1.0 range, typically</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the value (essentially lightness) of the color from 0.0 (black, inclusive) to
- 1.0 (inclusive) for screen colors or arbitrarily high for HDR colors.</dd>
+ 1.0 (very bright, inclusive).</dd>
 </dl>
 </li>
 </ul>
@@ -756,7 +754,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getValue</h4>
-<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.466">getValue</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;c)</pre>
+<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.464">getValue</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidpony/IColorCenter.html#getValue-T-">getValue</a></code>&nbsp;in interface&nbsp;<code><a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;</code></dd>
@@ -764,7 +762,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <dd><code>c</code> - a concrete color</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the value (essentially lightness) of the color from 0.0 (black, inclusive) to
- 1.0 (inclusive) for screen colors or arbitrarily high for HDR colors.</dd>
+ 1.0 (very bright, inclusive).</dd>
 </dl>
 </li>
 </ul>
@@ -774,7 +772,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getHue</h4>
-<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.481">getHue</a>(float&nbsp;r,
+<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.479">getHue</a>(float&nbsp;r,
                     float&nbsp;g,
                     float&nbsp;b)</pre>
 <dl>
@@ -796,7 +794,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>getHue</h4>
-<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.514">getHue</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;c)</pre>
+<pre>public&nbsp;float&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.512">getHue</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidpony/IColorCenter.html#getHue-T-">getHue</a></code>&nbsp;in interface&nbsp;<code><a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;</code></dd>
@@ -816,7 +814,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>filter</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.519">filter</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;c)</pre>
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.517">filter</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;c)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidpony/IColorCenter.html#filter-T-">filter</a></code>&nbsp;in interface&nbsp;<code><a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;</code></dd>
@@ -831,7 +829,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>filter</h4>
-<pre>public&nbsp;<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.526">filter</a>(<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;ics)</pre>
+<pre>public&nbsp;<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.524">filter</a>(<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;ics)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../squidpony/IColorCenter.html#filter-squidpony.panel.IColoredString-">filter</a></code>&nbsp;in interface&nbsp;<code><a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;</code></dd>
@@ -849,7 +847,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>greify</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.568">greify</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;t,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.566">greify</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;t,
                 boolean&nbsp;doAlpha)</pre>
 <div class="block">Gets a copy of t and modifies it to make a shade of gray with the same brightness.
  The doAlpha parameter causes the alpha to be considered in the calculation of brightness and also changes the
@@ -874,7 +872,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>lerp</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.600">lerp</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;start,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.598">lerp</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;start,
               <a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;end,
               float&nbsp;change)</pre>
 <div class="block">Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.
@@ -901,7 +899,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>desaturated</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.621">desaturated</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.619">desaturated</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;color)</pre>
 <div class="block">Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).
  Keeps alpha the same; if you want alpha to be considered (and brightness to be calculated differently), then
  you can use greify() in this class instead.</div>
@@ -923,7 +921,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>desaturate</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.634">desaturate</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;color,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.632">desaturate</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;color,
                     float&nbsp;degree)</pre>
 <div class="block">Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).
  Alpha is left unchanged.</div>
@@ -946,7 +944,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>saturated</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.645">saturated</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.643">saturated</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;color)</pre>
 <div class="block">Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.
  Leaves alpha unchanged.</div>
 <dl>
@@ -967,7 +965,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>saturate</h4>
-<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.657">saturate</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;color,
+<pre>public&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.655">saturate</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;color,
                   float&nbsp;degree)</pre>
 <div class="block">Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and
  returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this is
@@ -991,7 +989,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.663">gradient</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;fromColor,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.661">gradient</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;fromColor,
                              <a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;toColor)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../squidpony/IColorCenter.html#gradient-T-T-">IColorCenter</a></code></span></div>
 <div class="block">Finds a gradient with 16 steps going from fromColor to toColor,
@@ -1015,7 +1013,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockList">
 <li class="blockList">
 <h4>gradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.668">gradient</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;fromColor,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&gt;&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.666">gradient</a>(<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;fromColor,
                              <a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;toColor,
                              int&nbsp;steps)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../squidpony/IColorCenter.html#gradient-T-T-int-">IColorCenter</a></code></span></div>
@@ -1039,7 +1037,7 @@ implements <a href="../squidpony/IColorCenter.html" title="interface in squidpon
 <ul class="blockListLast">
 <li class="blockList">
 <h4>create</h4>
-<pre>protected abstract&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.690">create</a>(int&nbsp;red,
+<pre>protected abstract&nbsp;<a href="../squidpony/IColorCenter.Skeleton.html" title="type parameter in IColorCenter.Skeleton">T</a>&nbsp;<a href="../src-html/squidpony/IColorCenter.Skeleton.html#line.688">create</a>(int&nbsp;red,
                             int&nbsp;green,
                             int&nbsp;blue,
                             int&nbsp;opacity)</pre>

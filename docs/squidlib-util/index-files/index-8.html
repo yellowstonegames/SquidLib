@@ -156,6 +156,8 @@
 <div class="block">Tools for garbling Strings (making them appear to be gibberish) and degarbling earlier outputs to get the original
  inputs.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/TabbyNoise.html#gauss-long-">gauss(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/TabbyNoise.html" title="class in squidpony.squidmath">TabbyNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/AStarSearch.html#gCache">gCache</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/AStarSearch.html" title="class in squidpony.squidmath">AStarSearch</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#gen">gen</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
@@ -333,6 +335,10 @@
 <div class="block">Generates a world using the specified RNG state as a long, with specific water and cooling modifiers that affect
  the land-water ratio and the average temperature, respectively.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#generate--">generate()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>
+<div class="block">Only needs to be called if you change the <a href="../squidpony/squidmath/WaveletNoise.html#seed"><code>WaveletNoise.seed</code></a> field and want the cube of random values re-created.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#generate--">generate()</a></span> - Method in class squidpony.<a href="../squidpony/WeightedLetterNamegen.html" title="class in squidpony">WeightedLetterNamegen</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#generate-int-">generate(int)</a></span> - Method in class squidpony.<a href="../squidpony/WeightedLetterNamegen.html" title="class in squidpony">WeightedLetterNamegen</a></dt>
@@ -465,6 +471,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord3D.html#get-int-int-int-">get(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord3D.html" title="class in squidpony.squidmath">Coord3D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#get-double-double-">get(double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/EnumMapPlus.html#get-java.lang.Object-">get(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/EnumMapPlus.html" title="class in squidpony.squidmath">EnumMapPlus</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#get-java.lang.Object-">get(Object)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>
@@ -615,6 +623,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/panel/ISquidPanel.html#getBacker--">getBacker()</a></span> - Method in interface squidpony.panel.<a href="../squidpony/panel/ISquidPanel.html" title="interface in squidpony.panel">ISquidPanel</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getBandedNoise-float-float-float-int-float:A-">getBandedNoise(float, float, float, int, float[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>
+<div class="block">A 3D noise function that allows different frequencies to be mixed in unusual ways, similarly to octaves in other
+ noise functions but allowing arbitrary weights for frequencies.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#getBareDungeon--">getBareDungeon()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
 <dd>
 <div class="block">Get the most recently generated char[][] dungeon out of this class without any chars other than '#' or '.', for
@@ -1462,6 +1475,18 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ValueNoise.html#getNoise-double-double-double-double-double-double-">getNoise(double, double, double, double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoise-double-">getNoise(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoise-double-double-">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoise-double-double-double-">getNoise(double, double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoise-float-">getNoise(float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoise-float-float-">getNoise(float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoise-float-float-float-">getNoise(float, float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#getNoise-double-double-">getNoise(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
 <div class="block">2D simplex noise.</div>
@@ -1587,6 +1612,12 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ValueNoise.html#getNoiseWithSeed-double-double-double-double-int-">getNoiseWithSeed(double, double, double, double, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ValueNoise.html#getNoiseWithSeed-double-double-double-double-double-double-int-">getNoiseWithSeed(double, double, double, double, double, double, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoiseWithSeed-double-int-">getNoiseWithSeed(double, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoiseWithSeed-double-double-int-">getNoiseWithSeed(double, double, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getNoiseWithSeed-double-double-double-int-">getNoiseWithSeed(double, double, double, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#getNoiseWithSeed-double-double-int-">getNoiseWithSeed(double, double, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>
@@ -1824,6 +1855,12 @@
 <div class="block">Gets the latest "un-biased" random double used to produce the most recent (potentially) biased random number
  generated for another method in this class, such as nextDouble(), between(), or getRandomElement().</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#getRawNoise-float-float-float-int-">getRawNoise(float, float, float, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>
+<div class="block">The basis for all getNoise methods in this class; takes x, y, and z coordinates as floats, plus a seed that will
+ alter the noise effectively by just moving the section this samples in an unrelated way to changing x, y, and z
+ normally.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/AOE.html#getReach--">getReach()</a></span> - Method in interface squidpony.squidai.<a href="../squidpony/squidai/AOE.html" title="interface in squidpony.squidai">AOE</a></dt>
 <dd>
 <div class="block">Gets the same values returned by getLimitType(), getMinRange(), getMaxRange(), and getMetric() bundled into one
@@ -1907,6 +1944,8 @@
 <div class="block">Gets an estimate at the correct direction that a position lies in given the distance towards it on the x and y
  axes.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#getSalt--">getSalt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#getSaturation-T-">getSaturation(T)</a></span> - Method in interface squidpony.<a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#getSaturation-float-float-float-">getSaturation(float, float, float)</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
@@ -2031,6 +2070,8 @@
 <dd>
 <div class="block">Gets the current state of this generator.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#getState--">getState()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#getState--">getState()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
 <dd>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>

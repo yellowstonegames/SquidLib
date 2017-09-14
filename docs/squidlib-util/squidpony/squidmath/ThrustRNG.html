@@ -135,10 +135,10 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  provides the random number generator SplittableRandom, which uses SplitMix64 and does use different increments).
  <br>
  The speed of this generator is fairly good, and it is the fastest generator to pass PractRand with no anomalies, and
- remains faster than all generators without failures in PractRand. LapRNG, FlapRNG (when FlapRNG produces ints), and
- (narrowly) ThunderRNG are faster, but all have significant amounts of PractRand testing failures, indicating flaws in
- quality. The performance of this RandomnessSource has been surprisingly reasonable to improve beyond the baseline of
- SplitMix64; where LightRNG takes 1.385 seconds to generate a billion pseudo-random long values, this takes just under
+ remains faster than all generators without failures in PractRand. LapRNG and FlapRNG (when FlapRNG produces ints) are
+ faster, but have significant amounts of PractRand testing failures, indicating flaws in quality (ThunderRNG is very
+ close on speed, but ThrustRNG is now faster). The performance of this RandomnessSource has improved well since early
+ versions; where LightRNG takes 1.385 seconds to generate a billion pseudo-random long values, this takes just under
  a second (0.958 seconds, to be exact) to generate the same quantity. This speed will vary depending on hardware, and
  was benchmarked using JMH on a relatively-recent laptop (with a i7-6700HQ processor and DDR4 RAM, using a Zulu build
  of OpenJDK 8); you can expect better performance on most desktops or dedicated "gaming PCs," or potentially much

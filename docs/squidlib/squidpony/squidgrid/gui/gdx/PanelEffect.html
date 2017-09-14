@@ -18,6 +18,12 @@
     catch(err) {
     }
 //-->
+var methods = {"i0":9};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -70,13 +76,13 @@
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.com.badlogic.gdx.scenes.scene2d.actions.TemporalAction">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -121,7 +127,7 @@
 <hr>
 <br>
 <pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/annotation/Beta.html?is-external=true" title="class or interface in squidpony.annotation">@Beta</a>
-public abstract class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.29">PanelEffect</a>
+public abstract class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.31">PanelEffect</a>
 extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <div class="block">Various special effects that can be applied to a <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> as an
  <code>Action</code>. The PanelEffect class is abstract and has implementations as static
@@ -181,10 +187,14 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static com.badlogic.gdx.math.Interpolation</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#fastInSlowMidFastOut">fastInSlowMidFastOut</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#target">target</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#validCells">validCells</a></span></code>&nbsp;</td>
 </tr>
@@ -234,6 +244,23 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>static com.badlogic.gdx.scenes.scene2d.Action</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#makeGrenadeEffect-squidpony.squidgrid.gui.gdx.PanelEffect.ProjectileEffect-com.badlogic.gdx.scenes.scene2d.Action-">makeGrenadeEffect</a></span>(<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a>&nbsp;projectile,
+                 com.badlogic.gdx.scenes.scene2d.Action&nbsp;result)</code>
+<div class="block">Convenience method to make a ProjectileEffect take an "arc-like" path toward the target, where it is fast at the
+ beginning and end of its motion and is reaching the height of its arc at the center, before triggering another
+ Action when the projectile stops (often this might be an <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx"><code>PanelEffect.ExplosionEffect</code></a>, but could be any
+ scene2d Action).</div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.badlogic.gdx.scenes.scene2d.actions.TemporalAction">
 <!--   -->
@@ -275,16 +302,25 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>target</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.30">target</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.32">target</a></pre>
 </li>
 </ul>
 <a name="validCells">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>validCells</h4>
-<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.31">validCells</a></pre>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.33">validCells</a></pre>
+</li>
+</ul>
+<a name="fastInSlowMidFastOut">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fastInSlowMidFastOut</h4>
+<pre>public static&nbsp;com.badlogic.gdx.math.Interpolation <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.718">fastInSlowMidFastOut</a></pre>
 </li>
 </ul>
 </li>
@@ -301,7 +337,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.33">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting)</pre>
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.35">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting)</pre>
 </li>
 </ul>
 <a name="PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-">
@@ -310,7 +346,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.38">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.40">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                       float&nbsp;duration)</pre>
 </li>
 </ul>
@@ -320,9 +356,38 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.44">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.46">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                       float&nbsp;duration,
                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid)</pre>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="makeGrenadeEffect-squidpony.squidgrid.gui.gdx.PanelEffect.ProjectileEffect-com.badlogic.gdx.scenes.scene2d.Action-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>makeGrenadeEffect</h4>
+<pre>public static&nbsp;com.badlogic.gdx.scenes.scene2d.Action&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.736">makeGrenadeEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a>&nbsp;projectile,
+                                                                       com.badlogic.gdx.scenes.scene2d.Action&nbsp;result)</pre>
+<div class="block">Convenience method to make a ProjectileEffect take an "arc-like" path toward the target, where it is fast at the
+ beginning and end of its motion and is reaching the height of its arc at the center, before triggering another
+ Action when the projectile stops (often this might be an <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx"><code>PanelEffect.ExplosionEffect</code></a>, but could be any
+ scene2d Action).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>projectile</code> - a <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx"><code>PanelEffect.ProjectileEffect</code></a> to run as the first step</dd>
+<dd><code>result</code> - an <code>Action</code> to run after the ProjectileEffect completes</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an Action that can be added to a scene2d Actor, such as a SquidLayers or SparseLayers</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -380,13 +445,13 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.com.badlogic.gdx.scenes.scene2d.actions.TemporalAction">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">

@@ -355,6 +355,11 @@
 <dd>
 <div class="block">Get up to 32 bits (inclusive) of random state from the RandomnessSource.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Advances the state twice, causing the same state change as a call to <a href="../squidpony/squidmath/SaltyQRNG.html#nextInt--"><code>SaltyQRNG.nextInt()</code></a> or two calls to
+ <a href="../squidpony/squidmath/SaltyQRNG.html#nextFloat--"><code>SaltyQRNG.nextFloat()</code></a> or <a href="../squidpony/squidmath/SaltyQRNG.html#nextDouble--"><code>SaltyQRNG.nextDouble()</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortSet.ShortSetIterator.html" title="class in squidpony.squidmath">ShortSet.ShortSetIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
@@ -561,6 +566,10 @@
 <dd>
 <div class="block">This returns a random double between 0.0 (inclusive) and max (exclusive).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#nextDouble--">nextDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Gets the next double in the sequence, between 0.0 (inclusive) and 1.0 (exclusive)</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SobolQRNG.html#nextDouble--">nextDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SobolQRNG.html#nextDouble-double-">nextDouble(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></dt>
@@ -620,6 +629,10 @@
 <dd>
 <div class="block">This returns a maximum of 0.99999994 because that is the largest Float
  value that is less than 1.0f</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#nextFloat--">nextFloat()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Gets the next float in the sequence, between 0.0f (inclusive) and 1.0f (exclusive)</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/XkcdRNG.html#nextFloat--">nextFloat()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XkcdRNG.html" title="class in squidpony.squidmath">XkcdRNG</a></dt>
 <dd>
@@ -770,6 +783,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Advances the state twice, causing the same state change as a call to <a href="../squidpony/squidmath/SaltyQRNG.html#next-int-"><code>SaltyQRNG.next(int)</code></a> or two calls to
+ <a href="../squidpony/squidmath/SaltyQRNG.html#nextFloat--"><code>SaltyQRNG.nextFloat()</code></a> or <a href="../squidpony/squidmath/SaltyQRNG.html#nextDouble--"><code>SaltyQRNG.nextDouble()</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
 <dd>
@@ -958,6 +976,11 @@
 <dd>
 <div class="block">Returns a random long below the given bound, or 0 if the bound is 0 or
  negative.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Advances the state four times, causing the same state change as two calls to <a href="../squidpony/squidmath/SaltyQRNG.html#nextInt--"><code>SaltyQRNG.nextInt()</code></a> or
+ <a href="../squidpony/squidmath/SaltyQRNG.html#next-int-"><code>SaltyQRNG.next(int)</code></a>, or four calls to <a href="../squidpony/squidmath/SaltyQRNG.html#nextFloat--"><code>SaltyQRNG.nextFloat()</code></a> or <a href="../squidpony/squidmath/SaltyQRNG.html#nextDouble--"><code>SaltyQRNG.nextDouble()</code></a>.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
 <dd>

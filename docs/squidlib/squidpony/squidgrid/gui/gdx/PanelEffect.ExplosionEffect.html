@@ -136,7 +136,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/annotation/Beta.html?is-external=true" title="class or interface in squidpony.annotation">@Beta</a>
-public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.51">PanelEffect.ExplosionEffect</a>
+public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.53">PanelEffect.ExplosionEffect</a>
 extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></pre>
 </li>
 </ul>
@@ -211,7 +211,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;squidpony.squidgrid.gui.gdx.<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></h3>
-<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#target">target</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#validCells">validCells</a></code></li>
+<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#fastInSlowMidFastOut">fastInSlowMidFastOut</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#target">target</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#validCells">validCells</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.com.badlogic.gdx.scenes.scene2d.Action">
@@ -342,6 +342,13 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidgrid.gui.gdx.PanelEffect">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;squidpony.squidgrid.gui.gdx.<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect</a></h3>
+<code><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html#makeGrenadeEffect-squidpony.squidgrid.gui.gdx.PanelEffect.ProjectileEffect-com.badlogic.gdx.scenes.scene2d.Action-">makeGrenadeEffect</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.badlogic.gdx.scenes.scene2d.actions.TemporalAction">
 <!--   -->
 </a>
@@ -382,7 +389,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>center</h4>
-<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.56">center</a></pre>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.58">center</a></pre>
 <div class="block">Normally you should set this in the constructor, and not change it later.</div>
 </li>
 </ul>
@@ -392,7 +399,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>radius</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.60">radius</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.62">radius</a></pre>
 <div class="block">Normally you should set this in the constructor, and not change it later.</div>
 </li>
 </ul>
@@ -402,7 +409,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>colors</h4>
-<pre>public&nbsp;float[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.72">colors</a></pre>
+<pre>public&nbsp;float[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.74">colors</a></pre>
 <div class="block">The default explosion colors are normal for (non-chemical, non-electrical) fire and smoke, going from orange
  at the start to yellow, very light yellow, and then back to a different orange before going to smoke and
  fading out to translucent and then transparent by the end.
@@ -420,7 +427,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>lightMap</h4>
-<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.84">lightMap</a></pre>
+<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.86">lightMap</a></pre>
 <div class="block">The internal representation of how affected each cell is by the explosion, based on proximity to center.</div>
 </li>
 </ul>
@@ -430,7 +437,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockListLast">
 <li class="blockList">
 <h4>affected</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.90">affected</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.92">affected</a></pre>
 <div class="block">The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to
  show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as
  such (no false negatives). You can edit this if you need to, but it isn't recommended.</div>
@@ -450,7 +457,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.99">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.101">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius)</pre>
 <div class="block">Constructs an ExplosionEffect with explicit settings for some fields. The valid cells this can affect will be
@@ -469,7 +476,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.111">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.113">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
                        int&nbsp;radius)</pre>
@@ -490,7 +497,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.129">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.131">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -512,7 +519,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.153">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.155">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -537,7 +544,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.173">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.175">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -562,7 +569,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.193">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.195">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -590,7 +597,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.221">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.223">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -621,7 +628,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ExplosionEffect</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.245">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.247">ExplosionEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                        float&nbsp;duration,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;center,
@@ -660,7 +667,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.html" title
 <ul class="blockListLast">
 <li class="blockList">
 <h4>update</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.260">update</a>(float&nbsp;percent)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html#line.262">update</a>(float&nbsp;percent)</pre>
 <div class="block">Called each frame.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

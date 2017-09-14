@@ -78,6 +78,24 @@
 <dd>
 <div class="block">Like <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true#substring-int-int-" title="class or interface in java.lang"><code>String.substring(int, int)</code></a> but returns "" instead of throwing any sort of Exception.</div>
 </dd>
+<dt><a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">SaltyQRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">A different kind of quasi-random number generator (also called a sub-random sequence) that can be "salted" like some
+ hashing functions can, to produce many distinct sub-random sequences without changing its performance qualities.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#SaltyQRNG--">SaltyQRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Creates a SaltyQRNG with a random salt and a random starting state.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#SaltyQRNG-int-">SaltyQRNG(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#SaltyQRNG-int-long-">SaltyQRNG(int, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384) and a point
+ it has already advanced to in the sequence this generates.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PoissonDisk.html#sampleCircle-squidpony.squidmath.Coord-float-float-int-int-">sampleCircle(Coord, float, float, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PoissonDisk.html" title="class in squidpony.squidmath">PoissonDisk</a></dt>
 <dd>
 <div class="block">Get a list of Coords, each randomly positioned around the given center out to the given radius (measured with
@@ -354,6 +372,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#seed">seed</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TabbyNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/TabbyNoise.html" title="class in squidpony.squidmath">TabbyNoise</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath"><span class="typeNameLink">SeededNoise</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
@@ -993,6 +1013,13 @@
 <dd>
 <div class="block">Sets the current RNG.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#setSalt-int-">setSalt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Sets the salt, which should usually be a non-negative int less than 16384, though it can be any int (only the
+ bottom 14 bits are used).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#setScale-float-">setScale(float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#setSeed-long-">setSeed(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>
 <div class="block">Sets the seed of this generator (which is also the current state).</div>
@@ -1099,6 +1126,11 @@
 <dd>
 <div class="block">Sets the current state of this generator (an int) using only the least-significant 32 bits of seed (by casting
  a mask of those bits in seed to int, which helps ensure that a full 32 bits of state are possible).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
+<dd>
+<div class="block">Sets the current "state" of the QRNG (which number in the sequence it will produce), using the least-significant
+ 16 bits of a given long.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
 <dd>
@@ -1568,6 +1600,10 @@
 <dd>
 <div class="block">Gets the total number of bundle-to-single pairs in this BundleBiMap.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/EnumMapPlus.html#size">size</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/EnumMapPlus.html" title="class in squidpony.squidmath">EnumMapPlus</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/EnumMapPlus.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/EnumMapPlus.html" title="class in squidpony.squidmath">EnumMapPlus</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html#size--">size()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a></dt>

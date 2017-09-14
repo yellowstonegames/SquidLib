@@ -30,10 +30,10 @@
 <span class="sourceLineNo">022</span> * provides the random number generator SplittableRandom, which uses SplitMix64 and does use different increments).<a name="line.22"></a>
 <span class="sourceLineNo">023</span> * &lt;br&gt;<a name="line.23"></a>
 <span class="sourceLineNo">024</span> * The speed of this generator is fairly good, and it is the fastest generator to pass PractRand with no anomalies, and<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * remains faster than all generators without failures in PractRand. LapRNG, FlapRNG (when FlapRNG produces ints), and<a name="line.25"></a>
-<span class="sourceLineNo">026</span> * (narrowly) ThunderRNG are faster, but all have significant amounts of PractRand testing failures, indicating flaws in<a name="line.26"></a>
-<span class="sourceLineNo">027</span> * quality. The performance of this RandomnessSource has been surprisingly reasonable to improve beyond the baseline of<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * SplitMix64; where LightRNG takes 1.385 seconds to generate a billion pseudo-random long values, this takes just under<a name="line.28"></a>
+<span class="sourceLineNo">025</span> * remains faster than all generators without failures in PractRand. LapRNG and FlapRNG (when FlapRNG produces ints) are<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * faster, but have significant amounts of PractRand testing failures, indicating flaws in quality (ThunderRNG is very<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * close on speed, but ThrustRNG is now faster). The performance of this RandomnessSource has improved well since early<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * versions; where LightRNG takes 1.385 seconds to generate a billion pseudo-random long values, this takes just under<a name="line.28"></a>
 <span class="sourceLineNo">029</span> * a second (0.958 seconds, to be exact) to generate the same quantity. This speed will vary depending on hardware, and<a name="line.29"></a>
 <span class="sourceLineNo">030</span> * was benchmarked using JMH on a relatively-recent laptop (with a i7-6700HQ processor and DDR4 RAM, using a Zulu build<a name="line.30"></a>
 <span class="sourceLineNo">031</span> * of OpenJDK 8); you can expect better performance on most desktops or dedicated "gaming PCs," or potentially much<a name="line.31"></a>
