@@ -10,14 +10,21 @@ import squidpony.annotation.Beta;
 @Beta
 public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     public static final TabbyNoise instance = new TabbyNoise();
-    public int seed;
+    public long seedX, seedY, seedZ, seedW, seedU, seedV;
+    public double randX, randY, randZ, randW, randU, randV;
     public TabbyNoise()
     {
-        seed = 0x1337BEEF;
+        this(0x1337BEEF);
     }
     public TabbyNoise(final int seed)
     {
-        this.seed = seed;
+        randX = gauss(seedX = ThrustRNG.determine(seed  + 0xC6BC279692B5CC83L)) + 0.625;
+        randY = gauss(seedY = ThrustRNG.determine(seedX + 0xC7BC279692B5CC83L)) + 0.625;
+        randZ = gauss(seedZ = ThrustRNG.determine(seedY + 0xC8BC279692B5CC83L)) + 0.625;
+        randW = gauss(seedW = ThrustRNG.determine(seedZ + 0xC9BC279692B5CC83L)) + 0.625;
+        randU = gauss(seedU = ThrustRNG.determine(seedW + 0xCABC279692B5CC83L)) + 0.625;
+        randV = gauss(seedV = ThrustRNG.determine(seedU + 0xCBBC279692B5CC83L)) + 0.625;
+
     }
     /*
      * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
@@ -48,19 +55,30 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
     @Override
     public double getNoise(double x, double y) {
-        return getNoiseWithSeed(x, y, seed);
+        return getNoiseWithSeeds(x, y, seedX, seedY, randX, randY);
     }
 
     @Override
-    public double getNoiseWithSeed(double x, double y, int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final int seed) {
         final long
-                s = ThrustRNG.determine(seed ^ (long)~seed << 32),
-                rx = (seed - s) ^ (s >>> 29 ^ s << 23),
-                ry = (seed + rx) ^ (s >>> 17 ^ s << 36);
-        final double
-                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y,
-                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x;
+                rs  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
+                ry = (rx >>> 23 ^ rx << 23) * (rx | 1L);
+        return getNoiseWithSeeds(x, y, rx, ry, gauss(rx) + 0.625, gauss(ry) + 0.625);
+    }
 
+    public double getNoiseWithSeeds(final double x, final double y,
+                                    final long seedX, final long seedY,
+                                    final double randX, final double randY) {
+        final double
+                grx = randX * 0.625,
+                gry = randY * 0.625,
+                cx = NumberTools.zigzag(x) * (gry + 1.125) * 0x0.93p-1,
+                cy = NumberTools.zigzag(y) * (grx + 1.125) * 0x0.93p-1,
+                ax = x + (cy * (0.35 + gry)),
+                ay = y + (cx * (0.35 + grx)),
+                mx = ((((seedX & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ax + ((((seedX & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ay,
+                my = ((((seedY & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ay + ((((seedY & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ax;
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my);
@@ -72,63 +90,36 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                                 + querp(gauss(yf * 0xBE3779B97F4A7C55L),
                                 gauss((yf+1) * 0xBE3779B97F4A7C55L),
                                 my - yf)));
+
     }
 
     @Override
     public double getNoise(double x, double y, double z) {
-        return getNoiseWithSeed(x, y, z, seed);
+        return getNoiseWithSeeds(x, y, z, seedX, seedY, seedZ, randX, randY, randZ);
     }
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
-/*        long s = seed ^ (long)~seed << 32;
-        final double
-                rx = gauss(s += 0x763779B97F4A7C17L),
-                ry = gauss(s += 0x663779B97F4A7C17L),
-                rz = gauss(s += 0x563779B97F4A7C17L),
-                ax = NumberTools.zigzag(x * rx),
-                ay = NumberTools.zigzag(y * ry),
-                az = NumberTools.zigzag(z * rz),
-                dx = ((ay + az) * x),
-                dy = ((az + ax) * y),
-                dz = ((ax + ay) * z),
-                mx = dx + dy * ax - dz * ay * az,
-                my = dy + dz * ay - dx * az * ax,
-                mz = dz + dx * az - dy * ax * ay
-        ;
         final long
-                xf = fastFloor(mx),
-                yf = fastFloor(my),
-                zf = fastFloor(mz);
-        return
-                NumberTools.bounce(5.875 + 2.0625 * (
-                                querp(gauss(xf * 0xAE3779B97F4A7E35L),
-                                gauss((xf+1) * 0xAE3779B97F4A7E35L),
-                                mx - xf)
-                                + querp(gauss(yf * 0xBE3779B97F4A7C55L),
-                                gauss((yf+1) * 0xBE3779B97F4A7C55L),
-                                my - yf)
-                                + querp(gauss(zf * 0xCE3779B97F4A7A75L),
-                                gauss((zf+1) * 0xCE3779B97F4A7A75L),
-                                mz - zf)));
-                                */
-        final long
-                s  = ThrustRNG.determine(seed ^ (long)~seed << 32),
-                rx = s >>> 27 ^ s << 27,
-                ry = s >>> 23 ^ s << 23,
-                rz = s >>> 29 ^ s << 29;
+                rs  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
+                ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
+                rz = (ry >>> 23 ^ ry << 23) * (ry | 1L);
+        return getNoiseWithSeeds(x, y, z, rx, ry, rz,
+                gauss(rx) + 0.625, gauss(ry) + 0.625, gauss(rz) + 0.625);
+    }
+    public double getNoiseWithSeeds(final double x, final double y, final double z,
+                                    final long seedX, final long seedY, final long seedZ,
+                                    final double randX, final double randY, final double randZ) {
         final double
-                grx = gauss(rx) + 0.75,
-                gry = gauss(ry) + 0.75,
-                grz = gauss(rz) + 0.75,
-                cx = NumberTools.zigzag(x) * (gry * grz + 1.125) * 0x0.93p-1,
-                cy = NumberTools.zigzag(y) * (grz * grx + 1.125) * 0x0.93p-1,
-                cz = NumberTools.zigzag(z) * (grx * gry + 1.125) * 0x0.93p-1,
+                cx = NumberTools.zigzag(x) * (randY * randZ + 1.125) * 0x0.93p-1,
+                cy = NumberTools.zigzag(y) * (randZ * randX + 1.125) * 0x0.93p-1,
+                cz = NumberTools.zigzag(z) * (randX * randY + 1.125) * 0x0.93p-1,
                 ax = x + (cy * cz),
                 ay = y + (cz * cx),
                 az = z + (cx * cy),
-                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ax + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ay + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * az,
-                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ay + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * az + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ax,
-                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * az + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ax + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ay;
+                mx = ((((seedX & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ax + ((((seedX & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ay + ((((seedX & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * az,
+                my = ((((seedY & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ay + ((((seedY & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * az + ((((seedY & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ax,
+                mz = ((((seedZ & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * az + ((((seedZ & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ax + ((((seedZ & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ay;
 
         final long
                 xf = fastFloor(mx),
@@ -148,24 +139,37 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     @Override
-    public double getNoise(double x, double y, double z, double w) {
-        return getNoiseWithSeed(x, y, z, w, seed);
+    public double getNoise(final double x, final double y, final double z, final double w) {
+        return getNoiseWithSeeds(x, y, z, w, seedX, seedY, seedZ, seedW, randX, randY, randZ, randW);
     }
 
     @Override
-    public double getNoiseWithSeed(double x, double y, double z, double w, int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
         final long
-                s = ThrustRNG.determine(seed ^ (long)~seed << 32),
-                rx = (seed - s) ^ (s >>> 29 ^ s << 23),
-                ry = (seed + rx) ^ (s >>> 17 ^ s << 36),
-                rz = (ry - seed) ^ (s >>> 22 ^ s << 31),
-                rw = (seed + rz - ry - rx) ^ (s >>> 19 ^ s << 29);
+                rs  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
+                ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
+                rz = (ry >>> 23 ^ ry << 23) * (ry | 1L),
+                rw = (rz >>> 23 ^ rz << 23) * (rz | 1L);
+        return getNoiseWithSeeds(x, y, z, w, rx, ry, rz, rw,
+                gauss(rx) + 0.625, gauss(ry) + 0.625, gauss(rz) + 0.625, gauss(rw) + 0.625);
+    }
+    public double getNoiseWithSeeds(final double x, final double y, final double z, final double w,
+                                    final long seedX, final long seedY, final long seedZ, final long seedW,
+                                    final double randX, final double randY, final double randZ, final double randW) {
         final double
-                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * w + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * z + ((((rx & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * y,
-                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * w + ((((ry & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * z,
-                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * z + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * x + ((((rz & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * w,
-                mw = ((((rw & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * w + ((((rw & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * z + ((((rw & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * y + ((((rw & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * x;
-
+                cx = NumberTools.zigzag(x) * (randY * randZ + 1.125) * 0x0.93p-1,
+                cy = NumberTools.zigzag(y) * (randZ * randW + 1.125) * 0x0.93p-1,
+                cz = NumberTools.zigzag(z) * (randW * randX + 1.125) * 0x0.93p-1,
+                cw = NumberTools.zigzag(w) * (randX * randY + 1.125) * 0x0.93p-1,
+                ax = x + (cz * cw),
+                ay = y + (cw * cx),
+                az = z + (cx * cy),
+                aw = w + (cy * cz),
+                mx = ((((seedX & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ax + ((((seedX & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * aw + ((((seedX & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * az + ((((seedX & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * ay,
+                my = ((((seedY & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ay + ((((seedY & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ax + ((((seedY & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * aw + ((((seedY & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * az,
+                mz = ((((seedZ & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * az + ((((seedZ & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ay + ((((seedZ & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ax + ((((seedZ & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * aw,
+                mw = ((((seedW & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * aw + ((((seedW & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * az + ((((seedW & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ay + ((((seedW & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * ax;
         final long
                 xf = fastFloor(mx),
                 yf = fastFloor(my),
@@ -188,27 +192,51 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     @Override
-    public double getNoise(double x, double y, double z, double w, double u, double v) {
-        return getNoiseWithSeed(x, y, z, w, u, v, seed);
+    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {
+        return getNoiseWithSeeds(x, y, z, w, u, v,
+                seedX, seedY, seedZ, seedW, seedU, seedV,
+                randX, randY, randZ, randW, randU, randV);
     }
 
     @Override
-    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, int seed) {
         final long
-                s = ThrustRNG.determine(seed ^ (long)~seed << 32),
-                rx = (seed - s) ^ (s >>> 29 ^ s << 23),
-                ry = (seed + rx) ^ (s >>> 17 ^ s << 36),
-                rz = (ry - seed) ^ (s >>> 22 ^ s << 31),
-                rw = (seed + rz - ry * rx) ^ (s >>> 19 ^ s << 29),
-                ru = (seed - rw + rz * ry) ^ (s >>> 24 ^ s << 27),
-                rv = (seed + ru * rw - rx * rz) ^ (s >>> 21 ^ s << 34);
+                rs  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
+                ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
+                rz = (ry >>> 23 ^ ry << 23) * (ry | 1L),
+                rw = (rz >>> 23 ^ rz << 23) * (rz | 1L),
+                ru = (rw >>> 23 ^ rw << 23) * (rw | 1L),
+                rv = (ru >>> 23 ^ ru << 23) * (ru | 1L);
+        return getNoiseWithSeeds(x, y, z, w, u, v, rx, ry, rz, rw, ru, rv,
+                gauss(rx) + 0.625, gauss(ry) + 0.625, gauss(rz) + 0.625,
+                gauss(rw) + 0.625, gauss(ru) + 0.625, gauss(rv) + 0.625);
+    }
+    public double getNoiseWithSeeds(final double x, final double y, final double z,
+                                    final double w, final double u, final double v,
+                                    final long seedX, final long seedY, final long seedZ,
+                                    final long seedW, final long seedU, final long seedV,
+                                    final double randX, final double randY, final double randZ,
+                                    final double randW, final double randU, final double randV) {
         final double
-                mx = ((((rx & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * x + ((((rx & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * v + ((((rx & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * u + ((((rx & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * w + ((((rx & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * z + ((((rx & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * y,
-                my = ((((ry & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * y + ((((ry & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * x + ((((ry & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * v + ((((ry & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * u + ((((ry & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * w + ((((ry & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * z,
-                mz = ((((rz & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * z + ((((rz & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * y + ((((rz & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * x + ((((rz & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * v + ((((rz & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * u + ((((rz & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * w,
-                mw = ((((rw & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * w + ((((rw & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * z + ((((rw & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * y + ((((rw & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * x + ((((rw & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * v + ((((rw & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * u,
-                mu = ((((ru & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * u + ((((ru & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * w + ((((ru & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * z + ((((ru & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * y + ((((ru & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * x + ((((ru & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * v,
-                mv = ((((rv & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * v + ((((rv & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * u + ((((rv & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * w + ((((rv & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * z + ((((rv & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * y + ((((rv & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * x;
+                cx = NumberTools.zigzag(x) * (randY * randZ + 1.125) * 0x0.93p-1,
+                cy = NumberTools.zigzag(y) * (randZ * randW + 1.125) * 0x0.93p-1,
+                cz = NumberTools.zigzag(z) * (randW * randU + 1.125) * 0x0.93p-1,
+                cw = NumberTools.zigzag(w) * (randU * randV + 1.125) * 0x0.93p-1,
+                cu = NumberTools.zigzag(u) * (randV * randX + 1.125) * 0x0.93p-1,
+                cv = NumberTools.zigzag(v) * (randX * randY + 1.125) * 0x0.93p-1,
+                ax = x + (cw * cu),
+                ay = y + (cu * cv),
+                az = z + (cv * cx),
+                aw = w + (cx * cy),
+                au = u + (cy * cz),
+                av = v + (cz * cw),
+                mx = ((((seedX & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ax + ((((seedX & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * av + ((((seedX & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * au + ((((seedX & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * aw + ((((seedX & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * az + ((((seedX & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * ay,
+                my = ((((seedY & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ay + ((((seedY & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ax + ((((seedY & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * av + ((((seedY & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * au + ((((seedY & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * aw + ((((seedY & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * az,
+                mz = ((((seedZ & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * az + ((((seedZ & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ay + ((((seedZ & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ax + ((((seedZ & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * av + ((((seedZ & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * au + ((((seedZ & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * aw,
+                mw = ((((seedW & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * aw + ((((seedW & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * az + ((((seedW & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * ay + ((((seedW & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * ax + ((((seedW & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * av + ((((seedW & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * au,
+                mu = ((((seedU & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * au + ((((seedU & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * aw + ((((seedU & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * az + ((((seedU & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * ay + ((((seedU & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * ax + ((((seedU & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * av,
+                mv = ((((seedV & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * av + ((((seedV & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * au + ((((seedV & 0x1F00000L) | 0x2F0000L) - 0x1FF0000p-1) * 0x0.Bp-24) * aw + ((((seedV & 0x1F0000000L) | 0x2F000000L) - 0x1FF000000p-1) * 0x0.7p-32) * az + ((((seedV & 0x1F000000000L) | 0x2F00000000L) - 0x1FF00000000p-1) * 0x0.4p-40) * ay + ((((seedV & 0x1F00000000000L) | 0x2F0000000000L) - 0x1FF0000000000p-1) * 0x0.2p-48) * ax;
 
         final long
                 xf = fastFloor(mx),
