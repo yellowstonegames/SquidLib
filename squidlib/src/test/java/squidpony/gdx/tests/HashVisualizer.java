@@ -99,6 +99,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private XoRoRNG xoRo = new XoRoRNG();
     private XorRNG xor = new XorRNG();
     private ZapRNG zap = new ZapRNG();
+    private ThrustRNG thrust = new ThrustRNG(123456789L);
 
 
     private final int[] coordinates = new int[2];
@@ -137,6 +138,22 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise6D turb6D = new Noise.Turbulent6D(mead, ridged6D, 1, 1);
     private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
+
+    private final long
+            seedX0 = thrust.nextLong(), seedX1 = thrust.nextLong(), seedX2 = thrust.nextLong(), seedX3 = thrust.nextLong(),
+            seedY0 = thrust.nextLong(), seedY1 = thrust.nextLong(), seedY2 = thrust.nextLong(), seedY3 = thrust.nextLong(),
+            seedZ0 = thrust.nextLong(), seedZ1 = thrust.nextLong(), seedZ2 = thrust.nextLong(), seedZ3 = thrust.nextLong(),
+            seedW0 = thrust.nextLong(), seedW1 = thrust.nextLong(), seedW2 = thrust.nextLong(), seedW3 = thrust.nextLong(),
+            seedU0 = thrust.nextLong(), seedU1 = thrust.nextLong(), seedU2 = thrust.nextLong(), seedU3 = thrust.nextLong(),
+            seedV0 = thrust.nextLong(), seedV1 = thrust.nextLong(), seedV2 = thrust.nextLong(), seedV3 = thrust.nextLong();
+    private final double
+            randX0 = TabbyNoise.gauss(seedX0) + 0.625, randX1 = TabbyNoise.gauss(seedX1) + 0.625, randX2 = TabbyNoise.gauss(seedX2) + 0.625, randX3 = TabbyNoise.gauss(seedX3) + 0.625,
+            randY0 = TabbyNoise.gauss(seedY0) + 0.625, randY1 = TabbyNoise.gauss(seedY1) + 0.625, randY2 = TabbyNoise.gauss(seedY2) + 0.625, randY3 = TabbyNoise.gauss(seedY3) + 0.625,
+            randZ0 = TabbyNoise.gauss(seedZ0) + 0.625, randZ1 = TabbyNoise.gauss(seedZ1) + 0.625, randZ2 = TabbyNoise.gauss(seedZ2) + 0.625, randZ3 = TabbyNoise.gauss(seedZ3) + 0.625,
+            randW0 = TabbyNoise.gauss(seedW0) + 0.625, randW1 = TabbyNoise.gauss(seedW1) + 0.625, randW2 = TabbyNoise.gauss(seedW2) + 0.625, randW3 = TabbyNoise.gauss(seedW3) + 0.625,
+            randU0 = TabbyNoise.gauss(seedU0) + 0.625, randU1 = TabbyNoise.gauss(seedU1) + 0.625, randU2 = TabbyNoise.gauss(seedU2) + 0.625, randU3 = TabbyNoise.gauss(seedU3) + 0.625,
+            randV0 = TabbyNoise.gauss(seedV0) + 0.625, randV1 = TabbyNoise.gauss(seedV1) + 0.625, randV2 = TabbyNoise.gauss(seedV2) + 0.625, randV3 = TabbyNoise.gauss(seedV3) + 0.625;
+
 
     private final double[] turing = TuringPattern.initialize(width, height);
     private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4),
@@ -3021,9 +3038,9 @@ public class HashVisualizer extends ApplicationAdapter {
                                                 1.0f));*/
                                 display.put(x, y,
                                         floatGet(
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, 12345678) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, -87654321) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, 543212345) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, seedX0, seedY0, seedZ0, randX0, randY0, randZ0) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, seedX1, seedY1, seedZ1, randX1, randY1, randZ1) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, seedX2, seedY2, seedZ2, randX2, randY2, randZ2) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3033,8 +3050,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Tabby 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.11125f + 10,
-                                        123456789) * 0.50f) + 0.50f;
+                                bright = (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.11125f + 10,
+                                        seedX3, seedY3, seedZ3, randX3, randY3, randZ3) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -3323,9 +3340,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         floatGet(
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (x + y + ctr + 100) * 0.11125f, 12345678) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (x + y + ctr + 500) * 0.11125f, -87654321) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, (x + y + ctr + 900) * 0.11125f, 543212345) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (NumberTools.zigzag((x + y - ctr) * 0.091f) + ctr + 31.337) * 0.0711125f, seedX0, seedY0, seedZ0, seedW0, randX0, randY0, randZ0, randW0) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (NumberTools.zigzag((x + y - ctr) * 0.091f) + ctr + 42.337) * 0.0711125f, seedX1, seedY1, seedZ1, seedW1, randX1, randY1, randZ1, randW1) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, (NumberTools.zigzag((x + y - ctr) * 0.091f) + ctr + 53.337) * 0.0711125f, seedX2, seedY2, seedZ2, seedW2, randX2, randY2, randZ2, randW2) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3334,8 +3351,8 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Tabby 4D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
-                                        (x + y + ctr + 300) * 0.11125f, 123456789) * 0.50f) + 0.50f;
+                                bright = (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
+                                        (NumberTools.zigzag((x + y - ctr) * 0.091f) + ctr) * 0.0711125f, seedX3, seedY3, seedZ3, seedW3, randX3, randY3, randZ3, randW3) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -3346,9 +3363,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                display.put(x, y,
                                         floatGet(
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (x + y + ctr + 100) * 0.11125f, Math.sin((x - ctr) * 0.11125f),Math.cos((ctr - y) * 0.11125f),  12345678) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (x + y + ctr + 500) * 0.11125f, Math.sin((x - ctr) * 0.11125f),Math.cos((ctr - y) * 0.11125f),  -87654321) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, (x + y + ctr + 900) * 0.11125f, Math.sin((x - ctr) * 0.11125f),Math.cos((ctr - y) * 0.11125f),  543212345) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.1) * 0.0511125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.2) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.8) * 0.0611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0, randX0, randY0, randZ0, randW0, randU0, randV0) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.5) * 0.0511125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.6) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.3) * 0.0611125f, seedX1, seedY1, seedZ1, seedW1, seedU1, seedV1, randX1, randY1, randZ1, randW1, randU1, randV1) * 0.50f) + 0.50f,
+                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.9) * 0.0511125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.4) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.6) * 0.0611125f, seedX2, seedY2, seedZ2, seedW2, seedU2, seedV2, randX2, randY2, randZ2, randW2, randU2, randV2) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3357,8 +3374,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Tabby 6D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(TabbyNoise.instance.getNoiseWithSeed(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
-                                         (x + y + ctr + 100) * 0.11125f, Math.sin((x - ctr) * 0.11125f),Math.cos((ctr - y) * 0.11125f), 123456789) * 0.50f) + 0.50f;
+                                bright = (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.6) * 0.0311125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.5) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.2) * 0.0611125f, seedX3, seedY3, seedZ3, seedW3, seedU3, seedV3, randX3, randY3, randZ3, randW3, randU3, randV3) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
