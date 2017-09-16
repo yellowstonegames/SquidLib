@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10};
+var methods = {"i0":9,"i1":9,"i2":10,"i3":10,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":10,"i11":9,"i12":9,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../src-html/squidpony/FakeLanguageGen.html#line.3712">FakeLanguageGen.Modifier</a>
+<pre>public static class <a href="../src-html/squidpony/FakeLanguageGen.html#line.3730">FakeLanguageGen.Modifier</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <dl>
@@ -174,27 +174,37 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#LIGATURES">LIGATURES</a></span></code>
+<div class="block">Simple changes to merge "ae" into "æ", "oe" into "œ", and any of "aé", "áe", or "áé" into "ǽ".</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#LISP">LISP</a></span></code>
 <div class="block">For a character who always pronounces 's', 'ss', and 'sh' as 'th'.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#NO_DOUBLES">NO_DOUBLES</a></span></code>
 <div class="block">For a language that never repeats the same letter twice in a row.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_ARABIC">SIMPLIFY_ARABIC</a></span></code>&nbsp;</td>
-</tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_ARABIC">SIMPLIFY_ARABIC</a></span></code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">This Modifier doesn't do anything, and isn't needed.</span></div>
+</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_NORSE">SIMPLIFY_NORSE</a></span></code>
 <div class="block">Removes accented letters and the two non-English consonants from text generated with <a href="../squidpony/FakeLanguageGen.html#NORSE"><code>FakeLanguageGen.NORSE</code></a>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#STUTTER">STUTTER</a></span></code>
 <div class="block">For a character who has a 20% chance to repeat a starting consonant or vowel.</div>
@@ -246,39 +256,105 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#deserializeFromString-java.lang.String-">deserializeFromString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#charReplacementTable-java.lang.String-java.lang.String-">charReplacementTable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</code>
+<div class="block">Creates a Modifier that will replace the nth char in initial with the nth char in change.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#deserializeFromString-java.lang.String-">deserializeFromString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#insertClosingConsonant-java.lang.String-double-">insertClosingConsonant</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                      double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant at the end of a word with a
+ probability of <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted
+ consonant to be likely to end every word of some sentences.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#insertClosingVowel-java.lang.String-double-">insertClosingVowel</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                  double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel at the end of a word with a probability of
+ <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely
+ to end every word of some sentences.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#insertConsonant-java.lang.String-double-">insertConsonant</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+               double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant (at any point in a word that had
+ a consonant generated) with a probability of <code>chance</code>, so chance should be low (0.1 at most) unless you
+ want the newly-inserted consonant to be likely to be present in every word of some sentences.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#insertOpeningConsonant-java.lang.String-double-">insertOpeningConsonant</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                      double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant at the start of a word with a
+ probability of <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted
+ consonant to be likely to start every word of some sentences.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#insertOpeningVowel-java.lang.String-double-">insertOpeningVowel</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                  double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel at the start of a word with a probability of
+ <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely
+ to start every word of some sentences.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#insertVowel-java.lang.String-double-">insertVowel</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+           double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel (at any point in a word that had a vowel
+ generated) with a probability of <code>chance</code>, so chance should be low (0.1 at most) unless you want the
+ newly-inserted vowel to be likely to be present in every word of some sentences.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#modify-squidpony.squidmath.RNG-java.lang.StringBuilder-">modify</a></span>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#replacementTable-squidpony.squidmath.OrderedMap-">replacementTable</a></span>(<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;map)</code>
 <div class="block">Creates a Modifier that will replace the nth String key in map with the nth value.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static <a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#replacementTable-java.lang.String-java.lang.String-">replacementTable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</code>
-<div class="block">Creates a Modifier that will replace the nth char in initial with the nth char in change.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#replacementTable-java.lang.String...-">replacementTable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;pairs)</code>
+<div class="block">Creates a Modifier that will replace the (n*2)th String in pairs with the (n*2+1)th value in pairs.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#serializeToString--">serializeToString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.Modifier.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -310,7 +386,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>alterations</h4>
-<pre>public final&nbsp;<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a>[] <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3714">alterations</a></pre>
+<pre>public final&nbsp;<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a>[] <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3732">alterations</a></pre>
 </li>
 </ul>
 <a name="LISP">
@@ -319,7 +395,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>LISP</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3770">LISP</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3788">LISP</a></pre>
 <div class="block">For a character who always pronounces 's', 'ss', and 'sh' as 'th'.</div>
 </li>
 </ul>
@@ -329,7 +405,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>HISS</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3775">HISS</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3793">HISS</a></pre>
 <div class="block">For a character who always lengthens 's' and 'z' sounds not starting a word.</div>
 </li>
 </ul>
@@ -339,7 +415,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>STUTTER</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3780">STUTTER</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3798">STUTTER</a></pre>
 <div class="block">For a character who has a 20% chance to repeat a starting consonant or vowel.</div>
 </li>
 </ul>
@@ -349,7 +425,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DOUBLE_VOWELS</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3788">DOUBLE_VOWELS</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3806">DOUBLE_VOWELS</a></pre>
 <div class="block">For a language that has a 40% chance to repeat a single Latin vowel (a, e, o, or a variant on one of them
  like å or ö, but not merged letters like æ and œ).</div>
 </li>
@@ -360,7 +436,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>DOUBLE_CONSONANTS</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3797">DOUBLE_CONSONANTS</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3815">DOUBLE_CONSONANTS</a></pre>
 <div class="block">For a language that has a 50% chance to repeat a single consonant.</div>
 </li>
 </ul>
@@ -370,7 +446,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>NO_DOUBLES</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3804">NO_DOUBLES</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3822">NO_DOUBLES</a></pre>
 <div class="block">For a language that never repeats the same letter twice in a row.</div>
 </li>
 </ul>
@@ -380,11 +456,21 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>SIMPLIFY_NORSE</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3812">SIMPLIFY_NORSE</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3830">SIMPLIFY_NORSE</a></pre>
 <div class="block">Removes accented letters and the two non-English consonants from text generated with <a href="../squidpony/FakeLanguageGen.html#NORSE"><code>FakeLanguageGen.NORSE</code></a>.
  Replaces á, é, í, ý, ó, æ, ú, and ö with a, e, i, y, o, ae, and ou. In some instances, replaces j
  with y. Replaces ð and þ with th and th, except for when preceded by s (then it replaces sð or sþ
  with st or st) or when the start of a word is fð or fþ, where it replaces with fr or fr.</div>
+</li>
+</ul>
+<a name="LIGATURES">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LIGATURES</h4>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3848">LIGATURES</a></pre>
+<div class="block">Simple changes to merge "ae" into "æ", "oe" into "œ", and any of "aé", "áe", or "áé" into "ǽ".</div>
 </li>
 </ul>
 <a name="GENERAL_CLEANUP">
@@ -393,7 +479,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>GENERAL_CLEANUP</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3832">GENERAL_CLEANUP</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3853">GENERAL_CLEANUP</a></pre>
 <div class="block">Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
  for fixing a word that isn't pronounceable.</div>
 </li>
@@ -404,7 +490,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SIMPLIFY_ARABIC</h4>
-<pre>public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3886">SIMPLIFY_ARABIC</a></pre>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
+public static final&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a> <a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.4029">SIMPLIFY_ARABIC</a></pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">This Modifier doesn't do anything, and isn't needed.</span></div>
+<div class="block">This was used in an earlier version, which attempted to use a Romanization technique that would use Greek
+ letters and several accented Latin letters to try to accurately represent some of the complex orthography of
+ Arabic, but because FakeLanguageGen doesn't use that technique any more (it was effectively unreadable), this
+ Modifier is a no-op. Its use is never needed any more.</div>
 </li>
 </ul>
 </li>
@@ -421,7 +513,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Modifier</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3716">Modifier</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3734">Modifier</a>()</pre>
 </li>
 </ul>
 <a name="Modifier-java.lang.String-java.lang.String-">
@@ -430,7 +522,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Modifier</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3720">Modifier</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3738">Modifier</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replacement)</pre>
 </li>
 </ul>
@@ -440,7 +532,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Modifier</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3724">Modifier</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3742">Modifier</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replacement,
                 double&nbsp;chance)</pre>
 </li>
@@ -451,7 +543,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Modifier</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3728">Modifier</a>(<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a>...&nbsp;alts)</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3746">Modifier</a>(<a href="../squidpony/FakeLanguageGen.Alteration.html" title="class in squidpony">FakeLanguageGen.Alteration</a>...&nbsp;alts)</pre>
 </li>
 </ul>
 </li>
@@ -468,18 +560,18 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>modify</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3732">modify</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3750">modify</a>(<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a>&nbsp;sb)</pre>
 </li>
 </ul>
-<a name="replacementTable-java.lang.String-java.lang.String-">
+<a name="charReplacementTable-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>replacementTable</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3853">replacementTable</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
-                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</pre>
+<h4>charReplacementTable</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3876">charReplacementTable</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
+                                                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</pre>
 <div class="block">Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and
  change to be the same length, but will use the lesser length if they are not equal-length. Because of the
  state of the text at the time modifiers are run, only lower-case letters need to be searched for.</div>
@@ -498,7 +590,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>replacementTable</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3876">replacementTable</a>(<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;map)</pre>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3899">replacementTable</a>(<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;map)</pre>
 <div class="block">Creates a Modifier that will replace the nth String key in map with the nth value. Because of the
  state of the text at the time modifiers are run, only lower-case letters need to be searched for.
  This overload of replacementTable allows full regex pattern strings as keys and replacement syntax,
@@ -515,13 +607,166 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="replacementTable-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>replacementTable</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3922">replacementTable</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;pairs)</pre>
+<div class="block">Creates a Modifier that will replace the (n*2)th String in pairs with the (n*2+1)th value in pairs. Because
+ of the state of the text at the time modifiers are run, only lower-case letters need to be searched for.
+ This overload of replacementTable allows full regex syntax for search and replacement Strings,
+ such as searching for "([aeiou])\\1+" to find repeated occurrences of the same vowel, and "$1" in
+ this example to replace the repeated section with only the first vowel.
+ The ordering of pairs matters if a later search contains an earlier search (the earlier one will be replaced
+ first, possibly making the later search not match), or if an earlier replacement causes a later one to
+ become valid.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>pairs</code> - array or vararg of alternating Strings to search for and Strings to replace with; replacements happen in order</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</dd>
+</dl>
+</li>
+</ul>
+<a name="insertVowel-java.lang.String-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>insertVowel</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3942">insertVowel</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                                                   double&nbsp;chance)</pre>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel (at any point in a word that had a vowel
+ generated) with a probability of <code>chance</code>, so chance should be low (0.1 at most) unless you want the
+ newly-inserted vowel to be likely to be present in every word of some sentences.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>insertion</code> - the String to use as an additional vowel</dd>
+<dd><code>chance</code> - the chance for a vowel cluster to be replaced with insertion; normally 0.1 or less</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</dd>
+</dl>
+</li>
+</ul>
+<a name="insertConsonant-java.lang.String-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>insertConsonant</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3956">insertConsonant</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                                                       double&nbsp;chance)</pre>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant (at any point in a word that had
+ a consonant generated) with a probability of <code>chance</code>, so chance should be low (0.1 at most) unless you
+ want the newly-inserted consonant to be likely to be present in every word of some sentences.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>insertion</code> - the String to use as an additional consonant</dd>
+<dd><code>chance</code> - the chance for a consonant cluster to be replaced with insertion; normally 0.1 or less</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</dd>
+</dl>
+</li>
+</ul>
+<a name="insertOpeningVowel-java.lang.String-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>insertOpeningVowel</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3971">insertOpeningVowel</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                                                          double&nbsp;chance)</pre>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel at the start of a word with a probability of
+ <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely
+ to start every word of some sentences. Not all languages can start words with vowels, or do that very rarely,
+ so this might not do anything.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>insertion</code> - the String to use as an additional opening vowel</dd>
+<dd><code>chance</code> - the chance for a vowel cluster at the start of a word to be replaced with insertion; normally 0.2 or less</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</dd>
+</dl>
+</li>
+</ul>
+<a name="insertOpeningConsonant-java.lang.String-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>insertOpeningConsonant</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3986">insertOpeningConsonant</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                                                              double&nbsp;chance)</pre>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant at the start of a word with a
+ probability of <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted
+ consonant to be likely to start every word of some sentences. Not all languages can start words with
+ consonants, or do that very rarely, so this might not do anything.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>insertion</code> - the String to use as an additional opening consonant</dd>
+<dd><code>chance</code> - the chance for a consonant cluster at the start of a word to be replaced with insertion; normally 0.2 or less</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</dd>
+</dl>
+</li>
+</ul>
+<a name="insertClosingVowel-java.lang.String-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>insertClosingVowel</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.4001">insertClosingVowel</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                                                          double&nbsp;chance)</pre>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel at the end of a word with a probability of
+ <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely
+ to end every word of some sentences. Not all languages can end words with vowels, or do that very
+ rarely, so this might not do anything.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>insertion</code> - the String to use as an additional closing vowel</dd>
+<dd><code>chance</code> - the chance for a vowel cluster at the end of a word to be replaced with insertion; normally 0.2 or less</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</dd>
+</dl>
+</li>
+</ul>
+<a name="insertClosingConsonant-java.lang.String-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>insertClosingConsonant</h4>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.4016">insertClosingConsonant</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                                                              double&nbsp;chance)</pre>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant at the end of a word with a
+ probability of <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted
+ consonant to be likely to end every word of some sentences. Not all languages can end words with consonants,
+ or do that very rarely, so this might not do anything.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>insertion</code> - the String to use as an additional closing consonant</dd>
+<dd><code>chance</code> - the chance for a consonant cluster at the end of a word to be replaced with insertion; normally 0.2 or less</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Modifier that can be added to a FakeLanguageGen with its addModifiers() method</dd>
+</dl>
+</li>
+</ul>
 <a name="equals-java.lang.Object-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3904">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.4047">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -534,7 +779,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3915">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.4058">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -547,7 +792,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3920">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.4063">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -560,7 +805,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>serializeToString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3926">serializeToString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.4069">serializeToString</a>()</pre>
 </li>
 </ul>
 <a name="deserializeFromString-java.lang.String-">
@@ -569,7 +814,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>deserializeFromString</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.3934">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.Modifier.html#line.4077">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
 </li>
 </ul>
 </li>

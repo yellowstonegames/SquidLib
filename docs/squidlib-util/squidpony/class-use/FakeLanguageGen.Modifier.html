@@ -132,27 +132,37 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#LIGATURES">LIGATURES</a></span></code>
+<div class="block">Simple changes to merge "ae" into "æ", "oe" into "œ", and any of "aé", "áe", or "áé" into "ǽ".</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#LISP">LISP</a></span></code>
 <div class="block">For a character who always pronounces 's', 'ss', and 'sh' as 'th'.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#NO_DOUBLES">NO_DOUBLES</a></span></code>
 <div class="block">For a language that never repeats the same letter twice in a row.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
-<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_ARABIC">SIMPLIFY_ARABIC</a></span></code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_ARABIC">SIMPLIFY_ARABIC</a></span></code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">This Modifier doesn't do anything, and isn't needed.</span></div>
+</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#SIMPLIFY_NORSE">SIMPLIFY_NORSE</a></span></code>
 <div class="block">Removes accented letters and the two non-English consonants from text generated with <a href="../../squidpony/FakeLanguageGen.html#NORSE"><code>FakeLanguageGen.NORSE</code></a>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#STUTTER">STUTTER</a></span></code>
 <div class="block">For a character who has a 20% chance to repeat a starting consonant or vowel.</div>
@@ -182,30 +192,96 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
-<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#deserializeFromString-java.lang.String-">deserializeFromString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#charReplacementTable-java.lang.String-java.lang.String-">charReplacementTable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</code>
+<div class="block">Creates a Modifier that will replace the nth char in initial with the nth char in change.</div>
+</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#deserializeFromString-java.lang.String-">deserializeFromString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#insertClosingConsonant-java.lang.String-double-">insertClosingConsonant</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                      double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant at the end of a word with a
+ probability of <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted
+ consonant to be likely to end every word of some sentences.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#insertClosingVowel-java.lang.String-double-">insertClosingVowel</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                  double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel at the end of a word with a probability of
+ <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely
+ to end every word of some sentences.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#insertConsonant-java.lang.String-double-">insertConsonant</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+               double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant (at any point in a word that had
+ a consonant generated) with a probability of <code>chance</code>, so chance should be low (0.1 at most) unless you
+ want the newly-inserted consonant to be likely to be present in every word of some sentences.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#insertOpeningConsonant-java.lang.String-double-">insertOpeningConsonant</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                      double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a consonant in addition to the consonants
+ that the language already uses; insertion will replace an existing consonant at the start of a word with a
+ probability of <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted
+ consonant to be likely to start every word of some sentences.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#insertOpeningVowel-java.lang.String-double-">insertOpeningVowel</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+                  double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel at the start of a word with a probability of
+ <code>chance</code>, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely
+ to start every word of some sentences.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#insertVowel-java.lang.String-double-">insertVowel</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;insertion,
+           double&nbsp;chance)</code>
+<div class="block">Adds the potential for the String <code>insertion</code> to be used as a vowel in addition to the vowels that the
+ language already uses; insertion will replace an existing vowel (at any point in a word that had a vowel
+ generated) with a probability of <code>chance</code>, so chance should be low (0.1 at most) unless you want the
+ newly-inserted vowel to be likely to be present in every word of some sentences.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.html#modifier-java.lang.String-java.lang.String-">modifier</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replacement)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.html#modifier-java.lang.String-java.lang.String-double-">modifier</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;pattern,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replacement,
         double&nbsp;chance)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
 <td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#replacementTable-squidpony.squidmath.OrderedMap-">replacementTable</a></span>(<a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;map)</code>
 <div class="block">Creates a Modifier that will replace the nth String key in map with the nth value.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../squidpony/FakeLanguageGen.Modifier.html" title="class in squidpony">FakeLanguageGen.Modifier</a></code></td>
-<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#replacementTable-java.lang.String-java.lang.String-">replacementTable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;initial,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;change)</code>
-<div class="block">Creates a Modifier that will replace the nth char in initial with the nth char in change.</div>
+<td class="colLast"><span class="typeNameLabel">FakeLanguageGen.Modifier.</span><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.Modifier.html#replacementTable-java.lang.String...-">replacementTable</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;pairs)</code>
+<div class="block">Creates a Modifier that will replace the (n*2)th String in pairs with the (n*2+1)th value in pairs.</div>
 </td>
 </tr>
 </tbody>

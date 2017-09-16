@@ -16,8 +16,7 @@ public class GapShufflerTest {
             RNG rng = new RNG("SquidLib!");
             ArrayList<String> names = new ArrayList<>(n);
             for (int i = 0; i < n; i++) {
-                names.add(FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC)
-                        .word(rng, true, 3));
+                names.add(FakeLanguageGen.ARABIC_ROMANIZED.word(rng, true, 3));
             }
 
             GapShuffler<String> gap = new GapShuffler<>(names, rng);
