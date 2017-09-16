@@ -13,9 +13,7 @@ import squidpony.FakeLanguageGen;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.TabbyNoise;
+import squidpony.squidmath.*;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -42,9 +40,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         River                  = 12,
         Ocean                  = 13;
 
-    //private static final int width = 314 * 5, height = 500;
+    private static final int width = 314 * 4, height = 400;
 
-    private static final int width = 256, height = 256;
+    //private static final int width = 256, height = 256;
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
@@ -54,7 +52,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private Texture pt;
     private int counter = 0;
     private Color tempColor = Color.WHITE.cpy();
-    private static final int cellWidth = 2, cellHeight = 2;
+    private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
     //private Stage stage;
     private Viewport view;
@@ -302,10 +300,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pt = new Texture(pm);
         rng = new StatefulRNG(CrossHash.hash64(date));
         seed = rng.getState();
-        world = new WorldMapGenerator.TilingMap(seed, width, height, TabbyNoise.instance, 0.9);
-        //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.75);
+        //world = new WorldMapGenerator.TilingMap(seed, width, height, TabbyNoise.instance, 0.9);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Turbulent3D(WhirlingNoise.instance, TabbyNoise.instance, 2, 1.4), 0.85);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
-        //world.generateRivers = true;
+        world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -417,7 +415,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                             Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, ice,
                                     (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
                             pm.setColor(tempColor);
-                            pm.drawRectangle(x << 1, y << 1, 2, 2);
+                            pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 //                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
                             //display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
                             //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
@@ -426,7 +424,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                             Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(lightIce, ice,
                                     (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
                             pm.setColor(tempColor);
-                            pm.drawRectangle(x << 1, y << 1, 2, 2);
+                            pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 //                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
                             //display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
                             //        (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
@@ -441,7 +439,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                         Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
                         pm.setColor(tempColor);
-                        pm.drawRectangle(x << 1, y << 1, 2, 2);
+                        pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 //                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
                         //display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
                         //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
@@ -459,7 +457,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                         Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
                                 BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc)));
                         pm.setColor(tempColor);
-                        pm.drawRectangle(x << 1, y << 1, 2, 2);
+                        pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 //                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
                         //display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
                         //        BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],

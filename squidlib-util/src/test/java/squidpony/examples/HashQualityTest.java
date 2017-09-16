@@ -370,7 +370,7 @@ public class HashQualityTest {
         int langLength;
         System.out.println("Arabic-ish text, Romanized");
         srng.setState(0x1337CAFE);
-        oddLang = FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC);
+        oddLang = FakeLanguageGen.ARABIC_ROMANIZED;
         massive = oddLang.sentence(srng, 0x50000,0x50100, midPunct, endPunct, 0.3).toCharArray();
         langLength = massive.length;
         for (int i = 0, s = 0, e = 0; i < stringHashLength && s + 290 < langLength; i++, e = ((e+3) & 0x1ff)) {

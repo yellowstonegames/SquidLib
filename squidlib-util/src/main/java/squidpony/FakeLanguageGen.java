@@ -28,13 +28,31 @@ public class FakeLanguageGen implements Serializable {
     public static final StatefulRNG srng = new StatefulRNG();
     private static final OrderedSet<FakeLanguageGen> registry = new OrderedSet<>(32);
     protected String summary = null;
+    /**
+     * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
+     * and Cyrillic; for use when a String will be interpreted as a regex ({@link FakeLanguageGen.Alteration}).
+     */
+    public static final String anyVowel = "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]",
+    /**
+     * A pattern String that will match one or more of any vowels FakeLanguageGen can produce out-of-the-box, including
+     * Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex
+     * ({@link FakeLanguageGen.Alteration}).
+     */
+    anyVowelCluster = anyVowel + '+',
+    /**
+     * A pattern String that will match any consonant FakeLanguageGen can produce out-of-the-box, including Latin,
+     * Greek, and Cyrillic; for use when a String will be interpreted as a regex ({@link FakeLanguageGen.Alteration}).
+     */
+    anyConsonant = "[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]",
+    /**
+     * A pattern String that will match one or more of any consonants FakeLanguageGen can produce out-of-the-box,
+     * including Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex
+     * ({@link FakeLanguageGen.Alteration}).
+     */
+    anyConsonantCluster = anyConsonant + '+';
     protected static final Pattern repeats = Pattern.compile("(.)\\1+"),
-            vowelClusters = Pattern.compile(
-                    "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+",
-                    REFlags.IGNORE_CASE | REFlags.UNICODE),
-            consonantClusters = Pattern.compile(
-                    "[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+",
-                    REFlags.IGNORE_CASE | REFlags.UNICODE);
+            vowelClusters = Pattern.compile(anyVowelCluster, REFlags.IGNORE_CASE | REFlags.UNICODE),
+            consonantClusters = Pattern.compile(anyConsonantCluster, REFlags.IGNORE_CASE | REFlags.UNICODE);
     //latin
     //àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳybcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥ
     //ÀÁÂÃÄÅÆĀĂĄǺǼAÈÉÊËĒĔĖĘĚEÌÍÎÏĨĪĬĮIIÒÓÔÕÖØŌŎŐŒǾOÙÚÛÜŨŪŬŮŰŲUÝŸŶỲYBCÇĆĈĊČDÞÐĎĐFGĜĞĠĢHĤĦJĴȷKĶLĹĻĽĿŁMNÑŃŅŇŊPQRŔŖŘSŚŜŞŠȘTŢŤȚVWŴẀẂẄXYÝŸŶỲZŹŻŽṚṜḶḸḌṬṄṆṢṂḤ
@@ -3809,7 +3827,7 @@ public class FakeLanguageGen implements Serializable {
          * with y. Replaces ð and þ with th and th, except for when preceded by s (then it replaces sð or sþ
          * with st or st) or when the start of a word is fð or fþ, where it replaces with fr or fr.
          */
-        public static final Modifier SIMPLIFY_NORSE = replacementTable(Maker.makeOM(
+        public static final Modifier SIMPLIFY_NORSE = replacementTable(
                 "á", "a",
                 "é", "e",
                 "í", "i",
@@ -3822,14 +3840,17 @@ public class FakeLanguageGen implements Serializable {
                 "([^aeiou])j(?:[aeiouy]+)", "$1yo",
                 "s([ðþ])", "st",
                 "\\bf[ðþ]", "fr",
-                "[ðþ]", "th"));
-        //àáâãäåāăąǻæǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳy
+                "[ðþ]", "th");
+
+        /**
+         * Simple changes to merge "ae" into "æ", "oe" into "œ", and any of "aé", "áe", or "áé" into "ǽ".
+         */
+        public static final Modifier LIGATURES = replacementTable("ae", "æ", "oe", "œ", "[aá][eé]", "ǽ");
         /**
          * Some changes that can be applied when sanity checks (which force re-generating a new word) aren't appropriate
          * for fixing a word that isn't pronounceable.
          */
-        //bcçćĉċčdþðďđḍfgĝğġģhĥħḥjĵȷkķlĺļľŀłḷḹmṃnñńņňŋṅṇpqrŕŗřṛṝsśŝşšșṣtţťțṭvwŵẁẃẅxyýÿŷỳzźżž
-        public static final Modifier GENERAL_CLEANUP = replacementTable(Maker.makeOM(
+        public static final Modifier GENERAL_CLEANUP = replacementTable(
                 "[æǽœìíîïĩīĭįıiùúûüũūŭůűųuýÿŷỳy]([æǽœýÿŷỳy])", "$1",
                 "q([ùúûüũūŭůűųu])$", "q$1e",
                 "([ìíîïĩīĭįıi])[ìíîïĩīĭįıi]", "$1",
@@ -3838,8 +3859,10 @@ public class FakeLanguageGen implements Serializable {
                 "[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]([æǽœ])", "$1",
                 "([æǽœ])[àáâãäåāăąǻaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőǿoùúûüũūŭůűųuýÿŷỳy]", "$1",
                 "([wŵẁẃẅ])[wŵẁẃẅ]", "$1",
-                "qq", "q"));
+                "qq", "q");
 
+        //àáâãäåāăąǻæǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳy
+        //bcçćĉċčdþðďđḍfgĝğġģhĥħḥjĵȷkķlĺļľŀłḷḹmṃnñńņňŋṅṇpqrŕŗřṛṝsśŝşšșṣtţťțṭvwŵẁẃẅxyýÿŷỳzźżž
 
         /**
          * Creates a Modifier that will replace the nth char in initial with the nth char in change. Expects initial and
@@ -3850,7 +3873,7 @@ public class FakeLanguageGen implements Serializable {
          * @param change  a String containing characters that will replace occurrences of characters in initial
          * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
          */
-        public static Modifier replacementTable(String initial, String change) {
+        public static Modifier charReplacementTable(String initial, String change) {
             Alteration[] alts = new Alteration[Math.min(initial.length(), change.length())];
             for (int i = 0; i < alts.length; i++) {
                 //literal string syntax; avoids sensitive escaping issues and also doesn't need a character class,
@@ -3883,6 +3906,126 @@ public class FakeLanguageGen implements Serializable {
             return new Modifier(alts);
         }
 
+        /**
+         * Creates a Modifier that will replace the (n*2)th String in pairs with the (n*2+1)th value in pairs. Because
+         * of the state of the text at the time modifiers are run, only lower-case letters need to be searched for.
+         * This overload of replacementTable allows full regex syntax for search and replacement Strings,
+         * such as searching for "([aeiou])\\1+" to find repeated occurrences of the same vowel, and "$1" in
+         * this example to replace the repeated section with only the first vowel.
+         * The ordering of pairs matters if a later search contains an earlier search (the earlier one will be replaced
+         * first, possibly making the later search not match), or if an earlier replacement causes a later one to
+         * become valid.
+         *
+         * @param pairs array or vararg of alternating Strings to search for and Strings to replace with; replacements happen in order
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier replacementTable(String... pairs) {
+            int len;
+            if (pairs == null || (len = pairs.length) <= 1)
+                return new Modifier();
+            Alteration[] alts = new Alteration[len >> 1];
+            for (int i = 0; i < alts.length; i++) {
+                alts[i] = new Alteration(pairs[i<< 1], pairs[i<<1|1]);
+            }
+            return new Modifier(alts);
+        }
+
+        /**
+         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the
+         * language already uses; insertion will replace an existing vowel (at any point in a word that had a vowel
+         * generated) with a probability of {@code chance}, so chance should be low (0.1 at most) unless you want the
+         * newly-inserted vowel to be likely to be present in every word of some sentences.
+         * @param insertion the String to use as an additional vowel
+         * @param chance the chance for a vowel cluster to be replaced with insertion; normally 0.1 or less
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier insertVowel(String insertion, double chance)
+        {
+            return new Modifier(anyVowelCluster, insertion, chance);
+        }
+
+        /**
+         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants
+         * that the language already uses; insertion will replace an existing consonant (at any point in a word that had
+         * a consonant generated) with a probability of {@code chance}, so chance should be low (0.1 at most) unless you
+         * want the newly-inserted consonant to be likely to be present in every word of some sentences.
+         * @param insertion the String to use as an additional consonant
+         * @param chance the chance for a consonant cluster to be replaced with insertion; normally 0.1 or less
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier insertConsonant(String insertion, double chance)
+        {
+            return new Modifier(anyConsonantCluster, insertion, chance);
+        }
+
+        /**
+         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the
+         * language already uses; insertion will replace an existing vowel at the start of a word with a probability of
+         * {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely
+         * to start every word of some sentences. Not all languages can start words with vowels, or do that very rarely,
+         * so this might not do anything.
+         * @param insertion the String to use as an additional opening vowel
+         * @param chance the chance for a vowel cluster at the start of a word to be replaced with insertion; normally 0.2 or less
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier insertOpeningVowel(String insertion, double chance)
+        {
+            return new Modifier("\\b[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+", insertion, chance);
+        }
+
+        /**
+         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants
+         * that the language already uses; insertion will replace an existing consonant at the start of a word with a
+         * probability of {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted
+         * consonant to be likely to start every word of some sentences. Not all languages can start words with
+         * consonants, or do that very rarely, so this might not do anything.
+         * @param insertion the String to use as an additional opening consonant
+         * @param chance the chance for a consonant cluster at the start of a word to be replaced with insertion; normally 0.2 or less
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier insertOpeningConsonant(String insertion, double chance)
+        {
+            return new Modifier("\\b[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+", insertion, chance);
+        }
+
+        /**
+         * Adds the potential for the String {@code insertion} to be used as a vowel in addition to the vowels that the
+         * language already uses; insertion will replace an existing vowel at the end of a word with a probability of
+         * {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted vowel to be likely
+         * to end every word of some sentences. Not all languages can end words with vowels, or do that very
+         * rarely, so this might not do anything.
+         * @param insertion the String to use as an additional closing vowel
+         * @param chance the chance for a vowel cluster at the end of a word to be replaced with insertion; normally 0.2 or less
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier insertClosingVowel(String insertion, double chance)
+        {
+            return new Modifier("[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]+\\b", insertion, chance);
+        }
+
+        /**
+         * Adds the potential for the String {@code insertion} to be used as a consonant in addition to the consonants
+         * that the language already uses; insertion will replace an existing consonant at the end of a word with a
+         * probability of {@code chance}, so chance should be low (0.2 at most) unless you want the newly-inserted
+         * consonant to be likely to end every word of some sentences. Not all languages can end words with consonants,
+         * or do that very rarely, so this might not do anything.
+         * @param insertion the String to use as an additional closing consonant
+         * @param chance the chance for a consonant cluster at the end of a word to be replaced with insertion; normally 0.2 or less
+         * @return a Modifier that can be added to a FakeLanguageGen with its addModifiers() method
+         */
+        public static Modifier insertClosingConsonant(String insertion, double chance)
+        {
+            return new Modifier("[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]+\\b", insertion, chance);
+        }
+
+        /**
+         * This was used in an earlier version, which attempted to use a Romanization technique that would use Greek
+         * letters and several accented Latin letters to try to accurately represent some of the complex orthography of
+         * Arabic, but because FakeLanguageGen doesn't use that technique any more (it was effectively unreadable), this
+         * Modifier is a no-op. Its use is never needed any more.
+         * @deprecated This Modifier doesn't do anything, and isn't needed.
+         */
+        @Deprecated
         public static final Modifier SIMPLIFY_ARABIC = new Modifier(
                 /*
                 new Alteration("ţ", "th"),

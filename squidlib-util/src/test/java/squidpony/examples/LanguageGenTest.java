@@ -351,7 +351,7 @@ public class LanguageGenTest {
                 FakeLanguageGen.RUSSIAN_ROMANIZED.mix(FakeLanguageGen.SOMALI, 0.25),
                 FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.HINDI_ROMANIZED.removeAccents(), 0.5),
                 FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.FRENCH, 0.3),
-                FakeLanguageGen.ARABIC_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_ARABIC).mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.4),
+                FakeLanguageGen.ARABIC_ROMANIZED.mix(FakeLanguageGen.JAPANESE_ROMANIZED, 0.4),
                 FakeLanguageGen.SWAHILI.mix(FakeLanguageGen.GREEK_ROMANIZED, 0.4),
                 FakeLanguageGen.GREEK_ROMANIZED.mix(FakeLanguageGen.SOMALI, 0.4),
                 FakeLanguageGen.ENGLISH.mix(FakeLanguageGen.HINDI_ROMANIZED.removeAccents(), 0.4),
