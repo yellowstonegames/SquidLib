@@ -308,7 +308,7 @@ public class DungeonGeneratorTest {
 
         dungeonGenerator.addDoors(0, false);
         dungeonGenerator.clearEffects();
-        dungeonGenerator.generate(flow.generate());
+        dungeonGenerator.generate(flow.generate(TilesetType.DEFAULT_DUNGEON, 0.6));
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
         dungeon = dungeonGenerator.getDungeon();
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';

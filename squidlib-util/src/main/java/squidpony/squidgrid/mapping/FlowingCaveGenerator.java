@@ -3,7 +3,10 @@ package squidpony.squidgrid.mapping;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.CellularAutomaton;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.RNG;
+
+import java.util.ArrayList;
 
 /**
  * An IDungeonGenerator that distorts and smooths an ordinary dungeon map to make it appear like a cave complex.
@@ -159,8 +162,38 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
         ca.current.remake(gen.region.deteriorate(rng, 0.9));
         gen.region.or(ca.runBasicSmoothing());
         gen.region.remake(gen.region.removeEdges().largestPart());
-        gen.setDungeon(gen.region.toChars());
-        return gen.getDungeon();
+        return gen.region.intoChars(gen.getDungeon(), '.', '#');
+    }
+
+    /**
+     * Generates a flowing cave dungeon with a different {@link TilesetType} than this generator was made with, and
+     * specifying a chance to keep the original walls of rooms before the flowing smoothing step is performed.
+     * {@code roomChance} can be between 0.0 and 1.0, and if a room (identified with a similar technique to
+     * {@link RoomFinder}, but not using it directly) is randomly selected to be preserved (the probability per room is
+     * roomChance), then most of its walls will be kept in-place, generally with more right angles than the caves will
+     * have. It may be best to keep roomChance above 0.5 if you want the effect to be noticeable. Starting with
+     * {@link TilesetType#DEFAULT_DUNGEON} is a good choice for {@code type}.
+     * @param type a TilesetType enum value
+     * @param roomChance the chance, from 0.0 to 1.0, to preserve each room, keeping its walls where they start
+     * @return a 2D char array for the cave system
+     */
+    public char[][] generate(TilesetType type, double roomChance) {
+        gen.generate(type, width, height);
+        ArrayList<GreasedRegion> rooms = gen.region.copy().retract8way().flood8way(gen.region, 1).split();
+        ca.remake(gen.region);
+        gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);
+        gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);
+        ca.current.remake(gen.region.deteriorate(rng, 0.9));
+        gen.region.or(ca.runBasicSmoothing());
+        for (int i = 0; i < rooms.size(); i++) {
+            if(rng.nextDouble() < roomChance)
+            {
+                gen.region.andNot(rooms.get(i).fringe8way().deteriorate(rng, 0.81));
+            }
+        }
+        gen.region.remake(gen.region.removeEdges());
+        gen.region.insertSeveral(DungeonUtility.ensurePath(gen.region.intoChars(gen.getDungeon(), '.', '#'), rng, '.', '#'));
+        return gen.region.largestPart().intoChars(gen.getDungeon(), '.', '#');
     }
 
     /**
