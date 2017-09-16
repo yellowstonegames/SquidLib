@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.utils.IntIntMap;
 import squidpony.squidmath.IntVLA;
 
 /**
@@ -15,7 +16,13 @@ import squidpony.squidmath.IntVLA;
  * immediately, but stores keypresses in a queue, storing all key events and allowing them to be processed one at a time
  * using next() or all at once using drain(). To have an effect, it needs to be registered by calling
  * Input.setInputProcessor(SquidInput).
- *
+ * <br>
+ * This also allows some key remapping, including remapping so a key pressed with modifiers like Ctrl and Shift could
+ * act like '?' (which could be used by expert players to avoid accidentally opening a help menu they don't need), and
+ * that would free up '?' for some other use that could also be remapped. The remap() methods do much of this, often
+ * with help from {@link #combineModifiers(char, boolean, boolean, boolean)}, while the unmap() methods allow removal of
+ * any no-longer-wanted remappings.
+ * <br>
  * It does not perform the blocking functionality of earlier SquidKey implementations, because this is meant to run
  * in an event-driven libGDX game and should not step on the toes of libGDX's input handling. To block game logic
  * until an event has been received, check hasNext() in the game's render() method and effectively "block" by not
@@ -56,7 +63,7 @@ public class SquidInput extends InputAdapter {
     protected boolean numpadDirections = true, ignoreInput = false;
     protected SquidMouse mouse;
     protected final IntVLA queue = new IntVLA();
-
+    public final IntIntMap mapping = new IntIntMap(128);
     /**
      * Constructs a new SquidInput that does not respond to keyboard or mouse input. These can be set later by calling
      * setKeyHandler() to allow keyboard handling or setMouse() to allow mouse handling on a grid.
@@ -78,7 +85,6 @@ public class SquidInput extends InputAdapter {
         keyAction = null;
         this.mouse = mouse;
     }
-
 
     /**
      * Constructs a new SquidInput that does not respond to mouse input, but does take keyboard input and sends keyboard
@@ -189,6 +195,102 @@ public class SquidInput extends InputAdapter {
     }
 
     /**
+     * Remaps a char that could be input and processed by {@link KeyHandler#handle(char, boolean, boolean, boolean)}
+     * (possibly with some pressed modifiers) to another char with possible modifiers. When the first key/modifier mix
+     * is received, it will be translated to the second group in this method.
+     * @param pressedChar a source char that might be used in handling, like 'q', 'A', '7', '(', or {@link #UP_ARROW}.
+     * @param pressedAlt true if alt is part of the source combined keypress, false otherwise
+     * @param pressedCtrl true if ctrl is part of the source combined keypress, false otherwise
+     * @param pressedShift true if shift is part of the source combined keypress, false otherwise
+     * @param targetChar a target char that might be used in handling, like 'q', 'A', '7', '(', or {@link #UP_ARROW}.
+     * @param targetAlt true if alt is part of the target combined keypress, false otherwise
+     * @param targetCtrl true if ctrl is part of the target combined keypress, false otherwise
+     * @param targetShift true if shift is part of the target combined keypress, false otherwise
+     * @return this for chaining
+     */
+    public SquidInput remap(char pressedChar, boolean pressedAlt, boolean pressedCtrl, boolean pressedShift,
+                            char targetChar, boolean targetAlt, boolean targetCtrl, boolean targetShift)
+    {
+        mapping.put(combineModifiers(pressedChar, pressedAlt, pressedCtrl, pressedShift),
+                combineModifiers(targetChar, targetAlt, targetCtrl, targetShift));
+        return this;
+    }
+
+    /**
+     * Remaps a keypress combination, which is a char and several potential modifiers, to another keypress combination.
+     * When the {@code pressed} combination is received, it will be translated to {@code target} in this method.
+     * @see #combineModifiers(char, boolean, boolean, boolean) combineModifiers is usually used to make pressed and target
+     * @param pressed an int for the source keypress, probably produced by {@link #combineModifiers(char, boolean, boolean, boolean)}
+     * @param target an int for the target keypress, probably produced by {@link #combineModifiers(char, boolean, boolean, boolean)}
+     * @return this for chaining
+     */
+    public SquidInput remap(int pressed, int target)
+    {
+        mapping.put(pressed, target);
+        return this;
+    }
+    /**
+     * Remaps many keypress combinations, each of which is a char and several potential modifiers, to other keypress
+     * combinations. When the first of a pair of combinations is received, it will be translated to the second
+     * combination of the pair.
+     * @see #combineModifiers(char, boolean, boolean, boolean) combineModifiers is usually used to make the contents of pairs
+     * @param pairs an int array alternating source and target keypresses, each probably produced by {@link #combineModifiers(char, boolean, boolean, boolean)}
+     * @return this for chaining
+     */
+    public SquidInput remap(int[] pairs)
+    {
+        int len;
+        if(pairs == null || (len = pairs.length) <= 1)
+            return this;
+        for (int i = 0; i < len - 1; i++) {
+            mapping.put(pairs[i], pairs[++i]);
+        }
+        return this;
+    }
+
+    /**
+     * Removes a keypress combination from the mapping by specifying the char and any modifiers that are part of the
+     * keypress combination. This combination will no longer be remapped, but the original handling will be the same.
+     * @param pressedChar a char that might be used in handling, like 'q', 'A', '7', '(', or {@link #UP_ARROW}.
+     * @param pressedAlt true if alt is part of the combined keypress, false otherwise
+     * @param pressedCtrl true if ctrl is part of the combined keypress, false otherwise
+     * @param pressedShift true if shift is part of the combined keypress, false otherwise
+     * @return this for chaining
+     */
+    public SquidInput unmap(char pressedChar, boolean pressedAlt, boolean pressedCtrl, boolean pressedShift){
+        mapping.remove(combineModifiers(pressedChar, pressedAlt,pressedCtrl,pressedShift), 0);
+        return this;
+    }
+    /**
+     * Removes a keypress combination from the mapping by specifying the keypress combination as an int. This
+     * combination will no longer be remapped, but the original handling will be the same.
+     * @see #combineModifiers(char, boolean, boolean, boolean) combineModifiers is usually used to make pressed
+     * @param pressed an int for the source keypress, probably produced by {@link #combineModifiers(char, boolean, boolean, boolean)}
+     * @return this for chaining
+     */
+    public SquidInput unmap(int pressed)
+    {
+        mapping.remove(pressed, 0);
+        return this;
+    }
+    /**
+     * Combines the key (as it would be given to {@link KeyHandler#handle(char, boolean, boolean, boolean)}) with the
+     * three booleans for the alt, ctrl, and shift modifier keys, returning an int that can be used with the internal
+     * queue of ints or the public {@link #mapping} of received inputs to actual inputs the program can process.
+     * @param key a char that might be used in handling, like 'q', 'A', '7', '(', or {@link #UP_ARROW}.
+     * @param alt true if alt is part of this combined keypress, false otherwise
+     * @param ctrl true if ctrl is part of this combined keypress, false otherwise
+     * @param shift true if shift is part of this combined keypress, false otherwise
+     * @return an int that contains the information to represent the key with any modifiers as one value
+     */
+    public int combineModifiers(char key, boolean alt, boolean ctrl, boolean shift)
+    {
+        int c = alt ? (key | 0x10000) : key;
+        c |= ctrl ? 0x20000 : 0;
+        c |= shift ? 0x40000 : 0;
+        return c;
+        }
+    /**
      * Processes all events queued up, passing them through this object's key processing and then to keyHandler. Mouse
      * events are not queued and are processed when they come in.
      */
@@ -202,6 +304,7 @@ public class SquidInput extends InputAdapter {
 
         for (int i = 0, n = qu.size, t; i < n; ) {
             t = qu.get(i++);
+            t = mapping.get(t, t);
             keyAction.handle((char)t, (t & 0x10000) != 0, (t & 0x20000) != 0, (t & 0x40000) != 0);
         }
 
@@ -231,9 +334,8 @@ public class SquidInput extends InputAdapter {
             return;
         }
         int t = qu.removeIndex(0);
-
-        char c = (char) t;
-        keyAction.handle(c, (t & 0x10000) != 0, (t & 0x20000) != 0, (t & 0x40000) != 0);
+        t = mapping.get(t, t);
+        keyAction.handle((char)t, (t & 0x10000) != 0, (t & 0x20000) != 0, (t & 0x40000) != 0);
     }
 
     /**
@@ -249,14 +351,16 @@ public class SquidInput extends InputAdapter {
         if (ignoreInput || keyAction == null) {
             return false;
         }
-        boolean alt =  Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT),
-                ctrl =  Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT),
+        boolean
                 shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
         int c = fromCode(keycode, shift);
         if(c != '\0') {
-            c |= (alt) ? 0x10000 : 0;
-            c |= (ctrl) ? 0x20000 : 0;
-            c |= (shift) ? 0x40000 : 0;
+            c |= (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT))
+                    ? 0x10000 : 0;
+            c |= (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT))
+                    ? 0x20000 : 0;
+            c |= (shift)
+                    ? 0x40000 : 0;
             queue.add(c);
         }
         return false;
@@ -313,8 +417,10 @@ public class SquidInput extends InputAdapter {
      * to the shifted version as if on a QWERTY keyboard, and if you don't have a QWERTY keyboard, the mappings are
      * documented in full below.
      *
-     * Keys 'a' to 'z' report 'A' to 'Z' when shift is held. Non-Latin characters are not supported, since most
-     * keyboards would be unable to send keys for a particular language and A-Z are very common.
+     * Keys 'a' to 'z' report 'A' to 'Z' when shift is held. Non-ASCII-Latin characters do not have this behavior, since
+     * most keyboards would be unable to send keys for a particular language and A-Z are very common. You can still
+     * allow a response to, e.g. 'ä' and 'Ä' separately by checking for whether Shift was pressed in conjunction with
+     * 'ä' on a keyboard with that key, which can be useful when users can configure their own keyboard layouts.
      *
      * Top row numbers map as follows:
      *
