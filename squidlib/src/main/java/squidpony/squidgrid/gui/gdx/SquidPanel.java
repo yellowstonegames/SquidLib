@@ -1238,7 +1238,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         animationCount++;
         ae.animating = true;
         a.addAction(Actions.sequence(
-                Actions.moveToAligned(x + direction.deltaX * cellWidth * 0.35f, y + direction.deltaY * cellHeight * 0.35f,
+                Actions.moveToAligned(x + direction.deltaX * cellWidth * 0.35f, y - direction.deltaY * cellHeight * 0.35f,
                         Align.bottomLeft, duration * 0.35F),
                 Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F),
                 Actions.delay(duration, Actions.run(new Runnable() {

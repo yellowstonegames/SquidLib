@@ -273,6 +273,16 @@ public class SquidInput extends InputAdapter {
         mapping.remove(pressed, 0);
         return this;
     }
+
+    /**
+     * Removes any remappings to key bindings that were in use in this SquidInput.
+     * @return this for chaining
+     */
+    public SquidInput clearMapping()
+    {
+        mapping.clear();
+        return this;
+    }
     /**
      * Combines the key (as it would be given to {@link KeyHandler#handle(char, boolean, boolean, boolean)}) with the
      * three booleans for the alt, ctrl, and shift modifier keys, returning an int that can be used with the internal
@@ -283,13 +293,56 @@ public class SquidInput extends InputAdapter {
      * @param shift true if shift is part of this combined keypress, false otherwise
      * @return an int that contains the information to represent the key with any modifiers as one value
      */
-    public int combineModifiers(char key, boolean alt, boolean ctrl, boolean shift)
-    {
+    public int combineModifiers(char key, boolean alt, boolean ctrl, boolean shift) {
         int c = alt ? (key | 0x10000) : key;
         c |= ctrl ? 0x20000 : 0;
         c |= shift ? 0x40000 : 0;
         return c;
+    }
+
+    /**
+     * Gets the current key remapping as a String, which can be saved in a file and read back with
+     * {@link #keyMappingFromString(String)}. This will allow input with any of Shift, Alt, and Ctl modifiers in any
+     * script supported by the Unicode Basic Multilingual Plane (the first 65536 chars of Unicode).
+     * @return a String that stores four chars per remapping.
+     */
+    public String keyMappingToString()
+    {
+        char[] cs = new char[mapping.size << 2];
+        int i = 0;
+        for(IntIntMap.Entry ent : mapping)
+        {
+            cs[i++] = (char)(ent.key);
+            cs[i++] = (char)((ent.key>>>16) + 64);
+            cs[i++] = (char)(ent.value);
+            cs[i++] = (char)((ent.value>>>16) + 64);
         }
+        return String.valueOf(cs);
+    }
+
+    /**
+     * Reads in a String (almost certainly produced by {@link #keyMappingToString()}) to set the current key remapping.
+     * This will allow input with any of Shift, Alt, and Ctl modifiers in any script supported by the Unicode Basic
+     * Multilingual Plane (the first 65536 chars of Unicode). You may want to call {@link #clearMapping()} before
+     * calling this if you have already set the mapping and want the String's contents to be used as the only mapping.
+     * @param keymap a String that was probably produced by {@link #keyMappingToString()}
+     * @return this for chaining
+     */
+    public SquidInput keyMappingFromString(String keymap)
+    {
+        int len, k, v;
+        if(keymap == null || (len = keymap.length()) < 4)
+            return this;
+        for (int i = 0; i < len - 3; i++) {
+            k = keymap.charAt(i);
+            k |= (keymap.charAt(++i) - 64) << 16;
+            v = keymap.charAt(++i);
+            v |= (keymap.charAt(++i) - 64) << 16;
+            mapping.put(k, v);
+        }
+        return this;
+    }
+
     /**
      * Processes all events queued up, passing them through this object's key processing and then to keyHandler. Mouse
      * events are not queued and are processed when they come in.
