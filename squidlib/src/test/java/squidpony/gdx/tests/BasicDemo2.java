@@ -237,56 +237,51 @@ public class BasicDemo2 extends ApplicationAdapter {
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 switch (key) {
                     case SquidInput.UP_ARROW:
-                    case 'k':
-                    case 'w':
-                    case 'K':
-                    case 'W': {
                         toCursor.clear();
                         //-1 is up on the screen
                         awaitedMoves.add(playerPosition.translate(0, -1));
                         break;
-                    }
                     case SquidInput.DOWN_ARROW:
-                    case 'j':
-                    case 's':
-                    case 'J':
-                    case 'S': {
                         toCursor.clear();
                         //+1 is down on the screen
                         awaitedMoves.add(playerPosition.translate(0, 1));
                         break;
-                    }
                     case SquidInput.LEFT_ARROW:
-                    case 'h':
-                    case 'a':
-                    case 'H':
-                    case 'A': {
                         toCursor.clear();
                         awaitedMoves.add(playerPosition.translate(-1, 0));
                         break;
-                    }
                     case SquidInput.RIGHT_ARROW:
-                    case 'l':
-                    case 'd':
-                    case 'L':
-                    case 'D': {
                         toCursor.clear();
                         awaitedMoves.add(playerPosition.translate(1, 0));
                         break;
-                    }
+                    case SquidInput.UP_LEFT_ARROW:
+                        toCursor.clear();
+                        //-1 is up on the screen
+                        awaitedMoves.add(playerPosition.translate(-1, -1));
+                        break;
+                    case SquidInput.UP_RIGHT_ARROW:
+                        toCursor.clear();
+                        //+1 is down on the screen
+                        awaitedMoves.add(playerPosition.translate(1, -1));
+                        break;
+                    case SquidInput.DOWN_LEFT_ARROW:
+                        toCursor.clear();
+                        awaitedMoves.add(playerPosition.translate(-1, 1));
+                        break;
+                    case SquidInput.DOWN_RIGHT_ARROW:
+                        toCursor.clear();
+                        awaitedMoves.add(playerPosition.translate(1, 1));
+                        break;
                     case 'Q':
                     case 'q':
-                    case SquidInput.ESCAPE: {
+                    case SquidInput.ESCAPE:
                         Gdx.app.exit();
                         break;
-                    }
                     // Here, if you enter a '*' character (usually Shift+8) while holding Ctrl, a little effect appears.
-                    case '*': {
+                    case '*':
                         if (ctrl)
                             display.getForegroundLayer().burst(playerPosition.x, playerPosition.y, true, '@', SColor.CW_LIGHT_YELLOW, 0.75f);
                         break;
-                    }
-
                 }
             }
         },
@@ -358,6 +353,22 @@ public class BasicDemo2 extends ApplicationAdapter {
                         return false;
                     }
                 }));
+        // each of these adds a different kind of input handling support
+        // you can comment out any of the next 3 lines to disable wasd or vi-key keybindings.
+        input.keyMappingFromString("AD←@DD→@SD↓@WD↑@a@←@d@→@s@↓@w@↑@"); // wasd 4-way movement
+        input.keyMappingFromString("HD←@JD↓@KD↑@LD→@h@←@j@↓@k@↑@l@→@"); // hjkl vi-keys 4-way movement
+        input.keyMappingFromString("BD↙@ND↘@UD↗@YD↖@b@↙@n@↘@u@↗@y@↖@"); // yubn vi-keys diagonal movement
+        //this block is used to manually assign the key mapping, instead of from a string
+//        input.remap('y', false, false, false, SquidInput.UP_LEFT_ARROW, false, false, false);
+//        input.remap('Y', false, false, true, SquidInput.UP_LEFT_ARROW, false, false, false);
+//        input.remap('b', false, false, false, SquidInput.DOWN_LEFT_ARROW, false, false, false);
+//        input.remap('B', false, false, true, SquidInput.DOWN_LEFT_ARROW, false, false, false);
+//        input.remap('n', false, false, false, SquidInput.DOWN_RIGHT_ARROW, false, false, false);
+//        input.remap('N', false, false, true, SquidInput.DOWN_RIGHT_ARROW, false, false, false);
+//        input.remap('u', false, false, false, SquidInput.UP_RIGHT_ARROW, false, false, false);
+//        input.remap('U', false, false, true, SquidInput.UP_RIGHT_ARROW, false, false, false);
+        // this we use during development to make the Strings passed to keyMappingFromString()
+//        System.out.println(input.keyMappingToString());
         //Setting the InputProcessor is ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
         //You might be able to get by with the next line instead of the above line, but the former is preferred.
