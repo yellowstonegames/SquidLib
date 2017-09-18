@@ -146,8 +146,7 @@ public class NumberTools {
      */
     public static double zigzag(final double value)
     {
-        final double sign = value < 0.0 ? -2.0 : 2.0;
-        final long s = Double.doubleToLongBits(value + sign), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
+        final long s = Double.doubleToLongBits(value + (value < 0f ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
         return (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
                 | 0x4010000000000000L) - 5.0);
     }
@@ -165,11 +164,52 @@ public class NumberTools {
      */
     public static float zigzag(final float value)
     {
-        final float sign = value < 0f ? -2f : 2f;
-        final int s = Float.floatToIntBits(value + sign), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
         return (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff)
                 | 0x40800000) - 5f);
+    }
 
+    /**
+     * Limited-use. Takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+     * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+     * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
+     * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
+     * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
+     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain not change
+     * its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
+     * will smooth its path. An input of any even number should produce something very close to -1f, any odd
+     * number should produce something very close to 1f, and any number halfway between two incremental integers (like
+     * 8.5f or -10.5f) should produce 0f or a very small fraction.
+     * @param value any float
+     * @return a float from -1f (inclusive) to 1f (inclusive)
+     */
+    public static double sway(final double value)
+    {
+        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
+        final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+                | 0x4000000000000000L) - 2.0);
+        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * 2.0 - 1.0;
+    }
+
+    /**
+     * Limited-use. Takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+     * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+     * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
+     * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
+     * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
+     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain not change
+     * its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
+     * will smooth its path. An input of any even number should produce something very close to -1f, any odd
+     * number should produce something very close to 1f, and any number halfway between two incremental integers (like
+     * 8.5f or -10.5f) should produce 0f or a very small fraction.
+     * @param value any float
+     * @return a float from -1f (inclusive) to 1f (inclusive)
+     */
+    public static float sway(final float value)
+    {
+        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
+        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
     }
 
     public static int floatToIntBits(final float value)

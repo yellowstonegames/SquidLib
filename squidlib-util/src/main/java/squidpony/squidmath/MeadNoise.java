@@ -98,22 +98,14 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     public static float[] randomUnitVectors(final int size, final int len) {
         long seed = 0xC6BC279692B5C483L * len;
         float[] vectors = new float[size * len];
-        float mag = 0.0f, v1, v2, s;
+        float mag = 0.0f, v1;
         for (int u = 0; u < size; u++) {
             for (int i = 0; i < len; ) {
-
-                do {
-                    v1 = ZapRNG.randomSignedFloat(seed, seed += 0xA3779BE3779BE9L); // between -1 and 1
-                    v2 = ZapRNG.randomSignedFloat(seed >> 1, seed + 0xD9E3779BE3779BL); // between -1 and 1
-                    s = v1 * v1 + v2 * v2;
-                } while (s >= 1 || s == 0);
-                double multiplier = Math.sqrt(-2 * Math.log(s) / s);
-                v1 *= multiplier;
-                vectors[u * len + i++] = v1;
+                vectors[u * len + i++] = (v1 = NumberTools.formCurvedFloat(ThrustRNG.determine(++seed)));
                 mag += v1 * v1;
                 if (i < len) {
-                    vectors[u * len + i++] = (v2 *= multiplier);
-                    mag += v2 * v2;
+                    vectors[u * len + i++] = (v1 = NumberTools.formCurvedFloat(ThrustRNG.determine(++seed)));
+                    mag += v1 * v1;
                 }
             }
             if (mag == 0.0) {
@@ -1219,6 +1211,15 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         return t >= 0 ? (int) t : (int) t - 1;
     }
 
+    /**
+     * Like {@link Math#floor}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
+     * @param t the float to find the floor for
+     * @return the floor of t, as an int
+     */
+    public static long longFloor(float t) {
+        return t >= 0 ? (long) t : (long) t - 1L;
+    }
+
 
     protected static final float F2 = 0.36602540378443864676372317075294f,
             G2 = 0.21132486540518711774542560974902f,
@@ -1249,59 +1250,103 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     private static final int[] distOrder = {0, 0, 0, 0, 0, 0},
             newDistOrder = new int[]{-1, 0, 0, 0, 0, 0, 0},
             intLoc = {0, 0, 0, 0, 0, 0};
+    private static final float
+            //PI_F = 3.14159265358979323846f,
+            PHI_F = 1.618033988749895f,
+            HALF_PI_F = 1.5707963267948966f;
+    /*
+     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    public static float querp(final float start, final float end, float a){
+        return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
+    }
+
     public static double noise(final double x, final double y, final int seed) {
         return noise((float)x, (float)y, seed);
     }
-    public static float noise(final float x, final float y, final int seed) {
-        final float s = (x + y) * F2;
-        final float[] gradient2DLUT = MeadNoise.gradient2DLUT, jitterLUT = MeadNoise.jitter2DLUT;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s);
-        float t = (i + j) * G2,
-                x0 = x - (i - t),
-                y0 = y - (j - t);
-        int i1, j1;
-        if (x0 > y0) {
-            i1 = 1;
-            j1 = 0;
-        } else {
-            i1 = 0;
-            j1 = 1;
-        }
-        final int h0 = hash(i, j, seed) << 1,
-                h1 = hash(i + i1, j + j1, seed) << 1,
-                h2 = hash(i + 1, j + 1, seed) << 1;
-        final float mx0 = jitterLUT[h0] * 0.5f, my0 = jitterLUT[h0 | 1] * 0.5f,
-                mx1 = jitterLUT[h1] * 0.5f, my1 = jitterLUT[h1 | 1] * 0.5f,
-                mx2 = jitterLUT[h2] * 0.5f, my2 = jitterLUT[h2 | 1] * 0.5f;
+
+    public static float noise(float x, float y, final int seed) {
+//        final float
+//                rx = NumberTools.formFloat(seed + (~seed << 15)) + 0.5f,
+//                ry = NumberTools.formFloat(~seed ^ (seed << 14)) + 0.5f,
+//                x0y0 = (((x - 0.5f) * rx) + ((y - 0.5f) * ry)),
+//                x0y1 = (((x - 0.5f) * rx) + ((y + 0.5f) * ry)),
+//                x1y0 = (((x + 0.5f) * rx) + ((y - 0.5f) * ry)),
+//                x1y1 = (((x + 0.5f) * rx) + ((y + 0.5f) * ry));
+//        return NumberTools.sway(x0y0 + x1y0 + x0y1 + x1y1);
+        //weird
+        final float[] jitterLUT = MeadNoise.jitter2DLUT;
+        final int s = 0x632BE5AB + seed * 0x9E3779B9;
         final float
-                x1 = x0 - i1 + G2,
-                y1 = y0 - j1 + G2,
-                x2 = x0 - 1f + 2f * G2,
-                y2 = y0 - 1f + 2f * G2;
-        float n0, n1, n2;
-        float t0 = 0.5f - x0 * x0 - y0 * y0;
-        if (t0 < 0)
-            n0 = 0;
-        else {
-            t0 *= t0;
-            n0 = t0 * ((x0 + mx0) * gradient2DLUT[h0] + (y0 + my0) * gradient2DLUT[h0 | 1]);
-        }
-        float t1 = 0.5f - x1 * x1 - y1 * y1;
-        if (t1 < 0)
-            n1 = 0;
-        else {
-            t1 *= t1;
-            n1 = t1 * ((x1 + mx1) * gradient2DLUT[h1] + (y1 + my1) * gradient2DLUT[h1 | 1]);
-        }
-        float t2 = 0.5f - x2 * x2 - y2 * y2;
-        if (t2 < 0)
-            n2 = 0;
-        else {
-            t2 *= t2;
-            n2 = t2 * ((x2 + mx2) * gradient2DLUT[h2] + (y2 + my2) * gradient2DLUT[h2 | 1]);
-        }
-        return NumberTools.bounce((n0 + n1 + n2) * 11.5f + 10f);
+                //gxy = NumberTools.zigzag(x + y) * 0.3f + 0.7f,
+                gx = NumberTools.sway(x) * 0.5f, gy = NumberTools.sway(y) * 0.5f,
+                mx0 = jitterLUT[(s & 255) << 1], my0 = jitterLUT[(s & 255) << 1 | 1],
+                mx1 = jitterLUT[(s >>> 8 & 255) << 1], my1 = jitterLUT[(s >>> 8 & 255) << 1 | 1],
+                mx2 = jitterLUT[(s >>> 16 & 255) << 1], my2 = jitterLUT[(s >>> 16 & 255) << 1 | 1],
+                mx3 = jitterLUT[(s >>> 24 & 255) << 1], my3 = jitterLUT[(s >>> 24 & 255) << 1 | 1];
+        x *= 3f;
+        y *= 3f;
+        return NumberTools.sway(
+                        (NumberTools.sway(mx0 * x + my0 * y) * (0.75f + gx) + 1f) *
+                        (NumberTools.sway(mx1 * x + my1 * y) * (0.75f + gy) + 1f) +
+                        (NumberTools.sway(mx2 * x + my2 * y) * (0.75f - gy) + 1f) *
+                        (NumberTools.sway(mx3 * x + my3 * y) * (0.75f - gx) + 1f));
+
+        //original
+//        final float s = (x + y) * F2;
+//        final float[] gradient2DLUT = MeadNoise.gradient2DLUT, jitterLUT = MeadNoise.jitter2DLUT;
+//        final int i = fastFloor(x + s),
+//                j = fastFloor(y + s);
+//        float t = (i + j) * G2,
+//                x0 = x - (i - t),
+//                y0 = y - (j - t);
+//        int i1, j1;
+//        if (x0 > y0) {
+//            i1 = 1;
+//            j1 = 0;
+//        } else {
+//            i1 = 0;
+//            j1 = 1;
+//        }
+//        final int h0 = hash(i, j, seed) << 1,
+//                h1 = hash(i + i1, j + j1, seed) << 1,
+//                h2 = hash(i + 1, j + 1, seed) << 1;
+//        final float mx0 = jitterLUT[h0] * 0.5f, my0 = jitterLUT[h0 | 1] * 0.5f,
+//                mx1 = jitterLUT[h1] * 0.5f, my1 = jitterLUT[h1 | 1] * 0.5f,
+//                mx2 = jitterLUT[h2] * 0.5f, my2 = jitterLUT[h2 | 1] * 0.5f;
+//        final float
+//                x1 = x0 - i1 + G2,
+//                y1 = y0 - j1 + G2,
+//                x2 = x0 - 1f + 2f * G2,
+//                y2 = y0 - 1f + 2f * G2;
+//        float n0, n1, n2;
+//        float t0 = 0.5f - x0 * x0 - y0 * y0;
+//        if (t0 < 0)
+//            n0 = 0;
+//        else {
+//            t0 *= t0;
+//            n0 = t0 * ((x0 + mx0) * gradient2DLUT[h0] + (y0 + my0) * gradient2DLUT[h0 | 1]);
+//        }
+//        float t1 = 0.5f - x1 * x1 - y1 * y1;
+//        if (t1 < 0)
+//            n1 = 0;
+//        else {
+//            t1 *= t1;
+//            n1 = t1 * ((x1 + mx1) * gradient2DLUT[h1] + (y1 + my1) * gradient2DLUT[h1 | 1]);
+//        }
+//        float t2 = 0.5f - x2 * x2 - y2 * y2;
+//        if (t2 < 0)
+//            n2 = 0;
+//        else {
+//            t2 *= t2;
+//            n2 = t2 * ((x2 + mx2) * gradient2DLUT[h2] + (y2 + my2) * gradient2DLUT[h2 | 1]);
+//        }
+//        return NumberTools.bounce((n0 + n1 + n2) * 11.5f + 10f);
     }
 
     public static double noise(final double x, final double y, final double z, final int seed) {
