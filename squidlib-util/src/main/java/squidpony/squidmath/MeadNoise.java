@@ -1279,23 +1279,23 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //                x1y0 = (((x + 0.5f) * rx) + ((y - 0.5f) * ry)),
 //                x1y1 = (((x + 0.5f) * rx) + ((y + 0.5f) * ry));
 //        return NumberTools.sway(x0y0 + x1y0 + x0y1 + x1y1);
-        //weird
+        // produces a spotted pattern
         final float[] jitterLUT = MeadNoise.jitter2DLUT;
-        final int s = 0x632BE5AB + seed * 0x9E3779B9;
+        final int s = (0x632BE5AB + seed * 0x9E3779B9) ^ 0x85157AF5;
         final float
                 //gxy = NumberTools.zigzag(x + y) * 0.3f + 0.7f,
-                gx = NumberTools.sway(x) * 0.5f, gy = NumberTools.sway(y) * 0.5f,
+                sx = NumberTools.sway(x) * 0.23f, sy = NumberTools.sway(y) * 0.23f,
                 mx0 = jitterLUT[(s & 255) << 1], my0 = jitterLUT[(s & 255) << 1 | 1],
                 mx1 = jitterLUT[(s >>> 8 & 255) << 1], my1 = jitterLUT[(s >>> 8 & 255) << 1 | 1],
                 mx2 = jitterLUT[(s >>> 16 & 255) << 1], my2 = jitterLUT[(s >>> 16 & 255) << 1 | 1],
-                mx3 = jitterLUT[(s >>> 24 & 255) << 1], my3 = jitterLUT[(s >>> 24 & 255) << 1 | 1];
-        x *= 3f;
-        y *= 3f;
+                mx3 = jitterLUT[(s >>> 24) << 1], my3 = jitterLUT[(s >>> 24) << 1 | 1];
+        x *= 7f;
+        y *= 7f;
         return NumberTools.sway(
-                        (NumberTools.sway(mx0 * x + my0 * y) * (0.75f + gx) + 1f) *
-                        (NumberTools.sway(mx1 * x + my1 * y) * (0.75f + gy) + 1f) +
-                        (NumberTools.sway(mx2 * x + my2 * y) * (0.75f - gy) + 1f) *
-                        (NumberTools.sway(mx3 * x + my3 * y) * (0.75f - gx) + 1f));
+                        (NumberTools.sway(mx0 * x + my0 * y) * (0.26f + sx)) +
+                        (NumberTools.sway(mx1 * x + my1 * y) * (0.26f + sy)) +
+                        (NumberTools.sway(mx2 * x + my2 * y) * (0.26f - sy)) +
+                        (NumberTools.sway(mx3 * x + my3 * y) * (0.26f - sx)));
 
         //original
 //        final float s = (x + y) * F2;
@@ -1352,121 +1352,141 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     public static double noise(final double x, final double y, final double z, final int seed) {
         return noise((float)x, (float)y, (float)z, seed);
     }
-    public static float noise(final float x, final float y, final float z, final int seed) {
-        float n0, n1, n2, n3;
-        final float[] gradient3DLUT = MeadNoise.gradient3DLUT, jitterLUT = MeadNoise.jitter3DLUT;
-        final float s = (x + y + z) * F3;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s),
-                k = fastFloor(z + s);
+    public static float noise(float x, float y, float z, int seed) {
+        // produces a spotted pattern
+        final float[] jitterLUT = MeadNoise.jitter3DLUT;
+        seed = (0x632BE5AB + seed * 0x9E3779B9) ^ 0x85157AF5;
+        final float
+                //gxy = NumberTools.zigzag(x + y) * 0.3f + 0.7f,
+                sx = NumberTools.sway(y + z) * 0.24f, sy = NumberTools.sway(z + x) * 0.24f, sz = NumberTools.sway(x + y) * 0.24f,
+                mx0 = jitterLUT[(seed & 255) * 3], my0 = jitterLUT[(seed & 255) * 3 + 1], mz0 = jitterLUT[(seed & 255) * 3 + 2],
+                mx1 = jitterLUT[(seed >>> 8 & 255) * 3], my1 = jitterLUT[(seed >>> 8 & 255) * 3 + 1], mz1 = jitterLUT[(seed >>> 8 & 255) * 3 + 2],
+                mx2 = jitterLUT[(seed >>> 16 & 255) * 3], my2 = jitterLUT[(seed >>> 16 & 255) * 3 + 1], mz2 = jitterLUT[(seed >>> 16 & 255) * 3 + 2],
+                mx3 = jitterLUT[(seed >>> 24) * 3], my3 = jitterLUT[(seed >>> 24) * 3 + 1], mz3 = jitterLUT[(seed >>> 24) * 3 + 2];
+        x *= 7f;
+        y *= 7f;
+        z *= 7f;
+        return NumberTools.sway(
+                (NumberTools.sway(mx0 * x + my0 * y + mz0 * z) * (0.5f + sy + sz)) +
+                        (NumberTools.sway(mx1 * x + my1 * y + mz1 * z) * (0.5f + sz + sx)) +
+                        (NumberTools.sway(mx2 * x + my2 * y + mz2 * z) * (0.5f + sx + sy)) +
+                        (NumberTools.sway(mx3 * x + my3 * y + mz3 * z) * (0.4f - (sx+0.6f) * (sy+0.6f) * (sz+0.6f))));
 
-        final float t = (i + j + k) * G3;
-        final float X0 = i - t, Y0 = j - t, Z0 = k - t,
-                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;
 
-        int i1, j1, k1;
-        int i2, j2, k2;
-
-        if (x0 >= y0) {
-            if (y0 >= z0) {
-                i1 = 1;
-                j1 = 0;
-                k1 = 0;
-                i2 = 1;
-                j2 = 1;
-                k2 = 0;
-            } else if (x0 >= z0) {
-                i1 = 1;
-                j1 = 0;
-                k1 = 0;
-                i2 = 1;
-                j2 = 0;
-                k2 = 1;
-            } else {
-                i1 = 0;
-                j1 = 0;
-                k1 = 1;
-                i2 = 1;
-                j2 = 0;
-                k2 = 1;
-            }
-        } else {
-            if (y0 < z0) {
-                i1 = 0;
-                j1 = 0;
-                k1 = 1;
-                i2 = 0;
-                j2 = 1;
-                k2 = 1;
-            } else if (x0 < z0) {
-                i1 = 0;
-                j1 = 1;
-                k1 = 0;
-                i2 = 0;
-                j2 = 1;
-                k2 = 1;
-            } else {
-                i1 = 0;
-                j1 = 1;
-                k1 = 0;
-                i2 = 1;
-                j2 = 1;
-                k2 = 0;
-            }
-        }
-
-        float x1 = x0 - i1 + G3,
-                y1 = y0 - j1 + G3,
-                z1 = z0 - k1 + G3,
-                x2 = x0 - i2 + 2f * G3,
-                y2 = y0 - j2 + 2f * G3,
-                z2 = z0 - k2 + 2f * G3,
-                x3 = x0 - 1f + 3f * G3,
-                y3 = y0 - 1f + 3f * G3,
-                z3 = z0 - 1f + 3f * G3;
-
-        final int h0 = hash(i, j, k, seed) * 3,
-                h1 = hash(i + i1, j + j1, k + k1, seed) * 3,
-                h2 = hash(i + i2, j + j2, k + k2, seed) * 3,
-                h3 = hash(i + 1, j + 1, k + 1, seed) * 3;
-        final float mx0 = jitterLUT[h0] * 0.25f, my0 = jitterLUT[h0 + 1] * 0.25f, mz0 = jitterLUT[h0 + 2] * 0.25f,
-                mx1 = jitterLUT[h1] * 0.25f, my1 = jitterLUT[h1 + 1] * 0.25f, mz1 = jitterLUT[h1 + 2] * 0.25f,
-                mx2 = jitterLUT[h2] * 0.25f, my2 = jitterLUT[h2 + 1] * 0.25f, mz2 = jitterLUT[h2 + 2] * 0.25f,
-                mx3 = jitterLUT[h3] * 0.25f, my3 = jitterLUT[h3 + 1] * 0.25f, mz3 = jitterLUT[h3 + 2] * 0.25f;
-
-        float t0 = 0.75f - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0.0f)
-            n0 = 0.0f;
-        else {
-            t0 *= t0;
-            n0 = t0 * t0 * ((x0 + mx0) * gradient3DLUT[h0] + (y0 + my0) * gradient3DLUT[h0 + 1] + (z0 + mz0) * gradient3DLUT[h0 + 2]);
-        }
-
-        float t1 = 0.75f - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0.0f)
-            n1 = 0.0f;
-        else {
-            t1 *= t1;
-            n1 = t1 * t1 * ((x1 + mx1) * gradient3DLUT[h1] + (y1 + my1) * gradient3DLUT[h1 + 1] + (z1 + mz1) * gradient3DLUT[h1 + 2]);
-        }
-
-        float t2 = 0.75f - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0.0f)
-            n2 = 0.0f;
-        else {
-            t2 *= t2;
-            n2 = t2 * t2 * ((x2 + mx2) * gradient3DLUT[h2] + (y2 + my2) * gradient3DLUT[h2 + 1] + (z2 + mz2) * gradient3DLUT[h2 + 2]);
-        }
-
-        float t3 = 0.75f - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0.0f)
-            n3 = 0.0f;
-        else {
-            t3 *= t3;
-            n3 = t3 * t3 * ((x3 + mx3) * gradient3DLUT[h3] + (y3 + my3) * gradient3DLUT[h3 + 1] + (z3 + mz3) * gradient3DLUT[h3 + 2]);
-        }
-
-        return NumberTools.bounce((18.0f * (n0 + n1 + n2 + n3)) + 10f);
+//        float n0, n1, n2, n3;
+//        final float[] gradient3DLUT = MeadNoise.gradient3DLUT, jitterLUT = MeadNoise.jitter3DLUT;
+//        final float s = (x + y + z) * F3;
+//        final int i = fastFloor(x + s),
+//                j = fastFloor(y + s),
+//                k = fastFloor(z + s);
+//
+//        final float t = (i + j + k) * G3;
+//        final float X0 = i - t, Y0 = j - t, Z0 = k - t,
+//                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;
+//
+//        int i1, j1, k1;
+//        int i2, j2, k2;
+//
+//        if (x0 >= y0) {
+//            if (y0 >= z0) {
+//                i1 = 1;
+//                j1 = 0;
+//                k1 = 0;
+//                i2 = 1;
+//                j2 = 1;
+//                k2 = 0;
+//            } else if (x0 >= z0) {
+//                i1 = 1;
+//                j1 = 0;
+//                k1 = 0;
+//                i2 = 1;
+//                j2 = 0;
+//                k2 = 1;
+//            } else {
+//                i1 = 0;
+//                j1 = 0;
+//                k1 = 1;
+//                i2 = 1;
+//                j2 = 0;
+//                k2 = 1;
+//            }
+//        } else {
+//            if (y0 < z0) {
+//                i1 = 0;
+//                j1 = 0;
+//                k1 = 1;
+//                i2 = 0;
+//                j2 = 1;
+//                k2 = 1;
+//            } else if (x0 < z0) {
+//                i1 = 0;
+//                j1 = 1;
+//                k1 = 0;
+//                i2 = 0;
+//                j2 = 1;
+//                k2 = 1;
+//            } else {
+//                i1 = 0;
+//                j1 = 1;
+//                k1 = 0;
+//                i2 = 1;
+//                j2 = 1;
+//                k2 = 0;
+//            }
+//        }
+//
+//        float x1 = x0 - i1 + G3,
+//                y1 = y0 - j1 + G3,
+//                z1 = z0 - k1 + G3,
+//                x2 = x0 - i2 + 2f * G3,
+//                y2 = y0 - j2 + 2f * G3,
+//                z2 = z0 - k2 + 2f * G3,
+//                x3 = x0 - 1f + 3f * G3,
+//                y3 = y0 - 1f + 3f * G3,
+//                z3 = z0 - 1f + 3f * G3;
+//
+//        final int h0 = hash(i, j, k, seed) * 3,
+//                h1 = hash(i + i1, j + j1, k + k1, seed) * 3,
+//                h2 = hash(i + i2, j + j2, k + k2, seed) * 3,
+//                h3 = hash(i + 1, j + 1, k + 1, seed) * 3;
+//        final float mx0 = jitterLUT[h0] * 0.25f, my0 = jitterLUT[h0 + 1] * 0.25f, mz0 = jitterLUT[h0 + 2] * 0.25f,
+//                mx1 = jitterLUT[h1] * 0.25f, my1 = jitterLUT[h1 + 1] * 0.25f, mz1 = jitterLUT[h1 + 2] * 0.25f,
+//                mx2 = jitterLUT[h2] * 0.25f, my2 = jitterLUT[h2 + 1] * 0.25f, mz2 = jitterLUT[h2 + 2] * 0.25f,
+//                mx3 = jitterLUT[h3] * 0.25f, my3 = jitterLUT[h3 + 1] * 0.25f, mz3 = jitterLUT[h3 + 2] * 0.25f;
+//
+//        float t0 = 0.75f - x0 * x0 - y0 * y0 - z0 * z0;
+//        if (t0 < 0.0f)
+//            n0 = 0.0f;
+//        else {
+//            t0 *= t0;
+//            n0 = t0 * t0 * ((x0 + mx0) * gradient3DLUT[h0] + (y0 + my0) * gradient3DLUT[h0 + 1] + (z0 + mz0) * gradient3DLUT[h0 + 2]);
+//        }
+//
+//        float t1 = 0.75f - x1 * x1 - y1 * y1 - z1 * z1;
+//        if (t1 < 0.0f)
+//            n1 = 0.0f;
+//        else {
+//            t1 *= t1;
+//            n1 = t1 * t1 * ((x1 + mx1) * gradient3DLUT[h1] + (y1 + my1) * gradient3DLUT[h1 + 1] + (z1 + mz1) * gradient3DLUT[h1 + 2]);
+//        }
+//
+//        float t2 = 0.75f - x2 * x2 - y2 * y2 - z2 * z2;
+//        if (t2 < 0.0f)
+//            n2 = 0.0f;
+//        else {
+//            t2 *= t2;
+//            n2 = t2 * t2 * ((x2 + mx2) * gradient3DLUT[h2] + (y2 + my2) * gradient3DLUT[h2 + 1] + (z2 + mz2) * gradient3DLUT[h2 + 2]);
+//        }
+//
+//        float t3 = 0.75f - x3 * x3 - y3 * y3 - z3 * z3;
+//        if (t3 < 0.0f)
+//            n3 = 0.0f;
+//        else {
+//            t3 *= t3;
+//            n3 = t3 * t3 * ((x3 + mx3) * gradient3DLUT[h3] + (y3 + my3) * gradient3DLUT[h3 + 1] + (z3 + mz3) * gradient3DLUT[h3 + 2]);
+//        }
+//
+//        return NumberTools.bounce((18.0f * (n0 + n1 + n2 + n3)) + 10f);
     }
 
     public static double noise(final double x, final double y, final double z, final double w, final int seed) {
