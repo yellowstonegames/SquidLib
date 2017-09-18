@@ -94,8 +94,7 @@ public class NumberTools {
 
     public static double zigzag(final double value)
     {
-        final double sign = value < 0.0 ? -2.0 : 2.0;
-        wda.set(0, value + sign);
+        wda.set(0, value + (value < 0.0 ? -2.0 : 2.0));
         final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
         wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40100000);
         wia.set(0, wia.get(0) ^ flip);
@@ -104,13 +103,30 @@ public class NumberTools {
 
     public static float zigzag(final float value)
     {
-        final float sign = value < 0f ? -2f : 2f;
-        wfa.set(0, value + sign);
+        wfa.set(0, value + (value < 0f ? -2f : 2f));
         final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
         wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40800000);
         return wfa.get(0) - 5f;
     }
 
+    public static double sway(final double value)
+    {
+        wda.set(0, value + (value < 0.0 ? -2.0 : 2.0));
+        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
+        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
+        wia.set(0, wia.get(0) ^ flip);
+        final double a = wda.get(0) - 2.0;
+        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * 2.0 - 1.0;
+    }
+
+    public static float sway(final float value)
+    {
+        wfa.set(0, value + (value < 0f ? -2f : 2f));
+        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000);
+        final float a = wfa.get(0) - 2f;
+        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
+    }
 
     public static int floatToIntBits(final float value) {
         wfa.set(0, value);

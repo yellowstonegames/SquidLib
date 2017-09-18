@@ -44,6 +44,13 @@ public class Playground {
     private static float querp(final float start, final float end, float a){
         return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
     }
+    public static float sway(final float value)
+    {
+        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
+        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
+    }
+
     private int state = 0;
     private int mul = 0xF7910000;
     private float nextFloat(final int salt)
@@ -84,8 +91,8 @@ public class Playground {
 //            }
 //        }
 
-        for (float f = -9f; f <= 9f; f += 0.25f) {
-            System.out.printf("%f: %f, %f\n", f, NumberTools.zigzag(f), NumberTools.zigzag(f * 1.0));
+        for (float f = -9f; f <= 9f; f += 0.125f) {
+            System.out.printf("%f: %f, %f\n", f, NumberTools.zigzag(f), sway(f));
         }
 
 
