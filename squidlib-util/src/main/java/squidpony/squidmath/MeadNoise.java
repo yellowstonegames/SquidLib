@@ -1284,7 +1284,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         final int s = (0x632BE5AB + seed * 0x9E3779B9) ^ 0x85157AF5;
         final float
                 //gxy = NumberTools.zigzag(x + y) * 0.3f + 0.7f,
-                sx = NumberTools.sway(x) * 0.23f, sy = NumberTools.sway(y) * 0.23f,
+                sx = NumberTools.zigzag(x) * 0.23f, sy = NumberTools.zigzag(y) * 0.23f,
                 mx0 = jitterLUT[(s & 255) << 1], my0 = jitterLUT[(s & 255) << 1 | 1],
                 mx1 = jitterLUT[(s >>> 8 & 255) << 1], my1 = jitterLUT[(s >>> 8 & 255) << 1 | 1],
                 mx2 = jitterLUT[(s >>> 16 & 255) << 1], my2 = jitterLUT[(s >>> 16 & 255) << 1 | 1],
@@ -1358,7 +1358,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         seed = (0x632BE5AB + seed * 0x9E3779B9) ^ 0x85157AF5;
         final float
                 //gxy = NumberTools.zigzag(x + y) * 0.3f + 0.7f,
-                sx = NumberTools.sway(y + z) * 0.24f, sy = NumberTools.sway(z + x) * 0.24f, sz = NumberTools.sway(x + y) * 0.24f,
+                sx = NumberTools.zigzag(x) * 0.47f, sy = NumberTools.zigzag(y) * 0.47f, sz = NumberTools.zigzag(z) * 0.47f,
                 mx0 = jitterLUT[(seed & 255) * 3], my0 = jitterLUT[(seed & 255) * 3 + 1], mz0 = jitterLUT[(seed & 255) * 3 + 2],
                 mx1 = jitterLUT[(seed >>> 8 & 255) * 3], my1 = jitterLUT[(seed >>> 8 & 255) * 3 + 1], mz1 = jitterLUT[(seed >>> 8 & 255) * 3 + 2],
                 mx2 = jitterLUT[(seed >>> 16 & 255) * 3], my2 = jitterLUT[(seed >>> 16 & 255) * 3 + 1], mz2 = jitterLUT[(seed >>> 16 & 255) * 3 + 2],
@@ -1367,10 +1367,10 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         y *= 7f;
         z *= 7f;
         return NumberTools.sway(
-                (NumberTools.sway(mx0 * x + my0 * y + mz0 * z) * (0.5f + sy + sz)) +
-                        (NumberTools.sway(mx1 * x + my1 * y + mz1 * z) * (0.5f + sz + sx)) +
-                        (NumberTools.sway(mx2 * x + my2 * y + mz2 * z) * (0.5f + sx + sy)) +
-                        (NumberTools.sway(mx3 * x + my3 * y + mz3 * z) * (0.4f - (sx+0.6f) * (sy+0.6f) * (sz+0.6f))));
+                  (NumberTools.sway(mx0 * x + my0 * y + mz0 * z) * (0.23f + sy * sz)) +
+                        (NumberTools.sway(mx1 * x + my1 * y + mz1 * z) * (0.23f + sz * sz)) +
+                        (NumberTools.sway(mx2 * x + my2 * y + mz2 * z) * (0.23f + sx * sy)) +
+                        (NumberTools.sway(mx3 * x + my3 * y + mz3 * z) * (0.46f - sy * sz - sz * sz - sx * sy)));
 
 
 //        float n0, n1, n2, n3;

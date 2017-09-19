@@ -3,28 +3,82 @@ package squidpony.squidmath;
 /**
  * Various numeric functions that are important to performance but need alternate implementations on GWT to obtain it.
  * Super-sourced on GWT, but most things here are direct calls to JDK methods when on desktop or Android.
+ * Some of this code makes use of "creative" bit manipulation of floats and doubles, which can sometimes allow uncommon
+ * input-to-output patterns (as in {@link #bounce(float)}), or even can yield a performance boost (compare
+ * {@link #zigzag(float)} to using modulus to accomplish the same results). The bit manipulation has good performance on
+ * GWT thanks to JS typed arrays, which are well-supported now across all recent browsers and have fallbacks in GWT in
+ * the unlikely event of a browser not supporting them.
  */
 public class NumberTools {
+    /**
+     * Identical to {@link Double#doubleToLongBits(double)} on desktop; optimized on GWT. When compiling to JS via GWT,
+     * there is no way to distinguish NaN values with different bits but that are still NaN, so this doesn't try to
+     * somehow permit that. Uses JS typed arrays on GWT, which are well-supported now across all recent browsers and
+     * have fallbacks in GWT in the unlikely event of a browser not supporting them. JS typed arrays support double, but
+     * not long, so this needs to compose a long from two ints, which means the double-to/from-long conversions aren't
+     * as fast as float-to/from-int conversions.
+     * @param value a {@code double} floating-point number.
+     * @return the bits that represent the floating-point number.
+     */
     public static long doubleToLongBits(final double value)
     {
         return Double.doubleToLongBits(value);
     }
+    /**
+     * Identical to {@link Double#doubleToLongBits(double)} on desktop (note, not
+     * {@link Double#doubleToRawLongBits(double)}); optimized on GWT. When compiling to JS via GWT, there is no way to
+     * distinguish NaN values with different bits but that are still NaN, so this doesn't try to somehow permit that.
+     * Uses JS typed arrays on GWT, which are well-supported now across all recent browsers and have fallbacks in GWT in
+     * the unlikely event of a browser not supporting them. JS typed arrays support double, but not long, so this needs
+     * to compose a long from two ints, which means the double-to/from-long conversions aren't as fast as
+     * float-to/from-int conversions.
+     * @param value a {@code double} floating-point number.
+     * @return the bits that represent the floating-point number.
+     */
     public static long doubleToRawLongBits(final double value)
     {
-        return Double.doubleToRawLongBits(value);
+        return Double.doubleToLongBits(value);
     }
+
+    /**
+     * Identical to {@link Double#longBitsToDouble(long)} on desktop; optimized on GWT. Uses JS typed arrays on GWT,
+     * which are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a
+     * browser not supporting them. JS typed arrays support double, but not long, so this needs to compose a long from
+     * two ints, which means the double-to/from-long conversions aren't as fast as float-to/from-int conversions.
+     * @param bits a long.
+     * @return the {@code double} floating-point value with the same bit pattern.
+     */
     public static double longBitsToDouble(final long bits)
     {
         return Double.longBitsToDouble(bits);
     }
+    /**
+     * Converts {@code value} to a long and gets the lower 32 bits of that long, as an int.
+     * @param value a {@code double} precision floating-point number.
+     * @return the lower half of the bits that represent the floating-point number, as an int.
+     */
     public static int doubleToLowIntBits(final double value)
     {
         return (int)(Double.doubleToLongBits(value) & 0xffffffffL);
     }
+
+    /**
+     * Converts {@code value} to a long and gets the upper 32 bits of that long, as an int.
+     * @param value a {@code double} precision floating-point number.
+     * @return the upper half of the bits that represent the floating-point number, as an int.
+     */
     public static int doubleToHighIntBits(final double value)
     {
         return (int)(Double.doubleToLongBits(value) >>> 32);
     }
+
+    /**
+     * Converts {@code value} to a long and gets the XOR of its upper and lower 32-bit sections. Useful for numerical
+     * code where a 64-bit double needs to be reduced to a 32-bit value with some hope of keeping different doubles
+     * giving different ints.
+     * @param value a {@code double} precision floating-point number.
+     * @return the XOR of the lower and upper halves of the bits that represent the floating-point number.
+     */
     public static int doubleToMixedIntBits(final double value)
     {
         final long l = Double.doubleToLongBits(value);
@@ -76,7 +130,7 @@ public class NumberTools {
     }
 
     /**
-     * Very limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+     * Very limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
      * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
      * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value.
      * @param value any double
@@ -90,7 +144,7 @@ public class NumberTools {
     }
 
     /**
-     * Very limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+     * Very limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
      * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
      * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value.
      * @param value any double
@@ -103,7 +157,7 @@ public class NumberTools {
                 | 0x40800000) - 5f;
     }
     /**
-     * Very limited-use. Takes the significand bits of a double, represented as a long of which this uses 52 bits, and
+     * Very limited-use; takes the significand bits of a double, represented as a long of which this uses 52 bits, and
      * produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and
      * down through the range. This is meant for noise, where it may be useful to limit the amount of change between
      * nearby points' noise values and prevent sudden "jumps" in noise value.
@@ -116,7 +170,7 @@ public class NumberTools {
                 | 0x4010000000000000L) - 5.0;
     }
     /**
-     * Very limited-use. Takes the significand bits of a double, represented as a pair of ints {@code valueLow} and
+     * Very limited-use; takes the significand bits of a double, represented as a pair of ints {@code valueLow} and
      * {@code valueHigh}, using all bits in valueLow and the least-significant 20 bits of valueHigh, and
      * produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and
      * down through the range. This is meant for noise, where it may be useful to limit the amount of change between
@@ -134,7 +188,7 @@ public class NumberTools {
     }
 
     /**
-     * Limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+     * Limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
      * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
      * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value. It is
      * very similar to {@link #bounce(double)}, but unlike bounce() this will maintain a continuous rate regardless of
@@ -152,7 +206,7 @@ public class NumberTools {
     }
 
     /**
-     * Limited-use. Takes any float and produces a float in the -1f to 1f range, with similar inputs producing
+     * Limited-use; takes any float and produces a float in the -1f to 1f range, with similar inputs producing
      * close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
      * limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value. It is
      * very similar to {@link #bounce(float)}, but unlike bounce() this will maintain a continuous rate regardless of
@@ -170,7 +224,7 @@ public class NumberTools {
     }
 
     /**
-     * Limited-use. Takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+     * Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
      * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
      * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
      * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
@@ -192,7 +246,7 @@ public class NumberTools {
     }
 
     /**
-     * Limited-use. Takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+     * Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
      * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
      * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
      * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
@@ -212,14 +266,38 @@ public class NumberTools {
         return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
     }
 
+    /**
+     * Identical to {@link Float#floatToIntBits(float)} on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
+     * are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
+     * not supporting them.
+     * @param value a floating-point number.
+     * @return the bits that represent the floating-point number.
+     */
     public static int floatToIntBits(final float value)
     {
         return Float.floatToIntBits(value);
     }
+    /**
+     * Identical to {@link Float#floatToIntBits(float)} on desktop (note, not {@link Float#floatToRawIntBits(float)});
+     * optimized on GWT. When compiling to JS via GWT, there is no way to distinguish NaN values with different bits but
+     * that are still NaN, so this doesn't try to somehow permit that. Uses JS typed arrays on GWT, which are
+     * well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser not
+     * supporting them.
+     * @param value a floating-point number.
+     * @return the bits that represent the floating-point number.
+     */
     public static int floatToRawIntBits(final float value)
     {
-        return Float.floatToRawIntBits(value);
+        return Float.floatToIntBits(value);
     }
+
+    /**
+     * Identical to {@link Float#intBitsToFloat(int)} on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
+     * are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
+     * not supporting them.
+     * @param bits an integer.
+     * @return the {@code float} floating-point value with the same bit pattern.
+     */
     public static float intBitsToFloat(final int bits)
     {
         return Float.intBitsToFloat(bits);
@@ -266,12 +344,13 @@ public class NumberTools {
 
     /**
      * Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
-     * twice through the (very high-quality and rather fast) {@link LightRNG} algorithm, also called SplitMix64. This
+     * once through the (very high-quality and rather fast) {@link LightRNG} algorithm, also called SplitMix64. This
      * produces a pair of random ints, which this produces a double from using the equivalent of
      * {@link #longBitsToDouble(long)} or something functionally equivalent on GWT.
      * <br>
-     * Consider calling this with {@code NumberTools.randomDouble(seed += 0x3C6EF372)} for an optimal period of 2 to the
-     * 31 when repeatedly called, but {@code NumberTools.randomDouble(++seed)} will also work just fine.
+     * Consider calling this with {@code NumberTools.randomDouble(++seed)} for an optimal period of 2 to the 32 when
+     * repeatedly called, but {@code NumberTools.randomDouble(seed += ODD_INT)} will also work just fine if ODD_INT is
+     * any odd-number integer, positive or negative.
      * @param seed any int to be used as a seed
      * @return a pseudo-random double from 0.0 (inclusive) to 1.0 (exclusive)
      */
@@ -288,8 +367,9 @@ public class NumberTools {
      * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something
      * functionally equivalent on GWT.
      * <br>
-     * Consider calling this with {@code NumberTools.randomSignedFloat(seed += 0x9E3779B9)} for an optimal period of 2
-     * to the 32 when repeatedly called, but {@code NumberTools.randomSignedFloat(++seed)} will also work just fine.
+     * Consider calling this with {@code NumberTools.randomFloat(++seed)} for an optimal period of 2 to the 32 when
+     * repeatedly called, but {@code NumberTools.randomFloat(seed += ODD_INT)} will also work just fine if ODD_INT is
+     * any odd-number integer, positive or negative.
      * @param seed any int to be used as a seed
      * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)
      */
@@ -309,8 +389,9 @@ public class NumberTools {
      * up twice as often as any single other result, but this shouldn't affect the odds very strongly; it's about a 1 in
      * 8 million chance of exactly 0 occurring vs. a 1 in 16 million of any other specific float this can produce).
      * <br>
-     * Consider calling this with {@code NumberTools.randomSignedFloat(seed += 0x9E3779B9)} for an optimal period of 2
-     * to the 32 when repeatedly called, but {@code NumberTools.randomSignedFloat(++seed)} will also work just fine.
+     * Consider calling this with {@code NumberTools.randomSignedFloat(++seed)} for an optimal period of 2 to the 32
+     * when repeatedly called, but {@code NumberTools.randomSignedFloat(seed += ODD_INT)} will also work just fine if
+     * ODD_INT is any odd-number integer, positive or negative.
      * @param seed any int to be used as a seed
      * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)
      */
@@ -324,14 +405,15 @@ public class NumberTools {
 
     /**
      * Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
-     * strong central bias (around 0.0). Uses the given int seed, passing it twice through the (very high-quality and
+     * strong central bias (around 0.0). Uses the given int seed, passing it once through the (very high-quality and
      * rather fast) {@link LightRNG} algorithm, also called SplitMix64. This produces a pair of random ints, which this
      * uses to generate a pair of floats between 0.0 (inclusive)and 1.0 (exclusive) using the equivalent of
      * {@link #intBitsToFloat(int)} or something functionally equivalent on GWT, multiplies the floats, and sets the
      * sign pseudo-randomly based on an unused bit from earlier.
      * <br>
-     * Consider calling this with {@code NumberTools.randomFloatCurved(seed += 0x3C6EF372)} for an optimal period of 2
-     * to the 31 when repeatedly called, but {@code NumberTools.randomFloatCurved(++seed)} will also work just fine.
+     * Consider calling this with {@code NumberTools.randomFloatCurved(++seed)} for an optimal period of 2 to the 32
+     * when repeatedly called, but {@code NumberTools.randomFloatCurved(seed += ODD_INT)} will also work just fine if
+     * ODD_INT is any odd-number integer, positive or negative.
      * @param seed any int to be used as a seed
      * @return a pseudo-random double from -1.0 (exclusive) to 1.0 (exclusive), distributed on a curve centered on 0.0
      */
