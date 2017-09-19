@@ -1246,7 +1246,7 @@
 <span class="sourceLineNo">1238</span>        animationCount++;<a name="line.1238"></a>
 <span class="sourceLineNo">1239</span>        ae.animating = true;<a name="line.1239"></a>
 <span class="sourceLineNo">1240</span>        a.addAction(Actions.sequence(<a name="line.1240"></a>
-<span class="sourceLineNo">1241</span>                Actions.moveToAligned(x + direction.deltaX * cellWidth * 0.35f, y + direction.deltaY * cellHeight * 0.35f,<a name="line.1241"></a>
+<span class="sourceLineNo">1241</span>                Actions.moveToAligned(x + direction.deltaX * cellWidth * 0.35f, y - direction.deltaY * cellHeight * 0.35f,<a name="line.1241"></a>
 <span class="sourceLineNo">1242</span>                        Align.bottomLeft, duration * 0.35F),<a name="line.1242"></a>
 <span class="sourceLineNo">1243</span>                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F),<a name="line.1243"></a>
 <span class="sourceLineNo">1244</span>                Actions.delay(duration, Actions.run(new Runnable() {<a name="line.1244"></a>

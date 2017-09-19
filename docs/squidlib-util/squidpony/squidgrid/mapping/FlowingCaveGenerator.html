@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.90">FlowingCaveGenerator</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.93">FlowingCaveGenerator</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></pre>
 <div class="block">An IDungeonGenerator that distorts and smooths an ordinary dungeon map to make it appear like a cave complex.
@@ -298,6 +298,14 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>char[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#generate-squidpony.squidgrid.mapping.styled.TilesetType-double-">generate</a></span>(<a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;type,
+        double&nbsp;roomChance)</code>
+<div class="block">Generates a flowing cave dungeon with a different <a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled"><code>TilesetType</code></a> than this generator was made with, and
+ specifying a chance to keep the original walls of rooms before the flowing smoothing step is performed.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#getDungeon--">getDungeon</a></span>()</code>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../../../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#generate--"><code>generate()</code></a> or
  some similar method present in a specific implementation.</div>
@@ -331,7 +339,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>gen</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a> <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.91">gen</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a> <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.94">gen</a></pre>
 </li>
 </ul>
 <a name="width">
@@ -340,7 +348,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.92">width</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.95">width</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -349,7 +357,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.93">height</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.96">height</a></pre>
 </li>
 </ul>
 <a name="type">
@@ -358,7 +366,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>type</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a> <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.94">type</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a> <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.97">type</a></pre>
 </li>
 </ul>
 <a name="rng">
@@ -367,7 +375,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.95">rng</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.98">rng</a></pre>
 </li>
 </ul>
 <a name="ca">
@@ -376,7 +384,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ca</h4>
-<pre>protected&nbsp;<a href="../../../squidpony/squidmath/CellularAutomaton.html" title="class in squidpony.squidmath">CellularAutomaton</a> <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.96">ca</a></pre>
+<pre>protected&nbsp;<a href="../../../squidpony/squidmath/CellularAutomaton.html" title="class in squidpony.squidmath">CellularAutomaton</a> <a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.99">ca</a></pre>
 </li>
 </ul>
 </li>
@@ -393,7 +401,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>FlowingCaveGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.101">FlowingCaveGenerator</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.104">FlowingCaveGenerator</a>()</pre>
 <div class="block">Default constructor that makes a 60x60 cave map with a random seed.</div>
 </li>
 </ul>
@@ -403,7 +411,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>FlowingCaveGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.111">FlowingCaveGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.114">FlowingCaveGenerator</a>(int&nbsp;width,
                             int&nbsp;height)</pre>
 <div class="block">Makes a cave map with the specified dimensions and a random seed.</div>
 <dl>
@@ -419,7 +427,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FlowingCaveGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.127">FlowingCaveGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.130">FlowingCaveGenerator</a>(int&nbsp;width,
                             int&nbsp;height,
                             <a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;type,
                             <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
@@ -446,7 +454,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.144">generate</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.147">generate</a>()</pre>
 <div class="block">Generates a dungeon or other map as a 2D char array. Any implementation may allow its own configuration and
  customization of how dungeons are generated, but each must provide this as a sane default. Thus uses the
  convention of '#' representing a wall and '.' representing a bare floor.</div>
@@ -464,12 +472,36 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.154">generate</a>(<a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;type)</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.157">generate</a>(<a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;type)</pre>
 <div class="block">Generates a flowing cave dungeon with a different <a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled"><code>TilesetType</code></a> than this generator was made with.
  The default type is <a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html#DEFAULT_DUNGEON"><code>TilesetType.DEFAULT_DUNGEON</code></a> if unspecified in the constructor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>type</code> - a TilesetType enum value</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D char array for the cave system</dd>
+</dl>
+</li>
+</ul>
+<a name="generate-squidpony.squidgrid.mapping.styled.TilesetType-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generate</h4>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.180">generate</a>(<a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled">TilesetType</a>&nbsp;type,
+                         double&nbsp;roomChance)</pre>
+<div class="block">Generates a flowing cave dungeon with a different <a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html" title="enum in squidpony.squidgrid.mapping.styled"><code>TilesetType</code></a> than this generator was made with, and
+ specifying a chance to keep the original walls of rooms before the flowing smoothing step is performed.
+ <code>roomChance</code> can be between 0.0 and 1.0, and if a room (identified with a similar technique to
+ <a href="../../../squidpony/squidgrid/mapping/RoomFinder.html" title="class in squidpony.squidgrid.mapping"><code>RoomFinder</code></a>, but not using it directly) is randomly selected to be preserved (the probability per room is
+ roomChance), then most of its walls will be kept in-place, generally with more right angles than the caves will
+ have. It may be best to keep roomChance above 0.5 if you want the effect to be noticeable. Starting with
+ <a href="../../../squidpony/squidgrid/mapping/styled/TilesetType.html#DEFAULT_DUNGEON"><code>TilesetType.DEFAULT_DUNGEON</code></a> is a good choice for <code>type</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - a TilesetType enum value</dd>
+<dd><code>roomChance</code> - the chance, from 0.0 to 1.0, to preserve each room, keeping its walls where they start</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D char array for the cave system</dd>
 </dl>
@@ -481,7 +513,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getDungeon</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.174">getDungeon</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/FlowingCaveGenerator.html#line.207">getDungeon</a>()</pre>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../../../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#generate--"><code>generate()</code></a> or
  some similar method present in a specific implementation. This normally passes a direct reference and not a copy,
  so you can normally modify the returned array to propagate changes back into this IDungeonGenerator.</div>

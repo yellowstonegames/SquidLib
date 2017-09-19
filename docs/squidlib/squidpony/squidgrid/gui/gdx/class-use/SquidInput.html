@@ -94,6 +94,71 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a> that return <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#clearMapping--">clearMapping</a></span>()</code>
+<div class="block">Removes any remappings to key bindings that were in use in this SquidInput.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#keyMappingFromString-java.lang.String-">keyMappingFromString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keymap)</code>
+<div class="block">Reads in a String (almost certainly produced by <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#keyMappingToString--"><code>keyMappingToString()</code></a>) to set the current key remapping.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#remap-char-boolean-boolean-boolean-char-boolean-boolean-boolean-">remap</a></span>(char&nbsp;pressedChar,
+     boolean&nbsp;pressedAlt,
+     boolean&nbsp;pressedCtrl,
+     boolean&nbsp;pressedShift,
+     char&nbsp;targetChar,
+     boolean&nbsp;targetAlt,
+     boolean&nbsp;targetCtrl,
+     boolean&nbsp;targetShift)</code>
+<div class="block">Remaps a char that could be input and processed by <a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.KeyHandler.html#handle-char-boolean-boolean-boolean-"><code>SquidInput.KeyHandler.handle(char, boolean, boolean, boolean)</code></a>
+ (possibly with some pressed modifiers) to another char with possible modifiers.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#remap-int:A-">remap</a></span>(int[]&nbsp;pairs)</code>
+<div class="block">Remaps many keypress combinations, each of which is a char and several potential modifiers, to other keypress
+ combinations.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#remap-int-int-">remap</a></span>(int&nbsp;pressed,
+     int&nbsp;target)</code>
+<div class="block">Remaps a keypress combination, which is a char and several potential modifiers, to another keypress combination.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#unmap-char-boolean-boolean-boolean-">unmap</a></span>(char&nbsp;pressedChar,
+     boolean&nbsp;pressedAlt,
+     boolean&nbsp;pressedCtrl,
+     boolean&nbsp;pressedShift)</code>
+<div class="block">Removes a keypress combination from the mapping by specifying the char and any modifiers that are part of the
+ keypress combination.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html" title="class in squidpony.squidgrid.gui.gdx">SquidInput</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SquidInput.</span><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/SquidInput.html#unmap-int-">unmap</a></span>(int&nbsp;pressed)</code>
+<div class="block">Removes a keypress combination from the mapping by specifying the keypress combination as an int.</div>
+</td>
+</tr>
+</tbody>
+</table>
 </li>
 </ul>
 </li>

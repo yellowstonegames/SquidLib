@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,10 +109,15 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/NumberTools.html#line.7">NumberTools</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/NumberTools.html#line.12">NumberTools</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Various numeric functions that are important to performance but need alternate implementations on GWT to obtain it.
- Super-sourced on GWT, but most things here are direct calls to JDK methods when on desktop or Android.</div>
+ Super-sourced on GWT, but most things here are direct calls to JDK methods when on desktop or Android.
+ Some of this code makes use of "creative" bit manipulation of floats and doubles, which can sometimes allow uncommon
+ input-to-output patterns (as in <a href="../../squidpony/squidmath/NumberTools.html#bounce-float-"><code>bounce(float)</code></a>), or even can yield a performance boost (compare
+ <a href="../../squidpony/squidmath/NumberTools.html#zigzag-float-"><code>zigzag(float)</code></a> to using modulus to accomplish the same results). The bit manipulation has good performance on
+ GWT thanks to JS typed arrays, which are well-supported now across all recent browsers and have fallbacks in GWT in
+ the unlikely event of a browser not supporting them.</div>
 </li>
 </ul>
 </div>
@@ -151,55 +156,78 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#bounce-double-">bounce</a></span>(double&nbsp;value)</code>
-<div class="block">Very limited-use.</div>
+<div class="block">Very limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+ close to a consistent rate of up and down through the range.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#bounce-float-">bounce</a></span>(float&nbsp;value)</code>
-<div class="block">Very limited-use.</div>
+<div class="block">Very limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+ close to a consistent rate of up and down through the range.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#bounce-int-int-">bounce</a></span>(int&nbsp;valueLow,
       int&nbsp;valueHigh)</code>
-<div class="block">Very limited-use.</div>
+<div class="block">Very limited-use; takes the significand bits of a double, represented as a pair of ints <code>valueLow</code> and
+ <code>valueHigh</code>, using all bits in valueLow and the least-significant 20 bits of valueHigh, and
+ produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and
+ down through the range.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#bounce-long-">bounce</a></span>(long&nbsp;value)</code>
-<div class="block">Very limited-use.</div>
+<div class="block">Very limited-use; takes the significand bits of a double, represented as a long of which this uses 52 bits, and
+ produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and
+ down through the range.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToHighIntBits-double-">doubleToHighIntBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToHighIntBits-double-">doubleToHighIntBits</a></span>(double&nbsp;value)</code>
+<div class="block">Converts <code>value</code> to a long and gets the upper 32 bits of that long, as an int.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToLongBits-double-">doubleToLongBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToLongBits-double-">doubleToLongBits</a></span>(double&nbsp;value)</code>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true#doubleToLongBits-double-" title="class or interface in java.lang"><code>Double.doubleToLongBits(double)</code></a> on desktop; optimized on GWT.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToLowIntBits-double-">doubleToLowIntBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToLowIntBits-double-">doubleToLowIntBits</a></span>(double&nbsp;value)</code>
+<div class="block">Converts <code>value</code> to a long and gets the lower 32 bits of that long, as an int.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToMixedIntBits-double-">doubleToMixedIntBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToMixedIntBits-double-">doubleToMixedIntBits</a></span>(double&nbsp;value)</code>
+<div class="block">Converts <code>value</code> to a long and gets the XOR of its upper and lower 32-bit sections.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToRawLongBits-double-">doubleToRawLongBits</a></span>(double&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#doubleToRawLongBits-double-">doubleToRawLongBits</a></span>(double&nbsp;value)</code>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true#doubleToLongBits-double-" title="class or interface in java.lang"><code>Double.doubleToLongBits(double)</code></a> on desktop (note, not
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true#doubleToRawLongBits-double-" title="class or interface in java.lang"><code>Double.doubleToRawLongBits(double)</code></a>); optimized on GWT.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToIntBits-float-">floatToIntBits</a></span>(float&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToIntBits-float-">floatToIntBits</a></span>(float&nbsp;value)</code>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true#floatToIntBits-float-" title="class or interface in java.lang"><code>Float.floatToIntBits(float)</code></a> on desktop; optimized on GWT.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToRawIntBits-float-">floatToRawIntBits</a></span>(float&nbsp;value)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#floatToRawIntBits-float-">floatToRawIntBits</a></span>(float&nbsp;value)</code>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true#floatToIntBits-float-" title="class or interface in java.lang"><code>Float.floatToIntBits(float)</code></a> on desktop (note, not <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true#floatToRawIntBits-float-" title="class or interface in java.lang"><code>Float.floatToRawIntBits(float)</code></a>);
+ optimized on GWT.</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
@@ -255,17 +283,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>static float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-">intBitsToFloat</a></span>(int&nbsp;bits)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-">intBitsToFloat</a></span>(int&nbsp;bits)</code>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true#intBitsToFloat-int-" title="class or interface in java.lang"><code>Float.intBitsToFloat(int)</code></a> on desktop; optimized on GWT.</div>
+</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#longBitsToDouble-long-">longBitsToDouble</a></span>(long&nbsp;bits)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#longBitsToDouble-long-">longBitsToDouble</a></span>(long&nbsp;bits)</code>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true#longBitsToDouble-long-" title="class or interface in java.lang"><code>Double.longBitsToDouble(long)</code></a> on desktop; optimized on GWT.</div>
+</td>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomDouble-int-">randomDouble</a></span>(int&nbsp;seed)</code>
 <div class="block">Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
- twice through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64.</div>
+ once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64.</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
@@ -323,14 +355,32 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code>static double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#zigzag-double-">zigzag</a></span>(double&nbsp;value)</code>
-<div class="block">Limited-use.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#sway-double-">sway</a></span>(double&nbsp;value)</code>
+<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+ looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+ input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </td>
 </tr>
 <tr id="i29" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#sway-float-">sway</a></span>(float&nbsp;value)</code>
+<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+ looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+ input is halfway between two integers, smoothly curving at any points between those extremes.</div>
+</td>
+</tr>
+<tr id="i30" class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#zigzag-double-">zigzag</a></span>(double&nbsp;value)</code>
+<div class="block">Limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+ close to a consistent rate of up and down through the range.</div>
+</td>
+</tr>
+<tr id="i31" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#zigzag-float-">zigzag</a></span>(float&nbsp;value)</code>
-<div class="block">Limited-use.</div>
+<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with similar inputs producing
+ close to a consistent rate of up and down through the range.</div>
 </td>
 </tr>
 </table>
@@ -361,7 +411,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>NumberTools</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.7">NumberTools</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.12">NumberTools</a>()</pre>
 </li>
 </ul>
 </li>
@@ -378,7 +428,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doubleToLongBits</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.8">doubleToLongBits</a>(double&nbsp;value)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.23">doubleToLongBits</a>(double&nbsp;value)</pre>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true#doubleToLongBits-double-" title="class or interface in java.lang"><code>Double.doubleToLongBits(double)</code></a> on desktop; optimized on GWT. When compiling to JS via GWT,
+ there is no way to distinguish NaN values with different bits but that are still NaN, so this doesn't try to
+ somehow permit that. Uses JS typed arrays on GWT, which are well-supported now across all recent browsers and
+ have fallbacks in GWT in the unlikely event of a browser not supporting them. JS typed arrays support double, but
+ not long, so this needs to compose a long from two ints, which means the double-to/from-long conversions aren't
+ as fast as float-to/from-int conversions.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - a <code>double</code> floating-point number.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the bits that represent the floating-point number.</dd>
+</dl>
 </li>
 </ul>
 <a name="doubleToRawLongBits-double-">
@@ -387,7 +449,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doubleToRawLongBits</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.12">doubleToRawLongBits</a>(double&nbsp;value)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.38">doubleToRawLongBits</a>(double&nbsp;value)</pre>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true#doubleToLongBits-double-" title="class or interface in java.lang"><code>Double.doubleToLongBits(double)</code></a> on desktop (note, not
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true#doubleToRawLongBits-double-" title="class or interface in java.lang"><code>Double.doubleToRawLongBits(double)</code></a>); optimized on GWT. When compiling to JS via GWT, there is no way to
+ distinguish NaN values with different bits but that are still NaN, so this doesn't try to somehow permit that.
+ Uses JS typed arrays on GWT, which are well-supported now across all recent browsers and have fallbacks in GWT in
+ the unlikely event of a browser not supporting them. JS typed arrays support double, but not long, so this needs
+ to compose a long from two ints, which means the double-to/from-long conversions aren't as fast as
+ float-to/from-int conversions.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - a <code>double</code> floating-point number.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the bits that represent the floating-point number.</dd>
+</dl>
 </li>
 </ul>
 <a name="longBitsToDouble-long-">
@@ -396,7 +471,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>longBitsToDouble</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.16">longBitsToDouble</a>(long&nbsp;bits)</pre>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.51">longBitsToDouble</a>(long&nbsp;bits)</pre>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true#longBitsToDouble-long-" title="class or interface in java.lang"><code>Double.longBitsToDouble(long)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT,
+ which are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a
+ browser not supporting them. JS typed arrays support double, but not long, so this needs to compose a long from
+ two ints, which means the double-to/from-long conversions aren't as fast as float-to/from-int conversions.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bits</code> - a long.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the <code>double</code> floating-point value with the same bit pattern.</dd>
+</dl>
 </li>
 </ul>
 <a name="doubleToLowIntBits-double-">
@@ -405,7 +490,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doubleToLowIntBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.20">doubleToLowIntBits</a>(double&nbsp;value)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.60">doubleToLowIntBits</a>(double&nbsp;value)</pre>
+<div class="block">Converts <code>value</code> to a long and gets the lower 32 bits of that long, as an int.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - a <code>double</code> precision floating-point number.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the lower half of the bits that represent the floating-point number, as an int.</dd>
+</dl>
 </li>
 </ul>
 <a name="doubleToHighIntBits-double-">
@@ -414,7 +506,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doubleToHighIntBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.24">doubleToHighIntBits</a>(double&nbsp;value)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.70">doubleToHighIntBits</a>(double&nbsp;value)</pre>
+<div class="block">Converts <code>value</code> to a long and gets the upper 32 bits of that long, as an int.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - a <code>double</code> precision floating-point number.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the upper half of the bits that represent the floating-point number, as an int.</dd>
+</dl>
 </li>
 </ul>
 <a name="doubleToMixedIntBits-double-">
@@ -423,7 +522,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>doubleToMixedIntBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.28">doubleToMixedIntBits</a>(double&nbsp;value)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.82">doubleToMixedIntBits</a>(double&nbsp;value)</pre>
+<div class="block">Converts <code>value</code> to a long and gets the XOR of its upper and lower 32-bit sections. Useful for numerical
+ code where a 64-bit double needs to be reduced to a 32-bit value with some hope of keeping different doubles
+ giving different ints.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - a <code>double</code> precision floating-point number.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the XOR of the lower and upper halves of the bits that represent the floating-point number.</dd>
+</dl>
 </li>
 </ul>
 <a name="setExponent-double-int-">
@@ -432,7 +540,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setExponent</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.46">setExponent</a>(double&nbsp;value,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.100">setExponent</a>(double&nbsp;value,
                                  int&nbsp;exponentBits)</pre>
 <div class="block">Makes a modified version of value that uses the specified bits (up to 12) for its exponent and sign.
  Meant for some specific cases, like adjusting the exponent on an unknown double to the 1.0 to 2.0 range (which
@@ -456,7 +564,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getSelectedByte</h4>
-<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.58">getSelectedByte</a>(double&nbsp;value,
+<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.112">getSelectedByte</a>(double&nbsp;value,
                                    int&nbsp;whichByte)</pre>
 <div class="block">Gets an 8-bit section of the given double <code>value</code>, using <code>whichByte</code> to select whether this should
  return byte 0 (least significant), 1, 2, and so on up to 7 (most significant).</div>
@@ -475,7 +583,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setSelectedByte</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.72">setSelectedByte</a>(double&nbsp;value,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.126">setSelectedByte</a>(double&nbsp;value,
                                      int&nbsp;whichByte,
                                      byte&nbsp;newValue)</pre>
 <div class="block">Like <a href="../../squidpony/squidmath/NumberTools.html#getSelectedByte-double-int-"><code>getSelectedByte(double, int)</code></a>, this sets the byte at a selected position in the int representation of
@@ -497,8 +605,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bounce</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.85">bounce</a>(double&nbsp;value)</pre>
-<div class="block">Very limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.139">bounce</a>(double&nbsp;value)</pre>
+<div class="block">Very limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
  close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
  limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value.</div>
 <dl>
@@ -515,8 +623,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bounce</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.99">bounce</a>(float&nbsp;value)</pre>
-<div class="block">Very limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.153">bounce</a>(float&nbsp;value)</pre>
+<div class="block">Very limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
  close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
  limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value.</div>
 <dl>
@@ -533,8 +641,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bounce</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.113">bounce</a>(long&nbsp;value)</pre>
-<div class="block">Very limited-use. Takes the significand bits of a double, represented as a long of which this uses 52 bits, and
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.167">bounce</a>(long&nbsp;value)</pre>
+<div class="block">Very limited-use; takes the significand bits of a double, represented as a long of which this uses 52 bits, and
  produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and
  down through the range. This is meant for noise, where it may be useful to limit the amount of change between
  nearby points' noise values and prevent sudden "jumps" in noise value.</div>
@@ -552,9 +660,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>bounce</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.129">bounce</a>(int&nbsp;valueLow,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.183">bounce</a>(int&nbsp;valueLow,
                             int&nbsp;valueHigh)</pre>
-<div class="block">Very limited-use. Takes the significand bits of a double, represented as a pair of ints <code>valueLow</code> and
+<div class="block">Very limited-use; takes the significand bits of a double, represented as a pair of ints <code>valueLow</code> and
  <code>valueHigh</code>, using all bits in valueLow and the least-significant 20 bits of valueHigh, and
  produces a double in the -1.0 to 1.0 range, with similar inputs producing close to a consistent rate of up and
  down through the range. This is meant for noise, where it may be useful to limit the amount of change between
@@ -574,8 +682,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>zigzag</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.147">zigzag</a>(double&nbsp;value)</pre>
-<div class="block">Limited-use. Takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.201">zigzag</a>(double&nbsp;value)</pre>
+<div class="block">Limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
  close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
  limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value. It is
  very similar to <a href="../../squidpony/squidmath/NumberTools.html#bounce-double-"><code>bounce(double)</code></a>, but unlike bounce() this will maintain a continuous rate regardless of
@@ -596,12 +704,62 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>zigzag</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.166">zigzag</a>(float&nbsp;value)</pre>
-<div class="block">Limited-use. Takes any float and produces a float in the -1f to 1f range, with similar inputs producing
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.219">zigzag</a>(float&nbsp;value)</pre>
+<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with similar inputs producing
  close to a consistent rate of up and down through the range. This is meant for noise, where it may be useful to
  limit the amount of change between nearby points' noise values and prevent sudden "jumps" in noise value. It is
  very similar to <a href="../../squidpony/squidmath/NumberTools.html#bounce-float-"><code>bounce(float)</code></a>, but unlike bounce() this will maintain a continuous rate regardless of
  the magnitude of its input. An input of any even number should produce something very close to -1f, any odd
+ number should produce something very close to 1f, and any number halfway between two incremental integers (like
+ 8.5f or -10.5f) should produce 0f or a very small fraction.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - any float</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a float from -1f (inclusive) to 1f (inclusive)</dd>
+</dl>
+</li>
+</ul>
+<a name="sway-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sway</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.240">sway</a>(double&nbsp;value)</pre>
+<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+ looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+ input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
+ noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
+ sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
+ similar to <a href="../../squidpony/squidmath/NumberTools.html#bounce-float-"><code>bounce(float)</code></a> and <a href="../../squidpony/squidmath/NumberTools.html#zigzag-float-"><code>zigzag(float)</code></a>, but unlike bounce() this will maintain not change
+ its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
+ will smooth its path. An input of any even number should produce something very close to -1f, any odd
+ number should produce something very close to 1f, and any number halfway between two incremental integers (like
+ 8.5f or -10.5f) should produce 0f or a very small fraction.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - any float</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a float from -1f (inclusive) to 1f (inclusive)</dd>
+</dl>
+</li>
+</ul>
+<a name="sway-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>sway</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.262">sway</a>(float&nbsp;value)</pre>
+<div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+ looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+ input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
+ noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
+ sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
+ similar to <a href="../../squidpony/squidmath/NumberTools.html#bounce-float-"><code>bounce(float)</code></a> and <a href="../../squidpony/squidmath/NumberTools.html#zigzag-float-"><code>zigzag(float)</code></a>, but unlike bounce() this will maintain not change
+ its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
+ will smooth its path. An input of any even number should produce something very close to -1f, any odd
  number should produce something very close to 1f, and any number halfway between two incremental integers (like
  8.5f or -10.5f) should produce 0f or a very small fraction.</div>
 <dl>
@@ -618,7 +776,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>floatToIntBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.175">floatToIntBits</a>(float&nbsp;value)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.276">floatToIntBits</a>(float&nbsp;value)</pre>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true#floatToIntBits-float-" title="class or interface in java.lang"><code>Float.floatToIntBits(float)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
+ are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
+ not supporting them.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - a floating-point number.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the bits that represent the floating-point number.</dd>
+</dl>
 </li>
 </ul>
 <a name="floatToRawIntBits-float-">
@@ -627,7 +794,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>floatToRawIntBits</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.179">floatToRawIntBits</a>(float&nbsp;value)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.289">floatToRawIntBits</a>(float&nbsp;value)</pre>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true#floatToIntBits-float-" title="class or interface in java.lang"><code>Float.floatToIntBits(float)</code></a> on desktop (note, not <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true#floatToRawIntBits-float-" title="class or interface in java.lang"><code>Float.floatToRawIntBits(float)</code></a>);
+ optimized on GWT. When compiling to JS via GWT, there is no way to distinguish NaN values with different bits but
+ that are still NaN, so this doesn't try to somehow permit that. Uses JS typed arrays on GWT, which are
+ well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser not
+ supporting them.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>value</code> - a floating-point number.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the bits that represent the floating-point number.</dd>
+</dl>
 </li>
 </ul>
 <a name="intBitsToFloat-int-">
@@ -636,7 +814,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>intBitsToFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.183">intBitsToFloat</a>(int&nbsp;bits)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.301">intBitsToFloat</a>(int&nbsp;bits)</pre>
+<div class="block">Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Float.html?is-external=true#intBitsToFloat-int-" title="class or interface in java.lang"><code>Float.intBitsToFloat(int)</code></a> on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
+ are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
+ not supporting them.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>bits</code> - an integer.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the <code>float</code> floating-point value with the same bit pattern.</dd>
+</dl>
 </li>
 </ul>
 <a name="getSelectedByte-float-int-">
@@ -645,7 +832,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getSelectedByte</h4>
-<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.195">getSelectedByte</a>(float&nbsp;value,
+<pre>public static&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.313">getSelectedByte</a>(float&nbsp;value,
                                    int&nbsp;whichByte)</pre>
 <div class="block">Gets an 8-bit section of the given float <code>value</code>, using <code>whichByte</code> to select whether this should
  return byte 0 (least significant), 1, 2, or 3 (most significant).</div>
@@ -664,7 +851,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setSelectedByte</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.209">setSelectedByte</a>(float&nbsp;value,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.327">setSelectedByte</a>(float&nbsp;value,
                                     int&nbsp;whichByte,
                                     byte&nbsp;newValue)</pre>
 <div class="block">Like <a href="../../squidpony/squidmath/NumberTools.html#getSelectedByte-float-int-"><code>getSelectedByte(float, int)</code></a>, this sets the byte at a selected position in the int representation of
@@ -686,7 +873,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>splitMix64</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.221">splitMix64</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.339">splitMix64</a>(long&nbsp;state)</pre>
 <div class="block">Get a pseudo-random long from this with <code>splitMix64(z += 0x9E3779B97F4A7C15L)</code>, where z is a long to use
  as state. 0x9E3779B97F4A7C15L can be changed for any odd long if the same number is used across calls.</div>
 <dl>
@@ -703,14 +890,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>randomDouble</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.238">randomDouble</a>(int&nbsp;seed)</pre>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.357">randomDouble</a>(int&nbsp;seed)</pre>
 <div class="block">Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
- twice through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64. This
+ once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64. This
  produces a pair of random ints, which this produces a double from using the equivalent of
  <a href="../../squidpony/squidmath/NumberTools.html#longBitsToDouble-long-"><code>longBitsToDouble(long)</code></a> or something functionally equivalent on GWT.
  <br>
- Consider calling this with <code>NumberTools.randomDouble(seed += 0x3C6EF372)</code> for an optimal period of 2 to the
- 31 when repeatedly called, but <code>NumberTools.randomDouble(++seed)</code> will also work just fine.</div>
+ Consider calling this with <code>NumberTools.randomDouble(++seed)</code> for an optimal period of 2 to the 32 when
+ repeatedly called, but <code>NumberTools.randomDouble(seed += ODD_INT)</code> will also work just fine if ODD_INT is
+ any odd-number integer, positive or negative.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seed</code> - any int to be used as a seed</dd>
@@ -725,14 +913,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>randomFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.256">randomFloat</a>(int&nbsp;seed)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.376">randomFloat</a>(int&nbsp;seed)</pre>
 <div class="block">Generates a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive) using the given int seed, passing
  it once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64. This
  produces a random int, which this produces a float from using <a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-"><code>intBitsToFloat(int)</code></a> (long)} or something
  functionally equivalent on GWT.
  <br>
- Consider calling this with <code>NumberTools.randomSignedFloat(seed += 0x9E3779B9)</code> for an optimal period of 2
- to the 32 when repeatedly called, but <code>NumberTools.randomSignedFloat(++seed)</code> will also work just fine.</div>
+ Consider calling this with <code>NumberTools.randomFloat(++seed)</code> for an optimal period of 2 to the 32 when
+ repeatedly called, but <code>NumberTools.randomFloat(seed += ODD_INT)</code> will also work just fine if ODD_INT is
+ any odd-number integer, positive or negative.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seed</code> - any int to be used as a seed</dd>
@@ -747,7 +936,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>randomSignedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.277">randomSignedFloat</a>(int&nbsp;seed)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.398">randomSignedFloat</a>(int&nbsp;seed)</pre>
 <div class="block">Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
  it once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64. This
  produces a random int, which this produces a float from using <a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-"><code>intBitsToFloat(int)</code></a> (long)} or something
@@ -756,8 +945,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  up twice as often as any single other result, but this shouldn't affect the odds very strongly; it's about a 1 in
  8 million chance of exactly 0 occurring vs. a 1 in 16 million of any other specific float this can produce).
  <br>
- Consider calling this with <code>NumberTools.randomSignedFloat(seed += 0x9E3779B9)</code> for an optimal period of 2
- to the 32 when repeatedly called, but <code>NumberTools.randomSignedFloat(++seed)</code> will also work just fine.</div>
+ Consider calling this with <code>NumberTools.randomSignedFloat(++seed)</code> for an optimal period of 2 to the 32
+ when repeatedly called, but <code>NumberTools.randomSignedFloat(seed += ODD_INT)</code> will also work just fine if
+ ODD_INT is any odd-number integer, positive or negative.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seed</code> - any int to be used as a seed</dd>
@@ -772,16 +962,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>randomFloatCurved</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.298">randomFloatCurved</a>(int&nbsp;seed)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.420">randomFloatCurved</a>(int&nbsp;seed)</pre>
 <div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
- strong central bias (around 0.0). Uses the given int seed, passing it twice through the (very high-quality and
+ strong central bias (around 0.0). Uses the given int seed, passing it once through the (very high-quality and
  rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64. This produces a pair of random ints, which this
  uses to generate a pair of floats between 0.0 (inclusive)and 1.0 (exclusive) using the equivalent of
  <a href="../../squidpony/squidmath/NumberTools.html#intBitsToFloat-int-"><code>intBitsToFloat(int)</code></a> or something functionally equivalent on GWT, multiplies the floats, and sets the
  sign pseudo-randomly based on an unused bit from earlier.
  <br>
- Consider calling this with <code>NumberTools.randomFloatCurved(seed += 0x3C6EF372)</code> for an optimal period of 2
- to the 31 when repeatedly called, but <code>NumberTools.randomFloatCurved(++seed)</code> will also work just fine.</div>
+ Consider calling this with <code>NumberTools.randomFloatCurved(++seed)</code> for an optimal period of 2 to the 32
+ when repeatedly called, but <code>NumberTools.randomFloatCurved(seed += ODD_INT)</code> will also work just fine if
+ ODD_INT is any odd-number integer, positive or negative.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seed</code> - any int to be used as a seed</dd>
@@ -796,7 +987,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>formFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.315">formFloat</a>(int&nbsp;seed)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.437">formFloat</a>(int&nbsp;seed)</pre>
 <div class="block">Given an int as a seed, this uses its least-significant 23 bits to produce a float between 0f (inclusive) and 1f
  (exclusive). This does not randomize the seed at all, and the upper 9 bits of the seed are ignored.</div>
 <dl>
@@ -813,7 +1004,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>formSignedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.325">formSignedFloat</a>(int&nbsp;seed)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.447">formSignedFloat</a>(int&nbsp;seed)</pre>
 <div class="block">Given an int as a seed, this uses its least-significant 23 bits to produce a float between -1f (inclusive) and 1f
  (exclusive). This does not randomize the seed at all, and the upper 9 bits of the seed are ignored.</div>
 <dl>
@@ -830,7 +1021,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>formCurvedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.338">formCurvedFloat</a>(long&nbsp;start)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.460">formCurvedFloat</a>(long&nbsp;start)</pre>
 <div class="block">A different kind of determine-like method that expects to be given a random long and produces a random float with
  a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
  The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
@@ -849,7 +1040,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>formCurvedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.355">formCurvedFloat</a>(int&nbsp;start1,
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.477">formCurvedFloat</a>(int&nbsp;start1,
                                     int&nbsp;start2)</pre>
 <div class="block">A different kind of determine-like method that expects to be given random ints and produces a random float with
  a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
@@ -870,7 +1061,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>formCurvedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.370">formCurvedFloat</a>(int&nbsp;start)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.492">formCurvedFloat</a>(int&nbsp;start)</pre>
 <div class="block">A different kind of determine-like method that expects to be given a random int and produces a random float with
  a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
  The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or

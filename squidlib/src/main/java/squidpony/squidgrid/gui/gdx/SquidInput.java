@@ -293,7 +293,7 @@ public class SquidInput extends InputAdapter {
      * @param shift true if shift is part of this combined keypress, false otherwise
      * @return an int that contains the information to represent the key with any modifiers as one value
      */
-    public int combineModifiers(char key, boolean alt, boolean ctrl, boolean shift) {
+    public static int combineModifiers(char key, boolean alt, boolean ctrl, boolean shift) {
         int c = alt ? (key | 0x10000) : key;
         c |= ctrl ? 0x20000 : 0;
         c |= shift ? 0x40000 : 0;
