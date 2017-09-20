@@ -1250,11 +1250,11 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     private static final int[] distOrder = {0, 0, 0, 0, 0, 0},
             newDistOrder = new int[]{-1, 0, 0, 0, 0, 0, 0},
             intLoc = {0, 0, 0, 0, 0, 0};
-    private static final float
-            //PI_F = 3.14159265358979323846f,
-            PHI_F = 1.618033988749895f,
-            I_PHI_F = 0.6180339887498949f,
-            HALF_PI_F = 1.5707963267948966f;
+    private static final double
+            PI_F = 3.14159265358979323846,
+            PHI_F = 1.618033988749895,
+            I_PHI_F = 0.6180339887498949,
+            HALF_PI_F = 1.5707963267948966;
     /*
      * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
      * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
@@ -1287,20 +1287,26 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //                x1y0 = (((x + 0.5f) * rx) + ((y - 0.5f) * ry)),
 //                x1y1 = (((x + 0.5f) * rx) + ((y + 0.5f) * ry));
 //        return NumberTools.sway(x0y0 + x1y0 + x0y1 + x1y1);
+        x *= 3.25;
+        y *= 3.25;
         final float[] jitterLUT = MeadNoise.jitter2DLUT;
+        final long s = ThrustRNG.determine(seed);
         final double
-                mx0 = jitterLUT[(seed & 510)] * HALF_PI_F, my0 = jitterLUT[(seed & 510)|1] * HALF_PI_F,
-                mx1 = jitterLUT[(seed >>> 20 & 510)] * HALF_PI_F, my1 = jitterLUT[(seed >>> 20 & 510)|1] * HALF_PI_F,
-                sx = NumberTools.sway(x * mx0 + y * my0) * PHI_F, sy = NumberTools.sway(y * mx1 + x * my1) * PHI_F;
+                r = NumberTools.longBitsToDouble((longFloor(s * x + y * s * s + s) & 0x000FFFFFFFFFFFFFL) | 0x3FF0000000000000L) * 0.6 - 0.4,
+                mx0 = jitterLUT[(seed & 510)] * PI_F * r, my0 = jitterLUT[(seed & 510)|1] * PI_F * (1.0 - r),
+                mx1 = jitterLUT[(seed >>> 10 & 510)] * PI_F * r, my1 = jitterLUT[(seed >>> 10 & 510)|1] * PI_F * (1.0 - r),
+                sx = NumberTools.sway(x * mx0 + y * my0) * 0.55, sy = NumberTools.sway(y * mx1 + x * my1) * 0.55;
         final long ix = longFloor(x + sy), iy = longFloor(y + sx);
         final double
                 rx0y0 = NumberTools.longBitsToDouble((ThrustRNG.determine(ix << 32 ^ iy) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L),
                 rx1y0 = NumberTools.longBitsToDouble((ThrustRNG.determine((ix+1L) << 32 ^ iy) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L),
                 rx0y1 = NumberTools.longBitsToDouble((ThrustRNG.determine(ix << 32 ^ (iy+1L)) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L),
-                rx1y1 = NumberTools.longBitsToDouble((ThrustRNG.determine((ix+1L) << 32 ^ (iy+1L)) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L);
+                rx1y1 = NumberTools.longBitsToDouble((ThrustRNG.determine((ix+1L) << 32 ^ (iy+1L)) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L),
+                dx = x + sy - ix, dy = y + sx - iy;
+        //return NumberTools.sway(rx0y0 * ux * uy + rx0y1 * dy * ux + rx1y0 * dx + uy + rx1y1 * dy + dx);
         return querp(
-                querp(rx0y0, rx0y1, y + sx - iy),
-                querp(rx1y0, rx1y1, y + sx - iy), x + sy - ix) - 3.0;
+                querp(rx0y0, rx0y1, dy),
+                querp(rx1y0, rx1y1, dy), dx) - 3.0;
 
         //very periodic...
 //        final double
