@@ -2051,6 +2051,54 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen ALIEN_O = alien_o().register();
 
+    // àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳ
+    // çðþñýćĉċčďđĝğġģĥħĵķĺļľŀłńņňŋŕŗřśŝşšţťŵŷÿźżžșțẁẃẅ
+    private static FakeLanguageGen alien_u(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "a", "ä", "i", "o", "o", "o", "ö", "u", "u", "u", "u", "u", "u", "ü", "ü"
+                },
+                new String[]{},
+                new String[]{
+                        "b", "b", "b", "b", "d", "d", "g", "g", "ġ", "h", "h", "h", "h", "ħ",
+                        "l", "l", "l", "l", "ł", "m", "m", "m", "m", "m", "n", "n", "n", "n", "ñ", "ŋ", "p", "p", "p",
+                        "q", "q", "r", "r", "r", "ŕ", "s", "s", "s", "s", "ś", "v", "v", "v", "v",
+                        "w", "w", "w", "w", "ẃ", "y", "y", "y", "y", "ý"
+                },
+                new String[]{
+                        "b", "b", "b", "b", "d", "d", "g", "g", "ġ", "h", "h", "h", "h", "ħ",
+                        "l", "l", "l", "l", "ł", "m", "m", "m", "m", "m", "n", "n", "n", "n", "ñ", "ŋ", "p", "p", "p",
+                        "q", "q", "r", "r", "r", "ŕ", "s", "s", "s", "s", "ś", "v", "v", "v", "v",
+                        "w", "w", "w", "w", "ẃ", "y", "y", "y", "y", "ý"
+                },
+                new String[]{
+                        "b", "b", "b", "b", "d", "d", "g", "g", "ġ",
+                        "l", "l", "l", "l", "ł", "m", "m", "m", "m", "m", "n", "n", "n", "n", "ñ", "ŋ", "p", "p", "p",
+                        "r", "r", "r", "ŕ", "s", "s", "s", "s", "ś", "v", "v", "v", "v",
+                },
+                new String[]{"emb", "embrid", "embraŋ", "eŋ", "eŋul", "eŋov", "eẃul", "eẃuld", "eẃulb",
+                        "eviś", "evim", "ełurn", "ełav", "egiġ", "ergiġ", "elgiġ", "eŕu", "eŕup", "eŕulm", "eŕuv",
+                        "eħul", "eħid", "eħiŋ", "eyü", "eyür", "eyürl", "eyüld", "eyüns", "eqä", "eqäp", "eqäġ",
+                        "esu", "esumb", "esulg", "esurl", "eśo", "eśold", "eśolg", "eśu", "eśur", "eśuŋ",
+                        "eñu", "eñuns", "eñurn", "eño", "eñolb", "eñols"
+                },
+                new String[]{"'"}, new int[]{1, 2, 3, 4, 5}, new double[]{3, 4, 7, 5, 2}, 0.4, 0.15, 0.06, 0.5, null, true);
+    }
+
+    /**
+     * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
+     * an alien species. This alien language is meant to have an abrupt change mid-word for many words, with the suffix
+     * of roughly half of words using the letter "e", which is absent from the rest of the language; these suffixes can
+     * also use consonant clusters, which are similarly absent elsewhere. The suffixes would make sense as a historical
+     * relic or as a linguistic holdout from a historical merger. As the name would suggest, it strongly prefers
+     * using the vowel "u", with it present in about half the groups, and can use the umlaut accent "ü" on some vowels.
+     * The consonants completely avoid hard sounds like "t" and "k", and don't cluster; they often have special marks.
+     * This should be relatively easy to pronounce for an alien language, though the words are rather long.
+     * <br>
+     * Üweħid vuŕeħid deẃul leŋul waloyeyür; äyovavü...
+     */
+    public static final FakeLanguageGen ALIEN_U = alien_u().register();
+
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
      * nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric

@@ -253,6 +253,12 @@ public class LanguageGenTest {
             System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ",", ";"},
                     new String[]{".", ".", ".", "...", "...", "..."}, 0.19));
         }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.ALIEN_U;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ",", ";"},
+                    new String[]{".", ".", ".", "...", "...", "..."}, 0.19));
+        }
 
         rng.setState(0xf00df00L);
         flg = FakeLanguageGen.FANTASY_NAME;
@@ -362,11 +368,11 @@ public class LanguageGenTest {
                         FakeLanguageGen.modifier("([^aeiou])\\1", "$1sh", 0.5),
                         FakeLanguageGen.modifier("([^aeiou])\\1", "$1", 0.9)),
                 FakeLanguageGen.JAPANESE_ROMANIZED.addModifiers(FakeLanguageGen.Modifier.DOUBLE_VOWELS),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Kittenish")),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Puppyspeak")),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbitese")),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("Rabbit Language")),
-                FakeLanguageGen.randomLanguage(CrossHash.Lightning.hash64("The Roar Of That Slumbering Shadow That Mankind Wills Itself To Forget")),
+                FakeLanguageGen.randomLanguage(CrossHash.hash64("Kittenish")),
+                FakeLanguageGen.randomLanguage(CrossHash.hash64("Puppyspeak")),
+                FakeLanguageGen.randomLanguage(CrossHash.hash64("Rabbitese")),
+                FakeLanguageGen.randomLanguage(CrossHash.hash64("Rabbit Language")),
+                FakeLanguageGen.randomLanguage(CrossHash.hash64("The Roar Of That Slumbering Shadow Which Mankind Wills Itself To Forget")),
                 FakeLanguageGen.INUKTITUT,
                 FakeLanguageGen.NORSE,
                 FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
@@ -410,6 +416,7 @@ public class LanguageGenTest {
                 FakeLanguageGen.ALIEN_E,
                 FakeLanguageGen.ALIEN_I,
                 FakeLanguageGen.ALIEN_O,
+                FakeLanguageGen.ALIEN_U,
         };
         String[] oz = new String[]{
                 "Uncle Uncles Carbuncle Carbuncles Live Lives Lived Living Liver Livers Livery Liveries",
