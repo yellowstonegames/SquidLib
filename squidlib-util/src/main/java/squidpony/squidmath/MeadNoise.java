@@ -1216,7 +1216,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
      * @param t the float to find the floor for
      * @return the floor of t, as an int
      */
-    public static long longFloor(float t) {
+    public static long longFloor(double t) {
         return t >= 0 ? (long) t : (long) t - 1L;
     }
 
@@ -1253,6 +1253,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     private static final float
             //PI_F = 3.14159265358979323846f,
             PHI_F = 1.618033988749895f,
+            I_PHI_F = 0.6180339887498949f,
             HALF_PI_F = 1.5707963267948966f;
     /*
      * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
@@ -1265,12 +1266,19 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     public static float querp(final float start, final float end, float a){
         return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
     }
-
-    public static double noise(final double x, final double y, final int seed) {
-        return noise((float)x, (float)y, seed);
+    /*
+     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    public static double querp(final double start, final double end, double a){
+        return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
     }
 
-    public static float noise(float x, float y, final int seed) {
+    public static double noise(double x, double y, int seed) {
 //        final float
 //                rx = NumberTools.formFloat(seed + (~seed << 15)) + 0.5f,
 //                ry = NumberTools.formFloat(~seed ^ (seed << 14)) + 0.5f,
@@ -1279,23 +1287,49 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //                x1y0 = (((x + 0.5f) * rx) + ((y - 0.5f) * ry)),
 //                x1y1 = (((x + 0.5f) * rx) + ((y + 0.5f) * ry));
 //        return NumberTools.sway(x0y0 + x1y0 + x0y1 + x1y1);
-        // produces a spotted pattern
         final float[] jitterLUT = MeadNoise.jitter2DLUT;
-        final int s = (0x632BE5AB + seed * 0x9E3779B9) ^ 0x85157AF5;
-        final float
-                //gxy = NumberTools.zigzag(x + y) * 0.3f + 0.7f,
-                sx = NumberTools.zigzag(x) * 0.23f, sy = NumberTools.zigzag(y) * 0.23f,
-                mx0 = jitterLUT[(s & 255) << 1], my0 = jitterLUT[(s & 255) << 1 | 1],
-                mx1 = jitterLUT[(s >>> 8 & 255) << 1], my1 = jitterLUT[(s >>> 8 & 255) << 1 | 1],
-                mx2 = jitterLUT[(s >>> 16 & 255) << 1], my2 = jitterLUT[(s >>> 16 & 255) << 1 | 1],
-                mx3 = jitterLUT[(s >>> 24) << 1], my3 = jitterLUT[(s >>> 24) << 1 | 1];
-        x *= 7f;
-        y *= 7f;
-        return NumberTools.sway(
-                        (NumberTools.sway(mx0 * x + my0 * y) * (0.26f + sx)) +
-                        (NumberTools.sway(mx1 * x + my1 * y) * (0.26f + sy)) +
-                        (NumberTools.sway(mx2 * x + my2 * y) * (0.26f - sy)) +
-                        (NumberTools.sway(mx3 * x + my3 * y) * (0.26f - sx)));
+        final double
+                mx0 = jitterLUT[(seed & 510)] * HALF_PI_F, my0 = jitterLUT[(seed & 510)|1] * HALF_PI_F,
+                mx1 = jitterLUT[(seed >>> 20 & 510)] * HALF_PI_F, my1 = jitterLUT[(seed >>> 20 & 510)|1] * HALF_PI_F,
+                sx = NumberTools.sway(x * mx0 + y * my0) * PHI_F, sy = NumberTools.sway(y * mx1 + x * my1) * PHI_F;
+        final long ix = longFloor(x + sy), iy = longFloor(y + sx);
+        final double
+                rx0y0 = NumberTools.longBitsToDouble((ThrustRNG.determine(ix << 32 ^ iy) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L),
+                rx1y0 = NumberTools.longBitsToDouble((ThrustRNG.determine((ix+1L) << 32 ^ iy) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L),
+                rx0y1 = NumberTools.longBitsToDouble((ThrustRNG.determine(ix << 32 ^ (iy+1L)) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L),
+                rx1y1 = NumberTools.longBitsToDouble((ThrustRNG.determine((ix+1L) << 32 ^ (iy+1L)) & 0x000FFFFFFFFFFFFFL) | 0x4000000000000000L);
+        return querp(
+                querp(rx0y0, rx0y1, y + sx - iy),
+                querp(rx1y0, rx1y1, y + sx - iy), x + sy - ix) - 3.0;
+
+        //very periodic...
+//        final double
+//                cx = NumberTools.sway(x * PHI_F *
+//                (NumberTools.formFloat(seed ^= 0x632BE5AB + (seed * 0x9E3779B9 >> 4) * 181) - HALF_PI_F)) + I_PHI_F,
+//                cy = NumberTools.sway(y * PHI_F +
+//                        (NumberTools.formFloat(seed ^= 0x632BE5AB + (seed * 0x9E3779B9 >> 4) * 181) - HALF_PI_F)) + I_PHI_F,
+//                ca = NumberTools.sway((cx + cy) * 0x3.337p-3f *
+//                        (NumberTools.formFloat(seed ^ 0x632BE5AB + (seed * 0x9E3779B9 >> 4) * 181) - PHI_F)) - I_PHI_F;
+//                //ca = NumberTools.formCurvedFloat(seed ^= 0x632BE5AB + (seed * 0x9E3779B9 >> 4) * 181, fastFloor(y * x - (y + x) * 7f) * seed) * (seed >> 16);
+//        return NumberTools.sway((cx + cy) * 2.14f - ca * 3.718f);
+        // produces a spotted pattern
+//        final float[] jitterLUT = MeadNoise.jitter2DLUT;
+//        final int s = (0x632BE5AB + seed * 0x9E3779B9) ^ 0x85157AF5;
+//        final float
+//                //gxy = NumberTools.zigzag(x + y) * 0.3f + 0.7f,
+//                sx = NumberTools.sway(x * HALF_PI_F) * 0.42f, sy = NumberTools.sway(y * HALF_PI_F) * 0.42f,
+//                //sxy = NumberTools.sway((x + y) * PHI_F) * 0.72f,
+//                mx0 = jitterLUT[(s & 255) << 1], my0 = jitterLUT[(s & 255) << 1 | 1],
+//                mx1 = jitterLUT[(s >>> 8 & 255) << 1], my1 = jitterLUT[(s >>> 8 & 255) << 1 | 1],
+//                mx2 = jitterLUT[(s >>> 16 & 255) << 1], my2 = jitterLUT[(s >>> 16 & 255) << 1 | 1],
+//                mx3 = jitterLUT[(s >>> 24) << 1], my3 = jitterLUT[(s >>> 24) << 1 | 1];
+//        x *= 5.25f;
+//        y *= 5.25f;
+//        return NumberTools.sway((
+//                        (NumberTools.sway(mx0 * x + my0 * y) * (2f + sx)) +
+//                        (NumberTools.sway(mx1 * x + my1 * y) * (2f + sy)) +
+//                        (NumberTools.sway(mx2 * x + my2 * y) * (2f - sy)) +
+//                        (NumberTools.sway(mx3 * x + my3 * y) * (2f - sx))) * 0.3f);
 
         //original
 //        final float s = (x + y) * F2;
