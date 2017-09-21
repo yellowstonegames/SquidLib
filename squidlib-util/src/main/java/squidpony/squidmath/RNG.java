@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import squidpony.ArrayTools;
-import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
 import java.util.*;
@@ -104,7 +103,9 @@ public class RNG implements Serializable {
      * applications anyway. The addition of LongPeriodRNG on March 21, 2016 should help to take the part of a fast,
      * large-period RNG, which MersenneTwister is unable to act as on GWT. The default may change again some time after
      * May 1, 2016, now that we have XoRoRNG, which is approximately as fast as LightRNG and has a substantially better
-     * period (pow(2, 128) - 1).
+     * period (pow(2, 128) - 1). It may change instead to the newer ThrustRNG, which is extremely similar to LightRNG
+     * except that it has slightly better statistical quality (both excellent) and is a fair amount faster (its period
+     * remains at pow(2, 64)).
      */
     public RNG() {
         this(new LightRNG());
@@ -123,18 +124,18 @@ public class RNG implements Serializable {
      * seed for LightRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
      * tiny state size, and excellent 64-bit number generation.
      */
-    public RNG(String seedString) {
+    public RNG(CharSequence seedString) {
         this(new LightRNG(CrossHash.hash(seedString)));
     }
 
     /**
      * Uses the provided source of randomness for all calculations. This
      * constructor should be used if an alternate RandomnessSource other than LightRNG is desirable.
-     *
+     * If the parameter is null, this is equivalent to using {@link #RNG()} as the constructor.
      * @param random the source of pseudo-randomness, such as a MersenneTwister or SobolQRNG object
      */
     public RNG(RandomnessSource random) {
-        this.random = random;
+        this.random = (random == null) ? new LightRNG() : random;
     }
 
     /**
@@ -294,7 +295,7 @@ public class RNG implements Serializable {
      * @return the randomly selected element
      */
     public <T> T getRandomElement(List<T> list) {
-        if (list.size() <= 0) {
+        if (list.isEmpty()) {
             return null;
         }
         return list.get(nextInt(list.size()));
@@ -344,10 +345,11 @@ public class RNG implements Serializable {
      * @return the randomly selected element
      */
     public <T> T getRandomElement(Collection<T> coll) {
-        if (coll.size() <= 0) {
+        int n;
+        if ((n = coll.size()) <= 0) {
             return null;
         }
-        int n = nextInt(coll.size());
+        n = nextInt(n);
         T t = null;
         Iterator<T> it = coll.iterator();
         while (n-- >= 0 && it.hasNext())
@@ -385,7 +387,8 @@ public class RNG implements Serializable {
      * Essentially, it does what it says on the tin. It randomly rotates the List l.
      * <br>
      * If you only need to iterate through a collection starting at a random point, the method getRandomStartIterable()
-     * should have better performance.
+     * should have better performance. This was GWT incompatible before GWT 2.8.0 became the version SquidLib uses; now
+     * this method works fine with GWT.
      *
      * @param l   A {@link List} that will not be modified by this method. All elements of this parameter will be
      *            shared with the returned List.
@@ -394,7 +397,6 @@ public class RNG implements Serializable {
      * from all possible elements but order is retained. Will "loop around" to contain element 0 of l after the last
      * element of l, then element 1, etc.
      */
-    @GwtIncompatible /* Because of Collections.rotate */
     public <T> List<T> randomRotation(final List<T> l) {
         final int sz = l.size();
         if (sz == 0)

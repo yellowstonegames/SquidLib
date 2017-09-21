@@ -184,19 +184,19 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG--">StatefulRNG</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-java.lang.CharSequence-">StatefulRNG</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString)</code>
+<div class="block">String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
+ period (which rarely matters for games), and has good speed and tiny state size.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-long-">StatefulRNG</a></span>(long&nbsp;seed)</code>
 <div class="block">Seeded constructor uses LightRNG, which is of high quality, but low period (which rarely matters for games),
  and has good speed and tiny state size.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-squidpony.squidmath.RandomnessSource-">StatefulRNG</a></span>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</code>&nbsp;</td>
-</tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-java.lang.String-">StatefulRNG</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seedString)</code>
-<div class="block">String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
- period (which rarely matters for games), and has good speed and tiny state size.</div>
-</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-squidpony.squidmath.RandomnessSource-">StatefulRNG</a></span>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -299,13 +299,13 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
  and has good speed and tiny state size.</div>
 </li>
 </ul>
-<a name="StatefulRNG-java.lang.String-">
+<a name="StatefulRNG-java.lang.CharSequence-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>StatefulRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.38">StatefulRNG</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seedString)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.38">StatefulRNG</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString)</pre>
 <div class="block">String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
  period (which rarely matters for games), and has good speed and tiny state size.
 

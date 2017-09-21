@@ -43,8 +43,8 @@
 <span class="sourceLineNo">035</span>     * technique assigns to all 64 bits and has less correlation between similar inputs causing similar starting states.<a name="line.35"></a>
 <span class="sourceLineNo">036</span>     * It's also faster, but that shouldn't matter in a constructor.<a name="line.36"></a>
 <span class="sourceLineNo">037</span>     */<a name="line.37"></a>
-<span class="sourceLineNo">038</span>    public StatefulRNG(String seedString) {<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        this(new LightRNG(CrossHash.Wisp.hash64(seedString)));<a name="line.39"></a>
+<span class="sourceLineNo">038</span>    public StatefulRNG(CharSequence seedString) {<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        this(new LightRNG(CrossHash.hash64(seedString)));<a name="line.39"></a>
 <span class="sourceLineNo">040</span>    }<a name="line.40"></a>
 <span class="sourceLineNo">041</span><a name="line.41"></a>
 <span class="sourceLineNo">042</span>    @Override<a name="line.42"></a>

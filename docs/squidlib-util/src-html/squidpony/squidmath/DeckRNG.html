@@ -9,604 +9,578 @@
 <pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import squidpony.annotation.GwtIncompatible;<a name="line.4"></a>
-<span class="sourceLineNo">005</span><a name="line.5"></a>
-<span class="sourceLineNo">006</span>import java.io.Serializable;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import java.util.*;<a name="line.7"></a>
-<span class="sourceLineNo">008</span><a name="line.8"></a>
-<span class="sourceLineNo">009</span>/**<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * An RNG variant that has 16 possible grades of value it can produce and shuffles them like a deck of cards.<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * It repeats grades of value, but not exact values, every 16 numbers requested from it. Grades go in increments of<a name="line.11"></a>
-<span class="sourceLineNo">012</span> * 0.0625 from 0.0 to 0.9375, and are added to a random double less than 0.0625 to get the random number for that<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * grade.<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * &lt;p&gt;<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * You can get values from this generator with: {@link #nextDouble()}, {@link #nextInt()},<a name="line.15"></a>
-<span class="sourceLineNo">016</span> *   {@link #nextLong()}, and the bounded variants on each of those.<a name="line.16"></a>
-<span class="sourceLineNo">017</span> *<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * Created by Tommy Ettinger on 5/2/2015.<a name="line.18"></a>
-<span class="sourceLineNo">019</span> */<a name="line.19"></a>
-<span class="sourceLineNo">020</span>public class DeckRNG extends StatefulRNG implements Serializable {<a name="line.20"></a>
-<span class="sourceLineNo">021</span>        private static final long serialVersionUID = 7828346657944720807L;<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    private int step;<a name="line.22"></a>
-<span class="sourceLineNo">023</span>    private long lastShuffledState;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    private static final double[] baseDeck = new double[]{0.0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375,<a name="line.24"></a>
-<span class="sourceLineNo">025</span>                                             0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375},<a name="line.25"></a>
-<span class="sourceLineNo">026</span>            deck = new double[16];<a name="line.26"></a>
-<span class="sourceLineNo">027</span><a name="line.27"></a>
-<span class="sourceLineNo">028</span>    /**<a name="line.28"></a>
-<span class="sourceLineNo">029</span>     * Constructs a DeckRNG with a pseudo-random seed from Math.random().<a name="line.29"></a>
-<span class="sourceLineNo">030</span>     */<a name="line.30"></a>
-<span class="sourceLineNo">031</span>    public DeckRNG()<a name="line.31"></a>
-<span class="sourceLineNo">032</span>    {<a name="line.32"></a>
-<span class="sourceLineNo">033</span>        this((long)(Math.random() * ((1L &lt;&lt; 50) - 1)));<a name="line.33"></a>
-<span class="sourceLineNo">034</span>    }<a name="line.34"></a>
-<span class="sourceLineNo">035</span>    /**<a name="line.35"></a>
-<span class="sourceLineNo">036</span>     * Construct a new DeckRNG with the given seed.<a name="line.36"></a>
-<span class="sourceLineNo">037</span>     *<a name="line.37"></a>
-<span class="sourceLineNo">038</span>     * @param seed used to seed the default RandomnessSource.<a name="line.38"></a>
-<span class="sourceLineNo">039</span>     */<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    public DeckRNG(final long seed) {<a name="line.40"></a>
-<span class="sourceLineNo">041</span>        lastShuffledState = seed;<a name="line.41"></a>
-<span class="sourceLineNo">042</span>        random = new LightRNG(seed);<a name="line.42"></a>
-<span class="sourceLineNo">043</span>        step = 0;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>    }<a name="line.44"></a>
-<span class="sourceLineNo">045</span><a name="line.45"></a>
-<span class="sourceLineNo">046</span>    /**<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low<a name="line.47"></a>
-<span class="sourceLineNo">048</span>     * period (which rarely matters for games), and has good speed and tiny state size.<a name="line.48"></a>
-<span class="sourceLineNo">049</span>     *<a name="line.49"></a>
-<span class="sourceLineNo">050</span>     * @param seedString a String to use as a seed; will be hashed in a uniform way across platforms.<a name="line.50"></a>
-<span class="sourceLineNo">051</span>     */<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    public DeckRNG(String seedString) {<a name="line.52"></a>
-<span class="sourceLineNo">053</span>        this(CrossHash.hash(seedString));<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    }<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    /**<a name="line.55"></a>
-<span class="sourceLineNo">056</span>     * Seeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields<a name="line.56"></a>
-<span class="sourceLineNo">057</span>     * that would affect future pseudo-random number generation.<a name="line.57"></a>
-<span class="sourceLineNo">058</span>     * @param random will be used to generate a new seed, but will not be assigned as this object's RandomnessSource<a name="line.58"></a>
-<span class="sourceLineNo">059</span>     */<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    public DeckRNG(RandomnessSource random) {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        this(random.nextLong());<a name="line.61"></a>
-<span class="sourceLineNo">062</span><a name="line.62"></a>
-<span class="sourceLineNo">063</span>    }<a name="line.63"></a>
-<span class="sourceLineNo">064</span><a name="line.64"></a>
-<span class="sourceLineNo">065</span>    /**<a name="line.65"></a>
-<span class="sourceLineNo">066</span>     * Generate a random double, altering the result if recently generated results have been leaning<a name="line.66"></a>
-<span class="sourceLineNo">067</span>     * away from this class' fairness value.<a name="line.67"></a>
-<span class="sourceLineNo">068</span>     * @return a double between 0.0 (inclusive) and 1.0 (exclusive)<a name="line.68"></a>
-<span class="sourceLineNo">069</span>     */<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    @Override<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    public double nextDouble() {<a name="line.71"></a>
-<span class="sourceLineNo">072</span>        if(step == 0)<a name="line.72"></a>
-<span class="sourceLineNo">073</span>            shuffleInPlace(deck);<a name="line.73"></a>
-<span class="sourceLineNo">074</span>        double gen = deck[step++];<a name="line.74"></a>
-<span class="sourceLineNo">075</span>        step %= 16;<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        return gen;<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
-<span class="sourceLineNo">078</span><a name="line.78"></a>
-<span class="sourceLineNo">079</span>    /**<a name="line.79"></a>
-<span class="sourceLineNo">080</span>     * This returns a random double between 0.0 (inclusive) and max (exclusive).<a name="line.80"></a>
-<span class="sourceLineNo">081</span>     *<a name="line.81"></a>
-<span class="sourceLineNo">082</span>     * @return a value between 0 (inclusive) and max (exclusive)<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     */<a name="line.83"></a>
-<span class="sourceLineNo">084</span>    @Override<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    public double nextDouble(double max) {<a name="line.85"></a>
-<span class="sourceLineNo">086</span>        return nextDouble() * max;<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
-<span class="sourceLineNo">088</span><a name="line.88"></a>
-<span class="sourceLineNo">089</span>    /**<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * Returns a value from a even distribution from min (inclusive) to max<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * (exclusive).<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     *<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     * @param min the minimum bound on the return value (inclusive)<a name="line.93"></a>
-<span class="sourceLineNo">094</span>     * @param max the maximum bound on the return value (exclusive)<a name="line.94"></a>
-<span class="sourceLineNo">095</span>     * @return the found value<a name="line.95"></a>
-<span class="sourceLineNo">096</span>     */<a name="line.96"></a>
-<span class="sourceLineNo">097</span>    @Override<a name="line.97"></a>
-<span class="sourceLineNo">098</span>    public double between(double min, double max) {<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        return min + (max - min) * nextDouble();<a name="line.99"></a>
-<span class="sourceLineNo">100</span>    }<a name="line.100"></a>
-<span class="sourceLineNo">101</span><a name="line.101"></a>
-<span class="sourceLineNo">102</span>    /**<a name="line.102"></a>
-<span class="sourceLineNo">103</span>     * Returns a value between min (inclusive) and max (exclusive).<a name="line.103"></a>
-<span class="sourceLineNo">104</span>     *<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     * The inclusive and exclusive behavior is to match the behavior of the<a name="line.105"></a>
-<span class="sourceLineNo">106</span>     * similar method that deals with floating point values.<a name="line.106"></a>
-<span class="sourceLineNo">107</span>     *<a name="line.107"></a>
-<span class="sourceLineNo">108</span>     * @param min the minimum bound on the return value (inclusive)<a name="line.108"></a>
-<span class="sourceLineNo">109</span>     * @param max the maximum bound on the return value (exclusive)<a name="line.109"></a>
-<span class="sourceLineNo">110</span>     * @return the found value<a name="line.110"></a>
-<span class="sourceLineNo">111</span>     */<a name="line.111"></a>
-<span class="sourceLineNo">112</span>    @Override<a name="line.112"></a>
-<span class="sourceLineNo">113</span>    public int between(int min, int max) {<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        return nextInt(max - min) + min;<a name="line.114"></a>
-<span class="sourceLineNo">115</span>    }<a name="line.115"></a>
-<span class="sourceLineNo">116</span><a name="line.116"></a>
-<span class="sourceLineNo">117</span>    /**<a name="line.117"></a>
-<span class="sourceLineNo">118</span>     * Returns the average of a number of randomly selected numbers from the<a name="line.118"></a>
-<span class="sourceLineNo">119</span>     * provided range, with min being inclusive and max being exclusive. It will<a name="line.119"></a>
-<span class="sourceLineNo">120</span>     * sample the number of times passed in as the third parameter.<a name="line.120"></a>
-<span class="sourceLineNo">121</span>     *<a name="line.121"></a>
-<span class="sourceLineNo">122</span>     * The inclusive and exclusive behavior is to match the behavior of the<a name="line.122"></a>
-<span class="sourceLineNo">123</span>     * similar method that deals with floating point values.<a name="line.123"></a>
-<span class="sourceLineNo">124</span>     *<a name="line.124"></a>
-<span class="sourceLineNo">125</span>     * This can be used to weight RNG calls to the average between min and max.<a name="line.125"></a>
-<span class="sourceLineNo">126</span>     *<a name="line.126"></a>
-<span class="sourceLineNo">127</span>     * @param min the minimum bound on the return value (inclusive)<a name="line.127"></a>
-<span class="sourceLineNo">128</span>     * @param max the maximum bound on the return value (exclusive)<a name="line.128"></a>
-<span class="sourceLineNo">129</span>     * @param samples the number of samples to take<a name="line.129"></a>
-<span class="sourceLineNo">130</span>     * @return the found value<a name="line.130"></a>
-<span class="sourceLineNo">131</span>     */<a name="line.131"></a>
-<span class="sourceLineNo">132</span>    @Override<a name="line.132"></a>
-<span class="sourceLineNo">133</span>    public int betweenWeighted(int min, int max, int samples) {<a name="line.133"></a>
-<span class="sourceLineNo">134</span>        int sum = 0;<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        for (int i = 0; i &lt; samples; i++) {<a name="line.135"></a>
-<span class="sourceLineNo">136</span>            sum += between(min, max);<a name="line.136"></a>
-<span class="sourceLineNo">137</span>        }<a name="line.137"></a>
-<span class="sourceLineNo">138</span><a name="line.138"></a>
-<span class="sourceLineNo">139</span>        return Math.round((float) sum / samples);<a name="line.139"></a>
-<span class="sourceLineNo">140</span>    }<a name="line.140"></a>
-<span class="sourceLineNo">141</span><a name="line.141"></a>
-<span class="sourceLineNo">142</span>    /**<a name="line.142"></a>
-<span class="sourceLineNo">143</span>     * Returns a random element from the provided array and maintains object<a name="line.143"></a>
-<span class="sourceLineNo">144</span>     * type.<a name="line.144"></a>
-<span class="sourceLineNo">145</span>     *<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * @param &lt;T&gt; the type of the returned object<a name="line.146"></a>
-<span class="sourceLineNo">147</span>     * @param array the array to get an element from<a name="line.147"></a>
-<span class="sourceLineNo">148</span>     * @return the randomly selected element<a name="line.148"></a>
-<span class="sourceLineNo">149</span>     */<a name="line.149"></a>
-<span class="sourceLineNo">150</span>    @Override<a name="line.150"></a>
-<span class="sourceLineNo">151</span>    public &lt;T&gt; T getRandomElement(T[] array) {<a name="line.151"></a>
-<span class="sourceLineNo">152</span>        if (array.length &lt; 1) {<a name="line.152"></a>
-<span class="sourceLineNo">153</span>            return null;<a name="line.153"></a>
-<span class="sourceLineNo">154</span>        }<a name="line.154"></a>
-<span class="sourceLineNo">155</span>        return array[nextInt(array.length)];<a name="line.155"></a>
-<span class="sourceLineNo">156</span>    }<a name="line.156"></a>
-<span class="sourceLineNo">157</span><a name="line.157"></a>
-<span class="sourceLineNo">158</span>    /**<a name="line.158"></a>
-<span class="sourceLineNo">159</span>     * Returns a random element from the provided list. If the list is empty<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     * then null is returned.<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     *<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * @param &lt;T&gt; the type of the returned object<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     * @param list the list to get an element from<a name="line.163"></a>
-<span class="sourceLineNo">164</span>     * @return the randomly selected element<a name="line.164"></a>
-<span class="sourceLineNo">165</span>     */<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    @Override<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    public &lt;T&gt; T getRandomElement(List&lt;T&gt; list) {<a name="line.167"></a>
-<span class="sourceLineNo">168</span>        if (list.size() &lt;= 0) {<a name="line.168"></a>
-<span class="sourceLineNo">169</span>            return null;<a name="line.169"></a>
-<span class="sourceLineNo">170</span>        }<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        return list.get(nextInt(list.size()));<a name="line.171"></a>
-<span class="sourceLineNo">172</span>    }<a name="line.172"></a>
-<span class="sourceLineNo">173</span><a name="line.173"></a>
-<span class="sourceLineNo">174</span>    /**<a name="line.174"></a>
-<span class="sourceLineNo">175</span>     * Returns a random element from the provided ShortSet. If the set is empty<a name="line.175"></a>
-<span class="sourceLineNo">176</span>     * then an exception is thrown.<a name="line.176"></a>
-<span class="sourceLineNo">177</span>     *<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     * &lt;p&gt;<a name="line.178"></a>
-<span class="sourceLineNo">179</span>     * Requires iterating through a random amount of the elements in set, so performance depends on the size of set but<a name="line.179"></a>
-<span class="sourceLineNo">180</span>     * is likely to be decent. This is mostly meant for internal use, the same as ShortSet.<a name="line.180"></a>
-<span class="sourceLineNo">181</span>     * &lt;/p&gt;<a name="line.181"></a>
-<span class="sourceLineNo">182</span>     * @param set the ShortSet to get an element from<a name="line.182"></a>
-<span class="sourceLineNo">183</span>     * @return the randomly selected element<a name="line.183"></a>
-<span class="sourceLineNo">184</span>     */<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    public short getRandomElement(ShortSet set) {<a name="line.185"></a>
-<span class="sourceLineNo">186</span>        if (set.size &lt;= 0) {<a name="line.186"></a>
-<span class="sourceLineNo">187</span>            throw new UnsupportedOperationException("ShortSet cannot be empty when getting a random element");<a name="line.187"></a>
-<span class="sourceLineNo">188</span>        }<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        int n = nextInt(set.size);<a name="line.189"></a>
-<span class="sourceLineNo">190</span>        short s = 0;<a name="line.190"></a>
-<span class="sourceLineNo">191</span>        ShortSet.ShortSetIterator ssi = set.iterator();<a name="line.191"></a>
-<span class="sourceLineNo">192</span>        while (n-- &gt;= 0 &amp;&amp; ssi.hasNext)<a name="line.192"></a>
-<span class="sourceLineNo">193</span>            s = ssi.next();<a name="line.193"></a>
-<span class="sourceLineNo">194</span>        ssi.reset();<a name="line.194"></a>
-<span class="sourceLineNo">195</span>        return s;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>    }<a name="line.196"></a>
-<span class="sourceLineNo">197</span><a name="line.197"></a>
-<span class="sourceLineNo">198</span>    /**<a name="line.198"></a>
-<span class="sourceLineNo">199</span>     * Returns a random element from the provided Collection, which should have predictable iteration order if you want<a name="line.199"></a>
-<span class="sourceLineNo">200</span>     * predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection<a name="line.200"></a>
-<span class="sourceLineNo">201</span>     * (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted<a name="line.201"></a>
-<span class="sourceLineNo">202</span>     * Set like TreeSet if you want predictable results. Any List or Queue should be fine. Map does not implement<a name="line.202"></a>
-<span class="sourceLineNo">203</span>     * Collection, thank you very much Java library designers, so you can't actually pass a Map to this, though you can<a name="line.203"></a>
-<span class="sourceLineNo">204</span>     * pass the keys or values. If coll is empty, returns null.<a name="line.204"></a>
-<span class="sourceLineNo">205</span>     *<a name="line.205"></a>
-<span class="sourceLineNo">206</span>     * &lt;p&gt;<a name="line.206"></a>
-<span class="sourceLineNo">207</span>     * Requires iterating through a random amount of coll's elements, so performance depends on the size of coll but is<a name="line.207"></a>
-<span class="sourceLineNo">208</span>     * likely to be decent, as long as iteration isn't unusually slow. This replaces {@code getRandomElement(Queue)},<a name="line.208"></a>
-<span class="sourceLineNo">209</span>     * since Queue implements Collection and the older Queue-using implementation was probably less efficient.<a name="line.209"></a>
-<span class="sourceLineNo">210</span>     * &lt;/p&gt;<a name="line.210"></a>
-<span class="sourceLineNo">211</span>     * @param &lt;T&gt; the type of the returned object<a name="line.211"></a>
-<span class="sourceLineNo">212</span>     * @param coll the Collection to get an element from; remember, Map does not implement Collection<a name="line.212"></a>
-<span class="sourceLineNo">213</span>     * @return the randomly selected element<a name="line.213"></a>
-<span class="sourceLineNo">214</span>     */<a name="line.214"></a>
-<span class="sourceLineNo">215</span>    public &lt;T&gt; T getRandomElement(Collection&lt;T&gt; coll) {<a name="line.215"></a>
-<span class="sourceLineNo">216</span>        if (coll.size() &lt;= 0) {<a name="line.216"></a>
-<span class="sourceLineNo">217</span>            return null;<a name="line.217"></a>
-<span class="sourceLineNo">218</span>        }<a name="line.218"></a>
-<span class="sourceLineNo">219</span>        int n = nextInt(coll.size());<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        T t = null;<a name="line.220"></a>
-<span class="sourceLineNo">221</span>        Iterator&lt;T&gt; it = coll.iterator();<a name="line.221"></a>
-<span class="sourceLineNo">222</span>        while (n-- &gt;= 0 &amp;&amp; it.hasNext())<a name="line.222"></a>
-<span class="sourceLineNo">223</span>            t = it.next();<a name="line.223"></a>
-<span class="sourceLineNo">224</span>        return t;<a name="line.224"></a>
-<span class="sourceLineNo">225</span>    }<a name="line.225"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.util.*;<a name="line.6"></a>
+<span class="sourceLineNo">007</span><a name="line.7"></a>
+<span class="sourceLineNo">008</span>/**<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * An RNG variant that has 16 possible grades of value it can produce and shuffles them like a deck of cards.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * It repeats grades of value, but not exact values, every 16 numbers requested from it. Grades go in increments of<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * 0.0625 from 0.0 to 0.9375, and are added to a random double less than 0.0625 to get the random number for that<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * grade.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * &lt;p&gt;<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * You can get values from this generator with: {@link #nextDouble()}, {@link #nextInt()},<a name="line.14"></a>
+<span class="sourceLineNo">015</span> *   {@link #nextLong()}, and the bounded variants on each of those.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Created by Tommy Ettinger on 5/2/2015.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>public class DeckRNG extends StatefulRNG implements Serializable {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>        private static final long serialVersionUID = 7828346657944720807L;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    private int step;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    private long lastShuffledState;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    private static final double[] baseDeck = new double[]{0.0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375,<a name="line.23"></a>
+<span class="sourceLineNo">024</span>                                             0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375},<a name="line.24"></a>
+<span class="sourceLineNo">025</span>            deck = new double[16];<a name="line.25"></a>
+<span class="sourceLineNo">026</span><a name="line.26"></a>
+<span class="sourceLineNo">027</span>    /**<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     * Constructs a DeckRNG with a pseudo-random seed from Math.random().<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     */<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    public DeckRNG()<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    {<a name="line.31"></a>
+<span class="sourceLineNo">032</span>        this((long)(Math.random() * ((1L &lt;&lt; 50) - 1)));<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    }<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    /**<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     * Construct a new DeckRNG with the given seed.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     *<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * @param seed used to seed the default RandomnessSource.<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    public DeckRNG(final long seed) {<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        lastShuffledState = seed;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        random = new LightRNG(seed);<a name="line.41"></a>
+<span class="sourceLineNo">042</span>        step = 0;<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    }<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /**<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * period (which rarely matters for games), and has good speed and tiny state size.<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     *<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * @param seedString a String to use as a seed; will be hashed in a uniform way across platforms.<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     */<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    public DeckRNG(CharSequence seedString) {<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        this(CrossHash.hash64(seedString));<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    }<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    /**<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * Seeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * that would affect future pseudo-random number generation.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * @param random will be used to generate a new seed, but will not be assigned as this object's RandomnessSource<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     */<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    public DeckRNG(RandomnessSource random) {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        this(random.nextLong());<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>    }<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    /**<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * Generate a random double, altering the result if recently generated results have been leaning<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * away from this class' fairness value.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * @return a double between 0.0 (inclusive) and 1.0 (exclusive)<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     */<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    @Override<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    public double nextDouble() {<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        if(step == 0)<a name="line.71"></a>
+<span class="sourceLineNo">072</span>            shuffleInPlace(deck);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        double gen = deck[step++];<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        step %= 16;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        return gen;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    /**<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * This returns a random double between 0.0 (inclusive) and max (exclusive).<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     *<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * @return a value between 0 (inclusive) and max (exclusive)<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     */<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    @Override<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    public double nextDouble(double max) {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        return nextDouble() * max;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    }<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>    /**<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     * Returns a value from a even distribution from min (inclusive) to max<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * (exclusive).<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     *<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * @param min the minimum bound on the return value (inclusive)<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * @param max the maximum bound on the return value (exclusive)<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * @return the found value<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     */<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    @Override<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    public double between(double min, double max) {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        return min + (max - min) * nextDouble();<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>    /**<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * Returns a value between min (inclusive) and max (exclusive).<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     *<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * The inclusive and exclusive behavior is to match the behavior of the<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * similar method that deals with floating point values.<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     *<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * @param min the minimum bound on the return value (inclusive)<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * @param max the maximum bound on the return value (exclusive)<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * @return the found value<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     */<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    @Override<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    public int between(int min, int max) {<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        return nextInt(max - min) + min;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    }<a name="line.114"></a>
+<span class="sourceLineNo">115</span><a name="line.115"></a>
+<span class="sourceLineNo">116</span>    /**<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     * Returns the average of a number of randomly selected numbers from the<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     * provided range, with min being inclusive and max being exclusive. It will<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * sample the number of times passed in as the third parameter.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     *<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * The inclusive and exclusive behavior is to match the behavior of the<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * similar method that deals with floating point values.<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     *<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * This can be used to weight RNG calls to the average between min and max.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     *<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * @param min the minimum bound on the return value (inclusive)<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * @param max the maximum bound on the return value (exclusive)<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * @param samples the number of samples to take<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @return the found value<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     */<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    @Override<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    public int betweenWeighted(int min, int max, int samples) {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        int sum = 0;<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        for (int i = 0; i &lt; samples; i++) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>            sum += between(min, max);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        }<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>        return Math.round((float) sum / samples);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    }<a name="line.139"></a>
+<span class="sourceLineNo">140</span><a name="line.140"></a>
+<span class="sourceLineNo">141</span>    /**<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * Returns a random element from the provided array and maintains object<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * type.<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     *<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * @param &lt;T&gt; the type of the returned object<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * @param array the array to get an element from<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * @return the randomly selected element<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     */<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    @Override<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    public &lt;T&gt; T getRandomElement(T[] array) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        if (array.length &lt; 1) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            return null;<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        }<a name="line.153"></a>
+<span class="sourceLineNo">154</span>        return array[nextInt(array.length)];<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    }<a name="line.155"></a>
+<span class="sourceLineNo">156</span><a name="line.156"></a>
+<span class="sourceLineNo">157</span>    /**<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * Returns a random element from the provided list. If the list is empty<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * then null is returned.<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     *<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * @param &lt;T&gt; the type of the returned object<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * @param list the list to get an element from<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * @return the randomly selected element<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     */<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    @Override<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    public &lt;T&gt; T getRandomElement(List&lt;T&gt; list) {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        if (list.size() &lt;= 0) {<a name="line.167"></a>
+<span class="sourceLineNo">168</span>            return null;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        }<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        return list.get(nextInt(list.size()));<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Returns a random element from the provided ShortSet. If the set is empty<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * then an exception is thrown.<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     *<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * &lt;p&gt;<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * Requires iterating through a random amount of the elements in set, so performance depends on the size of set but<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * is likely to be decent. This is mostly meant for internal use, the same as ShortSet.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * &lt;/p&gt;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * @param set the ShortSet to get an element from<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * @return the randomly selected element<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     */<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    public short getRandomElement(ShortSet set) {<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        if (set.size &lt;= 0) {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>            throw new UnsupportedOperationException("ShortSet cannot be empty when getting a random element");<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        }<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        int n = nextInt(set.size);<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        short s = 0;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        ShortSet.ShortSetIterator ssi = set.iterator();<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        while (n-- &gt;= 0 &amp;&amp; ssi.hasNext)<a name="line.191"></a>
+<span class="sourceLineNo">192</span>            s = ssi.next();<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        ssi.reset();<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        return s;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    }<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>    /**<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * Returns a random element from the provided Collection, which should have predictable iteration order if you want<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * Set like TreeSet if you want predictable results. Any List or Queue should be fine. Map does not implement<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * Collection, thank you very much Java library designers, so you can't actually pass a Map to this, though you can<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * pass the keys or values. If coll is empty, returns null.<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     *<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     * &lt;p&gt;<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * Requires iterating through a random amount of coll's elements, so performance depends on the size of coll but is<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * likely to be decent, as long as iteration isn't unusually slow. This replaces {@code getRandomElement(Queue)},<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     * since Queue implements Collection and the older Queue-using implementation was probably less efficient.<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     * &lt;/p&gt;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     * @param &lt;T&gt; the type of the returned object<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * @param coll the Collection to get an element from; remember, Map does not implement Collection<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * @return the randomly selected element<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    public &lt;T&gt; T getRandomElement(Collection&lt;T&gt; coll) {<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        if (coll.size() &lt;= 0) {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>            return null;<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        }<a name="line.217"></a>
+<span class="sourceLineNo">218</span>        int n = nextInt(coll.size());<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        T t = null;<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        Iterator&lt;T&gt; it = coll.iterator();<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        while (n-- &gt;= 0 &amp;&amp; it.hasNext())<a name="line.221"></a>
+<span class="sourceLineNo">222</span>            t = it.next();<a name="line.222"></a>
+<span class="sourceLineNo">223</span>        return t;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    }<a name="line.224"></a>
+<span class="sourceLineNo">225</span><a name="line.225"></a>
 <span class="sourceLineNo">226</span><a name="line.226"></a>
-<span class="sourceLineNo">227</span><a name="line.227"></a>
-<span class="sourceLineNo">228</span>    /**<a name="line.228"></a>
-<span class="sourceLineNo">229</span>     * @return a value from the gaussian distribution<a name="line.229"></a>
-<span class="sourceLineNo">230</span>     */<a name="line.230"></a>
-<span class="sourceLineNo">231</span>    @Override<a name="line.231"></a>
-<span class="sourceLineNo">232</span>    public synchronized double nextGaussian() {<a name="line.232"></a>
-<span class="sourceLineNo">233</span>        if (haveNextNextGaussian) {<a name="line.233"></a>
-<span class="sourceLineNo">234</span>            haveNextNextGaussian = false;<a name="line.234"></a>
-<span class="sourceLineNo">235</span>            return nextNextGaussian;<a name="line.235"></a>
-<span class="sourceLineNo">236</span>        } else {<a name="line.236"></a>
-<span class="sourceLineNo">237</span>            double v1, v2, s;<a name="line.237"></a>
-<span class="sourceLineNo">238</span>            do {<a name="line.238"></a>
-<span class="sourceLineNo">239</span>                v1 = 2 * nextDouble() - 1; // between -1 and 1<a name="line.239"></a>
-<span class="sourceLineNo">240</span>                v2 = 2 * nextDouble() - 1; // between -1 and 1<a name="line.240"></a>
-<span class="sourceLineNo">241</span>                s = v1 * v1 + v2 * v2;<a name="line.241"></a>
-<span class="sourceLineNo">242</span>            } while (s &gt;= 1 || s == 0);<a name="line.242"></a>
-<span class="sourceLineNo">243</span>            double multiplier = Math.sqrt(-2 * Math.log(s) / s);<a name="line.243"></a>
-<span class="sourceLineNo">244</span>            nextNextGaussian = v2 * multiplier;<a name="line.244"></a>
-<span class="sourceLineNo">245</span>            haveNextNextGaussian = true;<a name="line.245"></a>
-<span class="sourceLineNo">246</span>            return v1 * multiplier;<a name="line.246"></a>
-<span class="sourceLineNo">247</span>        }<a name="line.247"></a>
-<span class="sourceLineNo">248</span>    }<a name="line.248"></a>
-<span class="sourceLineNo">249</span>    /**<a name="line.249"></a>
-<span class="sourceLineNo">250</span>     * Returns a random integer below the given bound, or 0 if the bound is 0 or<a name="line.250"></a>
-<span class="sourceLineNo">251</span>     * negative. Affects the current fortune.<a name="line.251"></a>
-<span class="sourceLineNo">252</span>     *<a name="line.252"></a>
-<span class="sourceLineNo">253</span>     * @param bound the upper bound (exclusive)<a name="line.253"></a>
-<span class="sourceLineNo">254</span>     * @return the found number<a name="line.254"></a>
-<span class="sourceLineNo">255</span>     */<a name="line.255"></a>
-<span class="sourceLineNo">256</span>    @Override<a name="line.256"></a>
-<span class="sourceLineNo">257</span>    public int nextInt(int bound) {<a name="line.257"></a>
-<span class="sourceLineNo">258</span>        if (bound &lt;= 0) {<a name="line.258"></a>
-<span class="sourceLineNo">259</span>            return 0;<a name="line.259"></a>
-<span class="sourceLineNo">260</span>        }<a name="line.260"></a>
-<span class="sourceLineNo">261</span><a name="line.261"></a>
-<span class="sourceLineNo">262</span>        return (int)(nextDouble() * bound);<a name="line.262"></a>
-<span class="sourceLineNo">263</span>    }<a name="line.263"></a>
-<span class="sourceLineNo">264</span><a name="line.264"></a>
-<span class="sourceLineNo">265</span>    /**<a name="line.265"></a>
-<span class="sourceLineNo">266</span>     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.<a name="line.266"></a>
-<span class="sourceLineNo">267</span>     * &lt;br&gt;<a name="line.267"></a>
-<span class="sourceLineNo">268</span>     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle<a name="line.268"></a>
-<span class="sourceLineNo">269</span>     *<a name="line.269"></a>
-<span class="sourceLineNo">270</span>     * @param elements an array of T; will not be modified<a name="line.270"></a>
-<span class="sourceLineNo">271</span>     * @return a shuffled copy of elements<a name="line.271"></a>
-<span class="sourceLineNo">272</span>     */<a name="line.272"></a>
-<span class="sourceLineNo">273</span>    @Override<a name="line.273"></a>
-<span class="sourceLineNo">274</span>    @GwtIncompatible<a name="line.274"></a>
-<span class="sourceLineNo">275</span>    public &lt;T&gt; T[] shuffle(T[] elements)<a name="line.275"></a>
-<span class="sourceLineNo">276</span>    {<a name="line.276"></a>
-<span class="sourceLineNo">277</span>        int n = elements.length;<a name="line.277"></a>
-<span class="sourceLineNo">278</span>        T[] array = Arrays.copyOf(elements, n);<a name="line.278"></a>
-<span class="sourceLineNo">279</span>        for (int i = 0; i &lt; n; i++)<a name="line.279"></a>
-<span class="sourceLineNo">280</span>        {<a name="line.280"></a>
-<span class="sourceLineNo">281</span>            int r = i + nextIntHasty(n - i);<a name="line.281"></a>
-<span class="sourceLineNo">282</span>            T t = array[r];<a name="line.282"></a>
-<span class="sourceLineNo">283</span>            array[r] = array[i];<a name="line.283"></a>
-<span class="sourceLineNo">284</span>            array[i] = t;<a name="line.284"></a>
-<span class="sourceLineNo">285</span>        }<a name="line.285"></a>
-<span class="sourceLineNo">286</span>        return array;<a name="line.286"></a>
-<span class="sourceLineNo">287</span>    }<a name="line.287"></a>
-<span class="sourceLineNo">288</span><a name="line.288"></a>
-<span class="sourceLineNo">289</span><a name="line.289"></a>
-<span class="sourceLineNo">290</span>    /**<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).<a name="line.291"></a>
-<span class="sourceLineNo">292</span>     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.<a name="line.292"></a>
-<span class="sourceLineNo">293</span>     *<a name="line.293"></a>
-<span class="sourceLineNo">294</span>     * @param length the size of the ordering to produce<a name="line.294"></a>
-<span class="sourceLineNo">295</span>     * @return a random ordering containing all ints from 0 to length (exclusive)<a name="line.295"></a>
-<span class="sourceLineNo">296</span>     */<a name="line.296"></a>
-<span class="sourceLineNo">297</span>    @Override<a name="line.297"></a>
-<span class="sourceLineNo">298</span>    public int[] randomOrdering(int length)<a name="line.298"></a>
-<span class="sourceLineNo">299</span>    {<a name="line.299"></a>
-<span class="sourceLineNo">300</span>        int[] dest = new int[length];<a name="line.300"></a>
-<span class="sourceLineNo">301</span>        for (int i = 0; i &lt; length; i++)<a name="line.301"></a>
-<span class="sourceLineNo">302</span>        {<a name="line.302"></a>
-<span class="sourceLineNo">303</span>            int r = nextIntHasty(i + 1);<a name="line.303"></a>
-<span class="sourceLineNo">304</span>            if(r != i)<a name="line.304"></a>
-<span class="sourceLineNo">305</span>                dest[i] = dest[r];<a name="line.305"></a>
-<span class="sourceLineNo">306</span>            dest[r] = i;<a name="line.306"></a>
-<span class="sourceLineNo">307</span>        }<a name="line.307"></a>
-<span class="sourceLineNo">308</span>        return dest;<a name="line.308"></a>
-<span class="sourceLineNo">309</span>    }<a name="line.309"></a>
-<span class="sourceLineNo">310</span><a name="line.310"></a>
-<span class="sourceLineNo">311</span>    /**<a name="line.311"></a>
-<span class="sourceLineNo">312</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.<a name="line.312"></a>
-<span class="sourceLineNo">313</span>     * Uses a slightly optimized technique. This method is considered "hasty" since<a name="line.313"></a>
-<span class="sourceLineNo">314</span>     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also<a name="line.314"></a>
-<span class="sourceLineNo">315</span>     * has undefined behavior if bound is negative, though it will probably produce a negative<a name="line.315"></a>
-<span class="sourceLineNo">316</span>     * number (just how negative is an open question).<a name="line.316"></a>
-<span class="sourceLineNo">317</span>     *<a name="line.317"></a>
-<span class="sourceLineNo">318</span>     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative<a name="line.318"></a>
-<span class="sourceLineNo">319</span>     * @return the found number<a name="line.319"></a>
-<span class="sourceLineNo">320</span>     */<a name="line.320"></a>
-<span class="sourceLineNo">321</span>    @Override<a name="line.321"></a>
-<span class="sourceLineNo">322</span>    public int nextIntHasty(int bound) {<a name="line.322"></a>
-<span class="sourceLineNo">323</span>        return (int)(nextDouble() * bound);<a name="line.323"></a>
-<span class="sourceLineNo">324</span>    }<a name="line.324"></a>
-<span class="sourceLineNo">325</span><a name="line.325"></a>
-<span class="sourceLineNo">326</span>    /**<a name="line.326"></a>
-<span class="sourceLineNo">327</span>     * Returns a random integer, which may be positive or negative.<a name="line.327"></a>
-<span class="sourceLineNo">328</span>     * @return A random int<a name="line.328"></a>
-<span class="sourceLineNo">329</span>     */<a name="line.329"></a>
-<span class="sourceLineNo">330</span>    @Override<a name="line.330"></a>
-<span class="sourceLineNo">331</span>    public int nextInt() {<a name="line.331"></a>
-<span class="sourceLineNo">332</span>        return (int)((nextDouble() * 2.0 - 1.0) * 0x7FFFFFFF);<a name="line.332"></a>
-<span class="sourceLineNo">333</span>    }<a name="line.333"></a>
-<span class="sourceLineNo">334</span><a name="line.334"></a>
-<span class="sourceLineNo">335</span>    /**<a name="line.335"></a>
-<span class="sourceLineNo">336</span>     * Returns a random long, which may be positive or negative.<a name="line.336"></a>
-<span class="sourceLineNo">337</span>     * @return A random long<a name="line.337"></a>
-<span class="sourceLineNo">338</span>     */<a name="line.338"></a>
-<span class="sourceLineNo">339</span>    @Override<a name="line.339"></a>
-<span class="sourceLineNo">340</span>    public long nextLong() {<a name="line.340"></a>
-<span class="sourceLineNo">341</span>        double nx = nextDouble();<a name="line.341"></a>
-<span class="sourceLineNo">342</span>        return (long)((nx * 2.0 - 1.0) * 0x7FFFFFFFFFFFFFFFL);<a name="line.342"></a>
-<span class="sourceLineNo">343</span>    }<a name="line.343"></a>
-<span class="sourceLineNo">344</span><a name="line.344"></a>
-<span class="sourceLineNo">345</span>    /**<a name="line.345"></a>
-<span class="sourceLineNo">346</span>     * Returns a random long below the given bound, or 0 if the bound is 0 or<a name="line.346"></a>
-<span class="sourceLineNo">347</span>     * negative.<a name="line.347"></a>
-<span class="sourceLineNo">348</span>     *<a name="line.348"></a>
-<span class="sourceLineNo">349</span>     * @param bound the upper bound (exclusive)<a name="line.349"></a>
-<span class="sourceLineNo">350</span>     * @return the found number<a name="line.350"></a>
-<span class="sourceLineNo">351</span>     */<a name="line.351"></a>
-<span class="sourceLineNo">352</span>    @Override<a name="line.352"></a>
-<span class="sourceLineNo">353</span>        public long nextLong(long bound) {<a name="line.353"></a>
-<span class="sourceLineNo">354</span>        if (bound &lt;= 0) {<a name="line.354"></a>
-<span class="sourceLineNo">355</span>            return 0;<a name="line.355"></a>
-<span class="sourceLineNo">356</span>        }<a name="line.356"></a>
-<span class="sourceLineNo">357</span>        double nx = nextDouble();<a name="line.357"></a>
-<span class="sourceLineNo">358</span>        return (long)(nx * bound);<a name="line.358"></a>
-<span class="sourceLineNo">359</span>        //return ((long)(nx * bound)) ^ (long)((nx * 0xFFFFFL) % bound) ^ (long)((nx * 0xFFFFF00000L) % bound);<a name="line.359"></a>
-<span class="sourceLineNo">360</span>    }<a name="line.360"></a>
-<span class="sourceLineNo">361</span>    /**<a name="line.361"></a>
-<span class="sourceLineNo">362</span>     *<a name="line.362"></a>
-<span class="sourceLineNo">363</span>     * @param bits the number of bits to be returned<a name="line.363"></a>
-<span class="sourceLineNo">364</span>     * @return a random int of the number of bits specified.<a name="line.364"></a>
-<span class="sourceLineNo">365</span>     */<a name="line.365"></a>
-<span class="sourceLineNo">366</span>    @Override<a name="line.366"></a>
-<span class="sourceLineNo">367</span>    public int next(int bits) {<a name="line.367"></a>
-<span class="sourceLineNo">368</span>        if(bits &lt;= 0)<a name="line.368"></a>
-<span class="sourceLineNo">369</span>            return 0;<a name="line.369"></a>
-<span class="sourceLineNo">370</span>        if(bits &gt; 32)<a name="line.370"></a>
-<span class="sourceLineNo">371</span>            bits = 32;<a name="line.371"></a>
-<span class="sourceLineNo">372</span>        return (int)(nextDouble() * (1L &lt;&lt; bits));<a name="line.372"></a>
+<span class="sourceLineNo">227</span>    /**<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * @return a value from the gaussian distribution<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     */<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    @Override<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    public synchronized double nextGaussian() {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        if (haveNextNextGaussian) {<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            haveNextNextGaussian = false;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>            return nextNextGaussian;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        } else {<a name="line.235"></a>
+<span class="sourceLineNo">236</span>            double v1, v2, s;<a name="line.236"></a>
+<span class="sourceLineNo">237</span>            do {<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                v1 = 2 * nextDouble() - 1; // between -1 and 1<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                v2 = 2 * nextDouble() - 1; // between -1 and 1<a name="line.239"></a>
+<span class="sourceLineNo">240</span>                s = v1 * v1 + v2 * v2;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>            } while (s &gt;= 1 || s == 0);<a name="line.241"></a>
+<span class="sourceLineNo">242</span>            double multiplier = Math.sqrt(-2 * Math.log(s) / s);<a name="line.242"></a>
+<span class="sourceLineNo">243</span>            nextNextGaussian = v2 * multiplier;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>            haveNextNextGaussian = true;<a name="line.244"></a>
+<span class="sourceLineNo">245</span>            return v1 * multiplier;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>        }<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    }<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    /**<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * Returns a random integer below the given bound, or 0 if the bound is 0 or<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     * negative. Affects the current fortune.<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     *<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     * @param bound the upper bound (exclusive)<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     * @return the found number<a name="line.253"></a>
+<span class="sourceLineNo">254</span>     */<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    @Override<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    public int nextInt(int bound) {<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        if (bound &lt;= 0) {<a name="line.257"></a>
+<span class="sourceLineNo">258</span>            return 0;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        }<a name="line.259"></a>
+<span class="sourceLineNo">260</span><a name="line.260"></a>
+<span class="sourceLineNo">261</span>        return (int)(nextDouble() * bound);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>    /**<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * &lt;br&gt;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle<a name="line.267"></a>
+<span class="sourceLineNo">268</span>     *<a name="line.268"></a>
+<span class="sourceLineNo">269</span>     * @param elements an array of T; will not be modified<a name="line.269"></a>
+<span class="sourceLineNo">270</span>     * @return a shuffled copy of elements<a name="line.270"></a>
+<span class="sourceLineNo">271</span>     */<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    @Override<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    public &lt;T&gt; T[] shuffle(T[] elements)<a name="line.273"></a>
+<span class="sourceLineNo">274</span>    {<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        int n = elements.length;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>        T[] array = Arrays.copyOf(elements, n);<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        for (int i = 0; i &lt; n; i++)<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        {<a name="line.278"></a>
+<span class="sourceLineNo">279</span>            int r = i + nextIntHasty(n - i);<a name="line.279"></a>
+<span class="sourceLineNo">280</span>            T t = array[r];<a name="line.280"></a>
+<span class="sourceLineNo">281</span>            array[r] = array[i];<a name="line.281"></a>
+<span class="sourceLineNo">282</span>            array[i] = t;<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        }<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        return array;<a name="line.284"></a>
+<span class="sourceLineNo">285</span>    }<a name="line.285"></a>
+<span class="sourceLineNo">286</span><a name="line.286"></a>
+<span class="sourceLineNo">287</span><a name="line.287"></a>
+<span class="sourceLineNo">288</span>    /**<a name="line.288"></a>
+<span class="sourceLineNo">289</span>     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     *<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     * @param length the size of the ordering to produce<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     * @return a random ordering containing all ints from 0 to length (exclusive)<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     */<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    @Override<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    public int[] randomOrdering(int length)<a name="line.296"></a>
+<span class="sourceLineNo">297</span>    {<a name="line.297"></a>
+<span class="sourceLineNo">298</span>        int[] dest = new int[length];<a name="line.298"></a>
+<span class="sourceLineNo">299</span>        for (int i = 0; i &lt; length; i++)<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            int r = nextIntHasty(i + 1);<a name="line.301"></a>
+<span class="sourceLineNo">302</span>            if(r != i)<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                dest[i] = dest[r];<a name="line.303"></a>
+<span class="sourceLineNo">304</span>            dest[r] = i;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>        }<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        return dest;<a name="line.306"></a>
+<span class="sourceLineNo">307</span>    }<a name="line.307"></a>
+<span class="sourceLineNo">308</span><a name="line.308"></a>
+<span class="sourceLineNo">309</span>    /**<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * Uses a slightly optimized technique. This method is considered "hasty" since<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also<a name="line.312"></a>
+<span class="sourceLineNo">313</span>     * has undefined behavior if bound is negative, though it will probably produce a negative<a name="line.313"></a>
+<span class="sourceLineNo">314</span>     * number (just how negative is an open question).<a name="line.314"></a>
+<span class="sourceLineNo">315</span>     *<a name="line.315"></a>
+<span class="sourceLineNo">316</span>     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative<a name="line.316"></a>
+<span class="sourceLineNo">317</span>     * @return the found number<a name="line.317"></a>
+<span class="sourceLineNo">318</span>     */<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    @Override<a name="line.319"></a>
+<span class="sourceLineNo">320</span>    public int nextIntHasty(int bound) {<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        return (int)(nextDouble() * bound);<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    }<a name="line.322"></a>
+<span class="sourceLineNo">323</span><a name="line.323"></a>
+<span class="sourceLineNo">324</span>    /**<a name="line.324"></a>
+<span class="sourceLineNo">325</span>     * Returns a random integer, which may be positive or negative.<a name="line.325"></a>
+<span class="sourceLineNo">326</span>     * @return A random int<a name="line.326"></a>
+<span class="sourceLineNo">327</span>     */<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    @Override<a name="line.328"></a>
+<span class="sourceLineNo">329</span>    public int nextInt() {<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        return (int)((nextDouble() * 2.0 - 1.0) * 0x7FFFFFFF);<a name="line.330"></a>
+<span class="sourceLineNo">331</span>    }<a name="line.331"></a>
+<span class="sourceLineNo">332</span><a name="line.332"></a>
+<span class="sourceLineNo">333</span>    /**<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * Returns a random long, which may be positive or negative.<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     * @return A random long<a name="line.335"></a>
+<span class="sourceLineNo">336</span>     */<a name="line.336"></a>
+<span class="sourceLineNo">337</span>    @Override<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    public long nextLong() {<a name="line.338"></a>
+<span class="sourceLineNo">339</span>        double nx = nextDouble();<a name="line.339"></a>
+<span class="sourceLineNo">340</span>        return (long)((nx * 2.0 - 1.0) * 0x7FFFFFFFFFFFFFFFL);<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    }<a name="line.341"></a>
+<span class="sourceLineNo">342</span><a name="line.342"></a>
+<span class="sourceLineNo">343</span>    /**<a name="line.343"></a>
+<span class="sourceLineNo">344</span>     * Returns a random long below the given bound, or 0 if the bound is 0 or<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * negative.<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     *<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * @param bound the upper bound (exclusive)<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     * @return the found number<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     */<a name="line.349"></a>
+<span class="sourceLineNo">350</span>    @Override<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        public long nextLong(long bound) {<a name="line.351"></a>
+<span class="sourceLineNo">352</span>        if (bound &lt;= 0) {<a name="line.352"></a>
+<span class="sourceLineNo">353</span>            return 0;<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        }<a name="line.354"></a>
+<span class="sourceLineNo">355</span>        double nx = nextDouble();<a name="line.355"></a>
+<span class="sourceLineNo">356</span>        return (long)(nx * bound);<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        //return ((long)(nx * bound)) ^ (long)((nx * 0xFFFFFL) % bound) ^ (long)((nx * 0xFFFFF00000L) % bound);<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    }<a name="line.358"></a>
+<span class="sourceLineNo">359</span>    /**<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     *<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     * @param bits the number of bits to be returned<a name="line.361"></a>
+<span class="sourceLineNo">362</span>     * @return a random int of the number of bits specified.<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     */<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    @Override<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    public int next(int bits) {<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        if(bits &lt;= 0)<a name="line.366"></a>
+<span class="sourceLineNo">367</span>            return 0;<a name="line.367"></a>
+<span class="sourceLineNo">368</span>        if(bits &gt; 32)<a name="line.368"></a>
+<span class="sourceLineNo">369</span>            bits = 32;<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        return (int)(nextDouble() * (1L &lt;&lt; bits));<a name="line.370"></a>
+<span class="sourceLineNo">371</span><a name="line.371"></a>
+<span class="sourceLineNo">372</span>    }<a name="line.372"></a>
 <span class="sourceLineNo">373</span><a name="line.373"></a>
-<span class="sourceLineNo">374</span>    }<a name="line.374"></a>
-<span class="sourceLineNo">375</span><a name="line.375"></a>
-<span class="sourceLineNo">376</span>    @Override<a name="line.376"></a>
-<span class="sourceLineNo">377</span>    public Random asRandom() {<a name="line.377"></a>
-<span class="sourceLineNo">378</span>        if(ran == null)<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        {<a name="line.379"></a>
-<span class="sourceLineNo">380</span>            ran = new CustomRandom(new LightRNG(getState()));<a name="line.380"></a>
-<span class="sourceLineNo">381</span>        }<a name="line.381"></a>
-<span class="sourceLineNo">382</span>        return ran;<a name="line.382"></a>
-<span class="sourceLineNo">383</span>    }<a name="line.383"></a>
-<span class="sourceLineNo">384</span><a name="line.384"></a>
-<span class="sourceLineNo">385</span>    @Override<a name="line.385"></a>
-<span class="sourceLineNo">386</span>    @GwtIncompatible<a name="line.386"></a>
-<span class="sourceLineNo">387</span>    public &lt;T&gt; List&lt;T&gt; randomRotation(List&lt;T&gt; l) {<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        return super.randomRotation(l);<a name="line.388"></a>
-<span class="sourceLineNo">389</span>    }<a name="line.389"></a>
-<span class="sourceLineNo">390</span><a name="line.390"></a>
-<span class="sourceLineNo">391</span>    @Override<a name="line.391"></a>
-<span class="sourceLineNo">392</span>    public &lt;T&gt; Iterable&lt;T&gt; getRandomStartIterable(List&lt;T&gt; list) {<a name="line.392"></a>
-<span class="sourceLineNo">393</span>        return super.getRandomStartIterable(list);<a name="line.393"></a>
-<span class="sourceLineNo">394</span>    }<a name="line.394"></a>
-<span class="sourceLineNo">395</span><a name="line.395"></a>
-<span class="sourceLineNo">396</span><a name="line.396"></a>
-<span class="sourceLineNo">397</span>    /**<a name="line.397"></a>
-<span class="sourceLineNo">398</span>     * Returns a value between min (inclusive) and max (exclusive).<a name="line.398"></a>
-<span class="sourceLineNo">399</span>     * &lt;p/&gt;<a name="line.399"></a>
-<span class="sourceLineNo">400</span>     * The inclusive and exclusive behavior is to match the behavior of the<a name="line.400"></a>
-<span class="sourceLineNo">401</span>     * similar method that deals with floating point values.<a name="line.401"></a>
-<span class="sourceLineNo">402</span>     *<a name="line.402"></a>
-<span class="sourceLineNo">403</span>     * @param min the minimum bound on the return value (inclusive)<a name="line.403"></a>
-<span class="sourceLineNo">404</span>     * @param max the maximum bound on the return value (exclusive)<a name="line.404"></a>
-<span class="sourceLineNo">405</span>     * @return the found value<a name="line.405"></a>
-<span class="sourceLineNo">406</span>     */<a name="line.406"></a>
-<span class="sourceLineNo">407</span>    @Override<a name="line.407"></a>
-<span class="sourceLineNo">408</span>    public long between(long min, long max) {<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        return nextLong(max - min) + min;<a name="line.409"></a>
-<span class="sourceLineNo">410</span>    }<a name="line.410"></a>
-<span class="sourceLineNo">411</span><a name="line.411"></a>
-<span class="sourceLineNo">412</span>    /*<a name="line.412"></a>
-<span class="sourceLineNo">413</span>     * Shuffle an array using the Fisher-Yates algorithm.<a name="line.413"></a>
-<span class="sourceLineNo">414</span>     *<a name="line.414"></a>
-<span class="sourceLineNo">415</span>     * @param elements an array of T; will not be modified<a name="line.415"></a>
-<span class="sourceLineNo">416</span>     * @return a shuffled copy of elements<a name="line.416"></a>
-<span class="sourceLineNo">417</span>     * /<a name="line.417"></a>
-<span class="sourceLineNo">418</span>    @Override<a name="line.418"></a>
-<span class="sourceLineNo">419</span>    @GwtIncompatible<a name="line.419"></a>
-<span class="sourceLineNo">420</span>    public &lt;T&gt; T[] shuffle(T[] elements) {<a name="line.420"></a>
-<span class="sourceLineNo">421</span>        return super.shuffle(elements);<a name="line.421"></a>
-<span class="sourceLineNo">422</span>    }<a name="line.422"></a>
-<span class="sourceLineNo">423</span>*/<a name="line.423"></a>
-<span class="sourceLineNo">424</span>    /**<a name="line.424"></a>
-<span class="sourceLineNo">425</span>     * Shuffle an array using the Fisher-Yates algorithm.<a name="line.425"></a>
-<span class="sourceLineNo">426</span>     *<a name="line.426"></a>
-<span class="sourceLineNo">427</span>     * @param elements an array of T; will not be modified<a name="line.427"></a>
-<span class="sourceLineNo">428</span>     * @param dest     Where to put the shuffle. It MUST have the same length as {@code elements}<a name="line.428"></a>
-<span class="sourceLineNo">429</span>     * @return {@code dest}<a name="line.429"></a>
-<span class="sourceLineNo">430</span>     * @throws IllegalStateException If {@code dest.length != elements.length}<a name="line.430"></a>
-<span class="sourceLineNo">431</span>     */<a name="line.431"></a>
-<span class="sourceLineNo">432</span>    @Override<a name="line.432"></a>
-<span class="sourceLineNo">433</span>    public &lt;T&gt; T[] shuffle(T[] elements, T[] dest) {<a name="line.433"></a>
-<span class="sourceLineNo">434</span>        return super.shuffle(elements, dest);<a name="line.434"></a>
-<span class="sourceLineNo">435</span>    }<a name="line.435"></a>
-<span class="sourceLineNo">436</span><a name="line.436"></a>
-<span class="sourceLineNo">437</span>    @Override<a name="line.437"></a>
-<span class="sourceLineNo">438</span>    public &lt;T&gt; ArrayList&lt;T&gt; shuffle(Collection&lt;T&gt; elements) {<a name="line.438"></a>
-<span class="sourceLineNo">439</span>        return super.shuffle(elements);<a name="line.439"></a>
+<span class="sourceLineNo">374</span>    @Override<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    public Random asRandom() {<a name="line.375"></a>
+<span class="sourceLineNo">376</span>        if(ran == null)<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        {<a name="line.377"></a>
+<span class="sourceLineNo">378</span>            ran = new CustomRandom(new LightRNG(getState()));<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        }<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        return ran;<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    }<a name="line.381"></a>
+<span class="sourceLineNo">382</span><a name="line.382"></a>
+<span class="sourceLineNo">383</span>    /**<a name="line.383"></a>
+<span class="sourceLineNo">384</span>     * Returns a value between min (inclusive) and max (exclusive).<a name="line.384"></a>
+<span class="sourceLineNo">385</span>     * &lt;p/&gt;<a name="line.385"></a>
+<span class="sourceLineNo">386</span>     * The inclusive and exclusive behavior is to match the behavior of the<a name="line.386"></a>
+<span class="sourceLineNo">387</span>     * similar method that deals with floating point values.<a name="line.387"></a>
+<span class="sourceLineNo">388</span>     *<a name="line.388"></a>
+<span class="sourceLineNo">389</span>     * @param min the minimum bound on the return value (inclusive)<a name="line.389"></a>
+<span class="sourceLineNo">390</span>     * @param max the maximum bound on the return value (exclusive)<a name="line.390"></a>
+<span class="sourceLineNo">391</span>     * @return the found value<a name="line.391"></a>
+<span class="sourceLineNo">392</span>     */<a name="line.392"></a>
+<span class="sourceLineNo">393</span>    @Override<a name="line.393"></a>
+<span class="sourceLineNo">394</span>    public long between(long min, long max) {<a name="line.394"></a>
+<span class="sourceLineNo">395</span>        return nextLong(max - min) + min;<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    }<a name="line.396"></a>
+<span class="sourceLineNo">397</span><a name="line.397"></a>
+<span class="sourceLineNo">398</span>    /**<a name="line.398"></a>
+<span class="sourceLineNo">399</span>     * Shuffle an array using the Fisher-Yates algorithm.<a name="line.399"></a>
+<span class="sourceLineNo">400</span>     *<a name="line.400"></a>
+<span class="sourceLineNo">401</span>     * @param elements an array of T; will not be modified<a name="line.401"></a>
+<span class="sourceLineNo">402</span>     * @param dest     Where to put the shuffle. It MUST have the same length as {@code elements}<a name="line.402"></a>
+<span class="sourceLineNo">403</span>     * @return {@code dest}<a name="line.403"></a>
+<span class="sourceLineNo">404</span>     * @throws IllegalStateException If {@code dest.length != elements.length}<a name="line.404"></a>
+<span class="sourceLineNo">405</span>     */<a name="line.405"></a>
+<span class="sourceLineNo">406</span>    @Override<a name="line.406"></a>
+<span class="sourceLineNo">407</span>    public &lt;T&gt; T[] shuffle(T[] elements, T[] dest) {<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        return super.shuffle(elements, dest);<a name="line.408"></a>
+<span class="sourceLineNo">409</span>    }<a name="line.409"></a>
+<span class="sourceLineNo">410</span><a name="line.410"></a>
+<span class="sourceLineNo">411</span>    @Override<a name="line.411"></a>
+<span class="sourceLineNo">412</span>    public &lt;T&gt; ArrayList&lt;T&gt; shuffle(Collection&lt;T&gt; elements) {<a name="line.412"></a>
+<span class="sourceLineNo">413</span>        return super.shuffle(elements);<a name="line.413"></a>
+<span class="sourceLineNo">414</span>    }<a name="line.414"></a>
+<span class="sourceLineNo">415</span><a name="line.415"></a>
+<span class="sourceLineNo">416</span>    @Override<a name="line.416"></a>
+<span class="sourceLineNo">417</span>    public float nextFloat() {<a name="line.417"></a>
+<span class="sourceLineNo">418</span>        return (float)nextDouble();<a name="line.418"></a>
+<span class="sourceLineNo">419</span>    }<a name="line.419"></a>
+<span class="sourceLineNo">420</span><a name="line.420"></a>
+<span class="sourceLineNo">421</span>    @Override<a name="line.421"></a>
+<span class="sourceLineNo">422</span>    public boolean nextBoolean() {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        return nextDouble() &gt;= 0.5;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>    }<a name="line.424"></a>
+<span class="sourceLineNo">425</span><a name="line.425"></a>
+<span class="sourceLineNo">426</span>    @Override<a name="line.426"></a>
+<span class="sourceLineNo">427</span>    public RandomnessSource getRandomness() {<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        return random;<a name="line.428"></a>
+<span class="sourceLineNo">429</span>    }<a name="line.429"></a>
+<span class="sourceLineNo">430</span><a name="line.430"></a>
+<span class="sourceLineNo">431</span>    /**<a name="line.431"></a>
+<span class="sourceLineNo">432</span>     * Reseeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields<a name="line.432"></a>
+<span class="sourceLineNo">433</span>     * that would affect future pseudo-random number generation.<a name="line.433"></a>
+<span class="sourceLineNo">434</span>     * @param random will be used to generate a new seed, but will not be assigned as this object's RandomnessSource<a name="line.434"></a>
+<span class="sourceLineNo">435</span>     */<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    @Override<a name="line.436"></a>
+<span class="sourceLineNo">437</span>    public void setRandomness(RandomnessSource random) {<a name="line.437"></a>
+<span class="sourceLineNo">438</span>        setState(((long)random.next(32) &lt;&lt; 32) | random.next(32));<a name="line.438"></a>
+<span class="sourceLineNo">439</span><a name="line.439"></a>
 <span class="sourceLineNo">440</span>    }<a name="line.440"></a>
 <span class="sourceLineNo">441</span><a name="line.441"></a>
-<span class="sourceLineNo">442</span>    @Override<a name="line.442"></a>
-<span class="sourceLineNo">443</span>    public float nextFloat() {<a name="line.443"></a>
-<span class="sourceLineNo">444</span>        return (float)nextDouble();<a name="line.444"></a>
-<span class="sourceLineNo">445</span>    }<a name="line.445"></a>
-<span class="sourceLineNo">446</span><a name="line.446"></a>
-<span class="sourceLineNo">447</span>    @Override<a name="line.447"></a>
-<span class="sourceLineNo">448</span>    public boolean nextBoolean() {<a name="line.448"></a>
-<span class="sourceLineNo">449</span>        return nextDouble() &gt;= 0.5;<a name="line.449"></a>
-<span class="sourceLineNo">450</span>    }<a name="line.450"></a>
-<span class="sourceLineNo">451</span><a name="line.451"></a>
-<span class="sourceLineNo">452</span>    @Override<a name="line.452"></a>
-<span class="sourceLineNo">453</span>    public RandomnessSource getRandomness() {<a name="line.453"></a>
-<span class="sourceLineNo">454</span>        return random;<a name="line.454"></a>
+<span class="sourceLineNo">442</span>    /**<a name="line.442"></a>
+<span class="sourceLineNo">443</span>     * Creates a copy of this DeckRNG; it will generate the same random numbers, given the same calls in order, as<a name="line.443"></a>
+<span class="sourceLineNo">444</span>     * this DeckRNG at the point copy() is called. The copy will not share references with this DeckRNG.<a name="line.444"></a>
+<span class="sourceLineNo">445</span>     *<a name="line.445"></a>
+<span class="sourceLineNo">446</span>     * @return a copy of this DeckRNG<a name="line.446"></a>
+<span class="sourceLineNo">447</span>     */<a name="line.447"></a>
+<span class="sourceLineNo">448</span>    public RNG copy()<a name="line.448"></a>
+<span class="sourceLineNo">449</span>    {<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        DeckRNG next = new DeckRNG(lastShuffledState);<a name="line.450"></a>
+<span class="sourceLineNo">451</span>        next.random = random.copy();<a name="line.451"></a>
+<span class="sourceLineNo">452</span>        System.arraycopy(deck, 0, next.deck, 0, deck.length);<a name="line.452"></a>
+<span class="sourceLineNo">453</span>        next.step = step;<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        return next;<a name="line.454"></a>
 <span class="sourceLineNo">455</span>    }<a name="line.455"></a>
 <span class="sourceLineNo">456</span><a name="line.456"></a>
 <span class="sourceLineNo">457</span>    /**<a name="line.457"></a>
-<span class="sourceLineNo">458</span>     * Reseeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields<a name="line.458"></a>
-<span class="sourceLineNo">459</span>     * that would affect future pseudo-random number generation.<a name="line.459"></a>
-<span class="sourceLineNo">460</span>     * @param random will be used to generate a new seed, but will not be assigned as this object's RandomnessSource<a name="line.460"></a>
-<span class="sourceLineNo">461</span>     */<a name="line.461"></a>
-<span class="sourceLineNo">462</span>    @Override<a name="line.462"></a>
-<span class="sourceLineNo">463</span>    public void setRandomness(RandomnessSource random) {<a name="line.463"></a>
-<span class="sourceLineNo">464</span>        setState(((long)random.next(32) &lt;&lt; 32) | random.next(32));<a name="line.464"></a>
-<span class="sourceLineNo">465</span><a name="line.465"></a>
-<span class="sourceLineNo">466</span>    }<a name="line.466"></a>
-<span class="sourceLineNo">467</span><a name="line.467"></a>
-<span class="sourceLineNo">468</span>    /**<a name="line.468"></a>
-<span class="sourceLineNo">469</span>     * Creates a copy of this DeckRNG; it will generate the same random numbers, given the same calls in order, as<a name="line.469"></a>
-<span class="sourceLineNo">470</span>     * this DeckRNG at the point copy() is called. The copy will not share references with this DeckRNG.<a name="line.470"></a>
-<span class="sourceLineNo">471</span>     *<a name="line.471"></a>
-<span class="sourceLineNo">472</span>     * @return a copy of this DeckRNG<a name="line.472"></a>
-<span class="sourceLineNo">473</span>     */<a name="line.473"></a>
-<span class="sourceLineNo">474</span>    public RNG copy()<a name="line.474"></a>
-<span class="sourceLineNo">475</span>    {<a name="line.475"></a>
-<span class="sourceLineNo">476</span>        DeckRNG next = new DeckRNG(lastShuffledState);<a name="line.476"></a>
-<span class="sourceLineNo">477</span>        next.random = random.copy();<a name="line.477"></a>
-<span class="sourceLineNo">478</span>        System.arraycopy(deck, 0, next.deck, 0, deck.length);<a name="line.478"></a>
-<span class="sourceLineNo">479</span>        next.step = step;<a name="line.479"></a>
-<span class="sourceLineNo">480</span>        return next;<a name="line.480"></a>
-<span class="sourceLineNo">481</span>    }<a name="line.481"></a>
-<span class="sourceLineNo">482</span><a name="line.482"></a>
-<span class="sourceLineNo">483</span>    /**<a name="line.483"></a>
-<span class="sourceLineNo">484</span>     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as<a name="line.484"></a>
-<span class="sourceLineNo">485</span>     * it can, and then returns output. Will only use a given position in the given data at most once; does this by<a name="line.485"></a>
-<span class="sourceLineNo">486</span>     * shuffling a copy of data and getting a section of it that matches the length of output.<a name="line.486"></a>
-<span class="sourceLineNo">487</span>     *<a name="line.487"></a>
-<span class="sourceLineNo">488</span>     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid<a name="line.488"></a>
-<span class="sourceLineNo">489</span>     * copying or creating a new generic array (a problem on GWT).<a name="line.489"></a>
-<span class="sourceLineNo">490</span>     * @param data an array of T; will not be modified.<a name="line.490"></a>
-<span class="sourceLineNo">491</span>     * @param output an array of T that will be overwritten; should always be instantiated with the portion length<a name="line.491"></a>
-<span class="sourceLineNo">492</span>     * @param &lt;T&gt; can be any non-primitive type.<a name="line.492"></a>
-<span class="sourceLineNo">493</span>     * @return an array of T that has length equal to output's length and may contain null elements if output is shorter<a name="line.493"></a>
-<span class="sourceLineNo">494</span>     * than data<a name="line.494"></a>
-<span class="sourceLineNo">495</span>     */<a name="line.495"></a>
-<span class="sourceLineNo">496</span>    @Override<a name="line.496"></a>
-<span class="sourceLineNo">497</span>    public &lt;T&gt; T[] randomPortion(T[] data, T[] output) {<a name="line.497"></a>
-<span class="sourceLineNo">498</span>        return super.randomPortion(data, output);<a name="line.498"></a>
-<span class="sourceLineNo">499</span>    }<a name="line.499"></a>
-<span class="sourceLineNo">500</span><a name="line.500"></a>
-<span class="sourceLineNo">501</span>    /**<a name="line.501"></a>
-<span class="sourceLineNo">502</span>     * Gets a random portion of a List and returns it as a new List. Will only use a given position in the given<a name="line.502"></a>
-<span class="sourceLineNo">503</span>     * List at most once; does this by shuffling a copy of the List and getting a section of it.<a name="line.503"></a>
-<span class="sourceLineNo">504</span>     *<a name="line.504"></a>
-<span class="sourceLineNo">505</span>     * @param data  a List of T; will not be modified.<a name="line.505"></a>
-<span class="sourceLineNo">506</span>     * @param count the non-negative number of elements to randomly take from data<a name="line.506"></a>
-<span class="sourceLineNo">507</span>     * @return a List of T that has length equal to the smaller of count or data.length<a name="line.507"></a>
-<span class="sourceLineNo">508</span>     */<a name="line.508"></a>
-<span class="sourceLineNo">509</span>    @Override<a name="line.509"></a>
-<span class="sourceLineNo">510</span>    public &lt;T&gt; List&lt;T&gt; randomPortion(List&lt;T&gt; data, int count) {<a name="line.510"></a>
-<span class="sourceLineNo">511</span>        return super.randomPortion(data, count);<a name="line.511"></a>
-<span class="sourceLineNo">512</span>    }<a name="line.512"></a>
-<span class="sourceLineNo">513</span><a name="line.513"></a>
-<span class="sourceLineNo">514</span>    /**<a name="line.514"></a>
-<span class="sourceLineNo">515</span>     * Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.<a name="line.515"></a>
-<span class="sourceLineNo">516</span>     * May return an empty array if the parameters are invalid (end is less than/equal to start, or start is negative).<a name="line.516"></a>
-<span class="sourceLineNo">517</span>     *<a name="line.517"></a>
-<span class="sourceLineNo">518</span>     * @param start the start of the range of numbers to potentially use (inclusive)<a name="line.518"></a>
-<span class="sourceLineNo">519</span>     * @param end   the end of the range of numbers to potentially use (exclusive)<a name="line.519"></a>
-<span class="sourceLineNo">520</span>     * @param count the total number of elements to use; will be less if the range is smaller than count<a name="line.520"></a>
-<span class="sourceLineNo">521</span>     * @return an int array that contains at most one of each number in the range<a name="line.521"></a>
-<span class="sourceLineNo">522</span>     */<a name="line.522"></a>
-<span class="sourceLineNo">523</span>    @Override<a name="line.523"></a>
-<span class="sourceLineNo">524</span>    public int[] randomRange(int start, int end, int count) {<a name="line.524"></a>
-<span class="sourceLineNo">525</span>        return super.randomRange(start, end, count);<a name="line.525"></a>
-<span class="sourceLineNo">526</span>    }<a name="line.526"></a>
-<span class="sourceLineNo">527</span><a name="line.527"></a>
-<span class="sourceLineNo">528</span>    /**<a name="line.528"></a>
-<span class="sourceLineNo">529</span>     * Shuffle an array using the Fisher-Yates algorithm.<a name="line.529"></a>
-<span class="sourceLineNo">530</span>     * @param array an array of double; WILL be modified<a name="line.530"></a>
-<span class="sourceLineNo">531</span>     */<a name="line.531"></a>
-<span class="sourceLineNo">532</span>    private void shuffleInPlace(double[] array)<a name="line.532"></a>
-<span class="sourceLineNo">533</span>    {<a name="line.533"></a>
-<span class="sourceLineNo">534</span>        lastShuffledState = ((LightRNG)random).getState();<a name="line.534"></a>
-<span class="sourceLineNo">535</span>        int n = array.length;<a name="line.535"></a>
-<span class="sourceLineNo">536</span>        System.arraycopy(baseDeck, 0, array, 0, n);<a name="line.536"></a>
-<span class="sourceLineNo">537</span>        for (int i = 0; i &lt; n; i++)<a name="line.537"></a>
-<span class="sourceLineNo">538</span>        {<a name="line.538"></a>
-<span class="sourceLineNo">539</span>            int r = i + ((LightRNG)random).nextInt(n - i);<a name="line.539"></a>
-<span class="sourceLineNo">540</span>            double t = array[r];<a name="line.540"></a>
-<span class="sourceLineNo">541</span>            array[r] = array[i];<a name="line.541"></a>
-<span class="sourceLineNo">542</span>            array[i] =((LightRNG)random).nextDouble(0.0625) + t;<a name="line.542"></a>
-<span class="sourceLineNo">543</span>        }<a name="line.543"></a>
-<span class="sourceLineNo">544</span>    }<a name="line.544"></a>
-<span class="sourceLineNo">545</span><a name="line.545"></a>
-<span class="sourceLineNo">546</span>    /**<a name="line.546"></a>
-<span class="sourceLineNo">547</span>     * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.<a name="line.547"></a>
-<span class="sourceLineNo">548</span>     *<a name="line.548"></a>
-<span class="sourceLineNo">549</span>     * @return a long that can be used as state.<a name="line.549"></a>
-<span class="sourceLineNo">550</span>     */<a name="line.550"></a>
-<span class="sourceLineNo">551</span>    @Override<a name="line.551"></a>
-<span class="sourceLineNo">552</span>    public long getState() {<a name="line.552"></a>
-<span class="sourceLineNo">553</span>        return lastShuffledState;<a name="line.553"></a>
-<span class="sourceLineNo">554</span>    }<a name="line.554"></a>
+<span class="sourceLineNo">458</span>     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as<a name="line.458"></a>
+<span class="sourceLineNo">459</span>     * it can, and then returns output. Will only use a given position in the given data at most once; does this by<a name="line.459"></a>
+<span class="sourceLineNo">460</span>     * shuffling a copy of data and getting a section of it that matches the length of output.<a name="line.460"></a>
+<span class="sourceLineNo">461</span>     *<a name="line.461"></a>
+<span class="sourceLineNo">462</span>     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid<a name="line.462"></a>
+<span class="sourceLineNo">463</span>     * copying or creating a new generic array (a problem on GWT).<a name="line.463"></a>
+<span class="sourceLineNo">464</span>     * @param data an array of T; will not be modified.<a name="line.464"></a>
+<span class="sourceLineNo">465</span>     * @param output an array of T that will be overwritten; should always be instantiated with the portion length<a name="line.465"></a>
+<span class="sourceLineNo">466</span>     * @param &lt;T&gt; can be any non-primitive type.<a name="line.466"></a>
+<span class="sourceLineNo">467</span>     * @return an array of T that has length equal to output's length and may contain null elements if output is shorter<a name="line.467"></a>
+<span class="sourceLineNo">468</span>     * than data<a name="line.468"></a>
+<span class="sourceLineNo">469</span>     */<a name="line.469"></a>
+<span class="sourceLineNo">470</span>    @Override<a name="line.470"></a>
+<span class="sourceLineNo">471</span>    public &lt;T&gt; T[] randomPortion(T[] data, T[] output) {<a name="line.471"></a>
+<span class="sourceLineNo">472</span>        return super.randomPortion(data, output);<a name="line.472"></a>
+<span class="sourceLineNo">473</span>    }<a name="line.473"></a>
+<span class="sourceLineNo">474</span><a name="line.474"></a>
+<span class="sourceLineNo">475</span>    /**<a name="line.475"></a>
+<span class="sourceLineNo">476</span>     * Gets a random portion of a List and returns it as a new List. Will only use a given position in the given<a name="line.476"></a>
+<span class="sourceLineNo">477</span>     * List at most once; does this by shuffling a copy of the List and getting a section of it.<a name="line.477"></a>
+<span class="sourceLineNo">478</span>     *<a name="line.478"></a>
+<span class="sourceLineNo">479</span>     * @param data  a List of T; will not be modified.<a name="line.479"></a>
+<span class="sourceLineNo">480</span>     * @param count the non-negative number of elements to randomly take from data<a name="line.480"></a>
+<span class="sourceLineNo">481</span>     * @return a List of T that has length equal to the smaller of count or data.length<a name="line.481"></a>
+<span class="sourceLineNo">482</span>     */<a name="line.482"></a>
+<span class="sourceLineNo">483</span>    @Override<a name="line.483"></a>
+<span class="sourceLineNo">484</span>    public &lt;T&gt; List&lt;T&gt; randomPortion(List&lt;T&gt; data, int count) {<a name="line.484"></a>
+<span class="sourceLineNo">485</span>        return super.randomPortion(data, count);<a name="line.485"></a>
+<span class="sourceLineNo">486</span>    }<a name="line.486"></a>
+<span class="sourceLineNo">487</span><a name="line.487"></a>
+<span class="sourceLineNo">488</span>    /**<a name="line.488"></a>
+<span class="sourceLineNo">489</span>     * Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.<a name="line.489"></a>
+<span class="sourceLineNo">490</span>     * May return an empty array if the parameters are invalid (end is less than/equal to start, or start is negative).<a name="line.490"></a>
+<span class="sourceLineNo">491</span>     *<a name="line.491"></a>
+<span class="sourceLineNo">492</span>     * @param start the start of the range of numbers to potentially use (inclusive)<a name="line.492"></a>
+<span class="sourceLineNo">493</span>     * @param end   the end of the range of numbers to potentially use (exclusive)<a name="line.493"></a>
+<span class="sourceLineNo">494</span>     * @param count the total number of elements to use; will be less if the range is smaller than count<a name="line.494"></a>
+<span class="sourceLineNo">495</span>     * @return an int array that contains at most one of each number in the range<a name="line.495"></a>
+<span class="sourceLineNo">496</span>     */<a name="line.496"></a>
+<span class="sourceLineNo">497</span>    @Override<a name="line.497"></a>
+<span class="sourceLineNo">498</span>    public int[] randomRange(int start, int end, int count) {<a name="line.498"></a>
+<span class="sourceLineNo">499</span>        return super.randomRange(start, end, count);<a name="line.499"></a>
+<span class="sourceLineNo">500</span>    }<a name="line.500"></a>
+<span class="sourceLineNo">501</span><a name="line.501"></a>
+<span class="sourceLineNo">502</span>    /**<a name="line.502"></a>
+<span class="sourceLineNo">503</span>     * Shuffle an array using the Fisher-Yates algorithm.<a name="line.503"></a>
+<span class="sourceLineNo">504</span>     * @param array an array of double; WILL be modified<a name="line.504"></a>
+<span class="sourceLineNo">505</span>     */<a name="line.505"></a>
+<span class="sourceLineNo">506</span>    private void shuffleInPlace(double[] array)<a name="line.506"></a>
+<span class="sourceLineNo">507</span>    {<a name="line.507"></a>
+<span class="sourceLineNo">508</span>        lastShuffledState = ((LightRNG)random).getState();<a name="line.508"></a>
+<span class="sourceLineNo">509</span>        int n = array.length;<a name="line.509"></a>
+<span class="sourceLineNo">510</span>        System.arraycopy(baseDeck, 0, array, 0, n);<a name="line.510"></a>
+<span class="sourceLineNo">511</span>        for (int i = 0; i &lt; n; i++)<a name="line.511"></a>
+<span class="sourceLineNo">512</span>        {<a name="line.512"></a>
+<span class="sourceLineNo">513</span>            int r = i + ((LightRNG)random).nextInt(n - i);<a name="line.513"></a>
+<span class="sourceLineNo">514</span>            double t = array[r];<a name="line.514"></a>
+<span class="sourceLineNo">515</span>            array[r] = array[i];<a name="line.515"></a>
+<span class="sourceLineNo">516</span>            array[i] =((LightRNG)random).nextDouble(0.0625) + t;<a name="line.516"></a>
+<span class="sourceLineNo">517</span>        }<a name="line.517"></a>
+<span class="sourceLineNo">518</span>    }<a name="line.518"></a>
+<span class="sourceLineNo">519</span><a name="line.519"></a>
+<span class="sourceLineNo">520</span>    /**<a name="line.520"></a>
+<span class="sourceLineNo">521</span>     * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.<a name="line.521"></a>
+<span class="sourceLineNo">522</span>     *<a name="line.522"></a>
+<span class="sourceLineNo">523</span>     * @return a long that can be used as state.<a name="line.523"></a>
+<span class="sourceLineNo">524</span>     */<a name="line.524"></a>
+<span class="sourceLineNo">525</span>    @Override<a name="line.525"></a>
+<span class="sourceLineNo">526</span>    public long getState() {<a name="line.526"></a>
+<span class="sourceLineNo">527</span>        return lastShuffledState;<a name="line.527"></a>
+<span class="sourceLineNo">528</span>    }<a name="line.528"></a>
+<span class="sourceLineNo">529</span><a name="line.529"></a>
+<span class="sourceLineNo">530</span>    /**<a name="line.530"></a>
+<span class="sourceLineNo">531</span>     * Sets the state of the random number generator to a given long, which will alter future random numbers this<a name="line.531"></a>
+<span class="sourceLineNo">532</span>     * produces based on the state. Setting the state always causes the "deck" of random grades to be shuffled.<a name="line.532"></a>
+<span class="sourceLineNo">533</span>     *<a name="line.533"></a>
+<span class="sourceLineNo">534</span>     * @param state any long (this can tolerate states of 0)<a name="line.534"></a>
+<span class="sourceLineNo">535</span>     */<a name="line.535"></a>
+<span class="sourceLineNo">536</span>    @Override<a name="line.536"></a>
+<span class="sourceLineNo">537</span>    public void setState(long state) {<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        ((LightRNG)random).setState(state);<a name="line.538"></a>
+<span class="sourceLineNo">539</span>        shuffleInPlace(deck);<a name="line.539"></a>
+<span class="sourceLineNo">540</span>        step = 0;<a name="line.540"></a>
+<span class="sourceLineNo">541</span>    }<a name="line.541"></a>
+<span class="sourceLineNo">542</span><a name="line.542"></a>
+<span class="sourceLineNo">543</span>    @Override<a name="line.543"></a>
+<span class="sourceLineNo">544</span>    public String toString() {<a name="line.544"></a>
+<span class="sourceLineNo">545</span>        return "DeckRNG{state: 0x" + StringKit.hex(lastShuffledState) + "L, step: 0x" + StringKit.hex(step) + "}";<a name="line.545"></a>
+<span class="sourceLineNo">546</span>    }<a name="line.546"></a>
+<span class="sourceLineNo">547</span><a name="line.547"></a>
+<span class="sourceLineNo">548</span>    @Override<a name="line.548"></a>
+<span class="sourceLineNo">549</span>    public boolean equals(Object o) {<a name="line.549"></a>
+<span class="sourceLineNo">550</span>        if (this == o) return true;<a name="line.550"></a>
+<span class="sourceLineNo">551</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.551"></a>
+<span class="sourceLineNo">552</span>        if (!super.equals(o)) return false;<a name="line.552"></a>
+<span class="sourceLineNo">553</span><a name="line.553"></a>
+<span class="sourceLineNo">554</span>        DeckRNG deckRNG = (DeckRNG) o;<a name="line.554"></a>
 <span class="sourceLineNo">555</span><a name="line.555"></a>
-<span class="sourceLineNo">556</span>    /**<a name="line.556"></a>
-<span class="sourceLineNo">557</span>     * Sets the state of the random number generator to a given long, which will alter future random numbers this<a name="line.557"></a>
-<span class="sourceLineNo">558</span>     * produces based on the state. Setting the state always causes the "deck" of random grades to be shuffled.<a name="line.558"></a>
-<span class="sourceLineNo">559</span>     *<a name="line.559"></a>
-<span class="sourceLineNo">560</span>     * @param state any long (this can tolerate states of 0)<a name="line.560"></a>
-<span class="sourceLineNo">561</span>     */<a name="line.561"></a>
-<span class="sourceLineNo">562</span>    @Override<a name="line.562"></a>
-<span class="sourceLineNo">563</span>    public void setState(long state) {<a name="line.563"></a>
-<span class="sourceLineNo">564</span>        ((LightRNG)random).setState(state);<a name="line.564"></a>
-<span class="sourceLineNo">565</span>        shuffleInPlace(deck);<a name="line.565"></a>
-<span class="sourceLineNo">566</span>        step = 0;<a name="line.566"></a>
-<span class="sourceLineNo">567</span>    }<a name="line.567"></a>
-<span class="sourceLineNo">568</span><a name="line.568"></a>
-<span class="sourceLineNo">569</span>    @Override<a name="line.569"></a>
-<span class="sourceLineNo">570</span>    public String toString() {<a name="line.570"></a>
-<span class="sourceLineNo">571</span>        return "DeckRNG{state: 0x" + StringKit.hex(lastShuffledState) + "L, step: 0x" + StringKit.hex(step) + "}";<a name="line.571"></a>
-<span class="sourceLineNo">572</span>    }<a name="line.572"></a>
-<span class="sourceLineNo">573</span><a name="line.573"></a>
-<span class="sourceLineNo">574</span>    @Override<a name="line.574"></a>
-<span class="sourceLineNo">575</span>    public boolean equals(Object o) {<a name="line.575"></a>
-<span class="sourceLineNo">576</span>        if (this == o) return true;<a name="line.576"></a>
-<span class="sourceLineNo">577</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.577"></a>
-<span class="sourceLineNo">578</span>        if (!super.equals(o)) return false;<a name="line.578"></a>
-<span class="sourceLineNo">579</span><a name="line.579"></a>
-<span class="sourceLineNo">580</span>        DeckRNG deckRNG = (DeckRNG) o;<a name="line.580"></a>
-<span class="sourceLineNo">581</span><a name="line.581"></a>
-<span class="sourceLineNo">582</span>        if (step != deckRNG.step) return false;<a name="line.582"></a>
-<span class="sourceLineNo">583</span>        return lastShuffledState == deckRNG.lastShuffledState;<a name="line.583"></a>
-<span class="sourceLineNo">584</span>    }<a name="line.584"></a>
-<span class="sourceLineNo">585</span><a name="line.585"></a>
-<span class="sourceLineNo">586</span>    @Override<a name="line.586"></a>
-<span class="sourceLineNo">587</span>    public int hashCode() {<a name="line.587"></a>
-<span class="sourceLineNo">588</span>        int result = random.hashCode();<a name="line.588"></a>
-<span class="sourceLineNo">589</span>        result = 31 * result + step;<a name="line.589"></a>
-<span class="sourceLineNo">590</span>        result = 31 * result + (int) (lastShuffledState ^ (lastShuffledState &gt;&gt;&gt; 32));<a name="line.590"></a>
-<span class="sourceLineNo">591</span>        return result;<a name="line.591"></a>
-<span class="sourceLineNo">592</span>    }<a name="line.592"></a>
-<span class="sourceLineNo">593</span><a name="line.593"></a>
-<span class="sourceLineNo">594</span>    public int getStep() {<a name="line.594"></a>
-<span class="sourceLineNo">595</span>        return step;<a name="line.595"></a>
-<span class="sourceLineNo">596</span>    }<a name="line.596"></a>
-<span class="sourceLineNo">597</span><a name="line.597"></a>
-<span class="sourceLineNo">598</span>    public void setStep(int step) {<a name="line.598"></a>
-<span class="sourceLineNo">599</span>        this.step = step;<a name="line.599"></a>
-<span class="sourceLineNo">600</span>    }<a name="line.600"></a>
-<span class="sourceLineNo">601</span>}<a name="line.601"></a>
+<span class="sourceLineNo">556</span>        if (step != deckRNG.step) return false;<a name="line.556"></a>
+<span class="sourceLineNo">557</span>        return lastShuffledState == deckRNG.lastShuffledState;<a name="line.557"></a>
+<span class="sourceLineNo">558</span>    }<a name="line.558"></a>
+<span class="sourceLineNo">559</span><a name="line.559"></a>
+<span class="sourceLineNo">560</span>    @Override<a name="line.560"></a>
+<span class="sourceLineNo">561</span>    public int hashCode() {<a name="line.561"></a>
+<span class="sourceLineNo">562</span>        int result = random.hashCode();<a name="line.562"></a>
+<span class="sourceLineNo">563</span>        result = 31 * result + step;<a name="line.563"></a>
+<span class="sourceLineNo">564</span>        result = 31 * result + (int) (lastShuffledState ^ (lastShuffledState &gt;&gt;&gt; 32));<a name="line.564"></a>
+<span class="sourceLineNo">565</span>        return result;<a name="line.565"></a>
+<span class="sourceLineNo">566</span>    }<a name="line.566"></a>
+<span class="sourceLineNo">567</span><a name="line.567"></a>
+<span class="sourceLineNo">568</span>    public int getStep() {<a name="line.568"></a>
+<span class="sourceLineNo">569</span>        return step;<a name="line.569"></a>
+<span class="sourceLineNo">570</span>    }<a name="line.570"></a>
+<span class="sourceLineNo">571</span><a name="line.571"></a>
+<span class="sourceLineNo">572</span>    public void setStep(int step) {<a name="line.572"></a>
+<span class="sourceLineNo">573</span>        this.step = step;<a name="line.573"></a>
+<span class="sourceLineNo">574</span>    }<a name="line.574"></a>
+<span class="sourceLineNo">575</span>}<a name="line.575"></a>
 
 
 
