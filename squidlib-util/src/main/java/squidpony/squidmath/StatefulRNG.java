@@ -35,8 +35,8 @@ public class StatefulRNG extends RNG {
      * technique assigns to all 64 bits and has less correlation between similar inputs causing similar starting states.
      * It's also faster, but that shouldn't matter in a constructor.
      */
-    public StatefulRNG(String seedString) {
-        this(new LightRNG(CrossHash.Wisp.hash64(seedString)));
+    public StatefulRNG(CharSequence seedString) {
+        this(new LightRNG(CrossHash.hash64(seedString)));
     }
 
     @Override

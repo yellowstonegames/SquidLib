@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import squidpony.StringKit;
-import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
 import java.util.*;
@@ -49,8 +48,8 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      *
      * @param seedString a String to use as a seed; will be hashed in a uniform way across platforms.
      */
-    public DeckRNG(String seedString) {
-        this(CrossHash.hash(seedString));
+    public DeckRNG(CharSequence seedString) {
+        this(CrossHash.hash64(seedString));
     }
     /**
      * Seeds this DeckRNG using the RandomnessSource it is given. Does not assign the RandomnessSource to any fields
@@ -271,7 +270,6 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      * @return a shuffled copy of elements
      */
     @Override
-    @GwtIncompatible
     public <T> T[] shuffle(T[] elements)
     {
         int n = elements.length;
@@ -382,18 +380,6 @@ public class DeckRNG extends StatefulRNG implements Serializable {
         return ran;
     }
 
-    @Override
-    @GwtIncompatible
-    public <T> List<T> randomRotation(List<T> l) {
-        return super.randomRotation(l);
-    }
-
-    @Override
-    public <T> Iterable<T> getRandomStartIterable(List<T> list) {
-        return super.getRandomStartIterable(list);
-    }
-
-
     /**
      * Returns a value between min (inclusive) and max (exclusive).
      * <p/>
@@ -409,18 +395,6 @@ public class DeckRNG extends StatefulRNG implements Serializable {
         return nextLong(max - min) + min;
     }
 
-    /*
-     * Shuffle an array using the Fisher-Yates algorithm.
-     *
-     * @param elements an array of T; will not be modified
-     * @return a shuffled copy of elements
-     * /
-    @Override
-    @GwtIncompatible
-    public <T> T[] shuffle(T[] elements) {
-        return super.shuffle(elements);
-    }
-*/
     /**
      * Shuffle an array using the Fisher-Yates algorithm.
      *

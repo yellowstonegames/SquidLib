@@ -1,9 +1,8 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.GwtIncompatible;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
@@ -83,7 +82,7 @@ public class DharmaRNG extends RNG implements Serializable{
      *
      * @param seedString a String as a seed
      */
-    public DharmaRNG(String seedString) {
+    public DharmaRNG(CharSequence seedString) {
         super(seedString);
     }
 
@@ -381,38 +380,6 @@ public class DharmaRNG extends RNG implements Serializable{
 
     }
 
-    @Override
-    public Random asRandom() {
-        return super.asRandom();
-    }
-
-    @Override
-    @GwtIncompatible
-    public <T> List<T> randomRotation(List<T> l) {
-        return super.randomRotation(l);
-    }
-
-    @Override
-    public <T> Iterable<T> getRandomStartIterable(List<T> list) {
-        return super.getRandomStartIterable(list);
-    }
-/*
-    @Override
-    @GwtIncompatible
-    public <T> T[] shuffle(T[] elements) {
-        return super.shuffle(elements);
-    }
-*/
-    @Override
-    public <T> T[] shuffle(T[] elements, T[] dest) {
-        return super.shuffle(elements, dest);
-    }
-
-    @Override
-    public <T> ArrayList<T> shuffle(Collection<T> elements) {
-        return super.shuffle(elements);
-    }
-
     /**
      * Returns a value between min (inclusive) and max (exclusive).
      * <p>
@@ -427,33 +394,6 @@ public class DharmaRNG extends RNG implements Serializable{
     public long between(long min, long max) {
         return min + nextLong(max - min);
     }
-
-    /**
-     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
-     * <br>
-     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-     *
-     * @param elements an array of T; will not be modified
-     * @return a shuffled copy of elements
-     */
-    @GwtIncompatible
-    @Override
-    public <T> T[] shuffle(T[] elements) {
-        return super.shuffle(elements);
-    }
-
-    /**
-     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
-     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
-     *
-     * @param length the size of the ordering to produce
-     * @return a random ordering containing all ints from 0 to length (exclusive)
-     */
-    @Override
-    public int[] randomOrdering(int length) {
-        return super.randomOrdering(length);
-    }
-
 
     /**
      * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.

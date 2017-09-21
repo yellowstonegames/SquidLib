@@ -1,12 +1,8 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.GwtIncompatible;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 /**
  * A subclass of StatefulRNG (and thus RNG) that allows customizing many parts of the random number generation.
@@ -99,7 +95,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
      *
      * @param seed used to seed the default RandomnessSource.
      */
-    public EditRNG(final String seed) {
+    public EditRNG(final CharSequence seed) {
         super(seed);
     }
 
@@ -459,32 +455,6 @@ public class EditRNG extends StatefulRNG implements Serializable{
     }
 
     @Override
-    public Random asRandom() {
-        return super.asRandom();
-    }
-
-    @Override
-    @GwtIncompatible
-    public <T> List<T> randomRotation(List<T> l) {
-        return super.randomRotation(l);
-    }
-
-    @Override
-    public <T> Iterable<T> getRandomStartIterable(List<T> list) {
-        return super.getRandomStartIterable(list);
-    }
-
-    @Override
-    public <T> T[] shuffle(T[] elements, T[] dest) {
-        return super.shuffle(elements, dest);
-    }
-
-    @Override
-    public <T> ArrayList<T> shuffle(Collection<T> elements) {
-        return super.shuffle(elements);
-    }
-
-    @Override
     public float nextFloat() {
         return (float)nextDouble();
     }
@@ -617,38 +587,9 @@ public class EditRNG extends StatefulRNG implements Serializable{
     @Override
     public int hashCode() {
         int result = super.hashCode() * 31;
-        long temp;
-        temp = NumberTools.doubleToLongBits(expected);
-        result += (int) (temp ^ (temp >>> 32));
-        temp = NumberTools.doubleToLongBits(centrality);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result += NumberTools.doubleToMixedIntBits(expected);
+        result = 31 * result + NumberTools.doubleToMixedIntBits(centrality);
         return result;
-    }
-
-    /**
-     * Shuffle an array using the Fisher-Yates algorithm. Not GWT-compatible; use the overload that takes two arrays.
-     * <br>
-     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-     *
-     * @param elements an array of T; will not be modified
-     * @return a shuffled copy of elements
-     */
-    @GwtIncompatible
-    @Override
-    public <T> T[] shuffle(T[] elements) {
-        return super.shuffle(elements);
-    }
-
-    /**
-     * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
-     * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
-     *
-     * @param length the size of the ordering to produce
-     * @return a random ordering containing all ints from 0 to length (exclusive)
-     */
-    @Override
-    public int[] randomOrdering(int length) {
-        return super.randomOrdering(length);
     }
 
     /**
