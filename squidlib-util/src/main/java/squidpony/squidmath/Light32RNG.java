@@ -62,7 +62,7 @@ public class Light32RNG implements StatefulRandomness, RandomnessSource, Seriali
     }
 
     public final int nextInt() {
-        int z = (state += (state == 0) ? (inc += 0x632BE5AC) : inc);
+        int z = (state += (state == 0) ? (inc += 0x632BE5A6) : inc);
         z = (z ^ (z >>> 16)) * 0x85EBCA6B;
         z = (z ^ (z >>> 13)) * 0xC2B2AE35;
         return z ^ (z >>> 16);
@@ -77,7 +77,7 @@ public class Light32RNG implements StatefulRandomness, RandomnessSource, Seriali
      */
     @Override
     public final int next(int bits) {
-        int z = (state += (state == 0) ? (inc += 0x632BE5AC) : inc);
+        int z = (state += (state == 0) ? (inc += 0x632BE5A6) : inc);
         z = (z ^ (z >>> 16)) * 0x85EBCA6B;
         z = (z ^ (z >>> 13)) * 0xC2B2AE35;
         return (z ^ (z >>> 16)) >>> (32 - bits);
@@ -93,11 +93,11 @@ public class Light32RNG implements StatefulRandomness, RandomnessSource, Seriali
      */
     @Override
     public final long nextLong() {
-        int y = (state += (state == 0) ? (inc += 0x632BE5AC) : inc),
-                z = (state += (state == 0) ? (inc += 0x632BE5AC) : inc);
+        int y = (state += (state == 0) ? (inc += 0x632BE5A6) : inc),
+                z = (state += (state == 0) ? (inc += 0x632BE5A6) : inc);
         y = (y ^ (y >>> 16)) * 0x85EBCA6B;
-        y = (y ^ (y >>> 13)) * 0xC2B2AE35;
         z = (z ^ (z >>> 16)) * 0x85EBCA6B;
+        y = (y ^ (y >>> 13)) * 0xC2B2AE35;
         z = (z ^ (z >>> 13)) * 0xC2B2AE35;
         return (long)(y ^ (y >>> 16)) << 32 ^ (z ^ (z >>> 16));
     }
