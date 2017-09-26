@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/Dice.html#line.21">Dice</a>
+public class <a href="../../src-html/squidpony/squidmath/Dice.html#line.19">Dice</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Class for emulating various traditional RPG-style dice rolls.
@@ -180,15 +180,6 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#bestOf-int-int-int-">bestOf</a></span>(int&nbsp;n,
-      int&nbsp;dice,
-      int&nbsp;sides)</code>
-<div class="block">Rolls the given number of dice with the given number of sides and returns
- the total of the best n dice.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#bestOf-int-int-java.lang.String-">bestOf</a></span>(int&nbsp;n,
       int&nbsp;dice,
       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</code>
@@ -196,38 +187,40 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
  to the roll group string.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#bestOf-int-java.util.List-">bestOf</a></span>(int&nbsp;n,
-      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;pool)</code>
-<div class="block">Totals the highest n numbers in the pool.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#independentRolls-int-int-">independentRolls</a></span>(int&nbsp;n,
                 int&nbsp;sides)</code>
 <div class="block">Get a list of the independent results of n rolls of dice with the given
  number of sides.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#roll-java.lang.String-">roll</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;rollCode)</code>
+<div class="block">Evaluate the String <code>rollCode</code> as dice roll notation and roll to get a random result of that dice roll.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#rollDice-int-int-">rollDice</a></span>(int&nbsp;n,
         int&nbsp;sides)</code>
 <div class="block">Emulate a dice roll and return the sum.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#rollGroup-java.lang.String-">rollGroup</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</code>
-<div class="block">Turn the string to a randomized number.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#setRandom-squidpony.squidmath.RNG-">setRandom</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Sets the random number generator to be used.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#worstOf-int-int-java.lang.String-">worstOf</a></span>(int&nbsp;n,
+       int&nbsp;dice,
+       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</code>
+<div class="block">Find the worst n totals from the provided number of dice rolled according
+ to the roll group string.</div>
 </td>
 </tr>
 </table>
@@ -258,7 +251,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Dice</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.31">Dice</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.29">Dice</a>()</pre>
 <div class="block">Creates a new dice roller that uses a random RNG seed for an RNG that it owns.</div>
 </li>
 </ul>
@@ -268,7 +261,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Dice</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.41">Dice</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.39">Dice</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Creates a new dice roller that uses the given RNG, which can be seeded before it's given here. The RNG will be
  shared, not copied, so requesting a random number from the same RNG in another place may change the value of the
  next die roll this makes, and dice rolls this makes will change the state of the shared RNG.</div>
@@ -284,7 +277,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Dice</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.50">Dice</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.48">Dice</a>(long&nbsp;seed)</pre>
 <div class="block">Creates a new dice roller that will use its own RNG, seeded with the given seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -298,7 +291,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Dice</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.58">Dice</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.56">Dice</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
 <div class="block">Creates a new dice roller that will use its own RNG, seeded with the given seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -320,7 +313,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setRandom</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.70">setRandom</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.68">setRandom</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Sets the random number generator to be used.
 
  This method does not need to be called before using the methods of this
@@ -331,55 +324,37 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
-<a name="bestOf-int-int-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>bestOf</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.83">bestOf</a>(int&nbsp;n,
-                  int&nbsp;dice,
-                  int&nbsp;sides)</pre>
-<div class="block">Rolls the given number of dice with the given number of sides and returns
- the total of the best n dice.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>n</code> - number of best dice to total</dd>
-<dd><code>dice</code> - total number of dice to roll</dd>
-<dd><code>sides</code> - number of sides on the dice</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>sum of best n out of <em>dice</em><b>d</b><em>sides</em></dd>
-</dl>
-</li>
-</ul>
-<a name="bestOf-int-java.util.List-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>bestOf</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.101">bestOf</a>(int&nbsp;n,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;pool)</pre>
-<div class="block">Totals the highest n numbers in the pool.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>n</code> - the number of dice to be totaled</dd>
-<dd><code>pool</code> - the dice to pick from</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the sum</dd>
-</dl>
-</li>
-</ul>
 <a name="bestOf-int-int-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>bestOf</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.121">bestOf</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.155">bestOf</a>(int&nbsp;n,
                   int&nbsp;dice,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</pre>
 <div class="block">Find the best n totals from the provided number of dice rolled according
+ to the roll group string.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>n</code> - number of roll groups to total</dd>
+<dd><code>dice</code> - number of roll groups to roll</dd>
+<dd><code>group</code> - string encoded roll grouping</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the sum</dd>
+</dl>
+</li>
+</ul>
+<a name="worstOf-int-int-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>worstOf</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.175">worstOf</a>(int&nbsp;n,
+                   int&nbsp;dice,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</pre>
+<div class="block">Find the worst n totals from the provided number of dice rolled according
  to the roll group string.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -397,7 +372,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rollDice</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.139">rollDice</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.193">rollDice</a>(int&nbsp;n,
                     int&nbsp;sides)</pre>
 <div class="block">Emulate a dice roll and return the sum.</div>
 <dl>
@@ -415,8 +390,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>independentRolls</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.155">independentRolls</a>(int&nbsp;n,
-                                      int&nbsp;sides)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.209">independentRolls</a>(int&nbsp;n,
+                               int&nbsp;sides)</pre>
 <div class="block">Get a list of the independent results of n rolls of dice with the given
  number of sides.</div>
 <dl>
@@ -428,25 +403,34 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
-<a name="rollGroup-java.lang.String-">
+<a name="roll-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>rollGroup</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.177">rollGroup</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</pre>
-<div class="block">Turn the string to a randomized number.
-
- The following types of strings are supported "42": simple absolute string
- "10:20": simple random range (inclusive between 10 and 20) "d6": synonym
- for "1d6" "3d6": sum of 3 6-sided dice "3:4d6": best 3 of 4 6-sided dice
-
- The following types of suffixes are supported "+4": add 4 to the value
- "-3": subtract 3 from the value "*100": multiply value by 100 "/8":
- divide value by 8</div>
+<h4>roll</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.239">roll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;rollCode)</pre>
+<div class="block">Evaluate the String <code>rollCode</code> as dice roll notation and roll to get a random result of that dice roll.
+ This is the main way of using the Dice class. The following notation is supported:
+ <ul>
+     <li><code>42</code> : simple absolute string</li>
+     <li><code>10:20</code> : simple random range (inclusive between 10 and 20)</li>
+     <li><code>3d6</code> : sum of 3 6-sided dice</li>
+     <li><code>d6</code> : synonym for <code>1d6</code></li>
+     <li><code>3&gt;4d6</code> : best 3 of 4 6-sided dice</li>
+     <li><code>3:4d6</code> : synonym for <code>3&gt;4d6</code>; older syntax</li>
+     <li><code>2&lt;5d6</code> : worst 2 of 5 6-sided dice</li>
+ </ul>
+ The following types of suffixes are supported:
+ <ul>
+     <li><code>+4</code> : add 4 to the value</li>
+     <li><code>-3</code> : subtract 3 from the value</li>
+     <li><code>*100</code> : multiply value by 100</li>
+     <li><code>/8</code> : divide value by 8</li>
+ </ul></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>group</code> - string encoded roll grouping</dd>
+<dd><code>rollCode</code> - string using dice roll notation</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>random number</dd>
 </dl>
