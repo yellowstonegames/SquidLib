@@ -8,6 +8,7 @@ import org.junit.Test;
  */
 public class DiceTest
 {
+    //uncomment when you want to know what the seeded RNG will produce; it should produce this reliably
     //@Test
     public void showDiceResults()
     {
@@ -23,6 +24,8 @@ public class DiceTest
         System.out.println(d.roll("10:11")); // 11
         System.out.println(d.roll("10:11")); // 11
         System.out.println(d.roll("10:11")); // 10
+        System.out.println(d.roll("5!4")); // 24
+        System.out.println(d.roll("10!2")); // 38
     }
     @Test
     public void testDiceResults()
@@ -39,5 +42,7 @@ public class DiceTest
         Assert.assertEquals(d.roll("10:11"), 11);
         Assert.assertEquals(d.roll("10:11"), 11);
         Assert.assertEquals(d.roll("10:11"), 10);
+        Assert.assertEquals(d.roll("5!4"), 24);
+        Assert.assertEquals(d.roll("10!2"), 38);
     }
 }

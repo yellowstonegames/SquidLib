@@ -9,18 +9,22 @@ import java.io.Serializable;
 
 /**
  * Class for emulating various traditional RPG-style dice rolls.
- *
+ * Supports rolling multiple virtual dice of arbitrary size, summing all, the highest <i>n</i>, or the lowest <i>n</i>
+ * dice, treating dice as "exploding" as in some tabletop games (where the max result is rolled again and added),
+ * getting value from inside a range, and applying simple arithmetic modifiers to the result (like adding a number).
+ * <br>
  * Based on code from the Blacken library.
  *
  * @author yam655
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
+ * @author Tommy Ettinger
  */
 @Beta
 public class Dice implements Serializable {
 
     private static final long serialVersionUID = -488902743486431146L;
 
-    private static final Pattern guessPattern = Pattern.compile("\\s*(\\d+)?\\s*(?:([:><])\\s*(\\d+))??\\s*(?:([d:])\\s*(\\d+))?\\s*(?:([+/*-])\\s*(\\d+))?\\s*");
+    private static final Pattern guessPattern = Pattern.compile("\\s*(\\d+)?\\s*(?:([:><])\\s*(\\d+))??\\s*(?:([d:!])\\s*(\\d+))?\\s*(?:([+/*-])\\s*(\\d+))?\\s*");
     private RNG rng;
     private transient IntVLA temp = new IntVLA(20);
     /**
@@ -199,6 +203,23 @@ public class Dice implements Serializable {
     }
 
     /**
+     * Emulate an exploding dice roll and return the sum.
+     *
+     * @param n number of dice to sum
+     * @param sides number of sides on the rollDice; should be greater than 1
+     * @return sum of rollDice
+     */
+    public int rollExplodingDice(int n, int sides) {
+        int ret = 0, curr;
+        if(sides <= 1) return n; // avoid infinite loop, act like they can't explode
+        for (int i = 0; i < n;) {
+            ret += (curr = rng.nextIntHasty(sides) + 1);
+            if(curr != sides) i++;
+        }
+        return ret;
+    }
+
+    /**
      * Get a list of the independent results of n rolls of dice with the given
      * number of sides.
      *
@@ -216,15 +237,36 @@ public class Dice implements Serializable {
 
     /**
      * Evaluate the String {@code rollCode} as dice roll notation and roll to get a random result of that dice roll.
-     * This is the main way of using the Dice class. The following notation is supported:
+     * This is the main way of using the Dice class. This effectively allows rolling one or more dice and performing
+     * certain operations on the dice and their result. One of the more frequent uses is rolling some amount of dice and
+     * summing their values, which can be done with e.g. "4d10" to roll four ten-sided dice and add up their results.
+     * You can choose to sum only some of the dice, either the "n highest" or "n lowest" values in a group, with "3>4d6"
+     * to sum the three greatest-value dice in four rolls of six-sided dice, or "2<3d8" to sum the two lowest-value dice
+     * in three rolls of eight-sided dice. You can apply modifiers to these results, such as "1d20+7" to roll one
+     * twenty-sided die and add 7 to its result. You can get a random value in an inclusive range with "50:100", which
+     * is technically equivalent to "1d51+49" but is easier to read and understand. You can treat dice as "exploding,"
+     * where any dice that get the maximum result are rolled again and added to the total along with the previous
+     * maximum result. As an example, if two exploding six-sided dice are rolled, and their results are 3 and 6, then
+     * because 6 is the maximum value it is rolled again and added to the earlier rolls; if the additional roll is a 5,
+     * then the sum is 3 + 6 + 5 (for a total of 14), but if the additional roll was a 6, then it would be rolled again
+     * and added again, potentially many times if 6 is rolled continually. Some players may be familiar with this game
+     * mechanic from various tabletop games, but many potential players might not be, so it should be explained if you
+     * show the kinds of dice being rolled to players. The syntax used for exploding dice replaced the "d" in "3d6" for
+     * normal dice with "!", making "3!6" for exploding dice. Exploding dice and inclusive ranges are not supported with
+     * best-of and worst-of notation.
+     * <br>
+     * The following notation is supported:
      * <ul>
      *     <li>{@code 42} : simple absolute string</li>
-     *     <li>{@code 10:20} : simple random range (inclusive between 10 and 20)</li>
      *     <li>{@code 3d6} : sum of 3 6-sided dice</li>
      *     <li>{@code d6} : synonym for {@code 1d6}</li>
      *     <li>{@code 3>4d6} : best 3 of 4 6-sided dice</li>
      *     <li>{@code 3:4d6} : synonym for {@code 3>4d6}; older syntax</li>
      *     <li>{@code 2<5d6} : worst 2 of 5 6-sided dice</li>
+     *     <li>{@code 10:20} : simple random range (inclusive between 10 and 20)</li>
+     *     <li>{@code :20} : synonym for {@code 0:20}</li>
+     *     <li>{@code 3!6} : sum of 3 "exploding" 6-sided dice; see above for the semantics of "exploding" dice</li>
+     *     <li>{@code !6} : synonym for {@code 1!6}</li>
      * </ul>
      * The following types of suffixes are supported:
      * <ul>
@@ -244,7 +286,7 @@ public class Dice implements Serializable {
             String num1 = mat.group(1); // number constant
             String wmode = mat.group(2); // between notation
             String wnum = mat.group(3); // number constant
-            String mode = mat.group(4); // d or colon
+            String mode = mat.group(4); // dice, range, or explode
             String num2 = mat.group(5); // number constant
             String pmode = mat.group(6); // math operation
             String pnum = mat.group(7); // number constant
@@ -268,6 +310,8 @@ public class Dice implements Serializable {
                     }
                 } else if ("d".equals(mode)) {
                     ret = rollDice(a, b);
+                } else if ("!".equals(mode)) {
+                    ret = rollExplodingDice(a, b);
                 } else if (":".equals(mode)) {
                     ret = a + rng.nextIntHasty(b + 1 - a);
                 }
@@ -282,6 +326,9 @@ public class Dice implements Serializable {
                     switch (mode) {
                         case "d":
                             ret = rollDice(1, b);
+                            break;
+                        case "!":
+                            ret = rollExplodingDice(1, b);
                             break;
                         case ":":
                             ret = rng.nextIntHasty(b + 1);
