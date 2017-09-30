@@ -200,6 +200,11 @@ public class EverythingDemo extends ApplicationAdapter {
         colorCenters[18] = new SquidColorCenter(new Filters.DistinctRedGreenFilter());
         colorCenters[19] = colorCenters[18];
 
+        // reduces the amount of colors we need by using one color for any two extremely similar values.
+        // you can use granularity = 2 without much difference (it may perform better), but granularity starts to
+        // take a toll on visual quality at 3 or higher.
+        DefaultResources.getSCC().granularity = 1;
+
         batch = new SpriteBatch();
         width = 90;
         height = 26;
@@ -208,7 +213,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //Only needed if totalWidth and/or totalHeight is 257 or larger
         Coord.expandPoolTo(totalWidth, totalHeight);
         dungeonGen = new DungeonGenerator(totalWidth, totalHeight, rng);
-        dungeonGen.addWater(16, 6);
+        dungeonGen.addWater(36, 6);
         dungeonGen.addGrass(15);
         dungeonGen.addBoulders(5);
         dungeonGen.addDoors(12, true);
@@ -285,7 +290,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
-        currentCenter = 7;
+        currentCenter = 8;
 
         fgCenter = colorCenters[currentCenter * 2];
         bgCenter = colorCenters[currentCenter * 2 + 1];
@@ -312,7 +317,7 @@ public class EverythingDemo extends ApplicationAdapter {
         fov = new FOV(FOV.RIPPLE_TIGHT);
         res = DungeonUtility.generateResistances(decoDungeon);
         floors = new GreasedRegion(res, 0.99);
-        fovmap = fov.calculateFOV(res, playerPos.x, playerPos.y, 8, Radius.SQUARE);
+        fovmap = fov.calculateFOV(res, playerPos.x, playerPos.y, 8, Radius.CIRCLE);
         getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
         getToPlayer.setGoal(playerPos);
@@ -340,7 +345,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // the line after this automatically sets the brightness of backgrounds in display to match their contents, so
         // here we simply fill the contents of display with our dungeon (but we don't set the actual colors yet).
         ArrayTools.insert(decoDungeon, display.getForegroundLayer().contents, 0, 0);
-        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.011);
+        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.012);
         seen = new boolean[decoDungeon.length][decoDungeon[0].length];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -575,11 +580,11 @@ public class EverythingDemo extends ApplicationAdapter {
                 res = DungeonUtility.generateResistances(decoDungeon);
                 floors.refill(res, 0.99);
                 // recalculate FOV, store it in fovmap for the render to use.
-                fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
+                fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.CIRCLE);
 
             } else {
                 // recalculate FOV, store it in fovmap for the render to use.
-                fovmap = fov.calculateFOV(res, newX, newY, 8, Radius.SQUARE);
+                fovmap = fov.calculateFOV(res, newX, newY, 8, Radius.CIRCLE);
                 //player.gridX = newX;
                 //player.gridY = newY;
 
@@ -641,7 +646,7 @@ public class EverythingDemo extends ApplicationAdapter {
         int monCount = monplaces.size();
 
         // recalculate FOV, store it in fovmap for the render to use.
-        fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.SQUARE);
+        fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.CIRCLE);
         // handle monster turns
         ArrayList<Coord> nextMovePositions;
         for(int ci = 0; ci < monCount; ci++)
@@ -831,8 +836,10 @@ public class EverythingDemo extends ApplicationAdapter {
                 if (fovmap[ci][cj] > 0.0) {
                     seen[ci][cj] = true;
                     display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
-                            (int) (-110 + display.lightnesses[ci][cj] +
-                                    18 * fovmap[ci][cj]));// * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.001, 10000)))));
+                            (int) (-95 +
+                                    160 * (fovmap[ci][cj] * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.0004, 10000)))));
+                    //(-110 + display.lightnesses[ci][cj] +
+                    //                18 * fovmap[ci][cj]));// * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.001, 10000)))));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
                     display.put(ci, cj, lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]), -140);
@@ -857,7 +864,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.011);
+        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.012);
 
         // you done bad. you done real bad.
         if (health <= 0) {

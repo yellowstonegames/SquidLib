@@ -157,8 +157,9 @@ public class SquidLayers extends Group {
      */
     public SquidLayers autoLight (double frame, char deepLiquid, char shallowLiquid) {
         final char[][] map = foregroundPanel.contents;
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
+        final int w = getTotalWidth(), h = getTotalHeight();
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
                 switch (map[i][j]) {
                     case '\1':
                     case '├':
@@ -188,23 +189,24 @@ public class SquidLayers extends Group {
                         lightnesses[i][j] = -10;
                         break;
                     case ',':
-                        lightnesses[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));
+                        lightnesses[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));
                         break;
                     case '~':
-                        lightnesses[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));
+                        lightnesses[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));
                         break;
                     case '"':
-                        lightnesses[i][j] = (int) (95 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.3 - 1.5));
+                        lightnesses[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));
                         break;
                     case '^':
                         lightnesses[i][j] = 40;
                         break;
                     default:
                         if (map[i][j] == deepLiquid)
-                            lightnesses[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.5) * 0.45 - 0.7));
+                            lightnesses[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.55) * 0.45 - 0.7));
                         else if (map[i][j] == shallowLiquid)
-                            lightnesses[i][j] = (int) (110 * (PerlinNoise.noise(i* 3.1, j* 3.1, frame * 0.25) * 0.4 - 0.65));
-                        else lightnesses[i][j] = 0;
+                            lightnesses[i][j] = (int) (110 * (PerlinNoise.noise(i * 3.1, j * 3.1, frame * 0.3) * 0.4 - 0.65));
+                        else
+                            lightnesses[i][j] = 0;
                 }
             }
         }
