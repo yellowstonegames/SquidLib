@@ -39,8 +39,12 @@ public class Maker {
     @SuppressWarnings("unchecked")
     public static <K, V> LinkedHashMap<K, V> makeLHM(K k0, V v0, Object... rest)
     {
-        if(rest == null)
-            return makeLHM(k0, v0);
+        if(rest == null || rest.length == 0)
+        {
+            LinkedHashMap<K, V> lhm = new LinkedHashMap<>(2);
+            lhm.put(k0, v0);
+            return lhm;
+        }
         LinkedHashMap<K, V> lhm = new LinkedHashMap<>(1 + (rest.length / 2));
         lhm.put(k0, v0);
 
@@ -148,8 +152,12 @@ public class Maker {
     @SuppressWarnings("unchecked")
     public static <K, V> OrderedMap<K, V> makeOM(float factor, K k0, V v0, Object... rest)
     {
-        if(rest == null)
-            rest = new Object[0];
+        if(rest == null || rest.length == 0)
+        {
+            OrderedMap<K, V> om = new OrderedMap<>(2, factor);
+            om.put(k0, v0);
+            return om;
+        }
         OrderedMap<K, V> om = new OrderedMap<>(1 + (rest.length / 2), factor);
         om.put(k0, v0);
 
@@ -256,8 +264,12 @@ public class Maker {
     @SuppressWarnings("unchecked")
     public static <A, B> K2<A, B> makeK2(float factor, A a0, B b0, Object... rest)
     {
-        if(rest == null)
-            rest = new Object[0];
+        if(rest == null || rest.length == 0)
+        {
+            K2<A, B> k2 = new K2<>(2, factor);
+            k2.put(a0, b0);
+            return k2;
+        }
         K2<A, B> k2 = new K2<>(1 + (rest.length >> 1), factor);
         k2.put(a0, b0);
 

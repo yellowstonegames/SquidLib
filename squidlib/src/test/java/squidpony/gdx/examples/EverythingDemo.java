@@ -186,9 +186,13 @@ public class EverythingDemo extends ApplicationAdapter {
         colorCenters[13] = colorCenters[12];
 
         // PaletteFilter here is used to limit colors to specific sets.
-
-        colorCenters[14] = new SquidColorCenter(new Filters.PaletteFilter(SColor.DAWNBRINGER_16));
-        colorCenters[15] = new SquidColorCenter(new Filters.PaletteFilter(SColor.DAWNBRINGER_16));
+        Filters.PaletteFilter paletteFilter = new Filters.PaletteFilter(SColor.COLOR_WHEEL_PALETTE);
+        colorCenters[14] = new SquidColorCenter(
+                new Filters.ChainFilter(paletteFilter,
+                        new Filters.SaturationValueFilter(1.02f, 1.2f)));
+        colorCenters[15] = new SquidColorCenter(
+                new Filters.ChainFilter(paletteFilter,
+                        new Filters.SaturationValueFilter(0.9f, 0.9f)));
 
         colorCenters[16] = DefaultResources.getSCC();
         colorCenters[17] = colorCenters[16];
@@ -281,7 +285,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
-        currentCenter = 8;
+        currentCenter = 7;
 
         fgCenter = colorCenters[currentCenter * 2];
         bgCenter = colorCenters[currentCenter * 2 + 1];
@@ -336,7 +340,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // the line after this automatically sets the brightness of backgrounds in display to match their contents, so
         // here we simply fill the contents of display with our dungeon (but we don't set the actual colors yet).
         ArrayTools.insert(decoDungeon, display.getForegroundLayer().contents, 0, 0);
-        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
+        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.011);
         seen = new boolean[decoDungeon.length][decoDungeon[0].length];
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -827,8 +831,8 @@ public class EverythingDemo extends ApplicationAdapter {
                 if (fovmap[ci][cj] > 0.0) {
                     seen[ci][cj] = true;
                     display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
-                            (int) (-105 +
-                                    180 * (fovmap[ci][cj] * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.001, 10000)))));
+                            (int) (-110 + display.lightnesses[ci][cj] +
+                                    18 * fovmap[ci][cj]));// * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.001, 10000)))));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else {// if (seen[i][j]) {
                     display.put(ci, cj, lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]), -140);
@@ -853,7 +857,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.013);
+        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.011);
 
         // you done bad. you done real bad.
         if (health <= 0) {
