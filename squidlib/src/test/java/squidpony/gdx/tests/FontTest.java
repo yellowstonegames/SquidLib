@@ -61,8 +61,8 @@ public class FontTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 120, 120, 120, 120, 110, 110, 110, 110, 170, 200, 220};
-        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  22,  22,  22,  22,  25,  25,  25,  25,  25,  25,  25};
+        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 170, 200, 220};
+        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabItalicFont().width(ZOOM * 14).height(28).initBySize(),
@@ -82,10 +82,10 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getStretchableLeanFont().width(ZOOM * 13).height(21).initBySize(),
                 DefaultResources.getStretchableLeanLightFont().width(ZOOM * 13).height(21).initBySize(),
 
-                DefaultResources.getStretchableWideSlabFont().width(ZOOM * 14).height(20).initBySize(),
-                DefaultResources.getStretchableWideSlabLightFont().width(ZOOM * 14).height(20).initBySize(),
-                DefaultResources.getStretchableWideFont().width(ZOOM * 14).height(20).initBySize(),
-                DefaultResources.getStretchableWideLightFont().width(ZOOM * 14).height(20).initBySize(),
+                DefaultResources.getStretchableWideSlabFont().width(ZOOM * 15).height(21).initBySize(),
+                DefaultResources.getStretchableWideSlabLightFont().width(ZOOM * 15).height(21).initBySize(),
+                DefaultResources.getStretchableWideFont().width(ZOOM * 15).height(21).initBySize(),
+                DefaultResources.getStretchableWideLightFont().width(ZOOM * 15).height(21).initBySize(),
 
                 DefaultResources.getStretchableOrbitFont().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),

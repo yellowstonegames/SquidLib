@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.MathUtils;
 import squidpony.IFilter;
 import squidpony.squidmath.LightRNG;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
  * Implementations of {@link IFilter}, that all are meant to perform different changes
  * to colors before they are created (they should be passed to SquidColorCenter's constructor, which can use them).
@@ -31,7 +34,40 @@ public class Filters {
             return new Color(r, g, b, a);
         }
     }
-
+    public static class ChainFilter implements IFilter<Color>
+    {
+        public ArrayList<IFilter<Color>> chains;
+        public ChainFilter(IFilter<Color> firstFilter, IFilter<Color> secondFilter)
+        {
+            chains = new ArrayList<>(2);
+            chains.add(firstFilter);
+            chains.add(secondFilter);
+        }
+        public ChainFilter(IFilter<Color> firstFilter, IFilter<Color> secondFilter, IFilter<Color> thirdFilter)
+        {
+            chains = new ArrayList<>(2);
+            chains.add(firstFilter);
+            chains.add(secondFilter);
+            chains.add(thirdFilter);
+        }
+        public ChainFilter(Collection<IFilter<Color>> filters)
+        {
+            if(filters == null || filters.isEmpty())
+            {
+                chains = new ArrayList<>();
+                chains.add(new IdentityFilter());
+            }
+            else chains = new ArrayList<>(filters);
+        }
+        @Override
+        public Color alter(float r, float g, float b, float a) {
+            Color c = chains.get(0).alter(r, g, b, a);
+            for (int i = 1; i < chains.size(); i++) {
+                c = chains.get(i).alter(c.r, c.g, c.b, c.a);
+            }
+            return c;
+        }
+    }
     /**
      * A Filter that converts all colors passed to it to grayscale, like a black and white film.
      */
@@ -403,6 +439,10 @@ public class Filters {
      */
     public static class PaletteFilter extends Filter<Color> {
         /**
+         * The array of Color objects this will use as a palette.
+         */
+        public Color[] colorStore;
+        /**
          * Sets up a PaletteFilter with the exact colors to use as individual components; the lengths of each given
          * array should be identical.
          *
@@ -411,20 +451,28 @@ public class Filters {
          * @param b the blue components to use
          */
         public PaletteFilter(float[] r, float[] g, float[] b) {
-            state = new float[Math.min(r.length, Math.min(g.length, b.length)) * 3];
-            for (int i = 0; i < state.length / 4; i++) {
-                state[i * 3] = MathUtils.clamp(r[i], 0f, 1f);
-                state[i * 3 + 1] = MathUtils.clamp(g[i], 0f, 1f);
-                state[i * 3 + 2] = MathUtils.clamp(b[i], 0f, 1f);
+            colorStore = new Color[Math.min(r.length, Math.min(g.length, b.length))];
+            state = new float[colorStore.length * 3];
+            for (int i = 0; i < colorStore.length; i++) {
+                colorStore[i] = new Color(
+                state[i * 3] = MathUtils.clamp(r[i], 0f, 1f),
+                state[i * 3 + 1] = MathUtils.clamp(g[i], 0f, 1f),
+                state[i * 3 + 2] = MathUtils.clamp(b[i], 0f, 1f),
+                        1f);
             }
         }/**
          * Sets up a PaletteFilter with the exact colors to use as Colors. A convenient way to
          * use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.
          * The alpha component of each color in the palette is ignored, since when a color is requested for
          * filtering, its alpha is respected and only its red, green, and blue components are changed.
-         * @param colors the Colors to use
+         * The {@code colors} array is used verbatim (as a reference, not a copy), so changes to the Color values inside
+         * it will change how this PaletteFilter works (possibly badly). If you expect to edit the array you give as a
+         * parameter to this, it may be optimal to give a temporary copy.
+         * @param colors the Colors to use as an array; will be referenced in the Filter, so changing this array changes
+         *               what Colors will be used
          */
         public PaletteFilter(Color[] colors) {
+            colorStore = colors;
             state = new float[colors.length * 3];
             for (int i = 0; i < colors.length; i++) {
                 state[i * 3] = colors[i].r;
@@ -437,15 +485,21 @@ public class Filters {
         public Color alter(float r, float g, float b, float a) {
             float diff = 9999.0f, temp;
             int choice = 0;
-            for (int i = 0; i < state.length; i += 4) {
+            r = (int)(r * 0x1.8p5f) * 0x1.555556p-6f;
+            g = (int)(g * 0x1.8p5f) * 0x1.555556p-6f;
+            b = (int)(b * 0x1.8p5f) * 0x1.555556p-6f;
+            for (int i = 0; i < state.length; i += 3) {
                 temp = Math.abs(state[i] - r) + Math.abs(state[i + 1] - g) + Math.abs(state[i + 2] - b);
                 if(temp < diff) {
                     diff = temp;
                     choice = i;
                 }
             }
-            return new Color(state[choice], state[choice + 1], state[choice + 2],
-                    a);
+            if(a >= 1f)
+                return colorStore[choice / 3];
+            Color ret = colorStore[choice / 3].cpy();
+            ret.a = a;
+            return ret;
         }
     }
     /**
