@@ -516,7 +516,7 @@ public interface IColorCenter<T> {
         @Override
         public T filter(T c)
         {
-        	return c == null ? c : get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
+        	return c == null ? null : get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));
         }
 
 
@@ -687,7 +687,7 @@ public interface IColorCenter<T> {
          */
         protected abstract T create(int red, int green, int blue, int opacity);
 
-		private long getUniqueIdentifier(int r, int g, int b, int a) {
+		protected long getUniqueIdentifier(int r, int g, int b, int a) {
 			return ((a & 0xffL) << 48) | ((r & 0xffffL) << 32) | ((g & 0xffffL) << 16) | (b & 0xffffL);
 		}
 

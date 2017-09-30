@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import squidpony.IColorCenter;
 import squidpony.IFilter;
 import squidpony.squidmath.CoordPacker;
@@ -12,12 +13,48 @@ import java.util.ArrayList;
 /**
  * A concrete implementation of {@link IColorCenter} for libgdx's {@link com.badlogic.gdx.graphics.Color}.
  * Supports filtering any colors that this creates using a {@link Filter}, such as one from {@link Filters}.
- *
+ * This class largely supersedes the earlier {@link SColorFactory} class, and supports similar operations
+ * while also allowing filters to modify the returned colors. Some things use different terms between the
+ * two classes; {@link SColorFactory#blend(SColor, SColor, double)} is {@link #lerp(Color, Color, double)}
+ * here, and {@link SColorFactory#setFloor(int)} is {@link #setGranularity(int)} (with different behavior).
  * @author smelC
  * @author Tommy Ettinger
  * @see SColor Another way to obtain colors by using pre-allocated (and named) instances.
  */
 public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
+
+    /**
+     * How different requested colors need to be to make a new color; should range from 0 to at most 6.
+     * If this is 0, all requested colors will be looked up (using a cached version if the exact request had been made
+     * before), but if this is greater than 0, then exponentially less colors will be used, using the cache for twice as
+     * many requests at granularity 1 (2 raised to the granularity), four times as many at granularity 2, and so on.
+     * Defaults to 1, which seems to help ensure visually-identical colors are not created more than once.
+     */
+    public int granularity = 1;
+
+    /**
+     * Gets the granularity, which is how different requested colors need to be to make a new color; can be from 0 to 6.
+     * If this is 0, all requested colors will be looked up (using a cached version if the exact request had been made
+     * before), but if this is greater than 0, then exponentially less colors will be used, using the cache for twice as
+     * many requests at granularity 1 (2 raised to the granularity), four times as many at granularity 2, and so on.
+     * If no granularity was set, the default is 1.
+     * @return the current granularity, as an int
+     */
+    public int getGranularity() {
+        return granularity;
+    }
+
+    /**
+     * Sets the granularity, which is how different requested colors must be to make a new color; from 0 to at most 6.
+     * If this is 0, all requested colors will be looked up (using a cached version if the exact request had been made
+     * before), but if this is greater than 0, then exponentially less colors will be used, using the cache for twice as
+     * many requests at granularity 1 (2 raised to the granularity), four times as many at granularity 2, and so on.
+     * If no granularity was set, the default is 1.
+     * @param granularity the granularity to use; will be clamped between 0 and 6
+     */
+    public void setGranularity(int granularity) {
+        this.granularity = MathUtils.clamp(granularity, 0, 6);
+    }
 
     /**
      * A fresh filter-less color center.
@@ -62,7 +99,16 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
     }
     public Color get(float r, float g, float b, float a)
     {
-        return get(Math.round(255 * r), Math.round(255 * g), Math.round(255 * b), Math.round(255 * a));
+        return get((int)(255.9999f * r), (int)(255.9999f * g), (int)(255.9999f * b), (int)(255.9999f * a));
+    }
+
+    @Override
+    protected long getUniqueIdentifier(int r, int g, int b, int a) {
+        return super.getUniqueIdentifier(
+                r & 0xff << granularity,
+                g & 0xff << granularity,
+                b & 0xff << granularity,
+                a & 0xff << granularity);
     }
 
     /**
@@ -576,6 +622,7 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
     public String toString() {
         return "SquidColorCenter{" +
                 "filter=" + (filter == null ? "null" : filter.getClass().getSimpleName()) +
+                ",granularity=" + granularity +
                 '}';
     }
 }

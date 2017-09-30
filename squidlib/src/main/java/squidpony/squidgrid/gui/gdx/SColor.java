@@ -10341,7 +10341,7 @@ public class SColor extends Color {
             // 19          20          21
             MINT_GREEN, LIME_GREEN, GREEN_BAMBOO,
             // 22     23        24
-            CYAN, OCEAN_BLUE, MIDORI,
+            CYAN, CW_DARK_AZURE, MIDORI,
             // 25              26            27
             COLUMBIA_BLUE, ROYAL_BLUE, PERSIAN_BLUE,
             // 28              29            30

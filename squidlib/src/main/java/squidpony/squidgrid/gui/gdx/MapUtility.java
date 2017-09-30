@@ -327,13 +327,13 @@ public class MapUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.45));
+                        portion[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45) * 0.55 - 0.7));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45) * 0.4 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.25 - 1.5));
+                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45) * 0.3 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -390,13 +390,13 @@ public class MapUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));
+                        portion[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.25 - 1.5));
+                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
@@ -456,22 +456,22 @@ public class MapUtility {
                         portion[i][j] = -10;
                         break;
                     case ',':
-                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));
+                        portion[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));
                         break;
                     case '~':
-                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));
+                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));
                         break;
                     case '"':
-                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.3 - 1.5));
+                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));
                         break;
                     case '^':
                         portion[i][j] = 40;
                         break;
                     default:
                         if (map[i][j] == deepLiquid)
-                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.5) * 0.45 - 0.7));
+                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.55) * 0.45 - 0.7));
                         else if (map[i][j] == shallowLiquid)
-                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i* 3.1, j* 3.1, frame * 0.25) * 0.4 - 0.65));
+                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i * 3.1, j * 3.1, frame * 0.3) * 0.4 - 0.65));
                         else portion[i][j] = 0;
                 }
             }
