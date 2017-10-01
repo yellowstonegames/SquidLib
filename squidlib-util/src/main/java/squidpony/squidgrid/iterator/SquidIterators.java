@@ -338,7 +338,7 @@ public class SquidIterators {
 
 				if (previous.x == xstart + width - 1) {
 					/* Need to go up and left (one column up, go left) */
-					if (previous.y == ystart - (height - 1) || previous.y == 0) {
+					if (previous.y == ystart - (height - 1)) {
 						/* We're done */
 						return null;
 					} else
