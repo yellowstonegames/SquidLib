@@ -20,6 +20,7 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <testOutputDirectory>target/test-classes</testOutputDirectory>
         <plugins>

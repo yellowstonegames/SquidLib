@@ -21,6 +21,8 @@ public class Playground {
     }
     private static float carp2(final float x) { return x - x * (x * (x - 1) + (1 - x) * (1 - x)); }
     private static float carpMid(final float x) { return carp2(x * 0.5f + 0.5f) * 2f - 1f; }
+    private static float cerp(final float x) { return x * x * (3f - 2f * x); }
+
     public static double determine2(final int index)
     {
         int s = (index+1 & 0x7fffffff), leading = Integer.numberOfLeadingZeros(s);
@@ -44,6 +46,10 @@ public class Playground {
     private static float querp(final float start, final float end, float a){
         return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
     }
+    public static double querp(final double start, final double end, double a) {
+        return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
+    }
+
     public static float sway(final float value)
     {
         final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
@@ -91,8 +97,8 @@ public class Playground {
 //            }
 //        }
 
-        for (float f = -9f; f <= 9f; f += 0.125f) {
-            System.out.printf("%f: %f, %f\n", f, NumberTools.zigzag(f), sway(f));
+        for (float f = 0f; f <= 1f; f += 0.0625f) {
+            System.out.printf("%f: querp: %f, carp2: %f, cerp: %f\n", f, querp(-100, 100, f), carp2(f), cerp(f));
         }
 
 
