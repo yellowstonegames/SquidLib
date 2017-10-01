@@ -309,41 +309,37 @@ public interface Zone extends Serializable, Iterable<Coord> {
 		/* Convenience implementation, feel free to override. */
 		public Zone translate(int x, int y) {
 			final List<Coord> initial = getAll();
-			final List<Coord> shifted = new ArrayList<Coord>(initial);
 			final int sz = initial.size();
+			final List<Coord> shifted = new ArrayList<Coord>(sz);
 			for (int i = 0; i < sz; i++) {
 				final Coord c = initial.get(i);
 				shifted.add(Coord.get(c.x + x, c.y + y));
 			}
+			assert shifted.size() == sz;
 			return new ListZone(shifted);
 		}
 
 		@Override
 		/* Convenience implementation, feel free to override. */
-		public Collection<Coord> getInternalBorder() {
-			final int sz = size();
-			if (sz <= 1)
-				return getAll();
-			final List<Coord> result = new ArrayList<Coord>(sz);
-			final List<Coord> all = getAll();
-			assert sz == all.size();
-			nextCell: for (int i = 0; i < sz; i++) {
-				final Coord c = all.get(i);
-				for (Direction out : Direction.OUTWARDS) {
-					final Coord neighbor = c.translate(out);
-					if (!contains(neighbor)) {
-						result.add(c);
-						continue nextCell;
-					}
-				}
-			}
-			return result;
+		public List<Coord> getInternalBorder() {
+			return size() <= 1 ? getAll() : DungeonUtility.border(getAll(), null);
 		}
 
 		@Override
 		/* Convenience implementation, feel free to override. */
 		public Collection<Coord> getExternalBorder() {
-			return DungeonUtility.border(getAll(), null);
+			final List<Coord> result = new ArrayList<Coord>(size());
+			final List<Coord> internalBorder = getInternalBorder();
+			final int ibsz = internalBorder.size();
+			for (int i = 0; i < ibsz; i++) {
+				final Coord b = internalBorder.get(i);
+				for (Direction dir : Direction.OUTWARDS) {
+					final Coord borderNeighbor = b.translate(dir);
+					if (!contains(borderNeighbor))
+						result.add(borderNeighbor);
+				}
+			}
+			return result;
 		}
 
 		@Override
@@ -358,38 +354,20 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			if (isEmpty())
 				return -1;
 			int min = Integer.MAX_VALUE;
-			if(xOrY)
-			{
-				for (Coord c : this) {
-					if (c.x < min)
-						min = c.x;
-				}
-			}
-			else
-			{
-				for (Coord c : this) {
-					if (c.y < min)
-						min = c.y;
-				}
+			for (Coord c : this) {
+				final int val = xOrY ? c.x : c.y;
+				if (val < min)
+					min = val;
 			}
 			return min;
 		}
 
 		private int biggest(boolean xOrY) {
 			int max = -1;
-			if(xOrY)
-			{
-				for (Coord c : this) {
-					if (c.x > max)
-						max = c.x;
-				}
-			}
-			else
-			{
-				for (Coord c : this) {
-					if (c.y > max)
-						max = c.y;
-				}
+			for (Coord c : this) {
+				final int val = xOrY ? c.x : c.y;
+				if (max < val)
+					max = val;
 			}
 			return max;
 		}
