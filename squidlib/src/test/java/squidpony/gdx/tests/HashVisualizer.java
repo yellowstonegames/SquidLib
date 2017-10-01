@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 43, rngMode = 30, noiseMode = 74;
+    private int hashMode = 43, rngMode = 30, noiseMode = 86;
 
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
@@ -587,8 +587,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 92;
-                                }
+                                    noiseMode %= 100;                               }
                                 switch (noiseMode)
                                 {
                                     case 16:
@@ -3029,13 +3028,6 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Tabby 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                /*
-                                display.put(x, y,
-                                        floatGet(
-                                                ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 3,1234) * 0.50f) + 0.50f,
-                                                ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 3,54321) * 0.50f) + 0.50f,
-                                                ((float)SeededNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 3,1234321) * 0.50f) + 0.50f,
-                                                1.0f));*/
                                 display.put(x, y,
                                         floatGet(
                                                 (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, seedX0, seedY0, seedZ0, randX0, randY0, randZ0) * 0.50f) + 0.50f,
@@ -3361,7 +3353,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Tabby 6D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                               display.put(x, y,
+                                display.put(x, y,
                                         floatGet(
                                                 (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.1) * 0.0511125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.2) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.8) * 0.0611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0, randX0, randY0, randZ0, randW0, randU0, randV0) * 0.50f) + 0.50f,
                                                 (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.5) * 0.0511125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.6) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.3) * 0.0611125f, seedX1, seedY1, seedZ1, seedW1, seedU1, seedV1, randX1, randY1, randZ1, randW1, randU1, randV1) * 0.50f) + 0.50f,
@@ -3375,6 +3367,99 @@ public class HashVisualizer extends ApplicationAdapter {
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.6) * 0.0311125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.5) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.2) * 0.0611125f, seedX3, seedY3, seedZ3, seedW3, seedU3, seedV3, randX3, randY3, randZ3, randW3, randU3, randV3) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+
+                    case 92:
+                        Gdx.graphics.setTitle("Mummy 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30, seedX0, seedY0) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 30, y * 0.11125f + ctr * 0.11125f + 10, seedX1, seedY1) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 10, y * 0.11125f + ctr * 0.11125f + 20, seedX2, seedY2) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 93:
+                        Gdx.graphics.setTitle("Mummy 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30, seedX0, seedY0) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 94:
+                        Gdx.graphics.setTitle("Mummy 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, seedX0, seedY0, seedZ0) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, seedX1, seedY1, seedZ1) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, seedX2, seedY2, seedZ2) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 95:
+                        Gdx.graphics.setTitle("Mummy 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.11125f + 10,
+                                        seedX3, seedY3, seedZ3) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                    case 96:
+                        Gdx.graphics.setTitle("Mummy 4D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 31.337) * 0.0311125f, seedX0, seedY0, seedZ0, seedW0) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 42.337) * 0.0311125f, seedX1, seedY1, seedZ1, seedW1) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 53.337) * 0.0311125f, seedX2, seedY2, seedZ2, seedW2) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 97:
+                        Gdx.graphics.setTitle("Mummy 4D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
+                                        NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 31.337) * 0.0311125f, seedX3, seedY3, seedZ3, seedW3) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 98:
+                        Gdx.graphics.setTitle("Mummy 6D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.041125f + 20, y * 0.041125f + 30, ctr * 0.042125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.042511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.04811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.04611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.041125f + 30, y * 0.041125f + 10, ctr * 0.042125f + 20, (NumberTools.sway((x + y) * 0.021f) + ctr + 42.337) * 0.042511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.6) * 0.04811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.3) * 0.04611125f, seedX1, seedY1, seedZ1, seedW1, seedU1, seedV1) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.041125f + 10, y * 0.041125f + 20, ctr * 0.042125f + 30, (NumberTools.sway((x + y) * 0.021f) + ctr + 53.337) * 0.042511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.4) * 0.04811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.6) * 0.04611125f, seedX2, seedY2, seedZ2, seedW2, seedU2, seedV2) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 99:
+                        Gdx.graphics.setTitle("Mummy 6D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.041125f + 20, y * 0.041125f + 30, ctr * 0.042125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.042511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.04811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.04611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }

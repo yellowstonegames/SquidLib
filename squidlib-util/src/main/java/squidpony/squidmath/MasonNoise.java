@@ -1184,6 +1184,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         return (1f - a) * start + a * end;
     }
 
+
     private static final long xJump = 0x9E3779BE3779B9L, yJump = 0xBFDAE4FFDAE4F7L, zJump = 0xF35692B35692B5L;
     public static float noise(final float x, final float y, final int seed) {
         //final float xy = x * 2.2731f - y, yx = y * 2.3417f - x;

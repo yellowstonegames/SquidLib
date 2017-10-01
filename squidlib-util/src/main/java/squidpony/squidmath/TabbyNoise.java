@@ -4,7 +4,7 @@ import squidpony.annotation.Beta;
 
 /**
  * A different kind of noise that has spotted and striped areas, like a tabby cat.
- * Highly experimental and expected to change; currently has significant spiral-shaped artifacts from stretching.
+ * Highly experimental and expected to change; currently has significant linear artifacts, though they do wiggle.
  * Created by Tommy Ettinger on 9/2/2017.
  */
 @Beta
@@ -45,14 +45,19 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     public static long fastFloor(double t) {
         return t >= 0 ? (long) t : (long) t - 1;
     }
-    public static double gauss(final long state) {
-        final long s1 = state + 0x9E3779B97F4A7C15L,
-                s2 = s1 + 0x9E3779B97F4A7C15L,
-                y = (s1 ^ s1 >>> 30) * 0x5851F42D4C957F2DL,
-                z = (s2 ^ s2 >>> 30) * 0x5851F42D4C957F2DL;
-        return ((((y ^ y >>> 28) & 0x7FFFFFL) + ((y ^ y >>> 28) >>> 41))
-                + (((z ^ z >>> 28) & 0x7FFFFFL) + ((z ^ z >>> 28) >>> 41))) * 0x1p-24 - 1.0;
-    }
+//    public static double gauss(final long state) {
+//        final long s1 = state + 0x9E3779B97F4A7C15L,
+//                s2 = s1 + 0x9E3779B97F4A7C15L,
+//                y = (s1 ^ s1 >>> 30) * 0x5851F42D4C957F2DL,
+//                z = (s2 ^ s2 >>> 30) * 0x5851F42D4C957F2DL;
+//        return ((((y ^ y >>> 28) & 0x7FFFFFL) + ((y ^ y >>> 28) >>> 41))
+//                + (((z ^ z >>> 28) & 0x7FFFFFL) + ((z ^ z >>> 28) >>> 41))) * 0x1p-24 - 1.0;
+//    }
+public static double gauss(long state) {
+    state = (state ^ state >>> 30) * 0x5851F42D4C957F2DL;
+    return (state ^ state >>> 28) * 0x1.5p-64;
+}
+
     @Override
     public double getNoise(double x, double y) {
         return getNoiseWithSeeds(x, y, seedX, seedY, randX, randY);
@@ -73,8 +78,8 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         final double
                 grx = randX * 0.625,
                 gry = randY * 0.625,
-                cx = NumberTools.zigzag(x) * (gry + 1.125) * 0x0.93p-1,
-                cy = NumberTools.zigzag(y) * (grx + 1.125) * 0x0.93p-1,
+                cx = NumberTools.sway(x) * (gry + 1.125) * 0x0.93p-1,
+                cy = NumberTools.sway(y) * (grx + 1.125) * 0x0.93p-1,
                 ax = x + (cy * (0.35 + gry)),
                 ay = y + (cx * (0.35 + grx)),
                 mx = ((((seedX & 0x1F0L) | 0x2FL) - 0x1FFp-1) * 0x1.4p-8) * ax + ((((seedX & 0x1F000L) | 0x2F00L) - 0x1FF00p-1) * 0x1.1p-16) * ay,
@@ -83,7 +88,8 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 xf = fastFloor(mx),
                 yf = fastFloor(my);
         return
-                NumberTools.bounce(5.875 + 2.0625 * (
+                //NumberTools.bounce(5.875 + 2.0625 * (
+                NumberTools.sway( 2.1625 * (
                         querp(gauss(xf * 0xAE3779B97F4A7E35L),
                                 gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)
@@ -111,9 +117,9 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                                     final long seedX, final long seedY, final long seedZ,
                                     final double randX, final double randY, final double randZ) {
         final double
-                cx = NumberTools.zigzag(x) * (randY * randZ + 1.125) * 0x0.93p-1,
-                cy = NumberTools.zigzag(y) * (randZ * randX + 1.125) * 0x0.93p-1,
-                cz = NumberTools.zigzag(z) * (randX * randY + 1.125) * 0x0.93p-1,
+                cx = NumberTools.sway(x) * (randY * randZ + 1.125) * 0x0.93p-1,
+                cy = NumberTools.sway(y) * (randZ * randX + 1.125) * 0x0.93p-1,
+                cz = NumberTools.sway(z) * (randX * randY + 1.125) * 0x0.93p-1,
                 ax = x + (cy * cz),
                 ay = y + (cz * cx),
                 az = z + (cx * cy),
@@ -126,7 +132,8 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 yf = fastFloor(my),
                 zf = fastFloor(mz);
         return
-                NumberTools.bounce(5.875 + 2.0625 * (
+                //NumberTools.bounce(5.875 + 2.0625 * (
+                NumberTools.sway( 2.1625 * (
                         querp(gauss(xf * 0xAE3779B97F4A7E35L),
                                 gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)
@@ -158,10 +165,10 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                                     final long seedX, final long seedY, final long seedZ, final long seedW,
                                     final double randX, final double randY, final double randZ, final double randW) {
         final double
-                cx = NumberTools.zigzag(x) * (randY * randZ + 1.125) * 0x0.93p-1,
-                cy = NumberTools.zigzag(y) * (randZ * randW + 1.125) * 0x0.93p-1,
-                cz = NumberTools.zigzag(z) * (randW * randX + 1.125) * 0x0.93p-1,
-                cw = NumberTools.zigzag(w) * (randX * randY + 1.125) * 0x0.93p-1,
+                cx = NumberTools.sway(x) * (randY * randZ + 1.125) * 0x0.93p-1,
+                cy = NumberTools.sway(y) * (randZ * randW + 1.125) * 0x0.93p-1,
+                cz = NumberTools.sway(z) * (randW * randX + 1.125) * 0x0.93p-1,
+                cw = NumberTools.sway(w) * (randX * randY + 1.125) * 0x0.93p-1,
                 ax = x + (cz * cw),
                 ay = y + (cw * cx),
                 az = z + (cx * cy),
@@ -176,7 +183,8 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 zf = fastFloor(mz),
                 wf = fastFloor(mw);
         return
-                NumberTools.bounce(5.875 + 2.0625 * (
+                //NumberTools.bounce(5.875 + 2.0625 * (
+                NumberTools.sway( 2.1625 * (
                         querp(gauss(xf * 0xAE3779B97F4A7E35L),
                                 gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)
@@ -219,12 +227,12 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                                     final double randX, final double randY, final double randZ,
                                     final double randW, final double randU, final double randV) {
         final double
-                cx = NumberTools.zigzag(x) * (randY * randZ + 1.125) * 0x0.93p-1,
-                cy = NumberTools.zigzag(y) * (randZ * randW + 1.125) * 0x0.93p-1,
-                cz = NumberTools.zigzag(z) * (randW * randU + 1.125) * 0x0.93p-1,
-                cw = NumberTools.zigzag(w) * (randU * randV + 1.125) * 0x0.93p-1,
-                cu = NumberTools.zigzag(u) * (randV * randX + 1.125) * 0x0.93p-1,
-                cv = NumberTools.zigzag(v) * (randX * randY + 1.125) * 0x0.93p-1,
+                cx = NumberTools.sway(x) * (randY * randZ + 1.125) * 0x0.93p-1,
+                cy = NumberTools.sway(y) * (randZ * randW + 1.125) * 0x0.93p-1,
+                cz = NumberTools.sway(z) * (randW * randU + 1.125) * 0x0.93p-1,
+                cw = NumberTools.sway(w) * (randU * randV + 1.125) * 0x0.93p-1,
+                cu = NumberTools.sway(u) * (randV * randX + 1.125) * 0x0.93p-1,
+                cv = NumberTools.sway(v) * (randX * randY + 1.125) * 0x0.93p-1,
                 ax = x + (cw * cu),
                 ay = y + (cu * cv),
                 az = z + (cv * cx),
@@ -246,7 +254,8 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 uf = fastFloor(mu),
                 vf = fastFloor(mv);
         return
-                NumberTools.bounce(5.875 + 2.0625 * (
+                //NumberTools.bounce(5.875 + 2.0625 * (
+                NumberTools.sway( 2.1625 * (
                         querp(gauss(xf * 0xAE3779B97F4A7E35L),
                                 gauss((xf+1) * 0xAE3779B97F4A7E35L),
                                 mx - xf)

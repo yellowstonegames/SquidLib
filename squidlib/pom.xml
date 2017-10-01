@@ -13,6 +13,7 @@
     <name>squidlib</name>
     <description>SquidLib LibGDX display code. Please refer to https://github.com/SquidPony/SquidLib .</description>
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <testResources>
             <testResource>

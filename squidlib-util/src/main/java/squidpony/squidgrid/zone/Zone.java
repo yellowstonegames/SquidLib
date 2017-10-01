@@ -321,15 +321,16 @@ public interface Zone extends Serializable, Iterable<Coord> {
 
 		@Override
 		/* Convenience implementation, feel free to override. */
-		public List<Coord> getInternalBorder() {
+		public Collection<Coord> getInternalBorder() {
 			return size() <= 1 ? getAll() : DungeonUtility.border(getAll(), null);
 		}
 
 		@Override
 		/* Convenience implementation, feel free to override. */
 		public Collection<Coord> getExternalBorder() {
-			final List<Coord> result = new ArrayList<Coord>(size());
-			final List<Coord> internalBorder = getInternalBorder();
+			final int sz = size();
+			final List<Coord> result = new ArrayList<Coord>();
+			final List<Coord> internalBorder = sz <= 1 ? getAll() : DungeonUtility.border(getAll(), null);
 			final int ibsz = internalBorder.size();
 			for (int i = 0; i < ibsz; i++) {
 				final Coord b = internalBorder.get(i);
