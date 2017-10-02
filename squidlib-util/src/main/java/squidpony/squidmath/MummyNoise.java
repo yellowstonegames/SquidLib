@@ -17,28 +17,48 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     public MummyNoise(final int seed) {
-        seedX = ThrustRNG.determine(seed + 0xC6BC279692B5CC83L);
-        seedY = ThrustRNG.determine(seedX ^ 0xC7BC279692B5CB83L);
-        seedZ = ThrustRNG.determine(seedY ^ 0xC8BC279692B5CA83L);
-        seedW = ThrustRNG.determine(seedZ ^ 0xC9BC279692B5C983L);
-        seedU = ThrustRNG.determine(seedW ^ 0xCABC279692B5C883L);
-        seedV = ThrustRNG.determine(seedU ^ 0xCBBC279692B5C783L);
+        seedX = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seed + 0xC6BC279692B5CC83L);
+        seedY = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedX ^ 0xC7BC279692B5CB83L);
+        seedZ = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedY ^ 0xC8BC279692B5CA83L);
+        seedW = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedZ ^ 0xC9BC279692B5C983L);
+        seedU = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedW ^ 0xCABC279692B5C883L);
+        seedV = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedU ^ 0xCBBC279692B5C783L);
     }
 
-    /*
-     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
-     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
-     * @param start a valid float
-     * @param end a valid float
-     * @param a a float between 0 and 1 inclusive
-     * @return a float between x and y inclusive
+    /**
+     * The same as {@link ThrustRNG#determine(long)}, except this assumes state has already been multiplied by
+     * 0x9E3779B97F4A7C15L . 
+     * @param state a long that should change in increments of 0x9E3779B97F4A7C15L
+     * @return a pseudo-random permutation of state
      */
-    public static double querp0(final double start, final double end, double a) {
+    public static long determine(long state)
+    {
+        state = (state ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        return state ^ state >>> 28;
+    }
+
+    /**
+     * Quintic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
+     * @param start a valid double
+     * @param end a valid double
+     * @param a a double between 0 and 1 inclusive
+     * @return a double between start and end inclusive
+     */
+    public static double querp(final double start, final double end, double a) {
         return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
     }
 
-    // actually cerp
-    private static double querp(final double start, final double end, double a) {
+    /**
+     * Cubic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively. Somewhat faster than
+     * {@link #querp(double, double, double)}, but slower (and smoother) than {@link  #lerp(double, double, double)}.
+     * @param start a valid double
+     * @param end a valid double
+     * @param a a double between 0 and 1 inclusive
+     * @return a double between start and end inclusive
+     */
+    private static double cerp(final double start, final double end, double a) {
         return (1.0 - (a *= a * (3.0 - 2.0 * a))) * start + a * end;
     }
 
@@ -78,26 +98,26 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(final double x, final double y, final int seed) {
         final long
-                rs = ThrustRNG.determine(seed ^ 0x5851F42D4C957F2DL),
-                rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
-                ry = (rx >>> 23 ^ rx << 23) * (rx | 1L);
+                rs = ThrustRNG.determine(seed ^ (long) ~seed << 32),
+                rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
+                ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L);
         return getNoiseWithSeeds(x, y, rx, ry);
     }
 
-    public double getNoiseWithSeeds(final double x, final double y,
+    public static double getNoiseWithSeeds(final double x, final double y,
                                     final long seedX, final long seedY) {
         final long
                 xf = longFloor(x),
                 yf = longFloor(y),
-                bx0 = ThrustRNG.determine(xf ^ seedX),
-                by0 = ThrustRNG.determine(yf ^ seedY),
-                bx1 = ThrustRNG.determine(xf + 1 ^ seedX),
-                by1 = ThrustRNG.determine(yf + 1 ^ seedY);
+                bx0 = xf * seedX,
+                by0 = yf * seedY,
+                bx1 = bx0+seedX,
+                by1 = by0+seedY;
         return
                 NumberTools.sway(
-                        querp(querp((bx0 * by0) * 0x1.5p-62, (bx1 * by0) * 0x1.5p-62,
+                        cerp(cerp(determine(bx0 + by0) * 0x1.25p-62, determine(bx1 + by0) * 0x1.25p-62,
                                 x - xf),
-                                querp((bx0 * by1) * 0x1.5p-62, (bx1 * by1) * 0x1.5p-62, x - xf),
+                                cerp(determine(bx0 + by1) * 0x1.25p-62, determine(bx1 + by1) * 0x1.25p-62, x - xf),
                                 y - yf));
     }
 
@@ -110,35 +130,33 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
         final long
                 rs = ThrustRNG.determine(seed ^ (long) ~seed << 32),
-                rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
-                ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
-                rz = (ry >>> 23 ^ ry << 23) * (ry | 1L);
+                rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
+                ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
+                rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L);
         return getNoiseWithSeeds(x, y, z, rx, ry, rz);
     }
 
-    public double getNoiseWithSeeds(final double x, final double y, final double z,
+    public static double getNoiseWithSeeds(final double x, final double y, final double z,
                                     final long seedX, final long seedY, final long seedZ) {
         final long
                 xf = longFloor(x),
                 yf = longFloor(y),
                 zf = longFloor(z),
-                bx0 = ThrustRNG.determine(xf ^ seedX),
-                by0 = ThrustRNG.determine(yf ^ seedY),
-                bz0 = ThrustRNG.determine(zf ^ seedZ),
-                bx1 = ThrustRNG.determine(xf + 1 ^ seedX),
-                by1 = ThrustRNG.determine(yf + 1 ^ seedY),
-                bz1 = ThrustRNG.determine(zf + 1 ^ seedZ);
+                bx0 = xf * seedX,
+                by0 = yf * seedY,
+                bz0 = zf * seedZ,
+                bx1 = bx0+seedX,
+                by1 = by0+seedY,
+                bz1 = bz0+seedZ;
         return NumberTools.sway(
-                querp(
-                        querp(
-                                querp((bx0 * by0 * bz0) * 0x1.5p-62, (bx1 * by0 * bz0) * 0x1.5p-62,
-                                        x - xf),
-                                querp((bx0 * by1 * bz0) * 0x1.5p-62, (bx1 * by1 * bz0) * 0x1.5p-62, x - xf),
+                cerp(
+                        cerp(
+                                cerp(determine(bx0 + by0 + bz0) * 0x1.25p-62, determine(bx1 + by0 + bz0) * 0x1.25p-62, x - xf),
+                                cerp(determine(bx0 + by1 + bz0) * 0x1.25p-62, determine(bx1 + by1 + bz0) * 0x1.25p-62, x - xf),
                                 y - yf),
-                        querp(
-                                querp((bx0 * by0 * bz1) * 0x1.5p-62, (bx1 * by0 * bz1) * 0x1.5p-62,
-                                        x - xf),
-                                querp((bx0 * by1 * bz1) * 0x1.5p-62, (bx1 * by1 * bz1) * 0x1.5p-62, x - xf),
+                        cerp(
+                                cerp(determine(bx0 + by0 + bz1) * 0x1.25p-62, determine(bx1 + by0 + bz1) * 0x1.25p-62, x - xf),
+                                cerp(determine(bx0 + by1 + bz1) * 0x1.25p-62, determine(bx1 + by1 + bz1) * 0x1.25p-62, x - xf),
                                 y - yf),
                         z - zf));
     }
@@ -152,52 +170,48 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
         final long
                 rs = ThrustRNG.determine(seed ^ (long) ~seed << 32),
-                rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
-                ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
-                rz = (ry >>> 23 ^ ry << 23) * (ry | 1L),
-                rw = (rz >>> 23 ^ rz << 23) * (rz | 1L);
+                rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
+                ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
+                rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L),
+                rw = 0x9E3779B97F4A7C15L * (rz >>> 23 ^ rz << 23) * (rz | 1L);
         return getNoiseWithSeeds(x, y, z, w, rx, ry, rz, rw);
     }
 
-    public double getNoiseWithSeeds(final double x, final double y, final double z, final double w,
+    public static double getNoiseWithSeeds(final double x, final double y, final double z, final double w,
                                     final long seedX, final long seedY, final long seedZ, final long seedW) {
         final long
                 xf = longFloor(x),
                 yf = longFloor(y),
                 zf = longFloor(z),
                 wf = longFloor(w),
-                bx0 = ThrustRNG.determine(xf ^ seedX),
-                by0 = ThrustRNG.determine(yf ^ seedY),
-                bz0 = ThrustRNG.determine(zf ^ seedZ),
-                bw0 = ThrustRNG.determine(wf ^ seedW),
-                bx1 = ThrustRNG.determine(xf + 1 ^ seedX),
-                by1 = ThrustRNG.determine(yf + 1 ^ seedY),
-                bz1 = ThrustRNG.determine(zf + 1 ^ seedZ),
-                bw1 = ThrustRNG.determine(wf + 1 ^ seedW);
+                bx0 = xf * seedX,
+                by0 = yf * seedY,
+                bz0 = zf * seedZ,
+                bw0 = wf * seedW,
+                bx1 = bx0+seedX,
+                by1 = by0+seedY,
+                bz1 = bz0+seedZ,
+                bw1 = bw0+seedW;
         return NumberTools.sway(
-                querp(
-                        querp(
-                                querp(
-                                        querp((bx0 * by0 * bz0 * bw0) * 0x1.5p-62, (bx1 * by0 * bz0 * bw0) * 0x1.5p-62,
-                                                x - xf),
-                                        querp((bx0 * by1 * bz0 * bw0) * 0x1.5p-62, (bx1 * by1 * bz0 * bw0) * 0x1.5p-62, x - xf),
+                cerp(
+                        cerp(
+                                cerp(
+                                        cerp(determine(bx0 + by0 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0) * 0x1.25p-62, x - xf),
+                                        cerp(determine(bx0 + by1 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0) * 0x1.25p-62, x - xf),
                                         y - yf),
-                                querp(
-                                        querp((bx0 * by0 * bz1 * bw0) * 0x1.5p-62, (bx1 * by0 * bz1 * bw0) * 0x1.5p-62,
-                                                x - xf),
-                                        querp((bx0 * by1 * bz1 * bw0) * 0x1.5p-62, (bx1 * by1 * bz1 * bw0) * 0x1.5p-62, x - xf),
+                                cerp(
+                                        cerp(determine(bx0 + by0 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0) * 0x1.25p-62, x - xf),
+                                        cerp(determine(bx0 + by1 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0) * 0x1.25p-62, x - xf),
                                         y - yf),
                                 z - zf),
-                        querp(
-                                querp(
-                                        querp((bx0 * by0 * bz0 * bw1) * 0x1.5p-62, (bx1 * by0 * bz0 * bw1) * 0x1.5p-62,
-                                                x - xf),
-                                        querp((bx0 * by1 * bz0 * bw1) * 0x1.5p-62, (bx1 * by1 * bz0 * bw1) * 0x1.5p-62, x - xf),
+                        cerp(
+                                cerp(
+                                        cerp(determine(bx0 + by0 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1) * 0x1.25p-62, x - xf),
+                                        cerp(determine(bx0 + by1 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1) * 0x1.25p-62, x - xf),
                                         y - yf),
-                                querp(
-                                        querp((bx0 * by0 * bz1 * bw1) * 0x1.5p-62, (bx1 * by0 * bz1 * bw1) * 0x1.5p-62,
-                                                x - xf),
-                                        querp((bx0 * by1 * bz1 * bw1) * 0x1.5p-62, (bx1 * by1 * bz1 * bw1) * 0x1.5p-62, x - xf),
+                                cerp(
+                                        cerp(determine(bx0 + by0 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1) * 0x1.25p-62, x - xf),
+                                        cerp(determine(bx0 + by1 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1) * 0x1.25p-62, x - xf),
                                         y - yf),
                                 z - zf),
                         w - wf));
@@ -213,16 +227,16 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, int seed) {
         final long
                 rs = ThrustRNG.determine(seed ^ (long) ~seed << 32),
-                rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
-                ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
-                rz = (ry >>> 23 ^ ry << 23) * (ry | 1L),
-                rw = (rz >>> 23 ^ rz << 23) * (rz | 1L),
-                ru = (rw >>> 23 ^ rw << 23) * (rw | 1L),
-                rv = (ru >>> 23 ^ ru << 23) * (ru | 1L);
+                rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
+                ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
+                rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L),
+                rw = 0x9E3779B97F4A7C15L * (rz >>> 23 ^ rz << 23) * (rz | 1L),
+                ru = 0x9E3779B97F4A7C15L * (rw >>> 23 ^ rw << 23) * (rw | 1L),
+                rv = 0x9E3779B97F4A7C15L * (ru >>> 23 ^ ru << 23) * (ru | 1L);
         return getNoiseWithSeeds(x, y, z, w, u, v, rx, ry, rz, rw, ru, rv);
     }
 
-    public double getNoiseWithSeeds(final double x, final double y, final double z,
+    public static double getNoiseWithSeeds(final double x, final double y, final double z,
                                     final double w, final double u, final double v,
                                     final long seedX, final long seedY, final long seedZ,
                                     final long seedW, final long seedU, final long seedV) {
@@ -233,113 +247,170 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 wf = longFloor(w),
                 uf = longFloor(u),
                 vf = longFloor(v),
-                bx0 = ThrustRNG.determine(xf ^ seedX),
-                by0 = ThrustRNG.determine(yf ^ seedY),
-                bz0 = ThrustRNG.determine(zf ^ seedZ),
-                bw0 = ThrustRNG.determine(wf ^ seedW),
-                bu0 = ThrustRNG.determine(uf ^ seedU),
-                bv0 = ThrustRNG.determine(vf ^ seedV),
-                bx1 = ThrustRNG.determine(xf + 1 ^ seedX),
-                by1 = ThrustRNG.determine(yf + 1 ^ seedY),
-                bz1 = ThrustRNG.determine(zf + 1 ^ seedZ),
-                bw1 = ThrustRNG.determine(wf + 1 ^ seedW),
-                bu1 = ThrustRNG.determine(uf + 1 ^ seedU),
-                bv1 = ThrustRNG.determine(vf + 1 ^ seedV);
+                bx0 = xf * seedX,
+                by0 = yf * seedY,
+                bz0 = zf * seedZ,
+                bw0 = wf * seedW,
+                bu0 = uf * seedU,
+                bv0 = vf * seedV,
+                bx1 = bx0+seedX,
+                by1 = by0+seedY,
+                bz1 = bz0+seedZ,
+                bw1 = bw0+seedW,
+                bu1 = bu0+seedU,
+                bv1 = bv0+seedV;
         return NumberTools.sway(
-                querp(
-                        querp(
-                                querp(
-                                        querp(
-                                                querp(
-                                                        querp((bx0 * by0 * bz0 * bw0 * bu0 * bv0) * 0x1.Bp-62, (bx1 * by0 * bz0 * bw0 * bu0 * bv0) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz0 * bw0 * bu0 * bv0) * 0x1.Bp-62, (bx1 * by1 * bz0 * bw0 * bu0 * bv0) * 0x1.Bp-62, x - xf),
+                cerp(
+                        cerp(
+                                cerp(
+                                        cerp(
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.25p-62, x - xf),
                                                         y - yf),
-                                                querp(
-                                                        querp((bx0 * by0 * bz1 * bw0 * bu0 * bv0) * 0x1.Bp-62, (bx1 * by0 * bz1 * bw0 * bu0 * bv0) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz1 * bw0 * bu0 * bv0) * 0x1.Bp-62, (bx1 * by1 * bz1 * bw0 * bu0 * bv0) * 0x1.Bp-62, x - xf),
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.25p-62, x - xf),
                                                         y - yf),
                                                 z - zf),
-                                        querp(
-                                                querp(
-                                                        querp((bx0 * by0 * bz0 * bw1 * bu0 * bv0) * 0x1.Bp-62, (bx1 * by0 * bz0 * bw1 * bu0 * bv0) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz0 * bw1 * bu0 * bv0) * 0x1.Bp-62, (bx1 * by1 * bz0 * bw1 * bu0 * bv0) * 0x1.Bp-62, x - xf),
+                                        cerp(
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.25p-62, x - xf),
                                                         y - yf),
-                                                querp(
-                                                        querp((bx0 * by0 * bz1 * bw1 * bu0 * bv0) * 0x1.Bp-62, (bx1 * by0 * bz1 * bw1 * bu0 * bv0) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz1 * bw1 * bu0 * bv0) * 0x1.Bp-62, (bx1 * by1 * bz1 * bw1 * bu0 * bv0) * 0x1.Bp-62, x - xf),
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.25p-62, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         w - wf),
-                                querp(
-                                        querp(
-                                                querp(
-                                                        querp((bx0 * by0 * bz0 * bw0 * bu1 * bv0) * 0x1.Bp-62, (bx1 * by0 * bz0 * bw0 * bu1 * bv0) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz0 * bw0 * bu1 * bv0) * 0x1.Bp-62, (bx1 * by1 * bz0 * bw0 * bu1 * bv0) * 0x1.Bp-62, x - xf),
+                                cerp(
+                                        cerp(
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.25p-62, x - xf),
                                                         y - yf),
-                                                querp(
-                                                        querp((bx0 * by0 * bz1 * bw0 * bu1 * bv0) * 0x1.Bp-62, (bx1 * by0 * bz1 * bw0 * bu1 * bv0) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz1 * bw0 * bu1 * bv0) * 0x1.Bp-62, (bx1 * by1 * bz1 * bw0 * bu1 * bv0) * 0x1.Bp-62, x - xf),
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.25p-62, x - xf),
                                                         y - yf),
                                                 z - zf),
-                                        querp(
-                                                querp(
-                                                        querp((bx0 * by0 * bz0 * bw1 * bu1 * bv0) * 0x1.Bp-62, (bx1 * by0 * bz0 * bw1 * bu1 * bv0) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz0 * bw1 * bu1 * bv0) * 0x1.Bp-62, (bx1 * by1 * bz0 * bw1 * bu1 * bv0) * 0x1.Bp-62, x - xf),
+                                        cerp(
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.25p-62, x - xf),
                                                         y - yf),
-                                                querp(
-                                                        querp((bx0 * by0 * bz1 * bw1 * bu1 * bv0) * 0x1.Bp-62, (bx1 * by0 * bz1 * bw1 * bu1 * bv0) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz1 * bw1 * bu1 * bv0) * 0x1.Bp-62, (bx1 * by1 * bz1 * bw1 * bu1 * bv0) * 0x1.Bp-62, x - xf),
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.25p-62, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         w - wf),
                                 u - uf),
 
-                        querp(
-                                querp(
-                                        querp(
-                                                querp(
-                                                        querp((bx0 * by0 * bz0 * bw0 * bu0 * bv1) * 0x1.Bp-62, (bx1 * by0 * bz0 * bw0 * bu0 * bv1) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz0 * bw0 * bu0 * bv1) * 0x1.Bp-62, (bx1 * by1 * bz0 * bw0 * bu0 * bv1) * 0x1.Bp-62, x - xf),
+                        cerp(
+                                cerp(
+                                        cerp(
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.25p-62, x - xf),
                                                         y - yf),
-                                                querp(
-                                                        querp((bx0 * by0 * bz1 * bw0 * bu0 * bv1) * 0x1.Bp-62, (bx1 * by0 * bz1 * bw0 * bu0 * bv1) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz1 * bw0 * bu0 * bv1) * 0x1.Bp-62, (bx1 * by1 * bz1 * bw0 * bu0 * bv1) * 0x1.Bp-62, x - xf),
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.25p-62, x - xf),
                                                         y - yf),
                                                 z - zf),
-                                        querp(
-                                                querp(
-                                                        querp((bx0 * by0 * bz0 * bw1 * bu0 * bv1) * 0x1.Bp-62, (bx1 * by0 * bz0 * bw1 * bu0 * bv1) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz0 * bw1 * bu0 * bv1) * 0x1.Bp-62, (bx1 * by1 * bz0 * bw1 * bu0 * bv1) * 0x1.Bp-62, x - xf),
+                                        cerp(
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.25p-62, x - xf),
                                                         y - yf),
-                                                querp(
-                                                        querp((bx0 * by0 * bz1 * bw1 * bu0 * bv1) * 0x1.Bp-62, (bx1 * by0 * bz1 * bw1 * bu0 * bv1) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz1 * bw1 * bu0 * bv1) * 0x1.Bp-62, (bx1 * by1 * bz1 * bw1 * bu0 * bv1) * 0x1.Bp-62, x - xf),
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.25p-62, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         w - wf),
-                                querp(
-                                        querp(
-                                                querp(
-                                                        querp((bx0 * by0 * bz0 * bw0 * bu1 * bv1) * 0x1.Bp-62, (bx1 * by0 * bz0 * bw0 * bu1 * bv1) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz0 * bw0 * bu1 * bv1) * 0x1.Bp-62, (bx1 * by1 * bz0 * bw0 * bu1 * bv1) * 0x1.Bp-62, x - xf),
+                                cerp(
+                                        cerp(
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.25p-62, x - xf),
                                                         y - yf),
-                                                querp(
-                                                        querp((bx0 * by0 * bz1 * bw0 * bu1 * bv1) * 0x1.Bp-62, (bx1 * by0 * bz1 * bw0 * bu1 * bv1) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz1 * bw0 * bu1 * bv1) * 0x1.Bp-62, (bx1 * by1 * bz1 * bw0 * bu1 * bv1) * 0x1.Bp-62, x - xf),
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.25p-62, x - xf),
                                                         y - yf),
                                                 z - zf),
-                                        querp(
-                                                querp(
-                                                        querp((bx0 * by0 * bz0 * bw1 * bu1 * bv1) * 0x1.Bp-62, (bx1 * by0 * bz0 * bw1 * bu1 * bv1) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz0 * bw1 * bu1 * bv1) * 0x1.Bp-62, (bx1 * by1 * bz0 * bw1 * bu1 * bv1) * 0x1.Bp-62, x - xf),
+                                        cerp(
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.25p-62, x - xf),
                                                         y - yf),
-                                                querp(
-                                                        querp((bx0 * by0 * bz1 * bw1 * bu1 * bv1) * 0x1.Bp-62, (bx1 * by0 * bz1 * bw1 * bu1 * bv1) * 0x1.Bp-62, x - xf),
-                                                        querp((bx0 * by1 * bz1 * bw1 * bu1 * bv1) * 0x1.Bp-62, (bx1 * by1 * bz1 * bw1 * bu1 * bv1) * 0x1.Bp-62, x - xf),
+                                                cerp(
+                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.25p-62, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         w - wf),
                                 u - uf),
                         v - vf));
     }
+    private transient long[] scratch3;
+    private transient double[] scratch;
+    public final double arbitraryNoise(long seed, double... coordinates) {
+        final int len = coordinates.length, upper = 1 << len;
+        if(scratch3 == null || scratch3.length < len * 3)
+            scratch3 = new long[len * 3];
+        if(scratch == null || scratch.length < upper)
+            scratch = new double[upper];
+        for (int i = 0; i < len; i++) {
+            seed = ThrustRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed << 32);
+            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(coordinates[i])) * seed) + seed;
+        }
+        long working;
+        for (int i = 0; i < upper; i++) {
+            working = 0L;
+            for (int j = 0; j < len; j++) {
+                working += scratch3[j * 3 + (i >> j & 1)];
+            }
+            scratch[i] = determine(working) * 0x1.5p-61;
+        }
+        for (int i = 0; i < len; ++i) {
+            for (int j = 0, t = upper >> i; j < t; j += 2) {
+                scratch[j >> 1] = cerp(scratch[j], scratch[j + 1], coordinates[i] - scratch3[i * 3 + 2]);
+            }
+        }
+        return NumberTools.sway(scratch[0]);
+        /*
+        for (int i = 0; i < upper; i++) {
+
+        }
+        //0000 0001 x 0010 0011 x y 0100 0101 x 0110 0111 x y z
+        return NumberTools.sway(
+                cerp(
+                        cerp(
+                                cerp(
+                                        cerp(determine(bx0 + by0 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0) * 0x1.25p-62, x - xf),
+                                        cerp(determine(bx0 + by1 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0) * 0x1.25p-62, x - xf),
+                                        y - yf),
+                                cerp(
+                                        cerp(determine(bx0 + by0 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0) * 0x1.25p-62, x - xf),
+                                        cerp(determine(bx0 + by1 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0) * 0x1.25p-62, x - xf),
+                                        y - yf),
+                                z - zf),
+                        cerp(
+                                cerp(
+                                        cerp(determine(bx0 + by0 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1) * 0x1.25p-62, x - xf),
+                                        cerp(determine(bx0 + by1 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1) * 0x1.25p-62, x - xf),
+                                        y - yf),
+                                cerp(
+                                        cerp(determine(bx0 + by0 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1) * 0x1.25p-62, x - xf),
+                                        cerp(determine(bx0 + by1 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1) * 0x1.25p-62, x - xf),
+                                        y - yf),
+                                z - zf),
+                        w - wf));
+        */
+    }
+
 }

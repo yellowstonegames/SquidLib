@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 43, rngMode = 30, noiseMode = 86;
+    private int hashMode = 43, rngMode = 30, noiseMode = 91;
 
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
@@ -587,7 +587,7 @@ public class HashVisualizer extends ApplicationAdapter {
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 100;                               }
+                                    noiseMode %= 102;                               }
                                 switch (noiseMode)
                                 {
                                     case 16:
@@ -3379,9 +3379,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         floatGet(
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30, seedX0, seedY0) * 0.50f) + 0.50f,
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 30, y * 0.11125f + ctr * 0.11125f + 10, seedX1, seedY1) * 0.50f) + 0.50f,
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 10, y * 0.11125f + ctr * 0.11125f + 20, seedX2, seedY2) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30, seedX0, seedY0) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 30, y * 0.11125f + ctr * 0.11125f + 10, seedX1, seedY1) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 10, y * 0.11125f + ctr * 0.11125f + 20, seedX2, seedY2) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3390,7 +3390,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Mummy 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30, seedX0, seedY0) * 0.50f) + 0.50f;
+                                bright = (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30, seedX3, seedY3) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -3401,9 +3401,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         floatGet(
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, seedX0, seedY0, seedZ0) * 0.50f) + 0.50f,
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, seedX1, seedY1, seedZ1) * 0.50f) + 0.50f,
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, seedX2, seedY2, seedZ2) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, seedX0, seedY0, seedZ0) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, seedX1, seedY1, seedZ1) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, seedX2, seedY2, seedZ2) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3412,7 +3412,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Mummy 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.11125f + 10,
+                                bright = (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.11125f + 10,
                                         seedX3, seedY3, seedZ3) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
@@ -3425,9 +3425,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         floatGet(
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 31.337) * 0.0311125f, seedX0, seedY0, seedZ0, seedW0) * 0.50f) + 0.50f,
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 42.337) * 0.0311125f, seedX1, seedY1, seedZ1, seedW1) * 0.50f) + 0.50f,
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 53.337) * 0.0311125f, seedX2, seedY2, seedZ2, seedW2) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 31.337) * 0.0311125f, seedX0, seedY0, seedZ0, seedW0) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 42.337) * 0.0311125f, seedX1, seedY1, seedZ1, seedW1) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 53.337) * 0.0311125f, seedX2, seedY2, seedZ2, seedW2) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3436,7 +3436,7 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Mummy 4D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
+                                bright = (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
                                         NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 31.337) * 0.0311125f, seedX3, seedY3, seedZ3, seedW3) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
@@ -3448,9 +3448,9 @@ public class HashVisualizer extends ApplicationAdapter {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
                                         floatGet(
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.041125f + 20, y * 0.041125f + 30, ctr * 0.042125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.042511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.04811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.04611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0) * 0.50f) + 0.50f,
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.041125f + 30, y * 0.041125f + 10, ctr * 0.042125f + 20, (NumberTools.sway((x + y) * 0.021f) + ctr + 42.337) * 0.042511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.6) * 0.04811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.3) * 0.04611125f, seedX1, seedY1, seedZ1, seedW1, seedU1, seedV1) * 0.50f) + 0.50f,
-                                                (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.041125f + 10, y * 0.041125f + 20, ctr * 0.042125f + 30, (NumberTools.sway((x + y) * 0.021f) + ctr + 53.337) * 0.042511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.4) * 0.04811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.6) * 0.04611125f, seedX2, seedY2, seedZ2, seedW2, seedU2, seedV2) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.071125f + 20, y * 0.071125f + 30, ctr * 0.072125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.07611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.071125f + 30, y * 0.071125f + 10, ctr * 0.072125f + 20, (NumberTools.sway((x + y) * 0.021f) + ctr + 42.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.6) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.3) * 0.07611125f, seedX1, seedY1, seedZ1, seedW1, seedU1, seedV1) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.getNoiseWithSeeds(x * 0.071125f + 10, y * 0.071125f + 20, ctr * 0.072125f + 30, (NumberTools.sway((x + y) * 0.021f) + ctr + 53.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.4) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.6) * 0.07611125f, seedX2, seedY2, seedZ2, seedW2, seedU2, seedV2) * 0.50f) + 0.50f,
                                                 1.0f));
                             }
                         }
@@ -3459,7 +3459,29 @@ public class HashVisualizer extends ApplicationAdapter {
                         Gdx.graphics.setTitle("Mummy 6D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)(MummyNoise.instance.getNoiseWithSeeds(x * 0.041125f + 20, y * 0.041125f + 30, ctr * 0.042125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.042511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.04811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.04611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0) * 0.50f) + 0.50f;
+                                bright = (float)(MummyNoise.getNoiseWithSeeds(x * 0.071125f + 20, y * 0.071125f + 30, ctr * 0.072125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.07611125f, seedX3, seedY3, seedZ3, seedW3, seedU3, seedV3) * 0.50f) + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 100:
+                        Gdx.graphics.setTitle("Mummy 9D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y,
+                                        floatGet(
+                                                (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter9D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter9D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter9D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                1.0f));
+                            }
+                        }
+                        break;
+                    case 101:
+                        Gdx.graphics.setTitle("Mummy 9D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(MummyNoise.instance.arbitraryNoise(seedX3, alter9D(x, y, ctr)) * 0.50f) + 0.50f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -4188,6 +4210,21 @@ public class HashVisualizer extends ApplicationAdapter {
             }
         }
         //colorFactory.clearCache();
+    }
+
+    private final double[] point9D = new double[9];
+    private double[] alter9D(int x, int y, int ctr) {
+        point9D[0] = x * 0.11125f;
+        point9D[1] = y * 0.11125f;
+        point9D[2] = ctr * 0.15125f;
+        point9D[3] = (x * 0.6 + y) * 0.05625f;
+        point9D[4] = (x * 0.6 - y) * 0.05625f;
+        point9D[5] = (y * 0.3 + x * 0.8) * 0.03125f + ctr * 0.03125f;
+        point9D[6] = (y * 0.3 - x * 0.8) * 0.01625f + ctr * 0.06125f;
+        point9D[7] = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
+        point9D[8] = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
+        return point9D;
+
     }
 
     @Override
