@@ -18,7 +18,7 @@ import java.util.EnumMap;
 public class SquidStorageTest extends ApplicationAdapter {
     public static class TestClass
     {
-        public EnumMapPlus<Direction, String> em = new EnumMapPlus<>(Direction.class);
+        public EnumMap<Direction, String> em = new EnumMap<>(Direction.class);
         public TestClass()
         {
         }
