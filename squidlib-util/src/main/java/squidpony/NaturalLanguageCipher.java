@@ -349,9 +349,9 @@ se$->z
         {
             checks = additionalSuffixChecks;
         }
-        syllables <<= 1;
+        //syllables <<= 1;
         do {
-            done = language.word(rng, false, syllables >> 1, checks);
+            done = language.word(rng, false, syllables, checks);
             if(cacheLevel < 2 || ++syllables > 5)
                 break;
         }while(reverse.containsKey(done));
@@ -361,6 +361,7 @@ se$->z
         }
         return done;
     }
+
     /**
      * Constructs a LanguageCipher that will use the given style of language generator to produce its text.
      * @param language a FakeLanguageGen, typically one of the static constants in that class or a mix of them.
@@ -611,7 +612,7 @@ se$->z
                     reverb = false, ennoun = false, preverb = false, postverb = false,
                     proverb = false, antiverb = false, disnoun = false;
             */
-            if(end >= 4 && endO >= 4 && sc[end-1]=='s')
+            if(end >= 4 && endO >= 4 && sc[end-1]=='s' && sc[end-2]!='s') // checking for extra 's' helps singular nouns like "dress" and "princess"
             {
                 mods |= PLURAL;
                 end--;

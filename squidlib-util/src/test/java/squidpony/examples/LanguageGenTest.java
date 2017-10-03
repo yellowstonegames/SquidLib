@@ -442,6 +442,8 @@ public class LanguageGenTest {
         StatefulRNG sr = new StatefulRNG(2252637788195L);
         for(FakeLanguageGen lang : languages) {
             NaturalLanguageCipher cipher = new NaturalLanguageCipher(lang, 41041041L);
+//            System.out.println("princess   : " + cipher.lookup("princess"));
+//            System.out.println("princesses : " + cipher.lookup("princesses"));
             //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
             for (String s : oz) {
