@@ -265,44 +265,44 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                                 cerp(
                                         cerp(
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         cerp(
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         w - wf),
                                 cerp(
                                         cerp(
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         cerp(
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         w - wf),
@@ -312,44 +312,44 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                                 cerp(
                                         cerp(
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         cerp(
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         w - wf),
                                 cerp(
                                         cerp(
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         cerp(
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 cerp(
-                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.25p-62, x - xf),
-                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.25p-62, x - xf),
+                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),
+                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),
                                                         y - yf),
                                                 z - zf),
                                         w - wf),
@@ -358,8 +358,18 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
     private transient long[] scratch3;
     private transient double[] scratch;
+    private transient int lastLen = -1;
+    private transient double lastEffect = 0x1.12bp-61;
     public final double arbitraryNoise(long seed, double... coordinates) {
         final int len = coordinates.length, upper = 1 << len;
+        final double effect;
+        if(len != lastLen)
+        {
+            lastLen = len;
+            lastEffect = effect = 0x1.81p-62 * Math.pow(1.15625, len * 0.8125);
+        }
+        else
+            effect = lastEffect;
         if(scratch3 == null || scratch3.length < len * 3)
             scratch3 = new long[len * 3];
         if(scratch == null || scratch.length < upper)
@@ -374,7 +384,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
             for (int j = 0; j < len; j++) {
                 working += scratch3[j * 3 + (i >> j & 1)];
             }
-            scratch[i] = determine(working) * 0x1.5p-61;
+            scratch[i] = determine(working) * effect;
         }
         for (int i = 0; i < len; ++i) {
             for (int j = 0, t = upper >> i; j < t; j += 2) {
