@@ -53,6 +53,7 @@ public abstract class WorldMapGenerator {
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
     public int zoom = 0;
     protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
+    protected int zoomStartX = 0, zoomStartY = 0;
     public static final double
             deepWaterLower = -1.0, deepWaterUpper = -0.7,        // 0
             mediumWaterLower = -0.7, mediumWaterUpper = -0.3,    // 1
@@ -164,9 +165,14 @@ public abstract class WorldMapGenerator {
             startCacheY.clear();
             startCacheX.add(0);
             startCacheY.add(0);
+            zoomStartX = width >> 1;
+            zoomStartY = height >> 1;
 
         }
-        regenerate(startCacheX.peek(), startCacheY.peek(),
+        //System.out.printf("generate, zoomStartX: %d, zoomStartY: %d\n", zoomStartX, zoomStartY);
+
+        regenerate((zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom),
+                //startCacheX.peek(), startCacheY.peek(),
                 (width >> zoom), (height >> zoom), waterMod, coolMod, state);
     }
 
@@ -192,6 +198,7 @@ public abstract class WorldMapGenerator {
      */
     public void zoomOut(int zoomAmount, int zoomCenterX, int zoomCenterY)
     {
+        zoomAmount = Math.min(zoom, zoomAmount);
         if(zoomAmount == 0) return;
         if(zoomAmount < 0) {
             zoomIn(-zoomAmount, zoomCenterX, zoomCenterY);
@@ -203,7 +210,13 @@ public abstract class WorldMapGenerator {
             {
                 generate(rng.nextLong());
             }
-
+            zoomStartX = Math.min(Math.max(
+                    (zoomStartX + (zoomCenterX - (width >> 1))) >> zoomAmount,
+                    width >> 1), (width << zoom - zoomAmount) - (width >> 1));
+            zoomStartY = Math.min(Math.max(
+                    (zoomStartY + (zoomCenterY - (height >> 1))) >> zoomAmount,
+                    height >> 1), (height << zoom - zoomAmount) - (height >> 1));
+//            System.out.printf("zoomOut, zoomStartX: %d, zoomStartY: %d\n", zoomStartX, zoomStartY);
             zoom -= zoomAmount;
             startCacheX.pop();
             startCacheY.pop();
@@ -211,7 +224,13 @@ public abstract class WorldMapGenerator {
                     0), width - (width >> zoom)));
             startCacheY.add(Math.min(Math.max(startCacheY.pop() + (zoomCenterY >> zoom + 1) - (height >> zoom + 2),
                     0), height - (height >> zoom)));
-            regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom,
+//            zoomStartX = Math.min(Math.max((zoomStartX >> 1) + (zoomCenterX >> zoom + 1) - (width >> zoom + 2),
+//                    0), width - (width >> zoom));
+//            zoomStartY = Math.min(Math.max((zoomStartY >> 1) + (zoomCenterY >> zoom + 1) - (height >> zoom + 2),
+//                    0), height - (height >> zoom));
+            regenerate((zoomStartX >> zoom) - (width >> zoom + 1), (zoomStartY >> zoom) - (height >> zoom + 1),
+                    //startCacheX.peek(), startCacheY.peek(),
+                    width >> zoom, height >> zoom,
                     waterModifier, coolingModifier, cachedState);
             rng.setState(cachedState);
         }
@@ -253,6 +272,15 @@ public abstract class WorldMapGenerator {
         {
             generate(rng.nextLong());
         }
+        zoomStartX = Math.min(Math.max(
+                (zoomStartX + zoomCenterX - (width >> 1) << zoomAmount),
+                width >> 1), (width << zoom + zoomAmount) - (width >> 1));
+//        int oldZoomY = zoomStartY;
+        zoomStartY = Math.min(Math.max(
+                (zoomStartY + zoomCenterY - (height >> 1) << zoomAmount),
+                height >> 1), (height << zoom + zoomAmount) - (height >> 1));
+//        System.out.printf("zoomIn, zoomStartX: %d, zoomStartY: %d, oldZoomY: %d, unedited: %d, upperCap: %d\n", zoomStartX, zoomStartY,
+//                oldZoomY, (oldZoomY + zoomCenterY - (height >> 1) << zoomAmount), (height << zoom + zoomAmount) - (height >> 1));
         zoom += zoomAmount;
         if(startCacheX.isEmpty())
         {
@@ -265,7 +293,9 @@ public abstract class WorldMapGenerator {
             startCacheY.add(Math.min(Math.max(startCacheY.peek() + (zoomCenterY >> zoom - 1) - (height >> zoom + 1),
                     0), height - (height >> zoom)));
         }
-        regenerate(startCacheX.peek(), startCacheY.peek(),width >> zoom, height >> zoom,
+        regenerate((zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom),
+                //startCacheX.peek(), startCacheY.peek(),
+                width >> zoom, height >> zoom,
                 waterModifier, coolingModifier, cachedState);
         rng.setState(cachedState);
     }
@@ -1225,9 +1255,11 @@ public abstract class WorldMapGenerator {
                 } else {
                     partialRiverData.remake(riverData);
                     partialLakeData.remake(lakeData);
+                    int stx = (zoomStartX >> (zoom)) - (width >> 1),
+                            sty = (zoomStartY >> (zoom)) - (height >> 1);
                     for (int i = 1; i <= zoom; i++) {
-                        int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
-                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
+//                        int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
+//                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
                         if ((i & 3) == 3) {
                             partialRiverData.zoom(stx, sty).connect8way();
                             partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
@@ -1544,8 +1576,12 @@ public abstract class WorldMapGenerator {
                     partialRiverData.remake(riverData);
                     partialLakeData.remake(lakeData);
                     for (int i = 1; i <= zoom; i++) {
-                        int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
-                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
+//                        int stx2 = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
+//                                sty2 = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
+                        //(zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom)
+                        int stx = Math.min(Math.max((zoomStartX >> zoom) - (width >> 2), 0), width),
+                                sty = Math.min(Math.max((zoomStartY >> zoom) - (height >> 2), 0), height);
+//                        System.out.printf("zoomStartX: %d zoomStartY: %d, stx: %d sty: %d, stx2: %d, sty2: %d\n", zoomStartX, zoomStartY, stx, sty, stx2, sty2);
                         if ((i & 3) == 3) {
                             partialRiverData.zoom(stx, sty).connect8way();
                             partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
@@ -1558,6 +1594,7 @@ public abstract class WorldMapGenerator {
                             partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
                         }
                     }
+//                    System.out.println();
                 }
             }
         }

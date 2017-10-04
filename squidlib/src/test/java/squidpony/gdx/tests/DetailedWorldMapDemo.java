@@ -342,6 +342,13 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         generate(seed);
                         rng.setState(seed);
                         break;
+                    case 'M':
+                    case 'm':
+                        world = new WorldMapGenerator.SphereMap(seed, width, height, MummyNoise.instance, 1.1);
+                        seed = rng.nextLong();
+                        generate(seed);
+                        rng.setState(seed);
+                        break;
                     case 'W':
                     case 'w':
                         world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
