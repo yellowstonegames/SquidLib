@@ -300,8 +300,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pt = new Texture(pm);
         rng = new StatefulRNG(CrossHash.hash64(date));
         seed = rng.getState();
-        //world = new WorldMapGenerator.TilingMap(seed, width, height, TabbyNoise.instance, 0.9);
-        world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Turbulent3D(WhirlingNoise.instance, TabbyNoise.instance, 2, 1.4), 0.85);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
+        //world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Turbulent3D(WhirlingNoise.instance, TabbyNoise.instance, 2, 1.4), 0.85);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {

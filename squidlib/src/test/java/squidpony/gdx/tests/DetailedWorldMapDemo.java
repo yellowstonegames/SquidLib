@@ -216,7 +216,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         final int[][] heightCodeData = world.heightCodeData;
         final double[][] heatData = world.heatData, moistureData = world.moistureData, heightData = world.heightData;
         int hc, mc, heightCode;
-        double hot, moist, high, i_hot = 1.0 / this.world.maxHeat;
+        double hot, moist, high, i_hot = 1.0 / this.world.maxHeat, fresh;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
 
@@ -224,8 +224,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 hot = heatData[x][y];
                 moist = moistureData[x][y];
                 high = heightData[x][y];
-                boolean isLake = heightCode >= 4 && world.partialLakeData.contains(x, y),
-                        isRiver = heightCode >= 4 && world.partialRiverData.contains(x, y);
+                fresh = world.freshwaterData[x][y];
+                boolean isLake = world.generateRivers && heightCode >= 4 && fresh > 0.65 && fresh + moist * 2.35 > 2.75,//world.partialLakeData.contains(x, y) && heightCode >= 4,
+                        isRiver = world.generateRivers && !isLake && heightCode >= 4 && fresh > 0.55 && fresh + moist * 2.2 > 2.15;//world.partialRiverData.contains(x, y) && heightCode >= 4;
                 if (moist >= (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)) {
                     mc = 5;
                 } else if (moist >= (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)) {
