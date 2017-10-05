@@ -63,7 +63,7 @@ public class DefaultResources implements LifecycleListener {
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
-            distanceSciFi = null, distanceOrbit = null,
+            distanceSciFi = null, distanceOrbit = null, distanceHeavySquare = null,
             distanceSlab = null, distanceSlabLight = null, distanceWideSlab = null,  distanceWideSlabLight = null,
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
@@ -83,6 +83,8 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldSquareTexture = "Inconsolata-LGC-Square-distance.png",
             distanceFieldNarrow = "Inconsolata-LGC-Custom-distance.fnt",
             distanceFieldNarrowTexture = "Inconsolata-LGC-Custom-distance.png",
+            distanceFieldHeavySquare = "BoxedIn-distance.fnt",
+            distanceFieldHeavySquareTexture = "BoxedIn-distance.png",
             distanceFieldPrint = "Gentium-distance.fnt",
             distanceFieldPrintTexture = "Gentium-distance.png",
             distanceFieldClean = "Noto-Sans-distance.fnt",
@@ -518,6 +520,43 @@ public class DefaultResources implements LifecycleListener {
             return instance.distanceSquare.copy();
         return null;
     }
+
+    /**
+     * Returns a TextCellFactory already configured to use an blocky, fairly-bold square font that should scale cleanly
+     * to many sizes. Unlike {@link #getStretchableSquareFont()}, the font this uses was made to be square initially,
+     * and is not a distorted/stretched version of an existing font. Caches the result for later calls.
+     * <br>
+     * <a href="https://i.imgur.com/nIjgTOp.png">Preview at 6x6 size, https://i.imgur.com/nIjgTOp.png</a>
+     * <a href="https://i.imgur.com/lWaSgVN.png">Preview at much larger size, https://i.imgur.com/lWaSgVN.png</a>
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/BoxedIn-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/BoxedIn-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the square font BoxedIn.ttf
+     */
+    public static TextCellFactory getStretchableHeavySquareFont()
+    {
+        initialize();
+        if(instance.distanceHeavySquare == null)
+        {
+            try {
+                instance.distanceHeavySquare = new TextCellFactory()
+                        .fontDistanceField(distanceFieldHeavySquare, distanceFieldHeavySquareTexture)
+                        .setSmoothingMultiplier(2.125f);
+            } catch (Exception e) {
+            }
+        }
+        if(instance.distanceHeavySquare != null)
+            return instance.distanceHeavySquare.copy();
+        return null;
+    }
+
+
     /**
      * Returns a TextCellFactory already configured to use a narrow font (twice as tall as it is wide) that should scale
      * cleanly to many sizes. Caches the result for later calls.

@@ -993,7 +993,7 @@ public class TextCellFactory implements Disposable {
         {
             colorFromFloat(bmpFont.getColor(), encodedColor);
             mut.setCharAt(0, swap.getOrDefault(c, c));
-            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, mut, x, y - descent/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
 
