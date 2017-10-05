@@ -55,9 +55,9 @@ public class SparseDemo extends ApplicationAdapter {
     //one cell; resizing the window can make the units cellWidth and cellHeight use smaller or larger than a pixel.
 
     /** In number of cells */
-    private static final int gridWidth = 91;
+    private static final int gridWidth = 60;
     /** In number of cells */
-    private static final int gridHeight = 24;
+    private static final int gridHeight = 40;
 
     /** In number of cells */
     private static final int bigWidth = gridWidth * 3;
@@ -67,9 +67,9 @@ public class SparseDemo extends ApplicationAdapter {
     /** In number of cells */
     private static final int bonusHeight = 7;
     /** The pixel width of a cell */
-    private static final int cellWidth = 10;
+    private static final int cellWidth = 6;
     /** The pixel height of a cell */
-    private static final int cellHeight = 20;
+    private static final int cellHeight = 6;
     private SquidInput input;
     private Color bgColor;
     private Stage stage, languageStage;
@@ -149,12 +149,13 @@ public class SparseDemo extends ApplicationAdapter {
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableSlabFont());
+                DefaultResources.getStretchableHeavySquareFont());
+                //DefaultResources.getStretchableSlabFont());
 
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.font.tweakWidth(cellWidth * 1.1f).tweakHeight(cellHeight * 1.1f).initBySize();
+        display.font.tweakWidth(cellWidth * 1.0666f).tweakHeight(cellHeight * 1.0666f).initBySize();
 
         languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
