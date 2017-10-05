@@ -2587,14 +2587,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * of the two dimensions) will be unaffected by this. Especially wide, irregularly-shaped areas may have unintended
      * appearances if you call this repeatedly or use {@link #thinFully()}; consider using this sparingly, or primarily
      * when an area has just gotten thicker than desired.
+     * <br>
+     * This currently uses 4-way adjacency, but had previously used 8-way; if you want the behavior this previously had,
+     * you can use {@link #thin8way()}, but it may be a good idea to try this method as well (some of the old behavior
+     * had problems where it yielded significantly larger minimum widths in some areas).
      * @return this for chaining
      */
     public GreasedRegion thin()
     {
         if(width <= 2 || ySections <= 0)
             return this;
-        GreasedRegion c1 = new GreasedRegion(this).retract8way(),
-                c2 = new GreasedRegion(c1).expand8way().xor(this).expand8way().and(this);
+        GreasedRegion c1 = new GreasedRegion(this).retract(),
+                c2 = new GreasedRegion(c1).expand().xor(this).expand().and(this);
         remake(c1).or(c2);
         /*
         System.out.println("\n\nc1:\n" + c1.toString() + "\n");
@@ -2609,11 +2613,52 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * {@code expand8way().retract().thinFully()} to help change a possibly-strange appearance when the GreasedRegion
      * this is called on touches the edges of the grid. In general, this method is likely to go too far when it tries to
      * thin a round or irregular area, and this often results in many diagonal lines spanning the formerly-thick area.
+     * <br>
+     * This currently uses 4-way adjacency, but had previously used 8-way; if you want the behavior this previously had,
+     * you can use {@link #thinFully8way()}, but it may be a good idea to try this method as well (some of the old
+     * behavior had problems where it yielded significantly larger minimum widths in some areas).
      * @return this for chaining
      */
     public GreasedRegion thinFully()
     {
         while (size() != thin().size());
+        return this;
+    }
+
+
+    /**
+     * Like {@link #retract8way()}, this reduces the width of thick areas of this GreasedRegion, but thin8way() will not
+     * remove areas that would be identical in a subsequent call to retract8way(), such as if the area would be
+     * eliminated. This is useful primarily for adjusting areas so they do not exceed a width of 2 cells, though their
+     * length (the longer of the two dimensions) will be unaffected by this. Especially wide, irregularly-shaped areas
+     * may have unintended appearances if you call this repeatedly or use {@link #thinFully8way()}; consider using this
+     * sparingly, or primarily when an area has just gotten thicker than desired.
+     * <br>
+     * This method was called {@link #thin()}, but now that name refers to a variant that uses 4-way adjacency.
+     * @return this for chaining
+     */
+    public GreasedRegion thin8way()
+    {
+        if(width <= 2 || ySections <= 0)
+            return this;
+        GreasedRegion c1 = new GreasedRegion(this).retract8way(),
+                c2 = new GreasedRegion(c1).expand8way().xor(this).expand8way().and(this);
+        remake(c1).or(c2);
+        return this;
+    }
+
+    /**
+     * Calls {@link #thin8way()} repeatedly, until the result is unchanged from the last call. Consider using the idiom
+     * {@code expand8way().retract().thinFully8way()} to help change a strange appearance when the GreasedRegion this is
+     * called on touches the edges of the grid. In general, this method is likely to go too far when it tries to thin a
+     * round or irregular area, and this often results in many diagonal lines spanning the formerly-thick area.
+     * <br>
+     * This method was called {@link #thinFully()}, but now that name refers to a variant that uses 4-way adjacency.
+     * @return this for chaining
+     */
+    public GreasedRegion thinFully8way()
+    {
+        while (size() != thin8way().size());
         return this;
     }
 
