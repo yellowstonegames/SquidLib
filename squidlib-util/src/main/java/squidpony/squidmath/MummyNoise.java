@@ -24,6 +24,15 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         seedU = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedW ^ 0xCABC279692B5C883L);
         seedV = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedU ^ 0xCBBC279692B5C783L);
     }
+    /**
+     * Like {@link Math#floor}, but returns a long. Doesn't consider weird doubles like INFINITY and NaN.
+     *
+     * @param t the double to find the floor for
+     * @return the floor of t, as a long
+     */
+    public static long longFloor(double t) {
+        return t >= 0 ? (long) t : (long) t - 1;
+    }
 
     /**
      * The same as {@link ThrustRNG#determine(long)}, except this assumes state has already been multiplied by
@@ -38,21 +47,9 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     /**
-     * Quintic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
-     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
-     * @param start a valid double
-     * @param end a valid double
-     * @param a a double between 0 and 1 inclusive
-     * @return a double between start and end inclusive
-     */
-    public static double querp(final double start, final double end, double a) {
-        return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
-    }
-
-    /**
      * Cubic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
      * Will smoothly transition toward start or end as a approaches 0 or 1, respectively. Somewhat faster than
-     * {@link #querp(double, double, double)}, but slower (and smoother) than {@link  #lerp(double, double, double)}.
+     * quintic interpolation (querp), but slower (and smoother) than {@link  #lerp(double, double, double)}.
      * @param start a valid double
      * @param end a valid double
      * @param a a double between 0 and 1 inclusive
@@ -65,16 +62,6 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     // actually lerp
     private static double lerp(final double start, final double end, double a) {
         return (1.0 - a) * start + a * end;
-    }
-
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird doubles like INFINITY and NaN.
-     *
-     * @param t the double to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static long longFloor(double t) {
-        return t >= 0 ? (long) t : (long) t - 1;
     }
 
     //    public static double gauss(final long state) {
@@ -392,35 +379,6 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
             }
         }
         return NumberTools.sway(scratch[0]);
-        /*
-        for (int i = 0; i < upper; i++) {
-
-        }
-        //0000 0001 x 0010 0011 x y 0100 0101 x 0110 0111 x y z
-        return NumberTools.sway(
-                cerp(
-                        cerp(
-                                cerp(
-                                        cerp(determine(bx0 + by0 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0) * 0x1.25p-62, x - xf),
-                                        cerp(determine(bx0 + by1 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0) * 0x1.25p-62, x - xf),
-                                        y - yf),
-                                cerp(
-                                        cerp(determine(bx0 + by0 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0) * 0x1.25p-62, x - xf),
-                                        cerp(determine(bx0 + by1 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0) * 0x1.25p-62, x - xf),
-                                        y - yf),
-                                z - zf),
-                        cerp(
-                                cerp(
-                                        cerp(determine(bx0 + by0 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1) * 0x1.25p-62, x - xf),
-                                        cerp(determine(bx0 + by1 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1) * 0x1.25p-62, x - xf),
-                                        y - yf),
-                                cerp(
-                                        cerp(determine(bx0 + by0 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1) * 0x1.25p-62, x - xf),
-                                        cerp(determine(bx0 + by1 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1) * 0x1.25p-62, x - xf),
-                                        y - yf),
-                                z - zf),
-                        w - wf));
-        */
     }
 
 }
