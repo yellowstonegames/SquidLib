@@ -31,14 +31,22 @@ public class ChaosRNG implements RandomnessSource{
 
     }
     /**
-     * Builds a ChaosRNG with a cryptographically-random seed. Future random generation uses less secure methods but
-     * should still make it extremely difficult to "divine" the future RNG results.
+     * Builds a ChaosRNG with a fairly-random seed derived from somewhat-OK sources of non-seed randomness, such as time
+     * before and after garbage collection. We're forced to use sub-par techniques here due to GWT not supporting any
+     * better methods. Future random generation uses less secure methods but should still make it extremely difficult to
+     * "divine" the future RNG results from the outputs.
      */
     public ChaosRNG()
     {
-        String s = System.currentTimeMillis() + "0" + System.identityHashCode(this);
+        z = new long[16];
+        // produces some garbage; this is intentional
+        String s = StringKit.hexHash(System.currentTimeMillis(), System.identityHashCode(this), System.identityHashCode(z));
         s += StringKit.LATIN_LETTERS_LOWER;
+        // sway causes most of the state of Math's Random field to be non-visible in the output
+        s += NumberTools.sway((126.621 + Math.random()) * (17.71 - Math.random()) + (71.17 * Math.random()));
+        // this should take some time because of the earlier garbage
         System.gc();
+        // so this should have a better chance of being different.
         s += System.currentTimeMillis();
         r0 = new IsaacRNG(s);
         r1 = new IsaacRNG(r0.nextBlock());
