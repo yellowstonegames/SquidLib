@@ -1,52 +1,53 @@
 package squidpony.squidmath;
 
-import squidpony.annotation.GwtIncompatible;
-
-import java.security.SecureRandom;
+import squidpony.StringKit;
 
 /**
  * An RNG that cannot be seeded and should be fairly hard to predict what it will return next. Useful for competitions
  * where a seeded RNG is used for dungeon generation and enemy placement but an unpredictable RNG is needed for combat,
- * so players can't abuse the RNG to make improbable events guaranteed or unfavorable outcomes impossible. The
- * performance of this as a RandomnessSource is also fairly good, taking approximately 1.5x to 1.7x as long as LightRNG
- * to produce random 64-bit data, and of course it is far faster than java.util.Random (which is 10x slower than this).
- * In the secure random numbers category, where this isn't quite as secure as most, ChaosRNG is about 80x faster than
- * SecureRandom once SecureRandom warms up, which takes about 10 minutes of continuous number generation. Before that,
- * ChaosRNG is about 110x faster than SecureRandom for 64-bit data.
+ * so players can't abuse the RNG to make improbable events guaranteed or unfavorable outcomes impossible.
  * <br>
  * This is intended to be used as a RandomnessSource for an RNG, and does not have any methods other than those needed
- * for that interface, with one exception -- the randomize() method, which can be used to completely change all 1024
+ * for that interface, with one exception -- the randomize() method, which can be used to completely change all (many)
  * bits of state using cryptographic random numbers. If you create a ChaosRNG and keep it around for later, then you can
  * pass it to the RNG constructor and later call randomize() on the ChaosRNG if you suspect it may be becoming
- * predictable. The period on this RNG is (2 to the 1024) - 1, so predicting it may be essentially impossible unless the
- * user can poke around in the application, use reflection, etc.
+ * predictable. The period on this RNG is preposterously large, since it involves a pair of IsaacRNGs as well as other
+ * random state, so predicting it may be essentially impossible unless the user can poke around in the application, use
+ * reflection, and so on.
  * Created by Tommy Ettinger on 3/17/2016.
  */
-@GwtIncompatible
 public class ChaosRNG implements RandomnessSource{
 
-    private transient long[] state = new long[16];
+    private transient long[] z;
     private transient int choice;
-    private transient SecureRandom sec;
+    private transient IsaacRNG r0, r1;
     private static final long serialVersionUID = -254415589291474491L;
 
+    private long determine()
+    {
+        long state = (z[(choice += 0xC6BC278D) >>> 28] += 0x9E3779B97F4A7C15L ^ choice * 0x2C9277B5000000L);
+        state = (state ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        return state ^ state >>> 28;
+
+    }
     /**
      * Builds a ChaosRNG with a cryptographically-random seed. Future random generation uses less secure methods but
      * should still make it extremely difficult to "divine" the future RNG results.
      */
     public ChaosRNG()
     {
-        sec = new SecureRandom();
-        byte[] bytes = new byte[128];
-        sec.nextBytes(bytes);
-        for (int i = sec.nextInt() & 127, c = 0; c < 128; c++, i = i + 1 & 127) {
-            state[i & 15] |= bytes[c] << ((i >> 4) << 3);
-        }
-        choice = sec.nextInt(16);
+        String s = System.currentTimeMillis() + "0" + System.identityHashCode(this);
+        s += StringKit.LATIN_LETTERS_LOWER;
+        System.gc();
+        s += System.currentTimeMillis();
+        r0 = new IsaacRNG(s);
+        r1 = new IsaacRNG(r0.nextBlock());
+        r1.fillBlock(z);
+        choice = r0.next(32);
     }
 
     @Override
-    public int next( int bits ) {
+    public final int next( int bits ) {
         return (int)( nextLong() & ( 1L << bits ) - 1 );
     }
 
@@ -55,12 +56,9 @@ public class ChaosRNG implements RandomnessSource{
      * @return any long, all 64 bits are random
      */
     @Override
-    public long nextLong() {
-        final long s0 = state[choice];
-        long s1 = state[choice = (choice + 1) & 15];
-        s1 ^= s1 << 31; // a
-        state[choice] = s1 ^ s0 ^ (s1 >>> 11) ^ (s0 >>> 30); // b,c
-        return state[choice] * 1181783497276652981L;
+    public final long nextLong() {
+        long rot = (determine() & 31) + 12;
+        return r0.nextLong() << rot ^ r1.nextLong() >>> 45 - rot;
     }
 
     /**
@@ -79,11 +77,14 @@ public class ChaosRNG implements RandomnessSource{
      */
     public void randomize()
     {
-        byte[] bytes = sec.generateSeed(128);
-        for (int i = sec.nextInt() & 127, c = 0; c < 128; c++, i = i + 1 & 127) {
-            state[i & 15] |= bytes[c] << ((i >> 4) << 3);
-        }
-        choice = sec.nextInt(16);
+        String s = System.currentTimeMillis() + "0" + System.identityHashCode(this);
+        s += StringKit.LATIN_LETTERS_LOWER;
+        System.gc();
+        s += System.currentTimeMillis();
+        r0.init(s);
+        r1.init(r0.nextBlock());
+        r1.fillBlock(z);
+        choice = r0.next(32);
     }
 
     @Override

@@ -3601,6 +3601,9 @@ public class CrossHash {
                 rho_ = new Mist("RHO"), sigma_ = new Mist("SIGMA"), tau_ = new Mist("TAU"),
                 upsilon_ = new Mist("UPSILON"), phi_ = new Mist("PHI"), chi_ = new Mist("CHI"), psi_ = new Mist("PSI"),
                 omega_ = new Mist("OMEGA");
+        /**
+         * Has a length of 48, which may be relevant if automatically choosing a predefined hash functor.
+         */
         public static final Mist[] predefined = new Mist[]{alpha, beta, gamma, delta, epsilon, zeta, eta, theta, iota,
                 kappa, lambda, mu, nu, xi, omicron, pi, rho, sigma, tau, upsilon, phi, chi, psi, omega,
                 alpha_, beta_, gamma_, delta_, epsilon_, zeta_, eta_, theta_, iota_,
