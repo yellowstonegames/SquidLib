@@ -151,7 +151,8 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ChaosRNG.html#ChaosRNG--">ChaosRNG</a></span>()</code>
-<div class="block">Builds a ChaosRNG with a cryptographically-random seed.</div>
+<div class="block">Builds a ChaosRNG with a fairly-random seed derived from somewhat-OK sources of non-seed randomness, such as time
+ before and after garbage collection.</div>
 </td>
 </tr>
 </table>
@@ -227,9 +228,11 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ChaosRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.37">ChaosRNG</a>()</pre>
-<div class="block">Builds a ChaosRNG with a cryptographically-random seed. Future random generation uses less secure methods but
- should still make it extremely difficult to "divine" the future RNG results.</div>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.39">ChaosRNG</a>()</pre>
+<div class="block">Builds a ChaosRNG with a fairly-random seed derived from somewhat-OK sources of non-seed randomness, such as time
+ before and after garbage collection. We're forced to use sub-par techniques here due to GWT not supporting any
+ better methods. Future random generation uses less secure methods but should still make it extremely difficult to
+ "divine" the future RNG results from the outputs.</div>
 </li>
 </ul>
 </li>
@@ -246,7 +249,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.50">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.58">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -266,7 +269,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.59">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.67">nextLong</a>()</pre>
 <div class="block">Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -282,7 +285,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.70">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.78">copy</a>()</pre>
 <div class="block">Produces another ChaosRNG with no relation to this one; this breaks the normal rules that RandomnessSource.copy
  abides by because this class should never have its generated number sequence be predictable.</div>
 <dl>
@@ -299,7 +302,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>randomize</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.78">randomize</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.86">randomize</a>()</pre>
 <div class="block">Changes the internal state to a new, fully-random version that should have no relation to the previous state.
  May be somewhat slow; you shouldn't need to call this often.</div>
 </li>
@@ -310,7 +313,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.91">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ChaosRNG.html#line.99">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

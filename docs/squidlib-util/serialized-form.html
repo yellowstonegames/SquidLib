@@ -2470,23 +2470,24 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>mt</h4>
-<pre>int[] mt</pre>
+<pre>long[] mt</pre>
+<div class="block">Mersenne Twister data.</div>
 </li>
 <li class="blockList">
 <h4>mti</h4>
 <pre>int mti</pre>
+<div class="block">Mersenne Twister Index.</div>
 </li>
 <li class="blockList">
-<h4>mag01</h4>
-<pre>int[] mag01</pre>
-</li>
-<li class="blockList">
-<h4>__nextNextGaussian</h4>
-<pre>double __nextNextGaussian</pre>
+<h4>extra</h4>
+<pre>long extra</pre>
+<div class="block">Internal to hold 64 bits, that might
+ used to generate two 32 bit values.</div>
 </li>
 <li class="blockListLast">
-<h4>__haveNextNextGaussian</h4>
-<pre>boolean __haveNextNextGaussian</pre>
+<h4>bitState</h4>
+<pre>boolean bitState</pre>
+<div class="block">Set to true if we need to generate another 64 bits, false if we have enough bits available for an int.</div>
 </li>
 </ul>
 </li>

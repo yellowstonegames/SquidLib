@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,91 +113,38 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.97">MersenneTwister</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.74">MersenneTwister</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></pre>
-<div class="block"><h3>MersenneTwister</h3>
- <p><b>Version 22</b>, based on version MT199937(99/10/29)
- of the Mersenne Twister algorithm found at
- <a href="http://www.math.keio.ac.jp/matumoto/emt.html">
- The Mersenne Twister Home Page</a>, with the initialization
- improved using the new 2002/1/26 initialization algorithm
- By Sean Luke, October 2004.
-
- <p><b>MersenneTwister</b> is not a subclass of java.util.Random, but is
- an implementation of RandomnessSource, so it can be used with RNG. It
- has the same public methods as Random does, as well. This class
- has hard-code inlined all of its methods directly, and made all of them
- final.  Further, these methods are not synchronized, so the same
- MersenneTwister instance cannot be shared by multiple threads. But all
- this helps MersenneTwister achieve much better speed (it still can't come
- close to lower-period fast generators like ThrustRNG). The Mersenne Twister
- algorithm has known flaws, so be aware that this is not a good generator
- for situations that need cryptographic security.
-
- <h3>About the Mersenne Twister</h3>
- <p>This is a Java version of the C-program for MT19937: Integer version.
- The MT19937 algorithm was created by Makoto Matsumoto and Takuji Nishimura.
-
- <p><b>Reference. </b>
- Makato Matsumoto and Takuji Nishimura,
- "Mersenne Twister: A 623-Dimensionally Equidistributed Uniform
- Pseudo-Random Number Generator",
- <i>ACM Transactions on Modeling and. Computer Simulation,</i>
- Vol. 8, No. 1, January 1998, pp 3--30.
-
- <p>The MersenneTwister code is based on standard MT19937 C/C++
- code by Takuji Nishimura,
- with suggestions from Topher Cooper and Marc Rieffel, July 1997.
- The code was originally translated into Java by Michael Lecuyer,
- January 1999, and the original code is Copyright (c) 1999 by Michael Lecuyer.
-
- <h3>Java notes</h3>
-
- <p>This implementation implements the bug fixes made in Java 1.2's
- version of Random, which means it can be used with earlier versions of
- Java.  See <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util"><code>Random</code></a>, the JDK 1.2 java.util.Random documentation,
- for further documentation on the random-number generation contracts made.
- Additionally, there (was) an undocumented bug in the JDK
- java.util.Random.nextBytes() method, which this code fixes.
-
- <p> Just like java.util.Random, this
- generator accepts a long seed but doesn't use all of it.  java.util.Random
- uses 48 bits.  The Mersenne Twister instead uses 32 bits (int size).
- So it's best if your seed does not exceed the int range.
-
- <h3>License</h3>
-
- Copyright (c) 2003 by Sean Luke. <br>
- Portions copyright (c) 1993 by Michael Lecuyer. <br>
- All rights reserved. <br>
-
- <p>Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are met:
+<div class="block">Mersenne Twister, 64-bit version as a RandomnessSource.
+ <br>
+ Similar to the regular Mersenne Twister but is implemented with 64-bit
+ registers (Java <code>long</code>) and produces different output.
+ <br>
+ This is mostly a straight port of the
+ <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/mt19937-64.c">
+ C-code (mt19937-64.c)</a>, but made more "java-like". This version was originally found
+ at <a href="https://github.com/javabeanz/javarng/blob/master/com/modp/random/MersenneTwister64.java">
+ an archived version of a Google Code repo</a>, and it is licensed under the 3-clause BSD license, like
+ the Mersenne Twister.
+ <br>
+ References:
+ <br>
  <ul>
- <li> Redistributions of source code must retain the above copyright notice,
- this list of conditions and the following disclaimer.
- <li> Redistributions in binary form must reproduce the above copyright notice,
- this list of conditions and the following disclaimer in the documentation
- and/or other materials provided with the distribution.
- <li> Neither the name of the copyright owners, their employers, nor the
- names of its contributors may be used to endorse or promote products
- derived from this software without specific prior written permission.
- </ul>
- <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNERS OR CONTRIBUTORS BE
- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- POSSIBILITY OF SUCH DAMAGE.</div>
+ <li>
+ <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">
+ The Mersenne Twister Home Page </a>
+ </li>
+ <li>  Makato Matsumoto and Takuji Nishimura,
+ <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/ARTICLES/mt.pdf">"Mersenne Twister:A 623-Dimensionally Equidistributed Uniform Pseudo-Random Number Generator"</a>,
+ <i>ACM Transactions on Modeling and Computer Simulation, </i> Vol. 8, No. 1,
+ January 1998, pp 3--30.</li>
+ </ul></div>
 <dl>
+<dt><span class="simpleTagLabel">Version:</span></dt>
+<dd>1.1 -- 07-Oct-2017</dd>
 <dt><span class="simpleTagLabel">Author:</span></dt>
-<dd>Makoto Matsumoto and Takuji Nishimura (original C version), Sean Luke (Java translation circa 2004), Tommy Ettinger (cleaned up translated code to fit being a RandomnessSource)</dd>
+<dd>Nick Galbreath -- nickg [at] modp [dot] com, Tommy Ettinger</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../serialized-form.html#squidpony.squidmath.MersenneTwister">Serialized Form</a></dd>
 </dl>
@@ -220,17 +167,17 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#MersenneTwister--">MersenneTwister</a></span>()</code>
-<div class="block">Constructor using a random seed.</div>
+<div class="block">Seeds this using two calls to Math.random().</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#MersenneTwister-int:A-">MersenneTwister</a></span>(int[]&nbsp;array)</code>
-<div class="block">Constructor using an array of integers as seed.</div>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#MersenneTwister-long-">MersenneTwister</a></span>(long&nbsp;seed)</code>
+<div class="block">Seeds this with the given long, which will be used to affect the large state.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#MersenneTwister-long-">MersenneTwister</a></span>(long&nbsp;seed)</code>
-<div class="block">Constructor using a given seed.</div>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#MersenneTwister-long:A-">MersenneTwister</a></span>(long[]&nbsp;seed)</code>
+<div class="block">Seeds this with the given long array, which will be used to affect the large state, and not used directly.</div>
 </td>
 </tr>
 </table>
@@ -249,136 +196,35 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#clearGaussian--">clearGaussian</a></span>()</code>
-<div class="block">Clears the internal gaussian variable from the RNG.</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/MersenneTwister.html" title="class in squidpony.squidmath">MersenneTwister</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#copy--">copy</a></span>()</code>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#next-int-">next</a></span>(int&nbsp;bits)</code>
+<div class="block">Returns up to 32 random bits.</div>
+</td>
+</tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>
-<div class="block">Returns true if the MersenneTwister's current internal state is equal to another MersenneTwister.</div>
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextLong--">nextLong</a></span>()</code>
+<div class="block">Returns 64 random bits.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#next-int-">next</a></span>(int&nbsp;bits)</code>
-<div class="block">Using this method, any algorithm that might use the built-in Java Random
- can interface with this randomness source.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextBoolean--">nextBoolean</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextBoolean-double-">nextBoolean</a></span>(double&nbsp;probability)</code>
-<div class="block">This generates a coin flip with a probability <tt>probability</tt>
-     of returning true, else returning false.</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextBoolean-float-">nextBoolean</a></span>(float&nbsp;probability)</code>
-<div class="block">This generates a coin flip with a probability <tt>probability</tt>
-     of returning true, else returning false.</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>byte</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextByte--">nextByte</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextBytes-byte:A-">nextBytes</a></span>(byte[]&nbsp;bytes)</code>&nbsp;</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>char</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextChar--">nextChar</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextDouble--">nextDouble</a></span>()</code>
-<div class="block">Returns a random double in the half-open range from [0.0,1.0).</div>
-</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextDouble-boolean-boolean-">nextDouble</a></span>(boolean&nbsp;includeZero,
-          boolean&nbsp;includeOne)</code>
-<div class="block">Returns a double in the range from 0.0 to 1.0, possibly inclusive of 0.0 and 1.0 themselves.</div>
-</td>
-</tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextFloat--">nextFloat</a></span>()</code>
-<div class="block">Returns a random float in the half-open range from [0.0f,1.0f).</div>
-</td>
-</tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextFloat-boolean-boolean-">nextFloat</a></span>(boolean&nbsp;includeZero,
-         boolean&nbsp;includeOne)</code>
-<div class="block">Returns a float in the range from 0.0f to 1.0f, possibly inclusive of 0.0f and 1.0f themselves.</div>
-</td>
-</tr>
-<tr id="i15" class="rowColor">
-<td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextGaussian--">nextGaussian</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextInt--">nextInt</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextInt-int-">nextInt</a></span>(int&nbsp;n)</code>
-<div class="block">Returns an integer drawn uniformly from 0 to n-1.</div>
-</td>
-</tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextLong--">nextLong</a></span>()</code>
-<div class="block">Returns a long drawn uniformly from the full range for longs.</div>
-</td>
-</tr>
-<tr id="i19" class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextLong-long-">nextLong</a></span>(long&nbsp;n)</code>
-<div class="block">Returns a long drawn uniformly from 0 to n-1.</div>
-</td>
-</tr>
-<tr id="i20" class="altColor">
-<td class="colFirst"><code>short</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#nextShort--">nextShort</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i21" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#setSeed-int:A-">setSeed</a></span>(int[]&nbsp;array)</code>
-<div class="block">Sets the seed of the MersenneTwister using an array of integers.</div>
-</td>
-</tr>
-<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#setSeed-long-">setSeed</a></span>(long&nbsp;seed)</code>
-<div class="block">Initalize the pseudo random number generator.</div>
+<div class="block">Initalize the pseudo random number generator with 64 bits.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#toString--">toString</a></span>()</code>&nbsp;</td>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MersenneTwister.html#setSeed-long:A-">setSeed</a></span>(long[]&nbsp;array)</code>
+<div class="block">Initalize the pseudo random number generator with a long array of any size, which should not be null but can be.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -386,7 +232,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 </li>
 </ul>
@@ -408,8 +254,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>MersenneTwister</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.169">MersenneTwister</a>()</pre>
-<div class="block">Constructor using a random seed.</div>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.118">MersenneTwister</a>()</pre>
+<div class="block">Seeds this using two calls to Math.random().</div>
 </li>
 </ul>
 <a name="MersenneTwister-long-">
@@ -418,22 +264,26 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>MersenneTwister</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.179">MersenneTwister</a>(long&nbsp;seed)</pre>
-<div class="block">Constructor using a given seed.  Though you pass this seed in
- as a long, it's best to make sure it's actually an integer.</div>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.128">MersenneTwister</a>(long&nbsp;seed)</pre>
+<div class="block">Seeds this with the given long, which will be used to affect the large state.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - any long</dd>
+</dl>
 </li>
 </ul>
-<a name="MersenneTwister-int:A-">
+<a name="MersenneTwister-long:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MersenneTwister</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.191">MersenneTwister</a>(int[]&nbsp;array)</pre>
-<div class="block">Constructor using an array of integers as seed.
- Your array must have a non-zero length.  Only the first 624 integers
- in the array are used; if the array is shorter than this then
- integers are repeatedly used in a wrap-around fashion.</div>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.137">MersenneTwister</a>(long[]&nbsp;seed)</pre>
+<div class="block">Seeds this with the given long array, which will be used to affect the large state, and not used directly.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - a long array; generally should be non-null</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -444,102 +294,34 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="copy--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>copy</h4>
-<pre>public final&nbsp;<a href="../../squidpony/squidmath/MersenneTwister.html" title="class in squidpony.squidmath">MersenneTwister</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.125">copy</a>()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#copy--">RandomnessSource</a></code></span></div>
-<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
- copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
- copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidmath/RandomnessSource.html#copy--">copy</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a copy of this RandomnessSource</dd>
-</dl>
-</li>
-</ul>
-<a name="equals-java.lang.Object-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>equals</h4>
-<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.142">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
-<div class="block">Returns true if the MersenneTwister's current internal state is equal to another MersenneTwister.
- This is roughly the same as normal equals() implementations, except that it compares based on value
- but does not guarantee the contract of immutability (obviously random number generators are mutable).
- Note that this does NOT check to see if the internal gaussian storage is the samefor both. You can
- guarantee that the internal gaussian storage is the same (and so the nextGaussian() methods will
- return the same values) by calling clearGaussian() on both objects.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="hashCode--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hashCode</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.157">hashCode</a>()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="toString--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.161">toString</a>()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
-</dl>
-</li>
-</ul>
 <a name="setSeed-long-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.203">setSeed</a>(long&nbsp;seed)</pre>
-<div class="block">Initalize the pseudo random number generator.  Don't
- pass in a long that's bigger than an int (Mersenne Twister
- only uses the first 32 bits for its seed).</div>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.147">setSeed</a>(long&nbsp;seed)</pre>
+<div class="block">Initalize the pseudo random number generator with 64 bits.
+ Not the same as setState() in StatefulRandomness; this changes the seed quite a bit.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - any long</dd>
+</dl>
 </li>
 </ul>
-<a name="setSeed-int:A-">
+<a name="setSeed-long:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.235">setSeed</a>(int[]&nbsp;array)</pre>
-<div class="block">Sets the seed of the MersenneTwister using an array of integers.
- Your array must have a non-zero length.  Only the first 624 integers
- in the array are used; if the array is shorter than this then
- integers are repeatedly used in a wrap-around fashion.</div>
-</li>
-</ul>
-<a name="nextInt--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.266">nextInt</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.160">setSeed</a>(long[]&nbsp;array)</pre>
+<div class="block">Initalize the pseudo random number generator with a long array of any size, which should not be null but can be.
+ Not the same as setState() in StatefulRandomness; this changes the seed quite a bit.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array</code> - any long array</dd>
+</dl>
 </li>
 </ul>
 <a name="next-int-">
@@ -548,10 +330,12 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.301">next</a>(int&nbsp;bits)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
-<div class="block">Using this method, any algorithm that might use the built-in Java Random
- can interface with this randomness source.</div>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.200">next</a>(int&nbsp;bits)</pre>
+<div class="block">Returns up to 32 random bits.
+ <p>
+ <p>the implementation splits a 64-bit long into
+ two 32-bit chunks.
+ </p></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">next</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
@@ -562,200 +346,39 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
-<a name="nextShort--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextShort</h4>
-<pre>public final&nbsp;short&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.337">nextShort</a>()</pre>
-</li>
-</ul>
-<a name="nextChar--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextChar</h4>
-<pre>public final&nbsp;char&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.374">nextChar</a>()</pre>
-</li>
-</ul>
-<a name="nextBoolean--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextBoolean</h4>
-<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.410">nextBoolean</a>()</pre>
-</li>
-</ul>
-<a name="nextBoolean-float-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextBoolean</h4>
-<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.453">nextBoolean</a>(float&nbsp;probability)</pre>
-<div class="block">This generates a coin flip with a probability <tt>probability</tt>
-     of returning true, else returning false.  <tt>probability</tt> must
-     be between 0.0 and 1.0, inclusive.   Not as precise a random real
-     event as nextBoolean(double), but twice as fast. To explicitly
-     use this, remember you may need to cast to float first.</div>
-</li>
-</ul>
-<a name="nextBoolean-double-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextBoolean</h4>
-<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.497">nextBoolean</a>(double&nbsp;probability)</pre>
-<div class="block">This generates a coin flip with a probability <tt>probability</tt>
-     of returning true, else returning false.  <tt>probability</tt> must
-     be between 0.0 and 1.0, inclusive.</div>
-</li>
-</ul>
-<a name="nextByte--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextByte</h4>
-<pre>public final&nbsp;byte&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.567">nextByte</a>()</pre>
-</li>
-</ul>
-<a name="nextBytes-byte:A-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextBytes</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.603">nextBytes</a>(byte[]&nbsp;bytes)</pre>
-</li>
-</ul>
 <a name="nextLong--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.646">nextLong</a>()</pre>
-<div class="block">Returns a long drawn uniformly from the full range for longs.</div>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.217">nextLong</a>()</pre>
+<div class="block">Returns 64 random bits.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">nextLong</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a random long from the full range, positive or negative.</dd>
+<dd>a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)</dd>
 </dl>
 </li>
 </ul>
-<a name="nextLong-long-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.714">nextLong</a>(long&nbsp;n)</pre>
-<div class="block">Returns a long drawn uniformly from 0 to n-1.  Suffice it to say,
-     n must be &gt; 0, or an IllegalArgumentException is raised.</div>
-</li>
-</ul>
-<a name="nextDouble--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextDouble</h4>
-<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.789">nextDouble</a>()</pre>
-<div class="block">Returns a random double in the half-open range from [0.0,1.0).  Thus 0.0 is a valid
-     result but 1.0 is not.</div>
-</li>
-</ul>
-<a name="nextDouble-boolean-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextDouble</h4>
-<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.869">nextDouble</a>(boolean&nbsp;includeZero,
-                               boolean&nbsp;includeOne)</pre>
-<div class="block">Returns a double in the range from 0.0 to 1.0, possibly inclusive of 0.0 and 1.0 themselves.  Thus:
-
-     <table border=0>
-     <tr><th>Expression</th><th>Interval</th></tr>
-     <tr><td>nextDouble(false, false)</td><td>(0.0, 1.0)</td></tr>
-     <tr><td>nextDouble(true, false)</td><td>[0.0, 1.0)</td></tr>
-     <tr><td>nextDouble(false, true)</td><td>(0.0, 1.0]</td></tr>
-     <tr><td>nextDouble(true, true)</td><td>[0.0, 1.0]</td></tr>
-     <caption>Table of intervals</caption>
-     </table>
-
-     <p>This version preserves all possible random values in the double range.</div>
-</li>
-</ul>
-<a name="clearGaussian--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>clearGaussian</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.888">clearGaussian</a>()</pre>
-<div class="block">Clears the internal gaussian variable from the RNG.  You only need to do this
-     in the rare case that you need to guarantee that two RNGs have identical internal
-     state.  Otherwise, disregard this method.  See stateEquals(other).</div>
-</li>
-</ul>
-<a name="nextGaussian--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextGaussian</h4>
-<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.891">nextGaussian</a>()</pre>
-</li>
-</ul>
-<a name="nextFloat--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextFloat</h4>
-<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.1041">nextFloat</a>()</pre>
-<div class="block">Returns a random float in the half-open range from [0.0f,1.0f).  Thus 0.0f is a valid
-     result but 1.0f is not.</div>
-</li>
-</ul>
-<a name="nextFloat-boolean-boolean-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>nextFloat</h4>
-<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.1090">nextFloat</a>(boolean&nbsp;includeZero,
-                             boolean&nbsp;includeOne)</pre>
-<div class="block">Returns a float in the range from 0.0f to 1.0f, possibly inclusive of 0.0f and 1.0f themselves.  Thus:
-
-     <table border=0>
-     <tr><th>Expression</th><th>Interval</th></tr>
-     <tr><td>nextFloat(false, false)</td><td>(0.0f, 1.0f)</td></tr>
-     <tr><td>nextFloat(true, false)</td><td>[0.0f, 1.0f)</td></tr>
-     <tr><td>nextFloat(false, true)</td><td>(0.0f, 1.0f]</td></tr>
-     <tr><td>nextFloat(true, true)</td><td>[0.0f, 1.0f]</td></tr>
-     <caption>Table of intervals</caption>
-     </table>
-
-     <p>This version preserves all possible random values in the float range.</div>
-</li>
-</ul>
-<a name="nextInt-int-">
+<a name="copy--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.1107">nextInt</a>(int&nbsp;n)</pre>
-<div class="block">Returns an integer drawn uniformly from 0 to n-1.  Suffice it to say,
-     n must be &gt; 0, or an IllegalArgumentException is raised.</div>
+<h4>copy</h4>
+<pre>public final&nbsp;<a href="../../squidpony/squidmath/MersenneTwister.html" title="class in squidpony.squidmath">MersenneTwister</a>&nbsp;<a href="../../src-html/squidpony/squidmath/MersenneTwister.html#line.247">copy</a>()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#copy--">RandomnessSource</a></code></span></div>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
+ copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/squidmath/RandomnessSource.html#copy--">copy</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a copy of this RandomnessSource</dd>
+</dl>
 </li>
 </ul>
 </li>

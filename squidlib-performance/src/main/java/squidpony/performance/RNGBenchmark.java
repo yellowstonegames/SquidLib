@@ -1183,8 +1183,7 @@ public class RNGBenchmark {
 
     public long doMT()
     {
-        int[] seeds = new int[]{(int) seed};
-        RNG rng = new RNG(new MersenneTwister(seeds));
+        RNG rng = new RNG(new MersenneTwister(seed));
         for (int i = 0; i < 1000000000; i++) {
             seed += rng.nextLong();
         }
@@ -1201,8 +1200,7 @@ public class RNGBenchmark {
 
     public long doMTInt()
     {
-        int[] seeds = new int[]{iseed};
-        RNG rng = new RNG(new MersenneTwister(seeds));
+        RNG rng = new RNG(new MersenneTwister(iseed));
         for (int i = 0; i < 1000000000; i++) {
             iseed += rng.next(32);
         }
@@ -1218,8 +1216,7 @@ public class RNGBenchmark {
 
     public long doMTR()
     {
-        int[] seeds = new int[]{(int) seed};
-        RNG rng = new RNG(new MersenneTwister(seeds));
+        RNG rng = new RNG(new MersenneTwister(seed));
         for (int i = 0; i < 1000000000; i++) {
             seed += rng.nextLong();
         }
@@ -1236,8 +1233,7 @@ public class RNGBenchmark {
 
     public long doMTIntR()
     {
-        int[] seeds = new int[]{iseed};
-        RNG rng = new RNG(new MersenneTwister(seeds));
+        RNG rng = new RNG(new MersenneTwister(iseed));
         for (int i = 0; i < 1000000000; i++) {
             iseed += rng.nextInt();
         }
