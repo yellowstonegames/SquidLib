@@ -44,7 +44,7 @@ public class CosmicNumbering implements Serializable {
         for (int i = 1; i < len; i++) {
             seeds[i] = ThrustRNG.determine(seed + i) | 1L;
         }
-        effect = 0x1.81p-62 * Math.pow(1.15625, len * 0.8125);
+        effect = 0x1.81p-62 * Math.pow(1.1875, len);
     }
 
     public double[] getConnections() {
@@ -66,7 +66,7 @@ public class CosmicNumbering implements Serializable {
             for (int i = 1; i < len; i++) {
                 seeds[i] = ThrustRNG.determine(seed + i) | 1L;
             }
-            effect = 0x1.81p-62 * Math.pow(1.15625, len * 0.8125);
+            effect = 0x1.81p-62 * Math.pow(1.1875, len);
         }
     }
 //    /*

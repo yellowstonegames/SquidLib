@@ -353,7 +353,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         if(len != lastLen)
         {
             lastLen = len;
-            lastEffect = effect = 0x1.81p-62 * Math.pow(1.15625, len * 0.8125);
+            lastEffect = effect = 0x1.81p-62 * Math.pow(1.1875, len);
         }
         else
             effect = lastEffect;

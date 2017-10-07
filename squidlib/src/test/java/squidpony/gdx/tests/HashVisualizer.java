@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.NumberUtils;
@@ -877,7 +878,7 @@ public class HashVisualizer extends ApplicationAdapter {
         //display.erase();
         //overlay.erase();
         long code;
-        float bright;
+        float bright, s0 = 0, c0 = 0, s1 = 0, c1 = 0, s2 = 0, c2 = 0;
         double dBright;
         int iBright;
         int xx, yy;
@@ -3291,11 +3292,17 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 80:
                         Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = MathUtils.sinDeg(ctr * 0.625f + 11f) * 0.015f;
+                        c0 = MathUtils.cosDeg(ctr * 0.625f + 11f) * 0.015f;
+                        s1 = MathUtils.sinDeg(ctr * 0.625f + 141f) * 0.015f;
+                        c1 = MathUtils.cosDeg(ctr * 0.625f + 141f) * 0.015f;
+                        s2 = MathUtils.sinDeg(ctr * 0.625f + 261f) * 0.015f;
+                        c2 = MathUtils.cosDeg(ctr * 0.625f + 261f) * 0.015f;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                connections[2] = x * 0.0111 + y * 0.0111 - ctr * 0.014;
-                                connections[0] = x * 0.0123 - y * 0.0113 + ctr * 0.008;
-                                connections[1] = y * 0.0123 - x * 0.0113 + ctr * 0.008;
+                                connections[0] = x * s0 - y * c0 + ctr * 0.007;
+                                connections[1] = y * c1 - x * s1 + ctr * 0.009;
+                                connections[2] = x * s2 + y * c2 + ctr * 0.013;
                                 connections[0] += cosmos.getDoubleBase();
                                 connections[1] += cosmos.getDoubleBase();
                                 connections[2] += cosmos.getDoubleBase();
@@ -3310,11 +3317,17 @@ public class HashVisualizer extends ApplicationAdapter {
                         break;
                     case 81:
                         Gdx.graphics.setTitle("Cosmic 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        s0 = MathUtils.sinDeg(ctr * 0.625f + 11f) * 0.015f;
+                        c0 = MathUtils.cosDeg(ctr * 0.625f + 11f) * 0.015f;
+                        s1 = MathUtils.sinDeg(ctr * 0.625f + 141f) * 0.015f;
+                        c1 = MathUtils.cosDeg(ctr * 0.625f + 141f) * 0.015f;
+                        s2 = MathUtils.sinDeg(ctr * 0.625f + 261f) * 0.015f;
+                        c2 = MathUtils.cosDeg(ctr * 0.625f + 261f) * 0.015f;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                connections[2] = x * 0.0111 + y * 0.0111 - ctr * 0.014;
-                                connections[0] = x * 0.0123 - y * 0.0113 + ctr * 0.008;
-                                connections[1] = y * 0.0123 - x * 0.0113 + ctr * 0.008;
+                                connections[0] = x * s0 - y * c0 + ctr * 0.007;
+                                connections[1] = y * c1 - x * s1 + ctr * 0.009;
+                                connections[2] = x * s2 + y * c2 + ctr * 0.013;
                                 connections[0] += cosmos.getDoubleBase();
                                 connections[1] += cosmos.getDoubleBase();
                                 connections[2] += cosmos.getDoubleBase();
@@ -3501,48 +3514,48 @@ public class HashVisualizer extends ApplicationAdapter {
                             }
                         }
                         break;
-//                    case 100:
-//                        Gdx.graphics.setTitle("Mummy 9D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                display.put(x, y, floatGet(
-//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter5D(x >> 1, y >> 1, ctr)) * 0.50f) + 0.50f,
-//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter5D(x >> 1, y >> 1, ctr)) * 0.50f) + 0.50f,
-//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter5D(x >> 1, y >> 1, ctr)) * 0.50f) + 0.50f,
-//                                        1.0f));
-//                            }
-//                        }
-//                        break;
-//                    case 101:
-//                        Gdx.graphics.setTitle("Mummy 9D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                bright = (float)(MummyNoise.instance.arbitraryNoise(seedX3, alter5D(x, y, ctr)) * 0.50f) + 0.50f;
-//                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-//                            }
-//                        }
-//                        break;
-//                    case 102:
-//                        Gdx.graphics.setTitle("Mummy 12D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                display.put(x, y, floatGet(
-//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x >> 2, y >> 2, ctr)) * 0.50f) + 0.50f,
-//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x >> 2, y >> 2, ctr)) * 0.50f) + 0.50f,
-//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x >> 2, y >> 2, ctr)) * 0.50f) + 0.50f,
-//                                        1.0f));
-//                            }
-//                        }
-//                        break;
-//                    case 103:
-//                        Gdx.graphics.setTitle("Mummy 12D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x >> 2, y >> 2, ctr)) * 0.50f) + 0.50f;
-//                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-//                            }
-//                        }
-//                        break;
+                    case 100:
+                        Gdx.graphics.setTitle("Mummy 5D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(
+                                        (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter5D(x, y, ctr))) * 0.50f + 0.50f,
+                                        (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter5D(x, y, ctr))) * 0.50f + 0.50f,
+                                        (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter5D(x, y, ctr))) * 0.50f + 0.50f,
+                                        1.0f));
+                            }
+                        }
+                        break;
+                    case 101:
+                        Gdx.graphics.setTitle("Mummy 5D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(MummyNoise.instance.arbitraryNoise(seedX3, alter5D(x, y, ctr))) * 0.50f + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 102:
+                        Gdx.graphics.setTitle("Mummy 7D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(
+                                        (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x, y, ctr))) * 0.50f + 0.50f,
+                                        (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x, y, ctr))) * 0.50f + 0.50f,
+                                        (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x, y, ctr))) * 0.50f + 0.50f,
+                                        1.0f));
+                            }
+                        }
+                        break;
+                    case 103:
+                        Gdx.graphics.setTitle("Mummy 7D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x, y, ctr))) * 0.50f + 0.50f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
 
                 }
             }
@@ -4283,13 +4296,13 @@ public class HashVisualizer extends ApplicationAdapter {
         return point5D;
     }
     private double[] alter7D(int x, int y, int ctr) {
-        point7D[0]  = (y * 0.3 + x * 0.8) * 0.03125f + ctr * 0.03125f;
-        point7D[1]  = (y * 0.3 - x * 0.8) * 0.01625f + ctr * 0.06125f;
-        point7D[2]  = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
-        point7D[3]  = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
-        point7D[4]  = (ctr * 0.55 + x * 0.3 - y * 0.2) * 0.04125f + ctr * 0.02625f;
-        point7D[5]  = (ctr * 0.55 + y * 0.3 - x * 0.2) * 0.06125f - ctr * 0.01625f;
-        point7D[6]  = (ctr * 0.45 + x * 0.3 + y * 0.3) * 0.05125f - ctr * 0.02125f;
+        point7D[0]  = (y * 0.6 + x) * 0.02625f + ctr * 0.03125f;
+        point7D[1]  = (x * 0.6 - y) * 0.01625f + ctr * 0.05125f;
+        point7D[2]  = (x * 0.8 + y * 0.5) * 0.02125f - ctr * 0.04625f;
+        point7D[3]  = (y * 0.8 - x * 0.5) * 0.02625f - ctr * 0.04125f;
+        point7D[4]  = (ctr * 0.55 + x * 0.5 - y * 0.3) * 0.04125f + ctr * 0.02625f;
+        point7D[5]  = (ctr * 0.55 + y * 0.5 - x * 0.3) * 0.06125f - ctr * 0.01625f;
+        point7D[6]  = (ctr * 0.45 + x * 0.45 + y * 0.45) * 0.05125f - ctr * 0.02125f;
       //point7D[7]  = (x * 0.7 + y * 0.4) * 0.02125f - ctr * 0.05125f;
       //point7D[8]  = (y * 0.7 - x * 0.4) * 0.02625f - ctr * 0.04125f;
       //point7D[9]  = (ctr * 0.55 + x * 0.3 - y * 0.2) * 0.04125f + ctr * 0.02625f;
