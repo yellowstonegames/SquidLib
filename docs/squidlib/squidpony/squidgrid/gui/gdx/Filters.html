@@ -43,7 +43,7 @@
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.ColorizeFilter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.ChainFilter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?squidpony/squidgrid/gui/gdx/Filters.html" target="_top">Frames</a></li>
@@ -102,7 +102,7 @@
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.html#line.13">Filters</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.html#line.16">Filters</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Implementations of <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/IFilter.html?is-external=true" title="class or interface in squidpony"><code>IFilter</code></a>, that all are meant to perform different changes
  to colors before they are created (they should be passed to SquidColorCenter's constructor, which can use them).
@@ -127,13 +127,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.ChainFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.ChainFilter</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.ColorizeFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.ColorizeFilter</a></span></code>
 <div class="block">A Filter that is constructed with a color and makes any color it is told to alter have the same hue as the given
  color, have saturation that is somewhere between the given color's and the altered colors, and chiefly is
  distinguishable from other colors by value.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.DistinctRedGreenFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.DistinctRedGreenFilter</a></span></code>
 <div class="block">A Filter that alters primarily-red and primarily-green colors so they can be more easily be distinguished by
@@ -141,19 +145,19 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  very well, and tritanopia may not benefit at all).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.GammaCorrectFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.GammaCorrectFilter</a></span></code>
 <div class="block">A Filter that performs a brightness adjustment to make dark areas lighter and light areas not much less bright.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.GrayscaleFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.GrayscaleFilter</a></span></code>
 <div class="block">A Filter that converts all colors passed to it to grayscale, like a black and white film.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.HallucinateFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.HallucinateFilter</a></span></code>
 <div class="block">A Filter that makes the colors requested from it highly saturated, with the original hue, value and a timer that
@@ -161,58 +165,58 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  saturation, and value all altering value.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.IdentityFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.IdentityFilter</a></span></code>
 <div class="block">A Filter that does nothing to the colors it is given but pass them along unchanged.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.LerpFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.LerpFilter</a></span></code>
 <div class="block">A Filter that is constructed with a color and linear-interpolates any color it is told to alter toward the color
  it was constructed with.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.MaxValueFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.MaxValueFilter</a></span></code>
 <div class="block">A Filter that tracks the highest brightness for any component it was assigned and stores it in state as the first
  and only element.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.MultiLerpFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.MultiLerpFilter</a></span></code>
 <div class="block">A Filter that is constructed with a group of colors and linear-interpolates any color it is told to alter toward
  the color it was constructed with that has the closest hue.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.PaletteFilter</a></span></code>
 <div class="block">A Filter that is constructed with a group of colors and forces any color it is told to alter to exactly
  the color it was constructed with that has the closest red, green, and blue components.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.SaturationFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.SaturationFilter</a></span></code>
 <div class="block">A Filter that multiplies the saturation of any color requested from it by a number given during construction.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.SaturationValueFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.SaturationValueFilter</a></span></code>
 <div class="block">A Filter that multiplies the saturation and the value of any color requested from it by different numbers given
  during construction.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.Utility.html" title="class in squidpony.squidgrid.gui.gdx">Filters.Utility</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.WiggleFilter.html" title="class in squidpony.squidgrid.gui.gdx">Filters.WiggleFilter</a></span></code>
 <div class="block">A Filter that is constructed with a palette of colors and randomly increases or decreases the red, green, and
@@ -263,7 +267,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.ColorizeFilter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.ChainFilter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../index.html?squidpony/squidgrid/gui/gdx/Filters.html" target="_top">Frames</a></li>

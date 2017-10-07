@@ -524,7 +524,7 @@
 <span class="sourceLineNo">516</span>        @Override<a name="line.516"></a>
 <span class="sourceLineNo">517</span>        public T filter(T c)<a name="line.517"></a>
 <span class="sourceLineNo">518</span>        {<a name="line.518"></a>
-<span class="sourceLineNo">519</span>                return c == null ? c : get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));<a name="line.519"></a>
+<span class="sourceLineNo">519</span>                return c == null ? null : get(getRed(c), getGreen(c), getBlue(c), getAlpha(c));<a name="line.519"></a>
 <span class="sourceLineNo">520</span>        }<a name="line.520"></a>
 <span class="sourceLineNo">521</span><a name="line.521"></a>
 <span class="sourceLineNo">522</span><a name="line.522"></a>
@@ -695,7 +695,7 @@
 <span class="sourceLineNo">687</span>         */<a name="line.687"></a>
 <span class="sourceLineNo">688</span>        protected abstract T create(int red, int green, int blue, int opacity);<a name="line.688"></a>
 <span class="sourceLineNo">689</span><a name="line.689"></a>
-<span class="sourceLineNo">690</span>                private long getUniqueIdentifier(int r, int g, int b, int a) {<a name="line.690"></a>
+<span class="sourceLineNo">690</span>                protected long getUniqueIdentifier(int r, int g, int b, int a) {<a name="line.690"></a>
 <span class="sourceLineNo">691</span>                        return ((a &amp; 0xffL) &lt;&lt; 48) | ((r &amp; 0xffffL) &lt;&lt; 32) | ((g &amp; 0xffffL) &lt;&lt; 16) | (b &amp; 0xffffL);<a name="line.691"></a>
 <span class="sourceLineNo">692</span>                }<a name="line.692"></a>
 <span class="sourceLineNo">693</span><a name="line.693"></a>

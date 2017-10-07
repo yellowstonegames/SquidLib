@@ -335,13 +335,13 @@
 <span class="sourceLineNo">327</span>                        portion[i][j] = -10;<a name="line.327"></a>
 <span class="sourceLineNo">328</span>                        break;<a name="line.328"></a>
 <span class="sourceLineNo">329</span>                    case ',':<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.45));<a name="line.330"></a>
+<span class="sourceLineNo">330</span>                        portion[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45) * 0.55 - 0.7));<a name="line.330"></a>
 <span class="sourceLineNo">331</span>                        break;<a name="line.331"></a>
 <span class="sourceLineNo">332</span>                    case '~':<a name="line.332"></a>
-<span class="sourceLineNo">333</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.4 - 0.65));<a name="line.333"></a>
+<span class="sourceLineNo">333</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45) * 0.4 - 0.65));<a name="line.333"></a>
 <span class="sourceLineNo">334</span>                        break;<a name="line.334"></a>
 <span class="sourceLineNo">335</span>                    case '"':<a name="line.335"></a>
-<span class="sourceLineNo">336</span>                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5) * 0.25 - 1.5));<a name="line.336"></a>
+<span class="sourceLineNo">336</span>                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45) * 0.3 - 1.5));<a name="line.336"></a>
 <span class="sourceLineNo">337</span>                        break;<a name="line.337"></a>
 <span class="sourceLineNo">338</span>                    case '^':<a name="line.338"></a>
 <span class="sourceLineNo">339</span>                        portion[i][j] = 40;<a name="line.339"></a>
@@ -398,13 +398,13 @@
 <span class="sourceLineNo">390</span>                        portion[i][j] = -10;<a name="line.390"></a>
 <span class="sourceLineNo">391</span>                        break;<a name="line.391"></a>
 <span class="sourceLineNo">392</span>                    case ',':<a name="line.392"></a>
-<span class="sourceLineNo">393</span>                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));<a name="line.393"></a>
+<span class="sourceLineNo">393</span>                        portion[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));<a name="line.393"></a>
 <span class="sourceLineNo">394</span>                        break;<a name="line.394"></a>
 <span class="sourceLineNo">395</span>                    case '~':<a name="line.395"></a>
-<span class="sourceLineNo">396</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));<a name="line.396"></a>
+<span class="sourceLineNo">396</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));<a name="line.396"></a>
 <span class="sourceLineNo">397</span>                        break;<a name="line.397"></a>
 <span class="sourceLineNo">398</span>                    case '"':<a name="line.398"></a>
-<span class="sourceLineNo">399</span>                        portion[i][j] = (int) (75 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.25 - 1.5));<a name="line.399"></a>
+<span class="sourceLineNo">399</span>                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));<a name="line.399"></a>
 <span class="sourceLineNo">400</span>                        break;<a name="line.400"></a>
 <span class="sourceLineNo">401</span>                    case '^':<a name="line.401"></a>
 <span class="sourceLineNo">402</span>                        portion[i][j] = 40;<a name="line.402"></a>
@@ -464,22 +464,22 @@
 <span class="sourceLineNo">456</span>                        portion[i][j] = -10;<a name="line.456"></a>
 <span class="sourceLineNo">457</span>                        break;<a name="line.457"></a>
 <span class="sourceLineNo">458</span>                    case ',':<a name="line.458"></a>
-<span class="sourceLineNo">459</span>                        portion[i][j] = (int) (70 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.45));<a name="line.459"></a>
+<span class="sourceLineNo">459</span>                        portion[i][j] = (int) (85 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.55 - 0.7));<a name="line.459"></a>
 <span class="sourceLineNo">460</span>                        break;<a name="line.460"></a>
 <span class="sourceLineNo">461</span>                    case '~':<a name="line.461"></a>
-<span class="sourceLineNo">462</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.4) * 0.4 - 0.65));<a name="line.462"></a>
+<span class="sourceLineNo">462</span>                        portion[i][j] = (int) (100 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.45) * 0.4 - 0.65));<a name="line.462"></a>
 <span class="sourceLineNo">463</span>                        break;<a name="line.463"></a>
 <span class="sourceLineNo">464</span>                    case '"':<a name="line.464"></a>
-<span class="sourceLineNo">465</span>                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i* 1.5, j* 1.5, frame * 0.45) * 0.3 - 1.5));<a name="line.465"></a>
+<span class="sourceLineNo">465</span>                        portion[i][j] = (int) (95 * (PerlinNoise.noise(i * 1.45, j * 1.45, frame * 0.5) * 0.3 - 1.5));<a name="line.465"></a>
 <span class="sourceLineNo">466</span>                        break;<a name="line.466"></a>
 <span class="sourceLineNo">467</span>                    case '^':<a name="line.467"></a>
 <span class="sourceLineNo">468</span>                        portion[i][j] = 40;<a name="line.468"></a>
 <span class="sourceLineNo">469</span>                        break;<a name="line.469"></a>
 <span class="sourceLineNo">470</span>                    default:<a name="line.470"></a>
 <span class="sourceLineNo">471</span>                        if (map[i][j] == deepLiquid)<a name="line.471"></a>
-<span class="sourceLineNo">472</span>                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.5) * 0.45 - 0.7));<a name="line.472"></a>
+<span class="sourceLineNo">472</span>                            portion[i][j] = (int) (180 * (PerlinNoise.noise(i * 4.2, j * 4.2, frame * 0.55) * 0.45 - 0.7));<a name="line.472"></a>
 <span class="sourceLineNo">473</span>                        else if (map[i][j] == shallowLiquid)<a name="line.473"></a>
-<span class="sourceLineNo">474</span>                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i* 3.1, j* 3.1, frame * 0.25) * 0.4 - 0.65));<a name="line.474"></a>
+<span class="sourceLineNo">474</span>                            portion[i][j] = (int) (110 * (PerlinNoise.noise(i * 3.1, j * 3.1, frame * 0.3) * 0.4 - 0.65));<a name="line.474"></a>
 <span class="sourceLineNo">475</span>                        else portion[i][j] = 0;<a name="line.475"></a>
 <span class="sourceLineNo">476</span>                }<a name="line.476"></a>
 <span class="sourceLineNo">477</span>            }<a name="line.477"></a>

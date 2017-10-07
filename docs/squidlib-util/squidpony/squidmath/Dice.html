@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -114,15 +114,18 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/Dice.html#line.19">Dice</a>
+public class <a href="../../src-html/squidpony/squidmath/Dice.html#line.23">Dice</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Class for emulating various traditional RPG-style dice rolls.
-
+ Supports rolling multiple virtual dice of arbitrary size, summing all, the highest <i>n</i>, or the lowest <i>n</i>
+ dice, treating dice as "exploding" as in some tabletop games (where the max result is rolled again and added),
+ getting value from inside a range, and applying simple arithmetic modifiers to the result (like adding a number).
+ <br>
  Based on code from the Blacken library.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
-<dd>yam655, Eben Howard - http://squidpony.com - howard@squidpony.com</dd>
+<dd>yam655, Eben Howard - http://squidpony.com - howard@squidpony.com, Tommy Ettinger</dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../serialized-form.html#squidpony.squidmath.Dice">Serialized Form</a></dd>
 </dl>
@@ -209,12 +212,19 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#rollExplodingDice-int-int-">rollExplodingDice</a></span>(int&nbsp;n,
+                 int&nbsp;sides)</code>
+<div class="block">Emulate an exploding dice roll and return the sum.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#setRandom-squidpony.squidmath.RNG-">setRandom</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Sets the random number generator to be used.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Dice.html#worstOf-int-int-java.lang.String-">worstOf</a></span>(int&nbsp;n,
        int&nbsp;dice,
@@ -251,7 +261,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Dice</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.29">Dice</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.33">Dice</a>()</pre>
 <div class="block">Creates a new dice roller that uses a random RNG seed for an RNG that it owns.</div>
 </li>
 </ul>
@@ -261,7 +271,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Dice</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.39">Dice</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.43">Dice</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Creates a new dice roller that uses the given RNG, which can be seeded before it's given here. The RNG will be
  shared, not copied, so requesting a random number from the same RNG in another place may change the value of the
  next die roll this makes, and dice rolls this makes will change the state of the shared RNG.</div>
@@ -277,7 +287,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>Dice</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.48">Dice</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.52">Dice</a>(long&nbsp;seed)</pre>
 <div class="block">Creates a new dice roller that will use its own RNG, seeded with the given seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -291,7 +301,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Dice</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.56">Dice</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.60">Dice</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
 <div class="block">Creates a new dice roller that will use its own RNG, seeded with the given seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -313,7 +323,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setRandom</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.68">setRandom</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.72">setRandom</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
 <div class="block">Sets the random number generator to be used.
 
  This method does not need to be called before using the methods of this
@@ -330,7 +340,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>bestOf</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.155">bestOf</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.159">bestOf</a>(int&nbsp;n,
                   int&nbsp;dice,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</pre>
 <div class="block">Find the best n totals from the provided number of dice rolled according
@@ -351,7 +361,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>worstOf</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.175">worstOf</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.179">worstOf</a>(int&nbsp;n,
                    int&nbsp;dice,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</pre>
 <div class="block">Find the worst n totals from the provided number of dice rolled according
@@ -372,7 +382,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rollDice</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.193">rollDice</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.197">rollDice</a>(int&nbsp;n,
                     int&nbsp;sides)</pre>
 <div class="block">Emulate a dice roll and return the sum.</div>
 <dl>
@@ -384,13 +394,31 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
+<a name="rollExplodingDice-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rollExplodingDice</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.212">rollExplodingDice</a>(int&nbsp;n,
+                             int&nbsp;sides)</pre>
+<div class="block">Emulate an exploding dice roll and return the sum.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>n</code> - number of dice to sum</dd>
+<dd><code>sides</code> - number of sides on the rollDice; should be greater than 1</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>sum of rollDice</dd>
+</dl>
+</li>
+</ul>
 <a name="independentRolls-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>independentRolls</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.209">independentRolls</a>(int&nbsp;n,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.230">independentRolls</a>(int&nbsp;n,
                                int&nbsp;sides)</pre>
 <div class="block">Get a list of the independent results of n rolls of dice with the given
  number of sides.</div>
@@ -409,17 +437,38 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>roll</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.239">roll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;rollCode)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.281">roll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;rollCode)</pre>
 <div class="block">Evaluate the String <code>rollCode</code> as dice roll notation and roll to get a random result of that dice roll.
- This is the main way of using the Dice class. The following notation is supported:
+ This is the main way of using the Dice class. This effectively allows rolling one or more dice and performing
+ certain operations on the dice and their result. One of the more frequent uses is rolling some amount of dice and
+ summing their values, which can be done with e.g. "4d10" to roll four ten-sided dice and add up their results.
+ You can choose to sum only some of the dice, either the "n highest" or "n lowest" values in a group, with "3>4d6"
+ to sum the three greatest-value dice in four rolls of six-sided dice, or "2<3d8" to sum the two lowest-value dice
+ in three rolls of eight-sided dice. You can apply modifiers to these results, such as "1d20+7" to roll one
+ twenty-sided die and add 7 to its result. You can get a random value in an inclusive range with "50:100", which
+ is technically equivalent to "1d51+49" but is easier to read and understand. You can treat dice as "exploding,"
+ where any dice that get the maximum result are rolled again and added to the total along with the previous
+ maximum result. As an example, if two exploding six-sided dice are rolled, and their results are 3 and 6, then
+ because 6 is the maximum value it is rolled again and added to the earlier rolls; if the additional roll is a 5,
+ then the sum is 3 + 6 + 5 (for a total of 14), but if the additional roll was a 6, then it would be rolled again
+ and added again, potentially many times if 6 is rolled continually. Some players may be familiar with this game
+ mechanic from various tabletop games, but many potential players might not be, so it should be explained if you
+ show the kinds of dice being rolled to players. The syntax used for exploding dice replaced the "d" in "3d6" for
+ normal dice with "!", making "3!6" for exploding dice. Exploding dice and inclusive ranges are not supported with
+ best-of and worst-of notation.
+ <br>
+ The following notation is supported:
  <ul>
      <li><code>42</code> : simple absolute string</li>
-     <li><code>10:20</code> : simple random range (inclusive between 10 and 20)</li>
      <li><code>3d6</code> : sum of 3 6-sided dice</li>
      <li><code>d6</code> : synonym for <code>1d6</code></li>
      <li><code>3&gt;4d6</code> : best 3 of 4 6-sided dice</li>
      <li><code>3:4d6</code> : synonym for <code>3&gt;4d6</code>; older syntax</li>
      <li><code>2&lt;5d6</code> : worst 2 of 5 6-sided dice</li>
+     <li><code>10:20</code> : simple random range (inclusive between 10 and 20)</li>
+     <li><code>:20</code> : synonym for <code>0:20</code></li>
+     <li><code>3!6</code> : sum of 3 "exploding" 6-sided dice; see above for the semantics of "exploding" dice</li>
+     <li><code>!6</code> : synonym for <code>1!6</code></li>
  </ul>
  The following types of suffixes are supported:
  <ul>

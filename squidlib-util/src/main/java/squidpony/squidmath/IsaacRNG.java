@@ -156,7 +156,58 @@ public class IsaacRNG implements RandomnessSource {
             results[i++] = b = mem[(int)(y >> 11 & 255)] + x;
         }
     }
+    /**
+     * Can be used to re-initialize this IsaacRNG as if using the long-array constructor.
+     * The given seed should be a rather large array of long values.
+     * You should try to make seed a long[256], but smaller arrays will be tolerated without error.
+     * Arrays larger than 256 items will only have the first 256 used.
+     * @param seed an array of longs to use as a seed; ideally it should be 256 individual longs
+     */
+    public void init(long seed[]) {
+        if(seed == null)
+            init(false);
+        else {
+            System.arraycopy(seed, 0, results, 0, Math.min(256, seed.length));
+            init(true);
+        }
+    }
 
+    /**
+     * Can be used to re-initialize this IsaacRNG as if using the single-long constructor.
+     * @param seed any long; will have equal influence on all bits of state
+     */
+    public void init(long seed) {
+        long z;
+        for (int i = 0; i < 256; i++) {
+            z = ( seed += 0x9E3779B97F4A7C15L );
+            z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+            z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+            results[i] = z ^ (z >>> 31);
+        }
+        init(true);
+    }
+
+    /**
+     * Can be used to re-initialize this IsaacRNG as if using the single-String constructor.
+     * @param seed a String; if non-null, its contents will be used as a seed
+     */
+    public final void init(String seed)
+    {
+        if(seed == null)
+            init(false);
+        else {
+            char[] chars = seed.toCharArray();
+            int slen = seed.length(), i = 0;
+            for (; i < 256 && i < slen; i++) {
+                results[i] = CrossHash.Wisp.hash64(chars, i, slen);
+            }
+            for (; i < 256; i++) {
+                results[i] = CrossHash.Wisp.hash64(results);
+            }
+            init(true);
+        }
+
+    }
 
     /**
      * Initializes this IsaacRNG; typically used from the constructor but can be called externally.

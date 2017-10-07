@@ -1181,19 +1181,17 @@ public class RNGBenchmark {
 */
 
 
-    /*
     public long doMT()
     {
-        byte[] bseed = new byte[16];
-        Arrays.fill(bseed, (byte)seed);
-        MersenneTwister rng = new MersenneTwister(bseed);
+        int[] seeds = new int[]{(int) seed};
+        RNG rng = new RNG(new MersenneTwister(seeds));
         for (int i = 0; i < 1000000000; i++) {
             seed += rng.nextLong();
         }
         return seed;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureMT() throws InterruptedException {
@@ -1203,15 +1201,14 @@ public class RNGBenchmark {
 
     public long doMTInt()
     {
-        byte[] bseed = new byte[16];
-        Arrays.fill(bseed, (byte)iseed);
-        MersenneTwister rng = new MersenneTwister(bseed);
+        int[] seeds = new int[]{iseed};
+        RNG rng = new RNG(new MersenneTwister(seeds));
         for (int i = 0; i < 1000000000; i++) {
             iseed += rng.next(32);
         }
         return iseed;
     }
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureMTInt() throws InterruptedException {
@@ -1221,16 +1218,15 @@ public class RNGBenchmark {
 
     public long doMTR()
     {
-        byte[] bseed = new byte[16];
-        Arrays.fill(bseed, (byte)seed);
-        RNG rng = new RNG(new MersenneTwister(bseed));
+        int[] seeds = new int[]{(int) seed};
+        RNG rng = new RNG(new MersenneTwister(seeds));
         for (int i = 0; i < 1000000000; i++) {
             seed += rng.nextLong();
         }
         return seed;
     }
 
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureMTR() throws InterruptedException {
@@ -1240,22 +1236,20 @@ public class RNGBenchmark {
 
     public long doMTIntR()
     {
-        byte[] bseed = new byte[16];
-        Arrays.fill(bseed, (byte)iseed);
-        RNG rng = new RNG(new MersenneTwister(bseed));
+        int[] seeds = new int[]{iseed};
+        RNG rng = new RNG(new MersenneTwister(seeds));
         for (int i = 0; i < 1000000000; i++) {
             iseed += rng.nextInt();
         }
         return iseed;
     }
-    //@Benchmark
+    @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void measureMTIntR() throws InterruptedException {
         iseed = 9000;
         doMTIntR();
     }
-*/
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================

@@ -74,13 +74,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.squidpony.squidgrid.gui.gdx.Filter">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -121,7 +121,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.html#line.404">Filters.PaletteFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.html#line.440">Filters.PaletteFilter</a>
 extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="class in squidpony.squidgrid.gui.gdx">Filter</a>&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 <div class="block">A Filter that is constructed with a group of colors and forces any color it is told to alter to exactly
  the color it was constructed with that has the closest red, green, and blue components. A convenient way to
@@ -144,6 +144,19 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <!--   -->
 </a>
 <h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>com.badlogic.gdx.graphics.Color[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#colorStore">colorStore</a></span></code>
+<div class="block">The array of Color objects this will use as a palette.</div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="fields.inherited.from.class.squidpony.squidgrid.gui.gdx.Filter">
 <!--   -->
@@ -215,6 +228,24 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="colorStore">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>colorStore</h4>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.444">colorStore</a></pre>
+<div class="block">The array of Color objects this will use as a palette.</div>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -227,7 +258,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteFilter</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.413">PaletteFilter</a>(float[]&nbsp;r,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.453">PaletteFilter</a>(float[]&nbsp;r,
                      float[]&nbsp;g,
                      float[]&nbsp;b)</pre>
 <div class="block">Sets up a PaletteFilter with the exact colors to use as individual components; the lengths of each given
@@ -246,14 +277,18 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PaletteFilter</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.427">PaletteFilter</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colors)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.474">PaletteFilter</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colors)</pre>
 <div class="block">Sets up a PaletteFilter with the exact colors to use as Colors. A convenient way to
  use this is to pass in one of the color series from SColor, such as RED_SERIES or ACHROMATIC_SERIES.
  The alpha component of each color in the palette is ignored, since when a color is requested for
- filtering, its alpha is respected and only its red, green, and blue components are changed.</div>
+ filtering, its alpha is respected and only its red, green, and blue components are changed.
+ The <code>colors</code> array is used verbatim (as a reference, not a copy), so changes to the Color values inside
+ it will change how this PaletteFilter works (possibly badly). If you expect to edit the array you give as a
+ parameter to this, it may be optimal to give a temporary copy.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>colors</code> - the Colors to use</dd>
+<dd><code>colors</code> - the Colors to use as an array; will be referenced in the Filter, so changing this array changes
+               what Colors will be used</dd>
 </dl>
 </li>
 </ul>
@@ -271,7 +306,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <ul class="blockListLast">
 <li class="blockList">
 <h4>alter</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.437">alter</a>(float&nbsp;r,
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/Filters.PaletteFilter.html#line.485">alter</a>(float&nbsp;r,
                                              float&nbsp;g,
                                              float&nbsp;b,
                                              float&nbsp;a)</pre>
@@ -330,13 +365,13 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/Filter.html" title="cla
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.squidpony.squidgrid.gui.gdx.Filter">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

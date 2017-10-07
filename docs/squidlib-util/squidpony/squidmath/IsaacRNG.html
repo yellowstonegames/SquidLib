@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -207,32 +207,50 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IsaacRNG.html#init-long-">init</a></span>(long&nbsp;seed)</code>
+<div class="block">Can be used to re-initialize this IsaacRNG as if using the single-long constructor.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IsaacRNG.html#init-long:A-">init</a></span>(long[]&nbsp;seed)</code>
+<div class="block">Can be used to re-initialize this IsaacRNG as if using the long-array constructor.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IsaacRNG.html#init-java.lang.String-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</code>
+<div class="block">Can be used to re-initialize this IsaacRNG as if using the single-String constructor.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IsaacRNG.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IsaacRNG.html#nextBlock--">nextBlock</a></span>()</code>
 <div class="block">Generates and returns a block of 256 pseudo-random long values.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IsaacRNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IsaacRNG.html#regen--">regen</a></span>()</code>
 <div class="block">Generates 256 results to be used by later calls to next() or nextLong().</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IsaacRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -334,13 +352,58 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
   This is a fast (not small) implementation.</div>
 </li>
 </ul>
+<a name="init-long:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>init</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.166">init</a>(long[]&nbsp;seed)</pre>
+<div class="block">Can be used to re-initialize this IsaacRNG as if using the long-array constructor.
+ The given seed should be a rather large array of long values.
+ You should try to make seed a long[256], but smaller arrays will be tolerated without error.
+ Arrays larger than 256 items will only have the first 256 used.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - an array of longs to use as a seed; ideally it should be 256 individual longs</dd>
+</dl>
+</li>
+</ul>
+<a name="init-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>init</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.179">init</a>(long&nbsp;seed)</pre>
+<div class="block">Can be used to re-initialize this IsaacRNG as if using the single-long constructor.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - any long; will have equal influence on all bits of state</dd>
+</dl>
+</li>
+</ul>
+<a name="init-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>init</h4>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.194">init</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<div class="block">Can be used to re-initialize this IsaacRNG as if using the single-String constructor.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - a String; if non-null, its contents will be used as a seed</dd>
+</dl>
+</li>
+</ul>
 <a name="init-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.165">init</a>(boolean&nbsp;flag)</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.216">init</a>(boolean&nbsp;flag)</pre>
 <div class="block">Initializes this IsaacRNG; typically used from the constructor but can be called externally.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -354,7 +417,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.231">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.282">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -374,7 +437,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBlock</h4>
-<pre>public final&nbsp;long[]&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.243">nextBlock</a>()</pre>
+<pre>public final&nbsp;long[]&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.294">nextBlock</a>()</pre>
 <div class="block">Generates and returns a block of 256 pseudo-random long values.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -388,7 +451,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>fillBlock</h4>
-<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.255">fillBlock</a>(long[]&nbsp;data)</pre>
+<pre>public final&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.306">fillBlock</a>(long[]&nbsp;data)</pre>
 <div class="block">Generates enough pseudo-random long values to fill <code>data</code> and assigns them to it.</div>
 </li>
 </ul>
@@ -398,7 +461,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.269">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.320">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -418,7 +481,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public final&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.281">copy</a>()</pre>
+<pre>public final&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.332">copy</a>()</pre>
 <div class="block">Produces another RandomnessSource, but the new one will not produce the same data as this one.
  This is meant to be a "more-secure" generator, so this helps reduce the ability to guess future
  results from a given sequence of output.</div>
@@ -436,7 +499,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.286">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.337">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -449,7 +512,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.301">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.352">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -462,7 +525,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.313">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IsaacRNG.html#line.364">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

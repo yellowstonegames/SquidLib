@@ -432,7 +432,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>NaturalLanguageCipher</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.369">NaturalLanguageCipher</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<pre>public&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.370">NaturalLanguageCipher</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
                              long&nbsp;shift)</pre>
 <div class="block">Constructs a LanguageCipher that will use the given style of language generator to produce its text.</div>
 <dl>
@@ -448,7 +448,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>NaturalLanguageCipher</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.416">NaturalLanguageCipher</a>(<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.417">NaturalLanguageCipher</a>(<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;other)</pre>
 <div class="block">Copies another LanguageCipher and constructs this one with the information in the other. Copies the dictionary
  of known words, as well as the FakeLanguageGen style and everything else.</div>
 <dl>
@@ -471,7 +471,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.377">initialize</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.378">initialize</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
                                         long&nbsp;shift)</pre>
 </li>
 </ul>
@@ -481,7 +481,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>phoneticHash64</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.447">phoneticHash64</a>(char[]&nbsp;data,
+<pre>public static&nbsp;long&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.448">phoneticHash64</a>(char[]&nbsp;data,
                                   int&nbsp;start,
                                   int&nbsp;end)</pre>
 </li>
@@ -492,7 +492,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>lookup</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.590">lookup</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.591">lookup</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;source)</pre>
 <div class="block">Given a word in the source language (usually English), looks up an existing translation for that word, or if none
  exists, generates a new word based on the hash of the source word and this LanguageCipher's FakeLanguageGen.</div>
 <dl>
@@ -509,7 +509,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>cipher</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.811">cipher</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.812">cipher</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 <div class="block">Given a String, StringBuilder, or other CharSequence that should contain words in the source language, this
  translates each word to the fake language, using existing translations if previous calls to cipher() or lookup()
  had translated that word.</div>
@@ -527,7 +527,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>decipher</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.867">decipher</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.868">decipher</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary)</pre>
 <div class="block">Deciphers words in an already-ciphered text with a given String-to-String Map for a vocabulary. This Map could be
  the reverse field of this LanguageCipher, which would give a complete translation, or it could be a
@@ -552,7 +552,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>learnTranslation</h4>
-<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.896">learnTranslation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary,
+<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.897">learnTranslation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary,
                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sourceWord)</pre>
 <div class="block">Adds a translation pair to vocabulary so it can be used in decipher, giving a correct translation for sourceWord.
  Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct a mismatched
@@ -572,7 +572,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>learnTranslations</h4>
-<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.911">learnTranslations</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary,
+<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.912">learnTranslations</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary,
                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;sourceWords)</pre>
 <div class="block">Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.
  Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct mismatched
@@ -593,7 +593,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>learnTranslations</h4>
-<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.928">learnTranslations</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary,
+<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.929">learnTranslations</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary,
                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;sourceWords)</pre>
 <div class="block">Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.
  Modifies vocabulary in-place and returns this LanguageCipher for chaining. Can be used to correct mismatched
@@ -614,7 +614,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>mismatchTranslation</h4>
-<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.947">mismatchTranslation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary,
+<pre>public&nbsp;<a href="../squidpony/NaturalLanguageCipher.html" title="class in squidpony">NaturalLanguageCipher</a>&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.948">mismatchTranslation</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;vocabulary,
                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;correctWord,
                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;mismatchWord)</pre>
 <div class="block">Adds a translation pair to vocabulary so it can be used in decipher, giving a typically-incorrect translation for
@@ -638,7 +638,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getCacheLevel</h4>
-<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.953">getCacheLevel</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.954">getCacheLevel</a>()</pre>
 </li>
 </ul>
 <a name="setCacheLevel-int-">
@@ -647,7 +647,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setCacheLevel</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.957">setCacheLevel</a>(int&nbsp;cacheLevel)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/NaturalLanguageCipher.html#line.958">setCacheLevel</a>(int&nbsp;cacheLevel)</pre>
 </li>
 </ul>
 </li>

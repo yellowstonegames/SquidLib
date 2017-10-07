@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":9,"i7":10};
+var methods = {"i0":9,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -151,6 +151,18 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <td class="colFirst"><code>protected double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#connections">connections</a></span></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#effect">effect</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#len">len</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected long[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#seeds">seeds</a></span></code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -171,6 +183,10 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#CosmicNumbering-double:A-">CosmicNumbering</a></span>(double[]&nbsp;connections)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#CosmicNumbering-long-double:A-">CosmicNumbering</a></span>(long&nbsp;seed,
+               double[]&nbsp;connections)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -188,45 +204,40 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#fastFloor-double-">fastFloor</a></span>(double&nbsp;t)</code>
-<div class="block">Like <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but returns an int.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#determine-long-">determine</a></span>(long&nbsp;state)</code>
+<div class="block">The same as <a href="../../squidpony/squidmath/ThrustRNG.html#determine-long-"><code>ThrustRNG.determine(long)</code></a>, except this assumes state has already been multiplied by
+ 0x9E3779B97F4A7C15L .</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#fastFloor-double-">fastFloor</a></span>(double&nbsp;t)</code>
+<div class="block">Like <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but returns a long.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--">getConnections</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#getDouble--">getDouble</a></span>()</code>
 <div class="block">Gets a double determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#getDoubleBase--">getDoubleBase</a></span>()</code>
 <div class="block">Gets a double determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#getInt--">getInt</a></span>()</code>
 <div class="block">Gets an int determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>static double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#interpolate-double-double-double-">interpolate</a></span>(double&nbsp;start,
-           double&nbsp;end,
-           double&nbsp;a)</code>&nbsp;</td>
-</tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>static double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#querp-double-double-double-">querp</a></span>(double&nbsp;start,
-     double&nbsp;end,
-     double&nbsp;a)</code>&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CosmicNumbering.html#setConnections-double:A-">setConnections</a></span>(double[]&nbsp;connections)</code>&nbsp;</td>
 </tr>
@@ -255,10 +266,37 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <a name="connections">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>connections</h4>
 <pre>protected&nbsp;double[] <a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.18">connections</a></pre>
+</li>
+</ul>
+<a name="len">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>len</h4>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.19">len</a></pre>
+</li>
+</ul>
+<a name="seeds">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>seeds</h4>
+<pre>protected&nbsp;long[] <a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.21">seeds</a></pre>
+</li>
+</ul>
+<a name="effect">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>effect</h4>
+<pre>protected&nbsp;double <a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.25">effect</a></pre>
 </li>
 </ul>
 </li>
@@ -275,16 +313,26 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>CosmicNumbering</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.19">CosmicNumbering</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.26">CosmicNumbering</a>()</pre>
 </li>
 </ul>
 <a name="CosmicNumbering-double:A-">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>CosmicNumbering</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.29">CosmicNumbering</a>(double[]&nbsp;connections)</pre>
+</li>
+</ul>
+<a name="CosmicNumbering-long-double:A-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CosmicNumbering</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.23">CosmicNumbering</a>(double[]&nbsp;connections)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.33">CosmicNumbering</a>(long&nbsp;seed,
+                       double[]&nbsp;connections)</pre>
 </li>
 </ul>
 </li>
@@ -301,7 +349,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getConnections</h4>
-<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.30">getConnections</a>()</pre>
+<pre>public&nbsp;double[]&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.50">getConnections</a>()</pre>
 </li>
 </ul>
 <a name="setConnections-double:A-">
@@ -310,29 +358,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>setConnections</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.34">setConnections</a>(double[]&nbsp;connections)</pre>
-</li>
-</ul>
-<a name="querp-double-double-double-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>querp</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.48">querp</a>(double&nbsp;start,
-                           double&nbsp;end,
-                           double&nbsp;a)</pre>
-</li>
-</ul>
-<a name="interpolate-double-double-double-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>interpolate</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.58">interpolate</a>(double&nbsp;start,
-                                 double&nbsp;end,
-                                 double&nbsp;a)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.54">setConnections</a>(double[]&nbsp;connections)</pre>
 </li>
 </ul>
 <a name="getDoubleBase--">
@@ -341,7 +367,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getDoubleBase</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.68">getDoubleBase</a>()</pre>
+<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.118">getDoubleBase</a>()</pre>
 <div class="block">Gets a double determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.
  Returns a value between -1.0 and 1.0 (exclusive on 1.0). Used as the basis for other methods in this class.</div>
 <dl>
@@ -356,7 +382,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.109">getDouble</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.162">getDouble</a>()</pre>
 <div class="block">Gets a double determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.
  Returns a value between 0.0 and 1.0 (exclusive on 1.0).</div>
 <dl>
@@ -371,7 +397,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>getInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.132">getInt</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.185">getInt</a>()</pre>
 <div class="block">Gets an int determined by the current values in the connections, accessible via <a href="../../squidpony/squidmath/CosmicNumbering.html#getConnections--"><code>getConnections()</code></a>.
  Returns a value in the full range of ints, but is less likely to produce ints close to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>
  or <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> (expect very few values in the bottom and top quarters of the range).</div>
@@ -384,16 +410,33 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <a name="fastFloor-double-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fastFloor</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.143">fastFloor</a>(double&nbsp;t)</pre>
-<div class="block">Like <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but returns an int. Doesn't consider weird doubles like INFINITY and NaN.</div>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.196">fastFloor</a>(double&nbsp;t)</pre>
+<div class="block">Like <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but returns a long. Doesn't consider weird doubles like INFINITY and NaN.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>t</code> - the double to find the floor for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the floor of t, as an int</dd>
+<dd>the floor of t, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="determine-long-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>determine</h4>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/CosmicNumbering.html#line.206">determine</a>(long&nbsp;state)</pre>
+<div class="block">The same as <a href="../../squidpony/squidmath/ThrustRNG.html#determine-long-"><code>ThrustRNG.determine(long)</code></a>, except this assumes state has already been multiplied by
+ 0x9E3779B97F4A7C15L .</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - a long that should change in increments of 0x9E3779B97F4A7C15L</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a pseudo-random permutation of state</dd>
 </dl>
 </li>
 </ul>

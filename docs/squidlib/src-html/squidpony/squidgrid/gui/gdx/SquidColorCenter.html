@@ -10,583 +10,630 @@
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import com.badlogic.gdx.graphics.Color;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import com.badlogic.gdx.math.Interpolation;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import squidpony.IColorCenter;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import squidpony.IFilter;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import squidpony.squidmath.CoordPacker;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import squidpony.squidmath.StatefulRNG;<a name="line.8"></a>
-<span class="sourceLineNo">009</span><a name="line.9"></a>
-<span class="sourceLineNo">010</span>import java.util.ArrayList;<a name="line.10"></a>
-<span class="sourceLineNo">011</span><a name="line.11"></a>
-<span class="sourceLineNo">012</span>/**<a name="line.12"></a>
-<span class="sourceLineNo">013</span> * A concrete implementation of {@link IColorCenter} for libgdx's {@link com.badlogic.gdx.graphics.Color}.<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * Supports filtering any colors that this creates using a {@link Filter}, such as one from {@link Filters}.<a name="line.14"></a>
-<span class="sourceLineNo">015</span> *<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * @author smelC<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * @author Tommy Ettinger<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * @see SColor Another way to obtain colors by using pre-allocated (and named) instances.<a name="line.18"></a>
-<span class="sourceLineNo">019</span> */<a name="line.19"></a>
-<span class="sourceLineNo">020</span>public class SquidColorCenter extends IColorCenter.Skeleton&lt;Color&gt; {<a name="line.20"></a>
-<span class="sourceLineNo">021</span><a name="line.21"></a>
-<span class="sourceLineNo">022</span>    /**<a name="line.22"></a>
-<span class="sourceLineNo">023</span>     * A fresh filter-less color center.<a name="line.23"></a>
-<span class="sourceLineNo">024</span>     */<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    public SquidColorCenter()<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    {<a name="line.26"></a>
-<span class="sourceLineNo">027</span>        this(null);<a name="line.27"></a>
-<span class="sourceLineNo">028</span>    }<a name="line.28"></a>
-<span class="sourceLineNo">029</span><a name="line.29"></a>
-<span class="sourceLineNo">030</span>    /**<a name="line.30"></a>
-<span class="sourceLineNo">031</span>         * A fresh filtered color center.<a name="line.31"></a>
-<span class="sourceLineNo">032</span>         * <a name="line.32"></a>
-<span class="sourceLineNo">033</span>         * @param filterEffect<a name="line.33"></a>
-<span class="sourceLineNo">034</span>         *            The filter to use.<a name="line.34"></a>
-<span class="sourceLineNo">035</span>         */<a name="line.35"></a>
-<span class="sourceLineNo">036</span>    public SquidColorCenter(/*Nullable*/IFilter&lt;Color&gt; filterEffect)<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    {<a name="line.37"></a>
-<span class="sourceLineNo">038</span>        super(filterEffect);<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    }<a name="line.39"></a>
-<span class="sourceLineNo">040</span><a name="line.40"></a>
-<span class="sourceLineNo">041</span>    @Override<a name="line.41"></a>
-<span class="sourceLineNo">042</span>    protected Color create(int red, int green, int blue, int opacity) {<a name="line.42"></a>
-<span class="sourceLineNo">043</span>        if (filter == null)<a name="line.43"></a>
-<span class="sourceLineNo">044</span>                        /* No filtering */<a name="line.44"></a>
-<span class="sourceLineNo">045</span>            return new Color(red / 255f, green / 255f, blue / 255f, opacity / 255f);<a name="line.45"></a>
-<span class="sourceLineNo">046</span>        else<a name="line.46"></a>
-<span class="sourceLineNo">047</span>                        /* Some filtering */<a name="line.47"></a>
-<span class="sourceLineNo">048</span>            return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    }<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    @Override<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    public Color filter(Color c)<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    {<a name="line.52"></a>
-<span class="sourceLineNo">053</span>        if(c == null)<a name="line.53"></a>
-<span class="sourceLineNo">054</span>            return Color.CLEAR;<a name="line.54"></a>
-<span class="sourceLineNo">055</span>        else<a name="line.55"></a>
-<span class="sourceLineNo">056</span>            return super.filter(c);<a name="line.56"></a>
+<span class="sourceLineNo">005</span>import com.badlogic.gdx.math.MathUtils;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import squidpony.IColorCenter;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import squidpony.IFilter;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import squidpony.squidmath.CoordPacker;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import squidpony.squidmath.StatefulRNG;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.util.ArrayList;<a name="line.11"></a>
+<span class="sourceLineNo">012</span><a name="line.12"></a>
+<span class="sourceLineNo">013</span>/**<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * A concrete implementation of {@link IColorCenter} for libgdx's {@link com.badlogic.gdx.graphics.Color}.<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * Supports filtering any colors that this creates using a {@link Filter}, such as one from {@link Filters}.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * This class largely supersedes the earlier {@link SColorFactory} class, and supports similar operations<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * while also allowing filters to modify the returned colors. Some things use different terms between the<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * two classes; {@link SColorFactory#blend(SColor, SColor, double)} is {@link #lerp(Color, Color, double)}<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * here, and {@link SColorFactory#setFloor(int)} is {@link #setGranularity(int)} (with different behavior).<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * @author smelC<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * @author Tommy Ettinger<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * @see SColor Another way to obtain colors by using pre-allocated (and named) instances.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> */<a name="line.23"></a>
+<span class="sourceLineNo">024</span>public class SquidColorCenter extends IColorCenter.Skeleton&lt;Color&gt; {<a name="line.24"></a>
+<span class="sourceLineNo">025</span><a name="line.25"></a>
+<span class="sourceLineNo">026</span>    /**<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     * How different requested colors need to be to make a new color; should range from 0 to at most 6.<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     * If this is 0, all requested colors will be looked up (using a cached version if the exact request had been made<a name="line.28"></a>
+<span class="sourceLineNo">029</span>     * before), but if this is greater than 0, then exponentially less colors will be used, using the cache for twice as<a name="line.29"></a>
+<span class="sourceLineNo">030</span>     * many requests at granularity 1 (2 raised to the granularity), four times as many at granularity 2, and so on.<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * Defaults to 1, which seems to help ensure visually-identical colors are not created more than once.<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     */<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    public int granularity = 1;<a name="line.33"></a>
+<span class="sourceLineNo">034</span><a name="line.34"></a>
+<span class="sourceLineNo">035</span>    /**<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * Gets the granularity, which is how different requested colors need to be to make a new color; can be from 0 to 6.<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * If this is 0, all requested colors will be looked up (using a cached version if the exact request had been made<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * before), but if this is greater than 0, then exponentially less colors will be used, using the cache for twice as<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * many requests at granularity 1 (2 raised to the granularity), four times as many at granularity 2, and so on.<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * If no granularity was set, the default is 1.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * @return the current granularity, as an int<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    public int getGranularity() {<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        return granularity;<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    }<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    /**<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * Sets the granularity, which is how different requested colors must be to make a new color; from 0 to at most 6.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * If this is 0, all requested colors will be looked up (using a cached version if the exact request had been made<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * before), but if this is greater than 0, then exponentially less colors will be used, using the cache for twice as<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * many requests at granularity 1 (2 raised to the granularity), four times as many at granularity 2, and so on.<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * If no granularity was set, the default is 1.<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * @param granularity the granularity to use; will be clamped between 0 and 6<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     */<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    public void setGranularity(int granularity) {<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        this.granularity = MathUtils.clamp(granularity, 0, 6);<a name="line.56"></a>
 <span class="sourceLineNo">057</span>    }<a name="line.57"></a>
 <span class="sourceLineNo">058</span><a name="line.58"></a>
-<span class="sourceLineNo">059</span>    public Color get(long c)<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        return get((int)((c &gt;&gt; 24) &amp; 0xff), (int)((c &gt;&gt; 16) &amp; 0xff), (int)((c &gt;&gt; 8) &amp; 0xff), (int)(c &amp; 0xff));<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    }<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    public Color get(float r, float g, float b, float a)<a name="line.63"></a>
-<span class="sourceLineNo">064</span>    {<a name="line.64"></a>
-<span class="sourceLineNo">065</span>        return get(Math.round(255 * r), Math.round(255 * g), Math.round(255 * b), Math.round(255 * a));<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    }<a name="line.66"></a>
-<span class="sourceLineNo">067</span><a name="line.67"></a>
-<span class="sourceLineNo">068</span>    /**<a name="line.68"></a>
-<span class="sourceLineNo">069</span>     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.<a name="line.69"></a>
-<span class="sourceLineNo">070</span>     * @param start the initial Color<a name="line.70"></a>
-<span class="sourceLineNo">071</span>     * @param end the "target" color<a name="line.71"></a>
-<span class="sourceLineNo">072</span>     * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end<a name="line.72"></a>
-<span class="sourceLineNo">073</span>     * @return a new Color<a name="line.73"></a>
-<span class="sourceLineNo">074</span>     */<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    @Override<a name="line.75"></a>
-<span class="sourceLineNo">076</span>    public Color lerp(Color start, Color end, float change)<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    {<a name="line.77"></a>
-<span class="sourceLineNo">078</span>        if(start == null || end == null)<a name="line.78"></a>
-<span class="sourceLineNo">079</span>            return Color.CLEAR;<a name="line.79"></a>
-<span class="sourceLineNo">080</span>        return get(<a name="line.80"></a>
-<span class="sourceLineNo">081</span>                start.r + change * (end.r - start.r),<a name="line.81"></a>
-<span class="sourceLineNo">082</span>                start.g + change * (end.g - start.g),<a name="line.82"></a>
-<span class="sourceLineNo">083</span>                start.b + change * (end.b - start.b),<a name="line.83"></a>
-<span class="sourceLineNo">084</span>                start.a + change * (end.a - start.a)<a name="line.84"></a>
-<span class="sourceLineNo">085</span>        );<a name="line.85"></a>
+<span class="sourceLineNo">059</span>    /**<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * A fresh filter-less color center.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     */<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    public SquidColorCenter()<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        this(null);<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    }<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>    /**<a name="line.67"></a>
+<span class="sourceLineNo">068</span>         * A fresh filtered color center.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>         * <a name="line.69"></a>
+<span class="sourceLineNo">070</span>         * @param filterEffect<a name="line.70"></a>
+<span class="sourceLineNo">071</span>         *            The filter to use.<a name="line.71"></a>
+<span class="sourceLineNo">072</span>         */<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    public SquidColorCenter(/*Nullable*/IFilter&lt;Color&gt; filterEffect)<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        super(filterEffect);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    }<a name="line.76"></a>
+<span class="sourceLineNo">077</span><a name="line.77"></a>
+<span class="sourceLineNo">078</span>    @Override<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    protected Color create(int red, int green, int blue, int opacity) {<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        if (filter == null)<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                        /* No filtering */<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            return new Color(red / 255f, green / 255f, blue / 255f, opacity / 255f);<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        else<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                        /* Some filtering */<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);<a name="line.85"></a>
 <span class="sourceLineNo">086</span>    }<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    /**<a name="line.87"></a>
-<span class="sourceLineNo">088</span>     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     * @param start the initial Color<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * @param end the "target" color<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * @param change the degree to change closer to end; a change of 0.0 produces start, 1.0 produces end<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * @return a new Color<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     */<a name="line.93"></a>
-<span class="sourceLineNo">094</span>    public Color lerp(Color start, Color end, double change)<a name="line.94"></a>
-<span class="sourceLineNo">095</span>    {<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        return lerp(start, end, (float)change);<a name="line.96"></a>
-<span class="sourceLineNo">097</span>    }<a name="line.97"></a>
-<span class="sourceLineNo">098</span>        @Override<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        public int getRed(Color c) {<a name="line.99"></a>
-<span class="sourceLineNo">100</span>                return Math.round(c.r * 255f);<a name="line.100"></a>
-<span class="sourceLineNo">101</span>        }<a name="line.101"></a>
-<span class="sourceLineNo">102</span><a name="line.102"></a>
-<span class="sourceLineNo">103</span>        @Override<a name="line.103"></a>
-<span class="sourceLineNo">104</span>        public int getGreen(Color c) {<a name="line.104"></a>
-<span class="sourceLineNo">105</span>                return Math.round(c.g * 255f);<a name="line.105"></a>
-<span class="sourceLineNo">106</span>        }<a name="line.106"></a>
-<span class="sourceLineNo">107</span><a name="line.107"></a>
-<span class="sourceLineNo">108</span>        @Override<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        public int getBlue(Color c) {<a name="line.109"></a>
-<span class="sourceLineNo">110</span>                return Math.round(c.b * 255f);<a name="line.110"></a>
-<span class="sourceLineNo">111</span>        }<a name="line.111"></a>
-<span class="sourceLineNo">112</span><a name="line.112"></a>
-<span class="sourceLineNo">113</span>        @Override<a name="line.113"></a>
-<span class="sourceLineNo">114</span>        public int getAlpha(Color c) {<a name="line.114"></a>
-<span class="sourceLineNo">115</span>                return Math.round(c.a * 255f);<a name="line.115"></a>
-<span class="sourceLineNo">116</span>        }<a name="line.116"></a>
-<span class="sourceLineNo">117</span><a name="line.117"></a>
-<span class="sourceLineNo">118</span>    public static int encode (Color color) {<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        if (color == null)<a name="line.119"></a>
-<span class="sourceLineNo">120</span>            return 0;<a name="line.120"></a>
-<span class="sourceLineNo">121</span>        return (Math.round(color.r * 255.0f) &lt;&lt; 24)<a name="line.121"></a>
-<span class="sourceLineNo">122</span>                | (Math.round(color.g * 255.0f) &lt;&lt; 16)<a name="line.122"></a>
-<span class="sourceLineNo">123</span>                | (Math.round(color.b * 255.0f) &lt;&lt; 8)<a name="line.123"></a>
-<span class="sourceLineNo">124</span>                | Math.round(color.a * 255.0f);<a name="line.124"></a>
-<span class="sourceLineNo">125</span>    }<a name="line.125"></a>
-<span class="sourceLineNo">126</span><a name="line.126"></a>
-<span class="sourceLineNo">127</span>    /**<a name="line.127"></a>
-<span class="sourceLineNo">128</span>     * Gets a modified copy of color as if it is lit with a colored light source.<a name="line.128"></a>
-<span class="sourceLineNo">129</span>     * @param color the color to shine the light on<a name="line.129"></a>
-<span class="sourceLineNo">130</span>     * @param light the color of the light source<a name="line.130"></a>
-<span class="sourceLineNo">131</span>     * @return a copy of the Color color that factors in the lighting of the Color light.<a name="line.131"></a>
-<span class="sourceLineNo">132</span>     */<a name="line.132"></a>
-<span class="sourceLineNo">133</span>    public Color lightWith(Color color, Color light)<a name="line.133"></a>
-<span class="sourceLineNo">134</span>    {<a name="line.134"></a>
-<span class="sourceLineNo">135</span>        return filter(color.cpy().mul(light));<a name="line.135"></a>
-<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
-<span class="sourceLineNo">137</span><a name="line.137"></a>
-<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
-<span class="sourceLineNo">139</span>     * Lightens a color by degree and returns the new color (mixed with white).<a name="line.139"></a>
-<span class="sourceLineNo">140</span>     * @param color the color to lighten<a name="line.140"></a>
-<span class="sourceLineNo">141</span>     * @param degree a float between 0.0f and 1.0f; more makes it lighter<a name="line.141"></a>
-<span class="sourceLineNo">142</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.142"></a>
-<span class="sourceLineNo">143</span>     */<a name="line.143"></a>
-<span class="sourceLineNo">144</span>    public Color light(Color color, float degree)<a name="line.144"></a>
-<span class="sourceLineNo">145</span>    {<a name="line.145"></a>
-<span class="sourceLineNo">146</span>        return lerp(color, Color.WHITE, degree);<a name="line.146"></a>
-<span class="sourceLineNo">147</span>    }<a name="line.147"></a>
+<span class="sourceLineNo">087</span>    @Override<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    public Color filter(Color c)<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    {<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        if(c == null)<a name="line.90"></a>
+<span class="sourceLineNo">091</span>            return Color.CLEAR;<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        else<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            return super.filter(c);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    }<a name="line.94"></a>
+<span class="sourceLineNo">095</span><a name="line.95"></a>
+<span class="sourceLineNo">096</span>    public Color get(long c)<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        return get((int)((c &gt;&gt; 24) &amp; 0xff), (int)((c &gt;&gt; 16) &amp; 0xff), (int)((c &gt;&gt; 8) &amp; 0xff), (int)(c &amp; 0xff));<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    public Color get(float r, float g, float b, float a)<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        return get((int)(255.9999f * r), (int)(255.9999f * g), (int)(255.9999f * b), (int)(255.9999f * a));<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    }<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>    @Override<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    protected long getUniqueIdentifier(int r, int g, int b, int a) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        return super.getUniqueIdentifier(<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                r &amp; 0xff &lt;&lt; granularity,<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                g &amp; 0xff &lt;&lt; granularity,<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                b &amp; 0xff &lt;&lt; granularity,<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                a &amp; 0xff &lt;&lt; granularity);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    }<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>    /**<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     * @param start the initial Color<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     * @param end the "target" color<a name="line.117"></a>
+<span class="sourceLineNo">118</span>     * @param change the degree to change closer to end; a change of 0.0f produces start, 1.0f produces end<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * @return a new Color<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     */<a name="line.120"></a>
+<span class="sourceLineNo">121</span>    @Override<a name="line.121"></a>
+<span class="sourceLineNo">122</span>    public Color lerp(Color start, Color end, float change)<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    {<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        if(start == null || end == null)<a name="line.124"></a>
+<span class="sourceLineNo">125</span>            return Color.CLEAR;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        return get(<a name="line.126"></a>
+<span class="sourceLineNo">127</span>                start.r + change * (end.r - start.r),<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                start.g + change * (end.g - start.g),<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                start.b + change * (end.b - start.b),<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                start.a + change * (end.a - start.a)<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        );<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    }<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    /**<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * @param start the initial Color<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * @param end the "target" color<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     * @param change the degree to change closer to end; a change of 0.0 produces start, 1.0 produces end<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * @return a new Color<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     */<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    public Color lerp(Color start, Color end, double change)<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        return lerp(start, end, (float)change);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        @Override<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        public int getRed(Color c) {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                return Math.round(c.r * 255f);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        }<a name="line.147"></a>
 <span class="sourceLineNo">148</span><a name="line.148"></a>
-<span class="sourceLineNo">149</span>    /**<a name="line.149"></a>
-<span class="sourceLineNo">150</span>     * Lightens a color by degree and returns the new color (mixed with white).<a name="line.150"></a>
-<span class="sourceLineNo">151</span>     * @param color the color to lighten<a name="line.151"></a>
-<span class="sourceLineNo">152</span>     * @param degree a double between 0.0 and 1.0; more makes it lighter<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     */<a name="line.154"></a>
-<span class="sourceLineNo">155</span>    public Color light(Color color, double degree)<a name="line.155"></a>
-<span class="sourceLineNo">156</span>    {<a name="line.156"></a>
-<span class="sourceLineNo">157</span>        return lerp(color, Color.WHITE, degree);<a name="line.157"></a>
-<span class="sourceLineNo">158</span>    }<a name="line.158"></a>
-<span class="sourceLineNo">159</span>    /**<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     * Lightens a color slightly and returns the new color (10% mix with white).<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * @param color the color to lighten<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     */<a name="line.163"></a>
-<span class="sourceLineNo">164</span>    public Color light(Color color)<a name="line.164"></a>
-<span class="sourceLineNo">165</span>    {<a name="line.165"></a>
-<span class="sourceLineNo">166</span>        return lerp(color, Color.WHITE, 0.1f);<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    }<a name="line.167"></a>
-<span class="sourceLineNo">168</span>    /**<a name="line.168"></a>
-<span class="sourceLineNo">169</span>     * Lightens a color significantly and returns the new color (30% mix with white).<a name="line.169"></a>
-<span class="sourceLineNo">170</span>     * @param color the color to lighten<a name="line.170"></a>
-<span class="sourceLineNo">171</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.171"></a>
-<span class="sourceLineNo">172</span>     */<a name="line.172"></a>
-<span class="sourceLineNo">173</span>    public Color lighter(Color color)<a name="line.173"></a>
-<span class="sourceLineNo">174</span>    {<a name="line.174"></a>
-<span class="sourceLineNo">175</span>        return lerp(color, Color.WHITE, 0.3f);<a name="line.175"></a>
-<span class="sourceLineNo">176</span>    }<a name="line.176"></a>
-<span class="sourceLineNo">177</span>    /**<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     * Lightens a color massively and returns the new color (70% mix with white).<a name="line.178"></a>
-<span class="sourceLineNo">179</span>     * @param color the color to lighten<a name="line.179"></a>
-<span class="sourceLineNo">180</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.180"></a>
-<span class="sourceLineNo">181</span>     */<a name="line.181"></a>
-<span class="sourceLineNo">182</span>    public Color lightest(Color color)<a name="line.182"></a>
-<span class="sourceLineNo">183</span>    {<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        return lerp(color, Color.WHITE, 0.7f);<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
-<span class="sourceLineNo">186</span><a name="line.186"></a>
-<span class="sourceLineNo">187</span>    /**<a name="line.187"></a>
-<span class="sourceLineNo">188</span>     * Darkens a color by the specified degree and returns the new color (mixed with black).<a name="line.188"></a>
-<span class="sourceLineNo">189</span>     * @param color the color to darken<a name="line.189"></a>
-<span class="sourceLineNo">190</span>     * @param degree a float between 0.0f and 1.0f; more makes it darker<a name="line.190"></a>
-<span class="sourceLineNo">191</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.191"></a>
-<span class="sourceLineNo">192</span>     */<a name="line.192"></a>
-<span class="sourceLineNo">193</span>    public Color dim(Color color, float degree)<a name="line.193"></a>
-<span class="sourceLineNo">194</span>    {<a name="line.194"></a>
-<span class="sourceLineNo">195</span>        return lerp(color, Color.BLACK, degree);<a name="line.195"></a>
-<span class="sourceLineNo">196</span>    }<a name="line.196"></a>
-<span class="sourceLineNo">197</span><a name="line.197"></a>
-<span class="sourceLineNo">198</span>    /**<a name="line.198"></a>
-<span class="sourceLineNo">199</span>     * Darkens a color by the specified degree and returns the new color (mixed with black).<a name="line.199"></a>
-<span class="sourceLineNo">200</span>     * @param color the color to darken<a name="line.200"></a>
-<span class="sourceLineNo">201</span>     * @param degree a double between 0.0 and 1.0; more makes it darker<a name="line.201"></a>
-<span class="sourceLineNo">202</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.202"></a>
-<span class="sourceLineNo">203</span>     */<a name="line.203"></a>
-<span class="sourceLineNo">204</span>    public Color dim(Color color, double degree)<a name="line.204"></a>
-<span class="sourceLineNo">205</span>    {<a name="line.205"></a>
-<span class="sourceLineNo">206</span>        return lerp(color, Color.BLACK, degree);<a name="line.206"></a>
-<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
-<span class="sourceLineNo">208</span>    /**<a name="line.208"></a>
-<span class="sourceLineNo">209</span>     * Darkens a color slightly and returns the new color (10% mix with black).<a name="line.209"></a>
-<span class="sourceLineNo">210</span>     * @param color the color to darken<a name="line.210"></a>
-<span class="sourceLineNo">211</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.211"></a>
-<span class="sourceLineNo">212</span>     */<a name="line.212"></a>
-<span class="sourceLineNo">213</span>    public Color dim(Color color)<a name="line.213"></a>
-<span class="sourceLineNo">214</span>    {<a name="line.214"></a>
-<span class="sourceLineNo">215</span>        return lerp(color, Color.BLACK, 0.1f);<a name="line.215"></a>
-<span class="sourceLineNo">216</span>    }<a name="line.216"></a>
-<span class="sourceLineNo">217</span>    /**<a name="line.217"></a>
-<span class="sourceLineNo">218</span>     * Darkens a color significantly and returns the new color (30% mix with black).<a name="line.218"></a>
-<span class="sourceLineNo">219</span>     * @param color the color to darken<a name="line.219"></a>
-<span class="sourceLineNo">220</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.220"></a>
-<span class="sourceLineNo">221</span>     */<a name="line.221"></a>
-<span class="sourceLineNo">222</span>    public Color dimmer(Color color)<a name="line.222"></a>
-<span class="sourceLineNo">223</span>    {<a name="line.223"></a>
-<span class="sourceLineNo">224</span>        return lerp(color, Color.BLACK, 0.3f);<a name="line.224"></a>
-<span class="sourceLineNo">225</span>    }<a name="line.225"></a>
-<span class="sourceLineNo">226</span>    /**<a name="line.226"></a>
-<span class="sourceLineNo">227</span>     * Darkens a color massively and returns the new color (70% mix with black).<a name="line.227"></a>
-<span class="sourceLineNo">228</span>     * @param color the color to darken<a name="line.228"></a>
-<span class="sourceLineNo">229</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.229"></a>
-<span class="sourceLineNo">230</span>     */<a name="line.230"></a>
-<span class="sourceLineNo">231</span>    public Color dimmest(Color color)<a name="line.231"></a>
-<span class="sourceLineNo">232</span>    {<a name="line.232"></a>
-<span class="sourceLineNo">233</span>        return lerp(color, Color.BLACK, 0.7f);<a name="line.233"></a>
-<span class="sourceLineNo">234</span>    }<a name="line.234"></a>
-<span class="sourceLineNo">235</span><a name="line.235"></a>
-<span class="sourceLineNo">236</span><a name="line.236"></a>
-<span class="sourceLineNo">237</span>    /**<a name="line.237"></a>
-<span class="sourceLineNo">238</span>     * Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).<a name="line.238"></a>
-<span class="sourceLineNo">239</span>     * @param color the color to desaturate (will not be modified)<a name="line.239"></a>
-<span class="sourceLineNo">240</span>     * @return the grayscale version of color<a name="line.240"></a>
-<span class="sourceLineNo">241</span>     */<a name="line.241"></a>
-<span class="sourceLineNo">242</span>    @Override<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    public Color desaturated(Color color)<a name="line.243"></a>
-<span class="sourceLineNo">244</span>    {<a name="line.244"></a>
-<span class="sourceLineNo">245</span>        float f = color.r * 0.299f + color.g * 0.587f + color.b * 0.114f;<a name="line.245"></a>
-<span class="sourceLineNo">246</span>        return get(f, f, f, color.a);<a name="line.246"></a>
-<span class="sourceLineNo">247</span>    }<a name="line.247"></a>
-<span class="sourceLineNo">248</span><a name="line.248"></a>
-<span class="sourceLineNo">249</span>    /**<a name="line.249"></a>
-<span class="sourceLineNo">250</span>     * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).<a name="line.250"></a>
-<span class="sourceLineNo">251</span>     * @param color the color to desaturate<a name="line.251"></a>
-<span class="sourceLineNo">252</span>     * @param degree a float between 0.0f and 1.0f; more makes it less colorful<a name="line.252"></a>
-<span class="sourceLineNo">253</span>     * @return the desaturated (and if a filter is used, also filtered) new color<a name="line.253"></a>
-<span class="sourceLineNo">254</span>     */<a name="line.254"></a>
-<span class="sourceLineNo">255</span>    @Override<a name="line.255"></a>
-<span class="sourceLineNo">256</span>    public Color desaturate(Color color, float degree)<a name="line.256"></a>
-<span class="sourceLineNo">257</span>    {<a name="line.257"></a>
-<span class="sourceLineNo">258</span>        return lerp(color, desaturated(color), degree);<a name="line.258"></a>
-<span class="sourceLineNo">259</span>    }<a name="line.259"></a>
-<span class="sourceLineNo">260</span><a name="line.260"></a>
-<span class="sourceLineNo">261</span>    /**<a name="line.261"></a>
-<span class="sourceLineNo">262</span>     * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).<a name="line.262"></a>
-<span class="sourceLineNo">263</span>     * @param color the color to desaturate<a name="line.263"></a>
-<span class="sourceLineNo">264</span>     * @param degree a double between 0.0 and 1.0; more makes it less colorful<a name="line.264"></a>
-<span class="sourceLineNo">265</span>     * @return the desaturated (and if a filter is used, also filtered) new color<a name="line.265"></a>
-<span class="sourceLineNo">266</span>     */<a name="line.266"></a>
-<span class="sourceLineNo">267</span>    public Color desaturate(Color color, double degree)<a name="line.267"></a>
-<span class="sourceLineNo">268</span>    {<a name="line.268"></a>
-<span class="sourceLineNo">269</span>        return lerp(color, desaturated(color), degree);<a name="line.269"></a>
-<span class="sourceLineNo">270</span>    }<a name="line.270"></a>
-<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">149</span>        @Override<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        public int getGreen(Color c) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                return Math.round(c.g * 255f);<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        }<a name="line.152"></a>
+<span class="sourceLineNo">153</span><a name="line.153"></a>
+<span class="sourceLineNo">154</span>        @Override<a name="line.154"></a>
+<span class="sourceLineNo">155</span>        public int getBlue(Color c) {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                return Math.round(c.b * 255f);<a name="line.156"></a>
+<span class="sourceLineNo">157</span>        }<a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>        @Override<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        public int getAlpha(Color c) {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                return Math.round(c.a * 255f);<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>    public static int encode (Color color) {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        if (color == null)<a name="line.165"></a>
+<span class="sourceLineNo">166</span>            return 0;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        return (Math.round(color.r * 255.0f) &lt;&lt; 24)<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                | (Math.round(color.g * 255.0f) &lt;&lt; 16)<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                | (Math.round(color.b * 255.0f) &lt;&lt; 8)<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                | Math.round(color.a * 255.0f);<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    /**<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * Gets a modified copy of color as if it is lit with a colored light source.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * @param color the color to shine the light on<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param light the color of the light source<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @return a copy of the Color color that factors in the lighting of the Color light.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     */<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    public Color lightWith(Color color, Color light)<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        return filter(color.cpy().mul(light));<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    }<a name="line.182"></a>
+<span class="sourceLineNo">183</span><a name="line.183"></a>
+<span class="sourceLineNo">184</span>    /**<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     * Lightens a color by degree and returns the new color (mixed with white).<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * @param color the color to lighten<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * @param degree a float between 0.0f and 1.0f; more makes it lighter<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     */<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    public Color light(Color color, float degree)<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    {<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        return lerp(color, Color.WHITE, degree);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    }<a name="line.193"></a>
+<span class="sourceLineNo">194</span><a name="line.194"></a>
+<span class="sourceLineNo">195</span>    /**<a name="line.195"></a>
+<span class="sourceLineNo">196</span>     * Lightens a color by degree and returns the new color (mixed with white).<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     * @param color the color to lighten<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * @param degree a double between 0.0 and 1.0; more makes it lighter<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     */<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    public Color light(Color color, double degree)<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    {<a name="line.202"></a>
+<span class="sourceLineNo">203</span>        return lerp(color, Color.WHITE, degree);<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    }<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    /**<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * Lightens a color slightly and returns the new color (10% mix with white).<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * @param color the color to lighten<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     */<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    public Color light(Color color)<a name="line.210"></a>
+<span class="sourceLineNo">211</span>    {<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        return lerp(color, Color.WHITE, 0.1f);<a name="line.212"></a>
+<span class="sourceLineNo">213</span>    }<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    /**<a name="line.214"></a>
+<span class="sourceLineNo">215</span>     * Lightens a color significantly and returns the new color (30% mix with white).<a name="line.215"></a>
+<span class="sourceLineNo">216</span>     * @param color the color to lighten<a name="line.216"></a>
+<span class="sourceLineNo">217</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.217"></a>
+<span class="sourceLineNo">218</span>     */<a name="line.218"></a>
+<span class="sourceLineNo">219</span>    public Color lighter(Color color)<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        return lerp(color, Color.WHITE, 0.3f);<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    }<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    /**<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * Lightens a color massively and returns the new color (70% mix with white).<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * @param color the color to lighten<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * @return the lightened (and if a filter is used, also filtered) new color<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     */<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    public Color lightest(Color color)<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    {<a name="line.229"></a>
+<span class="sourceLineNo">230</span>        return lerp(color, Color.WHITE, 0.7f);<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    }<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>    /**<a name="line.233"></a>
+<span class="sourceLineNo">234</span>     * Darkens a color by the specified degree and returns the new color (mixed with black).<a name="line.234"></a>
+<span class="sourceLineNo">235</span>     * @param color the color to darken<a name="line.235"></a>
+<span class="sourceLineNo">236</span>     * @param degree a float between 0.0f and 1.0f; more makes it darker<a name="line.236"></a>
+<span class="sourceLineNo">237</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     */<a name="line.238"></a>
+<span class="sourceLineNo">239</span>    public Color dim(Color color, float degree)<a name="line.239"></a>
+<span class="sourceLineNo">240</span>    {<a name="line.240"></a>
+<span class="sourceLineNo">241</span>        return lerp(color, Color.BLACK, degree);<a name="line.241"></a>
+<span class="sourceLineNo">242</span>    }<a name="line.242"></a>
+<span class="sourceLineNo">243</span><a name="line.243"></a>
+<span class="sourceLineNo">244</span>    /**<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * Darkens a color by the specified degree and returns the new color (mixed with black).<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * @param color the color to darken<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     * @param degree a double between 0.0 and 1.0; more makes it darker<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     */<a name="line.249"></a>
+<span class="sourceLineNo">250</span>    public Color dim(Color color, double degree)<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    {<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        return lerp(color, Color.BLACK, degree);<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    }<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    /**<a name="line.254"></a>
+<span class="sourceLineNo">255</span>     * Darkens a color slightly and returns the new color (10% mix with black).<a name="line.255"></a>
+<span class="sourceLineNo">256</span>     * @param color the color to darken<a name="line.256"></a>
+<span class="sourceLineNo">257</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.257"></a>
+<span class="sourceLineNo">258</span>     */<a name="line.258"></a>
+<span class="sourceLineNo">259</span>    public Color dim(Color color)<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    {<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        return lerp(color, Color.BLACK, 0.1f);<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    /**<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     * Darkens a color significantly and returns the new color (30% mix with black).<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * @param color the color to darken<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     */<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    public Color dimmer(Color color)<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        return lerp(color, Color.BLACK, 0.3f);<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    }<a name="line.271"></a>
 <span class="sourceLineNo">272</span>    /**<a name="line.272"></a>
-<span class="sourceLineNo">273</span>     * Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.<a name="line.273"></a>
-<span class="sourceLineNo">274</span>     * Leaves alpha unchanged.<a name="line.274"></a>
-<span class="sourceLineNo">275</span>     *<a name="line.275"></a>
-<span class="sourceLineNo">276</span>     * @param color the color T to saturate (will not be modified)<a name="line.276"></a>
-<span class="sourceLineNo">277</span>     * @return the saturated version of color<a name="line.277"></a>
-<span class="sourceLineNo">278</span>     */<a name="line.278"></a>
-<span class="sourceLineNo">279</span>    @Override<a name="line.279"></a>
-<span class="sourceLineNo">280</span>    public Color saturated(Color color) {<a name="line.280"></a>
-<span class="sourceLineNo">281</span>        return getHSV(getHue(color), 1f, getValue(color), getAlpha(color));<a name="line.281"></a>
-<span class="sourceLineNo">282</span>    }<a name="line.282"></a>
-<span class="sourceLineNo">283</span><a name="line.283"></a>
-<span class="sourceLineNo">284</span>    /**<a name="line.284"></a>
-<span class="sourceLineNo">285</span>     * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and<a name="line.285"></a>
-<span class="sourceLineNo">286</span>     * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this is<a name="line.286"></a>
-<span class="sourceLineNo">287</span>     * likely to produce a red hue by default (if there's no hue to make vivid, it needs to choose something).<a name="line.287"></a>
-<span class="sourceLineNo">288</span>     * @param color the color to saturate<a name="line.288"></a>
-<span class="sourceLineNo">289</span>     * @param degree a float between 0.0f and 1.0f; more makes it more colorful<a name="line.289"></a>
-<span class="sourceLineNo">290</span>     * @return the saturated (and if a filter is used, also filtered) new color<a name="line.290"></a>
-<span class="sourceLineNo">291</span>     */<a name="line.291"></a>
-<span class="sourceLineNo">292</span>    @Override<a name="line.292"></a>
-<span class="sourceLineNo">293</span>    public Color saturate(Color color, float degree)<a name="line.293"></a>
-<span class="sourceLineNo">294</span>    {<a name="line.294"></a>
-<span class="sourceLineNo">295</span>        return lerp(color, saturated(color), degree);<a name="line.295"></a>
-<span class="sourceLineNo">296</span>    }<a name="line.296"></a>
-<span class="sourceLineNo">297</span><a name="line.297"></a>
-<span class="sourceLineNo">298</span>    /**<a name="line.298"></a>
-<span class="sourceLineNo">299</span>     * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and<a name="line.299"></a>
-<span class="sourceLineNo">300</span>     * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this is<a name="line.300"></a>
-<span class="sourceLineNo">301</span>     * likely to produce a red hue by default (if there's no hue to make vivid, it needs to choose something).<a name="line.301"></a>
-<span class="sourceLineNo">302</span>     * @param color the color to saturate<a name="line.302"></a>
-<span class="sourceLineNo">303</span>     * @param degree a double between 0.0 and 1.0; more makes it more colorful<a name="line.303"></a>
-<span class="sourceLineNo">304</span>     * @return the saturated (and if a filter is used, also filtered) new color<a name="line.304"></a>
-<span class="sourceLineNo">305</span>     */<a name="line.305"></a>
-<span class="sourceLineNo">306</span>    public Color saturate(Color color, double degree)<a name="line.306"></a>
-<span class="sourceLineNo">307</span>    {<a name="line.307"></a>
-<span class="sourceLineNo">308</span>        return lerp(color, saturated(color), degree);<a name="line.308"></a>
-<span class="sourceLineNo">309</span>    }<a name="line.309"></a>
-<span class="sourceLineNo">310</span>    /**<a name="line.310"></a>
-<span class="sourceLineNo">311</span>     * Gets a fully random color that is only required to be opaque.<a name="line.311"></a>
-<span class="sourceLineNo">312</span>     * @return a random Color<a name="line.312"></a>
-<span class="sourceLineNo">313</span>     */<a name="line.313"></a>
-<span class="sourceLineNo">314</span>    public Color random()<a name="line.314"></a>
-<span class="sourceLineNo">315</span>    {<a name="line.315"></a>
-<span class="sourceLineNo">316</span>        StatefulRNG rng = DefaultResources.getGuiRandom();<a name="line.316"></a>
-<span class="sourceLineNo">317</span>        return get(rng.nextFloat(), rng.nextFloat(), rng.nextFloat(), 1f);<a name="line.317"></a>
-<span class="sourceLineNo">318</span>    }<a name="line.318"></a>
-<span class="sourceLineNo">319</span><a name="line.319"></a>
-<span class="sourceLineNo">320</span>    /**<a name="line.320"></a>
-<span class="sourceLineNo">321</span>     * Blends a color with a random (opaque) color by a factor of 10% random.<a name="line.321"></a>
-<span class="sourceLineNo">322</span>     * @param color the color to randomize<a name="line.322"></a>
-<span class="sourceLineNo">323</span>     * @return the randomized (and if a filter is used, also filtered) new color<a name="line.323"></a>
+<span class="sourceLineNo">273</span>     * Darkens a color massively and returns the new color (70% mix with black).<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * @param color the color to darken<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * @return the darkened (and if a filter is used, also filtered) new color<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     */<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    public Color dimmest(Color color)<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    {<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        return lerp(color, Color.BLACK, 0.7f);<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    }<a name="line.280"></a>
+<span class="sourceLineNo">281</span><a name="line.281"></a>
+<span class="sourceLineNo">282</span><a name="line.282"></a>
+<span class="sourceLineNo">283</span>    /**<a name="line.283"></a>
+<span class="sourceLineNo">284</span>     * Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).<a name="line.284"></a>
+<span class="sourceLineNo">285</span>     * @param color the color to desaturate (will not be modified)<a name="line.285"></a>
+<span class="sourceLineNo">286</span>     * @return the grayscale version of color<a name="line.286"></a>
+<span class="sourceLineNo">287</span>     */<a name="line.287"></a>
+<span class="sourceLineNo">288</span>    @Override<a name="line.288"></a>
+<span class="sourceLineNo">289</span>    public Color desaturated(Color color)<a name="line.289"></a>
+<span class="sourceLineNo">290</span>    {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        float f = color.r * 0.299f + color.g * 0.587f + color.b * 0.114f;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        return get(f, f, f, color.a);<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    }<a name="line.293"></a>
+<span class="sourceLineNo">294</span><a name="line.294"></a>
+<span class="sourceLineNo">295</span>    /**<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     * @param color the color to desaturate<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     * @param degree a float between 0.0f and 1.0f; more makes it less colorful<a name="line.298"></a>
+<span class="sourceLineNo">299</span>     * @return the desaturated (and if a filter is used, also filtered) new color<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     */<a name="line.300"></a>
+<span class="sourceLineNo">301</span>    @Override<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    public Color desaturate(Color color, float degree)<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    {<a name="line.303"></a>
+<span class="sourceLineNo">304</span>        return lerp(color, desaturated(color), degree);<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    }<a name="line.305"></a>
+<span class="sourceLineNo">306</span><a name="line.306"></a>
+<span class="sourceLineNo">307</span>    /**<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * Brings a color closer to grayscale by the specified degree and returns the new color (desaturated somewhat).<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * @param color the color to desaturate<a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * @param degree a double between 0.0 and 1.0; more makes it less colorful<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * @return the desaturated (and if a filter is used, also filtered) new color<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     */<a name="line.312"></a>
+<span class="sourceLineNo">313</span>    public Color desaturate(Color color, double degree)<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    {<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        return lerp(color, desaturated(color), degree);<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    }<a name="line.316"></a>
+<span class="sourceLineNo">317</span><a name="line.317"></a>
+<span class="sourceLineNo">318</span>    /**<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * Fully saturates color (makes it a vivid color like red or green and less gray) and returns the modified copy.<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * Leaves alpha unchanged.<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     *<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * @param color the color T to saturate (will not be modified)<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * @return the saturated version of color<a name="line.323"></a>
 <span class="sourceLineNo">324</span>     */<a name="line.324"></a>
-<span class="sourceLineNo">325</span>    public Color randomize(Color color)<a name="line.325"></a>
-<span class="sourceLineNo">326</span>    {<a name="line.326"></a>
-<span class="sourceLineNo">327</span>        return lerp(color, random(), 0.1f);<a name="line.327"></a>
+<span class="sourceLineNo">325</span>    @Override<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    public Color saturated(Color color) {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        return getHSV(getHue(color), 1f, getValue(color), getAlpha(color));<a name="line.327"></a>
 <span class="sourceLineNo">328</span>    }<a name="line.328"></a>
-<span class="sourceLineNo">329</span>    /**<a name="line.329"></a>
-<span class="sourceLineNo">330</span>     * Blends a color with a random (opaque) color by a factor of 30% random.<a name="line.330"></a>
-<span class="sourceLineNo">331</span>     * @param color the color to randomize<a name="line.331"></a>
-<span class="sourceLineNo">332</span>     * @return the randomized (and if a filter is used, also filtered) new color<a name="line.332"></a>
-<span class="sourceLineNo">333</span>     */<a name="line.333"></a>
-<span class="sourceLineNo">334</span>    public Color randomizeMore(Color color)<a name="line.334"></a>
-<span class="sourceLineNo">335</span>    {<a name="line.335"></a>
-<span class="sourceLineNo">336</span>        return lerp(color, random(), 0.3f);<a name="line.336"></a>
-<span class="sourceLineNo">337</span>    }<a name="line.337"></a>
-<span class="sourceLineNo">338</span>    /**<a name="line.338"></a>
-<span class="sourceLineNo">339</span>     * Blends a color with a random (opaque) color by a factor of 70% random.<a name="line.339"></a>
-<span class="sourceLineNo">340</span>     * @param color the color to randomize<a name="line.340"></a>
-<span class="sourceLineNo">341</span>     * @return the randomized (and if a filter is used, also filtered) new color<a name="line.341"></a>
-<span class="sourceLineNo">342</span>     */<a name="line.342"></a>
-<span class="sourceLineNo">343</span>    public Color randomizeMost(Color color)<a name="line.343"></a>
-<span class="sourceLineNo">344</span>    {<a name="line.344"></a>
-<span class="sourceLineNo">345</span>        return lerp(color, random(), 0.7f);<a name="line.345"></a>
-<span class="sourceLineNo">346</span>    }<a name="line.346"></a>
-<span class="sourceLineNo">347</span><a name="line.347"></a>
-<span class="sourceLineNo">348</span>    /**<a name="line.348"></a>
-<span class="sourceLineNo">349</span>     * Blends the colors A and B by a random degree.<a name="line.349"></a>
-<span class="sourceLineNo">350</span>     * @param a a color to mix in<a name="line.350"></a>
-<span class="sourceLineNo">351</span>     * @param b another color to mix in<a name="line.351"></a>
-<span class="sourceLineNo">352</span>     * @return a random blend of a and b.<a name="line.352"></a>
-<span class="sourceLineNo">353</span>     */<a name="line.353"></a>
-<span class="sourceLineNo">354</span>    public Color randomBlend(Color a, Color b)<a name="line.354"></a>
-<span class="sourceLineNo">355</span>    {<a name="line.355"></a>
-<span class="sourceLineNo">356</span>        return lerp(a, b, DefaultResources.getGuiRandom().nextFloat());<a name="line.356"></a>
-<span class="sourceLineNo">357</span>    }<a name="line.357"></a>
-<span class="sourceLineNo">358</span><a name="line.358"></a>
-<span class="sourceLineNo">359</span>    public Color invert(Color start)<a name="line.359"></a>
-<span class="sourceLineNo">360</span>    {<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        float v = getValue(start);<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        return v &gt; 0.65f<a name="line.362"></a>
-<span class="sourceLineNo">363</span>                ? getHSV((getHue(start) + 0.45f), 1f - getSaturation(start) * 0.85f, v * 0.1f, start.a)<a name="line.363"></a>
-<span class="sourceLineNo">364</span>                : getHSV((getHue(start) + 0.45f), 1f - getSaturation(start) * 1.15f, 1f, start.a);<a name="line.364"></a>
-<span class="sourceLineNo">365</span>    }<a name="line.365"></a>
+<span class="sourceLineNo">329</span><a name="line.329"></a>
+<span class="sourceLineNo">330</span>    /**<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and<a name="line.331"></a>
+<span class="sourceLineNo">332</span>     * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this is<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     * likely to produce a red hue by default (if there's no hue to make vivid, it needs to choose something).<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * @param color the color to saturate<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     * @param degree a float between 0.0f and 1.0f; more makes it more colorful<a name="line.335"></a>
+<span class="sourceLineNo">336</span>     * @return the saturated (and if a filter is used, also filtered) new color<a name="line.336"></a>
+<span class="sourceLineNo">337</span>     */<a name="line.337"></a>
+<span class="sourceLineNo">338</span>    @Override<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    public Color saturate(Color color, float degree)<a name="line.339"></a>
+<span class="sourceLineNo">340</span>    {<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        return lerp(color, saturated(color), degree);<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    }<a name="line.342"></a>
+<span class="sourceLineNo">343</span><a name="line.343"></a>
+<span class="sourceLineNo">344</span>    /**<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * Saturates color (makes it closer to a vivid color like red or green and less gray) by the specified degree and<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     * returns the new color (saturated somewhat). If this is called on a color that is very close to gray, this is<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * likely to produce a red hue by default (if there's no hue to make vivid, it needs to choose something).<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     * @param color the color to saturate<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     * @param degree a double between 0.0 and 1.0; more makes it more colorful<a name="line.349"></a>
+<span class="sourceLineNo">350</span>     * @return the saturated (and if a filter is used, also filtered) new color<a name="line.350"></a>
+<span class="sourceLineNo">351</span>     */<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    public Color saturate(Color color, double degree)<a name="line.352"></a>
+<span class="sourceLineNo">353</span>    {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        return lerp(color, saturated(color), degree);<a name="line.354"></a>
+<span class="sourceLineNo">355</span>    }<a name="line.355"></a>
+<span class="sourceLineNo">356</span>    /**<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     * Gets a fully random color that is only required to be opaque.<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * @return a random Color<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     */<a name="line.359"></a>
+<span class="sourceLineNo">360</span>    public Color random()<a name="line.360"></a>
+<span class="sourceLineNo">361</span>    {<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        StatefulRNG rng = DefaultResources.getGuiRandom();<a name="line.362"></a>
+<span class="sourceLineNo">363</span>        return get(rng.nextFloat(), rng.nextFloat(), rng.nextFloat(), 1f);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    }<a name="line.364"></a>
+<span class="sourceLineNo">365</span><a name="line.365"></a>
 <span class="sourceLineNo">366</span>    /**<a name="line.366"></a>
-<span class="sourceLineNo">367</span>     * Finds a 16-step gradient going from fromColor to toColor, both included in the gradient.<a name="line.367"></a>
-<span class="sourceLineNo">368</span>     * @param fromColor the color to start with, included in the gradient<a name="line.368"></a>
-<span class="sourceLineNo">369</span>     * @param toColor the color to end on, included in the gradient<a name="line.369"></a>
-<span class="sourceLineNo">370</span>     * @return a 16-element ArrayList composed of the blending steps from fromColor to toColor<a name="line.370"></a>
-<span class="sourceLineNo">371</span>     */<a name="line.371"></a>
-<span class="sourceLineNo">372</span>    public ArrayList&lt;Color&gt; gradient(Color fromColor, Color toColor)<a name="line.372"></a>
-<span class="sourceLineNo">373</span>    {<a name="line.373"></a>
-<span class="sourceLineNo">374</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(16);<a name="line.374"></a>
-<span class="sourceLineNo">375</span>        for (int i = 0; i &lt; 16; i++) {<a name="line.375"></a>
-<span class="sourceLineNo">376</span>            colors.add(lerp(fromColor, toColor, i / 15f));<a name="line.376"></a>
-<span class="sourceLineNo">377</span>        }<a name="line.377"></a>
-<span class="sourceLineNo">378</span>        return colors;<a name="line.378"></a>
-<span class="sourceLineNo">379</span>    }<a name="line.379"></a>
-<span class="sourceLineNo">380</span><a name="line.380"></a>
-<span class="sourceLineNo">381</span>    /**<a name="line.381"></a>
-<span class="sourceLineNo">382</span>     * Finds a gradient with the specified number of steps going from fromColor to toColor,<a name="line.382"></a>
-<span class="sourceLineNo">383</span>     * both included in the gradient.<a name="line.383"></a>
-<span class="sourceLineNo">384</span>     * @param fromColor the color to start with, included in the gradient<a name="line.384"></a>
-<span class="sourceLineNo">385</span>     * @param toColor the color to end on, included in the gradient<a name="line.385"></a>
-<span class="sourceLineNo">386</span>     * @param steps the number of elements to use in the gradient<a name="line.386"></a>
-<span class="sourceLineNo">387</span>     * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps<a name="line.387"></a>
+<span class="sourceLineNo">367</span>     * Blends a color with a random (opaque) color by a factor of 10% random.<a name="line.367"></a>
+<span class="sourceLineNo">368</span>     * @param color the color to randomize<a name="line.368"></a>
+<span class="sourceLineNo">369</span>     * @return the randomized (and if a filter is used, also filtered) new color<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     */<a name="line.370"></a>
+<span class="sourceLineNo">371</span>    public Color randomize(Color color)<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    {<a name="line.372"></a>
+<span class="sourceLineNo">373</span>        return lerp(color, random(), 0.1f);<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    }<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    /**<a name="line.375"></a>
+<span class="sourceLineNo">376</span>     * Blends a color with a random (opaque) color by a factor of 30% random.<a name="line.376"></a>
+<span class="sourceLineNo">377</span>     * @param color the color to randomize<a name="line.377"></a>
+<span class="sourceLineNo">378</span>     * @return the randomized (and if a filter is used, also filtered) new color<a name="line.378"></a>
+<span class="sourceLineNo">379</span>     */<a name="line.379"></a>
+<span class="sourceLineNo">380</span>    public Color randomizeMore(Color color)<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    {<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        return lerp(color, random(), 0.3f);<a name="line.382"></a>
+<span class="sourceLineNo">383</span>    }<a name="line.383"></a>
+<span class="sourceLineNo">384</span>    /**<a name="line.384"></a>
+<span class="sourceLineNo">385</span>     * Blends a color with a random (opaque) color by a factor of 70% random.<a name="line.385"></a>
+<span class="sourceLineNo">386</span>     * @param color the color to randomize<a name="line.386"></a>
+<span class="sourceLineNo">387</span>     * @return the randomized (and if a filter is used, also filtered) new color<a name="line.387"></a>
 <span class="sourceLineNo">388</span>     */<a name="line.388"></a>
-<span class="sourceLineNo">389</span>    public ArrayList&lt;Color&gt; gradient(Color fromColor, Color toColor, int steps)<a name="line.389"></a>
+<span class="sourceLineNo">389</span>    public Color randomizeMost(Color color)<a name="line.389"></a>
 <span class="sourceLineNo">390</span>    {<a name="line.390"></a>
-<span class="sourceLineNo">391</span>        return gradient(fromColor, toColor, steps, Interpolation.linear);<a name="line.391"></a>
+<span class="sourceLineNo">391</span>        return lerp(color, random(), 0.7f);<a name="line.391"></a>
 <span class="sourceLineNo">392</span>    }<a name="line.392"></a>
 <span class="sourceLineNo">393</span><a name="line.393"></a>
-<span class="sourceLineNo">394</span><a name="line.394"></a>
-<span class="sourceLineNo">395</span>    /**<a name="line.395"></a>
-<span class="sourceLineNo">396</span>     * Finds a gradient with the specified number of steps going from fromColor to midColor, then midColor to (possibly)<a name="line.396"></a>
-<span class="sourceLineNo">397</span>     * fromColor, with both included in the gradient but fromColor only repeated at the end if the number of steps is odd.<a name="line.397"></a>
-<span class="sourceLineNo">398</span>     * @param fromColor the color to start with (and end with, if steps is an odd number), included in the gradient<a name="line.398"></a>
-<span class="sourceLineNo">399</span>     * @param midColor the color to use in the middle of the loop, included in the gradient<a name="line.399"></a>
-<span class="sourceLineNo">400</span>     * @param steps the number of elements to use in the gradient, will be at least 3<a name="line.400"></a>
-<span class="sourceLineNo">401</span>     * @return an ArrayList composed of the blending steps from fromColor to midColor to fromColor again, with length equal to steps<a name="line.401"></a>
-<span class="sourceLineNo">402</span>     */<a name="line.402"></a>
-<span class="sourceLineNo">403</span>    public ArrayList&lt;Color&gt; loopingGradient(Color fromColor, Color midColor, int steps)<a name="line.403"></a>
-<span class="sourceLineNo">404</span>    {<a name="line.404"></a>
-<span class="sourceLineNo">405</span>        return loopingGradient(fromColor, midColor, steps, Interpolation.linear);<a name="line.405"></a>
-<span class="sourceLineNo">406</span>    }<a name="line.406"></a>
-<span class="sourceLineNo">407</span><a name="line.407"></a>
-<span class="sourceLineNo">408</span>    /**<a name="line.408"></a>
-<span class="sourceLineNo">409</span>     * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the<a name="line.409"></a>
-<span class="sourceLineNo">410</span>     * gradient. The interpolation argument can be used to make the color stay close to fromColor and/or toColor longer<a name="line.410"></a>
-<span class="sourceLineNo">411</span>     * than it would normally, or shorter if the middle colors are desirable.<a name="line.411"></a>
-<span class="sourceLineNo">412</span>     * @param fromColor the color to start with, included in the gradient<a name="line.412"></a>
-<span class="sourceLineNo">413</span>     * @param toColor the color to end on, included in the gradient<a name="line.413"></a>
-<span class="sourceLineNo">414</span>     * @param steps the number of elements to use in the gradient<a name="line.414"></a>
-<span class="sourceLineNo">415</span>     * @param interpolation a libGDX Interpolation that defines how quickly the color changes during the transition<a name="line.415"></a>
-<span class="sourceLineNo">416</span>     * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps<a name="line.416"></a>
+<span class="sourceLineNo">394</span>    /**<a name="line.394"></a>
+<span class="sourceLineNo">395</span>     * Blends the colors A and B by a random degree.<a name="line.395"></a>
+<span class="sourceLineNo">396</span>     * @param a a color to mix in<a name="line.396"></a>
+<span class="sourceLineNo">397</span>     * @param b another color to mix in<a name="line.397"></a>
+<span class="sourceLineNo">398</span>     * @return a random blend of a and b.<a name="line.398"></a>
+<span class="sourceLineNo">399</span>     */<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    public Color randomBlend(Color a, Color b)<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    {<a name="line.401"></a>
+<span class="sourceLineNo">402</span>        return lerp(a, b, DefaultResources.getGuiRandom().nextFloat());<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    }<a name="line.403"></a>
+<span class="sourceLineNo">404</span><a name="line.404"></a>
+<span class="sourceLineNo">405</span>    public Color invert(Color start)<a name="line.405"></a>
+<span class="sourceLineNo">406</span>    {<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        float v = getValue(start);<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        return v &gt; 0.65f<a name="line.408"></a>
+<span class="sourceLineNo">409</span>                ? getHSV((getHue(start) + 0.45f), 1f - getSaturation(start) * 0.85f, v * 0.1f, start.a)<a name="line.409"></a>
+<span class="sourceLineNo">410</span>                : getHSV((getHue(start) + 0.45f), 1f - getSaturation(start) * 1.15f, 1f, start.a);<a name="line.410"></a>
+<span class="sourceLineNo">411</span>    }<a name="line.411"></a>
+<span class="sourceLineNo">412</span>    /**<a name="line.412"></a>
+<span class="sourceLineNo">413</span>     * Finds a 16-step gradient going from fromColor to toColor, both included in the gradient.<a name="line.413"></a>
+<span class="sourceLineNo">414</span>     * @param fromColor the color to start with, included in the gradient<a name="line.414"></a>
+<span class="sourceLineNo">415</span>     * @param toColor the color to end on, included in the gradient<a name="line.415"></a>
+<span class="sourceLineNo">416</span>     * @return a 16-element ArrayList composed of the blending steps from fromColor to toColor<a name="line.416"></a>
 <span class="sourceLineNo">417</span>     */<a name="line.417"></a>
-<span class="sourceLineNo">418</span>    public ArrayList&lt;Color&gt; gradient(Color fromColor, Color toColor, int steps, Interpolation interpolation)<a name="line.418"></a>
+<span class="sourceLineNo">418</span>    public ArrayList&lt;Color&gt; gradient(Color fromColor, Color toColor)<a name="line.418"></a>
 <span class="sourceLineNo">419</span>    {<a name="line.419"></a>
-<span class="sourceLineNo">420</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;((steps &gt; 1) ? steps : 1);<a name="line.420"></a>
-<span class="sourceLineNo">421</span>        colors.add(filter(fromColor));<a name="line.421"></a>
-<span class="sourceLineNo">422</span>        if(steps &lt; 2)<a name="line.422"></a>
-<span class="sourceLineNo">423</span>            return colors;<a name="line.423"></a>
-<span class="sourceLineNo">424</span>        for (float i = 1; i &lt; steps; i++) {<a name="line.424"></a>
-<span class="sourceLineNo">425</span>            colors.add(lerp(fromColor, toColor, interpolation.apply(i / (steps - 1))));<a name="line.425"></a>
-<span class="sourceLineNo">426</span>        }<a name="line.426"></a>
-<span class="sourceLineNo">427</span>        return colors;<a name="line.427"></a>
-<span class="sourceLineNo">428</span>    }<a name="line.428"></a>
-<span class="sourceLineNo">429</span><a name="line.429"></a>
-<span class="sourceLineNo">430</span>    /**<a name="line.430"></a>
-<span class="sourceLineNo">431</span>     * Finds a gradient with the specified number of steps going from fromColor to midColor, then midColor to (possibly)<a name="line.431"></a>
-<span class="sourceLineNo">432</span>     * fromColor, with both included in the gradient but fromColor only repeated at the end if the number of steps is<a name="line.432"></a>
-<span class="sourceLineNo">433</span>     * odd. The interpolation argument can be used to make the color linger for a while with colors close to fromColor<a name="line.433"></a>
-<span class="sourceLineNo">434</span>     * or midColor, or to do the opposite and quickly change from one and spend more time in the middle.<a name="line.434"></a>
-<span class="sourceLineNo">435</span>     * @param fromColor the color to start with (and end with, if steps is an odd number), included in the gradient<a name="line.435"></a>
-<span class="sourceLineNo">436</span>     * @param midColor the color to use in the middle of the loop, included in the gradient<a name="line.436"></a>
-<span class="sourceLineNo">437</span>     * @param steps the number of elements to use in the gradient, will be at least 3<a name="line.437"></a>
-<span class="sourceLineNo">438</span>     * @param interpolation a libGDX Interpolation that defines how quickly the color changes at the start and end of<a name="line.438"></a>
-<span class="sourceLineNo">439</span>     *                      each transition, both from fromColor to midColor as well as back to fromColor<a name="line.439"></a>
-<span class="sourceLineNo">440</span>     * @return an ArrayList composed of the blending steps from fromColor to midColor to fromColor again, with length equal to steps<a name="line.440"></a>
-<span class="sourceLineNo">441</span>     */<a name="line.441"></a>
-<span class="sourceLineNo">442</span>    public ArrayList&lt;Color&gt; loopingGradient(Color fromColor, Color midColor, int steps, Interpolation interpolation)<a name="line.442"></a>
-<span class="sourceLineNo">443</span>    {<a name="line.443"></a>
-<span class="sourceLineNo">444</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;((steps &gt; 3) ? steps : 3);<a name="line.444"></a>
-<span class="sourceLineNo">445</span>        colors.add(filter(fromColor));<a name="line.445"></a>
-<span class="sourceLineNo">446</span>        for (float i = 1; i &lt; steps / 2; i++) {<a name="line.446"></a>
-<span class="sourceLineNo">447</span>            colors.add(lerp(fromColor, midColor, interpolation.apply(i / (steps / 2))));<a name="line.447"></a>
-<span class="sourceLineNo">448</span>        }<a name="line.448"></a>
-<span class="sourceLineNo">449</span>        for (float i = 0, c = steps / 2; c &lt; steps; i++, c++) {<a name="line.449"></a>
-<span class="sourceLineNo">450</span>            colors.add(lerp(midColor, fromColor, interpolation.apply(i / (steps / 2))));<a name="line.450"></a>
-<span class="sourceLineNo">451</span>        }<a name="line.451"></a>
-<span class="sourceLineNo">452</span>        return colors;<a name="line.452"></a>
-<span class="sourceLineNo">453</span>    }<a name="line.453"></a>
-<span class="sourceLineNo">454</span><a name="line.454"></a>
-<span class="sourceLineNo">455</span>    /**<a name="line.455"></a>
-<span class="sourceLineNo">456</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.456"></a>
-<span class="sourceLineNo">457</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.457"></a>
-<span class="sourceLineNo">458</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.458"></a>
-<span class="sourceLineNo">459</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.459"></a>
-<span class="sourceLineNo">460</span>     * Produces fully saturated and max-brightness colors on the rainbow, which is what many people expect for a rainbow.<a name="line.460"></a>
-<span class="sourceLineNo">461</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.461"></a>
-<span class="sourceLineNo">462</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.462"></a>
+<span class="sourceLineNo">420</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(16);<a name="line.420"></a>
+<span class="sourceLineNo">421</span>        for (int i = 0; i &lt; 16; i++) {<a name="line.421"></a>
+<span class="sourceLineNo">422</span>            colors.add(lerp(fromColor, toColor, i / 15f));<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        }<a name="line.423"></a>
+<span class="sourceLineNo">424</span>        return colors;<a name="line.424"></a>
+<span class="sourceLineNo">425</span>    }<a name="line.425"></a>
+<span class="sourceLineNo">426</span><a name="line.426"></a>
+<span class="sourceLineNo">427</span>    /**<a name="line.427"></a>
+<span class="sourceLineNo">428</span>     * Finds a gradient with the specified number of steps going from fromColor to toColor,<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     * both included in the gradient.<a name="line.429"></a>
+<span class="sourceLineNo">430</span>     * @param fromColor the color to start with, included in the gradient<a name="line.430"></a>
+<span class="sourceLineNo">431</span>     * @param toColor the color to end on, included in the gradient<a name="line.431"></a>
+<span class="sourceLineNo">432</span>     * @param steps the number of elements to use in the gradient<a name="line.432"></a>
+<span class="sourceLineNo">433</span>     * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps<a name="line.433"></a>
+<span class="sourceLineNo">434</span>     */<a name="line.434"></a>
+<span class="sourceLineNo">435</span>    public ArrayList&lt;Color&gt; gradient(Color fromColor, Color toColor, int steps)<a name="line.435"></a>
+<span class="sourceLineNo">436</span>    {<a name="line.436"></a>
+<span class="sourceLineNo">437</span>        return gradient(fromColor, toColor, steps, Interpolation.linear);<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    }<a name="line.438"></a>
+<span class="sourceLineNo">439</span><a name="line.439"></a>
+<span class="sourceLineNo">440</span><a name="line.440"></a>
+<span class="sourceLineNo">441</span>    /**<a name="line.441"></a>
+<span class="sourceLineNo">442</span>     * Finds a gradient with the specified number of steps going from fromColor to midColor, then midColor to (possibly)<a name="line.442"></a>
+<span class="sourceLineNo">443</span>     * fromColor, with both included in the gradient but fromColor only repeated at the end if the number of steps is odd.<a name="line.443"></a>
+<span class="sourceLineNo">444</span>     * @param fromColor the color to start with (and end with, if steps is an odd number), included in the gradient<a name="line.444"></a>
+<span class="sourceLineNo">445</span>     * @param midColor the color to use in the middle of the loop, included in the gradient<a name="line.445"></a>
+<span class="sourceLineNo">446</span>     * @param steps the number of elements to use in the gradient, will be at least 3<a name="line.446"></a>
+<span class="sourceLineNo">447</span>     * @return an ArrayList composed of the blending steps from fromColor to midColor to fromColor again, with length equal to steps<a name="line.447"></a>
+<span class="sourceLineNo">448</span>     */<a name="line.448"></a>
+<span class="sourceLineNo">449</span>    public ArrayList&lt;Color&gt; loopingGradient(Color fromColor, Color midColor, int steps)<a name="line.449"></a>
+<span class="sourceLineNo">450</span>    {<a name="line.450"></a>
+<span class="sourceLineNo">451</span>        return loopingGradient(fromColor, midColor, steps, Interpolation.linear);<a name="line.451"></a>
+<span class="sourceLineNo">452</span>    }<a name="line.452"></a>
+<span class="sourceLineNo">453</span><a name="line.453"></a>
+<span class="sourceLineNo">454</span>    /**<a name="line.454"></a>
+<span class="sourceLineNo">455</span>     * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the<a name="line.455"></a>
+<span class="sourceLineNo">456</span>     * gradient. The interpolation argument can be used to make the color stay close to fromColor and/or toColor longer<a name="line.456"></a>
+<span class="sourceLineNo">457</span>     * than it would normally, or shorter if the middle colors are desirable.<a name="line.457"></a>
+<span class="sourceLineNo">458</span>     * @param fromColor the color to start with, included in the gradient<a name="line.458"></a>
+<span class="sourceLineNo">459</span>     * @param toColor the color to end on, included in the gradient<a name="line.459"></a>
+<span class="sourceLineNo">460</span>     * @param steps the number of elements to use in the gradient<a name="line.460"></a>
+<span class="sourceLineNo">461</span>     * @param interpolation a libGDX Interpolation that defines how quickly the color changes during the transition<a name="line.461"></a>
+<span class="sourceLineNo">462</span>     * @return an ArrayList composed of the blending steps from fromColor to toColor, with length equal to steps<a name="line.462"></a>
 <span class="sourceLineNo">463</span>     */<a name="line.463"></a>
-<span class="sourceLineNo">464</span>    public ArrayList&lt;Color&gt; rainbow(int steps)<a name="line.464"></a>
+<span class="sourceLineNo">464</span>    public ArrayList&lt;Color&gt; gradient(Color fromColor, Color toColor, int steps, Interpolation interpolation)<a name="line.464"></a>
 <span class="sourceLineNo">465</span>    {<a name="line.465"></a>
-<span class="sourceLineNo">466</span>        return rainbow(1f, 1f, 1f, steps);<a name="line.466"></a>
-<span class="sourceLineNo">467</span>    }<a name="line.467"></a>
-<span class="sourceLineNo">468</span><a name="line.468"></a>
-<span class="sourceLineNo">469</span>    /**<a name="line.469"></a>
-<span class="sourceLineNo">470</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.470"></a>
-<span class="sourceLineNo">471</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.471"></a>
-<span class="sourceLineNo">472</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.472"></a>
-<span class="sourceLineNo">473</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.473"></a>
-<span class="sourceLineNo">474</span>     * Uses the given saturation and value for all colors in the rainbow, and only changes hue.<a name="line.474"></a>
-<span class="sourceLineNo">475</span>     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale<a name="line.475"></a>
-<span class="sourceLineNo">476</span>     * @param value the brightness of the rainbow's colors; 1.0 is brightest<a name="line.476"></a>
-<span class="sourceLineNo">477</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.477"></a>
-<span class="sourceLineNo">478</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.478"></a>
-<span class="sourceLineNo">479</span>     */<a name="line.479"></a>
-<span class="sourceLineNo">480</span>    public ArrayList&lt;Color&gt; rainbow(float saturation, float value, int steps)<a name="line.480"></a>
-<span class="sourceLineNo">481</span>    {<a name="line.481"></a>
-<span class="sourceLineNo">482</span>        return rainbow(saturation, value, 1f, steps);<a name="line.482"></a>
-<span class="sourceLineNo">483</span>    }<a name="line.483"></a>
-<span class="sourceLineNo">484</span><a name="line.484"></a>
-<span class="sourceLineNo">485</span>    /**<a name="line.485"></a>
-<span class="sourceLineNo">486</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.486"></a>
-<span class="sourceLineNo">487</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.487"></a>
-<span class="sourceLineNo">488</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.488"></a>
-<span class="sourceLineNo">489</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.489"></a>
-<span class="sourceLineNo">490</span>     * Uses the given saturation, value, and opacity for all colors in the rainbow, and only changes hue.<a name="line.490"></a>
-<span class="sourceLineNo">491</span>     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale<a name="line.491"></a>
-<span class="sourceLineNo">492</span>     * @param value the brightness of the rainbow's colors; 1.0 is brightest<a name="line.492"></a>
-<span class="sourceLineNo">493</span>     * @param opacity the alpha value of all colors in the rainbow; 0.0 is fully transparent and 1.0 is opaque<a name="line.493"></a>
-<span class="sourceLineNo">494</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.494"></a>
-<span class="sourceLineNo">495</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.495"></a>
-<span class="sourceLineNo">496</span>     */<a name="line.496"></a>
-<span class="sourceLineNo">497</span>    public ArrayList&lt;Color&gt; rainbow(float saturation, float value, float opacity, int steps)<a name="line.497"></a>
-<span class="sourceLineNo">498</span>    {<a name="line.498"></a>
-<span class="sourceLineNo">499</span>        steps = (steps &gt; 1) ? steps : 1;<a name="line.499"></a>
-<span class="sourceLineNo">500</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(steps);<a name="line.500"></a>
-<span class="sourceLineNo">501</span>        for (float i = 0; i &lt; 1f - 0.5f / steps; i+= 1.0f / steps) {<a name="line.501"></a>
-<span class="sourceLineNo">502</span>            colors.add(filter(getHSV(i, saturation, value, opacity)));<a name="line.502"></a>
-<span class="sourceLineNo">503</span>        }<a name="line.503"></a>
-<span class="sourceLineNo">504</span>        return colors;<a name="line.504"></a>
-<span class="sourceLineNo">505</span>    }<a name="line.505"></a>
-<span class="sourceLineNo">506</span><a name="line.506"></a>
-<span class="sourceLineNo">507</span>    /**<a name="line.507"></a>
-<span class="sourceLineNo">508</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.508"></a>
-<span class="sourceLineNo">509</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.509"></a>
-<span class="sourceLineNo">510</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.510"></a>
-<span class="sourceLineNo">511</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.511"></a>
-<span class="sourceLineNo">512</span>     * Uses the given saturation and value for all colors in the rainbow, and only changes hue.<a name="line.512"></a>
-<span class="sourceLineNo">513</span>     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale<a name="line.513"></a>
-<span class="sourceLineNo">514</span>     * @param value the brightness of the rainbow's colors; 1.0 is brightest<a name="line.514"></a>
-<span class="sourceLineNo">515</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.515"></a>
-<span class="sourceLineNo">516</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.516"></a>
-<span class="sourceLineNo">517</span>     */<a name="line.517"></a>
-<span class="sourceLineNo">518</span>    public ArrayList&lt;Color&gt; rainbow(double saturation, double value, int steps)<a name="line.518"></a>
-<span class="sourceLineNo">519</span>    {<a name="line.519"></a>
-<span class="sourceLineNo">520</span>        return rainbow((float)saturation, (float)value, 1f, steps);<a name="line.520"></a>
-<span class="sourceLineNo">521</span>    }<a name="line.521"></a>
-<span class="sourceLineNo">522</span><a name="line.522"></a>
-<span class="sourceLineNo">523</span>    /**<a name="line.523"></a>
-<span class="sourceLineNo">524</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.524"></a>
-<span class="sourceLineNo">525</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.525"></a>
-<span class="sourceLineNo">526</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.526"></a>
-<span class="sourceLineNo">527</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.527"></a>
-<span class="sourceLineNo">528</span>     * Uses the given saturation, value, and opacity for all colors in the rainbow, and only changes hue.<a name="line.528"></a>
-<span class="sourceLineNo">529</span>     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale<a name="line.529"></a>
-<span class="sourceLineNo">530</span>     * @param value the brightness of the rainbow's colors; 1.0 is brightest<a name="line.530"></a>
-<span class="sourceLineNo">531</span>     * @param opacity the alpha value of all colors in the rainbow; 0.0 is fully transparent and 1.0 is opaque<a name="line.531"></a>
-<span class="sourceLineNo">532</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.532"></a>
-<span class="sourceLineNo">533</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.533"></a>
-<span class="sourceLineNo">534</span>     */<a name="line.534"></a>
-<span class="sourceLineNo">535</span>    public ArrayList&lt;Color&gt; rainbow(double saturation, double value, double opacity, int steps)<a name="line.535"></a>
-<span class="sourceLineNo">536</span>    {<a name="line.536"></a>
-<span class="sourceLineNo">537</span>        return rainbow((float)saturation, (float)value, (float)opacity, steps);<a name="line.537"></a>
-<span class="sourceLineNo">538</span>    }<a name="line.538"></a>
-<span class="sourceLineNo">539</span>    /**<a name="line.539"></a>
-<span class="sourceLineNo">540</span>     * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the<a name="line.540"></a>
-<span class="sourceLineNo">541</span>     * gradient. This does not typically take a direct path on its way between fromColor and toColor, and is useful to<a name="line.541"></a>
-<span class="sourceLineNo">542</span>     * generate a wide variety of colors that can be confined to a rough amount of maximum difference by choosing values<a name="line.542"></a>
-<span class="sourceLineNo">543</span>     * for fromColor and toColor that are more similar.<a name="line.543"></a>
-<span class="sourceLineNo">544</span>     * &lt;br&gt;<a name="line.544"></a>
-<span class="sourceLineNo">545</span>     * Try using colors for fromColor and toColor that have different r, g, and b values, such as gray and white, then<a name="line.545"></a>
-<span class="sourceLineNo">546</span>     * compare to colors that don't differ on, for example, r, such as bright red and pink. In the first case, red,<a name="line.546"></a>
-<span class="sourceLineNo">547</span>     * green, blue, and many other colors will be generated if there are enough steps; in the second case, red will be<a name="line.547"></a>
-<span class="sourceLineNo">548</span>     * at the same level in all generated colors (very high, so no pure blue or pure green, but purple and yellow are<a name="line.548"></a>
-<span class="sourceLineNo">549</span>     * possible). This should help illustrate how this chooses how far to "zig-zag" off the straight-line path.<a name="line.549"></a>
-<span class="sourceLineNo">550</span>     * @param fromColor the color to start with, included in the gradient<a name="line.550"></a>
-<span class="sourceLineNo">551</span>     * @param toColor the color to end on, included in the gradient<a name="line.551"></a>
-<span class="sourceLineNo">552</span>     * @param steps the number of elements to use in the gradient; ideally no greater than 345 to avoid duplicates<a name="line.552"></a>
-<span class="sourceLineNo">553</span>     * @return an ArrayList composed of the zig-zag steps from fromColor to toColor, with length equal to steps<a name="line.553"></a>
-<span class="sourceLineNo">554</span>     */<a name="line.554"></a>
-<span class="sourceLineNo">555</span>    public ArrayList&lt;Color&gt; zigzagGradient(Color fromColor, Color toColor, int steps)<a name="line.555"></a>
-<span class="sourceLineNo">556</span>    {<a name="line.556"></a>
-<span class="sourceLineNo">557</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;((steps &gt; 1) ? steps : 1);<a name="line.557"></a>
-<span class="sourceLineNo">558</span>        colors.add(filter(fromColor));<a name="line.558"></a>
-<span class="sourceLineNo">559</span>        if(steps &lt; 2)<a name="line.559"></a>
-<span class="sourceLineNo">560</span>            return colors;<a name="line.560"></a>
-<span class="sourceLineNo">561</span>        float dr = toColor.r - fromColor.r, dg = toColor.g - fromColor.g, db = toColor.b - fromColor.b,<a name="line.561"></a>
-<span class="sourceLineNo">562</span>                a = fromColor.a, cr, cg, cb;<a name="line.562"></a>
-<span class="sourceLineNo">563</span>        int decoded;<a name="line.563"></a>
-<span class="sourceLineNo">564</span>        for (float i = 1; i &lt; steps; i++) {<a name="line.564"></a>
-<span class="sourceLineNo">565</span>            // 345 happens to be the distance on our 3D Hilbert curve that corresponds to (7,7,7).<a name="line.565"></a>
-<span class="sourceLineNo">566</span>            decoded = Math.round(345 * (i / (steps - 1)));<a name="line.566"></a>
-<span class="sourceLineNo">567</span>            cr = (CoordPacker.hilbert3X[decoded] / 7f) * dr + fromColor.r;<a name="line.567"></a>
-<span class="sourceLineNo">568</span>            cg = (CoordPacker.hilbert3Y[decoded] / 7f) * dg + fromColor.g;<a name="line.568"></a>
-<span class="sourceLineNo">569</span>            cb = (CoordPacker.hilbert3Z[decoded] / 7f) * db + fromColor.b;<a name="line.569"></a>
-<span class="sourceLineNo">570</span>            colors.add(get(cr, cg, cb, a));<a name="line.570"></a>
-<span class="sourceLineNo">571</span>        }<a name="line.571"></a>
-<span class="sourceLineNo">572</span>        return colors;<a name="line.572"></a>
-<span class="sourceLineNo">573</span>    }<a name="line.573"></a>
-<span class="sourceLineNo">574</span><a name="line.574"></a>
-<span class="sourceLineNo">575</span>    @Override<a name="line.575"></a>
-<span class="sourceLineNo">576</span>    public String toString() {<a name="line.576"></a>
-<span class="sourceLineNo">577</span>        return "SquidColorCenter{" +<a name="line.577"></a>
-<span class="sourceLineNo">578</span>                "filter=" + (filter == null ? "null" : filter.getClass().getSimpleName()) +<a name="line.578"></a>
-<span class="sourceLineNo">579</span>                '}';<a name="line.579"></a>
-<span class="sourceLineNo">580</span>    }<a name="line.580"></a>
-<span class="sourceLineNo">581</span>}<a name="line.581"></a>
+<span class="sourceLineNo">466</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;((steps &gt; 1) ? steps : 1);<a name="line.466"></a>
+<span class="sourceLineNo">467</span>        colors.add(filter(fromColor));<a name="line.467"></a>
+<span class="sourceLineNo">468</span>        if(steps &lt; 2)<a name="line.468"></a>
+<span class="sourceLineNo">469</span>            return colors;<a name="line.469"></a>
+<span class="sourceLineNo">470</span>        for (float i = 1; i &lt; steps; i++) {<a name="line.470"></a>
+<span class="sourceLineNo">471</span>            colors.add(lerp(fromColor, toColor, interpolation.apply(i / (steps - 1))));<a name="line.471"></a>
+<span class="sourceLineNo">472</span>        }<a name="line.472"></a>
+<span class="sourceLineNo">473</span>        return colors;<a name="line.473"></a>
+<span class="sourceLineNo">474</span>    }<a name="line.474"></a>
+<span class="sourceLineNo">475</span><a name="line.475"></a>
+<span class="sourceLineNo">476</span>    /**<a name="line.476"></a>
+<span class="sourceLineNo">477</span>     * Finds a gradient with the specified number of steps going from fromColor to midColor, then midColor to (possibly)<a name="line.477"></a>
+<span class="sourceLineNo">478</span>     * fromColor, with both included in the gradient but fromColor only repeated at the end if the number of steps is<a name="line.478"></a>
+<span class="sourceLineNo">479</span>     * odd. The interpolation argument can be used to make the color linger for a while with colors close to fromColor<a name="line.479"></a>
+<span class="sourceLineNo">480</span>     * or midColor, or to do the opposite and quickly change from one and spend more time in the middle.<a name="line.480"></a>
+<span class="sourceLineNo">481</span>     * @param fromColor the color to start with (and end with, if steps is an odd number), included in the gradient<a name="line.481"></a>
+<span class="sourceLineNo">482</span>     * @param midColor the color to use in the middle of the loop, included in the gradient<a name="line.482"></a>
+<span class="sourceLineNo">483</span>     * @param steps the number of elements to use in the gradient, will be at least 3<a name="line.483"></a>
+<span class="sourceLineNo">484</span>     * @param interpolation a libGDX Interpolation that defines how quickly the color changes at the start and end of<a name="line.484"></a>
+<span class="sourceLineNo">485</span>     *                      each transition, both from fromColor to midColor as well as back to fromColor<a name="line.485"></a>
+<span class="sourceLineNo">486</span>     * @return an ArrayList composed of the blending steps from fromColor to midColor to fromColor again, with length equal to steps<a name="line.486"></a>
+<span class="sourceLineNo">487</span>     */<a name="line.487"></a>
+<span class="sourceLineNo">488</span>    public ArrayList&lt;Color&gt; loopingGradient(Color fromColor, Color midColor, int steps, Interpolation interpolation)<a name="line.488"></a>
+<span class="sourceLineNo">489</span>    {<a name="line.489"></a>
+<span class="sourceLineNo">490</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;((steps &gt; 3) ? steps : 3);<a name="line.490"></a>
+<span class="sourceLineNo">491</span>        colors.add(filter(fromColor));<a name="line.491"></a>
+<span class="sourceLineNo">492</span>        for (float i = 1; i &lt; steps / 2; i++) {<a name="line.492"></a>
+<span class="sourceLineNo">493</span>            colors.add(lerp(fromColor, midColor, interpolation.apply(i / (steps / 2))));<a name="line.493"></a>
+<span class="sourceLineNo">494</span>        }<a name="line.494"></a>
+<span class="sourceLineNo">495</span>        for (float i = 0, c = steps / 2; c &lt; steps; i++, c++) {<a name="line.495"></a>
+<span class="sourceLineNo">496</span>            colors.add(lerp(midColor, fromColor, interpolation.apply(i / (steps / 2))));<a name="line.496"></a>
+<span class="sourceLineNo">497</span>        }<a name="line.497"></a>
+<span class="sourceLineNo">498</span>        return colors;<a name="line.498"></a>
+<span class="sourceLineNo">499</span>    }<a name="line.499"></a>
+<span class="sourceLineNo">500</span><a name="line.500"></a>
+<span class="sourceLineNo">501</span>    /**<a name="line.501"></a>
+<span class="sourceLineNo">502</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.502"></a>
+<span class="sourceLineNo">503</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.503"></a>
+<span class="sourceLineNo">504</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.504"></a>
+<span class="sourceLineNo">505</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.505"></a>
+<span class="sourceLineNo">506</span>     * Produces fully saturated and max-brightness colors on the rainbow, which is what many people expect for a rainbow.<a name="line.506"></a>
+<span class="sourceLineNo">507</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.507"></a>
+<span class="sourceLineNo">508</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.508"></a>
+<span class="sourceLineNo">509</span>     */<a name="line.509"></a>
+<span class="sourceLineNo">510</span>    public ArrayList&lt;Color&gt; rainbow(int steps)<a name="line.510"></a>
+<span class="sourceLineNo">511</span>    {<a name="line.511"></a>
+<span class="sourceLineNo">512</span>        return rainbow(1f, 1f, 1f, steps);<a name="line.512"></a>
+<span class="sourceLineNo">513</span>    }<a name="line.513"></a>
+<span class="sourceLineNo">514</span><a name="line.514"></a>
+<span class="sourceLineNo">515</span>    /**<a name="line.515"></a>
+<span class="sourceLineNo">516</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.516"></a>
+<span class="sourceLineNo">517</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.517"></a>
+<span class="sourceLineNo">518</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.518"></a>
+<span class="sourceLineNo">519</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.519"></a>
+<span class="sourceLineNo">520</span>     * Uses the given saturation and value for all colors in the rainbow, and only changes hue.<a name="line.520"></a>
+<span class="sourceLineNo">521</span>     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale<a name="line.521"></a>
+<span class="sourceLineNo">522</span>     * @param value the brightness of the rainbow's colors; 1.0 is brightest<a name="line.522"></a>
+<span class="sourceLineNo">523</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.523"></a>
+<span class="sourceLineNo">524</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.524"></a>
+<span class="sourceLineNo">525</span>     */<a name="line.525"></a>
+<span class="sourceLineNo">526</span>    public ArrayList&lt;Color&gt; rainbow(float saturation, float value, int steps)<a name="line.526"></a>
+<span class="sourceLineNo">527</span>    {<a name="line.527"></a>
+<span class="sourceLineNo">528</span>        return rainbow(saturation, value, 1f, steps);<a name="line.528"></a>
+<span class="sourceLineNo">529</span>    }<a name="line.529"></a>
+<span class="sourceLineNo">530</span><a name="line.530"></a>
+<span class="sourceLineNo">531</span>    /**<a name="line.531"></a>
+<span class="sourceLineNo">532</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.532"></a>
+<span class="sourceLineNo">533</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.533"></a>
+<span class="sourceLineNo">534</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.534"></a>
+<span class="sourceLineNo">535</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.535"></a>
+<span class="sourceLineNo">536</span>     * Uses the given saturation, value, and opacity for all colors in the rainbow, and only changes hue.<a name="line.536"></a>
+<span class="sourceLineNo">537</span>     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale<a name="line.537"></a>
+<span class="sourceLineNo">538</span>     * @param value the brightness of the rainbow's colors; 1.0 is brightest<a name="line.538"></a>
+<span class="sourceLineNo">539</span>     * @param opacity the alpha value of all colors in the rainbow; 0.0 is fully transparent and 1.0 is opaque<a name="line.539"></a>
+<span class="sourceLineNo">540</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.540"></a>
+<span class="sourceLineNo">541</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.541"></a>
+<span class="sourceLineNo">542</span>     */<a name="line.542"></a>
+<span class="sourceLineNo">543</span>    public ArrayList&lt;Color&gt; rainbow(float saturation, float value, float opacity, int steps)<a name="line.543"></a>
+<span class="sourceLineNo">544</span>    {<a name="line.544"></a>
+<span class="sourceLineNo">545</span>        steps = (steps &gt; 1) ? steps : 1;<a name="line.545"></a>
+<span class="sourceLineNo">546</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;(steps);<a name="line.546"></a>
+<span class="sourceLineNo">547</span>        for (float i = 0; i &lt; 1f - 0.5f / steps; i+= 1.0f / steps) {<a name="line.547"></a>
+<span class="sourceLineNo">548</span>            colors.add(filter(getHSV(i, saturation, value, opacity)));<a name="line.548"></a>
+<span class="sourceLineNo">549</span>        }<a name="line.549"></a>
+<span class="sourceLineNo">550</span>        return colors;<a name="line.550"></a>
+<span class="sourceLineNo">551</span>    }<a name="line.551"></a>
+<span class="sourceLineNo">552</span><a name="line.552"></a>
+<span class="sourceLineNo">553</span>    /**<a name="line.553"></a>
+<span class="sourceLineNo">554</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.554"></a>
+<span class="sourceLineNo">555</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.555"></a>
+<span class="sourceLineNo">556</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.556"></a>
+<span class="sourceLineNo">557</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.557"></a>
+<span class="sourceLineNo">558</span>     * Uses the given saturation and value for all colors in the rainbow, and only changes hue.<a name="line.558"></a>
+<span class="sourceLineNo">559</span>     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale<a name="line.559"></a>
+<span class="sourceLineNo">560</span>     * @param value the brightness of the rainbow's colors; 1.0 is brightest<a name="line.560"></a>
+<span class="sourceLineNo">561</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.561"></a>
+<span class="sourceLineNo">562</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.562"></a>
+<span class="sourceLineNo">563</span>     */<a name="line.563"></a>
+<span class="sourceLineNo">564</span>    public ArrayList&lt;Color&gt; rainbow(double saturation, double value, int steps)<a name="line.564"></a>
+<span class="sourceLineNo">565</span>    {<a name="line.565"></a>
+<span class="sourceLineNo">566</span>        return rainbow((float)saturation, (float)value, 1f, steps);<a name="line.566"></a>
+<span class="sourceLineNo">567</span>    }<a name="line.567"></a>
+<span class="sourceLineNo">568</span><a name="line.568"></a>
+<span class="sourceLineNo">569</span>    /**<a name="line.569"></a>
+<span class="sourceLineNo">570</span>     * Generates a hue-shifted rainbow of colors, starting at red and going through orange, yellow, green, blue, and<a name="line.570"></a>
+<span class="sourceLineNo">571</span>     * purple before getting close to red at the end again. If the given number of steps is less than 6 or so, you should<a name="line.571"></a>
+<span class="sourceLineNo">572</span>     * expect to see only some of those colors; if steps is larger (36 may be reasonable for gradients), you are more<a name="line.572"></a>
+<span class="sourceLineNo">573</span>     * likely to see colors that appear for shorter spans on the color wheel, like orange.<a name="line.573"></a>
+<span class="sourceLineNo">574</span>     * Uses the given saturation, value, and opacity for all colors in the rainbow, and only changes hue.<a name="line.574"></a>
+<span class="sourceLineNo">575</span>     * @param saturation the saturation of the rainbow's colors; 1.0 is boldest and 0.0 is grayscale<a name="line.575"></a>
+<span class="sourceLineNo">576</span>     * @param value the brightness of the rainbow's colors; 1.0 is brightest<a name="line.576"></a>
+<span class="sourceLineNo">577</span>     * @param opacity the alpha value of all colors in the rainbow; 0.0 is fully transparent and 1.0 is opaque<a name="line.577"></a>
+<span class="sourceLineNo">578</span>     * @param steps the number of different Color elements to generate in the returned ArrayList<a name="line.578"></a>
+<span class="sourceLineNo">579</span>     * @return an ArrayList of Color where each element goes around the color wheel, starting at red, then orange, etc.<a name="line.579"></a>
+<span class="sourceLineNo">580</span>     */<a name="line.580"></a>
+<span class="sourceLineNo">581</span>    public ArrayList&lt;Color&gt; rainbow(double saturation, double value, double opacity, int steps)<a name="line.581"></a>
+<span class="sourceLineNo">582</span>    {<a name="line.582"></a>
+<span class="sourceLineNo">583</span>        return rainbow((float)saturation, (float)value, (float)opacity, steps);<a name="line.583"></a>
+<span class="sourceLineNo">584</span>    }<a name="line.584"></a>
+<span class="sourceLineNo">585</span>    /**<a name="line.585"></a>
+<span class="sourceLineNo">586</span>     * Finds a gradient with the specified number of steps going from fromColor to toColor, both included in the<a name="line.586"></a>
+<span class="sourceLineNo">587</span>     * gradient. This does not typically take a direct path on its way between fromColor and toColor, and is useful to<a name="line.587"></a>
+<span class="sourceLineNo">588</span>     * generate a wide variety of colors that can be confined to a rough amount of maximum difference by choosing values<a name="line.588"></a>
+<span class="sourceLineNo">589</span>     * for fromColor and toColor that are more similar.<a name="line.589"></a>
+<span class="sourceLineNo">590</span>     * &lt;br&gt;<a name="line.590"></a>
+<span class="sourceLineNo">591</span>     * Try using colors for fromColor and toColor that have different r, g, and b values, such as gray and white, then<a name="line.591"></a>
+<span class="sourceLineNo">592</span>     * compare to colors that don't differ on, for example, r, such as bright red and pink. In the first case, red,<a name="line.592"></a>
+<span class="sourceLineNo">593</span>     * green, blue, and many other colors will be generated if there are enough steps; in the second case, red will be<a name="line.593"></a>
+<span class="sourceLineNo">594</span>     * at the same level in all generated colors (very high, so no pure blue or pure green, but purple and yellow are<a name="line.594"></a>
+<span class="sourceLineNo">595</span>     * possible). This should help illustrate how this chooses how far to "zig-zag" off the straight-line path.<a name="line.595"></a>
+<span class="sourceLineNo">596</span>     * @param fromColor the color to start with, included in the gradient<a name="line.596"></a>
+<span class="sourceLineNo">597</span>     * @param toColor the color to end on, included in the gradient<a name="line.597"></a>
+<span class="sourceLineNo">598</span>     * @param steps the number of elements to use in the gradient; ideally no greater than 345 to avoid duplicates<a name="line.598"></a>
+<span class="sourceLineNo">599</span>     * @return an ArrayList composed of the zig-zag steps from fromColor to toColor, with length equal to steps<a name="line.599"></a>
+<span class="sourceLineNo">600</span>     */<a name="line.600"></a>
+<span class="sourceLineNo">601</span>    public ArrayList&lt;Color&gt; zigzagGradient(Color fromColor, Color toColor, int steps)<a name="line.601"></a>
+<span class="sourceLineNo">602</span>    {<a name="line.602"></a>
+<span class="sourceLineNo">603</span>        ArrayList&lt;Color&gt; colors = new ArrayList&lt;&gt;((steps &gt; 1) ? steps : 1);<a name="line.603"></a>
+<span class="sourceLineNo">604</span>        colors.add(filter(fromColor));<a name="line.604"></a>
+<span class="sourceLineNo">605</span>        if(steps &lt; 2)<a name="line.605"></a>
+<span class="sourceLineNo">606</span>            return colors;<a name="line.606"></a>
+<span class="sourceLineNo">607</span>        float dr = toColor.r - fromColor.r, dg = toColor.g - fromColor.g, db = toColor.b - fromColor.b,<a name="line.607"></a>
+<span class="sourceLineNo">608</span>                a = fromColor.a, cr, cg, cb;<a name="line.608"></a>
+<span class="sourceLineNo">609</span>        int decoded;<a name="line.609"></a>
+<span class="sourceLineNo">610</span>        for (float i = 1; i &lt; steps; i++) {<a name="line.610"></a>
+<span class="sourceLineNo">611</span>            // 345 happens to be the distance on our 3D Hilbert curve that corresponds to (7,7,7).<a name="line.611"></a>
+<span class="sourceLineNo">612</span>            decoded = Math.round(345 * (i / (steps - 1)));<a name="line.612"></a>
+<span class="sourceLineNo">613</span>            cr = (CoordPacker.hilbert3X[decoded] / 7f) * dr + fromColor.r;<a name="line.613"></a>
+<span class="sourceLineNo">614</span>            cg = (CoordPacker.hilbert3Y[decoded] / 7f) * dg + fromColor.g;<a name="line.614"></a>
+<span class="sourceLineNo">615</span>            cb = (CoordPacker.hilbert3Z[decoded] / 7f) * db + fromColor.b;<a name="line.615"></a>
+<span class="sourceLineNo">616</span>            colors.add(get(cr, cg, cb, a));<a name="line.616"></a>
+<span class="sourceLineNo">617</span>        }<a name="line.617"></a>
+<span class="sourceLineNo">618</span>        return colors;<a name="line.618"></a>
+<span class="sourceLineNo">619</span>    }<a name="line.619"></a>
+<span class="sourceLineNo">620</span><a name="line.620"></a>
+<span class="sourceLineNo">621</span>    @Override<a name="line.621"></a>
+<span class="sourceLineNo">622</span>    public String toString() {<a name="line.622"></a>
+<span class="sourceLineNo">623</span>        return "SquidColorCenter{" +<a name="line.623"></a>
+<span class="sourceLineNo">624</span>                "filter=" + (filter == null ? "null" : filter.getClass().getSimpleName()) +<a name="line.624"></a>
+<span class="sourceLineNo">625</span>                ",granularity=" + granularity +<a name="line.625"></a>
+<span class="sourceLineNo">626</span>                '}';<a name="line.626"></a>
+<span class="sourceLineNo">627</span>    }<a name="line.627"></a>
+<span class="sourceLineNo">628</span>}<a name="line.628"></a>
 
 
 
