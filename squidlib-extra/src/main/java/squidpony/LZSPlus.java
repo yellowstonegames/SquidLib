@@ -26,10 +26,9 @@ SOFTWARE.
  */
 package squidpony;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectIntMap;
 import com.badlogic.gdx.utils.ObjectSet;
-
-import java.util.ArrayList;
 
 /**
  * LZ-String compression, taking Strings and compressing them to other Strings, optionally with some encryption.
@@ -48,13 +47,13 @@ public final class LZSPlus {
 
     /**
      * Compresses the given text using LZ-String compression and encrypts (somewhat) the compressed result so it can't
-     * be read back without the same keys as an int array. Shorter int arrays give less security to encryption, though
+     * be read back without the same keys as a long array. Shorter long arrays give less security to encryption, though
      * there isn't much security to begin with. You can produce a decent-quality array for this purpose with
      * {@link Garbler#makeKeyArray(int, String)}; the size parameter could reasonably be anywhere from 2 to 32. If the
      * keys array is null or empty, this only compresses and does not perform an additional encryption step.
      * @param uncompressedStr text to compress and optionally encrypt
-     * @param keys the int array that will be used to encrypt the output, and will be required to decrypt the result; may be null
-     * @return a compressed version of the given text
+     * @param keys the long array that will be used to encrypt the output, and will be required to decrypt the result; may be null
+     * @return a compressed and optionally encrypted version of the given text
      */
     public static String compress(String uncompressedStr, long[] keys) {
         if (uncompressedStr == null) return null;
@@ -305,10 +304,10 @@ public final class LZSPlus {
     }
 
     /**
-     * Decompresses text that was compressed with LZ-String compression, reversing any encryption if the keys int array
-     * matches the int array passed to {@link #compress(String, long[])} (keys can be null if no array was passed).
+     * Decompresses text that was compressed with LZ-String compression, reversing any encryption if the keys long array
+     * matches the long array passed to {@link #compress(String, long[])} (keys can be null if no array was passed).
      * @param compressed text that was compressed by {@link #compress(String, long[])}
-     * @param keys the int array that was used to encrypt the output, and must match to decrypt the result; may be null
+     * @param keys the long array that was used to encrypt the output, and must match to decrypt the result; may be null
      * @return the original text, decompressed and decrypted from compressed
      */
     public static String decompress(String compressed, long[] keys) {
@@ -349,14 +348,14 @@ public final class LZSPlus {
         }
 
 
-        ArrayList<String> dictionary = new ArrayList<String>();
+        Array<String> dictionary = new Array<String>();
         int enlargeIn = 4, dictSize = 4, numBits = 3, position = 16384, index = 1, resb, maxpower, power;
         String entry, w, c;
-        ArrayList<String> result = new ArrayList<String>();
+        Array<String> result = new Array<String>();
         char bits, val = (char) (comp[0] - 32);
 
         for (char i = 0; i < 3; i++) {
-            dictionary.add(i, String.valueOf(i));
+            dictionary.insert(i, String.valueOf(i));
         }
 
         bits = 0;
@@ -464,7 +463,7 @@ public final class LZSPlus {
                     enlargeIn--;
                     break;
                 case 2:
-                    StringBuilder sb = new StringBuilder(result.size());
+                    StringBuilder sb = new StringBuilder(result.size);
                     for (String s : result)
                         sb.append(s);
                     return sb.toString();
@@ -475,7 +474,7 @@ public final class LZSPlus {
                 numBits++;
             }
 
-            if (cc < dictionary.size() && dictionary.get(cc) != null) {
+            if (cc < dictionary.size && dictionary.get(cc) != null) {
                 entry = dictionary.get(cc);
             } else {
                 if (cc == dictSize) {

@@ -40,12 +40,27 @@
  */
 package squidpony.squidmath;
 
+import squidpony.StringKit;
+
 import java.io.Serializable;
+import java.util.Arrays;
+
 /**
  * Mersenne Twister, 64-bit version as a RandomnessSource.
  * <br>
- * Similar to the regular Mersenne Twister but is implemented with 64-bit
- * registers (Java <code>long</code>) and produces different output.
+ * Similar to the regular 32-bit Mersenne Twister but implemented with 64-bit
+ * values (Java <code>long</code>), and with different output. This generator is probably
+ * not the best to use because of known statistical problems and low speed, but its period
+ * is absurdly high, {@code pow(2, 19937) - 1}. {@link LongPeriodRNG} has significantly
+ * better speed and statistical quality, and also has a large period, {@code pow(2, 1024) - 1}.
+ * {@link BeardRNG} could have a period as high as {@code pow(2, 4096)}, but there are no
+ * guarantees on its period, though statistically it tests well. {@link IsaacRNG} is slower, but
+ * offers impeccable quality, and from its webpage, "Cycles are guaranteed to be at least
+ * {@code pow(2, 40)} values long, and they are {@code pow(2, 8295)} values long on average."
+ * IsaacRNG should be your choice if security is a concern, LongPeriodRNG if quality and speed
+ * are important (BeardRNG may be good to evaluate as well), and MersenneTwister should be used
+ * if period is the only criterion to judge an RNG on. There may be a CMWC generator added at
+ * some point, which would have potentially a greater period than the Mersenne Twister.
  * <br>
  * This is mostly a straight port of the
  * <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/mt19937-64.c">
@@ -73,7 +88,7 @@ import java.io.Serializable;
  */
 public class MersenneTwister implements Serializable, RandomnessSource {
 
-    private static final long serialVersionUID = -8219700664442619525L;
+    private static final long serialVersionUID = 1001000L;
 
     private static final int NN = 312;
 
@@ -191,10 +206,10 @@ public class MersenneTwister implements Serializable, RandomnessSource {
 
     /**
      * Returns up to 32 random bits.
-     * <p>
-     * <p>the implementation splits a 64-bit long into
-     * two 32-bit chunks.
-     * </p>
+     * <br>
+     * The implementation splits a 64-bit long into two 32-bit chunks.
+     * @param bits the number of bits to output, between 1 and 32 (both inclusive)
+     * @return an int with the specified number of pseudo-random bits
      */
     @Override
     public int next(final int bits) {
@@ -212,6 +227,7 @@ public class MersenneTwister implements Serializable, RandomnessSource {
 
     /**
      * Returns 64 random bits.
+     * @return a pseudo-random long, which can have any 64-bit value, positive or negative
      */
     @Override
     public long nextLong() {
@@ -251,6 +267,31 @@ public class MersenneTwister implements Serializable, RandomnessSource {
         f.bitState = bitState;
         System.arraycopy(mt, 0, f.mt, 0, mt.length);
         return f;
+    }
+
+    @Override
+    public String toString() {
+        return "MersenneTwister with state hashed as " + StringKit.hexHash(mt) +
+                " and index " + mti;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MersenneTwister mt64RNG = (MersenneTwister) o;
+
+        return mti == mt64RNG.mti && extra == mt64RNG.extra && bitState == mt64RNG.bitState && Arrays.equals(mt, mt64RNG.mt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = CrossHash.hash(mt);
+        result = 31 * result + mti;
+        result = 31 * result + (int) (extra ^ (extra >>> 32));
+        result = 31 * result + (bitState ? 1 : 0);
+        return result;
     }
 
 }

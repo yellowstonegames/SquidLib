@@ -219,8 +219,8 @@ public class StringKit {
 
     /**
      * Joins the boolean array {@code elements} without delimiters into a String, using "1" for true and "0" for false.
-     * @param elements
-     * @return
+     * @param elements an array or vararg of booleans
+     * @return a String using 1 for true elements and 0 for false, or "N" if elements is null
      */
     public static String joinAlt(boolean... elements) {
         if (elements == null) return "N";
@@ -316,16 +316,53 @@ public class StringKit {
      * Like {@link String#substring(int, int)} but returns "" instead of throwing any sort of Exception.
      * @param source the String to get a substring from
      * @param beginIndex the first index, inclusive; will be treated as 0 if negative
-     * @param endIndex the index after the last character (i.e. length, so exclusive); if negative this returns ""
+     * @param endIndex the index after the last character (exclusive); if negative this will be source.length()
      * @return the substring of source between beginIndex and endIndex, or "" if any parameters are null/invalid
      */
     public static String safeSubstring(String source, int beginIndex, int endIndex)
     {
-        if(endIndex < 0 || source == null || source.isEmpty()) return "";
+        if(source == null || source.isEmpty()) return "";
         if(beginIndex < 0) beginIndex = 0;
-        if(endIndex > source.length()) endIndex = source.length();
+        if(endIndex < 0 || endIndex > source.length()) endIndex = source.length();
         if(beginIndex > endIndex) return "";
         return source.substring(beginIndex, endIndex);
+    }
+    public static final Pattern whitespacePattern = Pattern.compile("\\s+"),
+            nonSpacePattern = Pattern.compile("\\S+");
+    private static final Matcher matcher = new Matcher(whitespacePattern);
+    public static int indexOf(CharSequence text, Pattern regex, int beginIndex)
+    {
+        matcher.setPattern(regex);
+        matcher.setTarget(text);
+        matcher.setPosition(beginIndex);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, String regex, int beginIndex)
+    {
+        matcher.setPattern(Pattern.compile(regex));
+        matcher.setTarget(text);
+        matcher.setPosition(beginIndex);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, Pattern regex)
+    {
+        matcher.setPattern(regex);
+        matcher.setTarget(text);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, String regex)
+    {
+        matcher.setPattern(Pattern.compile(regex));
+        matcher.setTarget(text);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
     }
 
     /**

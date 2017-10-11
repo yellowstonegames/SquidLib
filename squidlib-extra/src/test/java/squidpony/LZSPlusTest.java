@@ -1,6 +1,6 @@
 package squidpony;
 
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.ThrustRNG;
 
 /**
  * Created by Tommy Ettinger on 7/13/2017.
@@ -8,7 +8,6 @@ import squidpony.squidmath.RNG;
 public class LZSPlusTest {
     public static void main(String[] args)
     {
-        RNG rng = new RNG(0xBE1337);
         String[] ozzes = new String[] {
                 "Hello! ",
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
@@ -27,15 +26,18 @@ public class LZSPlusTest {
 //                FakeLanguageGen.INFERNAL.sentence(rng,7, 16),
         }, compressed = new String[ozzes.length];
         String oz = StringKit.join("", ozzes), allCompressed;
-        long[] keys = Garbler.makeKeyArray(7, "There's no place like home...");
+        //long[] keys = Garbler.makeKeyArray(7, "There's no place like home...");
+        long[] keys = {ThrustRNG.determine(10000L), ThrustRNG.determine(12000L),
+                ThrustRNG.determine(12300L), ThrustRNG.determine(12340L)};
+
         for (int i = 0; i < ozzes.length; i++) {
-            System.out.println(compressed[i] = LZSPlus.compress(ozzes[i]));
+            System.out.println(compressed[i] = LZSPlus.compress(ozzes[i], keys));
         }
-        allCompressed = LZSPlus.compress(oz);
+        allCompressed = LZSPlus.compress(oz, keys);
         for (int i = 0; i < ozzes.length; i++) {
-            System.out.println(LZSPlus.decompress(compressed[i]));
+            System.out.println(LZSPlus.decompress(compressed[i], keys));
         }
-        System.out.println(LZSPlus.decompress(allCompressed));
+        System.out.println(LZSPlus.decompress(allCompressed, keys));
         int olen = 0, clen = 0;
         for (int i = 0; i < ozzes.length; i++) {
             olen += ozzes[i].length();
@@ -45,6 +47,15 @@ public class LZSPlusTest {
         olen = oz.length();
         clen = allCompressed.length();
         System.out.println("All merged, original used " + olen + " chars, compressed used " + clen + " chars.");
-
+        System.out.println();
+        String link = "WE WANT TO ROCK! WE WANT TO ROll! WE WANT TO FEEL IT IN THE SOUL!",
+                linkCompressed = LZSPlus.compress(link, keys);
+        System.out.println(StringKit.join(", ", keys));
+        System.out.println(linkCompressed);
+        System.out.println("(length compressed is " + linkCompressed.length() + ")");
+        System.out.println(link = LZSPlus.decompress(linkCompressed, new long[]{keys[0], keys[1], keys[2], keys[3] + 1}));
+        System.out.println("(length uncompressed with incorrect key is " + link.length() + ")");
+        System.out.println(link = LZSPlus.decompress(linkCompressed, new long[]{keys[0], keys[1], keys[2], keys[3]}));
+        System.out.println("(length uncompressed is " + link.length() + ")");
     }
 }
