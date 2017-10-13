@@ -49,7 +49,7 @@ public class MaskedShapeGenerator {
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
-        randomRegion.refill(rng, 0.78, w, h);
+        randomRegion.refill(rng, 0.75, w, h);
         workingSolid.remake(potentialSolid);
         workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);
         workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe());
@@ -103,7 +103,7 @@ public class MaskedShapeGenerator {
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
-        randomRegion.refill(rng, 0.78, w, h);
+        randomRegion.refill(rng, 0.75, w, h);
         workingSolid.remake(potentialSolid);
         workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);
         workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe());
@@ -140,7 +140,7 @@ public class MaskedShapeGenerator {
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
-        randomRegion.refill(rng, 0.78, w, h);
+        randomRegion.refill(rng, 0.75, w, h);
         workingSolid.remake(potentialSolid);
         workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);
         workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe8way());

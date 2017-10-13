@@ -67,12 +67,14 @@ public class ShapeTest extends ApplicationAdapter {
     }
     public void putMap()
     {
+        int t;
         ArrayTools.fill(data, 0);
         for (int y = 0; y < 6; y++) {
             for (int x = 0; x < 6; x++) {
                 gen.generateIntoShaded8way(data, x * 16 + 2, y * 16 + 2);
-                colorChoices[x][y] = ((counter + x + 36 * y) * 13 % 21) * 9
-                        + ThrustRNG.determineBounded(counter + x + 36 * y, 3);
+                colorChoices[x][y] = ((t = counter + x + 6 * y) & 15) | (ThrustRNG.determineBounded(t, 3) << 4);
+//                colorChoices[x][y] = ((counter + x + 36 * y) * 13 % 21) * 9
+//                        + ThrustRNG.determineBounded(counter + x + 36 * y, 3);
             }
         }
         for (int y = 0; y < height; y++) {
@@ -86,13 +88,16 @@ public class ShapeTest extends ApplicationAdapter {
                         display.backgrounds[x][y] = SColor.FLOAT_BLACK;
                         break;
                     case 2:
-                        display.backgrounds[x][y] = SColor.COLOR_WHEEL_PALETTE[colorChoices[x >> 4][y >> 4] + 6].toFloatBits();
+                        //display.backgrounds[x][y] = SColor.COLOR_WHEEL_PALETTE[colorChoices[x >> 4][y >> 4] + 6].toFloatBits();
+                        display.backgrounds[x][y] = SColor.indexedColorWheel((t = colorChoices[x >> 4][y >> 4]) & 15, 2, t >> 4).toFloatBits();
                         break;
                     case 3:
-                        display.backgrounds[x][y] = SColor.COLOR_WHEEL_PALETTE[colorChoices[x >> 4][y >> 4]].toFloatBits();
+                        display.backgrounds[x][y] = SColor.indexedColorWheel((t = colorChoices[x >> 4][y >> 4]) & 15, 1, t >> 4).toFloatBits();
+                                //SColor.COLOR_WHEEL_PALETTE[colorChoices[x >> 4][y >> 4]].toFloatBits();
                         break;
                     case 4:
-                        display.backgrounds[x][y] = SColor.COLOR_WHEEL_PALETTE[colorChoices[x >> 4][y >> 4] + 3].toFloatBits();
+                        display.backgrounds[x][y] = SColor.indexedColorWheel((t = colorChoices[x >> 4][y >> 4]) & 15, 0, t >> 4).toFloatBits();
+                        //SColor.COLOR_WHEEL_PALETTE[colorChoices[x >> 4][y >> 4] + 3].toFloatBits();
                         break;
                 }
             }
@@ -130,7 +135,7 @@ public class ShapeTest extends ApplicationAdapter {
         config.title = "SquidLib Test: Procedural Spaceships";
         config.width = width * cellHeight;
         config.height = height * cellHeight;
-        config.foregroundFPS = 1;
+        config.foregroundFPS = 2;
         //config.vSyncEnabled = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);

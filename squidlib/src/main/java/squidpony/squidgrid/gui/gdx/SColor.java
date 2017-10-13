@@ -10167,7 +10167,143 @@ public class SColor extends Color {
             CW_BLACK, CW_ALMOST_BLACK, CW_GRAY_BLACK, CW_DARK_GRAY, CW_GRAY, CW_LIGHT_GRAY, CW_GRAY_WHITE, CW_ALMOST_WHITE, CW_WHITE,
     };
 
+    /**
+     * An alternate version of {@link #COLOR_WHEEL_PALETTE} that has 16 hues (instead of 21 in the other palette)
+     * followed by grayscale, with each hue containing 9 colors (there are also 9 grayscale colors). Very similar hues
+     * have been removed from COLOR_WHEEL_PALETTE to try to better support random (or random-like) selection of colors.
+     * Each section of 9 colors per hue has been reordered as well, going in this order:
+     * <ol>
+     *     <li>{@code CW_PALE}, high brightness, low saturation</li>
+     *     <li>{@code CW_LIGHT}, high brightness, medium saturation</li>
+     *     <li>{@code CW_BRIGHT}, high brightness, high saturation</li>
+     *     <li>{@code CW_FADED}, medium brightness, low saturation</li>
+     *     <li>{@code CW}, medium brightness, medium saturation</li>
+     *     <li>{@code CW_FLUSH}, medium brightness, high saturation</li>
+     *     <li>{@code CW_DRAB}, low brightness, low saturation</li>
+     *     <li>{@code CW_DARK}, low brightness, medium saturation</li>
+     *     <li>{@code CW_RICH}, low brightness, high saturation</li>
+     * </ol>
+     * The grayscale colors go from high brightness to low brightness as well, the reverse of COLOR_WHEEL_PALETTE.
+     * <br>
+     * You can use some of the utility methods in this class to get colors from this with a good distribution, including
+     * {@link #randomColorWheel(RNG, int, int)}, {@link #indexedColorWheel(int, int, int)}, and the overloads of those
+     * methods with less parameters. If those methods fit your needs, you don't need to read the next section.
+     * <br>
+     * This is organized the way it is to allow efficient random color fetching when you know what brightness and
+     * saturation you want. Example code for this given an {@link RNG} called {@code rng}, with brightness and
+     * saturation as ints called {@code bright} and {@code sat} between 0 and 2 inclusive, would be:
+     * {@code SColor.COLOR_WHEEL_PALETTE_REDUCED[rng.next(4) * 9 + 3 * bright + sat]}. That code won't ever get a
+     * grayscale color, but should have an equal chance of choosing any of the 16 hues, with the given saturation and
+     * brightness. You might want to select colors in a sequence, with a very low chance of similar colors being close
+     * in the sequence; this can be done in a few ways depending on whether you want saturation and brightness to change
+     * as well as hue. If you know brightness and saturation as ints between 0 and 2 (inclusive) called {@code bright}
+     * and {@code sat}, as before, you can go through the 16 hues in a good pattern using a change to the index (an int
+     * called {@code idx} here): {@code SColor.COLOR_WHEEL_PALETTE_REDUCED[(idx * 7 & 15) * 9 + 3 * bright + sat]}. If
+     * you add 1 to idx each time, as in an ordinary for loop, then that code will produce 16 different hues in a fairly
+     * well-distributed way as idx goes from 0 to 15. If you want brightness to also change in a sequence, you can use
+     * {@code SColor.COLOR_WHEEL_PALETTE_REDUCED[((idx * 497) % 48 ^ (idx * 497 >> 2 & 3)) * 3 + sat]} for idx values
+     * between 0 and 47, inclusive (this is rather complicated due to issues with simpler methods yielding brightness
+     * changes in an obvious pattern). If you want to select from all 144 non-grayscale colors in a sequence, you can
+     * try {@code SColor.COLOR_WHEEL_PALETTE_REDUCED[(idx * 89) % 144 ^ (idx * 89 >> 2 & 3)]}, which will yield all of
+     * the colors with a good distribution as idx goes from 0 to 143.
+     */
+    public static final SColor[] COLOR_WHEEL_PALETTE_REDUCED = {
+            CW_PALE_RED,CW_LIGHT_RED, CW_BRIGHT_RED, CW_FADED_RED, CW_RED, CW_FLUSH_RED, CW_DRAB_RED, CW_DARK_RED, CW_RICH_RED,
+            CW_PALE_ORANGE,CW_LIGHT_ORANGE, CW_BRIGHT_ORANGE, CW_FADED_ORANGE, CW_ORANGE, CW_FLUSH_ORANGE, CW_DRAB_ORANGE, CW_DARK_ORANGE, CW_RICH_ORANGE,
+            CW_PALE_BROWN,CW_LIGHT_BROWN, CW_BRIGHT_BROWN, CW_FADED_BROWN, CW_BROWN, CW_FLUSH_BROWN, CW_DRAB_BROWN, CW_DARK_BROWN, CW_RICH_BROWN,
+            CW_PALE_APRICOT,CW_LIGHT_APRICOT, CW_BRIGHT_APRICOT, CW_FADED_APRICOT, CW_APRICOT, CW_FLUSH_APRICOT, CW_DRAB_APRICOT, CW_DARK_APRICOT, CW_RICH_APRICOT,
+            CW_PALE_GOLD,CW_LIGHT_GOLD, CW_BRIGHT_GOLD, CW_FADED_GOLD, CW_GOLD, CW_FLUSH_GOLD, CW_DRAB_GOLD, CW_DARK_GOLD, CW_RICH_GOLD,
+            CW_PALE_YELLOW,CW_LIGHT_YELLOW, CW_BRIGHT_YELLOW, CW_FADED_YELLOW, CW_YELLOW, CW_FLUSH_YELLOW, CW_DRAB_YELLOW, CW_DARK_YELLOW, CW_RICH_YELLOW,
+            CW_PALE_CHARTREUSE,CW_LIGHT_CHARTREUSE, CW_BRIGHT_CHARTREUSE, CW_FADED_CHARTREUSE, CW_CHARTREUSE, CW_FLUSH_CHARTREUSE, CW_DRAB_CHARTREUSE, CW_DARK_CHARTREUSE, CW_RICH_CHARTREUSE,
+            CW_PALE_HONEYDEW,CW_LIGHT_HONEYDEW, CW_BRIGHT_HONEYDEW, CW_FADED_HONEYDEW, CW_HONEYDEW, CW_FLUSH_HONEYDEW, CW_DRAB_HONEYDEW, CW_DARK_HONEYDEW, CW_RICH_HONEYDEW,
+            CW_PALE_GREEN,CW_LIGHT_GREEN, CW_BRIGHT_GREEN, CW_FADED_GREEN, CW_GREEN, CW_FLUSH_GREEN, CW_DRAB_GREEN, CW_DARK_GREEN, CW_RICH_GREEN,
+            CW_PALE_SEAFOAM,CW_LIGHT_SEAFOAM, CW_BRIGHT_SEAFOAM, CW_FADED_SEAFOAM, CW_SEAFOAM, CW_FLUSH_SEAFOAM, CW_DRAB_SEAFOAM, CW_DARK_SEAFOAM, CW_RICH_SEAFOAM,
+            CW_PALE_AZURE,CW_LIGHT_AZURE, CW_BRIGHT_AZURE, CW_FADED_AZURE, CW_AZURE, CW_FLUSH_AZURE, CW_DRAB_AZURE, CW_DARK_AZURE, CW_RICH_AZURE,
+            CW_PALE_BLUE,CW_LIGHT_BLUE, CW_BRIGHT_BLUE, CW_FADED_BLUE, CW_BLUE, CW_FLUSH_BLUE, CW_DRAB_BLUE, CW_DARK_BLUE, CW_RICH_BLUE,
+            CW_PALE_INDIGO,CW_LIGHT_INDIGO, CW_BRIGHT_INDIGO, CW_FADED_INDIGO, CW_INDIGO, CW_FLUSH_INDIGO, CW_DRAB_INDIGO, CW_DARK_INDIGO, CW_RICH_INDIGO,
+            CW_PALE_VIOLET,CW_LIGHT_VIOLET, CW_BRIGHT_VIOLET, CW_FADED_VIOLET, CW_VIOLET, CW_FLUSH_VIOLET, CW_DRAB_VIOLET, CW_DARK_VIOLET, CW_RICH_VIOLET,
+            CW_PALE_PURPLE,CW_LIGHT_PURPLE, CW_BRIGHT_PURPLE, CW_FADED_PURPLE, CW_PURPLE, CW_FLUSH_PURPLE, CW_DRAB_PURPLE, CW_DARK_PURPLE, CW_RICH_PURPLE,
+            CW_PALE_MAGENTA,CW_LIGHT_MAGENTA, CW_BRIGHT_MAGENTA, CW_FADED_MAGENTA, CW_MAGENTA, CW_FLUSH_MAGENTA, CW_DRAB_MAGENTA, CW_DARK_MAGENTA, CW_RICH_MAGENTA,
+            CW_WHITE, CW_ALMOST_WHITE, CW_GRAY_WHITE, CW_LIGHT_GRAY, CW_GRAY, CW_DARK_GRAY, CW_GRAY_BLACK, CW_ALMOST_BLACK, CW_BLACK,
+    };
 
+    /**
+     * Gets a random color from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, with the specified brightness (0 is
+     * darkest, 1 is middle-bright, 2 is brightest) and saturation (0 is grayest, 1 is mid-saturation, 2 is fully
+     * saturated), using the specified RNG.
+     * @param rng used to choose the hue
+     * @param bright the brightness to use, from 0 (dark) to 2 (bright)
+     * @param sat the saturation to use, from 0 (grayish) to 2 (boldly colored)
+     * @return a randomly selected SColor from {@link #COLOR_WHEEL_PALETTE_REDUCED}
+     */
+    public static SColor randomColorWheel(RNG rng, int bright, int sat)
+    {
+        bright &= 0xf;
+        sat &= 0xf;
+        bright %= 3;
+        sat %= 3;
+        return COLOR_WHEEL_PALETTE_REDUCED[rng.next(4) * 9 + 3 * bright + sat];
+    }
+
+    /**
+     * Gets a random color from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, using the specified RNG to determine
+     * saturation, brightness, and hue.
+     * @param rng used to choose everything
+     * @return a randomly selected SColor from {@link #COLOR_WHEEL_PALETTE_REDUCED}
+     */
+    public static SColor randomColorWheel(RNG rng)
+    {
+        return COLOR_WHEEL_PALETTE_REDUCED[rng.nextIntHasty(144)];
+    }
+    /**
+     * Gets a color by a shuffled index from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, with the specified
+     * brightness (0 is darkest, 1 is middle-bright, 2 is brightest) and saturation (0 is grayest, 1 is mid-saturation,
+     * 2 is fully saturated), using the given index to ensure similar index values usually return very different colors.
+     * This can return up to 16 colors before cycling, if bright and sat stay the same.
+     * @param idx the index; should change by 1 per color generated to ensure different colors
+     * @param bright the brightness to use, from 0 (dark) to 2 (bright)
+     * @param sat the saturation to use, from 0 (grayish) to 2 (boldly colored)
+     * @return a mathematically selected SColor from {@link #COLOR_WHEEL_PALETTE_REDUCED}
+     */
+    public static SColor indexedColorWheel(int idx, int bright, int sat)
+    {
+        idx *= 7;
+        idx &= 0xf;
+        bright &= 0xf;
+        sat &= 0xf;
+        bright %= 3;
+        sat %= 3;
+        return COLOR_WHEEL_PALETTE_REDUCED[idx * 9 + 3 * bright + sat];
+    }
+    /**
+     * Gets a color by a shuffled index from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, with the specified
+     * saturation (0 is grayest, 1 is mid-saturation, 2 is fully saturated), using the given index to ensure similar
+     * index values usually return very different colors. This can return up to 48 colors before cycling, if sat stays
+     * the same.
+     * @param idx the index; should change by 1 per color generated to ensure different colors
+     * @param sat the saturation to use, from 0 (grayish) to 2 (boldly colored)
+     * @return a mathematically selected SColor from {@link #COLOR_WHEEL_PALETTE_REDUCED}
+     */
+    public static SColor indexedColorWheel(int idx, int sat)
+    {
+        idx *= 497;
+        sat &= 0xf;
+        sat %= 3;
+        return COLOR_WHEEL_PALETTE_REDUCED[(idx % 48 ^ (idx >> 2 & 3)) * 3 + sat];
+    }
+
+    /**
+     * Gets a color by a shuffled index from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, using the given index to
+     * ensure similar index values usually return very different colors. This can return up to 144 colors before
+     * cycling, which is the total amount of non-grayscale colors in COLOR_WHEEL_PALETTE_REDUCED.
+     * @param idx the index; should change by 1 per color generated to ensure different colors
+     * @return a mathematically selected SColor from {@link #COLOR_WHEEL_PALETTE_REDUCED}
+     */
+    public static SColor indexedColorWheel(int idx)
+    {
+        idx *= 89;
+        return COLOR_WHEEL_PALETTE_REDUCED[idx % 144 ^ (idx >> 2 & 3)];
+    }
     /**
      * This array is loaded with all of the colors defined in SColor, in
      * arbitrary order.
