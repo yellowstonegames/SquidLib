@@ -5732,6 +5732,22 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     }
 
+    /**
+     * Returns a new GreasedRegion that has been mirrored along the rightmost edge, parallel to the y-axis. The new
+     * GreasedRegion will have exactly twice the width, the additional width will have the contents of the original
+     * GreasesRegion in reversed order. The positions shared by both GreasedRegions will be the same, that is, any area
+     * not added to the original will be equal to the original.
+     * @return a new GreasedRegion with twice the width of {@code this}, that is mirrored along the rightmost edge
+     */
+    public GreasedRegion mirrorY()
+    {
+        GreasedRegion next = new GreasedRegion(data, width, height, width * 2, height);
+        for (int i = 0, o = width * 2 - 1; i < width; i++, o--) {
+            System.arraycopy(data, ySections * i, next.data, ySections * o, ySections);
+        }
+        return next;
+    }
+
     @Override
     public boolean intersectsWith(Zone other) {
         if (other instanceof GreasedRegion)
