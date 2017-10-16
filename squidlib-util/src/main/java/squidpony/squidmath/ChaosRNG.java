@@ -26,7 +26,7 @@ public class ChaosRNG implements RandomnessSource{
     private long determine()
     {
         long state = (z[(choice += 0xC6BC278D) >>> 28] += 0x9E3779B97F4A7C15L ^ choice * 0x2C9277B5000000L);
-        state = (state ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
         return state ^ state >>> 28;
 
     }

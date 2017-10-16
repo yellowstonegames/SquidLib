@@ -205,7 +205,7 @@ public class CosmicNumbering implements Serializable {
      */
     public static long determine(long state)
     {
-        state = (state ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
         return state ^ state >>> 28;
     }
 

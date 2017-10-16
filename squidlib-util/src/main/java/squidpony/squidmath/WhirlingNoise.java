@@ -939,7 +939,8 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to stay just inside [-1,1]
-        return 32.0 * (n0 + n1 + n2 + n3);
+        return 31.5 * (n0 + n1 + n2 + n3);
+
     }
 
     /**
@@ -1116,7 +1117,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to stay just inside [-1,1]
-        return 32f * (n0 + n1 + n2 + n3);
+        return  31.5f * (n0 + n1 + n2 + n3);
     }
 
     /**

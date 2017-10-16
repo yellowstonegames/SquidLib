@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private int hashMode = 64, rngMode = 30, noiseMode = 79;
 
     private SpriteBatch batch;
@@ -2504,7 +2504,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                                 //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
                                                 //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
                                                 PerlinNoise.noise(xx, yy)
-                                                        + 1f) / 2f;
+                                                        + 1f) * 0.5f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
@@ -2520,7 +2520,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                                 //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
                                                 //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
                                                 PerlinNoise.noise(x, y, ctr * 0.3)
-                                                        + 1f) / 2f;
+                                                        + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2537,7 +2537,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                                 //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
                                                 //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
                                                 WhirlingNoise.noise(x * 0.125, y * 0.125, ctr  * 0.0375)
-                                                        + 1f) / 2f;
+                                                        + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2557,7 +2557,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                                 //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
                                                 //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
                                                 WhirlingNoise.noise(xx * 0.125, yy * 0.125)
-                                                        + 1f) / 2f;
+                                                        + 1f) * 0.5f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
@@ -2565,14 +2565,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
 
                     case 12:
-                        Gdx.graphics.setTitle("Whirling Alt 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 4D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
-                                                //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
-                                                //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
-                                                WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0375)
-                                                        + 1f) / 2f;
+                                bright = ((float) WhirlingNoise.noise(x * 0.125, y * 0.125, ctr * 0.0375, 0.0)
+                                                        + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2591,7 +2588,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                                 //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
                                                 //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
                                                 WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
-                                                        + 1f) / 2f;
+                                                        + 1f) * 0.5f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }

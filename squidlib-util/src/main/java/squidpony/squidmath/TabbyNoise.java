@@ -54,7 +54,7 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 //                + (((z ^ z >>> 28) & 0x7FFFFFL) + ((z ^ z >>> 28) >>> 41))) * 0x1p-24 - 1.0;
 //    }
 public static double gauss(long state) {
-    state = (state ^ state >>> 30) * 0x5851F42D4C957F2DL;
+    state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
     return (state ^ state >>> 28) * 0x1.5p-64;
 }
 

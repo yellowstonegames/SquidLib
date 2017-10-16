@@ -33,6 +33,12 @@ import squidpony.annotation.Beta;
  * generator should yield the same results on GWT as on desktop or Android if the seed given is the same).
  * <br>
  * This is marked as Beta because there may be more improvements that can be made, and that would change the results.
+ * A change was made on October 16, 2017 that improved quality even more, and now this generator can pass the even more
+ * stringent BigCrush test suite from TestU01, and not just PractRand on 64 MB of data (it also passes PractRand on 256
+ * MB of data now). A C port of this was made as part of testing,
+ * <a href="https://gist.github.com/tommyettinger/e6d3e8816da79b45bfe582384c2fe14a">available here</a>, and it is the
+ * fastest generator I have been able to test with the constraints for the XorShift/Xoroshiro benchmarks, which only
+ * test C code.
  * <br>
  * Thanks to Ashiren, for advice on this in #libgdx on Freenode, and to Pierre L'Ecuyer and Donald Knuth for finding the
  * constants used (originally for linear congruential generators).
@@ -87,7 +93,7 @@ public class ThrustRNG implements StatefulRandomness {
     @Override
     public final int next(int bits) {
         long z = (state += 0x9E3779B97F4A7C15L);
-        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL;
+        z = (z ^ z >>> 26) * 0x2545F4914F6CDD1DL;
         return (int)(z ^ z >>> 28) >>> (32 - bits);
         //(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state >> 28)
     }
@@ -103,7 +109,7 @@ public class ThrustRNG implements StatefulRandomness {
     @Override
     public final long nextLong() {
         long z = (state += 0x9E3779B97F4A7C15L);
-        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL;// + 0x632BE59BD9B4E019L;
+        z = (z ^ z >>> 26) * 0x2545F4914F6CDD1DL;// * 0x5851F42D4C957F2DL // + 0x632BE59BD9B4E019L;
         return z ^ z >>> 28;
         // * 0x27BB2EE687B0B0FDL;
         //return ((state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state >> 28));
@@ -119,7 +125,7 @@ public class ThrustRNG implements StatefulRandomness {
      */
     public final long skip(long advance) {
         long z = (state += 0x9E3779B97F4A7C15L * advance);
-        z = (z ^ z >>> 30) * 0x5851F42D4C957F2DL;
+        z = (z ^ z >>> 26) * 0x2545F4914F6CDD1DL;
         return z ^ z >>> 28;
     }
 
@@ -168,7 +174,7 @@ public class ThrustRNG implements StatefulRandomness {
      */
     public static long determine(long state)
     {
-        state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 26) * 0x2545F4914F6CDD1DL;
         return state ^ state >>> 28;
     }
 
@@ -186,7 +192,7 @@ public class ThrustRNG implements StatefulRandomness {
      */
     public static int determineBounded(long state, final int bound)
     {
-        state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 26) * 0x2545F4914F6CDD1DL;
         return (int)((bound * ((state ^ state >>> 28) & 0x7FFFFFFFL)) >> 31);
     }
 

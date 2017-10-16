@@ -42,7 +42,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      */
     public static long determine(long state)
     {
-        state = (state ^ state >>> 30) * 0x5851F42D4C957F2DL;
+        state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
         return state ^ state >>> 28;
     }
 
@@ -67,13 +67,13 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     //    public static double gauss(final long state) {
 //        final long s1 = state + 0x9E3779B97F4A7C15L,
 //                s2 = s1 + 0x9E3779B97F4A7C15L,
-//                y = (s1 ^ s1 >>> 30) * 0x5851F42D4C957F2DL,
-//                z = (s2 ^ s2 >>> 30) * 0x5851F42D4C957F2DL;
+//                y = (s1 ^ s1 >>> 26) * 0x2545F4914F6CDD1DL,
+//                z = (s2 ^ s2 >>> 26) * 0x2545F4914F6CDD1DL;
 //        return ((((y ^ y >>> 28) & 0x7FFFFFL) + ((y ^ y >>> 28) >>> 41))
 //                + (((z ^ z >>> 28) & 0x7FFFFFL) + ((z ^ z >>> 28) >>> 41))) * 0x1p-24 - 1.0;
 //    }
-    public static double gauss(long state) {
-        state = (state ^ state >>> 30) * 0x5851F42D4C957F2DL;
+    public static double signedFloat(long state) {
+        state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
         return (state ^ state >>> 28) * 0x1p-63;
     }
 
