@@ -171,9 +171,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></code></td>
+<td class="colFirst"><code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#lrng">lrng</a></span></code>
-<div class="block">The LightRNG used as a RandomnessSource for the RNG this object uses.</div>
+<div class="block">The StatefulRandomness, usually a LightRNG, that this uses.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -265,14 +265,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.LightRNG-">Spill</a></span>(char[][]&nbsp;level,
-     <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
-     <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a>&nbsp;random)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
- char[][] where '#' means a wall and anything else is a walkable tile.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">Spill</a></span>(char[][]&nbsp;level,
      <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
      <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
@@ -280,13 +272,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.StatefulRandomness-">Spill</a></span>(char[][]&nbsp;level,
+     <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
+     <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</code>
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
+ char[][] where '#' means a wall and anything else is a walkable tile.</div>
+</td>
+</tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.LightRNG-">Spill</a></span>(<a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a>&nbsp;random)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.RNG-">Spill</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.RNG-">Spill</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.StatefulRandomness-">Spill</a></span>(<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</code>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </td>
 </tr>
@@ -309,16 +309,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colFirst"><code><a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#initialize-boolean:A:A-">initialize</a></span>(boolean[][]&nbsp;level)</code>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
- one when it was constructed, or because the contents of the terrain have changed permanently (not if a
- creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
+ one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#initialize-char:A:A-">initialize</a></span>(char[][]&nbsp;level)</code>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
- one when it was constructed, or because the contents of the terrain have changed permanently (not if a
- creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
+ one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
@@ -326,8 +324,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#initialize-char:A:A-char-">initialize</a></span>(char[][]&nbsp;level,
           char&nbsp;alternateWall)</code>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
- one when it was constructed, or because the contents of the terrain have changed permanently (not if a
- creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
+ one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -357,12 +354,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#setFresh-squidpony.squidmath.Coord-">setFresh</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#setFresh-squidpony.squidmath.Coord-">setFresh</a></span>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</code>
+<div class="block">Used internally to mark a cell as just-now being expanded from.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#setFresh-int-int-">setFresh</a></span>(int&nbsp;x,
-        int&nbsp;y)</code>&nbsp;</td>
+        int&nbsp;y)</code>
+<div class="block">Used internally to mark a cell as just-now being expanded from.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;</code></td>
@@ -491,8 +492,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>lrng</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a> <a href="../../src-html/squidpony/squidgrid/Spill.html#line.86">lrng</a></pre>
-<div class="block">The LightRNG used as a RandomnessSource for the RNG this object uses. Can have its state read and set.</div>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a> <a href="../../src-html/squidpony/squidgrid/Spill.html#line.86">lrng</a></pre>
+<div class="block">The StatefulRandomness, usually a LightRNG, that this uses. Can have its state read and set.</div>
 </li>
 </ul>
 </li>
@@ -528,13 +529,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  If you use this constructor, you must call an  initialize() method before using this class.</div>
 </li>
 </ul>
-<a name="Spill-squidpony.squidmath.LightRNG-">
+<a name="Spill-squidpony.squidmath.StatefulRandomness-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.120">Spill</a>(<a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.120">Spill</a>(<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</pre>
 <div class="block">Construct a Spill without a level to actually scan. This constructor allows you to specify a RandomnessSource
  in the form of a LightRNG, which will be referenced in this class (if the state of random changes because this
  object needed a random number, the state change will be reflected in the code that passed random to here).
@@ -552,7 +553,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Used to construct a Spill from the output of another.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular boolean array, using <code>false</code> to represent walls</dd>
 </dl>
 </li>
 </ul>
@@ -567,8 +568,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Used to construct a Spill from the output of another, specifying a distance calculation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
-<dd><code>measurement</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular boolean array, using <code>false</code> to represent walls</dd>
+<dd><code>measurement</code> - a <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid"><code>Spill.Measurement</code></a> enum; usually <a href="../../squidpony/squidgrid/Spill.Measurement.html#MANHATTAN"><code>Spill.Measurement.MANHATTAN</code></a> is ideal</dd>
 </dl>
 </li>
 </ul>
@@ -585,7 +586,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  map that can be used here.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular char array, using <code>'#'</code> to represent walls</dd>
 </dl>
 </li>
 </ul>
@@ -595,7 +596,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.173">Spill</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.174">Spill</a>(char[][]&nbsp;level,
              char&nbsp;alternateWall)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
@@ -603,7 +604,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  map that can be used here. You can specify the character used for walls.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular char array, using <code>alternateWall</code> to represent walls</dd>
+<dd><code>alternateWall</code> - the char that will be interpreted as a wall in <code>level</code></dd>
 </dl>
 </li>
 </ul>
@@ -613,7 +615,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.189">Spill</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.190">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
@@ -621,8 +623,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  map that can be used here. This constructor specifies a distance measurement.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
-<dd><code>measurement</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular char array, using <code>'#'</code> to represent walls</dd>
+<dd><code>measurement</code> - a <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid"><code>Spill.Measurement</code></a> enum; usually <a href="../../squidpony/squidgrid/Spill.Measurement.html#MANHATTAN"><code>Spill.Measurement.MANHATTAN</code></a> is ideal</dd>
 </dl>
 </li>
 </ul>
@@ -632,7 +634,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.209">Spill</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.210">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
              <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
@@ -645,32 +647,32 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  be used to seed this class' RNG).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
-<dd><code>measurement</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular char array, using <code>'#'</code> to represent walls</dd>
+<dd><code>measurement</code> - a <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid"><code>Spill.Measurement</code></a> enum; usually <a href="../../squidpony/squidgrid/Spill.Measurement.html#MANHATTAN"><code>Spill.Measurement.MANHATTAN</code></a> is ideal</dd>
 </dl>
 </li>
 </ul>
-<a name="Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.LightRNG-">
+<a name="Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.StatefulRandomness-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.228">Spill</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.229">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
-             <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a>&nbsp;random)</pre>
+             <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. This constructor specifies a distance measurement.
 
- This constructor allows you to specify a RandomnessSource in the form of a LightRNG, which will be referenced in
+ This constructor allows you to specify a StatefulRandomness, which will be referenced in
  this class (if the state of random changes because this object needed a random number, the state change will be
  reflected in the code that passed random to here).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
-<dd><code>measurement</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular char array, using <code>'#'</code> to represent walls</dd>
+<dd><code>measurement</code> - a <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid"><code>Spill.Measurement</code></a> enum; usually <a href="../../squidpony/squidgrid/Spill.Measurement.html#MANHATTAN"><code>Spill.Measurement.MANHATTAN</code></a> is ideal</dd>
 </dl>
 </li>
 </ul>
@@ -690,12 +692,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <h4>initialize</h4>
 <pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.243">initialize</a>(boolean[][]&nbsp;level)</pre>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
- one when it was constructed, or because the contents of the terrain have changed permanently (not if a
- creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
+ one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular boolean array, using <code>false</code> to represent walls</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>this Spill after initialization has completed, for chaining</dd>
 </dl>
 </li>
 </ul>
@@ -705,14 +707,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.266">initialize</a>(char[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.265">initialize</a>(char[][]&nbsp;level)</pre>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
- one when it was constructed, or because the contents of the terrain have changed permanently (not if a
- creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).</div>
+ one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular char array, using <code>'#'</code> to represent walls</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>this Spill after initialization has completed, for chaining</dd>
 </dl>
 </li>
 </ul>
@@ -722,17 +724,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.291">initialize</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.289">initialize</a>(char[][]&nbsp;level,
                         char&nbsp;alternateWall)</pre>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
- one when it was constructed, or because the contents of the terrain have changed permanently (not if a
- creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ). This
- initialize() method allows you to specify an alternate wall char other than the default character, '#' .</div>
+ one when it was constructed, or because the contents of the terrain have changed permanently. This
+ initialize() method allows you to specify an alternate wall char other than the default character, <code>'#'</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>level</code> - </dd>
-<dd><code>alternateWall</code> - </dd>
+<dd><code>level</code> - the level as a 2D rectangular char array, using <code>alternateWall</code> to represent walls</dd>
+<dd><code>alternateWall</code> - the char that will be interpreted as a wall in <code>level</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>this Spill after initialization has completed, for chaining</dd>
 </dl>
 </li>
 </ul>
@@ -742,7 +744,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>resetMap</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.310">resetMap</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.308">resetMap</a>()</pre>
 <div class="block">Resets the spillMap to being empty.</div>
 </li>
 </ul>
@@ -752,7 +754,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reset</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.322">reset</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.320">reset</a>()</pre>
 <div class="block">Resets this Spill to a state with an empty spillMap and an empty spreadPattern.</div>
 </li>
 </ul>
@@ -762,13 +764,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>resetCell</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.333">resetCell</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.331">resetCell</a>(int&nbsp;x,
                       int&nbsp;y)</pre>
 <div class="block">Reverts a cell to an unfilled state (false in spillMap).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
+<dd><code>x</code> - the x position of the cell to reset</dd>
+<dd><code>y</code> - the y position of the cell to reset</dd>
 </dl>
 </li>
 </ul>
@@ -778,11 +780,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>resetCell</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.342">resetCell</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.340">resetCell</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
 <div class="block">Reverts a cell to an unfilled state (false in spillMap).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>pt</code> - </dd>
+<dd><code>pt</code> - the position of the cell to reset</dd>
 </dl>
 </li>
 </ul>
@@ -792,8 +794,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setFresh</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.347">setFresh</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.350">setFresh</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
+<div class="block">Used internally to mark a cell as just-now being expanded from.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - the x position of the cell to reset</dd>
+<dd><code>y</code> - the y position of the cell to reset</dd>
+</dl>
 </li>
 </ul>
 <a name="setFresh-squidpony.squidmath.Coord-">
@@ -802,7 +810,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setFresh</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.352">setFresh</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.359">setFresh</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<div class="block">Used internally to mark a cell as just-now being expanded from.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>pt</code> - the position of the cell to reset</dd>
+</dl>
 </li>
 </ul>
 <a name="start-squidpony.squidmath.Coord-int-java.util.Set-">
@@ -811,7 +824,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>start</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.374">start</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;entry,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.381">start</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;entry,
                               int&nbsp;volume,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</pre>
 <div class="block">Recalculate the spillMap and return the spreadPattern. The cell corresponding to entry will be true,

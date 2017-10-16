@@ -65,20 +65,19 @@ public class DijkstraMap implements Serializable {
 
         public double heuristic(Direction target) {
             switch (this) {
+                case MANHATTAN:
                 case CHEBYSHEV:
                     return 1.0;
-                case EUCLIDEAN:
+                default:
                     switch (target) {
                         case DOWN_LEFT:
                         case DOWN_RIGHT:
                         case UP_LEFT:
                         case UP_RIGHT:
                             return root2;
-                        default:
-                            return 1.0;
+                        default: return 1.0;
                     }
             }
-            return 1.0;
         }
 
         public int directionCount() {

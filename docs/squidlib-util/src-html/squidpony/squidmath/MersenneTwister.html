@@ -48,220 +48,261 @@
 <span class="sourceLineNo">040</span> */<a name="line.40"></a>
 <span class="sourceLineNo">041</span>package squidpony.squidmath;<a name="line.41"></a>
 <span class="sourceLineNo">042</span><a name="line.42"></a>
-<span class="sourceLineNo">043</span>import java.io.Serializable;<a name="line.43"></a>
-<span class="sourceLineNo">044</span>/**<a name="line.44"></a>
-<span class="sourceLineNo">045</span> * Mersenne Twister, 64-bit version as a RandomnessSource.<a name="line.45"></a>
-<span class="sourceLineNo">046</span> * &lt;br&gt;<a name="line.46"></a>
-<span class="sourceLineNo">047</span> * Similar to the regular Mersenne Twister but is implemented with 64-bit<a name="line.47"></a>
-<span class="sourceLineNo">048</span> * registers (Java &lt;code&gt;long&lt;/code&gt;) and produces different output.<a name="line.48"></a>
-<span class="sourceLineNo">049</span> * &lt;br&gt;<a name="line.49"></a>
-<span class="sourceLineNo">050</span> * This is mostly a straight port of the<a name="line.50"></a>
-<span class="sourceLineNo">051</span> * &lt;a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/mt19937-64.c"&gt;<a name="line.51"></a>
-<span class="sourceLineNo">052</span> * C-code (mt19937-64.c)&lt;/a&gt;, but made more "java-like". This version was originally found<a name="line.52"></a>
-<span class="sourceLineNo">053</span> * at &lt;a href="https://github.com/javabeanz/javarng/blob/master/com/modp/random/MersenneTwister64.java"&gt;<a name="line.53"></a>
-<span class="sourceLineNo">054</span> * an archived version of a Google Code repo&lt;/a&gt;, and it is licensed under the 3-clause BSD license, like<a name="line.54"></a>
-<span class="sourceLineNo">055</span> * the Mersenne Twister.<a name="line.55"></a>
-<span class="sourceLineNo">056</span> * &lt;br&gt;<a name="line.56"></a>
-<span class="sourceLineNo">057</span> * References:<a name="line.57"></a>
-<span class="sourceLineNo">058</span> * &lt;br&gt;<a name="line.58"></a>
-<span class="sourceLineNo">059</span> * &lt;ul&gt;<a name="line.59"></a>
-<span class="sourceLineNo">060</span> * &lt;li&gt;<a name="line.60"></a>
-<span class="sourceLineNo">061</span> * &lt;a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html"&gt;<a name="line.61"></a>
-<span class="sourceLineNo">062</span> * The Mersenne Twister Home Page &lt;/a&gt;<a name="line.62"></a>
-<span class="sourceLineNo">063</span> * &lt;/li&gt;<a name="line.63"></a>
-<span class="sourceLineNo">064</span> * &lt;li&gt;  Makato Matsumoto and Takuji Nishimura,<a name="line.64"></a>
-<span class="sourceLineNo">065</span> * &lt;a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/ARTICLES/mt.pdf"&gt;"Mersenne Twister:A 623-Dimensionally Equidistributed Uniform Pseudo-Random Number Generator"&lt;/a&gt;,<a name="line.65"></a>
-<span class="sourceLineNo">066</span> * &lt;i&gt;ACM Transactions on Modeling and Computer Simulation, &lt;/i&gt; Vol. 8, No. 1,<a name="line.66"></a>
-<span class="sourceLineNo">067</span> * January 1998, pp 3--30.&lt;/li&gt;<a name="line.67"></a>
-<span class="sourceLineNo">068</span> * &lt;/ul&gt;<a name="line.68"></a>
-<span class="sourceLineNo">069</span> *<a name="line.69"></a>
-<span class="sourceLineNo">070</span> * @author Nick Galbreath -- nickg [at] modp [dot] com<a name="line.70"></a>
-<span class="sourceLineNo">071</span> * @author Tommy Ettinger<a name="line.71"></a>
-<span class="sourceLineNo">072</span> * @version 1.1 -- 07-Oct-2017<a name="line.72"></a>
-<span class="sourceLineNo">073</span> */<a name="line.73"></a>
-<span class="sourceLineNo">074</span>public class MersenneTwister implements Serializable, RandomnessSource {<a name="line.74"></a>
-<span class="sourceLineNo">075</span><a name="line.75"></a>
-<span class="sourceLineNo">076</span>    private static final long serialVersionUID = -8219700664442619525L;<a name="line.76"></a>
-<span class="sourceLineNo">077</span><a name="line.77"></a>
-<span class="sourceLineNo">078</span>    private static final int NN = 312;<a name="line.78"></a>
-<span class="sourceLineNo">079</span><a name="line.79"></a>
-<span class="sourceLineNo">080</span>    private static final int MM = 156;<a name="line.80"></a>
-<span class="sourceLineNo">081</span><a name="line.81"></a>
-<span class="sourceLineNo">082</span>    private static final long MATRIX_A = 0xB5026F5AA96619E9L;<a name="line.82"></a>
-<span class="sourceLineNo">083</span><a name="line.83"></a>
-<span class="sourceLineNo">084</span>    /**<a name="line.84"></a>
-<span class="sourceLineNo">085</span>     * Mask: Most significant 33 bits<a name="line.85"></a>
-<span class="sourceLineNo">086</span>     */<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    private static final long UM = 0xFFFFFFFF80000000L;<a name="line.87"></a>
-<span class="sourceLineNo">088</span><a name="line.88"></a>
-<span class="sourceLineNo">089</span>    /**<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * Mask: Least significant 31 bits<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     */<a name="line.91"></a>
-<span class="sourceLineNo">092</span>    private static final long LM = 0x7FFFFFFFL;<a name="line.92"></a>
-<span class="sourceLineNo">093</span><a name="line.93"></a>
-<span class="sourceLineNo">094</span>    /**<a name="line.94"></a>
-<span class="sourceLineNo">095</span>     * Mersenne Twister data.<a name="line.95"></a>
-<span class="sourceLineNo">096</span>     */<a name="line.96"></a>
-<span class="sourceLineNo">097</span>    private long[] mt = new long[NN];<a name="line.97"></a>
+<span class="sourceLineNo">043</span>import squidpony.StringKit;<a name="line.43"></a>
+<span class="sourceLineNo">044</span><a name="line.44"></a>
+<span class="sourceLineNo">045</span>import java.io.Serializable;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>import java.util.Arrays;<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>/**<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * Mersenne Twister, 64-bit version as a RandomnessSource.<a name="line.49"></a>
+<span class="sourceLineNo">050</span> * &lt;br&gt;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> * Similar to the regular 32-bit Mersenne Twister but implemented with 64-bit<a name="line.51"></a>
+<span class="sourceLineNo">052</span> * values (Java &lt;code&gt;long&lt;/code&gt;), and with different output. This generator is probably<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * not the best to use because of known statistical problems and low speed, but its period<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * is absurdly high, {@code pow(2, 19937) - 1}. {@link LongPeriodRNG} has significantly<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * better speed and statistical quality, and also has a large period, {@code pow(2, 1024) - 1}.<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * {@link BeardRNG} could have a period as high as {@code pow(2, 4096)}, but there are no<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * guarantees on its period, though statistically it tests well. {@link IsaacRNG} is slower, but<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * offers impeccable quality, and from its webpage, "Cycles are guaranteed to be at least<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * {@code pow(2, 40)} values long, and they are {@code pow(2, 8295)} values long on average."<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * IsaacRNG should be your choice if security is a concern, LongPeriodRNG if quality and speed<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * are important (BeardRNG may be good to evaluate as well), and MersenneTwister should be used<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * if period is the only criterion to judge an RNG on. There may be a CMWC generator added at<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * some point, which would have potentially a greater period than the Mersenne Twister.<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * &lt;br&gt;<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * This is mostly a straight port of the<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * &lt;a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/mt19937-64.c"&gt;<a name="line.66"></a>
+<span class="sourceLineNo">067</span> * C-code (mt19937-64.c)&lt;/a&gt;, but made more "java-like". This version was originally found<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * at &lt;a href="https://github.com/javabeanz/javarng/blob/master/com/modp/random/MersenneTwister64.java"&gt;<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * an archived version of a Google Code repo&lt;/a&gt;, and it is licensed under the 3-clause BSD license, like<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * the Mersenne Twister.<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * &lt;br&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * References:<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * &lt;br&gt;<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * &lt;ul&gt;<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * &lt;li&gt;<a name="line.75"></a>
+<span class="sourceLineNo">076</span> * &lt;a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html"&gt;<a name="line.76"></a>
+<span class="sourceLineNo">077</span> * The Mersenne Twister Home Page &lt;/a&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * &lt;/li&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span> * &lt;li&gt;  Makato Matsumoto and Takuji Nishimura,<a name="line.79"></a>
+<span class="sourceLineNo">080</span> * &lt;a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/ARTICLES/mt.pdf"&gt;"Mersenne Twister:A 623-Dimensionally Equidistributed Uniform Pseudo-Random Number Generator"&lt;/a&gt;,<a name="line.80"></a>
+<span class="sourceLineNo">081</span> * &lt;i&gt;ACM Transactions on Modeling and Computer Simulation, &lt;/i&gt; Vol. 8, No. 1,<a name="line.81"></a>
+<span class="sourceLineNo">082</span> * January 1998, pp 3--30.&lt;/li&gt;<a name="line.82"></a>
+<span class="sourceLineNo">083</span> * &lt;/ul&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span> *<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * @author Nick Galbreath -- nickg [at] modp [dot] com<a name="line.85"></a>
+<span class="sourceLineNo">086</span> * @author Tommy Ettinger<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * @version 1.1 -- 07-Oct-2017<a name="line.87"></a>
+<span class="sourceLineNo">088</span> */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>public class MersenneTwister implements Serializable, RandomnessSource {<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>    private static final long serialVersionUID = 1001000L;<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span>    private static final int NN = 312;<a name="line.93"></a>
+<span class="sourceLineNo">094</span><a name="line.94"></a>
+<span class="sourceLineNo">095</span>    private static final int MM = 156;<a name="line.95"></a>
+<span class="sourceLineNo">096</span><a name="line.96"></a>
+<span class="sourceLineNo">097</span>    private static final long MATRIX_A = 0xB5026F5AA96619E9L;<a name="line.97"></a>
 <span class="sourceLineNo">098</span><a name="line.98"></a>
 <span class="sourceLineNo">099</span>    /**<a name="line.99"></a>
-<span class="sourceLineNo">100</span>     * Mersenne Twister Index.<a name="line.100"></a>
+<span class="sourceLineNo">100</span>     * Mask: Most significant 33 bits<a name="line.100"></a>
 <span class="sourceLineNo">101</span>     */<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    private int mti = NN + 1;<a name="line.102"></a>
+<span class="sourceLineNo">102</span>    private static final long UM = 0xFFFFFFFF80000000L;<a name="line.102"></a>
 <span class="sourceLineNo">103</span><a name="line.103"></a>
 <span class="sourceLineNo">104</span>    /**<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     * Internal to hold 64 bits, that might<a name="line.105"></a>
-<span class="sourceLineNo">106</span>     * used to generate two 32 bit values.<a name="line.106"></a>
-<span class="sourceLineNo">107</span>     */<a name="line.107"></a>
-<span class="sourceLineNo">108</span>    private long extra;<a name="line.108"></a>
-<span class="sourceLineNo">109</span><a name="line.109"></a>
-<span class="sourceLineNo">110</span>    /**<a name="line.110"></a>
-<span class="sourceLineNo">111</span>     * Set to true if we need to generate another 64 bits, false if we have enough bits available for an int.<a name="line.111"></a>
-<span class="sourceLineNo">112</span>     */<a name="line.112"></a>
-<span class="sourceLineNo">113</span>    private boolean bitState = true;<a name="line.113"></a>
-<span class="sourceLineNo">114</span><a name="line.114"></a>
-<span class="sourceLineNo">115</span>    /**<a name="line.115"></a>
-<span class="sourceLineNo">116</span>     * Seeds this using two calls to Math.random().<a name="line.116"></a>
-<span class="sourceLineNo">117</span>     */<a name="line.117"></a>
-<span class="sourceLineNo">118</span>    public MersenneTwister() {<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        setSeed((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)<a name="line.119"></a>
-<span class="sourceLineNo">120</span>                ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));<a name="line.120"></a>
-<span class="sourceLineNo">121</span>    }<a name="line.121"></a>
-<span class="sourceLineNo">122</span><a name="line.122"></a>
-<span class="sourceLineNo">123</span>    /**<a name="line.123"></a>
-<span class="sourceLineNo">124</span>     * Seeds this with the given long, which will be used to affect the large state.<a name="line.124"></a>
-<span class="sourceLineNo">125</span>     *<a name="line.125"></a>
-<span class="sourceLineNo">126</span>     * @param seed any long<a name="line.126"></a>
+<span class="sourceLineNo">105</span>     * Mask: Least significant 31 bits<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     */<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    private static final long LM = 0x7FFFFFFFL;<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>    /**<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * Mersenne Twister data.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     */<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    private long[] mt = new long[NN];<a name="line.112"></a>
+<span class="sourceLineNo">113</span><a name="line.113"></a>
+<span class="sourceLineNo">114</span>    /**<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * Mersenne Twister Index.<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     */<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    private int mti = NN + 1;<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>    /**<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * Internal to hold 64 bits, that might<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * used to generate two 32 bit values.<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     */<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    private long extra;<a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>    /**<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * Set to true if we need to generate another 64 bits, false if we have enough bits available for an int.<a name="line.126"></a>
 <span class="sourceLineNo">127</span>     */<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    public MersenneTwister(final long seed) {<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        setSeed(seed);<a name="line.129"></a>
-<span class="sourceLineNo">130</span>    }<a name="line.130"></a>
-<span class="sourceLineNo">131</span><a name="line.131"></a>
-<span class="sourceLineNo">132</span>    /**<a name="line.132"></a>
-<span class="sourceLineNo">133</span>     * Seeds this with the given long array, which will be used to affect the large state, and not used directly.<a name="line.133"></a>
-<span class="sourceLineNo">134</span>     *<a name="line.134"></a>
-<span class="sourceLineNo">135</span>     * @param seed a long array; generally should be non-null<a name="line.135"></a>
-<span class="sourceLineNo">136</span>     */<a name="line.136"></a>
-<span class="sourceLineNo">137</span>    public MersenneTwister(final long[] seed) {<a name="line.137"></a>
-<span class="sourceLineNo">138</span>        setSeed(seed);<a name="line.138"></a>
-<span class="sourceLineNo">139</span>    }<a name="line.139"></a>
-<span class="sourceLineNo">140</span><a name="line.140"></a>
-<span class="sourceLineNo">141</span>    /**<a name="line.141"></a>
-<span class="sourceLineNo">142</span>     * Initalize the pseudo random number generator with 64 bits.<a name="line.142"></a>
-<span class="sourceLineNo">143</span>     * Not the same as setState() in StatefulRandomness; this changes the seed quite a bit.<a name="line.143"></a>
-<span class="sourceLineNo">144</span>     *<a name="line.144"></a>
-<span class="sourceLineNo">145</span>     * @param seed any long<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     */<a name="line.146"></a>
-<span class="sourceLineNo">147</span>    public void setSeed(final long seed) {<a name="line.147"></a>
-<span class="sourceLineNo">148</span>        mt[0] = seed;<a name="line.148"></a>
-<span class="sourceLineNo">149</span>        for (mti = 1; mti &lt; NN; mti++) {<a name="line.149"></a>
-<span class="sourceLineNo">150</span>            mt[mti] = (6364136223846793005L * (mt[mti - 1] ^ (mt[mti - 1] &gt;&gt;&gt; 62)) + mti);<a name="line.150"></a>
-<span class="sourceLineNo">151</span>        }<a name="line.151"></a>
-<span class="sourceLineNo">152</span>    }<a name="line.152"></a>
-<span class="sourceLineNo">153</span><a name="line.153"></a>
-<span class="sourceLineNo">154</span>    /**<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     * Initalize the pseudo random number generator with a long array of any size, which should not be null but can be.<a name="line.155"></a>
-<span class="sourceLineNo">156</span>     * Not the same as setState() in StatefulRandomness; this changes the seed quite a bit.<a name="line.156"></a>
-<span class="sourceLineNo">157</span>     *<a name="line.157"></a>
-<span class="sourceLineNo">158</span>     * @param array any long array<a name="line.158"></a>
-<span class="sourceLineNo">159</span>     */<a name="line.159"></a>
-<span class="sourceLineNo">160</span>    public void setSeed(final long[] array) {<a name="line.160"></a>
-<span class="sourceLineNo">161</span>        setSeed(19650218L);<a name="line.161"></a>
-<span class="sourceLineNo">162</span>        if (array == null)<a name="line.162"></a>
-<span class="sourceLineNo">163</span>            return;<a name="line.163"></a>
-<span class="sourceLineNo">164</span>        int i = 1;<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        int j = 0;<a name="line.165"></a>
-<span class="sourceLineNo">166</span>        int k = (NN &gt; array.length ? NN : array.length);<a name="line.166"></a>
-<span class="sourceLineNo">167</span>        for (; k != 0; k--) {<a name="line.167"></a>
-<span class="sourceLineNo">168</span>            mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] &gt;&gt;&gt; 62)) * 3935559000370003845L))<a name="line.168"></a>
-<span class="sourceLineNo">169</span>                    + array[j] + j;<a name="line.169"></a>
-<span class="sourceLineNo">170</span>            i++;<a name="line.170"></a>
-<span class="sourceLineNo">171</span>            j++;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>            if (i &gt;= NN) {<a name="line.172"></a>
-<span class="sourceLineNo">173</span>                mt[0] = mt[NN - 1];<a name="line.173"></a>
-<span class="sourceLineNo">174</span>                i = 1;<a name="line.174"></a>
-<span class="sourceLineNo">175</span>            }<a name="line.175"></a>
-<span class="sourceLineNo">176</span>            if (j &gt;= array.length)<a name="line.176"></a>
-<span class="sourceLineNo">177</span>                j = 0;<a name="line.177"></a>
-<span class="sourceLineNo">178</span>        }<a name="line.178"></a>
-<span class="sourceLineNo">179</span>        for (k = NN - 1; k != 0; k--) {<a name="line.179"></a>
-<span class="sourceLineNo">180</span>            mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] &gt;&gt;&gt; 62)) * 2862933555777941757L))<a name="line.180"></a>
-<span class="sourceLineNo">181</span>                    - i;<a name="line.181"></a>
-<span class="sourceLineNo">182</span>            i++;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>            if (i &gt;= NN) {<a name="line.183"></a>
-<span class="sourceLineNo">184</span>                mt[0] = mt[NN - 1];<a name="line.184"></a>
-<span class="sourceLineNo">185</span>                i = 1;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>            }<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        }<a name="line.187"></a>
-<span class="sourceLineNo">188</span><a name="line.188"></a>
-<span class="sourceLineNo">189</span>        mt[0] = 0x8000000000000000L; /* MSB is 1; assuring non-zero initial array */<a name="line.189"></a>
-<span class="sourceLineNo">190</span>    }<a name="line.190"></a>
-<span class="sourceLineNo">191</span><a name="line.191"></a>
-<span class="sourceLineNo">192</span>    /**<a name="line.192"></a>
-<span class="sourceLineNo">193</span>     * Returns up to 32 random bits.<a name="line.193"></a>
-<span class="sourceLineNo">194</span>     * &lt;p&gt;<a name="line.194"></a>
-<span class="sourceLineNo">195</span>     * &lt;p&gt;the implementation splits a 64-bit long into<a name="line.195"></a>
-<span class="sourceLineNo">196</span>     * two 32-bit chunks.<a name="line.196"></a>
-<span class="sourceLineNo">197</span>     * &lt;/p&gt;<a name="line.197"></a>
-<span class="sourceLineNo">198</span>     */<a name="line.198"></a>
-<span class="sourceLineNo">199</span>    @Override<a name="line.199"></a>
-<span class="sourceLineNo">200</span>    public int next(final int bits) {<a name="line.200"></a>
-<span class="sourceLineNo">201</span>        //return ((int)nextLong()) &gt;&gt;&gt; (32 - numbits);<a name="line.201"></a>
-<span class="sourceLineNo">202</span><a name="line.202"></a>
-<span class="sourceLineNo">203</span>        if (bitState) {<a name="line.203"></a>
-<span class="sourceLineNo">204</span>            extra = nextLong();<a name="line.204"></a>
-<span class="sourceLineNo">205</span>            bitState = false;<a name="line.205"></a>
-<span class="sourceLineNo">206</span>            return (int) (extra &gt;&gt;&gt; (64 - bits));<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        } else {<a name="line.207"></a>
-<span class="sourceLineNo">208</span>            bitState = true;<a name="line.208"></a>
-<span class="sourceLineNo">209</span>            return ((int) extra) &gt;&gt;&gt; (32 - bits);<a name="line.209"></a>
-<span class="sourceLineNo">210</span>        }<a name="line.210"></a>
-<span class="sourceLineNo">211</span>    }<a name="line.211"></a>
-<span class="sourceLineNo">212</span><a name="line.212"></a>
-<span class="sourceLineNo">213</span>    /**<a name="line.213"></a>
-<span class="sourceLineNo">214</span>     * Returns 64 random bits.<a name="line.214"></a>
-<span class="sourceLineNo">215</span>     */<a name="line.215"></a>
-<span class="sourceLineNo">216</span>    @Override<a name="line.216"></a>
-<span class="sourceLineNo">217</span>    public long nextLong() {<a name="line.217"></a>
-<span class="sourceLineNo">218</span>        int i;<a name="line.218"></a>
-<span class="sourceLineNo">219</span>        long x;<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        if (mti &gt;= NN) { /* generate NN words at one time */<a name="line.220"></a>
-<span class="sourceLineNo">221</span><a name="line.221"></a>
-<span class="sourceLineNo">222</span>            for (i = 0; i &lt; NN - MM; i++) {<a name="line.222"></a>
-<span class="sourceLineNo">223</span>                x = (mt[i] &amp; UM) | (mt[i + 1] &amp; LM);<a name="line.223"></a>
-<span class="sourceLineNo">224</span>                mt[i] = mt[i + MM] ^ (x &gt;&gt;&gt; 1) ^ (x &amp; 1L) * MATRIX_A;<a name="line.224"></a>
-<span class="sourceLineNo">225</span>            }<a name="line.225"></a>
-<span class="sourceLineNo">226</span>            for (; i &lt; NN - 1; i++) {<a name="line.226"></a>
-<span class="sourceLineNo">227</span>                x = (mt[i] &amp; UM) | (mt[i + 1] &amp; LM);<a name="line.227"></a>
-<span class="sourceLineNo">228</span>                mt[i] = mt[i + (MM - NN)] ^ (x &gt;&gt;&gt; 1) ^ (x &amp; 1L) * MATRIX_A;<a name="line.228"></a>
-<span class="sourceLineNo">229</span>            }<a name="line.229"></a>
-<span class="sourceLineNo">230</span>            x = (mt[NN - 1] &amp; UM) | (mt[0] &amp; LM);<a name="line.230"></a>
-<span class="sourceLineNo">231</span>            mt[NN - 1] = mt[MM - 1] ^ (x &gt;&gt;&gt; 1) ^ (x &amp; 1L) * MATRIX_A;<a name="line.231"></a>
-<span class="sourceLineNo">232</span><a name="line.232"></a>
-<span class="sourceLineNo">233</span>            mti = 0;<a name="line.233"></a>
-<span class="sourceLineNo">234</span>        }<a name="line.234"></a>
-<span class="sourceLineNo">235</span><a name="line.235"></a>
-<span class="sourceLineNo">236</span>        x = mt[mti++];<a name="line.236"></a>
+<span class="sourceLineNo">128</span>    private boolean bitState = true;<a name="line.128"></a>
+<span class="sourceLineNo">129</span><a name="line.129"></a>
+<span class="sourceLineNo">130</span>    /**<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * Seeds this using two calls to Math.random().<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     */<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    public MersenneTwister() {<a name="line.133"></a>
+<span class="sourceLineNo">134</span>        setSeed((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>    /**<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * Seeds this with the given long, which will be used to affect the large state.<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     *<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * @param seed any long<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     */<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    public MersenneTwister(final long seed) {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        setSeed(seed);<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    }<a name="line.145"></a>
+<span class="sourceLineNo">146</span><a name="line.146"></a>
+<span class="sourceLineNo">147</span>    /**<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * Seeds this with the given long array, which will be used to affect the large state, and not used directly.<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     *<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * @param seed a long array; generally should be non-null<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     */<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public MersenneTwister(final long[] seed) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        setSeed(seed);<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span>    /**<a name="line.156"></a>
+<span class="sourceLineNo">157</span>     * Initalize the pseudo random number generator with 64 bits.<a name="line.157"></a>
+<span class="sourceLineNo">158</span>     * Not the same as setState() in StatefulRandomness; this changes the seed quite a bit.<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     *<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * @param seed any long<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     */<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    public void setSeed(final long seed) {<a name="line.162"></a>
+<span class="sourceLineNo">163</span>        mt[0] = seed;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        for (mti = 1; mti &lt; NN; mti++) {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>            mt[mti] = (6364136223846793005L * (mt[mti - 1] ^ (mt[mti - 1] &gt;&gt;&gt; 62)) + mti);<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        }<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    }<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>    /**<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * Initalize the pseudo random number generator with a long array of any size, which should not be null but can be.<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     * Not the same as setState() in StatefulRandomness; this changes the seed quite a bit.<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     *<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * @param array any long array<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     */<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    public void setSeed(final long[] array) {<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        setSeed(19650218L);<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        if (array == null)<a name="line.177"></a>
+<span class="sourceLineNo">178</span>            return;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        int i = 1;<a name="line.179"></a>
+<span class="sourceLineNo">180</span>        int j = 0;<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        int k = (NN &gt; array.length ? NN : array.length);<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        for (; k != 0; k--) {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>            mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] &gt;&gt;&gt; 62)) * 3935559000370003845L))<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                    + array[j] + j;<a name="line.184"></a>
+<span class="sourceLineNo">185</span>            i++;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>            j++;<a name="line.186"></a>
+<span class="sourceLineNo">187</span>            if (i &gt;= NN) {<a name="line.187"></a>
+<span class="sourceLineNo">188</span>                mt[0] = mt[NN - 1];<a name="line.188"></a>
+<span class="sourceLineNo">189</span>                i = 1;<a name="line.189"></a>
+<span class="sourceLineNo">190</span>            }<a name="line.190"></a>
+<span class="sourceLineNo">191</span>            if (j &gt;= array.length)<a name="line.191"></a>
+<span class="sourceLineNo">192</span>                j = 0;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        }<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        for (k = NN - 1; k != 0; k--) {<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] &gt;&gt;&gt; 62)) * 2862933555777941757L))<a name="line.195"></a>
+<span class="sourceLineNo">196</span>                    - i;<a name="line.196"></a>
+<span class="sourceLineNo">197</span>            i++;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            if (i &gt;= NN) {<a name="line.198"></a>
+<span class="sourceLineNo">199</span>                mt[0] = mt[NN - 1];<a name="line.199"></a>
+<span class="sourceLineNo">200</span>                i = 1;<a name="line.200"></a>
+<span class="sourceLineNo">201</span>            }<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        }<a name="line.202"></a>
+<span class="sourceLineNo">203</span><a name="line.203"></a>
+<span class="sourceLineNo">204</span>        mt[0] = 0x8000000000000000L; /* MSB is 1; assuring non-zero initial array */<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    }<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span>    /**<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     * Returns up to 32 random bits.<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     * &lt;br&gt;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     * The implementation splits a 64-bit long into two 32-bit chunks.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * @param bits the number of bits to output, between 1 and 32 (both inclusive)<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * @return an int with the specified number of pseudo-random bits<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    @Override<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    public int next(final int bits) {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        //return ((int)nextLong()) &gt;&gt;&gt; (32 - numbits);<a name="line.216"></a>
+<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">218</span>        if (bitState) {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>            extra = nextLong();<a name="line.219"></a>
+<span class="sourceLineNo">220</span>            bitState = false;<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            return (int) (extra &gt;&gt;&gt; (64 - bits));<a name="line.221"></a>
+<span class="sourceLineNo">222</span>        } else {<a name="line.222"></a>
+<span class="sourceLineNo">223</span>            bitState = true;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>            return ((int) extra) &gt;&gt;&gt; (32 - bits);<a name="line.224"></a>
+<span class="sourceLineNo">225</span>        }<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    }<a name="line.226"></a>
+<span class="sourceLineNo">227</span><a name="line.227"></a>
+<span class="sourceLineNo">228</span>    /**<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     * Returns 64 random bits.<a name="line.229"></a>
+<span class="sourceLineNo">230</span>     * @return a pseudo-random long, which can have any 64-bit value, positive or negative<a name="line.230"></a>
+<span class="sourceLineNo">231</span>     */<a name="line.231"></a>
+<span class="sourceLineNo">232</span>    @Override<a name="line.232"></a>
+<span class="sourceLineNo">233</span>    public long nextLong() {<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        int i;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        long x;<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        if (mti &gt;= NN) { /* generate NN words at one time */<a name="line.236"></a>
 <span class="sourceLineNo">237</span><a name="line.237"></a>
-<span class="sourceLineNo">238</span>        x ^= (x &gt;&gt;&gt; 29) &amp; 0x5555555555555555L;<a name="line.238"></a>
-<span class="sourceLineNo">239</span>        x ^= (x &lt;&lt; 17) &amp; 0x71D67FFFEDA60000L;<a name="line.239"></a>
-<span class="sourceLineNo">240</span>        x ^= (x &lt;&lt; 37) &amp; 0xFFF7EEE000000000L;<a name="line.240"></a>
-<span class="sourceLineNo">241</span>        x ^= (x &gt;&gt;&gt; 43);<a name="line.241"></a>
-<span class="sourceLineNo">242</span><a name="line.242"></a>
-<span class="sourceLineNo">243</span>        return x;<a name="line.243"></a>
-<span class="sourceLineNo">244</span>    }<a name="line.244"></a>
-<span class="sourceLineNo">245</span><a name="line.245"></a>
-<span class="sourceLineNo">246</span>    @Override<a name="line.246"></a>
-<span class="sourceLineNo">247</span>    public final MersenneTwister copy() {<a name="line.247"></a>
-<span class="sourceLineNo">248</span>        MersenneTwister f = new MersenneTwister(MATRIX_A);<a name="line.248"></a>
-<span class="sourceLineNo">249</span>        f.mti = mti;<a name="line.249"></a>
-<span class="sourceLineNo">250</span>        f.extra = extra;<a name="line.250"></a>
-<span class="sourceLineNo">251</span>        f.bitState = bitState;<a name="line.251"></a>
-<span class="sourceLineNo">252</span>        System.arraycopy(mt, 0, f.mt, 0, mt.length);<a name="line.252"></a>
-<span class="sourceLineNo">253</span>        return f;<a name="line.253"></a>
-<span class="sourceLineNo">254</span>    }<a name="line.254"></a>
-<span class="sourceLineNo">255</span><a name="line.255"></a>
-<span class="sourceLineNo">256</span>}<a name="line.256"></a>
+<span class="sourceLineNo">238</span>            for (i = 0; i &lt; NN - MM; i++) {<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                x = (mt[i] &amp; UM) | (mt[i + 1] &amp; LM);<a name="line.239"></a>
+<span class="sourceLineNo">240</span>                mt[i] = mt[i + MM] ^ (x &gt;&gt;&gt; 1) ^ (x &amp; 1L) * MATRIX_A;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>            }<a name="line.241"></a>
+<span class="sourceLineNo">242</span>            for (; i &lt; NN - 1; i++) {<a name="line.242"></a>
+<span class="sourceLineNo">243</span>                x = (mt[i] &amp; UM) | (mt[i + 1] &amp; LM);<a name="line.243"></a>
+<span class="sourceLineNo">244</span>                mt[i] = mt[i + (MM - NN)] ^ (x &gt;&gt;&gt; 1) ^ (x &amp; 1L) * MATRIX_A;<a name="line.244"></a>
+<span class="sourceLineNo">245</span>            }<a name="line.245"></a>
+<span class="sourceLineNo">246</span>            x = (mt[NN - 1] &amp; UM) | (mt[0] &amp; LM);<a name="line.246"></a>
+<span class="sourceLineNo">247</span>            mt[NN - 1] = mt[MM - 1] ^ (x &gt;&gt;&gt; 1) ^ (x &amp; 1L) * MATRIX_A;<a name="line.247"></a>
+<span class="sourceLineNo">248</span><a name="line.248"></a>
+<span class="sourceLineNo">249</span>            mti = 0;<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        }<a name="line.250"></a>
+<span class="sourceLineNo">251</span><a name="line.251"></a>
+<span class="sourceLineNo">252</span>        x = mt[mti++];<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>        x ^= (x &gt;&gt;&gt; 29) &amp; 0x5555555555555555L;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        x ^= (x &lt;&lt; 17) &amp; 0x71D67FFFEDA60000L;<a name="line.255"></a>
+<span class="sourceLineNo">256</span>        x ^= (x &lt;&lt; 37) &amp; 0xFFF7EEE000000000L;<a name="line.256"></a>
+<span class="sourceLineNo">257</span>        x ^= (x &gt;&gt;&gt; 43);<a name="line.257"></a>
+<span class="sourceLineNo">258</span><a name="line.258"></a>
+<span class="sourceLineNo">259</span>        return x;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    }<a name="line.260"></a>
+<span class="sourceLineNo">261</span><a name="line.261"></a>
+<span class="sourceLineNo">262</span>    @Override<a name="line.262"></a>
+<span class="sourceLineNo">263</span>    public final MersenneTwister copy() {<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        MersenneTwister f = new MersenneTwister(MATRIX_A);<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        f.mti = mti;<a name="line.265"></a>
+<span class="sourceLineNo">266</span>        f.extra = extra;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        f.bitState = bitState;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        System.arraycopy(mt, 0, f.mt, 0, mt.length);<a name="line.268"></a>
+<span class="sourceLineNo">269</span>        return f;<a name="line.269"></a>
+<span class="sourceLineNo">270</span>    }<a name="line.270"></a>
+<span class="sourceLineNo">271</span><a name="line.271"></a>
+<span class="sourceLineNo">272</span>    @Override<a name="line.272"></a>
+<span class="sourceLineNo">273</span>    public String toString() {<a name="line.273"></a>
+<span class="sourceLineNo">274</span>        return "MersenneTwister with state hashed as " + StringKit.hexHash(mt) +<a name="line.274"></a>
+<span class="sourceLineNo">275</span>                " and index " + mti;<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    }<a name="line.276"></a>
+<span class="sourceLineNo">277</span><a name="line.277"></a>
+<span class="sourceLineNo">278</span>    @Override<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    public boolean equals(Object o) {<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        if (this == o) return true;<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.281"></a>
+<span class="sourceLineNo">282</span><a name="line.282"></a>
+<span class="sourceLineNo">283</span>        MersenneTwister mt64RNG = (MersenneTwister) o;<a name="line.283"></a>
+<span class="sourceLineNo">284</span><a name="line.284"></a>
+<span class="sourceLineNo">285</span>        return mti == mt64RNG.mti &amp;&amp; extra == mt64RNG.extra &amp;&amp; bitState == mt64RNG.bitState &amp;&amp; Arrays.equals(mt, mt64RNG.mt);<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    }<a name="line.286"></a>
+<span class="sourceLineNo">287</span><a name="line.287"></a>
+<span class="sourceLineNo">288</span>    @Override<a name="line.288"></a>
+<span class="sourceLineNo">289</span>    public int hashCode() {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        int result = CrossHash.hash(mt);<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        result = 31 * result + mti;<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        result = 31 * result + (int) (extra ^ (extra &gt;&gt;&gt; 32));<a name="line.292"></a>
+<span class="sourceLineNo">293</span>        result = 31 * result + (bitState ? 1 : 0);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>        return result;<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    }<a name="line.295"></a>
+<span class="sourceLineNo">296</span><a name="line.296"></a>
+<span class="sourceLineNo">297</span>}<a name="line.297"></a>
 
 
 

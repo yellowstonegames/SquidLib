@@ -442,15 +442,31 @@
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#sentence--">sentence()</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm--">SentenceForm()</a></span> - Constructor for class squidpony.<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Builds a SentenceForm with all default fields, using <a href="../squidpony/FakeLanguageGen.html#FANTASY_NAME"><code>FakeLanguageGen.FANTASY_NAME</code></a> for a language,
+ using between 1 and 9 words in a sentence, and otherwise defaulting to how
+ <code>#SentenceForm(FakeLanguageGen, int, int)</code> behaves.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-">SentenceForm(FakeLanguageGen, int, int)</a></span> - Constructor for class squidpony.<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Builds a SentenceForm with only a few fields specified.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-java.lang.String:A-java.lang.String:A-double-">SentenceForm(FakeLanguageGen, int, int, String[], String[], double)</a></span> - Constructor for class squidpony.<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Builds a SentenceForm with all fields specified except for <a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>FakeLanguageGen.SentenceForm.rng</code></a>, which will be made based on
+ FakeLanguageGen's static <a href="../squidpony/FakeLanguageGen.html#srng"><code>FakeLanguageGen.srng</code></a> field, and maxChars, which means the sentence length
+ will be limited only by maxWords and the length of words produced.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm(FakeLanguageGen, int, int, String[], String[], double, int)</a></span> - Constructor for class squidpony.<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Builds a SentenceForm with all fields specified except for <a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>FakeLanguageGen.SentenceForm.rng</code></a>, which will be made based on
+ FakeLanguageGen's static <a href="../squidpony/FakeLanguageGen.html#srng"><code>FakeLanguageGen.srng</code></a> field.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.StatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)</a></span> - Constructor for class squidpony.<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Builds a SentenceForm with all fields specified; each value is referenced directly except for <code>rng</code>,
+ which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Region.html#separated-int-">separated(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a></dt>
 <dd>
 <div class="block">Takes this region and walks through its Coords in chunks with length equal to separation, creating a new Region
@@ -743,9 +759,13 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SoundMap.html#setFresh-squidpony.squidmath.Coord-double-">setFresh(Coord, double)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SoundMap.html" title="class in squidpony.squidgrid">SoundMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#setFresh-int-int-">setFresh(int, int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Used internally to mark a cell as just-now being expanded from.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#setFresh-squidpony.squidmath.Coord-">setFresh(Coord)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Used internally to mark a cell as just-now being expanded from.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#setGenerateGoal-boolean-">setGenerateGoal(boolean)</a></span> - Method in class squidpony.squidgrid.mapping.locks.generators.<a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/CustomDijkstraMap.html#setGoal-int-">setGoal(int)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/CustomDijkstraMap.html" title="class in squidpony.squidai">CustomDijkstraMap</a></dt>
@@ -1863,6 +1883,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/constraints/SpaceMap.html#spaces">spaces</a></span> - Variable in class squidpony.squidgrid.mapping.locks.constraints.<a href="../squidpony/squidgrid/mapping/locks/constraints/SpaceMap.html" title="class in squidpony.squidgrid.mapping.locks.constraints">SpaceMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MaskedShapeGenerator.html#spaceship">spaceship</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/MaskedShapeGenerator.html" title="class in squidpony.squidmath">MaskedShapeGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/StringKit.html#SPACING">SPACING</a></span> - Static variable in class squidpony.<a href="../squidpony/StringKit.html" title="class in squidpony">StringKit</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid"><span class="typeNameLink">SpatialMap</span></a>&lt;<a href="../squidpony/squidgrid/SpatialMap.html" title="type parameter in SpatialMap">I</a>,<a href="../squidpony/squidgrid/SpatialMap.html" title="type parameter in SpatialMap">E</a>&gt; - Class in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
@@ -1938,7 +1960,7 @@
 <dd>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.LightRNG-">Spill(LightRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.StatefulRandomness-">Spill(StatefulRandomness)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </dd>
@@ -1970,7 +1992,7 @@
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.LightRNG-">Spill(char[][], Spill.Measurement, LightRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.StatefulRandomness-">Spill(char[][], Spill.Measurement, StatefulRandomness)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>

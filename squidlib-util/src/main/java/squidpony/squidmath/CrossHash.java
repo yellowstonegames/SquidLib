@@ -606,17 +606,17 @@ public class CrossHash {
      * ? equalityHelper((char[][]) left, (char[][]) right, charHasher)
      * : Objects.equals(left, right));}
      *
-     * @param left
-     * @param right
-     * @param inner
-     * @return
+     * @param left an array of some kind of Object, usually an array, that the given IHasher can compare
+     * @param right an array of some kind of Object, usually an array, that the given IHasher can compare
+     * @param inner an IHasher to compare items in left with items in right
+     * @return true if the contents of left and right are equal by the given IHasher, otherwise false
      */
     public static boolean equalityHelper(Object[] left, Object[] right, IHasher inner) {
         if (left == right)
             return true;
-        if ((left == null) ^ (right == null))
+        if (left == null || right == null || left.length != right.length)
             return false;
-        for (int i = 0; i < left.length && i < right.length; i++) {
+        for (int i = 0; i < left.length; i++) {
             if (!inner.areEqual(left[i], right[i]))
                 return false;
         }

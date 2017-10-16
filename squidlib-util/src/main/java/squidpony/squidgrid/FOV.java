@@ -767,7 +767,7 @@ public class FOV implements Serializable {
     /**
      * Adds an FOV map to another in the simplest way possible; does not check line-of-sight between FOV maps.
      * Clamps the highest value for any single position at 1.0. Modifies the basis parameter in-place and makes no
-     * allocations; this is different from {@link #addFOVs(double[][]...)}, which creates a new 2D array.
+     * allocations; this is different from {@link #addFOVs(double[][][])}, which creates a new 2D array.
      * @param basis a 2D double array, which can be empty or returned by calculateFOV() or reuseFOV(); modified!
      * @param addend another 2D double array that will be added into basis; this one will not be modified
      * @return the sum of the 2D double arrays passed, using the dimensions of basis if they don't match

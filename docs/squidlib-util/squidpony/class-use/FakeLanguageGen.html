@@ -487,7 +487,9 @@
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-">SentenceForm</a></span>(<a href="../../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
             int&nbsp;minWords,
-            int&nbsp;maxWords)</code>&nbsp;</td>
+            int&nbsp;maxWords)</code>
+<div class="block">Builds a SentenceForm with only a few fields specified.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-java.lang.String:A-java.lang.String:A-double-">SentenceForm</a></span>(<a href="../../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
@@ -495,7 +497,11 @@
             int&nbsp;maxWords,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
-            double&nbsp;midPunctuationFrequency)</code>&nbsp;</td>
+            double&nbsp;midPunctuationFrequency)</code>
+<div class="block">Builds a SentenceForm with all fields specified except for <a href="../../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>FakeLanguageGen.SentenceForm.rng</code></a>, which will be made based on
+ FakeLanguageGen's static <a href="../../squidpony/FakeLanguageGen.html#srng"><code>srng</code></a> field, and maxChars, which means the sentence length
+ will be limited only by maxWords and the length of words produced.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm</a></span>(<a href="../../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
@@ -504,7 +510,10 @@
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
             double&nbsp;midPunctuationFrequency,
-            int&nbsp;maxChars)</code>&nbsp;</td>
+            int&nbsp;maxChars)</code>
+<div class="block">Builds a SentenceForm with all fields specified except for <a href="../../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>FakeLanguageGen.SentenceForm.rng</code></a>, which will be made based on
+ FakeLanguageGen's static <a href="../../squidpony/FakeLanguageGen.html#srng"><code>srng</code></a> field.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.StatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm</a></span>(<a href="../../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
@@ -514,7 +523,10 @@
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
             double&nbsp;midPunctuationFrequency,
-            int&nbsp;maxChars)</code>&nbsp;</td>
+            int&nbsp;maxChars)</code>
+<div class="block">Builds a SentenceForm with all fields specified; each value is referenced directly except for <code>rng</code>,
+ which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).</div>
+</td>
 </tr>
 </tbody>
 </table>

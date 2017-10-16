@@ -124,7 +124,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
  <a href="../squidpony/FakeLanguageGen.html#sentence-squidpony.squidmath.RNG-int-int-java.lang.String:A-java.lang.String:A-double-int-"><code>FakeLanguageGen.sentence(RNG, int, int, String[], String[], double, int)</code></a> or one of its overloads.
  You can call <a href="../squidpony/FakeLanguageGen.SentenceForm.html#sentence--"><code>sentence()</code></a> on this to produce another String sentence with the parameters it was given
  at construction. The parameters to
- <code>FakeLanguageGen.SentenceForm#SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)</code> are stored in fields of
+ <code>#SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)</code> are stored in fields of
  the same name, and all fields in this class are public and modifiable.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -195,12 +195,18 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm--">SentenceForm</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm--">SentenceForm</a></span>()</code>
+<div class="block">Builds a SentenceForm with all default fields, using <a href="../squidpony/FakeLanguageGen.html#FANTASY_NAME"><code>FakeLanguageGen.FANTASY_NAME</code></a> for a language,
+ using between 1 and 9 words in a sentence, and otherwise defaulting to how
+ <code>#SentenceForm(FakeLanguageGen, int, int)</code> behaves.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-">SentenceForm</a></span>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
             int&nbsp;minWords,
-            int&nbsp;maxWords)</code>&nbsp;</td>
+            int&nbsp;maxWords)</code>
+<div class="block">Builds a SentenceForm with only a few fields specified.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-java.lang.String:A-java.lang.String:A-double-">SentenceForm</a></span>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
@@ -208,7 +214,11 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
             int&nbsp;maxWords,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
-            double&nbsp;midPunctuationFrequency)</code>&nbsp;</td>
+            double&nbsp;midPunctuationFrequency)</code>
+<div class="block">Builds a SentenceForm with all fields specified except for <a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>rng</code></a>, which will be made based on
+ FakeLanguageGen's static <a href="../squidpony/FakeLanguageGen.html#srng"><code>FakeLanguageGen.srng</code></a> field, and maxChars, which means the sentence length
+ will be limited only by maxWords and the length of words produced.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm</a></span>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
@@ -217,7 +227,10 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
             double&nbsp;midPunctuationFrequency,
-            int&nbsp;maxChars)</code>&nbsp;</td>
+            int&nbsp;maxChars)</code>
+<div class="block">Builds a SentenceForm with all fields specified except for <a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>rng</code></a>, which will be made based on
+ FakeLanguageGen's static <a href="../squidpony/FakeLanguageGen.html#srng"><code>FakeLanguageGen.srng</code></a> field.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.StatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm</a></span>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
@@ -227,7 +240,10 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
             double&nbsp;midPunctuationFrequency,
-            int&nbsp;maxChars)</code>&nbsp;</td>
+            int&nbsp;maxChars)</code>
+<div class="block">Builds a SentenceForm with all fields specified; each value is referenced directly except for <code>rng</code>,
+ which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).</div>
+</td>
 </tr>
 </table>
 </li>
@@ -364,7 +380,10 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>SentenceForm</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4226">SentenceForm</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4232">SentenceForm</a>()</pre>
+<div class="block">Builds a SentenceForm with all default fields, using <a href="../squidpony/FakeLanguageGen.html#FANTASY_NAME"><code>FakeLanguageGen.FANTASY_NAME</code></a> for a language,
+ using between 1 and 9 words in a sentence, and otherwise defaulting to how
+ <code>#SentenceForm(FakeLanguageGen, int, int)</code> behaves.</div>
 </li>
 </ul>
 <a name="SentenceForm-squidpony.FakeLanguageGen-int-int-">
@@ -373,9 +392,21 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>SentenceForm</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4232">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4249">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
                     int&nbsp;minWords,
                     int&nbsp;maxWords)</pre>
+<div class="block">Builds a SentenceForm with only a few fields specified. The <a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>rng</code></a> will be made based on
+ FakeLanguageGen's static <a href="../squidpony/FakeLanguageGen.html#srng"><code>FakeLanguageGen.srng</code></a> field, maxChars will be -1 so the sentence length
+ will be limited only by maxWords and the length of words produced, and the between-word and end-of-sentence
+ punctuation will be set to reasonable defaults. This places either a comma or a semicolon after a word in the
+ middle of a sentence about 18% of the time (<code>midPunctuationFrequency</code> is 0.18), and can end a sentence
+ in a period, exclamation mark, question mark, or ellipsis (the "..." punctuation).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>language</code> - A FakeLanguageGen to use to generate words</dd>
+<dd><code>minWords</code> - minimum words per sentence</dd>
+<dd><code>maxWords</code> - maximum words per sentence</dd>
+</dl>
 </li>
 </ul>
 <a name="SentenceForm-squidpony.FakeLanguageGen-int-int-java.lang.String:A-java.lang.String:A-double-">
@@ -384,12 +415,24 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>SentenceForm</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4237">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4265">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
                     int&nbsp;minWords,
                     int&nbsp;maxWords,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
                     double&nbsp;midPunctuationFrequency)</pre>
+<div class="block">Builds a SentenceForm with all fields specified except for <a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>rng</code></a>, which will be made based on
+ FakeLanguageGen's static <a href="../squidpony/FakeLanguageGen.html#srng"><code>FakeLanguageGen.srng</code></a> field, and maxChars, which means the sentence length
+ will be limited only by maxWords and the length of words produced.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>language</code> - A FakeLanguageGen to use to generate words</dd>
+<dd><code>minWords</code> - minimum words per sentence</dd>
+<dd><code>maxWords</code> - maximum words per sentence</dd>
+<dd><code>midPunctuation</code> - an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</dd>
+<dd><code>endPunctuation</code> - an array of Strings that can end a sentence, like ".", "?", or "..."</dd>
+<dd><code>midPunctuationFrequency</code> - the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</dd>
+</dl>
 </li>
 </ul>
 <a name="SentenceForm-squidpony.FakeLanguageGen-int-int-java.lang.String:A-java.lang.String:A-double-int-">
@@ -398,13 +441,25 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>SentenceForm</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4243">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4282">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
                     int&nbsp;minWords,
                     int&nbsp;maxWords,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
                     double&nbsp;midPunctuationFrequency,
                     int&nbsp;maxChars)</pre>
+<div class="block">Builds a SentenceForm with all fields specified except for <a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>rng</code></a>, which will be made based on
+ FakeLanguageGen's static <a href="../squidpony/FakeLanguageGen.html#srng"><code>FakeLanguageGen.srng</code></a> field.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>language</code> - A FakeLanguageGen to use to generate words</dd>
+<dd><code>minWords</code> - minimum words per sentence</dd>
+<dd><code>maxWords</code> - maximum words per sentence</dd>
+<dd><code>midPunctuation</code> - an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</dd>
+<dd><code>endPunctuation</code> - an array of Strings that can end a sentence, like ".", "?", or "..."</dd>
+<dd><code>midPunctuationFrequency</code> - the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</dd>
+<dd><code>maxChars</code> - the maximum number of chars to use in a sentence, or -1 for no hard limit</dd>
+</dl>
 </li>
 </ul>
 <a name="SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.StatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">
@@ -413,7 +468,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SentenceForm</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4250">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+<pre>public&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4303">SentenceForm</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
                     <a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng,
                     int&nbsp;minWords,
                     int&nbsp;maxWords,
@@ -421,6 +476,21 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;endPunctuation,
                     double&nbsp;midPunctuationFrequency,
                     int&nbsp;maxChars)</pre>
+<div class="block">Builds a SentenceForm with all fields specified; each value is referenced directly except for <code>rng</code>,
+ which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).
+ Note that the StatefulRandomness used by this class' rng field will always be LightRNG, even if the given rng
+ parameter used a different StatefulRandomness implementation.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>language</code> - A FakeLanguageGen to use to generate words</dd>
+<dd><code>rng</code> - a StatefulRNG that will not be directly referenced; the state will be copied into a new StatefulRNG</dd>
+<dd><code>minWords</code> - minimum words per sentence</dd>
+<dd><code>maxWords</code> - maximum words per sentence</dd>
+<dd><code>midPunctuation</code> - an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"</dd>
+<dd><code>endPunctuation</code> - an array of Strings that can end a sentence, like ".", "?", or "..."</dd>
+<dd><code>midPunctuationFrequency</code> - the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0</dd>
+<dd><code>maxChars</code> - the maximum number of chars to use in a sentence, or -1 for no hard limit</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -437,7 +507,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>sentence</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4263">sentence</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4316">sentence</a>()</pre>
 </li>
 </ul>
 <a name="serializeToString--">
@@ -446,7 +516,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>serializeToString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4269">serializeToString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4322">serializeToString</a>()</pre>
 </li>
 </ul>
 <a name="deserializeFromString-java.lang.String-">
@@ -455,7 +525,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>deserializeFromString</h4>
-<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4279">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ser)</pre>
+<pre>public static&nbsp;<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a>&nbsp;<a href="../src-html/squidpony/FakeLanguageGen.SentenceForm.html#line.4332">deserializeFromString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;ser)</pre>
 </li>
 </ul>
 </li>

@@ -567,7 +567,7 @@ public class SobolQRNG implements RandomnessSource {
     /**
      *
      * @param bits the number of bits to be returned
-     * @return
+     * @return a quasi-random int with at most the specified number of bits
      */
     @Override
     public int next(int bits) {

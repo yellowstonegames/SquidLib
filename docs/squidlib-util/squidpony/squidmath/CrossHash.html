@@ -1190,10 +1190,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  : Objects.equals(left, right));</code></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>left</code> - </dd>
-<dd><code>right</code> - </dd>
-<dd><code>inner</code> - </dd>
+<dd><code>left</code> - an array of some kind of Object, usually an array, that the given IHasher can compare</dd>
+<dd><code>right</code> - an array of some kind of Object, usually an array, that the given IHasher can compare</dd>
+<dd><code>inner</code> - an IHasher to compare items in left with items in right</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the contents of left and right are equal by the given IHasher, otherwise false</dd>
 </dl>
 </li>
 </ul>

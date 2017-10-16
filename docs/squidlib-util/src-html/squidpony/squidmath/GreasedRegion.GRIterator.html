@@ -5740,281 +5740,297 @@
 <span class="sourceLineNo">5732</span><a name="line.5732"></a>
 <span class="sourceLineNo">5733</span>    }<a name="line.5733"></a>
 <span class="sourceLineNo">5734</span><a name="line.5734"></a>
-<span class="sourceLineNo">5735</span>    @Override<a name="line.5735"></a>
-<span class="sourceLineNo">5736</span>    public boolean intersectsWith(Zone other) {<a name="line.5736"></a>
-<span class="sourceLineNo">5737</span>        if (other instanceof GreasedRegion)<a name="line.5737"></a>
-<span class="sourceLineNo">5738</span>            return intersects((GreasedRegion) other);<a name="line.5738"></a>
-<span class="sourceLineNo">5739</span>        long t, w;<a name="line.5739"></a>
-<span class="sourceLineNo">5740</span>        for (int x = 0; x &lt; width; x++) {<a name="line.5740"></a>
-<span class="sourceLineNo">5741</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.5741"></a>
-<span class="sourceLineNo">5742</span>                if ((t = data[x * ySections + s]) != 0) {<a name="line.5742"></a>
-<span class="sourceLineNo">5743</span>                    w = Long.lowestOneBit(t);<a name="line.5743"></a>
-<span class="sourceLineNo">5744</span>                    while (w != 0) {<a name="line.5744"></a>
-<span class="sourceLineNo">5745</span>                        if (other.contains(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w)))<a name="line.5745"></a>
-<span class="sourceLineNo">5746</span>                            return true;<a name="line.5746"></a>
-<span class="sourceLineNo">5747</span>                        t ^= w;<a name="line.5747"></a>
-<span class="sourceLineNo">5748</span>                        w = Long.lowestOneBit(t);<a name="line.5748"></a>
-<span class="sourceLineNo">5749</span>                    }<a name="line.5749"></a>
-<span class="sourceLineNo">5750</span>                }<a name="line.5750"></a>
-<span class="sourceLineNo">5751</span>            }<a name="line.5751"></a>
-<span class="sourceLineNo">5752</span>        }<a name="line.5752"></a>
-<span class="sourceLineNo">5753</span>        return false;<a name="line.5753"></a>
-<span class="sourceLineNo">5754</span>    }<a name="line.5754"></a>
-<span class="sourceLineNo">5755</span>    /**<a name="line.5755"></a>
-<span class="sourceLineNo">5756</span>     * Translates a copy of {@code this} by the x,y values in {@code c}.<a name="line.5756"></a>
-<span class="sourceLineNo">5757</span>     * Implemented with {@code return copy().translate(c.x, c.y);}<a name="line.5757"></a>
-<span class="sourceLineNo">5758</span>     * @return {@code this} copied and shifted by {@code (c.x,c.y)}<a name="line.5758"></a>
-<span class="sourceLineNo">5759</span>     */<a name="line.5759"></a>
-<span class="sourceLineNo">5760</span>    @Override<a name="line.5760"></a>
-<span class="sourceLineNo">5761</span>    public Zone translate(Coord c) {<a name="line.5761"></a>
-<span class="sourceLineNo">5762</span>        return copy().translate(c.x, c.y);<a name="line.5762"></a>
-<span class="sourceLineNo">5763</span>    }<a name="line.5763"></a>
-<span class="sourceLineNo">5764</span>    /**<a name="line.5764"></a>
-<span class="sourceLineNo">5765</span>     * Gets a Collection of Coord values that are not in this GreasedRegion, but are<a name="line.5765"></a>
-<span class="sourceLineNo">5766</span>     * adjacent to it, either orthogonally or diagonally. Related to the fringe()<a name="line.5766"></a>
-<span class="sourceLineNo">5767</span>     * methods in CoordPacker and GreasedRegion, but guaranteed to use 8-way<a name="line.5767"></a>
-<span class="sourceLineNo">5768</span>     * adjacency and to return a new Collection of Coord. This implementation returns<a name="line.5768"></a>
-<span class="sourceLineNo">5769</span>     * a GreasedRegion produced simply by {@code return copy().fringe8way();} .<a name="line.5769"></a>
-<span class="sourceLineNo">5770</span>     * @return Cells adjacent to {@code this} (orthogonally or diagonally) that<a name="line.5770"></a>
-<span class="sourceLineNo">5771</span>     * aren't in {@code this}<a name="line.5771"></a>
-<span class="sourceLineNo">5772</span>     */<a name="line.5772"></a>
-<span class="sourceLineNo">5773</span>    @Override<a name="line.5773"></a>
-<span class="sourceLineNo">5774</span>    public GreasedRegion getExternalBorder() {<a name="line.5774"></a>
-<span class="sourceLineNo">5775</span>        return copy().fringe8way();<a name="line.5775"></a>
-<span class="sourceLineNo">5776</span>    }<a name="line.5776"></a>
-<span class="sourceLineNo">5777</span><a name="line.5777"></a>
-<span class="sourceLineNo">5778</span>    /**<a name="line.5778"></a>
-<span class="sourceLineNo">5779</span>     * Gets a new Zone that contains all the Coords in {@code this} plus all<a name="line.5779"></a>
-<span class="sourceLineNo">5780</span>     * neighboring Coords, which can be orthogonally or diagonally adjacent<a name="line.5780"></a>
-<span class="sourceLineNo">5781</span>     * to any Coord this has in it. Related to the expand() methods in<a name="line.5781"></a>
-<span class="sourceLineNo">5782</span>     * CoordPacker and GreasedRegion, but guaranteed to use 8-way adjacency<a name="line.5782"></a>
-<span class="sourceLineNo">5783</span>     * and to return a new Zone. This implementation returns a GreasedRegion<a name="line.5783"></a>
-<span class="sourceLineNo">5784</span>     * produced simply by {@code return copy().expand8way();} .<a name="line.5784"></a>
-<span class="sourceLineNo">5785</span>     * @return A new GreasedRegion where "off" cells adjacent to {@code this}<a name="line.5785"></a>
-<span class="sourceLineNo">5786</span>     *         (orthogonally or diagonally) have been added to the "on" cells<a name="line.5786"></a>
-<span class="sourceLineNo">5787</span>     *         in {@code this}<a name="line.5787"></a>
+<span class="sourceLineNo">5735</span>    /**<a name="line.5735"></a>
+<span class="sourceLineNo">5736</span>     * Returns a new GreasedRegion that has been mirrored along the rightmost edge, parallel to the y-axis. The new<a name="line.5736"></a>
+<span class="sourceLineNo">5737</span>     * GreasedRegion will have exactly twice the width, the additional width will have the contents of the original<a name="line.5737"></a>
+<span class="sourceLineNo">5738</span>     * GreasesRegion in reversed order. The positions shared by both GreasedRegions will be the same, that is, any area<a name="line.5738"></a>
+<span class="sourceLineNo">5739</span>     * not added to the original will be equal to the original.<a name="line.5739"></a>
+<span class="sourceLineNo">5740</span>     * @return a new GreasedRegion with twice the width of {@code this}, that is mirrored along the rightmost edge<a name="line.5740"></a>
+<span class="sourceLineNo">5741</span>     */<a name="line.5741"></a>
+<span class="sourceLineNo">5742</span>    public GreasedRegion mirrorY()<a name="line.5742"></a>
+<span class="sourceLineNo">5743</span>    {<a name="line.5743"></a>
+<span class="sourceLineNo">5744</span>        GreasedRegion next = new GreasedRegion(data, width, height, width * 2, height);<a name="line.5744"></a>
+<span class="sourceLineNo">5745</span>        for (int i = 0, o = width * 2 - 1; i &lt; width; i++, o--) {<a name="line.5745"></a>
+<span class="sourceLineNo">5746</span>            System.arraycopy(data, ySections * i, next.data, ySections * o, ySections);<a name="line.5746"></a>
+<span class="sourceLineNo">5747</span>        }<a name="line.5747"></a>
+<span class="sourceLineNo">5748</span>        return next;<a name="line.5748"></a>
+<span class="sourceLineNo">5749</span>    }<a name="line.5749"></a>
+<span class="sourceLineNo">5750</span><a name="line.5750"></a>
+<span class="sourceLineNo">5751</span>    @Override<a name="line.5751"></a>
+<span class="sourceLineNo">5752</span>    public boolean intersectsWith(Zone other) {<a name="line.5752"></a>
+<span class="sourceLineNo">5753</span>        if (other instanceof GreasedRegion)<a name="line.5753"></a>
+<span class="sourceLineNo">5754</span>            return intersects((GreasedRegion) other);<a name="line.5754"></a>
+<span class="sourceLineNo">5755</span>        long t, w;<a name="line.5755"></a>
+<span class="sourceLineNo">5756</span>        for (int x = 0; x &lt; width; x++) {<a name="line.5756"></a>
+<span class="sourceLineNo">5757</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.5757"></a>
+<span class="sourceLineNo">5758</span>                if ((t = data[x * ySections + s]) != 0) {<a name="line.5758"></a>
+<span class="sourceLineNo">5759</span>                    w = Long.lowestOneBit(t);<a name="line.5759"></a>
+<span class="sourceLineNo">5760</span>                    while (w != 0) {<a name="line.5760"></a>
+<span class="sourceLineNo">5761</span>                        if (other.contains(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w)))<a name="line.5761"></a>
+<span class="sourceLineNo">5762</span>                            return true;<a name="line.5762"></a>
+<span class="sourceLineNo">5763</span>                        t ^= w;<a name="line.5763"></a>
+<span class="sourceLineNo">5764</span>                        w = Long.lowestOneBit(t);<a name="line.5764"></a>
+<span class="sourceLineNo">5765</span>                    }<a name="line.5765"></a>
+<span class="sourceLineNo">5766</span>                }<a name="line.5766"></a>
+<span class="sourceLineNo">5767</span>            }<a name="line.5767"></a>
+<span class="sourceLineNo">5768</span>        }<a name="line.5768"></a>
+<span class="sourceLineNo">5769</span>        return false;<a name="line.5769"></a>
+<span class="sourceLineNo">5770</span>    }<a name="line.5770"></a>
+<span class="sourceLineNo">5771</span>    /**<a name="line.5771"></a>
+<span class="sourceLineNo">5772</span>     * Translates a copy of {@code this} by the x,y values in {@code c}.<a name="line.5772"></a>
+<span class="sourceLineNo">5773</span>     * Implemented with {@code return copy().translate(c.x, c.y);}<a name="line.5773"></a>
+<span class="sourceLineNo">5774</span>     * @return {@code this} copied and shifted by {@code (c.x,c.y)}<a name="line.5774"></a>
+<span class="sourceLineNo">5775</span>     */<a name="line.5775"></a>
+<span class="sourceLineNo">5776</span>    @Override<a name="line.5776"></a>
+<span class="sourceLineNo">5777</span>    public Zone translate(Coord c) {<a name="line.5777"></a>
+<span class="sourceLineNo">5778</span>        return copy().translate(c.x, c.y);<a name="line.5778"></a>
+<span class="sourceLineNo">5779</span>    }<a name="line.5779"></a>
+<span class="sourceLineNo">5780</span>    /**<a name="line.5780"></a>
+<span class="sourceLineNo">5781</span>     * Gets a Collection of Coord values that are not in this GreasedRegion, but are<a name="line.5781"></a>
+<span class="sourceLineNo">5782</span>     * adjacent to it, either orthogonally or diagonally. Related to the fringe()<a name="line.5782"></a>
+<span class="sourceLineNo">5783</span>     * methods in CoordPacker and GreasedRegion, but guaranteed to use 8-way<a name="line.5783"></a>
+<span class="sourceLineNo">5784</span>     * adjacency and to return a new Collection of Coord. This implementation returns<a name="line.5784"></a>
+<span class="sourceLineNo">5785</span>     * a GreasedRegion produced simply by {@code return copy().fringe8way();} .<a name="line.5785"></a>
+<span class="sourceLineNo">5786</span>     * @return Cells adjacent to {@code this} (orthogonally or diagonally) that<a name="line.5786"></a>
+<span class="sourceLineNo">5787</span>     * aren't in {@code this}<a name="line.5787"></a>
 <span class="sourceLineNo">5788</span>     */<a name="line.5788"></a>
 <span class="sourceLineNo">5789</span>    @Override<a name="line.5789"></a>
-<span class="sourceLineNo">5790</span>    public GreasedRegion extend() {<a name="line.5790"></a>
-<span class="sourceLineNo">5791</span>        return copy().expand8way();<a name="line.5791"></a>
+<span class="sourceLineNo">5790</span>    public GreasedRegion getExternalBorder() {<a name="line.5790"></a>
+<span class="sourceLineNo">5791</span>        return copy().fringe8way();<a name="line.5791"></a>
 <span class="sourceLineNo">5792</span>    }<a name="line.5792"></a>
 <span class="sourceLineNo">5793</span><a name="line.5793"></a>
 <span class="sourceLineNo">5794</span>    /**<a name="line.5794"></a>
-<span class="sourceLineNo">5795</span>     * Checks if {@code c} is present in this GreasedRegion. Returns true if and only if c is present in this<a name="line.5795"></a>
-<span class="sourceLineNo">5796</span>     * GreasedRegion as an "on" cell. This will never be true if c is null, has negative x or y, has a value for x that<a name="line.5796"></a>
-<span class="sourceLineNo">5797</span>     * is equal to or greater than {@link #width}, or has a value for y that is equal to or greater than<a name="line.5797"></a>
-<span class="sourceLineNo">5798</span>     * {@link #height}, but none of those conditions will cause Exceptions to be thrown.<a name="line.5798"></a>
-<span class="sourceLineNo">5799</span>     * @param c a Coord to try to find in this GreasedRegion; if null this will always return false<a name="line.5799"></a>
-<span class="sourceLineNo">5800</span>     * @return true if {@code c} is an "on" cell in this GreasedRegion, or false otherwise, including if c is null<a name="line.5800"></a>
-<span class="sourceLineNo">5801</span>     */<a name="line.5801"></a>
-<span class="sourceLineNo">5802</span>    @Override<a name="line.5802"></a>
-<span class="sourceLineNo">5803</span>    public boolean contains(Coord c) {<a name="line.5803"></a>
-<span class="sourceLineNo">5804</span>        return c != null &amp;&amp; contains(c.x, c.y);<a name="line.5804"></a>
-<span class="sourceLineNo">5805</span>    }<a name="line.5805"></a>
-<span class="sourceLineNo">5806</span><a name="line.5806"></a>
-<span class="sourceLineNo">5807</span>    /**<a name="line.5807"></a>
-<span class="sourceLineNo">5808</span>     * Checks whether all Coords in {@code other} are also present in {@code this}.<a name="line.5808"></a>
-<span class="sourceLineNo">5809</span>     * Requires that {@code other} won't give a null Coord while this method iterates over it.<a name="line.5809"></a>
-<span class="sourceLineNo">5810</span>     * @param other another Zone, such as a GreasedRegion or a {@link squidpony.squidgrid.zone.CoordPackerZone}<a name="line.5810"></a>
-<span class="sourceLineNo">5811</span>     * @return true if all Coords in other are "on" in this GreasedRegion, or false otherwise<a name="line.5811"></a>
-<span class="sourceLineNo">5812</span>     */<a name="line.5812"></a>
-<span class="sourceLineNo">5813</span>    @Override<a name="line.5813"></a>
-<span class="sourceLineNo">5814</span>    public boolean contains(Zone other) {<a name="line.5814"></a>
-<span class="sourceLineNo">5815</span>        if(other instanceof Collection)<a name="line.5815"></a>
-<span class="sourceLineNo">5816</span>            return containsAll((Collection) other);<a name="line.5816"></a>
-<span class="sourceLineNo">5817</span>        for(Coord c : other)<a name="line.5817"></a>
-<span class="sourceLineNo">5818</span>        {<a name="line.5818"></a>
-<span class="sourceLineNo">5819</span>            if(!contains(c.x, c.y))<a name="line.5819"></a>
-<span class="sourceLineNo">5820</span>                return false;<a name="line.5820"></a>
-<span class="sourceLineNo">5821</span>        }<a name="line.5821"></a>
-<span class="sourceLineNo">5822</span>        return true;<a name="line.5822"></a>
-<span class="sourceLineNo">5823</span>    }<a name="line.5823"></a>
-<span class="sourceLineNo">5824</span><a name="line.5824"></a>
-<span class="sourceLineNo">5825</span>    /**<a name="line.5825"></a>
-<span class="sourceLineNo">5826</span>     * @param smallestOrBiggest if true, finds the smallest x-coordinate value;<a name="line.5826"></a>
-<span class="sourceLineNo">5827</span>     *                          if false, finds the biggest.<a name="line.5827"></a>
-<span class="sourceLineNo">5828</span>     * @return The x-coordinate of the Coord within {@code this} that has the<a name="line.5828"></a>
-<span class="sourceLineNo">5829</span>     * smallest (or biggest) x-coordinate. Or -1 if the zone is empty.<a name="line.5829"></a>
-<span class="sourceLineNo">5830</span>     */<a name="line.5830"></a>
-<span class="sourceLineNo">5831</span>    @Override<a name="line.5831"></a>
-<span class="sourceLineNo">5832</span>    public int x(boolean smallestOrBiggest) {<a name="line.5832"></a>
-<span class="sourceLineNo">5833</span>        if(smallestOrBiggest)<a name="line.5833"></a>
-<span class="sourceLineNo">5834</span>            return first().x;<a name="line.5834"></a>
-<span class="sourceLineNo">5835</span>        else<a name="line.5835"></a>
-<span class="sourceLineNo">5836</span>            return nth(size()-1).x;<a name="line.5836"></a>
-<span class="sourceLineNo">5837</span>    }<a name="line.5837"></a>
-<span class="sourceLineNo">5838</span><a name="line.5838"></a>
-<span class="sourceLineNo">5839</span>    /**<a name="line.5839"></a>
-<span class="sourceLineNo">5840</span>     * @param smallestOrBiggest if true, finds the smallest y-coordinate value;<a name="line.5840"></a>
-<span class="sourceLineNo">5841</span>     *                          if false, finds the biggest.<a name="line.5841"></a>
-<span class="sourceLineNo">5842</span>     * @return The y-coordinate of the Coord within {@code this} that has the<a name="line.5842"></a>
-<span class="sourceLineNo">5843</span>     * smallest (or biggest) y-coordinate. Or -1 if the zone is empty.<a name="line.5843"></a>
-<span class="sourceLineNo">5844</span>     */<a name="line.5844"></a>
-<span class="sourceLineNo">5845</span>    @Override<a name="line.5845"></a>
-<span class="sourceLineNo">5846</span>    public int y(boolean smallestOrBiggest) {<a name="line.5846"></a>
-<span class="sourceLineNo">5847</span>        long t, w;<a name="line.5847"></a>
-<span class="sourceLineNo">5848</span>        if(smallestOrBiggest) {<a name="line.5848"></a>
-<span class="sourceLineNo">5849</span>            int best = Integer.MAX_VALUE;<a name="line.5849"></a>
-<span class="sourceLineNo">5850</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5850"></a>
-<span class="sourceLineNo">5851</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.5851"></a>
-<span class="sourceLineNo">5852</span>                    if ((t = data[x * ySections + s]) != 0) {<a name="line.5852"></a>
-<span class="sourceLineNo">5853</span>                        w = Long.lowestOneBit(t);<a name="line.5853"></a>
-<span class="sourceLineNo">5854</span>                        while (w != 0) {<a name="line.5854"></a>
-<span class="sourceLineNo">5855</span>                            best = Math.min(s &lt;&lt; 6 | Long.numberOfTrailingZeros(w), best);<a name="line.5855"></a>
-<span class="sourceLineNo">5856</span>                            if(best == 0)<a name="line.5856"></a>
-<span class="sourceLineNo">5857</span>                                return 0;<a name="line.5857"></a>
-<span class="sourceLineNo">5858</span>                            t ^= w;<a name="line.5858"></a>
-<span class="sourceLineNo">5859</span>                            w = Long.lowestOneBit(t);<a name="line.5859"></a>
-<span class="sourceLineNo">5860</span>                        }<a name="line.5860"></a>
-<span class="sourceLineNo">5861</span>                    }<a name="line.5861"></a>
-<span class="sourceLineNo">5862</span>                }<a name="line.5862"></a>
-<span class="sourceLineNo">5863</span>            }<a name="line.5863"></a>
-<span class="sourceLineNo">5864</span>            return best == Integer.MAX_VALUE ? -1 : best;<a name="line.5864"></a>
-<span class="sourceLineNo">5865</span>        }<a name="line.5865"></a>
-<span class="sourceLineNo">5866</span>        else<a name="line.5866"></a>
-<span class="sourceLineNo">5867</span>        {<a name="line.5867"></a>
-<span class="sourceLineNo">5868</span>            int best = -1;<a name="line.5868"></a>
-<span class="sourceLineNo">5869</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5869"></a>
-<span class="sourceLineNo">5870</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.5870"></a>
-<span class="sourceLineNo">5871</span>                    if ((t = data[x * ySections + s]) != 0) {<a name="line.5871"></a>
-<span class="sourceLineNo">5872</span>                        w = Long.lowestOneBit(t);<a name="line.5872"></a>
-<span class="sourceLineNo">5873</span>                        while (w != 0) {<a name="line.5873"></a>
-<span class="sourceLineNo">5874</span>                            best = Math.max(s &lt;&lt; 6 | Long.numberOfTrailingZeros(w), best);<a name="line.5874"></a>
-<span class="sourceLineNo">5875</span>                            if(best == height - 1)<a name="line.5875"></a>
-<span class="sourceLineNo">5876</span>                                return best;<a name="line.5876"></a>
-<span class="sourceLineNo">5877</span>                            t ^= w;<a name="line.5877"></a>
-<span class="sourceLineNo">5878</span>                            w = Long.lowestOneBit(t);<a name="line.5878"></a>
-<span class="sourceLineNo">5879</span>                        }<a name="line.5879"></a>
-<span class="sourceLineNo">5880</span>                    }<a name="line.5880"></a>
-<span class="sourceLineNo">5881</span>                }<a name="line.5881"></a>
-<span class="sourceLineNo">5882</span>            }<a name="line.5882"></a>
-<span class="sourceLineNo">5883</span>            return best;<a name="line.5883"></a>
-<span class="sourceLineNo">5884</span>        }<a name="line.5884"></a>
-<span class="sourceLineNo">5885</span>    }<a name="line.5885"></a>
-<span class="sourceLineNo">5886</span><a name="line.5886"></a>
-<span class="sourceLineNo">5887</span>    /**<a name="line.5887"></a>
-<span class="sourceLineNo">5888</span>     * Gets the distance between the minimum x-value contained in this GreasedRegion and the maximum x-value in it.<a name="line.5888"></a>
-<span class="sourceLineNo">5889</span>     * Not the same as accessing the field {@link #width} on a GreasedRegion! The field will get the span of the space<a name="line.5889"></a>
-<span class="sourceLineNo">5890</span>     * that the GreasedRegion can use, including "on" and "off" cells. This method will only get the distance between<a name="line.5890"></a>
-<span class="sourceLineNo">5891</span>     * the furthest-separated "on" cells on the x-axis, and won't consider "off" cells. This method can return -1 if the<a name="line.5891"></a>
-<span class="sourceLineNo">5892</span>     * GreasedRegion is empty, 0 if the "on" cells are all in a vertical line (that is, when the minimum x is equal to<a name="line.5892"></a>
-<span class="sourceLineNo">5893</span>     * the maximum x), or a positive int in other cases with multiple x-values.<a name="line.5893"></a>
-<span class="sourceLineNo">5894</span>     * @return the distance on the x-axis between the "on" cell with the lowest x-value and the one with the highest<a name="line.5894"></a>
-<span class="sourceLineNo">5895</span>     */<a name="line.5895"></a>
-<span class="sourceLineNo">5896</span>    @Override<a name="line.5896"></a>
-<span class="sourceLineNo">5897</span>    public int getWidth() {<a name="line.5897"></a>
-<span class="sourceLineNo">5898</span>        if (super.width == -2)<a name="line.5898"></a>
-<span class="sourceLineNo">5899</span>            super.width = isEmpty() ? -1 : x(false) - x(true);<a name="line.5899"></a>
-<span class="sourceLineNo">5900</span>        return super.width;<a name="line.5900"></a>
+<span class="sourceLineNo">5795</span>     * Gets a new Zone that contains all the Coords in {@code this} plus all<a name="line.5795"></a>
+<span class="sourceLineNo">5796</span>     * neighboring Coords, which can be orthogonally or diagonally adjacent<a name="line.5796"></a>
+<span class="sourceLineNo">5797</span>     * to any Coord this has in it. Related to the expand() methods in<a name="line.5797"></a>
+<span class="sourceLineNo">5798</span>     * CoordPacker and GreasedRegion, but guaranteed to use 8-way adjacency<a name="line.5798"></a>
+<span class="sourceLineNo">5799</span>     * and to return a new Zone. This implementation returns a GreasedRegion<a name="line.5799"></a>
+<span class="sourceLineNo">5800</span>     * produced simply by {@code return copy().expand8way();} .<a name="line.5800"></a>
+<span class="sourceLineNo">5801</span>     * @return A new GreasedRegion where "off" cells adjacent to {@code this}<a name="line.5801"></a>
+<span class="sourceLineNo">5802</span>     *         (orthogonally or diagonally) have been added to the "on" cells<a name="line.5802"></a>
+<span class="sourceLineNo">5803</span>     *         in {@code this}<a name="line.5803"></a>
+<span class="sourceLineNo">5804</span>     */<a name="line.5804"></a>
+<span class="sourceLineNo">5805</span>    @Override<a name="line.5805"></a>
+<span class="sourceLineNo">5806</span>    public GreasedRegion extend() {<a name="line.5806"></a>
+<span class="sourceLineNo">5807</span>        return copy().expand8way();<a name="line.5807"></a>
+<span class="sourceLineNo">5808</span>    }<a name="line.5808"></a>
+<span class="sourceLineNo">5809</span><a name="line.5809"></a>
+<span class="sourceLineNo">5810</span>    /**<a name="line.5810"></a>
+<span class="sourceLineNo">5811</span>     * Checks if {@code c} is present in this GreasedRegion. Returns true if and only if c is present in this<a name="line.5811"></a>
+<span class="sourceLineNo">5812</span>     * GreasedRegion as an "on" cell. This will never be true if c is null, has negative x or y, has a value for x that<a name="line.5812"></a>
+<span class="sourceLineNo">5813</span>     * is equal to or greater than {@link #width}, or has a value for y that is equal to or greater than<a name="line.5813"></a>
+<span class="sourceLineNo">5814</span>     * {@link #height}, but none of those conditions will cause Exceptions to be thrown.<a name="line.5814"></a>
+<span class="sourceLineNo">5815</span>     * @param c a Coord to try to find in this GreasedRegion; if null this will always return false<a name="line.5815"></a>
+<span class="sourceLineNo">5816</span>     * @return true if {@code c} is an "on" cell in this GreasedRegion, or false otherwise, including if c is null<a name="line.5816"></a>
+<span class="sourceLineNo">5817</span>     */<a name="line.5817"></a>
+<span class="sourceLineNo">5818</span>    @Override<a name="line.5818"></a>
+<span class="sourceLineNo">5819</span>    public boolean contains(Coord c) {<a name="line.5819"></a>
+<span class="sourceLineNo">5820</span>        return c != null &amp;&amp; contains(c.x, c.y);<a name="line.5820"></a>
+<span class="sourceLineNo">5821</span>    }<a name="line.5821"></a>
+<span class="sourceLineNo">5822</span><a name="line.5822"></a>
+<span class="sourceLineNo">5823</span>    /**<a name="line.5823"></a>
+<span class="sourceLineNo">5824</span>     * Checks whether all Coords in {@code other} are also present in {@code this}.<a name="line.5824"></a>
+<span class="sourceLineNo">5825</span>     * Requires that {@code other} won't give a null Coord while this method iterates over it.<a name="line.5825"></a>
+<span class="sourceLineNo">5826</span>     * @param other another Zone, such as a GreasedRegion or a {@link squidpony.squidgrid.zone.CoordPackerZone}<a name="line.5826"></a>
+<span class="sourceLineNo">5827</span>     * @return true if all Coords in other are "on" in this GreasedRegion, or false otherwise<a name="line.5827"></a>
+<span class="sourceLineNo">5828</span>     */<a name="line.5828"></a>
+<span class="sourceLineNo">5829</span>    @Override<a name="line.5829"></a>
+<span class="sourceLineNo">5830</span>    public boolean contains(Zone other) {<a name="line.5830"></a>
+<span class="sourceLineNo">5831</span>        if(other instanceof Collection)<a name="line.5831"></a>
+<span class="sourceLineNo">5832</span>            return containsAll((Collection) other);<a name="line.5832"></a>
+<span class="sourceLineNo">5833</span>        for(Coord c : other)<a name="line.5833"></a>
+<span class="sourceLineNo">5834</span>        {<a name="line.5834"></a>
+<span class="sourceLineNo">5835</span>            if(!contains(c.x, c.y))<a name="line.5835"></a>
+<span class="sourceLineNo">5836</span>                return false;<a name="line.5836"></a>
+<span class="sourceLineNo">5837</span>        }<a name="line.5837"></a>
+<span class="sourceLineNo">5838</span>        return true;<a name="line.5838"></a>
+<span class="sourceLineNo">5839</span>    }<a name="line.5839"></a>
+<span class="sourceLineNo">5840</span><a name="line.5840"></a>
+<span class="sourceLineNo">5841</span>    /**<a name="line.5841"></a>
+<span class="sourceLineNo">5842</span>     * @param smallestOrBiggest if true, finds the smallest x-coordinate value;<a name="line.5842"></a>
+<span class="sourceLineNo">5843</span>     *                          if false, finds the biggest.<a name="line.5843"></a>
+<span class="sourceLineNo">5844</span>     * @return The x-coordinate of the Coord within {@code this} that has the<a name="line.5844"></a>
+<span class="sourceLineNo">5845</span>     * smallest (or biggest) x-coordinate. Or -1 if the zone is empty.<a name="line.5845"></a>
+<span class="sourceLineNo">5846</span>     */<a name="line.5846"></a>
+<span class="sourceLineNo">5847</span>    @Override<a name="line.5847"></a>
+<span class="sourceLineNo">5848</span>    public int x(boolean smallestOrBiggest) {<a name="line.5848"></a>
+<span class="sourceLineNo">5849</span>        if(smallestOrBiggest)<a name="line.5849"></a>
+<span class="sourceLineNo">5850</span>            return first().x;<a name="line.5850"></a>
+<span class="sourceLineNo">5851</span>        else<a name="line.5851"></a>
+<span class="sourceLineNo">5852</span>            return nth(size()-1).x;<a name="line.5852"></a>
+<span class="sourceLineNo">5853</span>    }<a name="line.5853"></a>
+<span class="sourceLineNo">5854</span><a name="line.5854"></a>
+<span class="sourceLineNo">5855</span>    /**<a name="line.5855"></a>
+<span class="sourceLineNo">5856</span>     * @param smallestOrBiggest if true, finds the smallest y-coordinate value;<a name="line.5856"></a>
+<span class="sourceLineNo">5857</span>     *                          if false, finds the biggest.<a name="line.5857"></a>
+<span class="sourceLineNo">5858</span>     * @return The y-coordinate of the Coord within {@code this} that has the<a name="line.5858"></a>
+<span class="sourceLineNo">5859</span>     * smallest (or biggest) y-coordinate. Or -1 if the zone is empty.<a name="line.5859"></a>
+<span class="sourceLineNo">5860</span>     */<a name="line.5860"></a>
+<span class="sourceLineNo">5861</span>    @Override<a name="line.5861"></a>
+<span class="sourceLineNo">5862</span>    public int y(boolean smallestOrBiggest) {<a name="line.5862"></a>
+<span class="sourceLineNo">5863</span>        long t, w;<a name="line.5863"></a>
+<span class="sourceLineNo">5864</span>        if(smallestOrBiggest) {<a name="line.5864"></a>
+<span class="sourceLineNo">5865</span>            int best = Integer.MAX_VALUE;<a name="line.5865"></a>
+<span class="sourceLineNo">5866</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5866"></a>
+<span class="sourceLineNo">5867</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.5867"></a>
+<span class="sourceLineNo">5868</span>                    if ((t = data[x * ySections + s]) != 0) {<a name="line.5868"></a>
+<span class="sourceLineNo">5869</span>                        w = Long.lowestOneBit(t);<a name="line.5869"></a>
+<span class="sourceLineNo">5870</span>                        while (w != 0) {<a name="line.5870"></a>
+<span class="sourceLineNo">5871</span>                            best = Math.min(s &lt;&lt; 6 | Long.numberOfTrailingZeros(w), best);<a name="line.5871"></a>
+<span class="sourceLineNo">5872</span>                            if(best == 0)<a name="line.5872"></a>
+<span class="sourceLineNo">5873</span>                                return 0;<a name="line.5873"></a>
+<span class="sourceLineNo">5874</span>                            t ^= w;<a name="line.5874"></a>
+<span class="sourceLineNo">5875</span>                            w = Long.lowestOneBit(t);<a name="line.5875"></a>
+<span class="sourceLineNo">5876</span>                        }<a name="line.5876"></a>
+<span class="sourceLineNo">5877</span>                    }<a name="line.5877"></a>
+<span class="sourceLineNo">5878</span>                }<a name="line.5878"></a>
+<span class="sourceLineNo">5879</span>            }<a name="line.5879"></a>
+<span class="sourceLineNo">5880</span>            return best == Integer.MAX_VALUE ? -1 : best;<a name="line.5880"></a>
+<span class="sourceLineNo">5881</span>        }<a name="line.5881"></a>
+<span class="sourceLineNo">5882</span>        else<a name="line.5882"></a>
+<span class="sourceLineNo">5883</span>        {<a name="line.5883"></a>
+<span class="sourceLineNo">5884</span>            int best = -1;<a name="line.5884"></a>
+<span class="sourceLineNo">5885</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5885"></a>
+<span class="sourceLineNo">5886</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.5886"></a>
+<span class="sourceLineNo">5887</span>                    if ((t = data[x * ySections + s]) != 0) {<a name="line.5887"></a>
+<span class="sourceLineNo">5888</span>                        w = Long.lowestOneBit(t);<a name="line.5888"></a>
+<span class="sourceLineNo">5889</span>                        while (w != 0) {<a name="line.5889"></a>
+<span class="sourceLineNo">5890</span>                            best = Math.max(s &lt;&lt; 6 | Long.numberOfTrailingZeros(w), best);<a name="line.5890"></a>
+<span class="sourceLineNo">5891</span>                            if(best == height - 1)<a name="line.5891"></a>
+<span class="sourceLineNo">5892</span>                                return best;<a name="line.5892"></a>
+<span class="sourceLineNo">5893</span>                            t ^= w;<a name="line.5893"></a>
+<span class="sourceLineNo">5894</span>                            w = Long.lowestOneBit(t);<a name="line.5894"></a>
+<span class="sourceLineNo">5895</span>                        }<a name="line.5895"></a>
+<span class="sourceLineNo">5896</span>                    }<a name="line.5896"></a>
+<span class="sourceLineNo">5897</span>                }<a name="line.5897"></a>
+<span class="sourceLineNo">5898</span>            }<a name="line.5898"></a>
+<span class="sourceLineNo">5899</span>            return best;<a name="line.5899"></a>
+<span class="sourceLineNo">5900</span>        }<a name="line.5900"></a>
 <span class="sourceLineNo">5901</span>    }<a name="line.5901"></a>
-<span class="sourceLineNo">5902</span>    /**<a name="line.5902"></a>
-<span class="sourceLineNo">5903</span>     * Gets the distance between the minimum y-value contained in this GreasedRegion and the maximum y-value in it.<a name="line.5903"></a>
-<span class="sourceLineNo">5904</span>     * Not the same as accessing the field {@link #height} on a GreasedRegion! The field will get the span of the space<a name="line.5904"></a>
-<span class="sourceLineNo">5905</span>     * that the GreasedRegion can use, including "on" and "off" cells. This method will only get the distance between<a name="line.5905"></a>
-<span class="sourceLineNo">5906</span>     * the furthest-separated "on" cells on the y-axis, and won't consider "off" cells. This method can return -1 if the<a name="line.5906"></a>
-<span class="sourceLineNo">5907</span>     * GreasedRegion is empty, 0 if the "on" cells are all in a horizontal line (that is, when the minimum y is equal to<a name="line.5907"></a>
-<span class="sourceLineNo">5908</span>     * the maximum y), or a positive int in other cases with multiple y-values.<a name="line.5908"></a>
-<span class="sourceLineNo">5909</span>     * @return the distance on the y-axis between the "on" cell with the lowest y-value and the one with the highest<a name="line.5909"></a>
-<span class="sourceLineNo">5910</span>     */<a name="line.5910"></a>
-<span class="sourceLineNo">5911</span>    @Override<a name="line.5911"></a>
-<span class="sourceLineNo">5912</span>    public int getHeight() {<a name="line.5912"></a>
-<span class="sourceLineNo">5913</span>        if (super.height == -2)<a name="line.5913"></a>
-<span class="sourceLineNo">5914</span>            super.height = isEmpty() ? -1 : y(false) - y(true);<a name="line.5914"></a>
-<span class="sourceLineNo">5915</span>        return super.height;<a name="line.5915"></a>
-<span class="sourceLineNo">5916</span>    }<a name="line.5916"></a>
-<span class="sourceLineNo">5917</span><a name="line.5917"></a>
+<span class="sourceLineNo">5902</span><a name="line.5902"></a>
+<span class="sourceLineNo">5903</span>    /**<a name="line.5903"></a>
+<span class="sourceLineNo">5904</span>     * Gets the distance between the minimum x-value contained in this GreasedRegion and the maximum x-value in it.<a name="line.5904"></a>
+<span class="sourceLineNo">5905</span>     * Not the same as accessing the field {@link #width} on a GreasedRegion! The field will get the span of the space<a name="line.5905"></a>
+<span class="sourceLineNo">5906</span>     * that the GreasedRegion can use, including "on" and "off" cells. This method will only get the distance between<a name="line.5906"></a>
+<span class="sourceLineNo">5907</span>     * the furthest-separated "on" cells on the x-axis, and won't consider "off" cells. This method can return -1 if the<a name="line.5907"></a>
+<span class="sourceLineNo">5908</span>     * GreasedRegion is empty, 0 if the "on" cells are all in a vertical line (that is, when the minimum x is equal to<a name="line.5908"></a>
+<span class="sourceLineNo">5909</span>     * the maximum x), or a positive int in other cases with multiple x-values.<a name="line.5909"></a>
+<span class="sourceLineNo">5910</span>     * @return the distance on the x-axis between the "on" cell with the lowest x-value and the one with the highest<a name="line.5910"></a>
+<span class="sourceLineNo">5911</span>     */<a name="line.5911"></a>
+<span class="sourceLineNo">5912</span>    @Override<a name="line.5912"></a>
+<span class="sourceLineNo">5913</span>    public int getWidth() {<a name="line.5913"></a>
+<span class="sourceLineNo">5914</span>        if (super.width == -2)<a name="line.5914"></a>
+<span class="sourceLineNo">5915</span>            super.width = isEmpty() ? -1 : x(false) - x(true);<a name="line.5915"></a>
+<span class="sourceLineNo">5916</span>        return super.width;<a name="line.5916"></a>
+<span class="sourceLineNo">5917</span>    }<a name="line.5917"></a>
 <span class="sourceLineNo">5918</span>    /**<a name="line.5918"></a>
-<span class="sourceLineNo">5919</span>     * Gets the diagonal distance from the point combining the lowest x-value present in this GreasedRegion with the<a name="line.5919"></a>
-<span class="sourceLineNo">5920</span>     * lowest y-value in this, to the point combining the highest x-value and the highest y-value. These minimum and<a name="line.5920"></a>
-<span class="sourceLineNo">5921</span>     * maximum values don't necessarily match a single "on" cell for each min and max corner, and can take their x and y<a name="line.5921"></a>
-<span class="sourceLineNo">5922</span>     * values from two different points. The diagonal distance uses Euclidean measurement (basic Pythagorean Theorem<a name="line.5922"></a>
-<span class="sourceLineNo">5923</span>     * math here), and will be a double.<a name="line.5923"></a>
-<span class="sourceLineNo">5924</span>     * @return the diagonal distance from (min x, min y) to (max x, max y), as a double<a name="line.5924"></a>
-<span class="sourceLineNo">5925</span>     */<a name="line.5925"></a>
-<span class="sourceLineNo">5926</span>    @Override<a name="line.5926"></a>
-<span class="sourceLineNo">5927</span>    public double getDiagonal() {<a name="line.5927"></a>
-<span class="sourceLineNo">5928</span>        final int w = getWidth();<a name="line.5928"></a>
-<span class="sourceLineNo">5929</span>        final int h = getHeight();<a name="line.5929"></a>
-<span class="sourceLineNo">5930</span>        return Math.sqrt((w * w) + (h * h));<a name="line.5930"></a>
-<span class="sourceLineNo">5931</span>    }<a name="line.5931"></a>
-<span class="sourceLineNo">5932</span>//////Not duplicated because the superclass does this just fine.<a name="line.5932"></a>
-<span class="sourceLineNo">5933</span>//    @Override<a name="line.5933"></a>
-<span class="sourceLineNo">5934</span>//    public Coord getCenter() {<a name="line.5934"></a>
-<span class="sourceLineNo">5935</span>//        return super.getCenter();<a name="line.5935"></a>
-<span class="sourceLineNo">5936</span>//    }<a name="line.5936"></a>
-<span class="sourceLineNo">5937</span><a name="line.5937"></a>
-<span class="sourceLineNo">5938</span>    @Override<a name="line.5938"></a>
-<span class="sourceLineNo">5939</span>    public GreasedRegion getInternalBorder() {<a name="line.5939"></a>
-<span class="sourceLineNo">5940</span>        return copy().surface8way();<a name="line.5940"></a>
-<span class="sourceLineNo">5941</span>    }<a name="line.5941"></a>
-<span class="sourceLineNo">5942</span><a name="line.5942"></a>
-<span class="sourceLineNo">5943</span>    public class GRIterator implements Iterator&lt;Coord&gt;<a name="line.5943"></a>
-<span class="sourceLineNo">5944</span>    {<a name="line.5944"></a>
-<span class="sourceLineNo">5945</span>        public int index = 0;<a name="line.5945"></a>
-<span class="sourceLineNo">5946</span>        private int[] counts;<a name="line.5946"></a>
-<span class="sourceLineNo">5947</span>        private int limit;<a name="line.5947"></a>
-<span class="sourceLineNo">5948</span>        private long t, w;<a name="line.5948"></a>
-<span class="sourceLineNo">5949</span>        public GRIterator()<a name="line.5949"></a>
-<span class="sourceLineNo">5950</span>        {<a name="line.5950"></a>
-<span class="sourceLineNo">5951</span>            limit = 0;<a name="line.5951"></a>
-<span class="sourceLineNo">5952</span>            counts = new int[width * ySections];<a name="line.5952"></a>
-<span class="sourceLineNo">5953</span>            int tmp;<a name="line.5953"></a>
-<span class="sourceLineNo">5954</span>            for (int i = 0; i &lt; width * ySections; i++) {<a name="line.5954"></a>
-<span class="sourceLineNo">5955</span>                tmp = Long.bitCount(data[i]);<a name="line.5955"></a>
-<span class="sourceLineNo">5956</span>                counts[i] = tmp == 0 ? -1 : (limit += tmp);<a name="line.5956"></a>
-<span class="sourceLineNo">5957</span>            }<a name="line.5957"></a>
-<span class="sourceLineNo">5958</span>        }<a name="line.5958"></a>
-<span class="sourceLineNo">5959</span>        @Override<a name="line.5959"></a>
-<span class="sourceLineNo">5960</span>        public boolean hasNext() {<a name="line.5960"></a>
-<span class="sourceLineNo">5961</span>            return index &lt; limit;<a name="line.5961"></a>
-<span class="sourceLineNo">5962</span>        }<a name="line.5962"></a>
-<span class="sourceLineNo">5963</span><a name="line.5963"></a>
-<span class="sourceLineNo">5964</span>        @Override<a name="line.5964"></a>
-<span class="sourceLineNo">5965</span>        public Coord next() {<a name="line.5965"></a>
-<span class="sourceLineNo">5966</span>            int ct;<a name="line.5966"></a>
-<span class="sourceLineNo">5967</span>            if(index &gt;= limit)<a name="line.5967"></a>
-<span class="sourceLineNo">5968</span>                return null;<a name="line.5968"></a>
-<span class="sourceLineNo">5969</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.5969"></a>
-<span class="sourceLineNo">5970</span>                for (int x = 0; x &lt; width; x++) {<a name="line.5970"></a>
-<span class="sourceLineNo">5971</span>                    if ((ct = counts[x * ySections + s]) &gt; index) {<a name="line.5971"></a>
-<span class="sourceLineNo">5972</span>                        t = data[x * ySections + s];<a name="line.5972"></a>
-<span class="sourceLineNo">5973</span>                        w = Long.lowestOneBit(t);<a name="line.5973"></a>
-<span class="sourceLineNo">5974</span>                        for (--ct; w != 0; ct--) {<a name="line.5974"></a>
-<span class="sourceLineNo">5975</span>                            if (ct == index)<a name="line.5975"></a>
-<span class="sourceLineNo">5976</span>                            {<a name="line.5976"></a>
-<span class="sourceLineNo">5977</span>                                if(index++ &lt; limit)<a name="line.5977"></a>
-<span class="sourceLineNo">5978</span>                                    return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.5978"></a>
-<span class="sourceLineNo">5979</span>                                else<a name="line.5979"></a>
-<span class="sourceLineNo">5980</span>                                    return null;<a name="line.5980"></a>
-<span class="sourceLineNo">5981</span>                            }<a name="line.5981"></a>
-<span class="sourceLineNo">5982</span>                            t ^= w;<a name="line.5982"></a>
-<span class="sourceLineNo">5983</span>                            w = Long.lowestOneBit(t);<a name="line.5983"></a>
-<span class="sourceLineNo">5984</span>                        }<a name="line.5984"></a>
-<span class="sourceLineNo">5985</span>                    }<a name="line.5985"></a>
-<span class="sourceLineNo">5986</span>                }<a name="line.5986"></a>
-<span class="sourceLineNo">5987</span>            }<a name="line.5987"></a>
-<span class="sourceLineNo">5988</span>            return null;<a name="line.5988"></a>
-<span class="sourceLineNo">5989</span><a name="line.5989"></a>
-<span class="sourceLineNo">5990</span>            /*<a name="line.5990"></a>
-<span class="sourceLineNo">5991</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5991"></a>
-<span class="sourceLineNo">5992</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.5992"></a>
-<span class="sourceLineNo">5993</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.5993"></a>
-<span class="sourceLineNo">5994</span>                        if(index++ &lt; limit)<a name="line.5994"></a>
-<span class="sourceLineNo">5995</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.5995"></a>
-<span class="sourceLineNo">5996</span>                        else<a name="line.5996"></a>
-<span class="sourceLineNo">5997</span>                            return null;<a name="line.5997"></a>
-<span class="sourceLineNo">5998</span>                    }<a name="line.5998"></a>
-<span class="sourceLineNo">5999</span>                }<a name="line.5999"></a>
-<span class="sourceLineNo">6000</span>            }<a name="line.6000"></a>
-<span class="sourceLineNo">6001</span>            */<a name="line.6001"></a>
-<span class="sourceLineNo">6002</span>        }<a name="line.6002"></a>
-<span class="sourceLineNo">6003</span><a name="line.6003"></a>
-<span class="sourceLineNo">6004</span>        @Override<a name="line.6004"></a>
-<span class="sourceLineNo">6005</span>        public void remove() {<a name="line.6005"></a>
-<span class="sourceLineNo">6006</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.6006"></a>
-<span class="sourceLineNo">6007</span>        }<a name="line.6007"></a>
-<span class="sourceLineNo">6008</span>    }<a name="line.6008"></a>
-<span class="sourceLineNo">6009</span>}<a name="line.6009"></a>
+<span class="sourceLineNo">5919</span>     * Gets the distance between the minimum y-value contained in this GreasedRegion and the maximum y-value in it.<a name="line.5919"></a>
+<span class="sourceLineNo">5920</span>     * Not the same as accessing the field {@link #height} on a GreasedRegion! The field will get the span of the space<a name="line.5920"></a>
+<span class="sourceLineNo">5921</span>     * that the GreasedRegion can use, including "on" and "off" cells. This method will only get the distance between<a name="line.5921"></a>
+<span class="sourceLineNo">5922</span>     * the furthest-separated "on" cells on the y-axis, and won't consider "off" cells. This method can return -1 if the<a name="line.5922"></a>
+<span class="sourceLineNo">5923</span>     * GreasedRegion is empty, 0 if the "on" cells are all in a horizontal line (that is, when the minimum y is equal to<a name="line.5923"></a>
+<span class="sourceLineNo">5924</span>     * the maximum y), or a positive int in other cases with multiple y-values.<a name="line.5924"></a>
+<span class="sourceLineNo">5925</span>     * @return the distance on the y-axis between the "on" cell with the lowest y-value and the one with the highest<a name="line.5925"></a>
+<span class="sourceLineNo">5926</span>     */<a name="line.5926"></a>
+<span class="sourceLineNo">5927</span>    @Override<a name="line.5927"></a>
+<span class="sourceLineNo">5928</span>    public int getHeight() {<a name="line.5928"></a>
+<span class="sourceLineNo">5929</span>        if (super.height == -2)<a name="line.5929"></a>
+<span class="sourceLineNo">5930</span>            super.height = isEmpty() ? -1 : y(false) - y(true);<a name="line.5930"></a>
+<span class="sourceLineNo">5931</span>        return super.height;<a name="line.5931"></a>
+<span class="sourceLineNo">5932</span>    }<a name="line.5932"></a>
+<span class="sourceLineNo">5933</span><a name="line.5933"></a>
+<span class="sourceLineNo">5934</span>    /**<a name="line.5934"></a>
+<span class="sourceLineNo">5935</span>     * Gets the diagonal distance from the point combining the lowest x-value present in this GreasedRegion with the<a name="line.5935"></a>
+<span class="sourceLineNo">5936</span>     * lowest y-value in this, to the point combining the highest x-value and the highest y-value. These minimum and<a name="line.5936"></a>
+<span class="sourceLineNo">5937</span>     * maximum values don't necessarily match a single "on" cell for each min and max corner, and can take their x and y<a name="line.5937"></a>
+<span class="sourceLineNo">5938</span>     * values from two different points. The diagonal distance uses Euclidean measurement (basic Pythagorean Theorem<a name="line.5938"></a>
+<span class="sourceLineNo">5939</span>     * math here), and will be a double.<a name="line.5939"></a>
+<span class="sourceLineNo">5940</span>     * @return the diagonal distance from (min x, min y) to (max x, max y), as a double<a name="line.5940"></a>
+<span class="sourceLineNo">5941</span>     */<a name="line.5941"></a>
+<span class="sourceLineNo">5942</span>    @Override<a name="line.5942"></a>
+<span class="sourceLineNo">5943</span>    public double getDiagonal() {<a name="line.5943"></a>
+<span class="sourceLineNo">5944</span>        final int w = getWidth();<a name="line.5944"></a>
+<span class="sourceLineNo">5945</span>        final int h = getHeight();<a name="line.5945"></a>
+<span class="sourceLineNo">5946</span>        return Math.sqrt((w * w) + (h * h));<a name="line.5946"></a>
+<span class="sourceLineNo">5947</span>    }<a name="line.5947"></a>
+<span class="sourceLineNo">5948</span>//////Not duplicated because the superclass does this just fine.<a name="line.5948"></a>
+<span class="sourceLineNo">5949</span>//    @Override<a name="line.5949"></a>
+<span class="sourceLineNo">5950</span>//    public Coord getCenter() {<a name="line.5950"></a>
+<span class="sourceLineNo">5951</span>//        return super.getCenter();<a name="line.5951"></a>
+<span class="sourceLineNo">5952</span>//    }<a name="line.5952"></a>
+<span class="sourceLineNo">5953</span><a name="line.5953"></a>
+<span class="sourceLineNo">5954</span>    @Override<a name="line.5954"></a>
+<span class="sourceLineNo">5955</span>    public GreasedRegion getInternalBorder() {<a name="line.5955"></a>
+<span class="sourceLineNo">5956</span>        return copy().surface8way();<a name="line.5956"></a>
+<span class="sourceLineNo">5957</span>    }<a name="line.5957"></a>
+<span class="sourceLineNo">5958</span><a name="line.5958"></a>
+<span class="sourceLineNo">5959</span>    public class GRIterator implements Iterator&lt;Coord&gt;<a name="line.5959"></a>
+<span class="sourceLineNo">5960</span>    {<a name="line.5960"></a>
+<span class="sourceLineNo">5961</span>        public int index = 0;<a name="line.5961"></a>
+<span class="sourceLineNo">5962</span>        private int[] counts;<a name="line.5962"></a>
+<span class="sourceLineNo">5963</span>        private int limit;<a name="line.5963"></a>
+<span class="sourceLineNo">5964</span>        private long t, w;<a name="line.5964"></a>
+<span class="sourceLineNo">5965</span>        public GRIterator()<a name="line.5965"></a>
+<span class="sourceLineNo">5966</span>        {<a name="line.5966"></a>
+<span class="sourceLineNo">5967</span>            limit = 0;<a name="line.5967"></a>
+<span class="sourceLineNo">5968</span>            counts = new int[width * ySections];<a name="line.5968"></a>
+<span class="sourceLineNo">5969</span>            int tmp;<a name="line.5969"></a>
+<span class="sourceLineNo">5970</span>            for (int i = 0; i &lt; width * ySections; i++) {<a name="line.5970"></a>
+<span class="sourceLineNo">5971</span>                tmp = Long.bitCount(data[i]);<a name="line.5971"></a>
+<span class="sourceLineNo">5972</span>                counts[i] = tmp == 0 ? -1 : (limit += tmp);<a name="line.5972"></a>
+<span class="sourceLineNo">5973</span>            }<a name="line.5973"></a>
+<span class="sourceLineNo">5974</span>        }<a name="line.5974"></a>
+<span class="sourceLineNo">5975</span>        @Override<a name="line.5975"></a>
+<span class="sourceLineNo">5976</span>        public boolean hasNext() {<a name="line.5976"></a>
+<span class="sourceLineNo">5977</span>            return index &lt; limit;<a name="line.5977"></a>
+<span class="sourceLineNo">5978</span>        }<a name="line.5978"></a>
+<span class="sourceLineNo">5979</span><a name="line.5979"></a>
+<span class="sourceLineNo">5980</span>        @Override<a name="line.5980"></a>
+<span class="sourceLineNo">5981</span>        public Coord next() {<a name="line.5981"></a>
+<span class="sourceLineNo">5982</span>            int ct;<a name="line.5982"></a>
+<span class="sourceLineNo">5983</span>            if(index &gt;= limit)<a name="line.5983"></a>
+<span class="sourceLineNo">5984</span>                return null;<a name="line.5984"></a>
+<span class="sourceLineNo">5985</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.5985"></a>
+<span class="sourceLineNo">5986</span>                for (int x = 0; x &lt; width; x++) {<a name="line.5986"></a>
+<span class="sourceLineNo">5987</span>                    if ((ct = counts[x * ySections + s]) &gt; index) {<a name="line.5987"></a>
+<span class="sourceLineNo">5988</span>                        t = data[x * ySections + s];<a name="line.5988"></a>
+<span class="sourceLineNo">5989</span>                        w = Long.lowestOneBit(t);<a name="line.5989"></a>
+<span class="sourceLineNo">5990</span>                        for (--ct; w != 0; ct--) {<a name="line.5990"></a>
+<span class="sourceLineNo">5991</span>                            if (ct == index)<a name="line.5991"></a>
+<span class="sourceLineNo">5992</span>                            {<a name="line.5992"></a>
+<span class="sourceLineNo">5993</span>                                if(index++ &lt; limit)<a name="line.5993"></a>
+<span class="sourceLineNo">5994</span>                                    return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.5994"></a>
+<span class="sourceLineNo">5995</span>                                else<a name="line.5995"></a>
+<span class="sourceLineNo">5996</span>                                    return null;<a name="line.5996"></a>
+<span class="sourceLineNo">5997</span>                            }<a name="line.5997"></a>
+<span class="sourceLineNo">5998</span>                            t ^= w;<a name="line.5998"></a>
+<span class="sourceLineNo">5999</span>                            w = Long.lowestOneBit(t);<a name="line.5999"></a>
+<span class="sourceLineNo">6000</span>                        }<a name="line.6000"></a>
+<span class="sourceLineNo">6001</span>                    }<a name="line.6001"></a>
+<span class="sourceLineNo">6002</span>                }<a name="line.6002"></a>
+<span class="sourceLineNo">6003</span>            }<a name="line.6003"></a>
+<span class="sourceLineNo">6004</span>            return null;<a name="line.6004"></a>
+<span class="sourceLineNo">6005</span><a name="line.6005"></a>
+<span class="sourceLineNo">6006</span>            /*<a name="line.6006"></a>
+<span class="sourceLineNo">6007</span>            for (int x = 0; x &lt; width; x++) {<a name="line.6007"></a>
+<span class="sourceLineNo">6008</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.6008"></a>
+<span class="sourceLineNo">6009</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.6009"></a>
+<span class="sourceLineNo">6010</span>                        if(index++ &lt; limit)<a name="line.6010"></a>
+<span class="sourceLineNo">6011</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.6011"></a>
+<span class="sourceLineNo">6012</span>                        else<a name="line.6012"></a>
+<span class="sourceLineNo">6013</span>                            return null;<a name="line.6013"></a>
+<span class="sourceLineNo">6014</span>                    }<a name="line.6014"></a>
+<span class="sourceLineNo">6015</span>                }<a name="line.6015"></a>
+<span class="sourceLineNo">6016</span>            }<a name="line.6016"></a>
+<span class="sourceLineNo">6017</span>            */<a name="line.6017"></a>
+<span class="sourceLineNo">6018</span>        }<a name="line.6018"></a>
+<span class="sourceLineNo">6019</span><a name="line.6019"></a>
+<span class="sourceLineNo">6020</span>        @Override<a name="line.6020"></a>
+<span class="sourceLineNo">6021</span>        public void remove() {<a name="line.6021"></a>
+<span class="sourceLineNo">6022</span>            throw new UnsupportedOperationException("remove() is not supported on this Iterator.");<a name="line.6022"></a>
+<span class="sourceLineNo">6023</span>        }<a name="line.6023"></a>
+<span class="sourceLineNo">6024</span>    }<a name="line.6024"></a>
+<span class="sourceLineNo">6025</span>}<a name="line.6025"></a>
 
 
 

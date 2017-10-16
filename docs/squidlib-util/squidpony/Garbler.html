@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public final class <a href="../src-html/squidpony/Garbler.html#line.19">Garbler</a>
+<pre>public final class <a href="../src-html/squidpony/Garbler.html#line.20">Garbler</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Tools for garbling Strings (making them appear to be gibberish) and degarbling earlier outputs to get the original
  inputs. This is like a weak form of encryption, and is probably enough to stop random users from editing saved files
@@ -235,7 +235,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>garble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.141">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.142">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 <div class="block">Garbles text with the default key. This can be degarbled with <a href="../squidpony/Garbler.html#degarble-java.lang.String-"><code>degarble(String)</code></a>, which also uses the
  default key.</div>
 <dl>
@@ -252,7 +252,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>garble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.152">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.153">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
 <div class="block">Garbles text with the given keyText. This can be degarbled with <a href="../squidpony/Garbler.html#degarble-java.lang.String-java.lang.String-"><code>degarble(String, String)</code></a>, which must be
  given the same keyText.</div>
@@ -271,7 +271,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>garble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.164">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.165">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                             long&nbsp;key)</pre>
 <div class="block">Garbles text with the given key as an int. This can be degarbled with <a href="../squidpony/Garbler.html#degarble-java.lang.String-long-"><code>degarble(String, long)</code></a>, which must
  be given the same key.</div>
@@ -290,7 +290,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>degarble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.189">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.190">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled)</pre>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-"><code>garble(String)</code></a> (using the default key), this reverses the
  garbling and gets the original String.</div>
 <dl>
@@ -307,7 +307,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>degarble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.199">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.200">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-java.lang.String-"><code>garble(String, String)</code></a> (using the given keyText), this
  reverses the garbling and gets the original String.</div>
@@ -326,7 +326,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>degarble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.211">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.212">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
                               long&nbsp;key)</pre>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-long-"><code>garble(String, long)</code></a> (using the given key), this reverses
  the garbling and gets the original String.</div>
@@ -345,7 +345,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>garble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.245">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.246">garble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                             long[]&nbsp;keys)</pre>
 <div class="block">Garbles text with the given keys as an int array, effectively garbling the same text one time per item in keys.
  This can seen as a way to improve the quality of the shuffle by adding more bits of state to the key(s).
@@ -367,7 +367,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>degarble</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.278">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Garbler.html#line.279">degarble</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;garbled,
                               long[]&nbsp;keys)</pre>
 <div class="block">Given a garbled String that was produced by <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>garble(String, long[])</code></a> (using the given keys), this
  reverses the garbling and gets the original String. This is not the same as calling degarble() repeatedly, in
@@ -389,12 +389,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeKeyArray</h4>
-<pre>public static&nbsp;long[]&nbsp;<a href="../src-html/squidpony/Garbler.html#line.314">makeKeyArray</a>(int&nbsp;size,
+<pre>public static&nbsp;long[]&nbsp;<a href="../src-html/squidpony/Garbler.html#line.315">makeKeyArray</a>(int&nbsp;size,
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;keyText)</pre>
 <div class="block">If you need to produce an int array as a key for <a href="../squidpony/Garbler.html#garble-java.lang.String-long:A-"><code>garble(String, long[])</code></a> when you only have a String,
  you can use this method if the String isn't too small (at least 8 char Strings should be fine). This produces a
  diverse array of ints without the correlation between items that you would get if you just generated a sequence
- of random ints from one small seed, by using multiple different <code>CrossHash.Mist</code> objects to hash the text.</div>
+ of random ints from one small seed, by using multiple different <a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath"><code>CrossHash.Mist</code></a> objects to hash the text.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>size</code> - the size of the key array to produce; larger key arrays take proportionately longer to process</dd>

@@ -284,7 +284,7 @@ public class LOS {
      * Returns the path of the last LOS calculation, with the starting point as
      * the head of the queue.
      *
-     * @return
+     * @return the last path found during LOS calculation, as a LinkedList of Coord with the starting point at the head
      */
     public LinkedList<Coord> getLastPath() {
         return lastPath;

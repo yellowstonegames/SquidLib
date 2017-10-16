@@ -775,7 +775,7 @@
 <span class="sourceLineNo">767</span>    /**<a name="line.767"></a>
 <span class="sourceLineNo">768</span>     * Adds an FOV map to another in the simplest way possible; does not check line-of-sight between FOV maps.<a name="line.768"></a>
 <span class="sourceLineNo">769</span>     * Clamps the highest value for any single position at 1.0. Modifies the basis parameter in-place and makes no<a name="line.769"></a>
-<span class="sourceLineNo">770</span>     * allocations; this is different from {@link #addFOVs(double[][]...)}, which creates a new 2D array.<a name="line.770"></a>
+<span class="sourceLineNo">770</span>     * allocations; this is different from {@link #addFOVs(double[][][])}, which creates a new 2D array.<a name="line.770"></a>
 <span class="sourceLineNo">771</span>     * @param basis a 2D double array, which can be empty or returned by calculateFOV() or reuseFOV(); modified!<a name="line.771"></a>
 <span class="sourceLineNo">772</span>     * @param addend another 2D double array that will be added into basis; this one will not be modified<a name="line.772"></a>
 <span class="sourceLineNo">773</span>     * @return the sum of the 2D double arrays passed, using the dimensions of basis if they don't match<a name="line.773"></a>

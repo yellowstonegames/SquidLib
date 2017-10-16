@@ -342,6 +342,16 @@
 <div class="block">Generates a world using the specified RNG state as a long, with specific water and cooling modifiers that affect
  the land-water ratio and the average temperature, respectively.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MaskedShapeGenerator.html#generate--">generate()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MaskedShapeGenerator.html" title="class in squidpony.squidmath">MaskedShapeGenerator</a></dt>
+<dd>
+<div class="block">Returns an int array (12x12) where 0 represents empty space, 1 represents border, and 2 represents "body."
+ The seed will change each time this runs, producing different shapes each time.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MaskedShapeGenerator.html#generate-long-">generate(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MaskedShapeGenerator.html" title="class in squidpony.squidmath">MaskedShapeGenerator</a></dt>
+<dd>
+<div class="block">Returns an int array (12x12) where 0 represents empty space, 1 represents border, and 2 represents "body."
+ Will use the specified seed for this generation.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#generate--">generate()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
 <dd>
 <div class="block">Only needs to be called if you change the <a href="../squidpony/squidmath/WaveletNoise.html#seed"><code>WaveletNoise.seed</code></a> field and want the cube of random values re-created.</div>
@@ -374,6 +384,21 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#generateGoal">generateGoal</a></span> - Variable in class squidpony.squidgrid.mapping.locks.generators.<a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MaskedShapeGenerator.html#generateInto-int:A:A-int-int-">generateInto(int[][], int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MaskedShapeGenerator.html" title="class in squidpony.squidmath">MaskedShapeGenerator</a></dt>
+<dd>
+<div class="block">Returns a modified version of changing where 0 represents empty space, 1 represents border, and 2 represents
+ "body." Only a 12x12 area will be changed by this call, with its minimum x and y determined by xPos and yPos.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MaskedShapeGenerator.html#generateIntoShaded-int:A:A-int-int-">generateIntoShaded(int[][], int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MaskedShapeGenerator.html" title="class in squidpony.squidmath">MaskedShapeGenerator</a></dt>
+<dd>
+<div class="block">Returns a modified version of changing where 0 represents empty space, 1 represents border, 2 represents shaded
+ "body,", 3 represents normal body, and 4 represents lit body.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MaskedShapeGenerator.html#generateIntoShaded8way-int:A:A-int-int-">generateIntoShaded8way(int[][], int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MaskedShapeGenerator.html" title="class in squidpony.squidmath">MaskedShapeGenerator</a></dt>
+<dd>
+<div class="block">Returns a modified version of changing where 0 represents empty space, 1 represents border, 2 represents shaded
+ "body,", 3 represents normal body, and 4 represents lit body.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#generateLightLevels-int-">generateLightLevels(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Given a number of total levels to consider separate in a double[][] such as an FOV result, this produces a levels

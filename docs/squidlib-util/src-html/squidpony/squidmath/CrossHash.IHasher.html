@@ -614,17 +614,17 @@
 <span class="sourceLineNo">606</span>     * ? equalityHelper((char[][]) left, (char[][]) right, charHasher)<a name="line.606"></a>
 <span class="sourceLineNo">607</span>     * : Objects.equals(left, right));}<a name="line.607"></a>
 <span class="sourceLineNo">608</span>     *<a name="line.608"></a>
-<span class="sourceLineNo">609</span>     * @param left<a name="line.609"></a>
-<span class="sourceLineNo">610</span>     * @param right<a name="line.610"></a>
-<span class="sourceLineNo">611</span>     * @param inner<a name="line.611"></a>
-<span class="sourceLineNo">612</span>     * @return<a name="line.612"></a>
+<span class="sourceLineNo">609</span>     * @param left an array of some kind of Object, usually an array, that the given IHasher can compare<a name="line.609"></a>
+<span class="sourceLineNo">610</span>     * @param right an array of some kind of Object, usually an array, that the given IHasher can compare<a name="line.610"></a>
+<span class="sourceLineNo">611</span>     * @param inner an IHasher to compare items in left with items in right<a name="line.611"></a>
+<span class="sourceLineNo">612</span>     * @return true if the contents of left and right are equal by the given IHasher, otherwise false<a name="line.612"></a>
 <span class="sourceLineNo">613</span>     */<a name="line.613"></a>
 <span class="sourceLineNo">614</span>    public static boolean equalityHelper(Object[] left, Object[] right, IHasher inner) {<a name="line.614"></a>
 <span class="sourceLineNo">615</span>        if (left == right)<a name="line.615"></a>
 <span class="sourceLineNo">616</span>            return true;<a name="line.616"></a>
-<span class="sourceLineNo">617</span>        if ((left == null) ^ (right == null))<a name="line.617"></a>
+<span class="sourceLineNo">617</span>        if (left == null || right == null || left.length != right.length)<a name="line.617"></a>
 <span class="sourceLineNo">618</span>            return false;<a name="line.618"></a>
-<span class="sourceLineNo">619</span>        for (int i = 0; i &lt; left.length &amp;&amp; i &lt; right.length; i++) {<a name="line.619"></a>
+<span class="sourceLineNo">619</span>        for (int i = 0; i &lt; left.length; i++) {<a name="line.619"></a>
 <span class="sourceLineNo">620</span>            if (!inner.areEqual(left[i], right[i]))<a name="line.620"></a>
 <span class="sourceLineNo">621</span>                return false;<a name="line.621"></a>
 <span class="sourceLineNo">622</span>        }<a name="line.622"></a>
