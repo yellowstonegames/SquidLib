@@ -1188,7 +1188,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             G6 = F6 / (float)(1.0 + 6.0 * F6),
             LIMIT4 = 0.62f,
             //LIMIT6 = 0.777f
-            LIMIT6 = 0.86f
+            LIMIT6 = 0.7875f
+            //LIMIT6 = 0.86f
             /*
             sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
             a6 = (float)(Math.sqrt((sideLength * sideLength)
@@ -1446,7 +1447,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             t4 *= t4;
             n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
         }
-        return NumberTools.bounce(5.0f + 41.0f * n);
+        //return NumberTools.bounce(5.0f + 41.0f * n);
+        return NumberTools.sway(0.5f + 12.75f * n);
     }
 
 
@@ -1455,15 +1457,19 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         return noise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v, seed);
     }
 
+    private static final float[] mShared = {0, 0, 0, 0, 0, 0}, cellDistShared = {0, 0, 0, 0, 0, 0};
+    private static final int[] distOrderShared = {0, 0, 0, 0, 0, 0}, intLocShared = {0, 0, 0, 0, 0, 0};
+
+
     public static float noise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {
 
         final float s = (x + y + z + w + u + v) * F6;
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
                 skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0}, gradient6DLUT = SeededNoise.gradient6DLUT;
-        final int[] distOrder = {0, 0, 0, 0, 0, 0},
-                intLoc = {0, 0, 0, 0, 0, 0};
+        final float[] m = mShared, cellDist = cellDistShared, gradient6DLUT = SeededNoise.gradient6DLUT;
+        final int[] distOrder = distOrderShared,
+                intLoc = intLocShared;
         intLoc[0] = skewX;
         intLoc[1] = skewY;
         intLoc[2] = skewZ;
@@ -1525,7 +1531,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             skewOffset += G6;
         }
         //return NumberTools.bounce(5.0 + 13.5 * n);
-        return NumberTools.bounce(10.0f + 16.25f * n);
+        //return NumberTools.bounce(10f + 16.25f * n);
+        return NumberTools.sway(0.5f + 5f * n);
+
     }
 
 }
