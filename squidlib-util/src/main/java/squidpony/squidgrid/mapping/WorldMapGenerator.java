@@ -1316,7 +1316,7 @@ public abstract class WorldMapGenerator {
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Always makes a 256x256 map.
          * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
-         * If you were using {@link WorldMapGenerator.SphereMap#SphereMap(long, int, int, Noise3D, double)}, then this would be the
+         * If you were using {@link SphereMap#SphereMap(long, int, int, Noise3D, double)}, then this would be the
          * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
          */
         public SphereMap() {

@@ -1,6 +1,7 @@
 package squidpony;
 
-import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.CrossHash.Mist;
+import squidpony.squidmath.CrossHash.Wisp;
 
 /**
  * Tools for garbling Strings (making them appear to be gibberish) and degarbling earlier outputs to get the original
@@ -151,7 +152,7 @@ public final class Garbler {
      */
     public static String garble(final String text, final String keyText)
     {
-        return garble(text,CrossHash.Wisp.hash(keyText) ^ 0x7F4A7C15);
+        return garble(text,Wisp.hash(keyText) ^ 0x7F4A7C15);
     }
 
     /**
@@ -198,7 +199,7 @@ public final class Garbler {
      */
     public static String degarble(final String garbled, final String keyText)
     {
-        return degarble(garbled,CrossHash.Wisp.hash(keyText) ^ 0x7F4A7C15);
+        return degarble(garbled,Wisp.hash(keyText) ^ 0x7F4A7C15);
     }
 
     /**
@@ -306,18 +307,18 @@ public final class Garbler {
      * If you need to produce an int array as a key for {@link #garble(String, long[])} when you only have a String,
      * you can use this method if the String isn't too small (at least 8 char Strings should be fine). This produces a
      * diverse array of ints without the correlation between items that you would get if you just generated a sequence
-     * of random ints from one small seed, by using multiple different {@link CrossHash.Mist} objects to hash the text.
+     * of random ints from one small seed, by using multiple different {@link Mist} objects to hash the text.
      * @param size the size of the key array to produce; larger key arrays take proportionately longer to process
      * @param keyText the String to use as a basis for generating random-seeming numbers for keys
      * @return an int array that can be given to {@link #garble(String, long[])} and {@link #degarble(String, long[])}
      */
     public static long[] makeKeyArray(final int size, final String keyText)
     {
-        if(size <= 1) return new long[]{CrossHash.Mist.predefined[keyText.length() & 31].hash64(keyText)};
+        if(size <= 1) return new long[]{Mist.predefined[keyText.length() & 31].hash64(keyText)};
         long[] keys = new long[size];
         long ctr = keyText.length() * 181L + 0xB9A2842FL;
         for (int i = 0; i < size; i++) {
-            ctr += (keys[i] = CrossHash.Mist.predefined[(int)splitMix64(ctr) & 31].hash64(keyText)) + 0xB9A2842FL;
+            ctr += (keys[i] = Mist.predefined[(int)splitMix64(ctr) & 31].hash64(keyText)) + 0xB9A2842FL;
             keys[i] ^= ctr;
         }
         return keys;

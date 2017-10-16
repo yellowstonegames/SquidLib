@@ -81,9 +81,9 @@ public class Spill {
      */
     public StatefulRNG rng;
     /**
-     * The LightRNG used as a RandomnessSource for the RNG this object uses. Can have its state read and set.
+     * The StatefulRandomness, usually a LightRNG, that this uses. Can have its state read and set.
      */
-    public LightRNG lrng;
+    public StatefulRandomness lrng;
 
     private boolean initialized = false;
     /**
@@ -117,7 +117,7 @@ public class Spill {
      *
      * If you use this constructor, you must call an  initialize() method before using this class.
      */
-    public Spill(LightRNG random) {
+    public Spill(StatefulRandomness random) {
         lrng = random;
         rng = new StatefulRNG(lrng);
 
@@ -126,7 +126,7 @@ public class Spill {
 
     /**
      * Used to construct a Spill from the output of another.
-     * @param level
+     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls
      */
     public Spill(final boolean[][] level) {
         lrng = new LightRNG();
@@ -136,8 +136,8 @@ public class Spill {
     }
     /**
      * Used to construct a Spill from the output of another, specifying a distance calculation.
-     * @param level
-     * @param measurement
+     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls
+     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final boolean[][] level, Measurement measurement) {
         lrng = new LightRNG();
@@ -154,7 +154,7 @@ public class Spill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here.
      *
-     * @param level
+     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
      */
     public Spill(final char[][] level) {
         lrng = new LightRNG();
@@ -168,7 +168,8 @@ public class Spill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. You can specify the character used for walls.
      *
-     * @param level
+     * @param level the level as a 2D rectangular char array, using {@code alternateWall} to represent walls
+     * @param alternateWall the char that will be interpreted as a wall in {@code level}
      */
     public Spill(final char[][] level, char alternateWall) {
         lrng = new LightRNG();
@@ -183,8 +184,8 @@ public class Spill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
      *
-     * @param level
-     * @param measurement
+     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
+     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement) {
         lrng = new LightRNG();
@@ -203,8 +204,8 @@ public class Spill {
      * will not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will
      * be used to seed this class' RNG).
      *
-     * @param level
-     * @param measurement
+     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
+     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement, RNG random) {
         lrng = new LightRNG(random.nextLong());
@@ -219,13 +220,13 @@ public class Spill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
      *
-     * This constructor allows you to specify a RandomnessSource in the form of a LightRNG, which will be referenced in
+     * This constructor allows you to specify a StatefulRandomness, which will be referenced in
      * this class (if the state of random changes because this object needed a random number, the state change will be
      * reflected in the code that passed random to here).
-     * @param level
-     * @param measurement
+     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
+     * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
-    public Spill(final char[][] level, Measurement measurement, LightRNG random) {
+    public Spill(final char[][] level, Measurement measurement, StatefulRandomness random) {
         lrng = random;
         rng = new StatefulRNG(lrng);
         this.measurement = measurement;
@@ -235,10 +236,9 @@ public class Spill {
 
     /**
      * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
-     * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
-     * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
-     * @param level
-     * @return
+     * one when it was constructed, or because the contents of the terrain have changed permanently.
+     * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls
+     * @return this Spill after initialization has completed, for chaining
      */
     public Spill initialize(final boolean[][] level) {
         fresh = new OrderedSet<>();
@@ -258,10 +258,9 @@ public class Spill {
 
     /**
      * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
-     * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
-     * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ).
-     * @param level
-     * @return
+     * one when it was constructed, or because the contents of the terrain have changed permanently.
+     * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
+     * @return this Spill after initialization has completed, for chaining
      */
     public Spill initialize(final char[][] level) {
         fresh = new OrderedSet<>();
@@ -281,12 +280,11 @@ public class Spill {
 
     /**
      * Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
-     * one when it was constructed, or because the contents of the terrain have changed permanently (not if a
-     * creature moved; for that you pass the positions of creatures that block paths to scan() or findPath() ). This
-     * initialize() method allows you to specify an alternate wall char other than the default character, '#' .
-     * @param level
-     * @param alternateWall
-     * @return
+     * one when it was constructed, or because the contents of the terrain have changed permanently. This
+     * initialize() method allows you to specify an alternate wall char other than the default character, {@code '#'}.
+     * @param level the level as a 2D rectangular char array, using {@code alternateWall} to represent walls
+     * @param alternateWall the char that will be interpreted as a wall in {@code level}
+     * @return this Spill after initialization has completed, for chaining
      */
     public Spill initialize(final char[][] level, char alternateWall) {
         fresh = new OrderedSet<>();
@@ -327,8 +325,8 @@ public class Spill {
 
     /**
      * Reverts a cell to an unfilled state (false in spillMap).
-     * @param x
-     * @param y
+     * @param x the x position of the cell to reset
+     * @param y the y position of the cell to reset
      */
     public void resetCell(int x, int y) {
         if(!initialized) return;
@@ -337,18 +335,27 @@ public class Spill {
 
     /**
      * Reverts a cell to an unfilled state (false in spillMap).
-     * @param pt
+     * @param pt the position of the cell to reset
      */
     public void resetCell(Coord pt) {
         if(!initialized) return;
         spillMap[pt.x][pt.y] = false;
     }
 
+    /**
+     * Used internally to mark a cell as just-now being expanded from.
+     * @param x the x position of the cell to reset
+     * @param y the y position of the cell to reset
+     */
     protected void setFresh(int x, int y) {
         if(!initialized) return;
         fresh.add(Coord.get(x, y));
     }
 
+    /**
+     * Used internally to mark a cell as just-now being expanded from.
+     * @param pt the position of the cell to reset
+     */
     protected void setFresh(final Coord pt) {
         if(!initialized) return;
         fresh.add(pt);
@@ -414,7 +421,7 @@ public class Spill {
             case MANHATTAN:
             case CHEBYSHEV:
                 return 1.0;
-            case EUCLIDEAN:
+            default:
                 switch (target) {
                     case DOWN_LEFT:
                     case DOWN_RIGHT:
@@ -425,6 +432,5 @@ public class Spill {
                         return  1.0;
                 }
         }
-        return 1.0;
     }
 }

@@ -4212,7 +4212,7 @@ public class FakeLanguageGen implements Serializable {
      * {@link FakeLanguageGen#sentence(RNG, int, int, String[], String[], double, int)} or one of its overloads.
      * You can call {@link #sentence()} on this to produce another String sentence with the parameters it was given
      * at construction. The parameters to
-     * {@link FakeLanguageGen.SentenceForm#SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)} are stored in fields of
+     * {@link #SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)} are stored in fields of
      * the same name, and all fields in this class are public and modifiable.
      */
     public static class SentenceForm implements Serializable
@@ -4223,23 +4223,62 @@ public class FakeLanguageGen implements Serializable {
         public String[] midPunctuation, endPunctuation;
         public double midPunctuationFrequency;
         public FakeLanguageGen language;
+
+        /**
+         * Builds a SentenceForm with all default fields, using {@link FakeLanguageGen#FANTASY_NAME} for a language,
+         * using between 1 and 9 words in a sentence, and otherwise defaulting to how
+         * {@link #SentenceForm(FakeLanguageGen, int, int)} behaves.
+         */
         public SentenceForm()
         {
             this(FakeLanguageGen.FANTASY_NAME, FakeLanguageGen.srng, 1, 9,
                     new String[]{",", ",", ",", ";", ";"},
                     new String[]{".", ".", ".", "!", "?", "..."}, 0.18, -1);
         }
+        /**
+         * Builds a SentenceForm with only a few fields specified. The {@link #rng} will be made based on
+         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field, maxChars will be -1 so the sentence length
+         * will be limited only by maxWords and the length of words produced, and the between-word and end-of-sentence
+         * punctuation will be set to reasonable defaults. This places either a comma or a semicolon after a word in the
+         * middle of a sentence about 18% of the time ({@code midPunctuationFrequency} is 0.18), and can end a sentence
+         * in a period, exclamation mark, question mark, or ellipsis (the "..." punctuation).
+         * @param language A FakeLanguageGen to use to generate words
+         * @param minWords minimum words per sentence
+         * @param maxWords maximum words per sentence
+         */
         public SentenceForm(FakeLanguageGen language, int minWords, int maxWords)
         {
             this(language, FakeLanguageGen.srng, minWords, maxWords, new String[]{",", ",", ",", ";", ";"},
                     new String[]{".", ".", ".", "!", "?", "..."}, 0.18, -1);
         }
+        /**
+         * Builds a SentenceForm with all fields specified except for {@link #rng}, which will be made based on
+         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field, and maxChars, which means the sentence length
+         * will be limited only by maxWords and the length of words produced.
+         * @param language A FakeLanguageGen to use to generate words
+         * @param minWords minimum words per sentence
+         * @param maxWords maximum words per sentence
+         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"
+         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."
+         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0
+         */
         public SentenceForm(FakeLanguageGen language, int minWords, int maxWords, String[] midPunctuation,
                             String[] endPunctuation, double midPunctuationFrequency)
         {
             this(language, FakeLanguageGen.srng, minWords, maxWords, midPunctuation, endPunctuation,
                     midPunctuationFrequency, -1);
         }
+        /**
+         * Builds a SentenceForm with all fields specified except for {@link #rng}, which will be made based on
+         * FakeLanguageGen's static {@link FakeLanguageGen#srng} field.
+         * @param language A FakeLanguageGen to use to generate words
+         * @param minWords minimum words per sentence
+         * @param maxWords maximum words per sentence
+         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"
+         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."
+         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0
+         * @param maxChars the maximum number of chars to use in a sentence, or -1 for no hard limit
+         */
         public SentenceForm(FakeLanguageGen language, int minWords, int maxWords, String[] midPunctuation,
                             String[] endPunctuation, double midPunctuationFrequency, int maxChars)
         {
@@ -4247,6 +4286,20 @@ public class FakeLanguageGen implements Serializable {
                     midPunctuationFrequency, maxChars);
         }
 
+        /**
+         * Builds a SentenceForm with all fields specified; each value is referenced directly except for {@code rng},
+         * which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).
+         * Note that the StatefulRandomness used by this class' rng field will always be LightRNG, even if the given rng
+         * parameter used a different StatefulRandomness implementation.
+         * @param language A FakeLanguageGen to use to generate words
+         * @param rng a StatefulRNG that will not be directly referenced; the state will be copied into a new StatefulRNG
+         * @param minWords minimum words per sentence
+         * @param maxWords maximum words per sentence
+         * @param midPunctuation an array of Strings that can be used immediately after words in the middle of sentences, like "," or ";"
+         * @param endPunctuation an array of Strings that can end a sentence, like ".", "?", or "..."
+         * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0
+         * @param maxChars the maximum number of chars to use in a sentence, or -1 for no hard limit
+         */
         public SentenceForm(FakeLanguageGen language, StatefulRNG rng, int minWords, int maxWords,
                             String[] midPunctuation, String[] endPunctuation,
                             double midPunctuationFrequency, int maxChars)

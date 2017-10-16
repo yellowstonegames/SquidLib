@@ -70,8 +70,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
-    private int hashMode = 43, rngMode = 30, noiseMode = 79;
+    private int testType = 1;
+    private int hashMode = 64, rngMode = 30, noiseMode = 79;
 
     private SpriteBatch batch;
     private SquidColorCenter colorFactory;
@@ -203,6 +203,96 @@ public class HashVisualizer extends ApplicationAdapter {
         return hash;
     }
 
+    /**
+     * Gets the fractional component of a float. For compatibility with GLSL, which has this built in.
+     * @param a any float other than NaN or an infinite value
+     * @return the fractional component of a, between 0.0 (inclusive) and 1.0 (exclusive)
+     */
+    public static float fract(final float a)
+    {
+        return a - (a >= 0f ? (int) a : (int) a - 1);
+    }
+
+    /**
+     * Hash of 1 float input (this will tolerate most floats) with a seed between 0.0 (inclusive) and 1.0 (exclusive),
+     * producing a float between 0.0 (inclusive) and 1.0 (exclusive). Designed to port well to GLSL; see
+     * <a href="https://www.shadertoy.com/view/Mljczw">this ShaderToy demo</a>. This function is used to implement the
+     * other overloads of floatHash().
+     * @param x almost any float; this will tolerate floats without a fractional component if they aren't very large
+     * @param seed a float between 0.0 (inclusive) and 1.0 (exclusive); others may reduce quality
+     * @return a hash-code-like float between 0.0 (inclusive) and 1.0 (exclusive)
+     */
+    public static float floatHash(float x, float seed)
+    {
+        x *= 15.718281828459045f;
+        x = (x + 0.5718281828459045f + seed) * ((seed + (x % 0.141592653589793f)) * 27.61803398875f + 4.718281828459045f);
+        return x - (x >= 0f ? (int) x : (int) x - 1);
+    }
+    /**
+     * Hash of 2 float inputs (this will tolerate most floats) with a seed between 0.0 (inclusive) and 1.0 (exclusive),
+     * producing a float between 0.0 (inclusive) and 1.0 (exclusive). Designed to port well to GLSL; see
+     * <a href="https://www.shadertoy.com/view/Mljczw">this ShaderToy demo</a>.
+     * @param x almost any float; this will tolerate floats without a fractional component if they aren't very large
+     * @param y almost any float; this will tolerate floats without a fractional component if they aren't very large
+     * @param seed a float between 0.0 (inclusive) and 1.0 (exclusive); others may reduce quality
+     * @return a hash-code-like float between 0.0 (inclusive) and 1.0 (exclusive)
+     */
+    public static float floatHash(float x, float y, float seed)
+    {
+        x = floatHash(x, seed);
+        return floatHash(y, x);
+        //x = fract((x + seed) * ((seed + (x % 0.141592653589793f)) * 23.61803398875f + 5.718281828459045f));
+        //return fract((y + x) * ((x + (y % 0.141592653589793f)) * 23.61803398875f + 5.718281828459045f));
+    }
+
+    /**
+     * Hash of 3 float inputs (this will tolerate most floats) with a seed between 0.0 (inclusive) and 1.0 (exclusive),
+     * producing a float between 0.0 (inclusive) and 1.0 (exclusive). Designed to port well to GLSL; see
+     * <a href="https://www.shadertoy.com/view/Mljczw">this ShaderToy demo</a>.
+     * @param x almost any float; this will tolerate floats without a fractional component if they aren't very large
+     * @param y almost any float; this will tolerate floats without a fractional component if they aren't very large
+     * @param z almost any float; this will tolerate floats without a fractional component if they aren't very large
+     * @param seed a float between 0.0 (inclusive) and 1.0 (exclusive); others may reduce quality
+     * @return a hash-code-like float between 0.0 (inclusive) and 1.0 (exclusive)
+     */
+    public static float floatHash(float x, float y, float z, float seed)
+    {
+        // This code is roughly equivalent to the following GLSL code, which may be available at the ShaderToy link:
+/*
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Adjust this for how you can access x,y positions.
+	vec2 uv = (fragCoord.xy / iResolution.xy) * 15.718281828459045;
+    // Randomness/hash "salt" is seeded here in the first three elements.
+    // Seeds should be between 0 and 1, upper exclusive.
+    vec3 seeds = vec3(0.123, 0.456, 0.789);
+    seeds = fract((uv.x + 0.5718281828459045 + seeds) * ((seeds + mod(uv.x, 0.141592653589793)) * 27.61803398875 + 4.718281828459045));
+    seeds = fract((uv.y + 0.5718281828459045 + seeds) * ((seeds + mod(uv.y, 0.141592653589793)) * 27.61803398875 + 4.718281828459045));
+    // You can use some other time-like counter if you want to change the hash over time
+    seeds = fract((iTime + 0.5718281828459045 + seeds) * ((seeds + mod(iTime, 0.141592653589793)) * 27.61803398875 + 4.718281828459045));
+    fragColor = vec4(seeds, 1.0);
+}
+*/
+        x = floatHash(x, seed);
+        y = floatHash(y, x);
+        return floatHash(z, y);
+    }
+
+    /**
+     * Hash of an array of float inputs (most inputs are acceptable) with a seed between 0.0 (inclusive) and 1.0
+     * (exclusive), producing a float between 0.0 (inclusive) and 1.0 (exclusive). Designed to port well to GLSL; see
+     * <a href="https://www.shadertoy.com/view/Mljczw">this ShaderToy demo</a>.
+     * @param inputs a non-null (and ideally non-empty) float array with input coordinates
+     * @param seed a float between 0.0 (inclusive) and 1.0 (exclusive); others may reduce quality
+     * @return a hash-code-like float between 0.0 (inclusive) and 1.0 (exclusive)
+     */
+    public static float floatHash(float[] inputs, float seed)
+    {
+        for (int i = 0; i < inputs.length; i++) {
+            seed = floatHash(inputs[i], seed);
+        }
+        return seed;
+    }
     /**
      * A miniature version of LapRNG that can be quickly copied into a project.
      * Sometimes used here to prototype changes to LapRNG's algorithm.
@@ -344,6 +434,9 @@ public class HashVisualizer extends ApplicationAdapter {
         return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
     }
     public static int fastFloor(double t) {
+        return t >= 0 ? (int) t : (int) t - 1;
+    }
+    public static int fastFloor(float t) {
         return t >= 0 ? (int) t : (int) t - 1;
     }
 
@@ -792,7 +885,7 @@ public class HashVisualizer extends ApplicationAdapter {
                                 break;
                             case 1:
                                 hashMode++;
-                                hashMode %= 66;
+                                hashMode %= 70;
                                 break;
                             case 2:
                                 hashMode++;
@@ -1578,6 +1671,50 @@ public class HashVisualizer extends ApplicationAdapter {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistC.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 66:
+                        Gdx.graphics.setTitle("FloatHash on length 2");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = floatHash(x * 0.211211211f, y * 0.211211211f, 0.123456789f);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 67:
+                        Gdx.graphics.setTitle("FloatHash on length 3");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = floatHash(x * 0.211211211f, y * 0.211211211f, ctr * 0.211211211f, 0.3456789f);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 68:
+                        Gdx.graphics.setTitle("FloatHash (3 seeds, color) on length 2");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(
+                                        floatHash(x * 0.211211211f, y * 0.211211211f, 0.39456189f),
+                                        floatHash(x * 0.211211211f, y * 0.211211211f, 0.48456289f),
+                                        floatHash(x * 0.211211211f, y * 0.211211211f, 0.57456389f),
+                                        1f
+                                ));
+                            }
+                        }
+                        break;
+                    case 69:
+                        Gdx.graphics.setTitle("FloatHash (3 seeds, color) on length 3");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(
+                                        floatHash(x * 0.211211211f, y * 0.211211211f, ctr * 0.211211211f, 0.39456189f),
+                                        floatHash(x * 0.211211211f, y * 0.211211211f, ctr * 0.211211211f, 0.48456289f),
+                                        floatHash(x * 0.211211211f, y * 0.211211211f, ctr * 0.211211211f, 0.57456389f),
+                                        1f
+                                ));
                             }
                         }
                         break;
