@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.ArrayTools;
 import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.GapShuffler;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.RNG;
 
@@ -10226,6 +10227,173 @@ public class SColor extends Color {
             CW_PALE_MAGENTA,CW_LIGHT_MAGENTA, CW_BRIGHT_MAGENTA, CW_FADED_MAGENTA, CW_MAGENTA, CW_FLUSH_MAGENTA, CW_DRAB_MAGENTA, CW_DARK_MAGENTA, CW_RICH_MAGENTA,
             CW_WHITE, CW_ALMOST_WHITE, CW_GRAY_WHITE, CW_LIGHT_GRAY, CW_GRAY, CW_DARK_GRAY, CW_GRAY_BLACK, CW_ALMOST_BLACK, CW_BLACK,
     };
+    /** 16 high-brightness, low-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_PALE =  {
+            CW_PALE_RED,
+            CW_PALE_ORANGE,
+            CW_PALE_BROWN,
+            CW_PALE_APRICOT,
+            CW_PALE_GOLD,
+            CW_PALE_YELLOW,
+            CW_PALE_CHARTREUSE,
+            CW_PALE_HONEYDEW,
+            CW_PALE_GREEN,
+            CW_PALE_SEAFOAM,
+            CW_PALE_AZURE,
+            CW_PALE_BLUE,
+            CW_PALE_INDIGO,
+            CW_PALE_VIOLET,
+            CW_PALE_PURPLE,
+            CW_PALE_MAGENTA
+    }, /** 16 high-brightness, mid-saturation colors. */ COLOR_WHEEL_PALETTE_LIGHT =  {
+            CW_LIGHT_RED,
+            CW_LIGHT_ORANGE,
+            CW_LIGHT_BROWN,
+            CW_LIGHT_APRICOT,
+            CW_LIGHT_GOLD,
+            CW_LIGHT_YELLOW,
+            CW_LIGHT_CHARTREUSE,
+            CW_LIGHT_HONEYDEW,
+            CW_LIGHT_GREEN,
+            CW_LIGHT_SEAFOAM,
+            CW_LIGHT_AZURE,
+            CW_LIGHT_BLUE,
+            CW_LIGHT_INDIGO,
+            CW_LIGHT_VIOLET,
+            CW_LIGHT_PURPLE,
+            CW_LIGHT_MAGENTA
+    }, /** 16 high-brightness, high-saturation colors. */ COLOR_WHEEL_PALETTE_BRIGHT =  {
+            CW_BRIGHT_RED,
+            CW_BRIGHT_ORANGE,
+            CW_BRIGHT_BROWN,
+            CW_BRIGHT_APRICOT,
+            CW_BRIGHT_GOLD,
+            CW_BRIGHT_YELLOW,
+            CW_BRIGHT_CHARTREUSE,
+            CW_BRIGHT_HONEYDEW,
+            CW_BRIGHT_GREEN,
+            CW_BRIGHT_SEAFOAM,
+            CW_BRIGHT_AZURE,
+            CW_BRIGHT_BLUE,
+            CW_BRIGHT_INDIGO,
+            CW_BRIGHT_VIOLET,
+            CW_BRIGHT_PURPLE,
+            CW_BRIGHT_MAGENTA
+    }, /** 16 mid-brightness, low-saturation colors. */ COLOR_WHEEL_PALETTE_FADED =  {
+            CW_FADED_RED,
+            CW_FADED_ORANGE,
+            CW_FADED_BROWN,
+            CW_FADED_APRICOT,
+            CW_FADED_GOLD,
+            CW_FADED_YELLOW,
+            CW_FADED_CHARTREUSE,
+            CW_FADED_HONEYDEW,
+            CW_FADED_GREEN,
+            CW_FADED_SEAFOAM,
+            CW_FADED_AZURE,
+            CW_FADED_BLUE,
+            CW_FADED_INDIGO,
+            CW_FADED_VIOLET,
+            CW_FADED_PURPLE,
+            CW_FADED_MAGENTA
+    }, /** 16 mid-brightness, mid-saturation colors. */ COLOR_WHEEL_PALETTE_MID =  {
+            CW_RED,
+            CW_ORANGE,
+            CW_BROWN,
+            CW_APRICOT,
+            CW_GOLD,
+            CW_YELLOW,
+            CW_CHARTREUSE,
+            CW_HONEYDEW,
+            CW_GREEN,
+            CW_SEAFOAM,
+            CW_AZURE,
+            CW_BLUE,
+            CW_INDIGO,
+            CW_VIOLET,
+            CW_PURPLE,
+            CW_MAGENTA
+    }, /** 16 mid-brightness, high-saturation colors. */ COLOR_WHEEL_PALETTE_FLUSH =  {
+            CW_FLUSH_RED,
+            CW_FLUSH_ORANGE,
+            CW_FLUSH_BROWN,
+            CW_FLUSH_APRICOT,
+            CW_FLUSH_GOLD,
+            CW_FLUSH_YELLOW,
+            CW_FLUSH_CHARTREUSE,
+            CW_FLUSH_HONEYDEW,
+            CW_FLUSH_GREEN,
+            CW_FLUSH_SEAFOAM,
+            CW_FLUSH_AZURE,
+            CW_FLUSH_BLUE,
+            CW_FLUSH_INDIGO,
+            CW_FLUSH_VIOLET,
+            CW_FLUSH_PURPLE,
+            CW_FLUSH_MAGENTA
+    }, /** 16 low-brightness, low-saturation colors. */ COLOR_WHEEL_PALETTE_DRAB =  {
+            CW_DRAB_RED,
+            CW_DRAB_ORANGE,
+            CW_DRAB_BROWN,
+            CW_DRAB_APRICOT,
+            CW_DRAB_GOLD,
+            CW_DRAB_YELLOW,
+            CW_DRAB_CHARTREUSE,
+            CW_DRAB_HONEYDEW,
+            CW_DRAB_GREEN,
+            CW_DRAB_SEAFOAM,
+            CW_DRAB_AZURE,
+            CW_DRAB_BLUE,
+            CW_DRAB_INDIGO,
+            CW_DRAB_VIOLET,
+            CW_DRAB_PURPLE,
+            CW_DRAB_MAGENTA
+    }, /** 16 low-brightness, mid-saturation colors. */ COLOR_WHEEL_PALETTE_DARK =  {
+            CW_DARK_RED,
+            CW_DARK_ORANGE,
+            CW_DARK_BROWN,
+            CW_DARK_APRICOT,
+            CW_DARK_GOLD,
+            CW_DARK_YELLOW,
+            CW_DARK_CHARTREUSE,
+            CW_DARK_HONEYDEW,
+            CW_DARK_GREEN,
+            CW_DARK_SEAFOAM,
+            CW_DARK_AZURE,
+            CW_DARK_BLUE,
+            CW_DARK_INDIGO,
+            CW_DARK_VIOLET,
+            CW_DARK_PURPLE,
+            CW_DARK_MAGENTA
+    }, /** 16 low-brightness, high-saturation colors. */ COLOR_WHEEL_PALETTE_RICH =  {
+            CW_RICH_RED,
+            CW_RICH_ORANGE,
+            CW_RICH_BROWN,
+            CW_RICH_APRICOT,
+            CW_RICH_GOLD,
+            CW_RICH_YELLOW,
+            CW_RICH_CHARTREUSE,
+            CW_RICH_HONEYDEW,
+            CW_RICH_GREEN,
+            CW_RICH_SEAFOAM,
+            CW_RICH_AZURE,
+            CW_RICH_BLUE,
+            CW_RICH_INDIGO,
+            CW_RICH_VIOLET,
+            CW_RICH_PURPLE,
+            CW_RICH_MAGENTA
+    };
+    /**
+     * Contains 9 arrays of 16 SColors each, with each of the outer arrays having a specific saturation and brightness,
+     * and the inner arrays all going through the 16 "reduced" Color Wheel palette hues. Meant to be used with
+     * {@link #randomHueSequence()} or its overloads to allow getting various saturation and brightness combinations
+     * from the same hue. Note that randomHueSequence returns an Integer between 0 and 15, so it would be used to select
+     * from the inner arrays.
+     */
+    public static final SColor[][] COLOR_WHEEL_PALETTES = {
+            COLOR_WHEEL_PALETTE_PALE, COLOR_WHEEL_PALETTE_LIGHT, COLOR_WHEEL_PALETTE_BRIGHT,
+            COLOR_WHEEL_PALETTE_FADED, COLOR_WHEEL_PALETTE_MID, COLOR_WHEEL_PALETTE_FLUSH,
+            COLOR_WHEEL_PALETTE_DRAB, COLOR_WHEEL_PALETTE_DARK, COLOR_WHEEL_PALETTE_RICH
+    };
 
     /**
      * Gets a random color from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, with the specified brightness (0 is
@@ -10238,8 +10406,9 @@ public class SColor extends Color {
      */
     public static SColor randomColorWheel(RNG rng, int bright, int sat)
     {
-        bright &= 0xf;
-        sat &= 0xf;
+        bright = 2 - bright;
+        bright &= 0x3;
+        sat &= 0x3;
         bright %= 3;
         sat %= 3;
         return COLOR_WHEEL_PALETTE_REDUCED[rng.next(4) * 9 + 3 * bright + sat];
@@ -10269,8 +10438,9 @@ public class SColor extends Color {
     {
         idx *= 7;
         idx &= 0xf;
-        bright &= 0xf;
-        sat &= 0xf;
+        bright = 2 - bright;
+        bright &= 0x3;
+        sat &= 0x3;
         bright %= 3;
         sat %= 3;
         return COLOR_WHEEL_PALETTE_REDUCED[idx * 9 + 3 * bright + sat];
@@ -10304,6 +10474,134 @@ public class SColor extends Color {
         idx *= 89;
         return COLOR_WHEEL_PALETTE_REDUCED[idx % 144 ^ (idx >> 2 & 3)];
     }
+
+    /**
+     * Returns an infinite Iterator (also an Iterable) over different colors from {@link #COLOR_WHEEL_PALETTE}, with
+     * measures taken to avoid returning the same exact SColor twice in a row (but two similar colors could be returned
+     * in quick succession). See the documentation for {@link GapShuffler} for how you can use the returned infinite
+     * Iterable; normally you would either call next() on it several times, or use it in a for loop that must at some
+     * point exit via return or break.
+     * @param seed a CharSequence, such as a String, to use as a seed; should be fairly long
+     * @return a GapShuffler over the SColor values in COLOR_WHEEL_PALETTE
+     */
+    public static GapShuffler<SColor> randomColorSequence(CharSequence seed)
+    {
+        return new GapShuffler<>(COLOR_WHEEL_PALETTE, seed);
+    }
+    /**
+     * Returns an infinite Iterator (also an Iterable) over different colors from {@link #COLOR_WHEEL_PALETTE}, with
+     * measures taken to avoid returning the same hue of SColor twice in a row (but two similar hues could be returned
+     * in quick succession). See the documentation for {@link GapShuffler} for how you can use the returned infinite
+     * Iterable; normally you would either call next() on it several times, or use it in a for loop that must at some
+     * point exit via return or break. This overload specifies a brightness and saturation to use, and only changes the
+     * hue; this means there are 16 possible colors this can generate with the same bright and sat parameters.
+     * @param seed a CharSequence, such as a String, to use as a seed; should be fairly long
+     * @param bright the brightness to use, from 0 (darkest) to 2 (brightest)
+     * @param sat the saturation to use, from 0 (grayest) to 2 (boldest)
+     * @return a GapShuffler over the SColor values in COLOR_WHEEL_PALETTE
+     */
+    public static GapShuffler<SColor> randomColorSequence(CharSequence seed, int bright, int sat)
+    {
+        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat) % 9], seed);
+    }
+    /**
+     * Returns an infinite Iterator (also an Iterable) over different colors from {@link #COLOR_WHEEL_PALETTE}, with
+     * measures taken to avoid returning the same exact SColor twice in a row (but two similar colors could be returned
+     * in quick succession). See the documentation for {@link GapShuffler} for how you can use the returned infinite
+     * Iterable; normally you would either call next() on it several times, or use it in a for loop that must at some
+     * point exit via return or break.
+     * @param rng the source of randomness for shuffles in the returned sequence; often a {@link squidpony.squidmath.LongPeriodRNG}
+     * @return a GapShuffler over the SColor values in COLOR_WHEEL_PALETTE
+     */
+    public static GapShuffler<SColor> randomColorSequence(RNG rng)
+    {
+        return new GapShuffler<>(COLOR_WHEEL_PALETTE, rng);
+    }
+    /**
+     * Returns an infinite Iterator (also an Iterable) over different colors from {@link #COLOR_WHEEL_PALETTE}, with
+     * measures taken to avoid returning the same hue of SColor twice in a row (but two similar hues could be returned
+     * in quick succession). See the documentation for {@link GapShuffler} for how you can use the returned infinite
+     * Iterable; normally you would either call next() on it several times, or use it in a for loop that must at some
+     * point exit via return or break. This overload specifies a brightness and saturation to use, and only changes the
+     * hue; this means there are 16 possible colors this can generate with the same bright and sat parameters.
+     * @param rng the source of randomness for shuffles in the returned sequence; often a {@link squidpony.squidmath.LongPeriodRNG}
+     * @param bright the brightness to use, from 0 (darkest) to 2 (brightest)
+     * @param sat the saturation to use, from 0 (grayest) to 2 (boldest)
+     * @return a GapShuffler over the SColor values in COLOR_WHEEL_PALETTE
+     */
+    public static GapShuffler<SColor> randomColorSequence(RNG rng, int bright, int sat)
+    {
+        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat) % 9], rng);
+    }
+    /**
+     * Returns an infinite Iterator (also an Iterable) over different colors from {@link #COLOR_WHEEL_PALETTE}, with
+     * measures taken to avoid returning the same exact SColor twice in a row (but two similar colors could be returned
+     * in quick succession). See the documentation for {@link GapShuffler} for how you can use the returned infinite
+     * Iterable; normally you would either call next() on it several times, or use it in a for loop that must at some
+     * point exit via return or break. This overload uses a random seed for its shuffled order.
+     * @return a GapShuffler over the SColor values in COLOR_WHEEL_PALETTE
+     */
+    public static GapShuffler<SColor> randomColorSequence()
+    {
+        return new GapShuffler<>(COLOR_WHEEL_PALETTE);
+    }
+    /**
+     * Returns an infinite Iterator (also an Iterable) over different colors from {@link #COLOR_WHEEL_PALETTE}, with
+     * measures taken to avoid returning the same hue of SColor twice in a row (but two similar hues could be returned
+     * in quick succession). See the documentation for {@link GapShuffler} for how you can use the returned infinite
+     * Iterable; normally you would either call next() on it several times, or use it in a for loop that must at some
+     * point exit via return or break. This overload specifies a brightness and saturation to use, and only changes the
+     * hue; this means there are 16 possible colors this can generate with the same bright and sat parameters. This
+     * overload uses a random seed for its shuffled order.
+     * @param bright the brightness to use, from 0 (darkest) to 2 (brightest)
+     * @param sat the saturation to use, from 0 (grayest) to 2 (boldest)
+     * @return a GapShuffler over the SColor values in COLOR_WHEEL_PALETTE
+     */
+    public static GapShuffler<SColor> randomColorSequence(int bright, int sat)
+    {
+        return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat) % 9]);
+    }
+
+    /**
+     * Returns an infinite Iterator (also an Iterable) over Integers 0-15 inclusive that can be used to select hues from
+     * {@link #COLOR_WHEEL_PALETTES}, with measures taken to avoid returning the same hue of SColor twice in a row (but
+     * two similar hues could be returned in quick succession). See the documentation for {@link GapShuffler} for how
+     * you can use the returned infinite Iterable; normally you would either call next() on it several times, or use it
+     * in a for loop that must at some point exit via return or break.
+     * @param seed a CharSequence, such as a String, to use as a seed; should be fairly long
+     * @return a GapShuffler that goes through the Integers betweeen 0 and 15, both inclusive
+     */
+    public static GapShuffler<Integer> randomHueSequence(CharSequence seed)
+    {
+        return new GapShuffler<Integer>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, seed);
+    }
+    /**
+     * Returns an infinite Iterator (also an Iterable) over Integers 0-15 inclusive that can be used to select hues from
+     * {@link #COLOR_WHEEL_PALETTES}, with measures taken to avoid returning the same hue of SColor twice in a row (but
+     * two similar hues could be returned in quick succession). See the documentation for {@link GapShuffler} for how
+     * you can use the returned infinite Iterable; normally you would either call next() on it several times, or use it
+     * in a for loop that must at some point exit via return or break.
+     * @param rng the source of randomness for shuffles in the returned sequence; often a {@link squidpony.squidmath.LongPeriodRNG}
+     * @return a GapShuffler that goes through the Integers betweeen 0 and 15, both inclusive
+     */
+    public static GapShuffler<Integer> randomHueSequence(RNG rng)
+    {
+        return new GapShuffler<Integer>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, rng);
+    }
+    /**
+     * Returns an infinite Iterator (also an Iterable) over Integers 0-15 inclusive that can be used to select hues from
+     * {@link #COLOR_WHEEL_PALETTES}, with measures taken to avoid returning the same hue of SColor twice in a row (but
+     * two similar hues could be returned in quick succession). See the documentation for {@link GapShuffler} for how
+     * you can use the returned infinite Iterable; normally you would either call next() on it several times, or use it
+     * in a for loop that must at some point exit via return or break. This overload uses a random seed for its shuffled
+     * order.
+     * @return a GapShuffler that goes through the Integers betweeen 0 and 15, both inclusive
+     */
+    public static GapShuffler<Integer> randomHueSequence()
+    {
+        return new GapShuffler<Integer>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
+    }
+
     /**
      * This array is loaded with all of the colors defined in SColor, in
      * arbitrary order.

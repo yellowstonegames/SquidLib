@@ -456,6 +456,24 @@ public class CrossHash {
         }
         return result * (a | 1L) ^ (result >>> 27 | result << 37);
     }
+    /**
+     * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+     *
+     * @param data  the char array to hash
+     * @param start the start of the section to hash (inclusive)
+     * @param end   the end of the section to hash (exclusive)
+     * @return a 64-bit hash code for the requested section of data
+     */
+    public static long hash64(final CharSequence data, final int start, final int end) {
+        if (data == null || start >= end)
+            return 0;
+        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+        final int len = end < data.length() ? end : data.length();
+        for (int i = start; i < len; i++) {
+            result += (a ^= 0x8329C6EB9E6AD3E3L * data.charAt(i));
+        }
+        return result * (a | 1L) ^ (result >>> 27 | result << 37);
+    }
 
     public static long hash64(final char[][] data) {
         if (data == null)

@@ -15,6 +15,7 @@ import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SparseLayers;
 import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidmath.GapShuffler;
 import squidpony.squidmath.MaskedShapeGenerator;
 import squidpony.squidmath.ThrustRNG;
 
@@ -30,14 +31,18 @@ public class ShapeTest extends ApplicationAdapter {
     private Stage stage;
     private Viewport view;
     private MaskedShapeGenerator gen;
-    private int[][] data, colorChoices;
-    private int counter = 0;
+    private int[][] data;
+    private float[][] colorChoices;
+    private long counter = 0L;
+    private GapShuffler<Integer> shuffler;
     @Override
     public void create() {
         gen = new MaskedShapeGenerator();
         batch = new SpriteBatch();
+        counter = System.currentTimeMillis();
+        shuffler = SColor.randomHueSequence();
         data = new int[width][height];
-        colorChoices = new int[6][6];
+        colorChoices = ArrayTools.fill(SColor.FLOAT_BLACK, 6, 24);
         display = new SparseLayers(width, height, cellWidth, cellHeight, DefaultResources.getStretchableHeavySquareFont());
         view = new StretchViewport(width * cellWidth, height * cellHeight);
         stage = new Stage(view, batch);
@@ -72,7 +77,12 @@ public class ShapeTest extends ApplicationAdapter {
         for (int y = 0; y < 6; y++) {
             for (int x = 0; x < 6; x++) {
                 gen.generateIntoShaded8way(data, x * 16 + 2, y * 16 + 2);
-                colorChoices[x][y] = ((t = counter + x + 6 * y) & 15) | (ThrustRNG.determineBounded(t, 3) << 4);
+                int sat = ThrustRNG.determineBounded(++counter + (x << 3) + y, 3),
+                hue = shuffler.next();
+                colorChoices[x][y<<2|1] = SColor.COLOR_WHEEL_PALETTES[sat][hue].toFloatBits();
+                colorChoices[x][y<<2|2] = SColor.COLOR_WHEEL_PALETTES[sat + 3][hue].toFloatBits();
+                colorChoices[x][y<<2|3] = SColor.COLOR_WHEEL_PALETTES[sat + 6][hue].toFloatBits();
+                //colorChoices[x][y] = ((t = counter + x + 6 * y) & 15) | (ThrustRNG.determineBounded(t, 3) << 4);
 //                colorChoices[x][y] = ((counter + x + 36 * y) * 13 % 21) * 9
 //                        + ThrustRNG.determineBounded(counter + x + 36 * y, 3);
             }
@@ -84,7 +94,8 @@ public class ShapeTest extends ApplicationAdapter {
                     case 0:
                         display.backgrounds[x][y] = 0f;
                         break;
-                    case 1:
+                    default: display.backgrounds[x][y] = colorChoices[x >> 4][(y >> 4) << 2 | (data[x][y] - 1)];
+/*                    case 1:
                         display.backgrounds[x][y] = SColor.FLOAT_BLACK;
                         break;
                     case 2:
@@ -99,6 +110,7 @@ public class ShapeTest extends ApplicationAdapter {
                         display.backgrounds[x][y] = SColor.indexedColorWheel((t = colorChoices[x >> 4][y >> 4]) & 15, 0, t >> 4).toFloatBits();
                         //SColor.COLOR_WHEEL_PALETTE[colorChoices[x >> 4][y >> 4] + 3].toFloatBits();
                         break;
+                        */
                 }
             }
         }
@@ -109,7 +121,6 @@ public class ShapeTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0.75f, 0.75f, 0.75f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        counter = gen.randomness.next(26);
         putMap();
 
         // if we are waiting for the player's input and get input, process it.
