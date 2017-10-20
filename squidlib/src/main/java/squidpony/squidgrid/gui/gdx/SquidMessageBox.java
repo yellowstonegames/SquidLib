@@ -155,9 +155,8 @@ public class SquidMessageBox extends SquidPanel {
         List<IColoredString<Color>> truncated = new IColoredString.Impl<>(message, defaultForeground).wrap(gridWidth - 2);
         for (IColoredString<Color> t : truncated)
         {
-            appendMessage(t.present());
+            appendMessage(t);
         }
-        messageIndex = messages.size() - 1;
     }
 
     /**
@@ -170,6 +169,7 @@ public class SquidMessageBox extends SquidPanel {
         IColoredString.Impl<Color> truncated = new IColoredString.Impl<>();
         truncated.append(message);
         truncated.setLength(gridWidth - 2);
+        messages.add(truncated);
         messageIndex = messages.size() - 1;
     }
 
@@ -190,8 +190,6 @@ public class SquidMessageBox extends SquidPanel {
         {
             appendMessage(t);
         }
-        messages.addAll(truncated);
-        messageIndex = messages.size() - 1;
     }
 
     /**

@@ -9,8 +9,8 @@ public class EverythingDemoLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "SquidLib GDX Everything Demo";
-		config.width = 90 * 12;
-		config.height = 30 * 25;
+		config.width = 90 * 13;
+		config.height = 30 * 23;
 		config.foregroundFPS = 0;
 		config.backgroundFPS = 30;
 		config.vSyncEnabled = false;

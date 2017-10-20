@@ -732,6 +732,8 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 						result.append(markup.closeMarkup());
 					open = false;
 				}
+				// maybe try this line if escape() is re-added to IMarkup
+				//result.append(markup.escape(fragment.text));
 				result.append(fragment.text);
 			}
 			return result.toString();

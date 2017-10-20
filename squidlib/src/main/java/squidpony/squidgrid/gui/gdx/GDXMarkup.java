@@ -11,6 +11,7 @@ import squidpony.panel.IMarkup;
  * Created by Tommy Ettinger on 1/23/2016.
  */
 public class GDXMarkup implements IMarkup<Color>{
+    public static GDXMarkup instance = new GDXMarkup();
     public GDXMarkup()
     {
 
@@ -30,4 +31,12 @@ public class GDXMarkup implements IMarkup<Color>{
     public String closeMarkup() {
         return "[]";
     }
+
+    /*
+    @Override
+    public String escape(String initialText)
+    {
+        return initialText.replace("[", "[[");
+    }
+    */
 }

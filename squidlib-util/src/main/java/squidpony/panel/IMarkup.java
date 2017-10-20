@@ -33,6 +33,16 @@ public interface IMarkup<T> {
      */
     String closeMarkup();
 
+    // escape() is currently commented out because I don't know if it is needed.
+    /*
+     * If the Strings used as markup may occur in normal text, you can call this on the text before applying markup to
+     * escape the not-actually-markup Strings in the text. If your variety of markup doesn't have a concept of escaping,
+     * this can return initialText as-is.
+     * @param initialText the text to process, before applying markup
+     * @return a String made from initialText, with any pre-existing Strings that could be read as markup escaped
+     * /
+    String escape(String initialText);
+     */
     /**
      * Probably not that useful on its own, but may be good as an example.
      * @see squidpony.panel.IMarkup IMarkup has more complete documentation on how it should be used
@@ -48,5 +58,13 @@ public interface IMarkup<T> {
         public String closeMarkup() {
             return "[]";
         }
+
+        /*
+        @Override
+        public String escape(String initialText)
+        {
+            return initialText.replace("[", "[[");
+        }
+        */
     }
 }
