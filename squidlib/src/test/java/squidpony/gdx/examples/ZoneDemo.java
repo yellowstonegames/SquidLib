@@ -258,7 +258,7 @@ public class ZoneDemo extends ApplicationAdapter {
     }
 
     private void buildCurrentTextPanel(int newWidth, int newHeight) {
-        current = new TextPanel<Color>(new GDXMarkup(), //DefaultResources.getLargeFont());
+        current = new TextPanel<Color>(GDXMarkup.instance, //DefaultResources.getLargeFont());
                 //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
                 //new TextCellFactory().fontDistanceField("Noto-Sans-distance.fnt", "Noto-Sans-distance.png")
                 //        .setSmoothingMultiplier(0.4f).height(30).width(7)

@@ -235,15 +235,15 @@ public class EverythingDemo extends ApplicationAdapter {
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
         // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
-        cellWidth = 12 * INTERNAL_ZOOM;
-        cellHeight = 25 * INTERNAL_ZOOM;
+        cellWidth = 13 * INTERNAL_ZOOM;
+        cellHeight = 23 * INTERNAL_ZOOM;
         // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
         // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
         // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
-        textFactory = DefaultResources.getStretchableSlabFont()//.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        textFactory = DefaultResources.getStretchableWideSlabFont()//.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize();
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
@@ -285,8 +285,25 @@ public class EverythingDemo extends ApplicationAdapter {
         display.setPosition(0, 0);
         viewport.setScreenY((int)messages.getHeight());
         //subCell.setPosition(0, messages.getHeight());
-        messages.appendWrappingMessage("Use numpad or vi-keys (hjklyubn) to move. Use ? for help, f to change colors, q to quit." +
-                " Click the top or bottom border of this box to scroll.");
+
+        // Here we try to bring attention to the important keys by using a mixed-color String (IColoredString).
+        IColoredString<Color> text = IColoredString.Impl.create("Use numpad or vi-keys (", Color.WHITE);
+        text.append('h', SColor.CW_BRIGHT_RED);
+        text.append('j', SColor.CW_BRIGHT_APRICOT);
+        text.append('k', SColor.CW_BRIGHT_YELLOW);
+        text.append('l', SColor.CW_BRIGHT_LIME);
+        text.append('y', SColor.CW_BRIGHT_JADE);
+        text.append('u', SColor.CW_BRIGHT_AZURE);
+        text.append('b', SColor.CW_BRIGHT_SAPPHIRE);
+        text.append('n', SColor.CW_FLUSH_PURPLE);
+        text.append(") to move. Use ");
+        text.append('?', SColor.CW_PALE_INDIGO);
+        text.append(" for help, ");
+        text.append('f', SColor.CW_FADED_BROWN);
+        text.append(" to filter colors, ");
+        text.append('q', SColor.CW_GRAY_WHITE);
+        text.append(" to quit. Click the top or bottom border of this box to scroll.");
+        messages.appendWrappingMessage(text);
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
@@ -443,7 +460,7 @@ public class EverythingDemo extends ApplicationAdapter {
                         break;
                     }
                     case 'f':
-                    case 'F': {
+                    case 'F':{
                         currentCenter = (currentCenter + 1) % 10;
                         //currentCenter = (currentCenter + 1 & 1) + 8; // for testing red-green color blindness filter
 
@@ -784,7 +801,7 @@ public class EverythingDemo extends ApplicationAdapter {
 			 * justifying, without having to worry about sizes since TextPanel lays
 			 * itself out.
 			 */
-        final TextPanel<Color> tp = new TextPanel<Color>(new GDXMarkup(), DefaultResources.getStretchablePrintFont());
+        final TextPanel<Color> tp = new TextPanel<Color>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont());
         tp.backgroundColor = SColor.DARK_SLATE_GRAY;
 
         final List<IColoredString<Color>> text = new ArrayList<>();
