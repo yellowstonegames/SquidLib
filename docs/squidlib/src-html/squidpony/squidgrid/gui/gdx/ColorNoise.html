@@ -27,8 +27,8 @@
 <span class="sourceLineNo">019</span><a name="line.19"></a>
 <span class="sourceLineNo">020</span>    public static float colorNoise(final double noise)<a name="line.20"></a>
 <span class="sourceLineNo">021</span>    {<a name="line.21"></a>
-<span class="sourceLineNo">022</span>        return SColor.floatGetHSV(((float) noise + 1f), 0.8f + (float) NumberTools.bounce(noise * 9.0 + 10.0) * 0.2f, 0.8f + (float) NumberTools.bounce(noise * 7.0 + 8.5) * 0.2f, 1f);<a name="line.22"></a>
-<span class="sourceLineNo">023</span>//        return NumberUtils.intToFloatColor(0xfe000000 |<a name="line.23"></a>
+<span class="sourceLineNo">022</span>        return SColor.floatGetHSV(NumberTools.zigzag((float) (noise * 16.0)), 0.75f + (float) NumberTools.zigzag(noise * 9.0) * 0.25f, 0.7f + (float) NumberTools.zigzag(noise * 7.0 + 0.5) * 0.3f, 1f);<a name="line.22"></a>
+<span class="sourceLineNo">023</span>//        return NumberTools.intBitsToFloat(0xfe000000 |<a name="line.23"></a>
 <span class="sourceLineNo">024</span>//                (bounce256((int) ((noise * 1.29 + 1.39) * (0x3DF9f)) &gt;&gt;&gt; 8) &lt;&lt; 16) |<a name="line.24"></a>
 <span class="sourceLineNo">025</span>//                (bounce256((int) ((noise * 1.18 + 1.45) * (0x3EB9f)) &gt;&gt;&gt; 8) &lt;&lt; 8) |<a name="line.25"></a>
 <span class="sourceLineNo">026</span>//                (bounce256((int) ((noise * 1.07 + 1.51) * (0x3E99f)) &gt;&gt;&gt; 8)));<a name="line.26"></a>

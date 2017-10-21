@@ -34,7 +34,7 @@
 <span class="sourceLineNo">026</span>    private long determine()<a name="line.26"></a>
 <span class="sourceLineNo">027</span>    {<a name="line.27"></a>
 <span class="sourceLineNo">028</span>        long state = (z[(choice += 0xC6BC278D) &gt;&gt;&gt; 28] += 0x9E3779B97F4A7C15L ^ choice * 0x2C9277B5000000L);<a name="line.28"></a>
-<span class="sourceLineNo">029</span>        state = (state ^ state &gt;&gt;&gt; 30) * 0x5851F42D4C957F2DL;<a name="line.29"></a>
+<span class="sourceLineNo">029</span>        state = (state ^ state &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;<a name="line.29"></a>
 <span class="sourceLineNo">030</span>        return state ^ state &gt;&gt;&gt; 28;<a name="line.30"></a>
 <span class="sourceLineNo">031</span><a name="line.31"></a>
 <span class="sourceLineNo">032</span>    }<a name="line.32"></a>

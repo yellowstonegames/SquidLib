@@ -41,164 +41,170 @@
 <span class="sourceLineNo">033</span> * generator should yield the same results on GWT as on desktop or Android if the seed given is the same).<a name="line.33"></a>
 <span class="sourceLineNo">034</span> * &lt;br&gt;<a name="line.34"></a>
 <span class="sourceLineNo">035</span> * This is marked as Beta because there may be more improvements that can be made, and that would change the results.<a name="line.35"></a>
-<span class="sourceLineNo">036</span> * &lt;br&gt;<a name="line.36"></a>
-<span class="sourceLineNo">037</span> * Thanks to Ashiren, for advice on this in #libgdx on Freenode, and to Pierre L'Ecuyer and Donald Knuth for finding the<a name="line.37"></a>
-<span class="sourceLineNo">038</span> * constants used (originally for linear congruential generators).<a name="line.38"></a>
-<span class="sourceLineNo">039</span> * Created by Tommy Ettinger on 8/3/2017.<a name="line.39"></a>
-<span class="sourceLineNo">040</span> */<a name="line.40"></a>
-<span class="sourceLineNo">041</span>@Beta<a name="line.41"></a>
-<span class="sourceLineNo">042</span>public class ThrustRNG implements StatefulRandomness {<a name="line.42"></a>
-<span class="sourceLineNo">043</span>    /**<a name="line.43"></a>
-<span class="sourceLineNo">044</span>     * Can be any long value.<a name="line.44"></a>
-<span class="sourceLineNo">045</span>     */<a name="line.45"></a>
-<span class="sourceLineNo">046</span>    public long state;<a name="line.46"></a>
-<span class="sourceLineNo">047</span><a name="line.47"></a>
-<span class="sourceLineNo">048</span>    /**<a name="line.48"></a>
-<span class="sourceLineNo">049</span>     * Creates a new generator seeded using Math.random.<a name="line.49"></a>
-<span class="sourceLineNo">050</span>     */<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    public ThrustRNG() {<a name="line.51"></a>
-<span class="sourceLineNo">052</span>        this((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)<a name="line.52"></a>
-<span class="sourceLineNo">053</span>                ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));<a name="line.53"></a>
-<span class="sourceLineNo">054</span>    }<a name="line.54"></a>
-<span class="sourceLineNo">055</span><a name="line.55"></a>
-<span class="sourceLineNo">056</span>    public ThrustRNG(final long seed) {<a name="line.56"></a>
-<span class="sourceLineNo">057</span>        state = seed;<a name="line.57"></a>
-<span class="sourceLineNo">058</span>    }<a name="line.58"></a>
-<span class="sourceLineNo">059</span><a name="line.59"></a>
-<span class="sourceLineNo">060</span>    /**<a name="line.60"></a>
-<span class="sourceLineNo">061</span>     * Get the current internal state of the StatefulRandomness as a long.<a name="line.61"></a>
-<span class="sourceLineNo">062</span>     *<a name="line.62"></a>
-<span class="sourceLineNo">063</span>     * @return the current internal state of this object.<a name="line.63"></a>
-<span class="sourceLineNo">064</span>     */<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    @Override<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    public long getState() {<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        return state;<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    }<a name="line.68"></a>
-<span class="sourceLineNo">069</span><a name="line.69"></a>
-<span class="sourceLineNo">070</span>    /**<a name="line.70"></a>
-<span class="sourceLineNo">071</span>     * Set the current internal state of this StatefulRandomness with a long.<a name="line.71"></a>
-<span class="sourceLineNo">072</span>     *<a name="line.72"></a>
-<span class="sourceLineNo">073</span>     * @param state a 64-bit long. You may want to avoid passing 0 for compatibility, though this implementation can handle that.<a name="line.73"></a>
-<span class="sourceLineNo">074</span>     */<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    @Override<a name="line.75"></a>
-<span class="sourceLineNo">076</span>    public void setState(long state) {<a name="line.76"></a>
-<span class="sourceLineNo">077</span>        this.state = state;<a name="line.77"></a>
-<span class="sourceLineNo">078</span>    }<a name="line.78"></a>
-<span class="sourceLineNo">079</span><a name="line.79"></a>
-<span class="sourceLineNo">080</span>    /**<a name="line.80"></a>
-<span class="sourceLineNo">081</span>     * Using this method, any algorithm that might use the built-in Java Random<a name="line.81"></a>
-<span class="sourceLineNo">082</span>     * can interface with this randomness source.<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     *<a name="line.83"></a>
-<span class="sourceLineNo">084</span>     * @param bits the number of bits to be returned<a name="line.84"></a>
-<span class="sourceLineNo">085</span>     * @return the integer containing the appropriate number of bits<a name="line.85"></a>
-<span class="sourceLineNo">086</span>     */<a name="line.86"></a>
-<span class="sourceLineNo">087</span>    @Override<a name="line.87"></a>
-<span class="sourceLineNo">088</span>    public final int next(int bits) {<a name="line.88"></a>
-<span class="sourceLineNo">089</span>        long z = (state += 0x9E3779B97F4A7C15L);<a name="line.89"></a>
-<span class="sourceLineNo">090</span>        z = (z ^ z &gt;&gt;&gt; 30) * 0x5851F42D4C957F2DL;<a name="line.90"></a>
-<span class="sourceLineNo">091</span>        return (int)(z ^ z &gt;&gt;&gt; 28) &gt;&gt;&gt; (32 - bits);<a name="line.91"></a>
-<span class="sourceLineNo">092</span>        //(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state &gt;&gt; 28)<a name="line.92"></a>
-<span class="sourceLineNo">093</span>    }<a name="line.93"></a>
-<span class="sourceLineNo">094</span><a name="line.94"></a>
-<span class="sourceLineNo">095</span>    /**<a name="line.95"></a>
-<span class="sourceLineNo">096</span>     * Using this method, any algorithm that needs to efficiently generate more<a name="line.96"></a>
-<span class="sourceLineNo">097</span>     * than 32 bits of random data can interface with this randomness source.<a name="line.97"></a>
-<span class="sourceLineNo">098</span>     * &lt;p&gt;<a name="line.98"></a>
-<span class="sourceLineNo">099</span>     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).<a name="line.99"></a>
-<span class="sourceLineNo">100</span>     *<a name="line.100"></a>
-<span class="sourceLineNo">101</span>     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)<a name="line.101"></a>
-<span class="sourceLineNo">102</span>     */<a name="line.102"></a>
-<span class="sourceLineNo">103</span>    @Override<a name="line.103"></a>
-<span class="sourceLineNo">104</span>    public final long nextLong() {<a name="line.104"></a>
-<span class="sourceLineNo">105</span>        long z = (state += 0x9E3779B97F4A7C15L);<a name="line.105"></a>
-<span class="sourceLineNo">106</span>        z = (z ^ z &gt;&gt;&gt; 30) * 0x5851F42D4C957F2DL;// + 0x632BE59BD9B4E019L;<a name="line.106"></a>
-<span class="sourceLineNo">107</span>        return z ^ z &gt;&gt;&gt; 28;<a name="line.107"></a>
-<span class="sourceLineNo">108</span>        // * 0x27BB2EE687B0B0FDL;<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        //return ((state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state &gt;&gt; 28));<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    }<a name="line.110"></a>
-<span class="sourceLineNo">111</span><a name="line.111"></a>
-<span class="sourceLineNo">112</span>    /**<a name="line.112"></a>
-<span class="sourceLineNo">113</span>     * Advances or rolls back the ThrustRNG's state without actually generating each number. Skips forward<a name="line.113"></a>
-<span class="sourceLineNo">114</span>     * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),<a name="line.114"></a>
-<span class="sourceLineNo">115</span>     * and returns the random number produced at that step (you can get the state with {@link #getState()}).<a name="line.115"></a>
-<span class="sourceLineNo">116</span>     *<a name="line.116"></a>
-<span class="sourceLineNo">117</span>     * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number<a name="line.117"></a>
-<span class="sourceLineNo">118</span>     * @return the random long generated after skipping forward or backwards by {@code advance} numbers<a name="line.118"></a>
-<span class="sourceLineNo">119</span>     */<a name="line.119"></a>
-<span class="sourceLineNo">120</span>    public final long skip(long advance) {<a name="line.120"></a>
-<span class="sourceLineNo">121</span>        long z = (state += 0x9E3779B97F4A7C15L * advance);<a name="line.121"></a>
-<span class="sourceLineNo">122</span>        z = (z ^ z &gt;&gt;&gt; 30) * 0x5851F42D4C957F2DL;<a name="line.122"></a>
-<span class="sourceLineNo">123</span>        return z ^ z &gt;&gt;&gt; 28;<a name="line.123"></a>
-<span class="sourceLineNo">124</span>    }<a name="line.124"></a>
-<span class="sourceLineNo">125</span><a name="line.125"></a>
-<span class="sourceLineNo">126</span><a name="line.126"></a>
-<span class="sourceLineNo">127</span>    /**<a name="line.127"></a>
-<span class="sourceLineNo">128</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.128"></a>
-<span class="sourceLineNo">129</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.129"></a>
-<span class="sourceLineNo">130</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.130"></a>
-<span class="sourceLineNo">131</span>     *<a name="line.131"></a>
-<span class="sourceLineNo">132</span>     * @return a copy of this RandomnessSource<a name="line.132"></a>
-<span class="sourceLineNo">133</span>     */<a name="line.133"></a>
-<span class="sourceLineNo">134</span>    @Override<a name="line.134"></a>
-<span class="sourceLineNo">135</span>    public RandomnessSource copy() {<a name="line.135"></a>
-<span class="sourceLineNo">136</span>        return new ThrustRNG(state);<a name="line.136"></a>
-<span class="sourceLineNo">137</span>    }<a name="line.137"></a>
-<span class="sourceLineNo">138</span>    @Override<a name="line.138"></a>
-<span class="sourceLineNo">139</span>    public String toString() {<a name="line.139"></a>
-<span class="sourceLineNo">140</span>        return "ThrustRNG with state 0x" + StringKit.hex(state) + 'L';<a name="line.140"></a>
-<span class="sourceLineNo">141</span>    }<a name="line.141"></a>
-<span class="sourceLineNo">142</span><a name="line.142"></a>
-<span class="sourceLineNo">143</span>    @Override<a name="line.143"></a>
-<span class="sourceLineNo">144</span>    public boolean equals(Object o) {<a name="line.144"></a>
-<span class="sourceLineNo">145</span>        if (this == o) return true;<a name="line.145"></a>
-<span class="sourceLineNo">146</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.146"></a>
-<span class="sourceLineNo">147</span><a name="line.147"></a>
-<span class="sourceLineNo">148</span>        ThrustRNG thrustRNG = (ThrustRNG) o;<a name="line.148"></a>
-<span class="sourceLineNo">149</span><a name="line.149"></a>
-<span class="sourceLineNo">150</span>        return state == thrustRNG.state;<a name="line.150"></a>
-<span class="sourceLineNo">151</span>    }<a name="line.151"></a>
-<span class="sourceLineNo">152</span><a name="line.152"></a>
-<span class="sourceLineNo">153</span>    @Override<a name="line.153"></a>
-<span class="sourceLineNo">154</span>    public int hashCode() {<a name="line.154"></a>
-<span class="sourceLineNo">155</span>        return (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.155"></a>
-<span class="sourceLineNo">156</span>    }<a name="line.156"></a>
-<span class="sourceLineNo">157</span><a name="line.157"></a>
-<span class="sourceLineNo">158</span>    /**<a name="line.158"></a>
-<span class="sourceLineNo">159</span>     * Returns a random permutation of state; if state is the same on two calls to this, this will return the same<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     * number. This is expected to be called with some changing variable, e.g. {@code randomize(++state)}, where<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * the increment for state should be odd but otherwise doesn't really matter. This multiplies state by<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * {@code 0x9E3779B97F4A7C15L} within this method, so using a small increment won't be much different from using a<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     * very large one, as long as it is odd.<a name="line.163"></a>
-<span class="sourceLineNo">164</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.164"></a>
-<span class="sourceLineNo">165</span>     *              using {@code randomize(++state)} is recommended to go forwards or {@code randomize(--state)} to<a name="line.165"></a>
-<span class="sourceLineNo">166</span>     *              generate numbers in reverse order<a name="line.166"></a>
-<span class="sourceLineNo">167</span>     * @return a pseudo-random permutation of state<a name="line.167"></a>
-<span class="sourceLineNo">168</span>     */<a name="line.168"></a>
-<span class="sourceLineNo">169</span>    public static long determine(long state)<a name="line.169"></a>
-<span class="sourceLineNo">170</span>    {<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        state = ((state *= 0x9E3779B97F4A7C15L) ^ state &gt;&gt;&gt; 30) * 0x5851F42D4C957F2DL;<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        return state ^ state &gt;&gt;&gt; 28;<a name="line.172"></a>
-<span class="sourceLineNo">173</span>    }<a name="line.173"></a>
-<span class="sourceLineNo">174</span><a name="line.174"></a>
-<span class="sourceLineNo">175</span>    /**<a name="line.175"></a>
-<span class="sourceLineNo">176</span>     * Given a state that should usually change each time this is called, and a bound that limits the result to some<a name="line.176"></a>
-<span class="sourceLineNo">177</span>     * (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive). The bound can be<a name="line.177"></a>
-<span class="sourceLineNo">178</span>     * negative, which will cause this to produce 0 or a negative int; otherwise this produces 0 or a positive int.<a name="line.178"></a>
-<span class="sourceLineNo">179</span>     * The state should change each time this is called, generally by incrementing by an odd number (not an even number,<a name="line.179"></a>
-<span class="sourceLineNo">180</span>     * especially not 0). It's fine to use {@code determineBounded(++state, bound)} to get a different int each time.<a name="line.180"></a>
-<span class="sourceLineNo">181</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.181"></a>
-<span class="sourceLineNo">182</span>     *              using {@code randomize(++state)} is recommended to go forwards or {@code randomize(--state)} to<a name="line.182"></a>
-<span class="sourceLineNo">183</span>     *              generate numbers in reverse order<a name="line.183"></a>
-<span class="sourceLineNo">184</span>     * @param bound the outer exclusive bound for the int this produces; can be negative or positive<a name="line.184"></a>
-<span class="sourceLineNo">185</span>     * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)<a name="line.185"></a>
-<span class="sourceLineNo">186</span>     */<a name="line.186"></a>
-<span class="sourceLineNo">187</span>    public static int determineBounded(long state, final int bound)<a name="line.187"></a>
-<span class="sourceLineNo">188</span>    {<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        state = ((state *= 0x9E3779B97F4A7C15L) ^ state &gt;&gt;&gt; 30) * 0x5851F42D4C957F2DL;<a name="line.189"></a>
-<span class="sourceLineNo">190</span>        return (int)((bound * ((state ^ state &gt;&gt;&gt; 28) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.190"></a>
-<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
-<span class="sourceLineNo">192</span><a name="line.192"></a>
-<span class="sourceLineNo">193</span>}<a name="line.193"></a>
+<span class="sourceLineNo">036</span> * A change was made on October 16, 2017 that improved quality even more, and now this generator can pass the even more<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * stringent BigCrush test suite from TestU01, and not just PractRand on 64 MB of data (it also passes PractRand on 256<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * MB of data now). A C port of this was made as part of testing,<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * &lt;a href="https://gist.github.com/tommyettinger/e6d3e8816da79b45bfe582384c2fe14a"&gt;available here&lt;/a&gt;, and it is the<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * fastest generator I have been able to test with the constraints for the XorShift/Xoroshiro benchmarks, which only<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * test C code.<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * &lt;br&gt;<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * Thanks to Ashiren, for advice on this in #libgdx on Freenode, and to Pierre L'Ecuyer and Donald Knuth for finding the<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * constants used (originally for linear congruential generators).<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * Created by Tommy Ettinger on 8/3/2017.<a name="line.45"></a>
+<span class="sourceLineNo">046</span> */<a name="line.46"></a>
+<span class="sourceLineNo">047</span>@Beta<a name="line.47"></a>
+<span class="sourceLineNo">048</span>public final class ThrustRNG implements StatefulRandomness {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    /**<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * Can be any long value.<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    public long state;<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>    /**<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * Creates a new generator seeded using Math.random.<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     */<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    public ThrustRNG() {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>        this((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    }<a name="line.60"></a>
+<span class="sourceLineNo">061</span><a name="line.61"></a>
+<span class="sourceLineNo">062</span>    public ThrustRNG(final long seed) {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        state = seed;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    }<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>    /**<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * Get the current internal state of the StatefulRandomness as a long.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     *<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * @return the current internal state of this object.<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    @Override<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    public long getState() {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        return state;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    }<a name="line.74"></a>
+<span class="sourceLineNo">075</span><a name="line.75"></a>
+<span class="sourceLineNo">076</span>    /**<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * Set the current internal state of this StatefulRandomness with a long.<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     *<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * @param state a 64-bit long. You may want to avoid passing 0 for compatibility, though this implementation can handle that.<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     */<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    @Override<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    public void setState(long state) {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        this.state = state;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    }<a name="line.84"></a>
+<span class="sourceLineNo">085</span><a name="line.85"></a>
+<span class="sourceLineNo">086</span>    /**<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * Using this method, any algorithm that might use the built-in Java Random<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     * can interface with this randomness source.<a name="line.88"></a>
+<span class="sourceLineNo">089</span>     *<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * @param bits the number of bits to be returned<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * @return the integer containing the appropriate number of bits<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     */<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    @Override<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    public final int next(int bits) {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        long z = (state += 0x9E3779B97F4A7C15L);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        z = (z ^ z &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>        return (int)(z ^ z &gt;&gt;&gt; 28) &gt;&gt;&gt; (32 - bits);<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        //(state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state &gt;&gt; 28)<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>    /**<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * Using this method, any algorithm that needs to efficiently generate more<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * than 32 bits of random data can interface with this randomness source.<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * &lt;p&gt;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     *<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     */<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    @Override<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    public final long nextLong() {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        long z = (state += 0x9E3779B97F4A7C15L);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        z = (z ^ z &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;// * 0x5851F42D4C957F2DL // + 0x632BE59BD9B4E019L;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        return z ^ z &gt;&gt;&gt; 28;<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        // * 0x27BB2EE687B0B0FDL;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        //return ((state = state * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state &gt;&gt; 28));<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    }<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>    /**<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * Advances or rolls back the ThrustRNG's state without actually generating each number. Skips forward<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * and returns the random number produced at that step (you can get the state with {@link #getState()}).<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     *<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * @return the random long generated after skipping forward or backwards by {@code advance} numbers<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     */<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    public final long skip(long advance) {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        long z = (state += 0x9E3779B97F4A7C15L * advance);<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        z = (z ^ z &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        return z ^ z &gt;&gt;&gt; 28;<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    }<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>    /**<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     *<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * @return a copy of this RandomnessSource<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     */<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    @Override<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    public RandomnessSource copy() {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        return new ThrustRNG(state);<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    @Override<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    public String toString() {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        return "ThrustRNG with state 0x" + StringKit.hex(state) + 'L';<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    }<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>    @Override<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    public boolean equals(Object o) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        if (this == o) return true;<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.152"></a>
+<span class="sourceLineNo">153</span><a name="line.153"></a>
+<span class="sourceLineNo">154</span>        ThrustRNG thrustRNG = (ThrustRNG) o;<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span>        return state == thrustRNG.state;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    }<a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>    @Override<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    public int hashCode() {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        return (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>    /**<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     * Returns a random permutation of state; if state is the same on two calls to this, this will return the same<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * number. This is expected to be called with some changing variable, e.g. {@code randomize(++state)}, where<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * the increment for state should be odd but otherwise doesn't really matter. This multiplies state by<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     * {@code 0x9E3779B97F4A7C15L} within this method, so using a small increment won't be much different from using a<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     * very large one, as long as it is odd.<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>     *              using {@code randomize(++state)} is recommended to go forwards or {@code randomize(--state)} to<a name="line.171"></a>
+<span class="sourceLineNo">172</span>     *              generate numbers in reverse order<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * @return a pseudo-random permutation of state<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     */<a name="line.174"></a>
+<span class="sourceLineNo">175</span>    public static long determine(long state)<a name="line.175"></a>
+<span class="sourceLineNo">176</span>    {<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        state = ((state *= 0x9E3779B97F4A7C15L) ^ state &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;<a name="line.177"></a>
+<span class="sourceLineNo">178</span>        return state ^ state &gt;&gt;&gt; 28;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    }<a name="line.179"></a>
+<span class="sourceLineNo">180</span><a name="line.180"></a>
+<span class="sourceLineNo">181</span>    /**<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * Given a state that should usually change each time this is called, and a bound that limits the result to some<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     * (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive). The bound can be<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * negative, which will cause this to produce 0 or a negative int; otherwise this produces 0 or a positive int.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     * The state should change each time this is called, generally by incrementing by an odd number (not an even number,<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * especially not 0). It's fine to use {@code determineBounded(++state, bound)} to get a different int each time.<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * @param state a variable that should be different every time you want a different random result;<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     *              using {@code randomize(++state)} is recommended to go forwards or {@code randomize(--state)} to<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     *              generate numbers in reverse order<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * @param bound the outer exclusive bound for the int this produces; can be negative or positive<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * @return a pseudo-random int between 0 (inclusive) and bound (exclusive)<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     */<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    public static int determineBounded(long state, final int bound)<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    {<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        state = ((state *= 0x9E3779B97F4A7C15L) ^ state &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        return (int)((bound * ((state ^ state &gt;&gt;&gt; 28) &amp; 0x7FFFFFFFL)) &gt;&gt; 31);<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    }<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>}<a name="line.199"></a>
 
 
 

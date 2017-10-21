@@ -740,119 +740,121 @@
 <span class="sourceLineNo">732</span>                                                result.append(markup.closeMarkup());<a name="line.732"></a>
 <span class="sourceLineNo">733</span>                                        open = false;<a name="line.733"></a>
 <span class="sourceLineNo">734</span>                                }<a name="line.734"></a>
-<span class="sourceLineNo">735</span>                                result.append(fragment.text);<a name="line.735"></a>
-<span class="sourceLineNo">736</span>                        }<a name="line.736"></a>
-<span class="sourceLineNo">737</span>                        return result.toString();<a name="line.737"></a>
-<span class="sourceLineNo">738</span>                }<a name="line.738"></a>
-<span class="sourceLineNo">739</span><a name="line.739"></a>
-<span class="sourceLineNo">740</span>                @Override<a name="line.740"></a>
-<span class="sourceLineNo">741</span>                public Iterator&lt;Bucket&lt;T&gt;&gt; iterator() {<a name="line.741"></a>
-<span class="sourceLineNo">742</span>                        return fragments.iterator();<a name="line.742"></a>
-<span class="sourceLineNo">743</span>                }<a name="line.743"></a>
-<span class="sourceLineNo">744</span><a name="line.744"></a>
-<span class="sourceLineNo">745</span>                @Override<a name="line.745"></a>
-<span class="sourceLineNo">746</span>                public String toString() {<a name="line.746"></a>
-<span class="sourceLineNo">747</span>                        return present();<a name="line.747"></a>
-<span class="sourceLineNo">748</span>                }<a name="line.748"></a>
-<span class="sourceLineNo">749</span><a name="line.749"></a>
-<span class="sourceLineNo">750</span>                protected static boolean equals(Object o1, Object o2) {<a name="line.750"></a>
-<span class="sourceLineNo">751</span>                        if (o1 == null)<a name="line.751"></a>
-<span class="sourceLineNo">752</span>                                return o2 == null;<a name="line.752"></a>
-<span class="sourceLineNo">753</span>                        else<a name="line.753"></a>
-<span class="sourceLineNo">754</span>                                return o1.equals(o2);<a name="line.754"></a>
-<span class="sourceLineNo">755</span>                }<a name="line.755"></a>
-<span class="sourceLineNo">756</span><a name="line.756"></a>
-<span class="sourceLineNo">757</span>                private int nbSpaces(String s) {<a name="line.757"></a>
-<span class="sourceLineNo">758</span>                        final int bd = s.length();<a name="line.758"></a>
-<span class="sourceLineNo">759</span>                        int result = 0;<a name="line.759"></a>
-<span class="sourceLineNo">760</span>                        for (int i = 0; i &lt; bd; i++) {<a name="line.760"></a>
-<span class="sourceLineNo">761</span>                                final char c = s.charAt(i);<a name="line.761"></a>
-<span class="sourceLineNo">762</span>                                if (c == ' ')<a name="line.762"></a>
-<span class="sourceLineNo">763</span>                                        result++;<a name="line.763"></a>
-<span class="sourceLineNo">764</span>                        }<a name="line.764"></a>
-<span class="sourceLineNo">765</span>                        return result;<a name="line.765"></a>
-<span class="sourceLineNo">766</span>                }<a name="line.766"></a>
-<span class="sourceLineNo">767</span><a name="line.767"></a>
-<span class="sourceLineNo">768</span>                /** Some tests */<a name="line.768"></a>
-<span class="sourceLineNo">769</span>                public static void main(String[] args) {<a name="line.769"></a>
-<span class="sourceLineNo">770</span>                        final IColoredString&lt;Object&gt; salutCestHgames = IColoredString.Impl.create();<a name="line.770"></a>
-<span class="sourceLineNo">771</span>                        salutCestHgames.append("Salut", new Object());<a name="line.771"></a>
-<span class="sourceLineNo">772</span>                        salutCestHgames.append(" ", new Object());<a name="line.772"></a>
-<span class="sourceLineNo">773</span>                        salutCestHgames.append("c'est", new Object());<a name="line.773"></a>
+<span class="sourceLineNo">735</span>                                // maybe try this line if escape() is re-added to IMarkup<a name="line.735"></a>
+<span class="sourceLineNo">736</span>                                //result.append(markup.escape(fragment.text));<a name="line.736"></a>
+<span class="sourceLineNo">737</span>                                result.append(fragment.text);<a name="line.737"></a>
+<span class="sourceLineNo">738</span>                        }<a name="line.738"></a>
+<span class="sourceLineNo">739</span>                        return result.toString();<a name="line.739"></a>
+<span class="sourceLineNo">740</span>                }<a name="line.740"></a>
+<span class="sourceLineNo">741</span><a name="line.741"></a>
+<span class="sourceLineNo">742</span>                @Override<a name="line.742"></a>
+<span class="sourceLineNo">743</span>                public Iterator&lt;Bucket&lt;T&gt;&gt; iterator() {<a name="line.743"></a>
+<span class="sourceLineNo">744</span>                        return fragments.iterator();<a name="line.744"></a>
+<span class="sourceLineNo">745</span>                }<a name="line.745"></a>
+<span class="sourceLineNo">746</span><a name="line.746"></a>
+<span class="sourceLineNo">747</span>                @Override<a name="line.747"></a>
+<span class="sourceLineNo">748</span>                public String toString() {<a name="line.748"></a>
+<span class="sourceLineNo">749</span>                        return present();<a name="line.749"></a>
+<span class="sourceLineNo">750</span>                }<a name="line.750"></a>
+<span class="sourceLineNo">751</span><a name="line.751"></a>
+<span class="sourceLineNo">752</span>                protected static boolean equals(Object o1, Object o2) {<a name="line.752"></a>
+<span class="sourceLineNo">753</span>                        if (o1 == null)<a name="line.753"></a>
+<span class="sourceLineNo">754</span>                                return o2 == null;<a name="line.754"></a>
+<span class="sourceLineNo">755</span>                        else<a name="line.755"></a>
+<span class="sourceLineNo">756</span>                                return o1.equals(o2);<a name="line.756"></a>
+<span class="sourceLineNo">757</span>                }<a name="line.757"></a>
+<span class="sourceLineNo">758</span><a name="line.758"></a>
+<span class="sourceLineNo">759</span>                private int nbSpaces(String s) {<a name="line.759"></a>
+<span class="sourceLineNo">760</span>                        final int bd = s.length();<a name="line.760"></a>
+<span class="sourceLineNo">761</span>                        int result = 0;<a name="line.761"></a>
+<span class="sourceLineNo">762</span>                        for (int i = 0; i &lt; bd; i++) {<a name="line.762"></a>
+<span class="sourceLineNo">763</span>                                final char c = s.charAt(i);<a name="line.763"></a>
+<span class="sourceLineNo">764</span>                                if (c == ' ')<a name="line.764"></a>
+<span class="sourceLineNo">765</span>                                        result++;<a name="line.765"></a>
+<span class="sourceLineNo">766</span>                        }<a name="line.766"></a>
+<span class="sourceLineNo">767</span>                        return result;<a name="line.767"></a>
+<span class="sourceLineNo">768</span>                }<a name="line.768"></a>
+<span class="sourceLineNo">769</span><a name="line.769"></a>
+<span class="sourceLineNo">770</span>                /** Some tests */<a name="line.770"></a>
+<span class="sourceLineNo">771</span>                public static void main(String[] args) {<a name="line.771"></a>
+<span class="sourceLineNo">772</span>                        final IColoredString&lt;Object&gt; salutCestHgames = IColoredString.Impl.create();<a name="line.772"></a>
+<span class="sourceLineNo">773</span>                        salutCestHgames.append("Salut", new Object());<a name="line.773"></a>
 <span class="sourceLineNo">774</span>                        salutCestHgames.append(" ", new Object());<a name="line.774"></a>
-<span class="sourceLineNo">775</span>                        salutCestHgames.append("hgames", new Object());<a name="line.775"></a>
-<span class="sourceLineNo">776</span>                        for (int i = 0; i &lt; salutCestHgames.length(); i++)<a name="line.776"></a>
-<span class="sourceLineNo">777</span>                                System.out.println(salutCestHgames.charAt(i));<a name="line.777"></a>
-<span class="sourceLineNo">778</span>                }<a name="line.778"></a>
-<span class="sourceLineNo">779</span>        }<a name="line.779"></a>
-<span class="sourceLineNo">780</span><a name="line.780"></a>
-<span class="sourceLineNo">781</span>        /**<a name="line.781"></a>
-<span class="sourceLineNo">782</span>         * A piece of a {@link IColoredString}: a text and its color.<a name="line.782"></a>
-<span class="sourceLineNo">783</span>         * <a name="line.783"></a>
-<span class="sourceLineNo">784</span>         * @author smelC<a name="line.784"></a>
+<span class="sourceLineNo">775</span>                        salutCestHgames.append("c'est", new Object());<a name="line.775"></a>
+<span class="sourceLineNo">776</span>                        salutCestHgames.append(" ", new Object());<a name="line.776"></a>
+<span class="sourceLineNo">777</span>                        salutCestHgames.append("hgames", new Object());<a name="line.777"></a>
+<span class="sourceLineNo">778</span>                        for (int i = 0; i &lt; salutCestHgames.length(); i++)<a name="line.778"></a>
+<span class="sourceLineNo">779</span>                                System.out.println(salutCestHgames.charAt(i));<a name="line.779"></a>
+<span class="sourceLineNo">780</span>                }<a name="line.780"></a>
+<span class="sourceLineNo">781</span>        }<a name="line.781"></a>
+<span class="sourceLineNo">782</span><a name="line.782"></a>
+<span class="sourceLineNo">783</span>        /**<a name="line.783"></a>
+<span class="sourceLineNo">784</span>         * A piece of a {@link IColoredString}: a text and its color.<a name="line.784"></a>
 <span class="sourceLineNo">785</span>         * <a name="line.785"></a>
-<span class="sourceLineNo">786</span>         * @param &lt;T&gt;<a name="line.786"></a>
-<span class="sourceLineNo">787</span>         *            The type of colors;<a name="line.787"></a>
-<span class="sourceLineNo">788</span>         */<a name="line.788"></a>
-<span class="sourceLineNo">789</span>        class Bucket&lt;T&gt; {<a name="line.789"></a>
-<span class="sourceLineNo">790</span><a name="line.790"></a>
-<span class="sourceLineNo">791</span>                protected final String text;<a name="line.791"></a>
-<span class="sourceLineNo">792</span>                protected final/* @Nullable */T color;<a name="line.792"></a>
-<span class="sourceLineNo">793</span><a name="line.793"></a>
-<span class="sourceLineNo">794</span>                public Bucket(String text, /* @Nullable */T color) {<a name="line.794"></a>
-<span class="sourceLineNo">795</span>                        this.text = text == null ? "" : text;<a name="line.795"></a>
-<span class="sourceLineNo">796</span>                        this.color = color;<a name="line.796"></a>
-<span class="sourceLineNo">797</span>                }<a name="line.797"></a>
-<span class="sourceLineNo">798</span><a name="line.798"></a>
-<span class="sourceLineNo">799</span>                /**<a name="line.799"></a>
-<span class="sourceLineNo">800</span>                 * @param text<a name="line.800"></a>
-<span class="sourceLineNo">801</span>                 * @return An instance whose text is {@code this.text + text}. Color is<a name="line.801"></a>
-<span class="sourceLineNo">802</span>                 *         unchanged.<a name="line.802"></a>
-<span class="sourceLineNo">803</span>                 */<a name="line.803"></a>
-<span class="sourceLineNo">804</span>                public Bucket&lt;T&gt; append(String text) {<a name="line.804"></a>
-<span class="sourceLineNo">805</span>                        if (text == null || text.isEmpty())<a name="line.805"></a>
-<span class="sourceLineNo">806</span>                                /* Let's save an allocation */<a name="line.806"></a>
-<span class="sourceLineNo">807</span>                                return this;<a name="line.807"></a>
-<span class="sourceLineNo">808</span>                        else<a name="line.808"></a>
-<span class="sourceLineNo">809</span>                                return new Bucket&lt;&gt;(this.text + text, color);<a name="line.809"></a>
-<span class="sourceLineNo">810</span>                }<a name="line.810"></a>
-<span class="sourceLineNo">811</span><a name="line.811"></a>
-<span class="sourceLineNo">812</span>                public Bucket&lt;T&gt; setLength(int l) {<a name="line.812"></a>
-<span class="sourceLineNo">813</span>                        final int here = text.length();<a name="line.813"></a>
-<span class="sourceLineNo">814</span>                        if (here &lt;= l)<a name="line.814"></a>
-<span class="sourceLineNo">815</span>                                return this;<a name="line.815"></a>
-<span class="sourceLineNo">816</span>                        else<a name="line.816"></a>
-<span class="sourceLineNo">817</span>                                return new Bucket&lt;&gt;(text.substring(0, l), color);<a name="line.817"></a>
-<span class="sourceLineNo">818</span>                }<a name="line.818"></a>
-<span class="sourceLineNo">819</span><a name="line.819"></a>
-<span class="sourceLineNo">820</span>                public Bucket&lt;T&gt; setColor(T t) {<a name="line.820"></a>
-<span class="sourceLineNo">821</span>                        return color == t ? this : new Bucket&lt;T&gt;(text, t);<a name="line.821"></a>
-<span class="sourceLineNo">822</span>                }<a name="line.822"></a>
-<span class="sourceLineNo">823</span><a name="line.823"></a>
-<span class="sourceLineNo">824</span>                /**<a name="line.824"></a>
-<span class="sourceLineNo">825</span>                 * @return The text that this bucket contains.<a name="line.825"></a>
-<span class="sourceLineNo">826</span>                 */<a name="line.826"></a>
-<span class="sourceLineNo">827</span>                public String getText() {<a name="line.827"></a>
-<span class="sourceLineNo">828</span>                        return text;<a name="line.828"></a>
-<span class="sourceLineNo">829</span>                }<a name="line.829"></a>
-<span class="sourceLineNo">830</span><a name="line.830"></a>
-<span class="sourceLineNo">831</span>                /**<a name="line.831"></a>
-<span class="sourceLineNo">832</span>                 * @return The color of {@link #getText()}. Or {@code null} if none.<a name="line.832"></a>
-<span class="sourceLineNo">833</span>                 */<a name="line.833"></a>
-<span class="sourceLineNo">834</span>                public/* @Nullable */T getColor() {<a name="line.834"></a>
-<span class="sourceLineNo">835</span>                        return color;<a name="line.835"></a>
-<span class="sourceLineNo">836</span>                }<a name="line.836"></a>
-<span class="sourceLineNo">837</span><a name="line.837"></a>
-<span class="sourceLineNo">838</span>                @Override<a name="line.838"></a>
-<span class="sourceLineNo">839</span>                public String toString() {<a name="line.839"></a>
-<span class="sourceLineNo">840</span>                        if (color == null)<a name="line.840"></a>
-<span class="sourceLineNo">841</span>                                return text;<a name="line.841"></a>
-<span class="sourceLineNo">842</span>                        else<a name="line.842"></a>
-<span class="sourceLineNo">843</span>                                return text + "(" + color + ")";<a name="line.843"></a>
-<span class="sourceLineNo">844</span>                }<a name="line.844"></a>
-<span class="sourceLineNo">845</span><a name="line.845"></a>
-<span class="sourceLineNo">846</span>        }<a name="line.846"></a>
-<span class="sourceLineNo">847</span>}<a name="line.847"></a>
+<span class="sourceLineNo">786</span>         * @author smelC<a name="line.786"></a>
+<span class="sourceLineNo">787</span>         * <a name="line.787"></a>
+<span class="sourceLineNo">788</span>         * @param &lt;T&gt;<a name="line.788"></a>
+<span class="sourceLineNo">789</span>         *            The type of colors;<a name="line.789"></a>
+<span class="sourceLineNo">790</span>         */<a name="line.790"></a>
+<span class="sourceLineNo">791</span>        class Bucket&lt;T&gt; {<a name="line.791"></a>
+<span class="sourceLineNo">792</span><a name="line.792"></a>
+<span class="sourceLineNo">793</span>                protected final String text;<a name="line.793"></a>
+<span class="sourceLineNo">794</span>                protected final/* @Nullable */T color;<a name="line.794"></a>
+<span class="sourceLineNo">795</span><a name="line.795"></a>
+<span class="sourceLineNo">796</span>                public Bucket(String text, /* @Nullable */T color) {<a name="line.796"></a>
+<span class="sourceLineNo">797</span>                        this.text = text == null ? "" : text;<a name="line.797"></a>
+<span class="sourceLineNo">798</span>                        this.color = color;<a name="line.798"></a>
+<span class="sourceLineNo">799</span>                }<a name="line.799"></a>
+<span class="sourceLineNo">800</span><a name="line.800"></a>
+<span class="sourceLineNo">801</span>                /**<a name="line.801"></a>
+<span class="sourceLineNo">802</span>                 * @param text<a name="line.802"></a>
+<span class="sourceLineNo">803</span>                 * @return An instance whose text is {@code this.text + text}. Color is<a name="line.803"></a>
+<span class="sourceLineNo">804</span>                 *         unchanged.<a name="line.804"></a>
+<span class="sourceLineNo">805</span>                 */<a name="line.805"></a>
+<span class="sourceLineNo">806</span>                public Bucket&lt;T&gt; append(String text) {<a name="line.806"></a>
+<span class="sourceLineNo">807</span>                        if (text == null || text.isEmpty())<a name="line.807"></a>
+<span class="sourceLineNo">808</span>                                /* Let's save an allocation */<a name="line.808"></a>
+<span class="sourceLineNo">809</span>                                return this;<a name="line.809"></a>
+<span class="sourceLineNo">810</span>                        else<a name="line.810"></a>
+<span class="sourceLineNo">811</span>                                return new Bucket&lt;&gt;(this.text + text, color);<a name="line.811"></a>
+<span class="sourceLineNo">812</span>                }<a name="line.812"></a>
+<span class="sourceLineNo">813</span><a name="line.813"></a>
+<span class="sourceLineNo">814</span>                public Bucket&lt;T&gt; setLength(int l) {<a name="line.814"></a>
+<span class="sourceLineNo">815</span>                        final int here = text.length();<a name="line.815"></a>
+<span class="sourceLineNo">816</span>                        if (here &lt;= l)<a name="line.816"></a>
+<span class="sourceLineNo">817</span>                                return this;<a name="line.817"></a>
+<span class="sourceLineNo">818</span>                        else<a name="line.818"></a>
+<span class="sourceLineNo">819</span>                                return new Bucket&lt;&gt;(text.substring(0, l), color);<a name="line.819"></a>
+<span class="sourceLineNo">820</span>                }<a name="line.820"></a>
+<span class="sourceLineNo">821</span><a name="line.821"></a>
+<span class="sourceLineNo">822</span>                public Bucket&lt;T&gt; setColor(T t) {<a name="line.822"></a>
+<span class="sourceLineNo">823</span>                        return color == t ? this : new Bucket&lt;T&gt;(text, t);<a name="line.823"></a>
+<span class="sourceLineNo">824</span>                }<a name="line.824"></a>
+<span class="sourceLineNo">825</span><a name="line.825"></a>
+<span class="sourceLineNo">826</span>                /**<a name="line.826"></a>
+<span class="sourceLineNo">827</span>                 * @return The text that this bucket contains.<a name="line.827"></a>
+<span class="sourceLineNo">828</span>                 */<a name="line.828"></a>
+<span class="sourceLineNo">829</span>                public String getText() {<a name="line.829"></a>
+<span class="sourceLineNo">830</span>                        return text;<a name="line.830"></a>
+<span class="sourceLineNo">831</span>                }<a name="line.831"></a>
+<span class="sourceLineNo">832</span><a name="line.832"></a>
+<span class="sourceLineNo">833</span>                /**<a name="line.833"></a>
+<span class="sourceLineNo">834</span>                 * @return The color of {@link #getText()}. Or {@code null} if none.<a name="line.834"></a>
+<span class="sourceLineNo">835</span>                 */<a name="line.835"></a>
+<span class="sourceLineNo">836</span>                public/* @Nullable */T getColor() {<a name="line.836"></a>
+<span class="sourceLineNo">837</span>                        return color;<a name="line.837"></a>
+<span class="sourceLineNo">838</span>                }<a name="line.838"></a>
+<span class="sourceLineNo">839</span><a name="line.839"></a>
+<span class="sourceLineNo">840</span>                @Override<a name="line.840"></a>
+<span class="sourceLineNo">841</span>                public String toString() {<a name="line.841"></a>
+<span class="sourceLineNo">842</span>                        if (color == null)<a name="line.842"></a>
+<span class="sourceLineNo">843</span>                                return text;<a name="line.843"></a>
+<span class="sourceLineNo">844</span>                        else<a name="line.844"></a>
+<span class="sourceLineNo">845</span>                                return text + "(" + color + ")";<a name="line.845"></a>
+<span class="sourceLineNo">846</span>                }<a name="line.846"></a>
+<span class="sourceLineNo">847</span><a name="line.847"></a>
+<span class="sourceLineNo">848</span>        }<a name="line.848"></a>
+<span class="sourceLineNo">849</span>}<a name="line.849"></a>
 
 
 

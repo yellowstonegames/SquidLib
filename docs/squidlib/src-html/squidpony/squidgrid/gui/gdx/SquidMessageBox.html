@@ -163,21 +163,21 @@
 <span class="sourceLineNo">155</span>        List&lt;IColoredString&lt;Color&gt;&gt; truncated = new IColoredString.Impl&lt;&gt;(message, defaultForeground).wrap(gridWidth - 2);<a name="line.155"></a>
 <span class="sourceLineNo">156</span>        for (IColoredString&lt;Color&gt; t : truncated)<a name="line.156"></a>
 <span class="sourceLineNo">157</span>        {<a name="line.157"></a>
-<span class="sourceLineNo">158</span>            appendMessage(t.present());<a name="line.158"></a>
+<span class="sourceLineNo">158</span>            appendMessage(t);<a name="line.158"></a>
 <span class="sourceLineNo">159</span>        }<a name="line.159"></a>
-<span class="sourceLineNo">160</span>        messageIndex = messages.size() - 1;<a name="line.160"></a>
-<span class="sourceLineNo">161</span>    }<a name="line.161"></a>
-<span class="sourceLineNo">162</span><a name="line.162"></a>
-<span class="sourceLineNo">163</span>    /**<a name="line.163"></a>
-<span class="sourceLineNo">164</span>     * A common way of using this class. Appends a new line as an IColoredString to the message listing and scrolls to<a name="line.164"></a>
-<span class="sourceLineNo">165</span>     * the bottom.<a name="line.165"></a>
-<span class="sourceLineNo">166</span>     * @param message an IColoredString that should be no longer than gridWidth - 2; will be truncated otherwise.<a name="line.166"></a>
-<span class="sourceLineNo">167</span>     */<a name="line.167"></a>
-<span class="sourceLineNo">168</span>    public void appendMessage(IColoredString&lt;Color&gt; message)<a name="line.168"></a>
-<span class="sourceLineNo">169</span>    {<a name="line.169"></a>
-<span class="sourceLineNo">170</span>        IColoredString.Impl&lt;Color&gt; truncated = new IColoredString.Impl&lt;&gt;();<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        truncated.append(message);<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        truncated.setLength(gridWidth - 2);<a name="line.172"></a>
+<span class="sourceLineNo">160</span>    }<a name="line.160"></a>
+<span class="sourceLineNo">161</span><a name="line.161"></a>
+<span class="sourceLineNo">162</span>    /**<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * A common way of using this class. Appends a new line as an IColoredString to the message listing and scrolls to<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * the bottom.<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     * @param message an IColoredString that should be no longer than gridWidth - 2; will be truncated otherwise.<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     */<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    public void appendMessage(IColoredString&lt;Color&gt; message)<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        IColoredString.Impl&lt;Color&gt; truncated = new IColoredString.Impl&lt;&gt;();<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        truncated.append(message);<a name="line.170"></a>
+<span class="sourceLineNo">171</span>        truncated.setLength(gridWidth - 2);<a name="line.171"></a>
+<span class="sourceLineNo">172</span>        messages.add(truncated);<a name="line.172"></a>
 <span class="sourceLineNo">173</span>        messageIndex = messages.size() - 1;<a name="line.173"></a>
 <span class="sourceLineNo">174</span>    }<a name="line.174"></a>
 <span class="sourceLineNo">175</span><a name="line.175"></a>
@@ -198,74 +198,72 @@
 <span class="sourceLineNo">190</span>        {<a name="line.190"></a>
 <span class="sourceLineNo">191</span>            appendMessage(t);<a name="line.191"></a>
 <span class="sourceLineNo">192</span>        }<a name="line.192"></a>
-<span class="sourceLineNo">193</span>        messages.addAll(truncated);<a name="line.193"></a>
-<span class="sourceLineNo">194</span>        messageIndex = messages.size() - 1;<a name="line.194"></a>
-<span class="sourceLineNo">195</span>    }<a name="line.195"></a>
-<span class="sourceLineNo">196</span><a name="line.196"></a>
-<span class="sourceLineNo">197</span>    /**<a name="line.197"></a>
-<span class="sourceLineNo">198</span>     * Used internally to scroll up by one line, but can also be triggered by your code.<a name="line.198"></a>
-<span class="sourceLineNo">199</span>     */<a name="line.199"></a>
-<span class="sourceLineNo">200</span>    public void nudgeUp()<a name="line.200"></a>
-<span class="sourceLineNo">201</span>    {<a name="line.201"></a>
-<span class="sourceLineNo">202</span>        messageIndex = Math.max(0, messageIndex - 1);<a name="line.202"></a>
-<span class="sourceLineNo">203</span>    }<a name="line.203"></a>
-<span class="sourceLineNo">204</span><a name="line.204"></a>
-<span class="sourceLineNo">205</span>    /**<a name="line.205"></a>
-<span class="sourceLineNo">206</span>     * Used internally to scroll down by one line, but can also be triggered by your code.<a name="line.206"></a>
-<span class="sourceLineNo">207</span>     */<a name="line.207"></a>
-<span class="sourceLineNo">208</span>    public void nudgeDown()<a name="line.208"></a>
-<span class="sourceLineNo">209</span>    {<a name="line.209"></a>
-<span class="sourceLineNo">210</span>        messageIndex = Math.min(messages.size() - 1, messageIndex + 1);<a name="line.210"></a>
-<span class="sourceLineNo">211</span>    }<a name="line.211"></a>
-<span class="sourceLineNo">212</span>    private char[][] assembleBorders() {<a name="line.212"></a>
-<span class="sourceLineNo">213</span>        char[][] result = new char[gridWidth][gridHeight];<a name="line.213"></a>
-<span class="sourceLineNo">214</span>        result[0][0] = '┌';<a name="line.214"></a>
-<span class="sourceLineNo">215</span>        result[gridWidth - 1][0] = '┐';<a name="line.215"></a>
-<span class="sourceLineNo">216</span>        result[0][gridHeight - 1] = '└';<a name="line.216"></a>
-<span class="sourceLineNo">217</span>        result[gridWidth - 1][gridHeight - 1] = '┘';<a name="line.217"></a>
-<span class="sourceLineNo">218</span>        for (int i = 1; i &lt; gridWidth - 1; i++) {<a name="line.218"></a>
-<span class="sourceLineNo">219</span>            result[i][0] = '─';<a name="line.219"></a>
-<span class="sourceLineNo">220</span>            result[i][gridHeight - 1] = '─';<a name="line.220"></a>
-<span class="sourceLineNo">221</span>        }<a name="line.221"></a>
-<span class="sourceLineNo">222</span>        for (int y = 1; y &lt; gridHeight - 1; y++) {<a name="line.222"></a>
-<span class="sourceLineNo">223</span>            result[0][y] = '│';<a name="line.223"></a>
-<span class="sourceLineNo">224</span>            result[gridWidth - 1][y] = '│';<a name="line.224"></a>
-<span class="sourceLineNo">225</span>        }<a name="line.225"></a>
-<span class="sourceLineNo">226</span>        for (int y = 1; y &lt; gridHeight - 1; y++) {<a name="line.226"></a>
-<span class="sourceLineNo">227</span>            for (int x = 1; x &lt; gridWidth - 1; x++) {<a name="line.227"></a>
-<span class="sourceLineNo">228</span>                result[x][y] = ' ';<a name="line.228"></a>
-<span class="sourceLineNo">229</span>                result[x][y] = ' ';<a name="line.229"></a>
-<span class="sourceLineNo">230</span>            }<a name="line.230"></a>
-<span class="sourceLineNo">231</span>        }<a name="line.231"></a>
-<span class="sourceLineNo">232</span>        return result;<a name="line.232"></a>
-<span class="sourceLineNo">233</span>    }<a name="line.233"></a>
-<span class="sourceLineNo">234</span><a name="line.234"></a>
-<span class="sourceLineNo">235</span>    @Override<a name="line.235"></a>
-<span class="sourceLineNo">236</span>    public void draw(Batch batch, float parentAlpha) {<a name="line.236"></a>
-<span class="sourceLineNo">237</span>        super.draw(batch, parentAlpha);<a name="line.237"></a>
-<span class="sourceLineNo">238</span>        put(basicBorders);<a name="line.238"></a>
-<span class="sourceLineNo">239</span>        for (int i = 1; i &lt; gridHeight - 1 &amp;&amp; i &lt;= messageIndex; i++) {<a name="line.239"></a>
-<span class="sourceLineNo">240</span>            put(1, gridHeight - 1 - i, messages.get(messageIndex + 1 - i));<a name="line.240"></a>
-<span class="sourceLineNo">241</span>        }<a name="line.241"></a>
-<span class="sourceLineNo">242</span>        act(Gdx.graphics.getDeltaTime());<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    }<a name="line.243"></a>
-<span class="sourceLineNo">244</span><a name="line.244"></a>
-<span class="sourceLineNo">245</span>    /**<a name="line.245"></a>
-<span class="sourceLineNo">246</span>     * Set the x, y position of the lower left corner, plus set the width and height.<a name="line.246"></a>
-<span class="sourceLineNo">247</span>     * ACTUALLY NEEDED to make the borders clickable. It can't know<a name="line.247"></a>
-<span class="sourceLineNo">248</span>     * the boundaries of the clickable area until it knows its own position and bounds.<a name="line.248"></a>
-<span class="sourceLineNo">249</span>     *<a name="line.249"></a>
-<span class="sourceLineNo">250</span>     * @param x x position in pixels or other units that libGDX is set to use<a name="line.250"></a>
-<span class="sourceLineNo">251</span>     * @param y y position in pixels or other units that libGDX is set to use<a name="line.251"></a>
-<span class="sourceLineNo">252</span>     * @param width the width in pixels (usually) of the message box; changes on resize<a name="line.252"></a>
-<span class="sourceLineNo">253</span>     * @param height the height in pixels (usually) of the message box; changes on resize<a name="line.253"></a>
-<span class="sourceLineNo">254</span>     */<a name="line.254"></a>
-<span class="sourceLineNo">255</span>    @Override<a name="line.255"></a>
-<span class="sourceLineNo">256</span>    public void setBounds(float x, float y, float width, float height) {<a name="line.256"></a>
-<span class="sourceLineNo">257</span>        super.setBounds(x, y, width, height);<a name="line.257"></a>
-<span class="sourceLineNo">258</span>        makeBordersClickable();<a name="line.258"></a>
-<span class="sourceLineNo">259</span>    }<a name="line.259"></a>
-<span class="sourceLineNo">260</span>}<a name="line.260"></a>
+<span class="sourceLineNo">193</span>    }<a name="line.193"></a>
+<span class="sourceLineNo">194</span><a name="line.194"></a>
+<span class="sourceLineNo">195</span>    /**<a name="line.195"></a>
+<span class="sourceLineNo">196</span>     * Used internally to scroll up by one line, but can also be triggered by your code.<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     */<a name="line.197"></a>
+<span class="sourceLineNo">198</span>    public void nudgeUp()<a name="line.198"></a>
+<span class="sourceLineNo">199</span>    {<a name="line.199"></a>
+<span class="sourceLineNo">200</span>        messageIndex = Math.max(0, messageIndex - 1);<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    }<a name="line.201"></a>
+<span class="sourceLineNo">202</span><a name="line.202"></a>
+<span class="sourceLineNo">203</span>    /**<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * Used internally to scroll down by one line, but can also be triggered by your code.<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     */<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    public void nudgeDown()<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        messageIndex = Math.min(messages.size() - 1, messageIndex + 1);<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    private char[][] assembleBorders() {<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        char[][] result = new char[gridWidth][gridHeight];<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        result[0][0] = '┌';<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        result[gridWidth - 1][0] = '┐';<a name="line.213"></a>
+<span class="sourceLineNo">214</span>        result[0][gridHeight - 1] = '└';<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        result[gridWidth - 1][gridHeight - 1] = '┘';<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        for (int i = 1; i &lt; gridWidth - 1; i++) {<a name="line.216"></a>
+<span class="sourceLineNo">217</span>            result[i][0] = '─';<a name="line.217"></a>
+<span class="sourceLineNo">218</span>            result[i][gridHeight - 1] = '─';<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        }<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        for (int y = 1; y &lt; gridHeight - 1; y++) {<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            result[0][y] = '│';<a name="line.221"></a>
+<span class="sourceLineNo">222</span>            result[gridWidth - 1][y] = '│';<a name="line.222"></a>
+<span class="sourceLineNo">223</span>        }<a name="line.223"></a>
+<span class="sourceLineNo">224</span>        for (int y = 1; y &lt; gridHeight - 1; y++) {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>            for (int x = 1; x &lt; gridWidth - 1; x++) {<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                result[x][y] = ' ';<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                result[x][y] = ' ';<a name="line.227"></a>
+<span class="sourceLineNo">228</span>            }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>        }<a name="line.229"></a>
+<span class="sourceLineNo">230</span>        return result;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    }<a name="line.231"></a>
+<span class="sourceLineNo">232</span><a name="line.232"></a>
+<span class="sourceLineNo">233</span>    @Override<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    public void draw(Batch batch, float parentAlpha) {<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        super.draw(batch, parentAlpha);<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        put(basicBorders);<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        for (int i = 1; i &lt; gridHeight - 1 &amp;&amp; i &lt;= messageIndex; i++) {<a name="line.237"></a>
+<span class="sourceLineNo">238</span>            put(1, gridHeight - 1 - i, messages.get(messageIndex + 1 - i));<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        }<a name="line.239"></a>
+<span class="sourceLineNo">240</span>        act(Gdx.graphics.getDeltaTime());<a name="line.240"></a>
+<span class="sourceLineNo">241</span>    }<a name="line.241"></a>
+<span class="sourceLineNo">242</span><a name="line.242"></a>
+<span class="sourceLineNo">243</span>    /**<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * Set the x, y position of the lower left corner, plus set the width and height.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * ACTUALLY NEEDED to make the borders clickable. It can't know<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * the boundaries of the clickable area until it knows its own position and bounds.<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     *<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     * @param x x position in pixels or other units that libGDX is set to use<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * @param y y position in pixels or other units that libGDX is set to use<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     * @param width the width in pixels (usually) of the message box; changes on resize<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     * @param height the height in pixels (usually) of the message box; changes on resize<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     */<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    @Override<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    public void setBounds(float x, float y, float width, float height) {<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        super.setBounds(x, y, width, height);<a name="line.255"></a>
+<span class="sourceLineNo">256</span>        makeBordersClickable();<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    }<a name="line.257"></a>
+<span class="sourceLineNo">258</span>}<a name="line.258"></a>
 
 
 

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":42,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":42,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":42,"i27":10,"i28":10,"i29":10};
+var methods = {"i0":10,"i1":10,"i2":42,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":42,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":42,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":42,"i27":10,"i28":10,"i29":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -108,7 +108,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.23">SColorFactory</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.25">SColorFactory</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Provides utilities for working with colors as well as caching operations for
  color creation.
@@ -240,13 +240,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColorFactory.html#colorForName-java.lang.String-">colorForName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</code>
-<div class="block">Returns the SColor Constant who's name is the one provided.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">You should use the Colors class from libGDX instead; it has all named SColors registered</span></div>
+</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColorFactory.html#colorForValue-int-">colorForValue</a></span>(int&nbsp;rgb)</code>
-<div class="block">Returns the SColor who's value matches the one passed in.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColorFactory.html#colorForValue-int-">colorForValue</a></span>(int&nbsp;argb)</code>
+<div class="block">Returns the SColor whose value matches the one passed in.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -409,7 +411,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SColorFactory</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.45">SColorFactory</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.47">SColorFactory</a>()</pre>
 <div class="block">Constructs a new SColorFactory with an empty cache.
  <br>
  Implementation note: SColorFactory initially used static methods and was not intended to
@@ -418,9 +420,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  constructed and for that object to contain the cache, rather than a static instance. Code
  written for earlier versions of SquidLib may use static methods on SColorFactory; most
  code written in SquidLib 3.0.0 beta 2 and newer prefers the IColorCenter implementations
- such as SquidColorCenter when SColor features such as color names aren't required. As of
- the master revision after beta 3, SquidColorCenter implements most of SColorFactory's API,
- and also supports a Filter for automatic changes to requested colors..</div>
+ such as SquidColorCenter when SColor features such as color names aren't required. Since
+ beta 4, SquidColorCenter implements most of SColorFactory's API, and also supports a
+ Filter for automatic changes to requested colors.</div>
 </li>
 </ul>
 </li>
@@ -437,12 +439,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>colorForName</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.66">colorForName</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
-<div class="block">Returns the SColor Constant who's name is the one provided. If one cannot
- be found then null is returned.
-
- This method constructs a list of the SColor constants the first time it
- is called.</div>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang">@Deprecated</a>
+public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.73">colorForName</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">You should use the Colors class from libGDX instead; it has all named SColors registered</span></div>
+<div class="block">DEPRECATED: You should use the Colors class from libGDX instead; it has all named SColors registered, though
+ calling its <code>Colors.get(String)</code> method returns a Color, not an SColor.
+ Since Colors has a map registering all named SColor objects (and some Color objects) already, it is rather
+ wasteful to store another map of all SColors for this method (and only this method) to use.
+ <br>
+ Returns the SColor Constant whose name is the one provided. If one cannot be found then null is returned.
+ <br>
+ This method constructs a list of the SColor constants the first time it is called.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>s</code> - the name</dd>
@@ -457,18 +464,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>colorForValue</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.87">colorForValue</a>(int&nbsp;rgb)</pre>
-<div class="block">Returns the SColor who's value matches the one passed in. If no SColor
- Constant matches that value then a cached or new SColor is returned that
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.94">colorForValue</a>(int&nbsp;argb)</pre>
+<div class="block">Returns the SColor whose value matches the one passed in. If no SColor
+ constant matches that value, then a cached or new SColor is returned that
  matches the provided value.
 
  This method constructs a list of the SColor constants the first time it
  is called.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rgb</code> - an int encoding 256 * 256 * red + 256 * green + blue</dd>
+<dd><code>argb</code> - an int encoding 256 * 256 * 256 * alpha + 256 * 256 * red + 256 * green + blue</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the SColor with value rgb</dd>
+<dd>the SColor with value argb</dd>
 </dl>
 </li>
 </ul>
@@ -478,7 +485,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>quantityCached</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.102">quantityCached</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.112">quantityCached</a>()</pre>
 <div class="block">Returns the number of SColor objects currently cached.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -491,7 +498,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>blend</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.143">blend</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.153">blend</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
                     <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2,
                     double&nbsp;coef)</pre>
 <div class="block">Returns an SColor that is the given distance from the first color to the
@@ -511,7 +518,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>randomBlend</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.160">randomBlend</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.170">randomBlend</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
                           <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2,
                           double&nbsp;min,
                           double&nbsp;max)</pre>
@@ -533,7 +540,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.171">add</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.181">add</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
                   <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2)</pre>
 <div class="block">Adds the two colors together.</div>
 <dl>
@@ -550,7 +557,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>lightWith</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.184">lightWith</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.194">lightWith</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color,
                         <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;light)</pre>
 <div class="block">Uses the second color as a light source, meaning that each of the red,
  green, and blue values of the first color are multiplied by the lighting
@@ -569,7 +576,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>emptyCache</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.195">emptyCache</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.205">emptyCache</a>()</pre>
 <div class="block">Clears the backing cache.
 
  Should only be used if an extreme number of colors are being created and
@@ -583,7 +590,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>setFloor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.212">setFloor</a>(int&nbsp;value)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.222">setFloor</a>(int&nbsp;value)</pre>
 <div class="block">Sets the value at which each of the red, green, and blue values will be
  set to the nearest lower multiple of.
 
@@ -605,7 +612,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getFloor</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.226">getFloor</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.236">getFloor</a>()</pre>
 <div class="block">Gets the value at which each of the red, green, and blue values will be
  set to the nearest lower multiple of.
  <br>
@@ -624,7 +631,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>asSColor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.243">asSColor</a>(int&nbsp;argb)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.253">asSColor</a>(int&nbsp;argb)</pre>
 <div class="block">Returns the cached color that matches the desired rgb value.
 
  If the color is not already in the cache, it is created and added to the
@@ -646,7 +653,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>asSColor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.286">asSColor</a>(float&nbsp;a,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.296">asSColor</a>(float&nbsp;a,
                        float&nbsp;r,
                        float&nbsp;g,
                        float&nbsp;b)</pre>
@@ -660,11 +667,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  colorForValue(int rgb) instead.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>a</code> - </dd>
-<dd><code>r</code> - </dd>
-<dd><code>g</code> - </dd>
-<dd><code>b</code> - </dd>
+<dd><code>a</code> - alpha, between 0.0 and 1.0 inclusive</dd>
+<dd><code>r</code> - red, between 0.0 and 1.0 inclusive</dd>
+<dd><code>g</code> - green, between 0.0 and 1.0 inclusive</dd>
+<dd><code>b</code> - blue, between 0.0 and 1.0 inclusive</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>an SColor with an unspecified name and the given a, r, g, and b values</dd>
 </dl>
 </li>
 </ul>
@@ -674,16 +682,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>asSColor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.321">asSColor</a>(int&nbsp;r,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.331">asSColor</a>(int&nbsp;r,
                        int&nbsp;g,
                        int&nbsp;b)</pre>
 <div class="block">Returns an SColor that is opaque.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>r</code> - </dd>
-<dd><code>g</code> - </dd>
-<dd><code>b</code> - </dd>
+<dd><code>r</code> - red, between 0 and 255 inclusive</dd>
+<dd><code>g</code> - green, between 0 and 255 inclusive</dd>
+<dd><code>b</code> - blue, between 0 and 255 inclusive</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>an SColor with an unspecified name, full (opaque) alpha, and the given r, g, and b values</dd>
 </dl>
 </li>
 </ul>
@@ -693,7 +702,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>asSColor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.335">asSColor</a>(int&nbsp;a,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.345">asSColor</a>(int&nbsp;a,
                        int&nbsp;r,
                        int&nbsp;g,
                        int&nbsp;b)</pre>
@@ -701,11 +710,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  between 0 and 255.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>a</code> - </dd>
-<dd><code>r</code> - </dd>
-<dd><code>g</code> - </dd>
-<dd><code>b</code> - </dd>
+<dd><code>a</code> - alpha, between 0 and 255 inclusive</dd>
+<dd><code>r</code> - red, between 0 and 255 inclusive</dd>
+<dd><code>g</code> - green, between 0 and 255 inclusive</dd>
+<dd><code>b</code> - blue, between 0 and 255 inclusive</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
+<dd>an SColor with an unspecified name and the given a, r, g, and b values</dd>
 </dl>
 </li>
 </ul>
@@ -715,7 +725,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>asSColor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.355">asSColor</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.361">asSColor</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Returns an SColor representation of the provided Color. If there is a
  named SColor constant that matches the value, then that constant is
  returned.</div>
@@ -732,7 +742,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>dim</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.366">dim</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.372">dim</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
 <div class="block">Returns an SColor that is a slightly dimmer version of the provided
  color.</div>
 <dl>
@@ -748,7 +758,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>dimmer</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.377">dimmer</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.383">dimmer</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
 <div class="block">Returns an SColor that is a somewhat dimmer version of the provided
  color.</div>
 <dl>
@@ -764,7 +774,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>dimmest</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.387">dimmest</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.393">dimmest</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
 <div class="block">Returns an SColor that is a lot darker version of the provided color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -779,7 +789,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>light</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.398">light</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.404">light</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
 <div class="block">Returns an SColor that is a slightly lighter version of the provided
  color.</div>
 <dl>
@@ -795,7 +805,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>lighter</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.409">lighter</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.415">lighter</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
 <div class="block">Returns an SColor that is a somewhat lighter version of the provided
  color.</div>
 <dl>
@@ -811,7 +821,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>lightest</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.419">lightest</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.425">lightest</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
 <div class="block">Returns an SColor that is a lot lighter version of the provided color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -826,7 +836,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>desaturated</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.430">desaturated</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.436">desaturated</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color)</pre>
 <div class="block">Returns an SColor that is the fully desaturated (greyscale) version of
  the provided color.</div>
 <dl>
@@ -842,7 +852,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>desaturate</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.449">desaturate</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.455">desaturate</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color,
                          double&nbsp;percent)</pre>
 <div class="block">Returns an SColor that is the version of the provided color desaturated
  the given amount.</div>
@@ -861,7 +871,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>asGradient</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.461">asGradient</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.467">asGradient</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color1,
                                     <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;color2)</pre>
 <div class="block">Returns a list of colors starting at the first color and moving to the
  second color. The end point colors are included in the list.</div>
@@ -880,7 +890,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>palette</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.485">palette</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.491">palette</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
 <div class="block">Returns the palette associate with the provided name, or null if there is
  no such palette.</div>
 <dl>
@@ -896,7 +906,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>pallet</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.496">pallet</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.502">pallet</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Prefer palette over this misspelled version.</span></div>
 <div class="block">Returns the palette associate with the provided name, or null if there is
  no such palette.</div>
@@ -913,7 +923,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>fromPalette</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.512">fromPalette</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.518">fromPalette</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                           float&nbsp;percent)</pre>
 <div class="block">Returns the SColor that is the provided percent towards the end of the
  palette. Bounds are checked so as long as there is at least one color in
@@ -935,7 +945,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>fromPallet</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.537">fromPallet</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.543">fromPallet</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                          float&nbsp;percent)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Prefer fromPalette over this misspelled version; they are equivalent.</span></div>
 <div class="block">Returns the SColor that is the provided percent towards the end of the
@@ -958,7 +968,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>addPallet</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.557">addPallet</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.563">addPallet</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;palette)</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Prefer addPalette over this misspelled version; they are equivalent.</span></div>
 <div class="block">Places the palette into the cache, along with each of the member colors.</div>
@@ -975,7 +985,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>addPalette</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.567">addPalette</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColorFactory.html#line.573">addPalette</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;&nbsp;palette)</pre>
 <div class="block">Places the palette into the cache, along with each of the member colors.</div>
 <dl>

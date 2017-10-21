@@ -29,9 +29,6 @@
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
-                    <excludes>
-                        <exclude>**/emu/**</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

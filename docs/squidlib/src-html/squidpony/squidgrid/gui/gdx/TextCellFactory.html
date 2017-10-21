@@ -24,9 +24,9 @@
 <span class="sourceLineNo">016</span>import com.badlogic.gdx.scenes.scene2d.ui.Label;<a name="line.16"></a>
 <span class="sourceLineNo">017</span>import com.badlogic.gdx.utils.Align;<a name="line.17"></a>
 <span class="sourceLineNo">018</span>import com.badlogic.gdx.utils.Disposable;<a name="line.18"></a>
-<span class="sourceLineNo">019</span>import com.badlogic.gdx.utils.NumberUtils;<a name="line.19"></a>
-<span class="sourceLineNo">020</span>import squidpony.IColorCenter;<a name="line.20"></a>
-<span class="sourceLineNo">021</span>import squidpony.StringKit;<a name="line.21"></a>
+<span class="sourceLineNo">019</span>import squidpony.IColorCenter;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import squidpony.StringKit;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import squidpony.squidmath.NumberTools;<a name="line.21"></a>
 <span class="sourceLineNo">022</span>import squidpony.squidmath.OrderedMap;<a name="line.22"></a>
 <span class="sourceLineNo">023</span><a name="line.23"></a>
 <span class="sourceLineNo">024</span>import java.util.ArrayList;<a name="line.24"></a>
@@ -2029,7 +2029,7 @@
 <span class="sourceLineNo">2021</span>        public String toString() {<a name="line.2021"></a>
 <span class="sourceLineNo">2022</span>            return "Glyph{'" +<a name="line.2022"></a>
 <span class="sourceLineNo">2023</span>                     + shown +<a name="line.2023"></a>
-<span class="sourceLineNo">2024</span>                    "' with color 0x" + StringKit.hex(NumberUtils.floatToIntColor(color)) +<a name="line.2024"></a>
+<span class="sourceLineNo">2024</span>                    "' with RGBA color 0x" + StringKit.hex(Integer.reverseBytes(NumberTools.floatToIntBits(color))) +<a name="line.2024"></a>
 <span class="sourceLineNo">2025</span>                    ", position (" + getX() +<a name="line.2025"></a>
 <span class="sourceLineNo">2026</span>                    "," + getY() +<a name="line.2026"></a>
 <span class="sourceLineNo">2027</span>                    ")}";<a name="line.2027"></a>

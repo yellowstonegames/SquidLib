@@ -113,10 +113,10 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.36">LongPeriodRNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.44">LongPeriodRNG</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
-<div class="block">An RNG that has a drastically longer period than the other generators in Sarong, other than IsaacRNG, without
+<div class="block">An RNG that has a drastically longer period than the other generators in SquidLib, other than IsaacRNG, without
  sacrificing speed or HTML target compatibility. If you don't already know what the period of an RNG is, this probably
  isn't needed for your purposes, or many purposes in games at all. It is primarily meant for applications that need to
  generate massive amounts of random numbers, more than pow(2, 64) (18,446,744,073,709,551,616), without repeating
@@ -127,18 +127,26 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
  276,302,219,601,246,094,119,453,082,952,085,005,768,838,150,682,342,462,881,473,913,110,540,827,237,163,350,510,684,
  586,298,239,947,245,938,479,716,304,835,356,329,624,224,137,215). While that number is preposterously large, there's
  always some application that seems to need more; if you really need more than that, look into CMWC generators, which
- can have even larger state and also even larger periods. There isn't one of those in Sarong currently, though there
- is a possibility of one being added in the future.
+ can have even larger state and also even larger periods. There isn't one of those in SquidLib currently, though there
+ is a possibility of one being added in the future. There is a 64-bit MersenneTwister, which has an even larger period
+ than this one, but it might not have optimal quality for some applications (notably, the game Dungeon Crawl Stone
+ Soup used Mersenne Twister and found that some players in a competition could predict impending random events,
+ despite the generator seeming bulletproof).
  <br>
  This class may be particularly useful in conjunction with the shuffle method of RNG; the period of an RNG determines
  how many possible "shuffles", a.k.a orderings or permutations, can be produced over all calls to a permuting method
  like shuffle. A LightRNG-backed RNG with a period of pow(2, 64) will only be able to produce all possible "shuffles"
  for lists or arrays of 20 items or less. If a LongPeriodRNG is given to the constructor of an RNG and a large enough
- state has been given to the LongPeriodRNG (the String or long[] constructors can allow this), then lists or arrays of up
- to 170 elements can have all possible orderings produced by shuffle(), though it will take near-impossibly-many calls.
- This class has 128 bytes of state plus more in overhead (compare to the 16-byte-with-overhead LightRNG), but due to
- its massive period and createMany() static method, you can create a large number of subsequences with rather long
- periods themselves from a single seed. This uses the xorshift-1024* algorithm, and has competitive speed.
+ state has been given to the LongPeriodRNG (the String or long[] constructors can allow this), then lists or arrays of
+ up to 170 elements can have all possible orderings produced by shuffle(), though it will take near-impossibly-many
+ calls. This class has 128 bytes of state plus more in overhead (compare to the 16-byte-with-overhead LightRNG), but
+ due to its massive period and createMany() static method, you can create a large number of subsequences with rather
+ long periods themselves from a single seed. This uses the xorshift-1024*phi algorithm, and has competitive speed.
+ <br>
+ This generator was updated to the "phi" variant of XorShift1024* instead of the "M_8" variant when the phi variant
+ became recommended over the version this originally used. The multiplier, and thus the sequence of numbers this
+ generates for a given seed, changed on October 19, 2017.
+ <br>
  Created by Tommy Ettinger on 3/21/2016.
  Ported from CC0-licensed C code by Sebastiano Vigna, at http://xorshift.di.unimi.it/xorshift1024star.c</div>
 <dl>
@@ -194,26 +202,26 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG-java.lang.CharSequence-">LongPeriodRNG</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</code>
+<div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with the given seed, using a different
+ strategy depending on the seed.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG-long-">LongPeriodRNG</a></span>(long&nbsp;seed)</code>
 <div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with many calls to a SplitMix64-based RNG
  using a variant on seed produced by running it through PCG-Random's output step (PermutedRNG here).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG-long:A-">LongPeriodRNG</a></span>(long[]&nbsp;seed)</code>
 <div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with the given seed as a long array, which
  may or may not have 16 elements (though it is less wasteful to run this with 16 longs since that is exactly 1024
  bits).</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG-squidpony.squidmath.LongPeriodRNG-">LongPeriodRNG</a></span>(<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>&nbsp;other)</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG-java.lang.String-">LongPeriodRNG</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</code>
-<div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with the given seed, using a different
- strategy depending on the seed.</div>
-</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#LongPeriodRNG-squidpony.squidmath.LongPeriodRNG-">LongPeriodRNG</a></span>(<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -301,22 +309,22 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#reseed-java.lang.CharSequence-">reseed</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</code>
+<div class="block">Reinitializes this class' 1024 bits of state with the given seed, using a different strategy depending on the seed.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#reseed-long-">reseed</a></span>(long&nbsp;seed)</code>
 <div class="block">Reinitializes this class' 1024 bits of state with the given seed passed into SplitMix64, the algorithm also used by
  LightRNG.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#reseed-long:A-">reseed</a></span>(long[]&nbsp;seed)</code>
 <div class="block">Reinitializes this class' 1024 bits of state with the given seed as a long array, which may or may not have 16
  elements (though it is less wasteful to run this with 16 longs since that is exactly 1024 bits).</div>
-</td>
-</tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LongPeriodRNG.html#reseed-java.lang.String-">reseed</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</code>
-<div class="block">Reinitializes this class' 1024 bits of state with the given seed, using a different strategy depending on the seed.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
@@ -351,7 +359,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>state</h4>
-<pre>public final&nbsp;long[] <a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.38">state</a></pre>
+<pre>public final&nbsp;long[] <a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.46">state</a></pre>
 </li>
 </ul>
 <a name="choice">
@@ -360,7 +368,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>choice</h4>
-<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.39">choice</a></pre>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.47">choice</a></pre>
 </li>
 </ul>
 </li>
@@ -377,7 +385,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LongPeriodRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.54">LongPeriodRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.62">LongPeriodRNG</a>()</pre>
 <div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with a random seed passed into SplitMix64,
  the algorithm also used by LightRNG. A different algorithm is used in non-constructor code to generate random
  numbers, which is a recommended technique to generate seeds.</div>
@@ -389,7 +397,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LongPeriodRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.63">LongPeriodRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.71">LongPeriodRNG</a>(long&nbsp;seed)</pre>
 <div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with many calls to a SplitMix64-based RNG
  using a variant on seed produced by running it through PCG-Random's output step (PermutedRNG here).</div>
 <dl>
@@ -398,22 +406,22 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </dl>
 </li>
 </ul>
-<a name="LongPeriodRNG-java.lang.String-">
+<a name="LongPeriodRNG-java.lang.CharSequence-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>LongPeriodRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.108">LongPeriodRNG</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.114">LongPeriodRNG</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
 <div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with the given seed, using a different
  strategy depending on the seed. If seed is null, this uses the same state as any other null seed. If seed is a
  String with length 15 or less, this generates a 64-bit hash of the seed and uses it in the same way the constructor
  that takes a long creates 1024 bits of state from a 64-bit seed. If seed is a String with length 16 or more, this
  splits the string up and generates 16 hashes from progressively smaller substrings of seed. The highest quality
- states will result from passing this a very long String.</div>
+ states will result from passing this a very long String (a StringBuilder would also be a good choice).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>seed</code> - a String seed; can be any value, but produces the best results if it at least 16 characters long</dd>
+<dd><code>seed</code> - a String (or other CharSequence) seed; can be any value, but produces the best results if it at least 16 characters long</dd>
 </dl>
 </li>
 </ul>
@@ -423,7 +431,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>LongPeriodRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.153">LongPeriodRNG</a>(long[]&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.158">LongPeriodRNG</a>(long[]&nbsp;seed)</pre>
 <div class="block">Builds a LongPeriodRNG and initializes this class' 1024 bits of state with the given seed as a long array, which
  may or may not have 16 elements (though it is less wasteful to run this with 16 longs since that is exactly 1024
  bits). If seed is null, this produces the same state as the String constructor does when given a null seed. If seed
@@ -442,7 +450,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LongPeriodRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.206">LongPeriodRNG</a>(<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.211">LongPeriodRNG</a>(<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>&nbsp;other)</pre>
 </li>
 </ul>
 </li>
@@ -459,7 +467,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>reseed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.67">reseed</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.75">reseed</a>()</pre>
 </li>
 </ul>
 <a name="reseed-long-">
@@ -468,7 +476,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>reseed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.93">reseed</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.99">reseed</a>(long&nbsp;seed)</pre>
 <div class="block">Reinitializes this class' 1024 bits of state with the given seed passed into SplitMix64, the algorithm also used by
  LightRNG. A different algorithm is used in actual number generating code, which is a recommended technique to
  generate seeds.</div>
@@ -478,22 +486,22 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 </dl>
 </li>
 </ul>
-<a name="reseed-java.lang.String-">
+<a name="reseed-java.lang.CharSequence-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>reseed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.122">reseed</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.128">reseed</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</pre>
 <div class="block">Reinitializes this class' 1024 bits of state with the given seed, using a different strategy depending on the seed.
  If seed is null, this uses the same state as any other null seed. If seed is a String with length 15 or less, this
  generates a 64-bit hash of the seed and uses it in the same way the constructor that takes a long creates 1024 bits
  of state from a 64-bit seed. If seed is a String with length 16 or more, this splits the string up and generates 16
  hashes from progressively smaller substrings of seed. The highest quality states will result from passing this a
- very long String.</div>
+ very long String (a StringBuilder would also be a good choice).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>seed</code> - a String seed; can be any value, but produces the best results if it at least 16 characters long</dd>
+<dd><code>seed</code> - a String (or other CharSequence) seed; can be any value, but produces the best results if it at least 16 characters long</dd>
 </dl>
 </li>
 </ul>
@@ -503,7 +511,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>reseed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.167">reseed</a>(long[]&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.172">reseed</a>(long[]&nbsp;seed)</pre>
 <div class="block">Reinitializes this class' 1024 bits of state with the given seed as a long array, which may or may not have 16
  elements (though it is less wasteful to run this with 16 longs since that is exactly 1024 bits). If seed is null,
  this produces the same state as the String constructor does when given a null seed. If seed has fewer than 16
@@ -522,7 +530,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.212">next</a>(int&nbsp;bits)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.217">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -542,7 +550,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.224">nextLong</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.234">nextLong</a>()</pre>
 <div class="block">Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
  <br>
  Written by Sebastiano Vigna, from http://xorshift.di.unimi.it/xorshift1024star.c</div>
@@ -560,7 +568,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.239">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.249">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -578,7 +586,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>jump</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.253">jump</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.263">jump</a>()</pre>
 <div class="block">This is the jump function for the generator. It is equivalent to 2^512 calls to nextLong(); it can be used to
  generate 2^512 non-overlapping subsequences for parallel computations. Alters the state of this object.
  <br>
@@ -591,7 +599,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>createMany</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.276">createMany</a>(int&nbsp;count)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.286">createMany</a>(int&nbsp;count)</pre>
 <div class="block">Creates many LongPeriodRNG objects in an array, where each will generate a sequence of pow(2, 512) numbers that
  will not overlap with other sequences in the array. The number of items in the array is specified by count.</div>
 <dl>
@@ -608,7 +616,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>createMany</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.301">createMany</a>(int&nbsp;count,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.311">createMany</a>(int&nbsp;count,
                                          long&nbsp;seed)</pre>
 <div class="block">Creates many LongPeriodRNG objects in an array, where each will generate a sequence of pow(2, 512) numbers that
  will not overlap with other sequences in the array. The number of items in the array is specified by count. A
@@ -631,7 +639,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>createMany</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.325">createMany</a>(int&nbsp;count,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.335">createMany</a>(int&nbsp;count,
                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
 <div class="block">Creates many LongPeriodRNG objects in an array, where each will generate a sequence of pow(2, 512) numbers that
  will not overlap with other sequences in the array. The number of items in the array is specified by count. A
@@ -654,7 +662,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>createMany</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.349">createMany</a>(int&nbsp;count,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath">LongPeriodRNG</a>[]&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.359">createMany</a>(int&nbsp;count,
                                          long[]&nbsp;seed)</pre>
 <div class="block">Creates many LongPeriodRNG objects in an array, where each will generate a sequence of pow(2, 512) numbers that
  will not overlap with other sequences in the array. The number of items in the array is specified by count. A
@@ -677,7 +685,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.363">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.373">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -690,7 +698,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.368">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.378">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -703,7 +711,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.380">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LongPeriodRNG.html#line.390">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
