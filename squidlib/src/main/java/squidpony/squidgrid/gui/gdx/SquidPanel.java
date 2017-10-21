@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
@@ -61,7 +60,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     public float[][] colors;
     protected Color lightingColor = SColor.WHITE, tmpColor = new Color();
     protected TextCellFactory textFactory;
-    protected float xOffset, yOffset, lightingFloat = NumberUtils.intToFloatColor(0xffffffff);
+    protected float xOffset, yOffset, lightingFloat = SColor.FLOAT_WHITE;
     public OrderedSet<AnimatedEntity> animatedEntities;
     public OrderedSet<Actor> autoActors;
     /**

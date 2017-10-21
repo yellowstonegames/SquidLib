@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
@@ -2613,7 +2612,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
-                                        NumberUtils.intToFloatColor(0xFE000000 |
+                                        NumberTools.intBitsToFloat(0xFE000000 |
                                                 (int)((WhirlingNoise.noise(x * 0.0625, y * 0.0625, ctr  * 0.125)
                                                         + 1.0) * 8388607.5)));
                             }

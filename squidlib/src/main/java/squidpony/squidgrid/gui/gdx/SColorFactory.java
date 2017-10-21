@@ -2,6 +2,8 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.IntMap;
+import com.badlogic.gdx.utils.ObjectMap;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord3D;
 import squidpony.squidmath.RNG;
@@ -22,12 +24,12 @@ import java.util.*;
  */
 public class SColorFactory {
 
-    private final TreeMap<String, SColor> nameLookup;
-    private final TreeMap<Integer, SColor> valueLookup;
+    private final ObjectMap<String, SColor> nameLookup;
+    private final IntMap<SColor> valueLookup;
     private RNG rng;
-    private Map<Integer, SColor> colorBag;
-    private Map<String, ArrayList<SColor>> palettes;
-    private long floor = 1;//what multiple to floor rgb values to in order to reduce total colors
+    private IntMap<SColor> colorBag;
+    private ObjectMap<String, ArrayList<SColor>> palettes;
+    private int floor = 1;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
      * Constructs a new SColorFactory with an empty cache.
@@ -38,33 +40,38 @@ public class SColorFactory {
      * constructed and for that object to contain the cache, rather than a static instance. Code
      * written for earlier versions of SquidLib may use static methods on SColorFactory; most
      * code written in SquidLib 3.0.0 beta 2 and newer prefers the IColorCenter implementations
-     * such as SquidColorCenter when SColor features such as color names aren't required. As of
-     * the master revision after beta 3, SquidColorCenter implements most of SColorFactory's API,
-     * and also supports a Filter for automatic changes to requested colors..
+     * such as SquidColorCenter when SColor features such as color names aren't required. Since
+     * beta 4, SquidColorCenter implements most of SColorFactory's API, and also supports a
+     * Filter for automatic changes to requested colors.
      */
     public SColorFactory() {
 
-        nameLookup = new TreeMap<>();
-        valueLookup = new TreeMap<>();
+        nameLookup = new ObjectMap<>();
+        valueLookup = new IntMap<>();
         rng = DefaultResources.getGuiRandom();
-        colorBag = new HashMap<>();
-        palettes = new HashMap<>();
+        colorBag = new IntMap<>();
+        palettes = new ObjectMap<>();
         floor = 1;
 
     }
 
     /**
-     * Returns the SColor Constant who's name is the one provided. If one cannot
-     * be found then null is returned.
-     *
-     * This method constructs a list of the SColor constants the first time it
-     * is called.
+     * DEPRECATED: You should use the Colors class from libGDX instead; it has all named SColors registered, though
+     * calling its {@link com.badlogic.gdx.graphics.Colors#get(String)} method returns a Color, not an SColor.
+     * Since Colors has a map registering all named SColor objects (and some Color objects) already, it is rather
+     * wasteful to store another map of all SColors for this method (and only this method) to use.
+     * <br>
+     * Returns the SColor Constant whose name is the one provided. If one cannot be found then null is returned.
+     * <br>
+     * This method constructs a list of the SColor constants the first time it is called.
      *
      * @param s the name
      * @return  the SColor by name s
+     * @deprecated You should use the Colors class from libGDX instead; it has all named SColors registered
      */
+    @Deprecated
     public SColor colorForName(String s) {
-        if (nameLookup.isEmpty()) {
+        if (nameLookup.size == 0) {
             for (SColor sc : SColor.FULL_PALETTE) {
                 nameLookup.put(sc.getName(), sc);
             }
@@ -74,24 +81,27 @@ public class SColorFactory {
     }
 
     /**
-     * Returns the SColor who's value matches the one passed in. If no SColor
-     * Constant matches that value then a cached or new SColor is returned that
+     * Returns the SColor whose value matches the one passed in. If no SColor
+     * constant matches that value, then a cached or new SColor is returned that
      * matches the provided value.
      *
      * This method constructs a list of the SColor constants the first time it
      * is called.
      *
-     * @param rgb an int encoding 256 * 256 * red + 256 * green + blue
-     * @return the SColor with value rgb
+     * @param argb an int encoding 256 * 256 * 256 * alpha + 256 * 256 * red + 256 * green + blue
+     * @return the SColor with value argb
      */
-    public SColor colorForValue(int rgb) {
-        if (valueLookup.isEmpty()) {
-            for (SColor sc : SColor.FULL_PALETTE) {
-                valueLookup.put(sc.toIntBits(), sc);
+    public SColor colorForValue(int argb) {
+        if (valueLookup.size == 0) {
+            int len = SColor.FULL_PALETTE.length;
+            SColor sc;
+            for (int i = 0; i < len; i++) {
+                sc = SColor.FULL_PALETTE[i];
+                valueLookup.put(Color.argb8888(sc), sc);
             }
         }
 
-        return valueLookup.containsKey(rgb) ? valueLookup.get(rgb) : asSColor(rgb);
+        return valueLookup.containsKey(argb) ? valueLookup.get(argb) : asSColor(argb);
     }
 
     /**
@@ -100,7 +110,7 @@ public class SColorFactory {
      * @return
      */
     public int quantityCached() {
-        return colorBag.size();
+        return colorBag.size;
     }
 
     /**
@@ -193,7 +203,7 @@ public class SColorFactory {
      * areas that will not be revisited.
      */
     public void emptyCache() {
-        colorBag = new HashMap<>();
+        colorBag.clear();
     }
 
     /**
@@ -243,20 +253,20 @@ public class SColorFactory {
     public SColor asSColor(int argb) {
         int working = argb;
         if (floor != 1) {//need to convert to floored values
-            int r = (argb >>> 24) & 0xff;
-            r -= r % floor;
-            int g = (argb >> 16) & 0xff;
-            g -= g % floor;
-            int b = (argb >> 8) & 0xff;
-            b -= b % floor;
-            int a = (argb) & 0xff;
+            int a = (argb >>> 24) & 0xff;
             a -= a % floor;
+            int r = (argb >> 16) & 0xff;
+            r -= r % floor;
+            int g = (argb >> 8) & 0xff;
+            g -= g % floor;
+            int b = (argb) & 0xff;
+            b -= b % floor;
 
             //put back together
-            working = ((r & 0xFF) << 24)
-                    | ((g & 0xFF) << 16)
-                    | ((b & 0xFF) << 8)
-                    | (a & 0xFF);
+            working = ((a & 0xFF) << 24)
+                    | ((r & 0xFF) << 16)
+                    | ((g & 0xFF) << 8)
+                    | (b & 0xFF);
         }
 
         if (colorBag.containsKey(working)) {
@@ -277,11 +287,11 @@ public class SColorFactory {
      * SColor constant. If such functionality is desired then please use
      * colorForValue(int rgb) instead.
      *
-     * @param a
-     * @param r 
-     * @param g 
-     * @param b 
-     * @return
+     * @param a alpha, between 0.0 and 1.0 inclusive
+     * @param r red, between 0.0 and 1.0 inclusive
+     * @param g green, between 0.0 and 1.0 inclusive
+     * @param b blue, between 0.0 and 1.0 inclusive
+     * @return an SColor with an unspecified name and the given a, r, g, and b values
      */
     public SColor asSColor(float a, float r, float g, float b) {
         int working = 0;
@@ -313,10 +323,10 @@ public class SColorFactory {
     /**
      * Returns an SColor that is opaque.
      *
-     * @param r
-     * @param g
-     * @param b
-     * @return
+     * @param r red, between 0 and 255 inclusive
+     * @param g green, between 0 and 255 inclusive
+     * @param b blue, between 0 and 255 inclusive
+     * @return an SColor with an unspecified name, full (opaque) alpha, and the given r, g, and b values
      */
     public SColor asSColor(int r, int g, int b) {
         return asSColor(255, r, g, b);
@@ -326,21 +336,17 @@ public class SColorFactory {
      * Returns an SColor with the given values, with those values clamped
      * between 0 and 255.
      *
-     * @param a
-     * @param r
-     * @param g
-     * @param b
-     * @return
+     * @param a alpha, between 0 and 255 inclusive
+     * @param r red, between 0 and 255 inclusive
+     * @param g green, between 0 and 255 inclusive
+     * @param b blue, between 0 and 255 inclusive
+     * @return an SColor with an unspecified name and the given a, r, g, and b values
      */
     public SColor asSColor(int a, int r, int g, int b) {
-        a = Math.min(a, 255);
-        a = Math.max(a, 0);
-        r = Math.min(r, 255);
-        r = Math.max(r, 0);
-        g = Math.min(g, 255);
-        g = Math.max(g, 0);
-        b = Math.min(b, 255);
-        b = Math.max(b, 0);
+        a = Math.max(Math.min(a, 255), 0);
+        r = Math.max(Math.min(r, 255), 0);
+        g = Math.max(Math.min(g, 255), 0);
+        b = Math.max(Math.min(b, 255), 0);
         return asSColor((a << 24) | (r << 16) | (g << 8) | b);
     }
 

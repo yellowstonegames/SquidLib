@@ -1,8 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.ArrayTools;
 import squidpony.StringKit;
 import squidpony.squidmath.CrossHash;
@@ -10815,6 +10815,7 @@ public class SColor extends Color {
     public SColor(Color color, String name) {
         super((Color.rgb888(color) << 8) | 255);
         this.name = name;
+        Colors.put(name, this);
     }
 
     /**
@@ -10837,6 +10838,7 @@ public class SColor extends Color {
     public SColor(int colorValue, String name) {
         super((colorValue << 8) | 255);
         this.name = name;
+        Colors.put(name, this);
     }
 
     /**
@@ -10875,6 +10877,7 @@ public class SColor extends Color {
     public SColor(int r, int g, int b, String name) {
         super(r / 255f, g / 255f, b / 255f, 1.0f);
         this.name = name;
+        Colors.put(name, this);
     }
 
     /**
@@ -10889,6 +10892,7 @@ public class SColor extends Color {
     public SColor(int r, int g, int b, int a, String name) {
         super(r / 255f, g / 255f, b / 255f, a / 255f);
         this.name = name;
+        Colors.put(name, this);
     }
 
     /**
@@ -10918,7 +10922,7 @@ public class SColor extends Color {
      * @return the Color that can be represented by encoded
      */
     public static Color colorFromFloat(final float encoded) {
-        int c = NumberUtils.floatToIntColor(encoded);
+        int c = NumberTools.floatToIntBits(encoded);
         return new Color(((c & 0x000000ff)) / 255f, ((c & 0x0000ff00) >>> 8) / 255f,
                 ((c & 0x00ff0000) >>> 16) / 255f, ((c & 0xff000000) >>> 24) / 255f);
     }
@@ -10930,7 +10934,7 @@ public class SColor extends Color {
      */
     public static int redOfFloat(final float encoded)
     {
-        return NumberUtils.floatToIntColor(encoded) & 0x000000ff;
+        return NumberTools.floatToIntBits(encoded) & 0x000000ff;
     }
 
     /**
@@ -10940,7 +10944,7 @@ public class SColor extends Color {
      */
     public static int greenOfFloat(final float encoded)
     {
-        return (NumberUtils.floatToIntColor(encoded) & 0x0000ff00) >>> 8;
+        return (NumberTools.floatToIntBits(encoded) & 0x0000ff00) >>> 8;
     }
 
     /**
@@ -10950,7 +10954,7 @@ public class SColor extends Color {
      */
     public static int blueOfFloat(final float encoded)
     {
-        return (NumberUtils.floatToIntColor(encoded) & 0x00ff0000) >>> 16;
+        return (NumberTools.floatToIntBits(encoded) & 0x00ff0000) >>> 16;
     }
 
     /**
@@ -10961,7 +10965,7 @@ public class SColor extends Color {
      */
     public static int alphaOfFloat(final float encoded)
     {
-        return (NumberUtils.floatToIntColor(encoded) & 0xfe000000) >>> 24;
+        return (NumberTools.floatToIntBits(encoded) & 0xfe000000) >>> 24;
     }
     /**
      * Gets the saturation of the given encoded color, as a float ranging from 0.0f to 1.0f, inclusive.
@@ -10970,7 +10974,7 @@ public class SColor extends Color {
      * bright color, exclusive)
      */
     public static float saturationOfFloat(float encoded) {
-        final int e = NumberUtils.floatToIntColor(encoded),
+        final int e = NumberTools.floatToIntBits(encoded),
                 r = (e & 255), g = (e >>> 8 & 255),
                 b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
         final float min = Math.min(Math.min(r, g ), b) / 255f;   //Min. value of RGB
@@ -10995,7 +10999,7 @@ public class SColor extends Color {
      */
     public static float valueOfFloat(final float encoded)
     {
-        final int e = NumberUtils.floatToIntColor(encoded);
+        final int e = NumberTools.floatToIntBits(encoded);
         final int r = (e & 255), g = (e >>> 8 & 255),
                 b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
         return Math.max(Math.max(r, g), b) / 255f;
@@ -11009,7 +11013,7 @@ public class SColor extends Color {
      * eventually to purple before looping back to almost the same red (1.0, exclusive)
      */
     public static float hueOfFloat(final float encoded) {
-        final int e = NumberUtils.floatToIntColor(encoded);
+        final int e = NumberTools.floatToIntBits(encoded);
         final float r = (e & 255) / 255f, g = (e >>> 8 & 255) / 255f,
                 b = (e >>> 16 & 255) / 255f;//, a = (e >>> 24 & 254) / 254f;
         final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
@@ -11056,8 +11060,8 @@ public class SColor extends Color {
      * @return another color encoded as a packed float, using encodedColor's RGB channels and the given alpha
      */
     public static float translucentColor(float encodedColor, float alpha) {
-        return NumberUtils.intToFloatColor(NumberUtils.floatToIntColor(encodedColor) & 0xFFFFFF
-                | (MathUtils.clamp((int) (255f * alpha), 0, 255) << 24));
+        return NumberTools.intBitsToFloat(NumberTools.floatToIntBits(encodedColor) & 0xFFFFFF
+                | (MathUtils.clamp((int) (255f * alpha), 0, 255) << 24 & 0xFE000000));
     }
 
     private static final char[] digits = {
@@ -11077,10 +11081,10 @@ public class SColor extends Color {
      *
      * @param changing a char array that will be changed in place; must not be null and must have length of at least 8
      * @param color    a color
-     * @return the char array parameter changing, after modifications
+     * @return the char array parameter changing, after modifications to store an RGBA8888 color as hex
      */
     public static char[] floatToChars(final char[] changing, final float color) {
-        final int i = NumberUtils.floatToIntColor(color);
+        final int i = NumberTools.floatToIntBits(color);
         changing[1] = digits[i & 15];
         changing[0] = digits[(i >>> 4) & 15];
         changing[3] = digits[(i >>> 8) & 15];
@@ -11093,13 +11097,14 @@ public class SColor extends Color {
     }
 
     /**
-     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
-     * to construct an int in RGBA8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
-     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} starting at
+     * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in
+     * RGBA8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
+     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
-     * @param data   a char array that must not be null and must have length of at least 8
+     * @param data   a char array that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer
      * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length
      * @return an int in RGBA8888 format
      */
@@ -11108,13 +11113,28 @@ public class SColor extends Color {
     }
 
     /**
-     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
-     * to construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as
+     * as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in RGBA8888 format. Some parts of
+     * libGDX use and expect RGBA8888 order, such as most constructors for Color and {@link Color#set(int)}, while
+     * others use ABGR8888 (often with packed floats), like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)},
+     * which is the fastest and least wasteful way to set the current color used by a Batch for tinting.
+     *
+     * @param data   a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer
+     * @return an int in RGBA8888 format
+     */
+    public static int charsToRGBA(final char[] data) {
+        return StringKit.intFromHex(data, 0, Math.min(data.length, 8));
+    }
+
+    /**
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} starting at
+     * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to
+     * construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
      * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
-     * @param data   a char array that must not be null and must have length of at least 8
+     * @param data   a char array that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer
      * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length
      * @return an int in ABGR8888 format
      */
@@ -11123,13 +11143,14 @@ public class SColor extends Color {
     }
 
     /**
-     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
-     * to construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
-     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as
+     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct an int in ABGR8888 format.
+     * Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
+     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
-     * @param data a char array that must not be null and must have length of at least 8
+     * @param data a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer
      * @return an int in ABGR8888 format
      */
     public static int charsToABGR(final char[] data) {
@@ -11137,50 +11158,53 @@ public class SColor extends Color {
     }
 
     /**
-     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
-     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
-     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as
+     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888
+     * format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
+     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
-     * @param data a char array that must not be null and must have length of at least 8
+     * @param data a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer
      * @return a float in packed ABGR8888 format
      */
     public static float charsToFloat(final char[] data) {
-        return NumberUtils.intToFloatColor(
+        return NumberTools.intBitsToFloat(
                 Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));
     }
 
     /**
-     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
-     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} starting at
+     * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to
+     * construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
      * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
-     * @param data   a char array that must not be null and must have length of at least 8
+     * @param data a char array that must not be null + offset; the first 8 chars after offset should be an RGBA8888 hex integer
      * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length
      * @return a float in packed ABGR8888 format
      */
     public static float charsToFloat(final char[] data, final int offset) {
-        return NumberUtils.intToFloatColor(
+        return NumberTools.intBitsToFloat(0xFE000000 &
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset + 8))));
     }
 
     /**
-     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} and use them
-     * to construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
-     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
+     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as
+     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888
+     * format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
+     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set
      * the current color used by a Batch for tinting.
      *
-     * @param data   a CharSequence that must not be null and must have length of at least 8
+     * @param data a CharSequence that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer
      * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length()
      * @return a float in packed ABGR8888 format
      */
 
     public static float charsToFloat(final CharSequence data, final int offset) {
-        return NumberUtils.intToFloatColor(
+        return NumberTools.intBitsToFloat(0xFE000000 &
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length(), offset + 8))));
     }
 
@@ -11199,7 +11223,7 @@ public class SColor extends Color {
      * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
      */
     public static float floatGet(float r, float g, float b, float a) {
-        return NumberUtils.intToFloatColor(((int) (a * 255) << 24) | ((int) (b * 255) << 16)
+        return NumberTools.intBitsToFloat(((int) (a * 255) << 24 & 0xFE000000) | ((int) (b * 255) << 16)
                 | ((int) (g * 255) << 8) | (int) (r * 255));
     }
 
@@ -11220,7 +11244,7 @@ public class SColor extends Color {
      * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
      */
     public static float floatGet(long c) {
-        return NumberUtils.intToFloatColor((int) ((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
+        return NumberTools.intBitsToFloat((int) ((c >>> 24 & 0xff) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
                 | (c << 24 & 0xfe000000)));
     }
 
@@ -11241,8 +11265,7 @@ public class SColor extends Color {
      * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
      */
     public static float floatGet(int c) {
-        return NumberUtils.intToFloatColor((c >>> 24) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000)
-                | (c << 24));
+        return NumberTools.intBitsToFloat((c >>> 24) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000) | (c << 24 & 0xFE000000));
     }
 
     /**
@@ -11259,7 +11282,7 @@ public class SColor extends Color {
      * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
      */
     public static float floatGetI(int r, int g, int b) {
-        return NumberUtils.intToFloatColor((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
+        return NumberTools.intBitsToFloat((r & 0xff) | (g << 8 & 0xff00) | (b << 16 & 0xff0000)
                 | 0xfe000000); //rgbToFloatColor((b & 0xff) | (g << 8 & 0xff00) | (r << 16));
     }
 
@@ -11286,7 +11309,7 @@ public class SColor extends Color {
         if (saturation <= 0.0039f) {
             return floatGet(value, value, value, opacity);
         } else if (value <= 0.0039f) {
-            return NumberUtils.intToFloatColor((int) (opacity * 255f) << 24);
+            return NumberTools.intBitsToFloat((int) (opacity * 255f) << 24 & 0xFE000000);
         } else {
             final float h = ((hue + 6f) % 1f) * 6f;
             final int i = (int) h;
@@ -11339,8 +11362,38 @@ public class SColor extends Color {
      * @return a float encoding a color with the given properties
      */
     public float toRandomizedFloat(RNG random, float hue, float saturation, float value) {
-        return toRandomizedFloat(random, hue, saturation, value, 0f);
+        return toRandomizedFloat(this, random, hue, saturation, value, 0f);
+    }
 
+    /**
+     * Gets a variation on the Color basis as a packed float that can have its hue, saturation, and value changed to
+     * specified degrees using a random number generator. Takes an RNG object (if the colors don't have a specific need
+     * to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an RNG; if they do,
+     * consider setting the state of that RNG with {@link squidpony.squidmath.StatefulRNG#setState(long)}), as well as
+     * floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that
+     * can be used as a packed or encoded color with methods like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
+     * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
+     * <br>
+     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway
+     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or
+     * higher than 1, with an exception for hue, which can rotate around somewhat if lower or higher hues would be used.
+     * As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the possible
+     * saturations that could be used would have the specified 0.4f range centered on 0.7f, or 0.5f to 0.9f. If you gave
+     * this 1f for saturation and the current color still has saturation 0.7f, then the range would be truncated at the
+     * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely
+     * to be at the truncated max or min amount.
+     *
+     * @param basis      a Color or SColor to use as the starting point; will not be modified itself
+     * @param random     an RNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
+     * @param hue        0f to 1f, the span of hue change that can be applied to the new float color
+     * @param saturation 0f to 1f, the span of saturation change that can be applied to the new float color
+     * @param value      0f to 1f, the span of value/brightness change that can be applied to the new float color
+     * @return a float encoding a color with the given properties
+     */
+    public static float toRandomizedFloat(Color basis, RNG random, float hue, float saturation, float value) {
+        return toRandomizedFloat(basis, random, hue, saturation, value, 0f);
     }
     /**
      * Gets a variation on this SColor as a packed float that can have its hue, saturation, value, and opacity changed
@@ -11369,7 +11422,37 @@ public class SColor extends Color {
      * @return a float encoding a variation of this SColor with changes up to the given properties
      */
     public float toRandomizedFloat(RNG random, float hue, float saturation, float value, float opacity) {
-        final float h, s;
+        return toRandomizedFloat(this, random, hue, saturation, value, opacity);
+    }
+    /**
+     * Gets a variation on the Color basis as a packed float that can have its hue, saturation, value, and opacity
+     * changed to specified degrees using a random number generator. Takes an RNG object (if the colors don't have a
+     * specific need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an
+     * RNG), as well as floats representing the amounts of change that can be applied to hue, saturation, value, and
+     * opacity. Returns a float that can be used as a packed or encoded color with methods like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
+     * saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any objects.
+     * <br>
+     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway
+     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or
+     * higher than 1, with an exception for hue, which can rotate around somewhat if lower or higher hues would be used.
+     * As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the possible
+     * saturations that could be used would have the specified 0.4f range centered on 0.7f, or 0.5f to 0.9f. If you gave
+     * this 1f for saturation and the current color still has saturation 0.7f, then the range would be truncated at the
+     * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely
+     * to be at the truncated max or min amount.
+     *
+     * @param basis      a Color or SColor to use as the starting point; will not be modified itself
+     * @param random     an RNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
+     * @param hue        0f to 2f, the span of hue change that can be applied to the new float color
+     * @param saturation 0f to 2f, the span of saturation change that can be applied to the new float color
+     * @param value      0f to 2f, the span of value/brightness change that can be applied to the new float color
+     * @param opacity    0f to 2f, the span of opacity/alpha change that can be applied to the new float color
+     * @return a float encoding a variation of this SColor with changes up to the given properties
+     */
+    public static float toRandomizedFloat(Color basis, RNG random, float hue, float saturation, float value, float opacity) {
+        final float h, s, r = basis.r, g = basis.g, b = basis.b;
         final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
         final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value
         final float delta = max - min;                   //Delta RGB value
@@ -11392,32 +11475,32 @@ public class SColor extends Color {
         }
         saturation = MathUtils.clamp(s + (random.nextFloat() - 0.5f) * saturation, 0f, 1f);
         value = MathUtils.clamp(max + (random.nextFloat() - 0.5f) * value, 0f, 1f);
-        opacity = MathUtils.clamp(a + (random.nextFloat() - 0.5f) * opacity, 0f, 1f);
+        opacity = MathUtils.clamp(basis.a + (random.nextFloat() - 0.5f) * opacity, 0f, 1f);
 
         if (saturation <= 0.0039f) {
             return floatGet(value, value, value, opacity);
         } else if (value <= 0.0039f) {
-            return NumberUtils.intToFloatColor((int) (opacity * 254f) << 24);
+            return NumberTools.intBitsToFloat((int) (opacity * 254f) << 24 & 0xFE000000);
         } else {
             final float hu = ((h + (random.nextFloat() - 0.5f) * hue + 6f) % 1f) * 6f;
             final int i = (int) hu;
-            final float a = value * (1 - saturation);
-            final float b = value * (1 - saturation * (hu - i));
-            final float c = value * (1 - saturation * (1 - (hu - i)));
+            final float x = value * (1 - saturation);
+            final float y = value * (1 - saturation * (hu - i));
+            final float z = value * (1 - saturation * (1 - (hu - i)));
 
             switch (i) {
                 case 0:
-                    return floatGet(value, c, a, opacity);
+                    return floatGet(value, z, x, opacity);
                 case 1:
-                    return floatGet(b, value, a, opacity);
+                    return floatGet(y, value, x, opacity);
                 case 2:
-                    return floatGet(a, value, c, opacity);
+                    return floatGet(x, value, z, opacity);
                 case 3:
-                    return floatGet(a, b, value, opacity);
+                    return floatGet(x, y, value, opacity);
                 case 4:
-                    return floatGet(c, a, value, opacity);
+                    return floatGet(z, x, value, opacity);
                 default:
-                    return floatGet(value, a, b, opacity);
+                    return floatGet(value, x, y, opacity);
             }
         }
     }
@@ -11426,7 +11509,7 @@ public class SColor extends Color {
         final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),
                 rs = (s & 0xFF), gs = (s >>> 8) & 0xFF, bs = (s >>> 16) & 0xFF, as = (s >>> 24) & 254,
                 re = (e & 0xFF), ge = (e >>> 8) & 0xFF, be = (e >>> 16) & 0xFF, ae = (e >>> 24) & 254;
-        return NumberUtils.intBitsToFloat(((int) (rs + change * (re - rs)) & 0xFF)
+        return NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) & 0xFF)
                 | ((int) (gs + change * (ge - gs)) & 0xFF) << 8
                 | (((int) (bs + change * (be - bs)) & 0xFF) << 16)
                 | (((int) (as + change * (ae - as)) & 0xFE) << 24));

@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.NumberUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
 import squidpony.NaturalLanguageCipher;
@@ -19,10 +18,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.SeededNoise;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,8 +120,8 @@ public class SparseDemo extends ApplicationAdapter {
     // floats, usually using SColor.lerpFloatColors(), which avoids creating any objects. It's ideal to avoid creating
     // new objects (such as Colors) frequently for only brief usage,because this can cause temporary garbage objects to
     // build up and slow down the program while they get cleaned up (garbage collection, which is slower on Android).
-    private static final float WHITE_FLOAT = NumberUtils.intToFloatColor(-1),
-            GRAY_FLOAT = NumberUtils.intToFloatColor(0xFF444444);
+    private static final float WHITE_FLOAT = SColor.FLOAT_WHITE,
+            GRAY_FLOAT = NumberTools.intBitsToFloat(0xFE444444);
     // here we store the colors we will use for a burst effect when the player bumps into a wall. We don't really need
     // to recalculate this every time a wall gets bumped, and this lets us do more complex things with the colors.
     private float[] burstColors;

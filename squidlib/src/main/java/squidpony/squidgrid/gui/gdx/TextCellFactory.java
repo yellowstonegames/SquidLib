@@ -16,9 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.NumberUtils;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
@@ -2021,7 +2021,7 @@ public class TextCellFactory implements Disposable {
         public String toString() {
             return "Glyph{'" +
                      + shown +
-                    "' with color 0x" + StringKit.hex(NumberUtils.floatToIntColor(color)) +
+                    "' with RGBA color 0x" + StringKit.hex(Integer.reverseBytes(NumberTools.floatToIntBits(color))) +
                     ", position (" + getX() +
                     "," + getY() +
                     ")}";
