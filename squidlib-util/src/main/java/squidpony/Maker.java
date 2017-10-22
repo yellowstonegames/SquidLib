@@ -1,9 +1,6 @@
 package squidpony;
 
-import squidpony.squidmath.Arrangement;
-import squidpony.squidmath.K2;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -188,7 +185,7 @@ public class Maker {
 
     /**
      * Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty
-     * OrderedMap with String keys and Coord values, you could use {@code Maker.<String, Coord>makeOM();}. Using
+     * OrderedMap with String keys and Coord values, you could use {@code Maker.<String, Coord>makeOM()}. Using
      * the new keyword is probably just as easy in this case; this method is provided for completeness relative to
      * makeOM() with 2 or more parameters.
      * @param <K> the type of keys in the returned OrderedMap; cannot be inferred and must be specified
@@ -311,5 +308,66 @@ public class Maker {
     {
         return new K2<>();
     }
+    /**
+     * Makes an EnumOrderedMap (EOM) with key and value types inferred from the types of k0 and v0, and considers all
+     * remaining parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at
+     * positions 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of
+     * items in rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs
+     * information on the problematic pair to the static Maker.issueLog field.
+     *
+     * @param k0 the first key, which must be an Enum; used to infer the types of other keys if generic parameters aren't specified.
+     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.
+     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements
+     * @param <K> the type of Enum keys in the returned EnumOrderedMap; if not specified, will be inferred from k0
+     * @param <V> the type of values in the returned EnumOrderedMap; if not specified, will be inferred from v0
+     * @return a freshly-made EnumOrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it
+     */
+    @SuppressWarnings("unchecked")
+    public static <K extends Enum<K>, V> EnumOrderedMap<K, V> makeEOM(K k0, V v0, Object... rest)
+    {
+        if(rest == null || rest.length == 0)
+        {
+            EnumOrderedMap<K, V> eom = new EnumOrderedMap<>();
+            eom.put(k0, v0);
+            return eom;
+        }
+        EnumOrderedMap<K, V> eom = new EnumOrderedMap<>(k0);
+        eom.put(k0, v0);
+
+        for (int i = 0; i < rest.length - 1; i+=2) {
+            try {
+                eom.put((K) rest[i], (V) rest[i + 1]);
+            }catch (ClassCastException cce) {
+                issueLog.append("makeEOM call had a casting problem with pair at rest[");
+                issueLog.append(i);
+                issueLog.append("] and/or rest[");
+                issueLog.append(i + 1);
+                issueLog.append("], with contents: ");
+                issueLog.append(rest[i]);
+                issueLog.append(", ");
+                issueLog.append(rest[i+1]);
+                issueLog.append(".\n\nException messages:\n");
+                issueLog.append(cce);
+                String msg = cce.getMessage();
+                if (msg != null) {
+                    issueLog.append('\n');
+                    issueLog.append(msg);
+                }
+                issueLog.append('\n');
+            }
+        }
+        return eom;
+    }
+
+    /**
+     * Makes an empty EnumOrderedMap (EOM); needs key and value types to be specified in order to work. For an empty
+     * EnumOrderedMap with Radius keys and Coord values, you could use {@code Maker.<Radius, Coord>makeEOM()}. Using
+     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to
+     * makeEOM() with 2 or more parameters.
+     * @param <K> the type of Enum keys in the returned EnumOrderedMap; cannot be inferred and must be specified
+     * @param <V> the type of values in the returned EnumOrderedMap; cannot be inferred and must be specified
+     * @return an empty EnumOrderedMap with the given key and value types.
+     */
+    public static <K extends Enum<K>, V> EnumOrderedMap<K, V> makeEOM() { return new EnumOrderedMap<>(); }
 
 }
