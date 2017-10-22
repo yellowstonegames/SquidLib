@@ -1,8 +1,10 @@
 package squidpony.examples;
 
 import org.junit.Test;
+import squidpony.ArrayTools;
 import squidpony.Maker;
 import squidpony.StringKit;
+import squidpony.squidgrid.mapping.DungeonUtility;
 
 import java.util.List;
 
@@ -99,8 +101,25 @@ public class StringKitTest {
         assertEquals(StringKit.join(",", Maker.makeArrange("a", "b", "c")), "a,b,c");
         assertEquals(StringKit.join("", Maker.makeArrange("a", "b", "c")), "abc");
         assertEquals(StringKit.join(":)", Maker.makeArrange("a", "b", "c")), "a:)b:)c");
-
     }
 
-
+    @Test
+    public void testArrays()
+    {
+        char[][] arr = new char[80][20];
+        ArrayTools.randomFill(arr, StringKit.BOX_DRAWING_SINGLE, 0x1111111111111111L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+        ArrayTools.randomFill(arr, StringKit.LATIN_LETTERS_LOWER, 0x1111111111111111L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+        ArrayTools.randomFill(arr, StringKit.DIGITS, 0x1111111111111111L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+        int[][] arr2 = new int[20][10];
+        ArrayTools.randomFill(arr2, 0x1111111111111111L);
+        for (int i = 0; i < arr2.length; i++) {
+            System.out.println(StringKit.hex(arr2[i]));
+        }
+    }
 }
