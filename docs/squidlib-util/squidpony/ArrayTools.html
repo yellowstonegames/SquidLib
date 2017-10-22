@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -347,19 +347,96 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i26" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-char:A:A-char:A-long-">randomFill</a></span>(char[][]&nbsp;array2d,
+          char[]&nbsp;values,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, choosing chars to place in
+ the given 2D array by selecting them at random from the given 1D char array <code>values</code>.</div>
+</td>
+</tr>
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-char:A:A-java.lang.CharSequence-long-">randomFill</a></span>(char[][]&nbsp;array2d,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;values,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, choosing chars to place in
+ the given 2D array by selecting them at random from the given 1D char array <code>values</code>.</div>
+</td>
+</tr>
+<tr id="i28" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-double:A:A-double-long-">randomFill</a></span>(double[][]&nbsp;array2d,
+          double&nbsp;bound,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, limiting results to between
+ 0 and <code>bound</code>, exclusive.</div>
+</td>
+</tr>
+<tr id="i29" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-double:A:A-long-">randomFill</a></span>(double[][]&nbsp;array2d,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>; can fill an element with
+ any double between 0.0 inclusive and 1.0 exclusive.</div>
+</td>
+</tr>
+<tr id="i30" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-float:A:A-float-long-">randomFill</a></span>(float[][]&nbsp;array2d,
+          float&nbsp;bound,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, limiting results to between
+ 0 and <code>bound</code>, exclusive.</div>
+</td>
+</tr>
+<tr id="i31" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-float:A:A-long-">randomFill</a></span>(float[][]&nbsp;array2d,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>; can fill an element with
+ any float between 0.0 inclusive and 1.0 exclusive.</div>
+</td>
+</tr>
+<tr id="i32" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-int:A:A-int-long-">randomFill</a></span>(int[][]&nbsp;array2d,
+          int&nbsp;bound,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, limiting results to between
+ 0 and <code>bound</code>, exclusive.</div>
+</td>
+</tr>
+<tr id="i33" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-int:A:A-long-">randomFill</a></span>(int[][]&nbsp;array2d,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>; can fill an element with
+ any int, positive or negative.</div>
+</td>
+</tr>
+<tr id="i34" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#randomFill-long:A:A-long-">randomFill</a></span>(long[][]&nbsp;array2d,
+          long&nbsp;seed)</code>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>; can fill an element with
+ any long, positive or negative.</div>
+</td>
+</tr>
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>static int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#range-int-">range</a></span>(int&nbsp;end)</code>
 <div class="block">Stupidly simple convenience method that produces a range from 0 to end, not including end, as an int array.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>static int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#range-int-int-">range</a></span>(int&nbsp;start,
      int&nbsp;end)</code>
 <div class="block">Stupidly simple convenience method that produces a range from start to end, not including end, as an int array.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#reorder-java.util.ArrayList-int...-">reorder</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;list,
        int...&nbsp;ordering)</code>
@@ -368,43 +445,43 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-"><code>RNG.randomOrdering(int, int[])</code></a>.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>static boolean[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#reverse-boolean:A-">reverse</a></span>(boolean[]&nbsp;data)</code>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#reverse-byte:A-">reverse</a></span>(byte[]&nbsp;data)</code>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>static char[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#reverse-char:A-">reverse</a></span>(char[]&nbsp;data)</code>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>static double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#reverse-double:A-">reverse</a></span>(double[]&nbsp;data)</code>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>static float[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#reverse-float:A-">reverse</a></span>(float[]&nbsp;data)</code>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>static int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#reverse-int:A-">reverse</a></span>(int[]&nbsp;data)</code>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>static &lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/ArrayTools.html#reverse-T:A-">reverse</a></span>(T[]&nbsp;data)</code>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
@@ -948,13 +1025,203 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="randomFill-long:A:A-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.531">randomFill</a>(long[][]&nbsp;array2d,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>; can fill an element with
+ any long, positive or negative.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomFill-int:A:A-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.554">randomFill</a>(int[][]&nbsp;array2d,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>; can fill an element with
+ any int, positive or negative.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomFill-int:A:A-int-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.578">randomFill</a>(int[][]&nbsp;array2d,
+                              int&nbsp;bound,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, limiting results to between
+ 0 and <code>bound</code>, exclusive.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>bound</code> - the upper exclusive limit for the ints this can produce</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomFill-char:A:A-char:A-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.602">randomFill</a>(char[][]&nbsp;array2d,
+                              char[]&nbsp;values,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, choosing chars to place in
+ the given 2D array by selecting them at random from the given 1D char array <code>values</code>.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>values</code> - a 1D char array containing the possible char values that can be chosen to fill array2d</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomFill-char:A:A-java.lang.CharSequence-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.628">randomFill</a>(char[][]&nbsp;array2d,
+                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;values,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, choosing chars to place in
+ the given 2D array by selecting them at random from the given 1D char array <code>values</code>.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>values</code> - a 1D char array containing the possible char values that can be chosen to fill array2d</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomFill-float:A:A-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.653">randomFill</a>(float[][]&nbsp;array2d,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>; can fill an element with
+ any float between 0.0 inclusive and 1.0 exclusive.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomFill-float:A:A-float-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.677">randomFill</a>(float[][]&nbsp;array2d,
+                              float&nbsp;bound,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, limiting results to between
+ 0 and <code>bound</code>, exclusive.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>bound</code> - the upper exclusive limit for the floats this can produce</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomFill-double:A:A-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.702">randomFill</a>(double[][]&nbsp;array2d,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>; can fill an element with
+ any double between 0.0 inclusive and 1.0 exclusive.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomFill-double:A:A-double-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomFill</h4>
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.726">randomFill</a>(double[][]&nbsp;array2d,
+                              double&nbsp;bound,
+                              long&nbsp;seed)</pre>
+<div class="block">Randomly fills all of <code>array2d</code> with random values generated from <code>seed</code>, limiting results to between
+ 0 and <code>bound</code>, exclusive.
+ Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+ context, and improves quality by seeding each column differently. Generates <code>(height + 1) * width</code> random
+ values to fill the <code>height * width</code> elements in array2d.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>array2d</code> - a 2D array that will be modified in-place</dd>
+<dd><code>bound</code> - the upper exclusive limit for the doubles this can produce</dd>
+<dd><code>seed</code> - the seed for the random values, as a long</dd>
+</dl>
+</li>
+</ul>
 <a name="reorder-java.util.ArrayList-int...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>reorder</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.536">reorder</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;list,
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.756">reorder</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;list,
                                        int...&nbsp;ordering)</pre>
 <div class="block">Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with
  <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-"><code>RNG.randomOrdering(int)</code></a> or
@@ -980,7 +1247,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>invertOrdering</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.554">invertOrdering</a>(int[]&nbsp;ordering)</pre>
+<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.774">invertOrdering</a>(int[]&nbsp;ordering)</pre>
 <div class="block">Given an ordering such as one produced by <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-"><code>RNG.randomOrdering(int, int[])</code></a>, this finds
  its inverse, able to reverse the reordering and vice versa.</div>
 <dl>
@@ -997,7 +1264,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>invertOrdering</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.575">invertOrdering</a>(int[]&nbsp;ordering,
+<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.795">invertOrdering</a>(int[]&nbsp;ordering,
                                    int[]&nbsp;dest)</pre>
 <div class="block">Given an ordering such as one produced by <a href="../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-"><code>RNG.randomOrdering(int, int[])</code></a>, this finds
  its inverse, able to reverse the reordering and vice versa. This overload doesn't allocate a new int
@@ -1018,7 +1285,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reverse</h4>
-<pre>public static&nbsp;boolean[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.591">reverse</a>(boolean[]&nbsp;data)</pre>
+<pre>public static&nbsp;boolean[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.811">reverse</a>(boolean[]&nbsp;data)</pre>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1034,7 +1301,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reverse</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.609">reverse</a>(char[]&nbsp;data)</pre>
+<pre>public static&nbsp;char[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.829">reverse</a>(char[]&nbsp;data)</pre>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1050,7 +1317,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reverse</h4>
-<pre>public static&nbsp;float[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.627">reverse</a>(float[]&nbsp;data)</pre>
+<pre>public static&nbsp;float[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.847">reverse</a>(float[]&nbsp;data)</pre>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1066,7 +1333,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reverse</h4>
-<pre>public static&nbsp;double[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.645">reverse</a>(double[]&nbsp;data)</pre>
+<pre>public static&nbsp;double[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.865">reverse</a>(double[]&nbsp;data)</pre>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1082,7 +1349,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reverse</h4>
-<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.663">reverse</a>(int[]&nbsp;data)</pre>
+<pre>public static&nbsp;int[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.883">reverse</a>(int[]&nbsp;data)</pre>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1098,7 +1365,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>reverse</h4>
-<pre>public static&nbsp;byte[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.681">reverse</a>(byte[]&nbsp;data)</pre>
+<pre>public static&nbsp;byte[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.901">reverse</a>(byte[]&nbsp;data)</pre>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1116,7 +1383,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>reverse</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.698">reverse</a>(T[]&nbsp;data)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;T[]&nbsp;<a href="../src-html/squidpony/ArrayTools.html#line.918">reverse</a>(T[]&nbsp;data)</pre>
 <div class="block">Reverses the array given as a parameter, in-place, and returns the modified original.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
