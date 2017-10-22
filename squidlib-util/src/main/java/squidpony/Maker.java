@@ -323,7 +323,7 @@ public class Maker {
      * @return a freshly-made EnumOrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it
      */
     @SuppressWarnings("unchecked")
-    public static <K extends Enum<K>, V> EnumOrderedMap<K, V> makeEOM(K k0, V v0, Object... rest)
+    public static <K extends Enum<?>, V> EnumOrderedMap<K, V> makeEOM(K k0, V v0, Object... rest)
     {
         if(rest == null || rest.length == 0)
         {
