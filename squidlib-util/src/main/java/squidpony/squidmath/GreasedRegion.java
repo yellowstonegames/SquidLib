@@ -777,7 +777,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
      * the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more efficient than an RNG when
      * you're making a lot of calls on it.
-     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThunderRNG do
+     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustRNG do
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
@@ -802,7 +802,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * (without extra allocations) if this.width == width and this.height == height, and typically assigning
      * approximately half of the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more
      * efficient than an RNG when you're making a lot of calls on it.
-     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThunderRNG do
+     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustRNG do
      * @param width the width of the desired GreasedRegion
      * @param height the height of the desired GreasedRegion
      * @return this for chaining
@@ -835,7 +835,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Constructor for a random GreasedRegion of the given width and height.
      * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
-     * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents
+     * @param random a RandomnessSource (such as LightRNG or ThrustRNG) that this will use to generate its contents
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */

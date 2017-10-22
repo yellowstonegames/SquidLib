@@ -19,6 +19,12 @@ public class SquidStorageTest extends ApplicationAdapter {
     public static class TestClass
     {
         public EnumMap<Direction, String> em = new EnumMap<>(Direction.class);
+        public EnumOrderedMap<Direction, String> om = Maker.makeEOM(
+                Direction.DOWN_LEFT, "California",
+                Direction.DOWN_RIGHT, "Florida",
+                Direction.UP_RIGHT, "Maine",
+                Direction.UP_LEFT, "Washington",
+                Direction.DOWN, "Texas");
         public TestClass()
         {
         }
@@ -33,7 +39,7 @@ public class SquidStorageTest extends ApplicationAdapter {
 
         @Override
         public String toString() {
-            return em.toString();
+            return em.toString() + " vs. " + om.toString();
         }
     }
     @Override
@@ -48,7 +54,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3), lang2;
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75), g2;
+            GreasedRegion grease = new GreasedRegion(new ThrustRNG(75L), 75, 75), g2;
             store.put("rng", srng);
             store.put("language", randomLanguage);
             store.put("world", world);
@@ -86,12 +92,13 @@ public class SquidStorageTest extends ApplicationAdapter {
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3);
 
             EnumMap<Direction, String> empty = new EnumMap<>(Direction.class);
+            EnumOrderedMap<Direction, String> empty2 = new EnumOrderedMap<>();
             TestClass em = new TestClass();
             em.initialize();
             noCompression.json.setElementType(TestClass.class, "em", String.class);
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme");
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new ThunderRNG(75L), 75, 75);
+            GreasedRegion grease = new GreasedRegion(new ThrustRNG(75L), 75, 75);
             String text = randomLanguage.sentence(srng.copy(), 5, 8);
             ProbabilityTable<String> table = new ProbabilityTable<>("I heard you like JSON...");
             table.add("well", 1).add("this", 2).add("ain't", 3).add("real", 4).add("JSON!", 5);
@@ -106,6 +113,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             noCompression.put("drawn", text);
             noCompression.put("enum_map", em);
             noCompression.put("empty_enum_map", empty);
+            noCompression.put("empty_eom", empty2);
 
             yesCompression.put("rng", srng);
             yesCompression.put("language", randomLanguage);
@@ -116,6 +124,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             yesCompression.put("drawn", text);
             yesCompression.put("enum_map", em);
             yesCompression.put("empty_enum_map", empty);
+            yesCompression.put("empty_eom", empty2);
 
             System.out.println(text);
 
@@ -140,6 +149,8 @@ public class SquidStorageTest extends ApplicationAdapter {
             //final field, but it's private so we can't safely use it.
             System.out.println(empty);
             System.out.println(yesCompression.get("Compressed", "empty_enum_map", EnumMap.class));
+            System.out.println(empty2);
+            System.out.println(yesCompression.get("Compressed", "empty_eom", EnumOrderedMap.class));
             yesCompression.preferences.clear();
             yesCompression.preferences.flush();
             Gdx.app.exit();

@@ -3,6 +3,8 @@ package squidpony.store.json;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import regexodus.Pattern;
 import squidpony.FakeLanguageGen;
 import squidpony.Maker;
@@ -72,6 +74,7 @@ public class JsonConverter extends Json {
         json.addClassTag("#LnMd", FakeLanguageGen.Modifier.class);
         json.addClassTag("#SSMp", StringStringMap.class);
         json.addClassTag("#OMap", OrderedMap.class);
+        json.addClassTag("#EOMp", EnumOrderedMap.class);
         json.addClassTag("#OSet", OrderedSet.class);
         json.addClassTag("#Aran", Arrangement.class);
         json.addClassTag("#K2", K2.class);
@@ -85,10 +88,11 @@ public class JsonConverter extends Json {
         json.addClassTag("#DecR", DeckRNG.class);
         json.addClassTag("#Ligh", LightRNG.class);
         json.addClassTag("#LonP", LongPeriodRNG.class);
-        json.addClassTag("#Thun", ThunderRNG.class);
+        json.addClassTag("#Thrs", ThrustRNG.class);
         json.addClassTag("#XoRo", XoRoRNG.class);
         json.addClassTag("#XorR", XorRNG.class);
         json.addClassTag("#Strm", CrossHash.Storm.class);
+        json.addClassTag("#Strm", CrossHash.Mist.class);
         json.addClassTag("#Dir", Direction.class);
         json.addClassTag("#Rad", Radius.class);
 
@@ -242,6 +246,56 @@ public class JsonConverter extends Json {
                 if(k == INVALID)
                     return new OrderedMap(0, f);
                 return Maker.makeOM(f, k, v, r);
+                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
+                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
+            }
+        });
+        json.setSerializer(EnumOrderedMap.class, new Serializer<EnumOrderedMap>() {
+            @Override
+            public void write(Json json, EnumOrderedMap object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeObjectStart();
+                if(!object.isEmpty()) {
+                    json.writeValue("c", object.firstKey().getClass().getName());
+                    json.writeValue("k", object.firstKey(), null);
+                    json.writeValue("v", object.getAt(0), null);
+                    int sz = object.size();
+                    Object[] r = new Object[(sz - 1) * 2];
+                    for (int i = 1, p = 0; i < sz; i++) {
+                        r[p++] = object.keyAt(i);
+                        r[p++] = object.getAt(i);
+                    }
+                    json.writeValue("r", r, Object[].class, Object.class);
+                }
+                else
+                    json.writeValue("c", "default");
+                json.writeObjectEnd();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public EnumOrderedMap read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                String c = json.readValue("c", String.class, "", jsonData);
+                if("default".equals(c))
+                    return new EnumOrderedMap();
+                try {
+                    Class<? extends Enum<?>> cl = ClassReflection.forName(c);
+                    if(!ClassReflection.isEnum(cl))
+                        return null;
+                    Enum<?> k = json.readValue("k", cl, jsonData);
+                    Object v = json.readValue("v", null, INVALID, jsonData);
+                    Object[] r = json.readValue("r", Object[].class, jsonData);
+                    if(v == INVALID)
+                        return new EnumOrderedMap();
+                    return Maker.makeEOM(k, v, r);
+                } catch (ReflectionException e) {
+                    return null;
+                }
                 //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
                 //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
             }

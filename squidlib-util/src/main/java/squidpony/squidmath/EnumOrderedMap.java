@@ -13,7 +13,7 @@ import java.util.Objects;
  * <br>
  * Created by Tommy Ettinger on 10/21/2017.
  */
-public class EnumOrderedMap<K extends Enum<K>, V> extends OrderedMap<K, V> {
+public class EnumOrderedMap<K extends Enum<?>, V> extends OrderedMap<K, V> {
     public static class EnumHasher implements CrossHash.IHasher
     {
         @Override
@@ -36,5 +36,20 @@ public class EnumOrderedMap<K extends Enum<K>, V> extends OrderedMap<K, V> {
     }
     public EnumOrderedMap(K enumObject) {
         super(enumObject.getClass().getEnumConstants().length, 0.9375f, eh);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder s = new StringBuilder();
+        int n = size(), i = 0;
+        boolean first = true;
+        s.append("EnumOrderedMap{");
+        while (i < n) {
+            if (first) first = false;
+            else s.append(", ");
+            s.append(entryAt(i++));
+        }
+        s.append("}");
+        return s.toString();
     }
 }
