@@ -520,6 +520,226 @@ public class ArrayTools {
     }
 
     /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with
+     * any long, positive or negative.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(long[][] array2d, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = z ^ (z >> 28);
+            }
+        }
+    }
+    /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with
+     * any int, positive or negative.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(int[][] array2d, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = (int)(z ^ (z >> 28));
+            }
+        }
+    }
+    /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between
+     * 0 and {@code bound}, exclusive.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param bound the upper exclusive limit for the ints this can produce
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(int[][] array2d, final int bound, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = (int) ((bound * ((z ^ (z >> 28)) & 0x7FFFFFFFL)) >> 31);
+            }
+        }
+    }
+    /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, choosing chars to place in
+     * the given 2D array by selecting them at random from the given 1D char array {@code values}.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param values a 1D char array containing the possible char values that can be chosen to fill array2d
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(char[][] array2d, final char[] values, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        final int bound = values.length;
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = values[(int) ((bound * ((z ^ (z >> 28)) & 0x7FFFFFFFL)) >> 31)];
+            }
+        }
+    }
+
+    /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, choosing chars to place in
+     * the given 2D array by selecting them at random from the given 1D char array {@code values}.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param values a 1D char array containing the possible char values that can be chosen to fill array2d
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(char[][] array2d, final CharSequence values, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        final int bound = values.length();
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = values.charAt((int) ((bound * ((z ^ (z >> 28)) & 0x7FFFFFFFL)) >> 31));
+            }
+        }
+    }
+
+    /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with
+     * any float between 0.0 inclusive and 1.0 exclusive.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(float[][] array2d, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = ((z ^ (z >> 28)) & 0xFFFFFFL) * 0x1p-24f;
+            }
+        }
+    }
+    /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between
+     * 0 and {@code bound}, exclusive.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param bound the upper exclusive limit for the floats this can produce
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(float[][] array2d, final float bound, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        final float mul = 0x1p-24f * bound;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = ((z ^ (z >> 28)) & 0xFFFFFFL) * mul;
+            }
+        }
+    }
+
+    /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with
+     * any double between 0.0 inclusive and 1.0 exclusive.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(double[][] array2d, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = ((z ^ (z >> 28)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+            }
+        }
+    }
+    /**
+     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between
+     * 0 and {@code bound}, exclusive.
+     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this
+     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random
+     * values to fill the {@code height * width} elements in array2d.
+     * @param array2d a 2D array that will be modified in-place
+     * @param bound the upper exclusive limit for the doubles this can produce
+     * @param seed the seed for the random values, as a long
+     */
+    public static void randomFill(double[][] array2d, final double bound, final long seed)
+    {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        final double mul = 0x1p-53 * bound;
+        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
+            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
+            r1 = z ^ (z >> 28);
+            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
+                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
+                array2d[x][y] = ((z ^ (z >> 28)) & 0x1FFFFFFFFFFFFFL) * mul;
+            }
+        }
+    }
+
+    /**
      * Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with
      * {@link squidpony.squidmath.RNG#randomOrdering(int)} or
      * {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}. These orderings will never repeat an earlier element,
