@@ -136,8 +136,6 @@ public class RotationDemo extends ApplicationAdapter {
         //        .width(cellWidth).height(cellHeight).initBySize();
         textFactory = DefaultResources.getStretchableWideSlabFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
-        //textFactory = DefaultResources.getStretchableSciFiFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-        //        .width(cellWidth).height(cellHeight).initBySize();
 
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
