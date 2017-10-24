@@ -75,7 +75,6 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getStretchableTypewriterFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getStretchableCodeFont().width(ZOOM * 15).height(27).initBySize(),
                 DefaultResources.getStretchableDejaVuFont().width(ZOOM * 14).height(25).initBySize(),
-                //DefaultResources.getStretchableSciFiFont().width(ZOOM * 28).height(64).initBySize(),
                 DefaultResources.getStretchableSlabFont().width(ZOOM * 13).height(21).initBySize(),
                 DefaultResources.getStretchableSlabLightFont().width(ZOOM * 13).height(21).initBySize(),
                 //DefaultResources.getStretchableSquareFont().width(ZOOM * 20).height(20).initBySize(),
