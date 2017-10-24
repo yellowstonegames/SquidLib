@@ -270,8 +270,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1.1f,cellHeight * 1.1f);
-        display.setTextSize(cellWidth * 1.1f, cellHeight  * 1.1f);
+        messages.setTextSize(cellWidth * 1f,cellHeight * 1.1f);
+        display.setTextSize(cellWidth * 1f, cellHeight  * 1.1f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);

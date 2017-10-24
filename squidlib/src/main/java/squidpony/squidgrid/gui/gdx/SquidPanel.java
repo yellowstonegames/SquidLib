@@ -307,7 +307,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         if(string == null || string.isEmpty())
             return;
         if (string.length() == 1) {
-            put(xOffset, yOffset, string.charAt(0), foreground);
+            put(xOffset, yOffset, string.charAt(0), scc.filter(foreground).toFloatBits());
         }
         else
         {

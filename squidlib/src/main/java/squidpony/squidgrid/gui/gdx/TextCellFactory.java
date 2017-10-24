@@ -832,7 +832,7 @@ public class TextCellFactory implements Disposable {
         // - distanceFieldScaleY / 12f
 
         //height - lineTweak * 2f
-        if (s == null || s.isEmpty() || s.charAt(0) == 0) {
+        if (s == null || s.isEmpty()) {// || s.charAt(0) == 0) {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
@@ -861,10 +861,10 @@ public class TextCellFactory implements Disposable {
         // - distanceFieldScaleY / 12f
 
         //height - lineTweak * 2f
-        if (c == 0) {
+        /*if (c == 0) {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
-        } else {
+        } else*/ {
             bmpFont.setColor(1f,1f,1f,1f);
             mut.setCharAt(0, swap.getOrDefault(c, c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
@@ -888,19 +888,22 @@ public class TextCellFactory implements Disposable {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
 
-        if (s == null) {
-            Color orig = scc.filter(batch.getColor());
-            batch.setColor(r, g, b, a);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
-        } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            Color orig = scc.filter(batch.getColor());
-            batch.setColor(r, g, b, a);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
-        } else {
-            bmpFont.setColor(r, g, b, a);
+        if (s == null)
+            mut.setCharAt(0, '\0');
+        else
             mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+        //            Color orig = scc.filter(batch.getColor());
+//            batch.setColor(r, g, b, a);
+//            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+//            batch.setColor(orig);
+// else if(s.length() > 0 && s.charAt(0) == '\0') {
+//            Color orig = scc.filter(batch.getColor());
+//            batch.setColor(r, g, b, a);
+//            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+//            batch.setColor(orig);
+//        } else
+        {
+            bmpFont.setColor(r, g, b, a);
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -919,20 +922,25 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
-
-        if (s == null) {
-            Color orig = batch.getColor();
-            batch.setColor(scc.filter(color));
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
-        } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            Color orig = batch.getColor();
-            batch.setColor(scc.filter(color));
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
-        } else {
-            bmpFont.setColor(scc.filter(color));
+        if (s == null)
+            mut.setCharAt(0, '\0');
+        else
             mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+
+//        if (s == null) {
+//            Color orig = batch.getColor();
+//            batch.setColor(scc.filter(color));
+//            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+//            batch.setColor(orig);
+//        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+//            Color orig = batch.getColor();
+//            batch.setColor(scc.filter(color));
+//            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+//            batch.setColor(orig);
+//        } else
+        {
+            bmpFont.setColor(color);
+            //mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -951,20 +959,24 @@ public class TextCellFactory implements Disposable {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
 
-        if (s == null) {
-            float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
-        } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
-        } else
+//        if (s == null) {
+//            float orig = batch.getPackedColor();
+//            batch.setColor(encodedColor);
+//            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+//            batch.setColor(orig);
+//        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+//            float orig = batch.getPackedColor();
+//            batch.setColor(encodedColor);
+//            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+//            batch.setColor(orig);
+//        } else
+        if (s == null)
+            mut.setCharAt(0, '\0');
+        else
+            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
         {
             colorFromFloat(bmpFont.getColor(), encodedColor);
-            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            //mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -984,16 +996,16 @@ public class TextCellFactory implements Disposable {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
 
-        if (c == 0) {
-            float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
-        } else
+//        if (c == 0) {
+//            float orig = batch.getPackedColor();
+//            batch.setColor(encodedColor);
+//            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+//            batch.setColor(orig);
+//        } else
         {
             colorFromFloat(bmpFont.getColor(), encodedColor);
             mut.setCharAt(0, swap.getOrDefault(c, c));
-            bmpFont.draw(batch, mut, x, y - descent/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, mut, x, y - descent, width, Align.center, false);
         }
     }
 
@@ -1073,7 +1085,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             Color orig = batch.getColor();
-            batch.setColor(scc.filter(color));
+            batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
         }
@@ -1193,7 +1205,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             Color orig = batch.getColor();
-            batch.setColor(scc.filter(color));
+            batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
             batch.setColor(orig);
         }
@@ -1236,10 +1248,14 @@ public class TextCellFactory implements Disposable {
         final int w = encodedColors.length, h = encodedColors[0].length;
         float wm = x, hm;
         for (int i = 0; i < w; i++, wm += actualCellWidth) {
-            hm = y + (h - 1) * actualCellHeight;
+            hm = y + (h - 1) * actualCellHeight - descent;
             for (int j = 0; j < h; j++, hm -= actualCellHeight) {
-                batch.setColor(encodedColors[i][j]);
-                batch.draw(block, wm, hm, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+                //batch.setColor(encodedColors[i][j]);
+                //batch.draw(block, wm, hm, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+                colorFromFloat(bmpFont.getColor(), encodedColors[i][j]);
+                mut.setCharAt(0, '\0');
+                bmpFont.draw(batch, mut, wm, hm, width, Align.center, false);
+
             }
         }
         batch.setColor(orig);
@@ -1277,27 +1293,35 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
-        if (s == null) {
-            Image im = new Image(block);
-            im.setColor(scc.filter(color));
-            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
-            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
-            return im;
-        } else if(s.length() > 0 && s.charAt(0) == '\0') {
-            Image im = new Image(block);
-            im.setColor(scc.filter(color));
-            //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
-            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
-            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
-            return im;
-        } else {
-            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+//        if (s == null) {
+//            Image im = new Image(block);
+//            im.setColor(scc.filter(color));
+//            //im.setSize(width, height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+//            im.setSize(actualCellWidth, actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
+//            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+//            return im;
+//        } else if(s.length() > 0 && s.charAt(0) == '\0') {
+//            Image im = new Image(block);
+//            im.setColor(color);
+//            //im.setSize(width * s.length(), height - MathUtils.ceil(bmpFont.getDescent() / 2f));
+//            im.setSize(actualCellWidth * s.length(), actualCellHeight + (distanceField ? 1 : 0)); //   - lineHeight / actualCellHeight //+ lineTweak * 1f
+//            // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+//            return im;
+//        } else
+        if(s == null)
+        {
             Label lb = new Label(mut, style);
-            //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
+            mut.setCharAt(0, '\0');
+            lb.setSize(width, height - descent); //+ lineTweak * 1f
+            lb.setColor(color);
+            return lb;
+        }
+        else
+        {
+            Label lb = new Label(mut, style);
+            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
-            lb.setColor(scc.filter(color));
-            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
+            lb.setColor(color);
             return lb;
         }
     }
