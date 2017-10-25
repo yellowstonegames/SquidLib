@@ -1,7 +1,11 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.MathUtils;
+import regexodus.Matcher;
+import regexodus.Pattern;
+import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 
 /**
@@ -30,6 +34,39 @@ public class GDXMarkup implements IMarkup<Color>{
     @Override
     public String closeMarkup() {
         return "[]";
+    }
+
+    Matcher markupMatcher = Pattern.compile("({=p}[^\\[\\]]+)|(?:\\[({=e}\\[))|(?:\\[#({=h}[0-9A-Fa-f]{6,8})\\])|(?:\\[({=n}[^\\]]+?)\\])|(?:\\[({=r}\\]))").matcher();
+
+    public IColoredString<Color> colorString(final CharSequence markupString)
+    {
+        markupMatcher.setTarget(markupString);
+        IColoredString<Color> cs = new IColoredString.Impl<>();
+        Color current = Color.WHITE;
+        String m;
+        while (markupMatcher.find())
+        {
+            if((m = markupMatcher.group("p")) != null) {
+                cs.append(m, current);
+            }
+            else if((m = markupMatcher.group("e")) != null)
+            {
+                cs.append('[', current);
+            }
+            else if((m = markupMatcher.group("r")) != null)
+            {
+                current = Color.WHITE;
+            }
+            else if((m = markupMatcher.group("h")) != null)
+            {
+                current = Color.valueOf(m);
+            }
+            else if((m = markupMatcher.group("n")) != null)
+            {
+                current = Colors.get(m);
+            }
+        }
+        return cs;
     }
 
     /*
