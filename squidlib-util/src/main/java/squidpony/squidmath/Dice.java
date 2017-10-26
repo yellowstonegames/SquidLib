@@ -24,7 +24,7 @@ public class Dice implements Serializable {
 
     private static final long serialVersionUID = -488902743486431146L;
 
-    private static final Pattern guessPattern = Pattern.compile("\\s*(\\d+)?\\s*(?:([:><])\\s*(\\d+))??\\s*(?:([d:!])\\s*(\\d+))?\\s*(?:([+/*-])\\s*(\\d+))?\\s*");
+    private static final Matcher mat = Pattern.compile("(?:(-?\\d+)\\s*(?:([:><])\\s*(\\d+))?\\s*(?:([d:!])\\s*(\\d+))?)|([+/*-])").matcher();
     private RNG rng;
     private transient IntVLA temp = new IntVLA(20);
     /**
@@ -243,8 +243,10 @@ public class Dice implements Serializable {
      * You can choose to sum only some of the dice, either the "n highest" or "n lowest" values in a group, with "3>4d6"
      * to sum the three greatest-value dice in four rolls of six-sided dice, or "2<3d8" to sum the two lowest-value dice
      * in three rolls of eight-sided dice. You can apply modifiers to these results, such as "1d20+7" to roll one
-     * twenty-sided die and add 7 to its result. You can get a random value in an inclusive range with "50:100", which
-     * is technically equivalent to "1d51+49" but is easier to read and understand. You can treat dice as "exploding,"
+     * twenty-sided die and add 7 to its result. These modifiers can be other dice, such as "1d10-1d6", and while
+     * multiplication and division are supported, order of operations isn't, so it just rolls dice from left to right
+     * and applies operators it find along the way. You can get a random value in an inclusive range with "50:100",
+     * which is equivalent to "1d51+49" but is easier to read and understand. You can treat dice as "exploding,"
      * where any dice that get the maximum result are rolled again and added to the total along with the previous
      * maximum result. As an example, if two exploding six-sided dice are rolled, and their results are 3 and 6, then
      * because 6 is the maximum value it is rolled again and added to the earlier rolls; if the additional roll is a 5,
@@ -253,11 +255,14 @@ public class Dice implements Serializable {
      * mechanic from various tabletop games, but many potential players might not be, so it should be explained if you
      * show the kinds of dice being rolled to players. The syntax used for exploding dice replaced the "d" in "3d6" for
      * normal dice with "!", making "3!6" for exploding dice. Exploding dice and inclusive ranges are not supported with
-     * best-of and worst-of notation.
+     * best-of and worst-of notation. While it is technically allowed to end a dice string with an operator, the partial
+     * operator will be ignored. If you start a dice string with an operator, its left-hand-side will always be 0. If
+     * you have two operators in a row, only the last will be used, unless one is '-' and can be treated as part of a
+     * negative number (this allows "1d20 * -3" to work). Whitespace is allowed between most parts of a dice string.
      * <br>
      * The following notation is supported:
      * <ul>
-     *     <li>{@code 42} : simple absolute string</li>
+     *     <li>{@code 42} : simple absolute string; can start with {@code -} to make it negative</li>
      *     <li>{@code 3d6} : sum of 3 6-sided dice</li>
      *     <li>{@code d6} : synonym for {@code 1d6}</li>
      *     <li>{@code 3>4d6} : best 3 of 4 6-sided dice</li>
@@ -268,29 +273,34 @@ public class Dice implements Serializable {
      *     <li>{@code 3!6} : sum of 3 "exploding" 6-sided dice; see above for the semantics of "exploding" dice</li>
      *     <li>{@code !6} : synonym for {@code 1!6}</li>
      * </ul>
-     * The following types of suffixes are supported:
+     * The following types of operators are supported:
      * <ul>
      *     <li>{@code +4} : add 4 to the value</li>
      *     <li>{@code -3} : subtract 3 from the value</li>
      *     <li>{@code *100} : multiply value by 100</li>
      *     <li>{@code /8} : divide value by 8</li>
      * </ul>
-     * @param rollCode string using dice roll notation
-     * @return random number
+     * @param rollCode dice string using the above notation
+     * @return a random number that is possible with the given dice string
      */
-    public int roll(String rollCode) {//TODO -- rework to tokenize and allow multiple chained operations
-        Matcher mat = guessPattern.matcher(rollCode);
-        int ret = 0;
-
-        if (mat.matches()) {
+    public int roll(String rollCode) {
+        mat.setTarget(rollCode);
+        int ret, prev = 0;
+        char currentMode = '+';
+        while (mat.find()) {
+            ret = 0;
             String num1 = mat.group(1); // number constant
             String wmode = mat.group(2); // between notation
             String wnum = mat.group(3); // number constant
             String mode = mat.group(4); // dice, range, or explode
             String num2 = mat.group(5); // number constant
             String pmode = mat.group(6); // math operation
-            String pnum = mat.group(7); // number constant
 
+            if(pmode != null)
+            {
+                currentMode = pmode.charAt(0);
+                continue;
+            }
             int a = num1 == null ? 0 : StringKit.intFromDec(num1);
             int b = num2 == null ? 0 : StringKit.intFromDec(num2);
             int w = wnum == null ? 0 : StringKit.intFromDec(wnum);
@@ -336,24 +346,23 @@ public class Dice implements Serializable {
                     }
                 }
             }
-            if (pmode != null) {
-                int p = pnum == null ? 0 : StringKit.intFromDec(pnum);
-                switch (pmode) {
-                    case "+":
-                        ret += p;
-                        break;
-                    case "-":
-                        ret -= p;
-                        break;
-                    case "*":
-                        ret *= p;
-                        break;
-                    case "/":
-                        ret /= p;
-                        break;
-                }
+            switch (currentMode)
+            {
+                case '-':
+                    prev -= ret;
+                    break;
+                case '*':
+                    prev *= ret;
+                    break;
+                case '/':
+                    prev /= ret;
+                    break;
+                default:
+                    prev += ret;
+                    break;
             }
+            currentMode = '+';
         }
-        return ret;
+        return prev;
     }
 }
