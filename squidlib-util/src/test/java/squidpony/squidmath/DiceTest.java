@@ -26,6 +26,14 @@ public class DiceTest
         System.out.println(d.roll("10:11")); // 10
         System.out.println(d.roll("5!4")); // 24
         System.out.println(d.roll("10!2")); // 38
+        System.out.println(d.roll("5d6+2d8")); //26
+        System.out.println(d.roll("5!6 + 2!8")); //25
+        System.out.println(d.roll("3>4d6  *  1!4")); //84
+        System.out.println(d.roll("1d20-3")); //17
+        System.out.println(d.roll("1d20*-3")); //-24
+
+
+
     }
     @Test
     public void testDiceResults()
@@ -44,5 +52,11 @@ public class DiceTest
         Assert.assertEquals(d.roll("10:11"), 10);
         Assert.assertEquals(d.roll("5!4"), 24);
         Assert.assertEquals(d.roll("10!2"), 38);
+        Assert.assertEquals(d.roll("5d6+2d8"), 26);
+        Assert.assertEquals(d.roll("5!6 + 2!8"), 25);
+        Assert.assertEquals(d.roll("3>4d6  *  1!4"), 84);
+        Assert.assertEquals(d.roll("1d20-3"), 17);
+        Assert.assertEquals(d.roll("1d20*-3"), -24);
+
     }
 }
