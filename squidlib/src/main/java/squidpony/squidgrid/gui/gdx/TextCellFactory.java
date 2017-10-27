@@ -70,18 +70,18 @@ public class TextCellFactory implements Disposable {
     protected float width = 1, height = 1;
     public float actualCellWidth = 1, actualCellHeight = 1;
     protected float distanceFieldScaleX = 36f, distanceFieldScaleY = 36f;
-    private boolean initialized = false, initializedByFont = false, initializedBySize = false;
+    protected boolean initialized = false, initializedByFont = false, initializedBySize = false;
     protected boolean distanceField = false;
     protected boolean msdf = false;
     protected ShaderProgram shader;
     protected float smoothingMultiplier = 1.2f;
     protected float descent, lineHeight;
-    private Label.LabelStyle style;
+    protected Label.LabelStyle style;
     protected OrderedMap<Character, Character> swap = new OrderedMap<>(32);
     protected char directionGlyph = '^';
     protected OrderedMap<Character, TextureRegion> glyphTextures = new OrderedMap<>(16);
 
-    private StringBuilder mut = new StringBuilder(1).append('\0');
+    protected StringBuilder mut = new StringBuilder(1).append('\0');
 
     /**
      * Creates a default valued factory. One of the initialization methods must
@@ -384,11 +384,11 @@ public class TextCellFactory implements Disposable {
         Texture tex;
         if (Gdx.files.internal(texturePath).exists()) {
             Gdx.app.debug("font", "Using internal font texture at " + texturePath);
-            tex = new Texture(Gdx.files.internal(texturePath), true);
+            tex = new Texture(Gdx.files.internal(texturePath), false);
             tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else if (Gdx.files.classpath(texturePath).exists()) {
             Gdx.app.debug("font", "Using classpath font texture at " + texturePath);
-            tex = new Texture(Gdx.files.classpath(texturePath), true);
+            tex = new Texture(Gdx.files.classpath(texturePath), false);
             tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else {
             bmpFont = DefaultResources.getIncludedFont();
@@ -1996,6 +1996,15 @@ public class TextCellFactory implements Disposable {
     {
         swap.clear();
         return this;
+    }
+
+    /**
+     * Not implemented in this class; in subclasses that do, this should change the currently-used font style, such as
+     * from regular to italic or bold. Calling this method on a TextCellFactory does nothing, but won't cause problems.
+     * @param style an int, typically a constant in a class that implements this, that determines what style to use.
+     */
+    public void setStyle(int style)
+    {
     }
 
     public class Glyph extends Actor
