@@ -127,7 +127,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private SquidColorCenter[] colorCenters;
     private int currentCenter;
     private boolean changingColors = false;
-    private TextCellFactory textFactory;
+    private TextFamily textFactory;
     public static final int INTERNAL_ZOOM = 1;
     private Viewport viewport, messageViewport;
     private Camera camera;
@@ -243,8 +243,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
         // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
         // cases but probably not all.
-        textFactory = DefaultResources.getStretchableWideSlabFont()//.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
-                .width(cellWidth).height(cellHeight).initBySize();
+        textFactory = DefaultResources.getSlabFamily();
+        textFactory.width(cellWidth).height(cellHeight).initBySize();
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
@@ -266,12 +266,12 @@ public class EverythingDemo extends ApplicationAdapter {
         // of the actual color, which should be practically white but just a little closer to yellow.
         display.setLightingColor(SColor.COSMIC_LATTE);
         messages = new SquidMessageBox(width, 4,
-                textFactory.copy());
+                textFactory);
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1f,cellHeight * 1.1f);
-        display.setTextSize(cellWidth * 1f, cellHeight  * 1.1f);
+        messages.setTextSize(cellWidth * 1.175f,cellHeight * 1.11f);
+        display.setTextSize(cellWidth * 1.175f, cellHeight  * 1.11f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
@@ -290,8 +290,7 @@ public class EverythingDemo extends ApplicationAdapter {
         IColoredString<Color> text = GDXMarkup.instance.colorString(
                 "Use numpad or vi-keys ([CW Bright Red]h[CW Bright Apricot]j[CW Bright Yellow]k[CW Bright Lime]l" +
                         "[CW Bright Jade]y[CW Bright Azure]u[CW Bright Sapphire]b[CW Flush Purple]n[]) to move. Use " +
-                        "[CW Pale Indigo]?[] for help, [CW Faded Brown]f[] to filter colors, [CW Gray White]q[] to quit. " +
-                        "Click the top or bottom border of this box to scroll.");
+                        "[CW Pale Indigo]?[] for help, [CW Faded Brown]f[] to filter colors, [CW Gray White]q[] to quit.");
         /*IColoredString.Impl.create("Use numpad or vi-keys (", Color.WHITE);
         text.append('h', SColor.CW_BRIGHT_RED);
         text.append('j', SColor.CW_BRIGHT_APRICOT);
@@ -310,6 +309,9 @@ public class EverythingDemo extends ApplicationAdapter {
         text.append(" to quit. Click the top or bottom border of this box to scroll.");
         */
         messages.appendWrappingMessage(text);
+        //textFactory.setStyle(TextFamily.BOLD_ITALIC);
+        messages.appendMessage("Click the top or bottom border of this box to scroll.");
+        //textFactory.setStyle(TextFamily.REGULAR);
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.

@@ -68,6 +68,7 @@ public class DefaultResources implements LifecycleListener {
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
             msdfDejaVu = null, msdfDejaVuItalic = null;
+    private TextFamily familyLean = null, familySlab = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
@@ -1402,6 +1403,40 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
 
+    public static TextFamily getSlabFamily()
+    {
+        initialize();
+        if(instance.familySlab == null)
+        {
+            try {
+                instance.familySlab = new TextFamily()
+                        .defaultFamilySlabDistance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.familySlab != null)
+            return instance.familySlab.copy();
+        return null;
+    }
+
+    public static TextFamily getLeanFamily()
+    {
+        initialize();
+        if(instance.familyLean == null)
+        {
+            try {
+                instance.familyLean = new TextFamily()
+                        .defaultFamilyLeanDistance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.familyLean != null)
+            return instance.familyLean.copy();
+        return null;
+    }
+
 
     /**
      * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.
@@ -1655,6 +1690,14 @@ public class DefaultResources implements LifecycleListener {
         if (unicode2 != null) {
             unicode2.dispose();
             unicode2 = null;
+        }
+        if(familyLean != null) {
+            familyLean.dispose();
+            familyLean = null;
+        }
+        if(familySlab != null) {
+            familySlab.dispose();
+            familySlab = null;
         }
         if(tentacle != null) {
             tentacle.dispose();
