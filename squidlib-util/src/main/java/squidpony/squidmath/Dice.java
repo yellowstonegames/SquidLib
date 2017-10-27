@@ -90,6 +90,25 @@ public class Dice implements Serializable {
         }
 
         return bestOf(rolls, temp);
+
+    }
+
+    /**
+     * Rolls the given number of exploding dice with the given number of sides and returns
+     * the total of the best n dice (counting a die that explodes as one die).
+     *
+     * @param n number of best dice to total
+     * @param dice total number of dice to roll
+     * @param sides number of sides on the dice
+     * @return sum of best n out of <em>dice</em><b>d</b><em>sides</em>
+     */
+    private int bestOfExploding(int n, int dice, int sides) {
+        int rolls = Math.min(n, dice);
+        temp.clear();
+        for (int i = 0; i < dice; i++) {
+            temp.add(rollExplodingDice(1, sides));
+        }
+        return bestOf(rolls, temp);
     }
 
     /**
@@ -99,7 +118,7 @@ public class Dice implements Serializable {
      * @param n number of worst dice to total
      * @param dice total number of dice to roll
      * @param sides number of sides on the dice
-     * @return sum of best n out of <em>dice</em><b>d</b><em>sides</em>
+     * @return sum of worst n out of <em>dice</em><b>d</b><em>sides</em>
      */
     private int worstOf(int n, int dice, int sides) {
         int rolls = Math.min(n, dice);
@@ -107,7 +126,24 @@ public class Dice implements Serializable {
         for (int i = 0; i < dice; i++) {
             temp.add(rollDice(1, sides));
         }
+        return worstOf(rolls, temp);
+    }
 
+    /**
+     * Rolls the given number of exploding dice with the given number of sides and returns
+     * the total of the lowest n dice (counting a die that explodes as one die).
+     *
+     * @param n number of worst dice to total
+     * @param dice total number of dice to roll
+     * @param sides number of sides on the dice
+     * @return sum of worst n out of <em>dice</em><b>d</b><em>sides</em>
+     */
+    private int worstOfExploding(int n, int dice, int sides) {
+        int rolls = Math.min(n, dice);
+        temp.clear();
+        for (int i = 0; i < dice; i++) {
+            temp.add(rollExplodingDice(1, sides));
+        }
         return worstOf(rolls, temp);
     }
 
@@ -254,8 +290,11 @@ public class Dice implements Serializable {
      * and added again, potentially many times if 6 is rolled continually. Some players may be familiar with this game
      * mechanic from various tabletop games, but many potential players might not be, so it should be explained if you
      * show the kinds of dice being rolled to players. The syntax used for exploding dice replaced the "d" in "3d6" for
-     * normal dice with "!", making "3!6" for exploding dice. Exploding dice and inclusive ranges are not supported with
-     * best-of and worst-of notation. While it is technically allowed to end a dice string with an operator, the partial
+     * normal dice with "!", making "3!6" for exploding dice. Inclusive ranges are not supported with best-of and
+     * worst-of notation, but exploding dice are. If using a range, the upper bound can be random, decided by dice rolls
+     * such as with "1:6d6" (which rolls six 6-sided dice and uses that as the upper bound of the range) or by other
+     * ranges such as with "10:100:200", which gets a random number between 100 and 200, then returns a random number
+     * between 10 and that. While it is technically allowed to end a dice string with an operator, the partial
      * operator will be ignored. If you start a dice string with an operator, its left-hand-side will always be 0. If
      * you have two operators in a row, only the last will be used, unless one is '-' and can be treated as part of a
      * negative number (this allows "1d20 * -3" to work). Whitespace is allowed between most parts of a dice string.
@@ -266,7 +305,7 @@ public class Dice implements Serializable {
      *     <li>{@code 3d6} : sum of 3 6-sided dice</li>
      *     <li>{@code d6} : synonym for {@code 1d6}</li>
      *     <li>{@code 3>4d6} : best 3 of 4 6-sided dice</li>
-     *     <li>{@code 3:4d6} : synonym for {@code 3>4d6}; older syntax</li>
+     *     <li>{@code 3:4d6} : gets a random value between 3 and a roll of {@code 4d6}; this syntax has changed</li>
      *     <li>{@code 2<5d6} : worst 2 of 5 6-sided dice</li>
      *     <li>{@code 10:20} : simple random range (inclusive between 10 and 20)</li>
      *     <li>{@code :20} : synonym for {@code 0:20}</li>
@@ -307,15 +346,35 @@ public class Dice implements Serializable {
 
             if (num1 != null && num2 != null) {
                 if (wnum != null) {
-                    if (">".equals(wmode) || ":".equals(wmode)) {
+                    if (">".equals(wmode)) {
                         if ("d".equals(mode)) {
                             ret = bestOf(a, w, b);
+                        }
+                        else if("!".equals(mode))
+                        {
+                            ret = bestOfExploding(a, w, b);
                         }
                     }
                     else if("<".equals(wmode))
                     {
                         if ("d".equals(mode)) {
                             ret = worstOf(a, w, b);
+                        }
+                        else if("!".equals(mode))
+                        {
+                            ret = worstOfExploding(a, w, b);
+                        }
+                    }
+                    else
+                    // Here, wmode is ":", there is a constant lower bound for the range, and the upper bound is some
+                    // dice roll or other range. This can be negative, easily, if the random upper bound is negative
+                    {
+                        if ("d".equals(mode)) {
+                            ret = a + rng.nextIntHasty(rollDice(w, b) + 1 - a);
+                        } else if ("!".equals(mode)) {
+                            ret = a + rng.nextIntHasty(rollExplodingDice(w, b) + 1 - a);
+                        } else if (":".equals(mode)) {
+                            ret = a + rng.nextIntHasty(w + rng.nextIntHasty(b + 1 - w) + 1 - a);
                         }
                     }
                 } else if ("d".equals(mode)) {
