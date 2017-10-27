@@ -31,8 +31,10 @@ public class DiceTest
         System.out.println(d.roll("3>4d6  *  1!4")); //84
         System.out.println(d.roll("1d20-3")); //17
         System.out.println(d.roll("1d20*-3")); //-24
-
-
+        System.out.println(d.roll("1>10!2")); // 7
+        System.out.println(d.roll("10:100:200")); // 142
+        System.out.println(d.roll("3<10!100")); // 44
+        System.out.println(d.roll("0:-15:15")); // -3
 
     }
     @Test
@@ -57,6 +59,10 @@ public class DiceTest
         Assert.assertEquals(d.roll("3>4d6  *  1!4"), 84);
         Assert.assertEquals(d.roll("1d20-3"), 17);
         Assert.assertEquals(d.roll("1d20*-3"), -24);
+        Assert.assertEquals(d.roll("1>10!2"), 7);
+        Assert.assertEquals(d.roll("10:100:200"), 142);
+        Assert.assertEquals(d.roll("3<10!100"), 44);
+        Assert.assertEquals(d.roll("0:-15:15"), -3);
 
     }
 }
