@@ -496,7 +496,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     }
 
     public void put(int x, int y, int c, Color color) {
-        put(x, y, String.valueOf(Character.toChars(c)), color);
+        put(x, y, (char) c, color);
     }
 
     /**

@@ -290,7 +290,8 @@ public class EverythingDemo extends ApplicationAdapter {
         IColoredString<Color> text = GDXMarkup.instance.colorString(
                 "Use numpad or vi-keys ([CW Bright Red]h[CW Bright Apricot]j[CW Bright Yellow]k[CW Bright Lime]l" +
                         "[CW Bright Jade]y[CW Bright Azure]u[CW Bright Sapphire]b[CW Flush Purple]n[]) to move. Use " +
-                        "[CW Pale Indigo]?[] for help, [CW Faded Brown]f[] to filter colors, [CW Gray White]q[] to quit.");
+                        "[CW Pale Indigo]?[] for help, [CW Faded Brown]f[] to filter colors, [CW Gray White]q[] to quit. " +
+                        "Click the [/]top[/] or [/]bottom[/] border of [*]this [/]box[] to scroll.");
         /*IColoredString.Impl.create("Use numpad or vi-keys (", Color.WHITE);
         text.append('h', SColor.CW_BRIGHT_RED);
         text.append('j', SColor.CW_BRIGHT_APRICOT);
@@ -309,9 +310,6 @@ public class EverythingDemo extends ApplicationAdapter {
         text.append(" to quit. Click the top or bottom border of this box to scroll.");
         */
         messages.appendWrappingMessage(text);
-        //textFactory.setStyle(TextFamily.BOLD_ITALIC);
-        messages.appendMessage("Click the top or bottom border of this box to scroll.");
-        //textFactory.setStyle(TextFamily.REGULAR);
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
