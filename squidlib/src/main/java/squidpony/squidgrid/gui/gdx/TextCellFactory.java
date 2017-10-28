@@ -983,8 +983,6 @@ public class TextCellFactory implements Disposable {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
         }
-        setStyle(c >>> 14);
-        c &= '\u3fff';
         if (c == 0) {
             float orig = batch.getPackedColor();
             batch.setColor(encodedColor);

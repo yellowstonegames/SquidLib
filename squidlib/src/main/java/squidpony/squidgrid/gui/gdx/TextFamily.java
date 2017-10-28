@@ -7,15 +7,21 @@ import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import squidpony.squidmath.OrderedMap;
 
 /**
+ * A variant of {@link TextCellFactory} that allows switching between regular, bold, italic, and bold italic styles.
+ * While almost interchangeable with TextCellFactory, it must be set up differently, using the
+ * {@link #fontFamily(String, String...)} or {@link #fontFamilyDistance(String, String...)} methods, and (potentially
+ * importantly) it does not correctly render chars above {@code '\\u3fff'} due to using some of the bits that normally
+ * represent late-in-Unicode character codes to instead represent bold and italic modes. Two TextFamily values are
+ * present in DefaultResources, {@link DefaultResources#getLeanFamily()} and {@link DefaultResources#getSlabFamily()};
+ * using them is currently the recommended way because this class is somewhat picky about how it can be built.
+ * You may want to use {@link GDXMarkup#colorString(CharSequence)} to produce an {@link squidpony.panel.IColoredString}
+ * that contains the specially-altered chars that store bold and italic mode data.
  * Created by Tommy Ettinger on 10/26/2017.
  */
 public class TextFamily extends TextCellFactory {
@@ -246,6 +252,21 @@ public class TextFamily extends TextCellFactory {
         return this;
     }
 
+    /**
+     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param c the char to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param encodedColor the LibGDX Color to use, converted to float as by {@link Color#toFloatBits()}
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, char c, float encodedColor, float x, float y) {
+        setStyle(c >>> 14);
+        c &= '\u3fff';
+        super.draw(batch, c, encodedColor, x, y);
+    }
 
     /**
      * Changes the currently-used font style, such as from regular to italic or bold; values for style can range from 0
