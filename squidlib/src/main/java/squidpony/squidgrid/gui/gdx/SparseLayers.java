@@ -46,13 +46,13 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * The value of {@link #defaultForeground} as a float, for easier usage with the methods that use floats for colors.
      * Defaults to white.
      */
-    public float defaultPackedForeground = SColor.WHITE.toFloatBits(),
+    public float defaultPackedForeground = SColor.FLOAT_WHITE,
     /**
      * The value of {@link #defaultBackground} as a float, for easier usage with the methods that use floats for colors.
      * Currently unused internally, but public so if some background color needs to be stored with this SparseLayers,
      * then there will be a logical place for it. Defaults to black.
      */
-            defaultPackedBackground = SColor.BLACK.toFloatBits();
+            defaultPackedBackground = SColor.FLOAT_BLACK;
     /**
      * A list of SparseTextMap objects, with each representing a foreground layer.
      */
@@ -956,6 +956,11 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         return Math.round((getY() - worldY) / font.actualCellHeight + gridHeight);
     }
 
+    @Override
+    public void blend(int x, int y, float color, float mixBy)
+    {
+        backgrounds[x][y] = SColor.lerpFloatColors(backgrounds[x][y], color, mixBy);
+    }
 
     /**
      * Produces a single char with a color, that can be positioned independently of the contents of this SparseLayers.
