@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":10,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":10,"i23":9,"i24":10,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":10,"i47":10,"i48":10,"i49":9,"i50":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":10,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":10,"i25":9,"i26":9,"i27":10,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":9,"i47":9,"i48":9,"i49":9,"i50":9,"i51":10,"i52":10,"i53":10,"i54":9,"i55":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -5044,6 +5044,12 @@ extends com.badlogic.gdx.graphics.Color</pre>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#alphaOfFloatF-float-">alphaOfFloatF</a></span>(float&nbsp;encoded)</code>
+<div class="block">Gets the alpha channel value of the given encoded color, as a float ranging from 0f to 1f, inclusive.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static float[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#blankColoredLighting-int-int-">blankColoredLighting</a></span>(int&nbsp;width,
                     int&nbsp;height)</code>
@@ -5051,20 +5057,26 @@ extends com.badlogic.gdx.graphics.Color</pre>
  data to fill the lighting with, and you just need a map of a specific size that starts with no lighting.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#blueOfFloat-float-">blueOfFloat</a></span>(float&nbsp;encoded)</code>
 <div class="block">Gets the blue channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#blueOfFloatF-float-">blueOfFloatF</a></span>(float&nbsp;encoded)</code>
+<div class="block">Gets the blue channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#charsToABGR-char:A-">charsToABGR</a></span>(char[]&nbsp;data)</code>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code>, read them as
  as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct an int in ABGR8888 format.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#charsToABGR-char:A-int-">charsToABGR</a></span>(char[]&nbsp;data,
            int&nbsp;offset)</code>
@@ -5073,7 +5085,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  construct an int in ABGR8888 format.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#charsToFloat-char:A-">charsToFloat</a></span>(char[]&nbsp;data)</code>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code>, read them as
@@ -5081,7 +5093,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  format.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#charsToFloat-char:A-int-">charsToFloat</a></span>(char[]&nbsp;data,
             int&nbsp;offset)</code>
@@ -5090,7 +5102,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  construct a packed float in ABGR8888 format.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#charsToFloat-java.lang.CharSequence-int-">charsToFloat</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data,
             int&nbsp;offset)</code>
@@ -5099,14 +5111,14 @@ extends com.badlogic.gdx.graphics.Color</pre>
  format.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#charsToRGBA-char:A-">charsToRGBA</a></span>(char[]&nbsp;data)</code>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code>, read them as
  as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in RGBA8888 format.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#charsToRGBA-char:A-int-">charsToRGBA</a></span>(char[]&nbsp;data,
            int&nbsp;offset)</code>
@@ -5115,20 +5127,20 @@ extends com.badlogic.gdx.graphics.Color</pre>
  RGBA8888 format.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static com.badlogic.gdx.graphics.Color</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#colorFromFloat-com.badlogic.gdx.graphics.Color-float-">colorFromFloat</a></span>(com.badlogic.gdx.graphics.Color&nbsp;changing,
               float&nbsp;value)</code>
 <div class="block">Modifies the color parameter <code>changing</code> so its value is the one encoded in <code>value</code>.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static com.badlogic.gdx.graphics.Color</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#colorFromFloat-float-">colorFromFloat</a></span>(float&nbsp;encoded)</code>
 <div class="block">Produces a new Color that is identical to the one encoded in <code>encoded</code>.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static float[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#colorLighting-double:A:A-float-">colorLighting</a></span>(double[][]&nbsp;lights,
              float&nbsp;color)</code>
@@ -5138,7 +5150,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  lights that is greater than 0, or defaulting to white if the cell is unlit).</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static float[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#colorLightingInto-float:A:A:A-double:A:A-float-">colorLightingInto</a></span>(float[][][]&nbsp;reuse,
                  double[][]&nbsp;lights,
@@ -5149,18 +5161,18 @@ extends com.badlogic.gdx.graphics.Color</pre>
  value in lights that is greater than 0, or defaulting to white if the cell is unlit).</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static float[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#eraseColoredLighting-float:A:A:A-">eraseColoredLighting</a></span>(float[][][]&nbsp;original)</code>
 <div class="block">Removes any information from the given 3D float array for colored lighting, making it as if it had just been
  built by <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#blankColoredLighting-int-int-"><code>blankColoredLighting(int, int)</code></a>, but without any allocations.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatGet-float-float-float-float-">floatGet</a></span>(float&nbsp;r,
         float&nbsp;g,
@@ -5169,19 +5181,19 @@ extends com.badlogic.gdx.graphics.Color</pre>
 <div class="block">Gets a packed float representation of a color given as 4 RGBA float components.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatGet-int-">floatGet</a></span>(int&nbsp;c)</code>
 <div class="block">Gets a packed float representation of a color given an RGBA8888-format int.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatGet-long-">floatGet</a></span>(long&nbsp;c)</code>
 <div class="block">Gets a packed float representation of a color given an RGBA8888-format long.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatGetHSV-float-float-float-float-">floatGetHSV</a></span>(float&nbsp;hue,
            float&nbsp;saturation,
@@ -5190,7 +5202,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
 <div class="block">Gets a color as a packed float given floats representing hue, saturation, value, and opacity.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatGetI-int-int-int-">floatGetI</a></span>(int&nbsp;r,
          int&nbsp;g,
@@ -5198,42 +5210,48 @@ extends com.badlogic.gdx.graphics.Color</pre>
 <div class="block">Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static char[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-">floatToChars</a></span>(char[]&nbsp;changing,
             float&nbsp;color)</code>
 <div class="block">Stores the value of color in the char[] <code>changing</code>, using RGBA8888 format with two hex digits per channel.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#getName--">getName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#greenOfFloat-float-">greenOfFloat</a></span>(float&nbsp;encoded)</code>
 <div class="block">Gets the green channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i26" class="altColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#greenOfFloatF-float-">greenOfFloatF</a></span>(float&nbsp;encoded)</code>
+<div class="block">Gets the green channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
+</td>
+</tr>
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#hueOfFloat-float-">hueOfFloat</a></span>(float&nbsp;encoded)</code>
 <div class="block">Gets the hue of the given encoded color, as a float from 0f (inclusive, red and approaching orange if increased)
  to 1f (exclusive, red and approaching purple if decreased).</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#indexedColorWheel-int-">indexedColorWheel</a></span>(int&nbsp;idx)</code>
 <div class="block">Gets a color by a shuffled index from the palette <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#COLOR_WHEEL_PALETTE_REDUCED"><code>COLOR_WHEEL_PALETTE_REDUCED</code></a>, using the given index to
  ensure similar index values usually return very different colors.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#indexedColorWheel-int-int-">indexedColorWheel</a></span>(int&nbsp;idx,
                  int&nbsp;sat)</code>
@@ -5242,7 +5260,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  index values usually return very different colors.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#indexedColorWheel-int-int-int-">indexedColorWheel</a></span>(int&nbsp;idx,
                  int&nbsp;bright,
@@ -5252,13 +5270,24 @@ extends com.badlogic.gdx.graphics.Color</pre>
  2 is fully saturated), using the given index to ensure similar index values usually return very different colors.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#lerpFloatColors-float-float-float-">lerpFloatColors</a></span>(float&nbsp;start,
                float&nbsp;end,
-               float&nbsp;change)</code>&nbsp;</td>
+               float&nbsp;change)</code>
+<div class="block">Interpolates from the packed float color start towards end by change.</div>
+</td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i33" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#lerpFloatColorsBlended-float-float-float-">lerpFloatColorsBlended</a></span>(float&nbsp;start,
+                      float&nbsp;end,
+                      float&nbsp;change)</code>
+<div class="block">Interpolates from the packed float color start towards end by change, but keeps the alpha of start and uses the
+ alpha of end as an extra factor that can affect how much to change.</div>
+</td>
+</tr>
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>static float[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#mixColoredLighting-float:A:A:A-float:A:A:A-">mixColoredLighting</a></span>(float[][][]&nbsp;basis,
                   float[][][]&nbsp;other)</code>
@@ -5266,7 +5295,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  parameter so it contains the combined brightnesses and colors of basis and other, in a pair of 2D arrays.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomColorSequence--">randomColorSequence</a></span>()</code>
 <div class="block">Returns an infinite Iterator (also an Iterable) over different colors from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#COLOR_WHEEL_PALETTE"><code>COLOR_WHEEL_PALETTE</code></a>, with
@@ -5274,7 +5303,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  in quick succession).</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomColorSequence-java.lang.CharSequence-">randomColorSequence</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</code>
 <div class="block">Returns an infinite Iterator (also an Iterable) over different colors from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#COLOR_WHEEL_PALETTE"><code>COLOR_WHEEL_PALETTE</code></a>, with
@@ -5282,7 +5311,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  in quick succession).</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomColorSequence-java.lang.CharSequence-int-int-">randomColorSequence</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed,
                    int&nbsp;bright,
@@ -5292,7 +5321,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  in quick succession).</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomColorSequence-int-int-">randomColorSequence</a></span>(int&nbsp;bright,
                    int&nbsp;sat)</code>
@@ -5301,7 +5330,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  in quick succession).</div>
 </td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomColorSequence-squidpony.squidmath.RNG-">randomColorSequence</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Returns an infinite Iterator (also an Iterable) over different colors from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#COLOR_WHEEL_PALETTE"><code>COLOR_WHEEL_PALETTE</code></a>, with
@@ -5309,7 +5338,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  in quick succession).</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomColorSequence-squidpony.squidmath.RNG-int-int-">randomColorSequence</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;rng,
                    int&nbsp;bright,
@@ -5319,14 +5348,14 @@ extends com.badlogic.gdx.graphics.Color</pre>
  in quick succession).</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomColorWheel-squidpony.squidmath.RNG-">randomColorWheel</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Gets a random color from the palette <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#COLOR_WHEEL_PALETTE_REDUCED"><code>COLOR_WHEEL_PALETTE_REDUCED</code></a>, using the specified RNG to determine
  saturation, brightness, and hue.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomColorWheel-squidpony.squidmath.RNG-int-int-">randomColorWheel</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;rng,
                 int&nbsp;bright,
@@ -5336,7 +5365,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  saturated), using the specified RNG.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomHueSequence--">randomHueSequence</a></span>()</code>
 <div class="block">Returns an infinite Iterator (also an Iterable) over Integers 0-15 inclusive that can be used to select hues from
@@ -5344,7 +5373,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  two similar hues could be returned in quick succession).</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomHueSequence-java.lang.CharSequence-">randomHueSequence</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seed)</code>
 <div class="block">Returns an infinite Iterator (also an Iterable) over Integers 0-15 inclusive that can be used to select hues from
@@ -5352,7 +5381,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  two similar hues could be returned in quick succession).</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>static <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GapShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">GapShuffler</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#randomHueSequence-squidpony.squidmath.RNG-">randomHueSequence</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
 <div class="block">Returns an infinite Iterator (also an Iterable) over Integers 0-15 inclusive that can be used to select hues from
@@ -5360,19 +5389,25 @@ extends com.badlogic.gdx.graphics.Color</pre>
  two similar hues could be returned in quick succession).</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#redOfFloat-float-">redOfFloat</a></span>(float&nbsp;encoded)</code>
 <div class="block">Gets the red channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i47" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#redOfFloatF-float-">redOfFloatF</a></span>(float&nbsp;encoded)</code>
+<div class="block">Gets the red channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
+</td>
+</tr>
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#saturationOfFloat-float-">saturationOfFloat</a></span>(float&nbsp;encoded)</code>
 <div class="block">Gets the saturation of the given encoded color, as a float ranging from 0.0f to 1.0f, inclusive.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toRandomizedFloat-com.badlogic.gdx.graphics.Color-squidpony.squidmath.RNG-float-float-float-">toRandomizedFloat</a></span>(com.badlogic.gdx.graphics.Color&nbsp;basis,
                  <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
@@ -5383,7 +5418,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  specified degrees using a random number generator.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i50" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toRandomizedFloat-com.badlogic.gdx.graphics.Color-squidpony.squidmath.RNG-float-float-float-float-">toRandomizedFloat</a></span>(com.badlogic.gdx.graphics.Color&nbsp;basis,
                  <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
@@ -5395,7 +5430,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  changed to specified degrees using a random number generator.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i51" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toRandomizedFloat-squidpony.squidmath.RNG-float-float-float-">toRandomizedFloat</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
                  float&nbsp;hue,
@@ -5405,7 +5440,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  specified degrees using a random number generator.</div>
 </td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i52" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toRandomizedFloat-squidpony.squidmath.RNG-float-float-float-float-">toRandomizedFloat</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
                  float&nbsp;hue,
@@ -5416,11 +5451,11 @@ extends com.badlogic.gdx.graphics.Color</pre>
  to specified degrees using a random number generator.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i53" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i49" class="rowColor">
+<tr id="i54" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#translucentColor-float-float-">translucentColor</a></span>(float&nbsp;encodedColor,
                 float&nbsp;alpha)</code>
@@ -5429,7 +5464,7 @@ extends com.badlogic.gdx.graphics.Color</pre>
  set to the given alpha, without constructing any objects along the way.</div>
 </td>
 </tr>
-<tr id="i50" class="altColor">
+<tr id="i55" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#valueOfFloat-float-">valueOfFloat</a></span>(float&nbsp;encoded)</code>
 <div class="block">Gets the value (lightness/brightness) of the given encoded color, as a float ranging from 0f to 1f, inclusive.</div>
@@ -19668,7 +19703,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>FLOAT_WHITE</h4>
-<pre>public static final&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11047">FLOAT_WHITE</a></pre>
+<pre>public static final&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11088">FLOAT_WHITE</a></pre>
 <div class="block">A constant that stores opaque white color as a packed float, for convenience when using the float-based APIs.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -19682,7 +19717,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FLOAT_BLACK</h4>
-<pre>public static final&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11051">FLOAT_BLACK</a></pre>
+<pre>public static final&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11092">FLOAT_BLACK</a></pre>
 <div class="block">A constant that stores opaque black color as a packed float, for convenience when using the float-based APIs.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -20258,13 +20293,78 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 </dl>
 </li>
 </ul>
+<a name="redOfFloatF-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>redOfFloatF</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.10976">redOfFloatF</a>(float&nbsp;encoded)</pre>
+<div class="block">Gets the red channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>encoded</code> - a color as a packed float that can be obtained by <code>Color.toFloatBits()</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int from 0 to 255, inclusive, representing the red channel value of the given encoded color</dd>
+</dl>
+</li>
+</ul>
+<a name="greenOfFloatF-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>greenOfFloatF</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.10986">greenOfFloatF</a>(float&nbsp;encoded)</pre>
+<div class="block">Gets the green channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>encoded</code> - a color as a packed float that can be obtained by <code>Color.toFloatBits()</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int from 0 to 255, inclusive, representing the green channel value of the given encoded color</dd>
+</dl>
+</li>
+</ul>
+<a name="blueOfFloatF-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>blueOfFloatF</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.10996">blueOfFloatF</a>(float&nbsp;encoded)</pre>
+<div class="block">Gets the blue channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>encoded</code> - a color as a packed float that can be obtained by <code>Color.toFloatBits()</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int from 0 to 255, inclusive, representing the blue channel value of the given encoded color</dd>
+</dl>
+</li>
+</ul>
+<a name="alphaOfFloatF-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>alphaOfFloatF</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11007">alphaOfFloatF</a>(float&nbsp;encoded)</pre>
+<div class="block">Gets the alpha channel value of the given encoded color, as a float ranging from 0f to 1f, inclusive. Because
+ of how alpha is stored in libGDX, no odd-number values are possible for alpha.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>encoded</code> - a color as a packed float that can be obtained by <code>Color.toFloatBits()</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an even int from 0 to 254, inclusive, representing the alpha channel value of the given encoded color</dd>
+</dl>
+</li>
+</ul>
 <a name="saturationOfFloat-float-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>saturationOfFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.10976">saturationOfFloat</a>(float&nbsp;encoded)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11017">saturationOfFloat</a>(float&nbsp;encoded)</pre>
 <div class="block">Gets the saturation of the given encoded color, as a float ranging from 0.0f to 1.0f, inclusive.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -20281,7 +20381,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>valueOfFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11000">valueOfFloat</a>(float&nbsp;encoded)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11041">valueOfFloat</a>(float&nbsp;encoded)</pre>
 <div class="block">Gets the value (lightness/brightness) of the given encoded color, as a float ranging from 0f to 1f, inclusive.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -20298,7 +20398,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>hueOfFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11015">hueOfFloat</a>(float&nbsp;encoded)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11056">hueOfFloat</a>(float&nbsp;encoded)</pre>
 <div class="block">Gets the hue of the given encoded color, as a float from 0f (inclusive, red and approaching orange if increased)
  to 1f (exclusive, red and approaching purple if decreased).</div>
 <dl>
@@ -20316,7 +20416,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>translucentColor</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11062">translucentColor</a>(float&nbsp;encodedColor,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11103">translucentColor</a>(float&nbsp;encodedColor,
                                      float&nbsp;alpha)</pre>
 <div class="block">Given a color stored as a packed float, and a desired alpha to set for that color (between 0.0 and 1.0, inclusive
  and clamped in that range), this makes a new float that has the same red, green, and blue channels but has been
@@ -20336,7 +20436,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>floatToChars</h4>
-<pre>public static&nbsp;char[]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11086">floatToChars</a>(char[]&nbsp;changing,
+<pre>public static&nbsp;char[]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11127">floatToChars</a>(char[]&nbsp;changing,
                                   float&nbsp;color)</pre>
 <div class="block">Stores the value of color in the char[] <code>changing</code>, using RGBA8888 format with two hex digits per channel.
  This means that changing must be at least length 8 (this doesn't check for efficiency reasons), and that the
@@ -20362,7 +20462,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>charsToRGBA</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11111">charsToRGBA</a>(char[]&nbsp;data,
+<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11152">charsToRGBA</a>(char[]&nbsp;data,
                               int&nbsp;offset)</pre>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code> starting at
  <code>offset</code>, read them as as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in
@@ -20385,7 +20485,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>charsToRGBA</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11125">charsToRGBA</a>(char[]&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11166">charsToRGBA</a>(char[]&nbsp;data)</pre>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code>, read them as
  as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in RGBA8888 format. Some parts of
  libGDX use and expect RGBA8888 order, such as most constructors for Color and <code>Color.set(int)</code>, while
@@ -20405,7 +20505,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>charsToABGR</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11141">charsToABGR</a>(char[]&nbsp;data,
+<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11182">charsToABGR</a>(char[]&nbsp;data,
                               int&nbsp;offset)</pre>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code> starting at
  <code>offset</code>, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to
@@ -20428,7 +20528,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>charsToABGR</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11156">charsToABGR</a>(char[]&nbsp;data)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11197">charsToABGR</a>(char[]&nbsp;data)</pre>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code>, read them as
  as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct an int in ABGR8888 format.
  Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
@@ -20449,7 +20549,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>charsToFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11171">charsToFloat</a>(char[]&nbsp;data)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11212">charsToFloat</a>(char[]&nbsp;data)</pre>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code>, read them as
  as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888
  format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
@@ -20470,7 +20570,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>charsToFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11188">charsToFloat</a>(char[]&nbsp;data,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11229">charsToFloat</a>(char[]&nbsp;data,
                                  int&nbsp;offset)</pre>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code> starting at
  <code>offset</code>, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to
@@ -20493,7 +20593,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>charsToFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11206">charsToFloat</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11247">charsToFloat</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;data,
                                  int&nbsp;offset)</pre>
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code>, read them as
  as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888
@@ -20516,7 +20616,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>floatGet</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11225">floatGet</a>(float&nbsp;r,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11266">floatGet</a>(float&nbsp;r,
                              float&nbsp;g,
                              float&nbsp;b,
                              float&nbsp;a)</pre>
@@ -20543,7 +20643,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>floatGet</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11246">floatGet</a>(long&nbsp;c)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11287">floatGet</a>(long&nbsp;c)</pre>
 <div class="block">Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format
  in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
  packed floats like what this returns are ABGR format, the kind that can be passed directly to
@@ -20569,7 +20669,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>floatGet</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11267">floatGet</a>(int&nbsp;c)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11308">floatGet</a>(int&nbsp;c)</pre>
 <div class="block">Gets a packed float representation of a color given an RGBA8888-format int. LibGDX expects ABGR format
  in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
  packed floats like what this returns are ABGR format, the kind that can be passed directly to
@@ -20595,7 +20695,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>floatGetI</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11284">floatGetI</a>(int&nbsp;r,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11325">floatGetI</a>(int&nbsp;r,
                               int&nbsp;g,
                               int&nbsp;b)</pre>
 <div class="block">Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX
@@ -20620,7 +20720,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>floatGetHSV</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11308">floatGetHSV</a>(float&nbsp;hue,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11349">floatGetHSV</a>(float&nbsp;hue,
                                 float&nbsp;saturation,
                                 float&nbsp;value,
                                 float&nbsp;opacity)</pre>
@@ -20652,7 +20752,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>toRandomizedFloat</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11364">toRandomizedFloat</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11405">toRandomizedFloat</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
                                float&nbsp;hue,
                                float&nbsp;saturation,
                                float&nbsp;value)</pre>
@@ -20690,7 +20790,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>toRandomizedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11395">toRandomizedFloat</a>(com.badlogic.gdx.graphics.Color&nbsp;basis,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11436">toRandomizedFloat</a>(com.badlogic.gdx.graphics.Color&nbsp;basis,
                                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
                                       float&nbsp;hue,
                                       float&nbsp;saturation,
@@ -20731,7 +20831,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>toRandomizedFloat</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11424">toRandomizedFloat</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11465">toRandomizedFloat</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
                                float&nbsp;hue,
                                float&nbsp;saturation,
                                float&nbsp;value,
@@ -20771,7 +20871,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>toRandomizedFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11454">toRandomizedFloat</a>(com.badlogic.gdx.graphics.Color&nbsp;basis,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11495">toRandomizedFloat</a>(com.badlogic.gdx.graphics.Color&nbsp;basis,
                                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/RNG.html?is-external=true" title="class or interface in squidpony.squidmath">RNG</a>&nbsp;random,
                                       float&nbsp;hue,
                                       float&nbsp;saturation,
@@ -20813,9 +20913,43 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>lerpFloatColors</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11508">lerpFloatColors</a>(float&nbsp;start,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11558">lerpFloatColors</a>(float&nbsp;start,
                                     float&nbsp;end,
                                     float&nbsp;change)</pre>
+<div class="block">Interpolates from the packed float color start towards end by change. Both start and end should be packed colors,
+ as from <code>Color.toFloatBits()</code> or <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatGet-float-float-float-float-"><code>floatGet(float, float, float, float)</code></a>, and change can be between 0f
+ (keep start) and 1f (only use end). This is a good way to reduce allocations of temporary Colors.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - the starting color as a packed float</dd>
+<dd><code>end</code> - the target color as a packed float</dd>
+<dd><code>change</code> - how much to go from start toward end, as a float between 0 and 1; higher means closer to end</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a packed float that represents a color between start and end</dd>
+</dl>
+</li>
+</ul>
+<a name="lerpFloatColorsBlended-float-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lerpFloatColorsBlended</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11578">lerpFloatColorsBlended</a>(float&nbsp;start,
+                                           float&nbsp;end,
+                                           float&nbsp;change)</pre>
+<div class="block">Interpolates from the packed float color start towards end by change, but keeps the alpha of start and uses the
+ alpha of end as an extra factor that can affect how much to change. Both start and end should be packed colors,
+ as from <code>Color.toFloatBits()</code> or <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatGet-float-float-float-float-"><code>floatGet(float, float, float, float)</code></a>, and change can be between 0f
+ (keep start) and 1f (only use end). This is a good way to reduce allocations of temporary Colors.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>start</code> - the starting color as a packed float; alpha will be preserved</dd>
+<dd><code>end</code> - the target color as a packed float; alpha will not be used directly, and will instead be multiplied with change</dd>
+<dd><code>change</code> - how much to go from start toward end, as a float between 0 and 1; higher means closer to end</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a packed float that represents a color between start and end</dd>
+</dl>
 </li>
 </ul>
 <a name="blankColoredLighting-int-int-">
@@ -20824,7 +20958,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>blankColoredLighting</h4>
-<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11528">blankColoredLighting</a>(int&nbsp;width,
+<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11599">blankColoredLighting</a>(int&nbsp;width,
                                                int&nbsp;height)</pre>
 <div class="block">Similar to <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#colorLighting-double:A:A-float-"><code>colorLighting(double[][], float)</code></a>, but meant for an initial state before you have FOV or color
  data to fill the lighting with, and you just need a map of a specific size that starts with no lighting. This
@@ -20845,7 +20979,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>eraseColoredLighting</h4>
-<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11545">eraseColoredLighting</a>(float[][][]&nbsp;original)</pre>
+<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11616">eraseColoredLighting</a>(float[][][]&nbsp;original)</pre>
 <div class="block">Removes any information from the given 3D float array for colored lighting, making it as if it had just been
  built by <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#blankColoredLighting-int-int-"><code>blankColoredLighting(int, int)</code></a>, but without any allocations. This blank state is different from
  being simply filled with all 0 or all default values; the two sub-arrays receive different contents (the one that
@@ -20864,7 +20998,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>colorLighting</h4>
-<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11563">colorLighting</a>(double[][]&nbsp;lights,
+<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11634">colorLighting</a>(double[][]&nbsp;lights,
                                         float&nbsp;color)</pre>
 <div class="block">Given a 2D double array that was probably produced by FOV and a packed color as a float, this gets a 3D float
  array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in the first
@@ -20887,7 +21021,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>colorLightingInto</h4>
-<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11582">colorLightingInto</a>(float[][][]&nbsp;reuse,
+<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11653">colorLightingInto</a>(float[][][]&nbsp;reuse,
                                             double[][]&nbsp;lights,
                                             float&nbsp;color)</pre>
 <div class="block">Given a 2D double array that was probably produced by FOV and a packed color as a float, this assigns into reuse
@@ -20914,7 +21048,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>mixColoredLighting</h4>
-<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11601">mixColoredLighting</a>(float[][][]&nbsp;basis,
+<pre>public static&nbsp;float[][][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11672">mixColoredLighting</a>(float[][][]&nbsp;basis,
                                              float[][][]&nbsp;other)</pre>
 <div class="block">Adds two 3D arrays produced by <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#colorLighting-double:A:A-float-"><code>colorLighting(double[][], float)</code></a> or this method and modifies the basis
  parameter so it contains the combined brightnesses and colors of basis and other, in a pair of 2D arrays.</div>
@@ -20933,7 +21067,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11618">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11689">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>com.badlogic.gdx.graphics.Color</code></dd>
@@ -20946,7 +21080,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>getName</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11622">getName</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11693">getName</a>()</pre>
 </li>
 </ul>
 <a name="equals-java.lang.Object-">
@@ -20955,7 +21089,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11627">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;other)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11698">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;other)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>equals</code>&nbsp;in class&nbsp;<code>com.badlogic.gdx.graphics.Color</code></dd>
@@ -20968,7 +21102,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11632">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SColor.html#line.11703">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>hashCode</code>&nbsp;in class&nbsp;<code>com.badlogic.gdx.graphics.Color</code></dd>

@@ -2,7 +2,6 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
@@ -263,22 +262,22 @@ public abstract class PanelEffect extends TemporalAction{
         protected void update(float percent) {
             int len = affected.size();
             Coord c;
-            float f, color;
+            float f, color, light;
             int idx, seed = System.identityHashCode(this);
             for (int i = 0; i < len; i++) {
                 c = affected.get(i);
-                if(lightMap[c.x][c.y] <= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
+                if((light = (float) lightMap[c.x][c.y]) <= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
                     continue;
                 f = (float)SeededNoise.noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)
                         * 0.17f + percent * 1.2f;
-                if(f < 0f || 0.5 * lightMap[c.x][c.y] + f < 0.4)
+                if(f < 0f || 0.5 * light + f < 0.4)
                     continue;
                 idx = (int) (f * colors.length);
                 if(idx >= colors.length - 1)
                     color = SColor.lerpFloatColors(colors[colors.length-1], NumberTools.setSelectedByte(colors[colors.length-1], 3, (byte)0), (Math.min(0.99f, f) * colors.length) % 1f);
                 else
                     color = SColor.lerpFloatColors(colors[idx], colors[idx+1], (f * colors.length) % 1f);
-                target.put(c.x, c.y, color);
+                target.blend(c.x, c.y, color, SColor.alphaOfFloatF(color) * light * 0.25f + 0.75f);
             }
         }
         /**
@@ -287,7 +286,7 @@ public abstract class PanelEffect extends TemporalAction{
          * like sparks in GibberishEffect if the chars in {@link GibberishEffect#choices} are selected in a way that
          * fits that theme.
          */
-        public void useElectricColors()
+        public ExplosionEffect useElectricColors()
         {
             colors[0] = SColor.floatGet(0xCCCCFFEE); // SColor.PERIWINKLE
             colors[1] = SColor.floatGet(0xBF00FFFF); // SColor.ELECTRIC_PURPLE
@@ -296,6 +295,7 @@ public abstract class PanelEffect extends TemporalAction{
             colors[4] = SColor.floatGet(0xBF00FFDD); // SColor.ELECTRIC_PURPLE
             colors[5] = SColor.floatGet(0x6022EEBB); // SColor.ELECTRIC_INDIGO
             colors[6] = SColor.floatGet(0x4B008277); // SColor.INDIGO
+            return this;
         }
 
         /**
@@ -303,7 +303,7 @@ public abstract class PanelEffect extends TemporalAction{
          * Meant for fiery explosions with smoke, this will affect character foregrounds in a GibberishEffect.
          * This may look more like a fiery blast if used with an ExplosionEffect than a GibberishEffect.
          */
-        public void useFieryColors()
+        public ExplosionEffect useFieryColors()
         {
             colors[0] = SColor.floatGet(0xFF4F00FF); // SColor.INTERNATIONAL_ORANGE
             colors[1] = SColor.floatGet(0xFFB94EFF); // SColor.FLORAL_LEAF
@@ -312,7 +312,7 @@ public abstract class PanelEffect extends TemporalAction{
             colors[4] = SColor.floatGet(0xFF6600EE); // SColor.SAFETY_ORANGE
             colors[5] = SColor.floatGet(0x595652DD); // SColor.DB_SOOT
             colors[6] = SColor.floatGet(0x59565299); // SColor.DB_SOOT
-
+            return this;
         }
 
     }
@@ -614,20 +614,13 @@ public abstract class PanelEffect extends TemporalAction{
                 c = affected.get(i);
                 if((light = (float) lightMap[c.x][c.y]) <= 0f)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
                     continue;
-                f = (float)SeededNoise.noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)
+                f = (float)SeededNoise.noise(c.x * 0.3, c.y * 0.3, percent * 1.3, seed)
                         * 0.498f + 0.4999f;
                 target.blend(c.x, c.y,
                         SColor.lerpFloatColors(colors[(int) (f * colors.length)],
                                 colors[((int) (f * colors.length) + 1) % colors.length],
                                 (f * colors.length) % 1f), NumberTools.swayTight(percent * 2f) * light);
             }
-        }
-        private static float fade(float color, float alphaMultiplier)
-        {
-            int bits = NumberTools.floatToIntBits(color);
-            return NumberTools.intBitsToFloat(bits & 0xFFFFFF
-                    | (MathUtils.clamp((int)((bits >>> 25) * alphaMultiplier), 0, 127) << 25));
-
         }
     }
     @Beta

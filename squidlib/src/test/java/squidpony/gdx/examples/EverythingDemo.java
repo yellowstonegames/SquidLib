@@ -613,7 +613,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
                 if(monsters.remove(Coord.get(newX, newY)) != null)
                 {
-                    display.addAction(new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 1f,
+                    display.addAction(new PanelEffect.ExplosionEffect(display.getBackgroundLayer(), 1f,
                             floors, Coord.get(newX, newY), 5));
                 }
                 //display.setGridOffsetX(newX - (width >> 1));

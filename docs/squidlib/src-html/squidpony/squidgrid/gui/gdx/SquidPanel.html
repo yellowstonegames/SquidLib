@@ -481,7 +481,7 @@
 <span class="sourceLineNo">473</span>    @Override<a name="line.473"></a>
 <span class="sourceLineNo">474</span>    public void blend(int x, int y, float color, float mixBy)<a name="line.474"></a>
 <span class="sourceLineNo">475</span>    {<a name="line.475"></a>
-<span class="sourceLineNo">476</span>        colors[x][y] = SColor.lerpFloatColors(colors[x][y], color, mixBy);<a name="line.476"></a>
+<span class="sourceLineNo">476</span>        colors[x][y] = SColor.lerpFloatColorsBlended(colors[x][y], color, mixBy);<a name="line.476"></a>
 <span class="sourceLineNo">477</span>    }<a name="line.477"></a>
 <span class="sourceLineNo">478</span><a name="line.478"></a>
 <span class="sourceLineNo">479</span>    public void put(int x, int y, Color color, float colorMultiplier) {<a name="line.479"></a>

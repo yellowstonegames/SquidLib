@@ -959,7 +959,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     @Override
     public void blend(int x, int y, float color, float mixBy)
     {
-        backgrounds[x][y] = SColor.lerpFloatColors(backgrounds[x][y], color, mixBy);
+        backgrounds[x][y] = SColor.lerpFloatColorsBlended(backgrounds[x][y], color, mixBy);
     }
 
     /**

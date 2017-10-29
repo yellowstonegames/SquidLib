@@ -128,6 +128,15 @@ public class NumberTools {
         return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
     }
 
+    public static float swayTight(final float value)
+    {
+        wfa.set(0, value + (value < 0f ? -2f : 2f));
+        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000);
+        final float a = wfa.get(0) - 2f;
+        return a * a * a * (a * (a * 6f - 15f) + 10f);
+    }
+
     public static int floatToIntBits(final float value) {
         wfa.set(0, value);
         return wia.get(0);
