@@ -473,7 +473,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     @Override
     public void blend(int x, int y, float color, float mixBy)
     {
-        colors[x][y] = SColor.lerpFloatColors(colors[x][y], color, mixBy);
+        colors[x][y] = SColor.lerpFloatColorsBlended(colors[x][y], color, mixBy);
     }
 
     public void put(int x, int y, Color color, float colorMultiplier) {

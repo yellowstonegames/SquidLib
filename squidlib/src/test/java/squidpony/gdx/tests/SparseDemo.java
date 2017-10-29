@@ -121,7 +121,7 @@ public class SparseDemo extends ApplicationAdapter {
     // new objects (such as Colors) frequently for only brief usage,because this can cause temporary garbage objects to
     // build up and slow down the program while they get cleaned up (garbage collection, which is slower on Android).
     private static final float WHITE_FLOAT = SColor.FLOAT_WHITE,
-            GRAY_FLOAT = NumberTools.intBitsToFloat(0xFE444444);
+            GRAY_FLOAT = SColor.floatGetI(0x44, 0x44, 0x44);
     // here we store the colors we will use for a burst effect when the player bumps into a wall. We don't really need
     // to recalculate this every time a wall gets bumped, and this lets us do more complex things with the colors.
     private float[] burstColors;
@@ -278,7 +278,8 @@ public class SparseDemo extends ApplicationAdapter {
 
         //The next three lines set the background color for anything we don't draw on, but also create 2D arrays of the
         //same size as decoDungeon that store simple indexes into a common list of colors, using the colors that looks
-        // up as the colors for the cell with the same x and y.
+        //up as the colors for the cell with the same x and y. By changing an item in SColor.LIMITED_PALETTE, we also
+        //change the colors assigned by default to walls.
         bgColor = SColor.DARK_SLATE_GRAY;
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
         Color[][] temp = MapUtility.generateDefaultColors(decoDungeon);
@@ -503,12 +504,13 @@ public class SparseDemo extends ApplicationAdapter {
         else
         {
             display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
-            /*
-            display.addAction(new PanelEffect.GibberishEffect(display, 1f, floors, player, 6,
-                    burstColors,
-                    new char[]{'\u0000'} // the char at Unicode 0 is used to mean a solid block that takes up the cell
-            ));*/
-            display.addAction(new PanelEffect.PulseEffect(display, 1f, floors, player, 3, new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}));
+
+            //display.addAction(new PanelEffect.ExplosionEffect(display, 1f, floors, player, 6,
+            //        burstColors
+            //));
+            display.addAction(new PanelEffect.PulseEffect(display, 1f, floors, player, 3
+                    , new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}
+                    ));
             //display.burst(newX, newY, 1, Radius.CIRCLE, StringKit.PUNCTUATION, burstColors[8], burstColors[35], 0.4f);
         }
         // removes the first line displayed of the Art of War text or its translation.
@@ -531,15 +533,30 @@ public class SparseDemo extends ApplicationAdapter {
         //past from affecting the current frame. This isn't a problem here, but would probably be an issue if we had
         //monsters running in and out of our vision. If artifacts from previous frames show up, uncomment the next line.
         //display.clear();
-        long tm = (System.currentTimeMillis() & 0xffffffL);
+
+        float tm = (System.currentTimeMillis() & 0xffffffL) * 0.001f;
         for (int i = 0; i < bigWidth; i++) {
             for (int j = 0; j < bigHeight; j++) {
                 if(visible[i][j] > 0.0) {
-                    float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(40f + 256f + (-105f +
-                            180f * ((float)visible[i][j] * (1.0f + 0.2f * SeededNoise.noise(i * 0.2f, j * 0.2f, tm * 0.001f, 10000)))))
-                            * 0x1p-9f); // "* 0x1p-9f" is equivalent to "/ 512.0", just maybe faster
+                    // There are a lot of numbers here; they're just chosen for aesthetic reasons. They affect
+                    // the brightness of a cell, using SeededNoise for a flickering torchlight effect that changes
+                    // as the time does, and also depends on the x,y position of the cell being lit. We use
+                    // SColor.lerpFloatColors() to take two floats that encode colors without using an object,
+                    // and mix them according to a third float between 0f and 1f. The two colors are the background
+                    // color of the cell, and pure white, while the third number is where the mess is. First it
+                    // gets a number using the visibility of the cell and the SeededNoise result, which will be
+                    // between 0f and 512f, then effectively divides that by 512 using a strange-at-first
+                    // hexadecimal float literal, 0x1p-9f. That is essentially the same as writing 0.001953125f,
+                    // (float)Math.pow(2.0, -9.0), or (1f / 512f), but is possibly faster than the last two if the
+                    // compiler can't optimize float division effectively, and is a good tool to have because these
+                    // hexadecimal float or double literals always represent numbers accurately. To contrast,
+                    // 0.3 - 0.2 is not equal to 0.1 with doubles, because tenths are inaccurate with floats and
+                    // doubles, and hex literals won't have the option to write an inaccurate float or double.
+                    float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(196f + (
+                            180f * ((float)visible[i][j] * (1.0f + 0.2f * SeededNoise.noise(i * 0.2f, j * 0.2f, tm, 10000)))))
+                            * 0x1p-9f); // as above, "* 0x1p-9f" is roughly equivalent to "/ 512.0"
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bg);
-                }else if(seen.contains(i, j))
+                } else if(seen.contains(i, j))
                     display.put(i, j, lineDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], GRAY_FLOAT, 0.3f));
             }
         }

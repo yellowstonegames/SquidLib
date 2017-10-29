@@ -10967,6 +10967,47 @@ public class SColor extends Color {
     {
         return (NumberTools.floatToIntBits(encoded) & 0xfe000000) >>> 24;
     }
+
+    /**
+     * Gets the red channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return an int from 0 to 255, inclusive, representing the red channel value of the given encoded color
+     */
+    public static float redOfFloatF(final float encoded)
+    {
+        return (NumberTools.floatToIntBits(encoded) & 0x000000ff) * 0.003921569f;
+    }
+
+    /**
+     * Gets the green channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return an int from 0 to 255, inclusive, representing the green channel value of the given encoded color
+     */
+    public static float greenOfFloatF(final float encoded)
+    {
+        return ((NumberTools.floatToIntBits(encoded) & 0x0000ff00) >>> 8) * 0.003921569f;
+    }
+
+    /**
+     * Gets the blue channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return an int from 0 to 255, inclusive, representing the blue channel value of the given encoded color
+     */
+    public static float blueOfFloatF(final float encoded)
+    {
+        return ((NumberTools.floatToIntBits(encoded) & 0x00ff0000) >>> 16) * 0.003921569f;
+    }
+
+    /**
+     * Gets the alpha channel value of the given encoded color, as a float ranging from 0f to 1f, inclusive. Because
+     * of how alpha is stored in libGDX, no odd-number values are possible for alpha.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return an even int from 0 to 254, inclusive, representing the alpha channel value of the given encoded color
+     */
+    public static float alphaOfFloatF(final float encoded)
+    {
+        return ((NumberTools.floatToIntBits(encoded) & 0xfe000000) >>> 24) * 0.003937008f;
+    }
     /**
      * Gets the saturation of the given encoded color, as a float ranging from 0.0f to 1.0f, inclusive.
      * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
@@ -11505,6 +11546,15 @@ public class SColor extends Color {
         }
     }
 
+    /**
+     * Interpolates from the packed float color start towards end by change. Both start and end should be packed colors,
+     * as from {@link #toFloatBits()} or {@link #floatGet(float, float, float, float)}, and change can be between 0f
+     * (keep start) and 1f (only use end). This is a good way to reduce allocations of temporary Colors.
+     * @param start the starting color as a packed float
+     * @param end the target color as a packed float
+     * @param change how much to go from start toward end, as a float between 0 and 1; higher means closer to end
+     * @return a packed float that represents a color between start and end
+     */
     public static float lerpFloatColors(final float start, final float end, final float change) {
         final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),
                 rs = (s & 0xFF), gs = (s >>> 8) & 0xFF, bs = (s >>> 16) & 0xFF, as = (s >>> 24) & 254,
@@ -11513,6 +11563,27 @@ public class SColor extends Color {
                 | ((int) (gs + change * (ge - gs)) & 0xFF) << 8
                 | (((int) (bs + change * (be - bs)) & 0xFF) << 16)
                 | (((int) (as + change * (ae - as)) & 0xFE) << 24));
+    }
+
+    /**
+     * Interpolates from the packed float color start towards end by change, but keeps the alpha of start and uses the
+     * alpha of end as an extra factor that can affect how much to change. Both start and end should be packed colors,
+     * as from {@link #toFloatBits()} or {@link #floatGet(float, float, float, float)}, and change can be between 0f
+     * (keep start) and 1f (only use end). This is a good way to reduce allocations of temporary Colors.
+     * @param start the starting color as a packed float; alpha will be preserved
+     * @param end the target color as a packed float; alpha will not be used directly, and will instead be multiplied with change
+     * @param change how much to go from start toward end, as a float between 0 and 1; higher means closer to end
+     * @return a packed float that represents a color between start and end
+     */
+    public static float lerpFloatColorsBlended(final float start, final float end, float change) {
+        final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),
+                rs = (s & 0xFF), gs = (s >>> 8) & 0xFF, bs = (s >>> 16) & 0xFF, as = s & 0xFE000000,
+                re = (e & 0xFF), ge = (e >>> 8) & 0xFF, be = (e >>> 16) & 0xFF, ae = (e >>> 25);
+        change *= ae * 0.007874016f;
+        return NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) & 0xFF)
+                | ((int) (gs + change * (ge - gs)) & 0xFF) << 8
+                | (((int) (bs + change * (be - bs)) & 0xFF) << 16)
+                | as);
     }
 
     /**
