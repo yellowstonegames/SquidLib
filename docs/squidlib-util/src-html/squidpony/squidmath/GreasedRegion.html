@@ -785,7 +785,7 @@
 <span class="sourceLineNo">777</span>     * Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of<a name="line.777"></a>
 <span class="sourceLineNo">778</span>     * the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more efficient than an RNG when<a name="line.778"></a>
 <span class="sourceLineNo">779</span>     * you're making a lot of calls on it.<a name="line.779"></a>
-<span class="sourceLineNo">780</span>     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThunderRNG do<a name="line.780"></a>
+<span class="sourceLineNo">780</span>     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustRNG do<a name="line.780"></a>
 <span class="sourceLineNo">781</span>     * @param width the maximum width for the GreasedRegion<a name="line.781"></a>
 <span class="sourceLineNo">782</span>     * @param height the maximum height for the GreasedRegion<a name="line.782"></a>
 <span class="sourceLineNo">783</span>     */<a name="line.783"></a>
@@ -810,7 +810,7 @@
 <span class="sourceLineNo">802</span>     * (without extra allocations) if this.width == width and this.height == height, and typically assigning<a name="line.802"></a>
 <span class="sourceLineNo">803</span>     * approximately half of the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more<a name="line.803"></a>
 <span class="sourceLineNo">804</span>     * efficient than an RNG when you're making a lot of calls on it.<a name="line.804"></a>
-<span class="sourceLineNo">805</span>     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThunderRNG do<a name="line.805"></a>
+<span class="sourceLineNo">805</span>     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustRNG do<a name="line.805"></a>
 <span class="sourceLineNo">806</span>     * @param width the width of the desired GreasedRegion<a name="line.806"></a>
 <span class="sourceLineNo">807</span>     * @param height the height of the desired GreasedRegion<a name="line.807"></a>
 <span class="sourceLineNo">808</span>     * @return this for chaining<a name="line.808"></a>
@@ -843,7 +843,7 @@
 <span class="sourceLineNo">835</span>    /**<a name="line.835"></a>
 <span class="sourceLineNo">836</span>     * Constructor for a random GreasedRegion of the given width and height.<a name="line.836"></a>
 <span class="sourceLineNo">837</span>     * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.<a name="line.837"></a>
-<span class="sourceLineNo">838</span>     * @param random a RandomnessSource (such as LightRNG or ThunderRNG) that this will use to generate its contents<a name="line.838"></a>
+<span class="sourceLineNo">838</span>     * @param random a RandomnessSource (such as LightRNG or ThrustRNG) that this will use to generate its contents<a name="line.838"></a>
 <span class="sourceLineNo">839</span>     * @param width the maximum width for the GreasedRegion<a name="line.839"></a>
 <span class="sourceLineNo">840</span>     * @param height the maximum height for the GreasedRegion<a name="line.840"></a>
 <span class="sourceLineNo">841</span>     */<a name="line.841"></a>

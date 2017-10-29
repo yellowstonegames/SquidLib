@@ -224,18 +224,18 @@ public class NumberTools {
     }
 
     /**
-     * Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
+     * Limited-use; takes any double and produces a double in the -1 to 1 range, with a graph of input to output that
      * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
      * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
      * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
      * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
-     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain not change
-     * its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
-     * will smooth its path. An input of any even number should produce something very close to -1f, any odd
-     * number should produce something very close to 1f, and any number halfway between two incremental integers (like
-     * 8.5f or -10.5f) should produce 0f or a very small fraction.
-     * @param value any float
-     * @return a float from -1f (inclusive) to 1f (inclusive)
+     * similar to {@link #bounce(double)} and {@link #zigzag(double)}, but unlike bounce() this will maintain its
+     * frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
+     * will smooth its path. An input of any even number should produce something very close to -1.0, any odd
+     * number should produce something very close to 1.0, and any number halfway between two incremental integers (like
+     * 8.5 or -10.5) should produce 0.0 or a very small fraction.
+     * @param value any double other than NaN or infinite values
+     * @return a double from -1.0 (inclusive) to 1.0 (inclusive)
      */
     public static double sway(final double value)
     {
@@ -251,12 +251,12 @@ public class NumberTools {
      * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
      * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
      * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
-     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain not change
-     * its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
+     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain its
+     * frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
      * will smooth its path. An input of any even number should produce something very close to -1f, any odd
      * number should produce something very close to 1f, and any number halfway between two incremental integers (like
      * 8.5f or -10.5f) should produce 0f or a very small fraction.
-     * @param value any float
+     * @param value any float other than NaN or infinite values
      * @return a float from -1f (inclusive) to 1f (inclusive)
      */
     public static float sway(final float value)
@@ -264,6 +264,28 @@ public class NumberTools {
         final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
         final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
         return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
+    }
+
+    /**
+     * Limited-use; takes any float and produces a float in the 0f to 1f range, with a graph of input to output that
+     * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+     * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
+     * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
+     * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
+     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain not change
+     * its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
+     * will smooth its path. An input of any even number should produce something very close to 0f, any odd
+     * number should produce something very close to 1f, and any number halfway between two incremental integers (like
+     * 8.5f or -10.5f) should produce 0.5f. This version is called "Tight" because its range is tighter than
+     * {@link #sway(float)}.
+     * @param value any float other than NaN or infinite values
+     * @return a float from 0f (inclusive) to 1f (inclusive)
+     */
+    public static float swayTight(final float value)
+    {
+        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
+        return a * a * a * (a * (a * 6f - 15f) + 10f);
     }
 
     /**

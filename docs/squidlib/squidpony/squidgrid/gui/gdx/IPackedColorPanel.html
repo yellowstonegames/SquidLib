@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6};
+var methods = {"i0":6,"i1":6,"i2":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,6 +131,17 @@ extends <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/pan
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#blend-int-int-float-float-">blend</a></span>(int&nbsp;x,
+     int&nbsp;y,
+     float&nbsp;color,
+     float&nbsp;mixBy)</code>
+<div class="block">Using the existing color at the position x,y, this performs color blending from that existing color to the given
+ color (as a float), using the mixBy parameter to determine how much of the color parameter to use (1f will set
+ the color in this to the parameter, while 0f for mixBy will ignore the color parameter entirely).</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#put-int-int-char-float-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
    char&nbsp;c,
@@ -139,7 +150,7 @@ extends <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/pan
  the foreground characters, this will not affect it.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#put-int-int-float-">put</a></span>(int&nbsp;x,
    int&nbsp;y,
@@ -190,13 +201,35 @@ extends <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/pan
 </dl>
 </li>
 </ul>
+<a name="blend-int-int-float-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>blend</h4>
+<pre>void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.29">blend</a>(int&nbsp;x,
+           int&nbsp;y,
+           float&nbsp;color,
+           float&nbsp;mixBy)</pre>
+<div class="block">Using the existing color at the position x,y, this performs color blending from that existing color to the given
+ color (as a float), using the mixBy parameter to determine how much of the color parameter to use (1f will set
+ the color in this to the parameter, while 0f for mixBy will ignore the color parameter entirely).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - the x component of the position in this panel to draw the starting color from</dd>
+<dd><code>y</code> - the y component of the position in this panel to draw the starting color from</dd>
+<dd><code>color</code> - the new color to mix with the starting color; a packed float, as made by <code>Color.toFloatBits()</code></dd>
+<dd><code>mixBy</code> - the amount by which the new color will affect the old one, between 0 (no effect) and 1 (overwrite)</dd>
+</dl>
+</li>
+</ul>
 <a name="put-int-int-char-float-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>put</h4>
-<pre>void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.30">put</a>(int&nbsp;x,
+<pre>void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/IPackedColorPanel.html#line.41">put</a>(int&nbsp;x,
          int&nbsp;y,
          char&nbsp;c,
          float&nbsp;encodedColor)</pre>

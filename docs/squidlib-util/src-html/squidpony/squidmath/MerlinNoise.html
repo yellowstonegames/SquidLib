@@ -431,77 +431,75 @@
 <span class="sourceLineNo">423</span><a name="line.423"></a>
 <span class="sourceLineNo">424</span>    /**<a name="line.424"></a>
 <span class="sourceLineNo">425</span>     * Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.<a name="line.425"></a>
-<span class="sourceLineNo">426</span>     * Does allow taking a seed because internally it uses a ThunderRNG to quickly generate initial white noise before<a name="line.426"></a>
+<span class="sourceLineNo">426</span>     * Does allow taking a seed because internally it uses a ThrustRNG to quickly generate initial white noise before<a name="line.426"></a>
 <span class="sourceLineNo">427</span>     * processing it into more continuous noise. This generates a lot of random numbers (at least 1 + 14 * height, or<a name="line.427"></a>
-<span class="sourceLineNo">428</span>     * more if width is greater than 64), so ThunderRNG's high speed and presumed higher-than-2-to-the-64 period are<a name="line.428"></a>
-<span class="sourceLineNo">429</span>     * both assets here.<a name="line.429"></a>
-<span class="sourceLineNo">430</span>     * &lt;br&gt;<a name="line.430"></a>
-<span class="sourceLineNo">431</span>     * The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is<a name="line.431"></a>
-<span class="sourceLineNo">432</span>     * impossible for this to generate, it should be fine to use values from this as denominators in division.<a name="line.432"></a>
-<span class="sourceLineNo">433</span>     *<a name="line.433"></a>
-<span class="sourceLineNo">434</span>     * @param width  the width of the 2D int array to generate<a name="line.434"></a>
-<span class="sourceLineNo">435</span>     * @param height the height of the 2D int array to generate<a name="line.435"></a>
-<span class="sourceLineNo">436</span>     * @param seed   the RNG seed to use when pseudo-randomly generating the initial white noise this then processes<a name="line.436"></a>
-<span class="sourceLineNo">437</span>     * @return a 2D int array where each int should be between 1 and 255, inclusive<a name="line.437"></a>
-<span class="sourceLineNo">438</span>     */<a name="line.438"></a>
-<span class="sourceLineNo">439</span>    public static int[][] preCalcNoise2D(int width, int height, long seed) {<a name="line.439"></a>
-<span class="sourceLineNo">440</span>        ThunderRNG random = new ThunderRNG(seed);<a name="line.440"></a>
-<span class="sourceLineNo">441</span>        int w = (width &lt;&lt; 1) + 2, h = (height &lt;&lt; 1) + 2;<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        GreasedRegion[] regions = new GreasedRegion[]{<a name="line.442"></a>
+<span class="sourceLineNo">428</span>     * more if width is greater than 64), so ThrustRNG's high speed and fairly good period are both assets here.<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     * &lt;br&gt;<a name="line.429"></a>
+<span class="sourceLineNo">430</span>     * The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is<a name="line.430"></a>
+<span class="sourceLineNo">431</span>     * impossible for this to generate, it should be fine to use values from this as denominators in division.<a name="line.431"></a>
+<span class="sourceLineNo">432</span>     *<a name="line.432"></a>
+<span class="sourceLineNo">433</span>     * @param width  the width of the 2D int array to generate<a name="line.433"></a>
+<span class="sourceLineNo">434</span>     * @param height the height of the 2D int array to generate<a name="line.434"></a>
+<span class="sourceLineNo">435</span>     * @param seed   the RNG seed to use when pseudo-randomly generating the initial white noise this then processes<a name="line.435"></a>
+<span class="sourceLineNo">436</span>     * @return a 2D int array where each int should be between 1 and 255, inclusive<a name="line.436"></a>
+<span class="sourceLineNo">437</span>     */<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    public static int[][] preCalcNoise2D(int width, int height, long seed) {<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        ThrustRNG random = new ThrustRNG(seed);<a name="line.439"></a>
+<span class="sourceLineNo">440</span>        int w = (width &lt;&lt; 1) + 2, h = (height &lt;&lt; 1) + 2;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>        GreasedRegion[] regions = new GreasedRegion[]{<a name="line.441"></a>
+<span class="sourceLineNo">442</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.442"></a>
 <span class="sourceLineNo">443</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.443"></a>
 <span class="sourceLineNo">444</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.444"></a>
-<span class="sourceLineNo">445</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.445"></a>
-<span class="sourceLineNo">446</span>                new GreasedRegion(random, w, h).retract().expand(3)<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        };<a name="line.447"></a>
-<span class="sourceLineNo">448</span>        random.reseed(random.nextLong());<a name="line.448"></a>
-<span class="sourceLineNo">449</span>        int[][] data = GreasedRegion.bitSum(regions);<a name="line.449"></a>
-<span class="sourceLineNo">450</span><a name="line.450"></a>
-<span class="sourceLineNo">451</span>        regions = new GreasedRegion[]{<a name="line.451"></a>
+<span class="sourceLineNo">445</span>                new GreasedRegion(random, w, h).retract().expand(3)<a name="line.445"></a>
+<span class="sourceLineNo">446</span>        };<a name="line.446"></a>
+<span class="sourceLineNo">447</span>        int[][] data = GreasedRegion.bitSum(regions);<a name="line.447"></a>
+<span class="sourceLineNo">448</span><a name="line.448"></a>
+<span class="sourceLineNo">449</span>        regions = new GreasedRegion[]{<a name="line.449"></a>
+<span class="sourceLineNo">450</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.450"></a>
+<span class="sourceLineNo">451</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.451"></a>
 <span class="sourceLineNo">452</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.452"></a>
-<span class="sourceLineNo">453</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.453"></a>
-<span class="sourceLineNo">454</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.454"></a>
-<span class="sourceLineNo">455</span>                new GreasedRegion(random, w, h).retract().expand(3)<a name="line.455"></a>
-<span class="sourceLineNo">456</span>        };<a name="line.456"></a>
-<span class="sourceLineNo">457</span>        int[][] data2 = GreasedRegion.bitSum(regions), data3 = new int[width][height];<a name="line.457"></a>
-<span class="sourceLineNo">458</span>        for (int x = 0; x &lt; w; x++) {<a name="line.458"></a>
-<span class="sourceLineNo">459</span>            for (int y = 0; y &lt; h; y++) {<a name="line.459"></a>
-<span class="sourceLineNo">460</span>                data[x][y] += 128 - data2[x][y];<a name="line.460"></a>
-<span class="sourceLineNo">461</span>            }<a name="line.461"></a>
-<span class="sourceLineNo">462</span>        }<a name="line.462"></a>
-<span class="sourceLineNo">463</span>        for (int x = 0, dx = 1; x &lt; width; x++, dx += 2) {<a name="line.463"></a>
-<span class="sourceLineNo">464</span>            for (int y = 0, dy = 1; y &lt; height; y++, dy += 2) {<a name="line.464"></a>
-<span class="sourceLineNo">465</span>                data3[x][y] = ((data[dx][dy] &lt;&lt; 2) + data[dx - 1][dy] + data[dx + 1][dy] + data[dx][dy + 1] + data[dx][dy - 1]) &gt;&gt;&gt; 3;<a name="line.465"></a>
-<span class="sourceLineNo">466</span>            }<a name="line.466"></a>
-<span class="sourceLineNo">467</span>        }<a name="line.467"></a>
-<span class="sourceLineNo">468</span>        return data3;<a name="line.468"></a>
-<span class="sourceLineNo">469</span>        /*<a name="line.469"></a>
-<span class="sourceLineNo">470</span>        int[][] data = GreasedRegion.bitSum(regions);<a name="line.470"></a>
-<span class="sourceLineNo">471</span>        return GreasedRegion.selectiveNegate(data, new GreasedRegion(random, width, height), 0xff);<a name="line.471"></a>
-<span class="sourceLineNo">472</span>        */<a name="line.472"></a>
-<span class="sourceLineNo">473</span>    }<a name="line.473"></a>
-<span class="sourceLineNo">474</span><a name="line.474"></a>
-<span class="sourceLineNo">475</span><a name="line.475"></a>
-<span class="sourceLineNo">476</span>    /*<a name="line.476"></a>
-<span class="sourceLineNo">477</span>    public static int noise2D(int x, int y, double zoom) {<a name="line.477"></a>
-<span class="sourceLineNo">478</span>        final double alef = x / zoom, bet = y / zoom;<a name="line.478"></a>
-<span class="sourceLineNo">479</span>        final int alpha = (int) (alef), beta = (int) (bet),<a name="line.479"></a>
-<span class="sourceLineNo">480</span>                north = rawNoise2D(alpha, beta - 1), south = rawNoise2D(alpha, beta + 1),<a name="line.480"></a>
-<span class="sourceLineNo">481</span>                east = rawNoise2D(alpha + 1, beta), west = rawNoise2D(alpha - 1, beta),<a name="line.481"></a>
-<span class="sourceLineNo">482</span>                center = rawNoise2D(alpha, beta);<a name="line.482"></a>
-<span class="sourceLineNo">483</span>        final double aBias = (alef - alpha), bBias = (bet - beta);<a name="line.483"></a>
-<span class="sourceLineNo">484</span>        return (((aBias - 0.75) &lt; 0 ? west : center) * 3 + ((aBias + 0.75) &gt;= 1 ? east : center) * 3 +<a name="line.484"></a>
-<span class="sourceLineNo">485</span>                ((aBias - 0.25) &lt; 0 ? west : center) * 2 + ((aBias + 0.25) &gt;= 1 ? east : center) * 2 +<a name="line.485"></a>
-<span class="sourceLineNo">486</span>                ((bBias - 0.75) &lt; 0 ? north : center) * 3 + ((bBias + 0.75) &gt;= 1 ? south : center) * 3 +<a name="line.486"></a>
-<span class="sourceLineNo">487</span>                ((bBias - 0.25) &lt; 0 ? north : center) * 2 + ((bBias + 0.25) &gt;= 1 ? south : center) * 2<a name="line.487"></a>
-<span class="sourceLineNo">488</span>        ) / 20;<a name="line.488"></a>
-<span class="sourceLineNo">489</span>    }*/<a name="line.489"></a>
-<span class="sourceLineNo">490</span>                    /*+<a name="line.490"></a>
-<span class="sourceLineNo">491</span>                ((aBias - 0.5) &lt; 0 ? west : center) * 17 + ((aBias + 0.5) &gt;= 1 ? east : center) * 17 +<a name="line.491"></a>
-<span class="sourceLineNo">492</span>                ((aBias - 0.3) &lt; 0 ? west : center) * 15 + ((aBias + 0.3) &gt;= 1 ? east : center) * 15 +<a name="line.492"></a>
-<span class="sourceLineNo">493</span>                ((bBias - 0.5) &lt; 0 ? north : center) * 17 + ((bBias + 0.5) &gt;= 1 ? south : center) * 17 +<a name="line.493"></a>
-<span class="sourceLineNo">494</span>                ((bBias - 0.3) &lt; 0 ? north : center) * 15 + ((bBias + 0.3) &gt;= 1 ? south : center) * 15*/<a name="line.494"></a>
-<span class="sourceLineNo">495</span><a name="line.495"></a>
-<span class="sourceLineNo">496</span>}<a name="line.496"></a>
+<span class="sourceLineNo">453</span>                new GreasedRegion(random, w, h).retract().expand(3)<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        };<a name="line.454"></a>
+<span class="sourceLineNo">455</span>        int[][] data2 = GreasedRegion.bitSum(regions), data3 = new int[width][height];<a name="line.455"></a>
+<span class="sourceLineNo">456</span>        for (int x = 0; x &lt; w; x++) {<a name="line.456"></a>
+<span class="sourceLineNo">457</span>            for (int y = 0; y &lt; h; y++) {<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                data[x][y] += 128 - data2[x][y];<a name="line.458"></a>
+<span class="sourceLineNo">459</span>            }<a name="line.459"></a>
+<span class="sourceLineNo">460</span>        }<a name="line.460"></a>
+<span class="sourceLineNo">461</span>        for (int x = 0, dx = 1; x &lt; width; x++, dx += 2) {<a name="line.461"></a>
+<span class="sourceLineNo">462</span>            for (int y = 0, dy = 1; y &lt; height; y++, dy += 2) {<a name="line.462"></a>
+<span class="sourceLineNo">463</span>                data3[x][y] = ((data[dx][dy] &lt;&lt; 2) + data[dx - 1][dy] + data[dx + 1][dy] + data[dx][dy + 1] + data[dx][dy - 1]) &gt;&gt;&gt; 3;<a name="line.463"></a>
+<span class="sourceLineNo">464</span>            }<a name="line.464"></a>
+<span class="sourceLineNo">465</span>        }<a name="line.465"></a>
+<span class="sourceLineNo">466</span>        return data3;<a name="line.466"></a>
+<span class="sourceLineNo">467</span>        /*<a name="line.467"></a>
+<span class="sourceLineNo">468</span>        int[][] data = GreasedRegion.bitSum(regions);<a name="line.468"></a>
+<span class="sourceLineNo">469</span>        return GreasedRegion.selectiveNegate(data, new GreasedRegion(random, width, height), 0xff);<a name="line.469"></a>
+<span class="sourceLineNo">470</span>        */<a name="line.470"></a>
+<span class="sourceLineNo">471</span>    }<a name="line.471"></a>
+<span class="sourceLineNo">472</span><a name="line.472"></a>
+<span class="sourceLineNo">473</span><a name="line.473"></a>
+<span class="sourceLineNo">474</span>    /*<a name="line.474"></a>
+<span class="sourceLineNo">475</span>    public static int noise2D(int x, int y, double zoom) {<a name="line.475"></a>
+<span class="sourceLineNo">476</span>        final double alef = x / zoom, bet = y / zoom;<a name="line.476"></a>
+<span class="sourceLineNo">477</span>        final int alpha = (int) (alef), beta = (int) (bet),<a name="line.477"></a>
+<span class="sourceLineNo">478</span>                north = rawNoise2D(alpha, beta - 1), south = rawNoise2D(alpha, beta + 1),<a name="line.478"></a>
+<span class="sourceLineNo">479</span>                east = rawNoise2D(alpha + 1, beta), west = rawNoise2D(alpha - 1, beta),<a name="line.479"></a>
+<span class="sourceLineNo">480</span>                center = rawNoise2D(alpha, beta);<a name="line.480"></a>
+<span class="sourceLineNo">481</span>        final double aBias = (alef - alpha), bBias = (bet - beta);<a name="line.481"></a>
+<span class="sourceLineNo">482</span>        return (((aBias - 0.75) &lt; 0 ? west : center) * 3 + ((aBias + 0.75) &gt;= 1 ? east : center) * 3 +<a name="line.482"></a>
+<span class="sourceLineNo">483</span>                ((aBias - 0.25) &lt; 0 ? west : center) * 2 + ((aBias + 0.25) &gt;= 1 ? east : center) * 2 +<a name="line.483"></a>
+<span class="sourceLineNo">484</span>                ((bBias - 0.75) &lt; 0 ? north : center) * 3 + ((bBias + 0.75) &gt;= 1 ? south : center) * 3 +<a name="line.484"></a>
+<span class="sourceLineNo">485</span>                ((bBias - 0.25) &lt; 0 ? north : center) * 2 + ((bBias + 0.25) &gt;= 1 ? south : center) * 2<a name="line.485"></a>
+<span class="sourceLineNo">486</span>        ) / 20;<a name="line.486"></a>
+<span class="sourceLineNo">487</span>    }*/<a name="line.487"></a>
+<span class="sourceLineNo">488</span>                    /*+<a name="line.488"></a>
+<span class="sourceLineNo">489</span>                ((aBias - 0.5) &lt; 0 ? west : center) * 17 + ((aBias + 0.5) &gt;= 1 ? east : center) * 17 +<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                ((aBias - 0.3) &lt; 0 ? west : center) * 15 + ((aBias + 0.3) &gt;= 1 ? east : center) * 15 +<a name="line.490"></a>
+<span class="sourceLineNo">491</span>                ((bBias - 0.5) &lt; 0 ? north : center) * 17 + ((bBias + 0.5) &gt;= 1 ? south : center) * 17 +<a name="line.491"></a>
+<span class="sourceLineNo">492</span>                ((bBias - 0.3) &lt; 0 ? north : center) * 15 + ((bBias + 0.3) &gt;= 1 ? south : center) * 15*/<a name="line.492"></a>
+<span class="sourceLineNo">493</span><a name="line.493"></a>
+<span class="sourceLineNo">494</span>}<a name="line.494"></a>
 
 
 

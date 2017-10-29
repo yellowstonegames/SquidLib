@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
@@ -280,23 +281,11 @@ public abstract class PanelEffect extends TemporalAction{
                 target.put(c.x, c.y, color);
             }
         }
-    }
-    public static class GibberishEffect extends ExplosionEffect
-    {
         /**
-         * This char array contains all characters that can be used in the foreground of this effect. You can assign
-         * another char array, such as if you take {@link squidpony.StringKit#PUNCTUATION} and call
-         * {@link String#toCharArray()} on it, to this at any time between calls to {@link #update(float)} (which is
-         * usually called indirectly via Stage's {@link com.badlogic.gdx.scenes.scene2d.Stage#act()} method if this has
-         * been added to an Actor on that Stage). These chars are pseudo-randomly selected approximately once every
-         * eighth of a second, and may change sooner if the effect expands more quickly than that.
-         */
-        public char[] choices = "`~!@#$%^&*()-_=+\\|][}{'\";:/?.>,<".toCharArray();
-
-        /**
-         * Sets the colors this GibberishEffect uses to go from through various shades of gray-purple before fading.
+         * Sets the colors this ExplosionEffect uses to go from through various shades of gray-purple before fading.
          * Meant for electrical bursts, this will affect character foregrounds in a GibberishEffect. This should look
-         * like sparks in GibberishEffect if the chars in {@link #choices} are selected in a way that fits that theme.
+         * like sparks in GibberishEffect if the chars in {@link GibberishEffect#choices} are selected in a way that
+         * fits that theme.
          */
         public void useElectricColors()
         {
@@ -310,9 +299,9 @@ public abstract class PanelEffect extends TemporalAction{
         }
 
         /**
-         * Sets the colors this GibberishEffect uses to go from orange, to yellow, to orange, to dark gray, then fade.
+         * Sets the colors this ExplosionEffect uses to go from orange, to yellow, to orange, to dark gray, then fade.
          * Meant for fiery explosions with smoke, this will affect character foregrounds in a GibberishEffect.
-         * This may look more like a fiery blast if used with {@link ExplosionEffect}.
+         * This may look more like a fiery blast if used with an ExplosionEffect than a GibberishEffect.
          */
         public void useFieryColors()
         {
@@ -325,6 +314,20 @@ public abstract class PanelEffect extends TemporalAction{
             colors[6] = SColor.floatGet(0x59565299); // SColor.DB_SOOT
 
         }
+
+    }
+    public static class GibberishEffect extends ExplosionEffect
+    {
+        /**
+         * This char array contains all characters that can be used in the foreground of this effect. You can assign
+         * another char array, such as if you take {@link squidpony.StringKit#PUNCTUATION} and call
+         * {@link String#toCharArray()} on it, to this at any time between calls to {@link #update(float)} (which is
+         * usually called indirectly via Stage's {@link com.badlogic.gdx.scenes.scene2d.Stage#act()} method if this has
+         * been added to an Actor on that Stage). These chars are pseudo-randomly selected approximately once every
+         * eighth of a second, and may change sooner if the effect expands more quickly than that.
+         */
+        public char[] choices = "`~!@#$%^&*()-_=+\\|][}{'\";:/?.>,<".toCharArray();
+
         public GibberishEffect(IPackedColorPanel targeting, Coord center, int radius)
         {
             super(targeting, 1f, center, radius);
@@ -568,6 +571,66 @@ public abstract class PanelEffect extends TemporalAction{
 
     }
     @Beta
+    public static class PulseEffect extends ExplosionEffect
+    {
+        public PulseEffect(IPackedColorPanel targeting, Coord center, int radius) {
+            super(targeting, center, radius);
+        }
+
+        public PulseEffect(IPackedColorPanel targeting, float duration, Coord center, int radius) {
+            super(targeting, duration, center, radius);
+        }
+
+        public PulseEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius) {
+            super(targeting, duration, valid, center, radius);
+        }
+
+        public PulseEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, List<? extends Color> coloring) {
+            super(targeting, duration, valid, center, radius, coloring);
+        }
+
+        public PulseEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, float[] coloring) {
+            super(targeting, duration, valid, center, radius, coloring);
+        }
+
+        public PulseEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span) {
+            super(targeting, duration, valid, center, radius, angle, span);
+        }
+
+        public PulseEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span, List<? extends Color> coloring) {
+            super(targeting, duration, valid, center, radius, angle, span, coloring);
+        }
+
+        public PulseEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord center, int radius, double angle, double span, float[] coloring) {
+            super(targeting, duration, valid, center, radius, angle, span, coloring);
+        }
+        @Override
+        protected void update(float percent) {
+            int len = affected.size();
+            Coord c;
+            float f, light;
+            int seed = System.identityHashCode(this);
+            for (int i = 0; i < len; i++) {
+                c = affected.get(i);
+                if((light = (float) lightMap[c.x][c.y]) <= 0f)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
+                    continue;
+                f = (float)SeededNoise.noise(c.x * 1.5, c.y * 1.5, percent * 5, seed)
+                        * 0.498f + 0.4999f;
+                target.blend(c.x, c.y,
+                        SColor.lerpFloatColors(colors[(int) (f * colors.length)],
+                                colors[((int) (f * colors.length) + 1) % colors.length],
+                                (f * colors.length) % 1f), NumberTools.swayTight(percent * 2f) * light);
+            }
+        }
+        private static float fade(float color, float alphaMultiplier)
+        {
+            int bits = NumberTools.floatToIntBits(color);
+            return NumberTools.intBitsToFloat(bits & 0xFFFFFF
+                    | (MathUtils.clamp((int)((bits >>> 25) * alphaMultiplier), 0, 127) << 25));
+
+        }
+    }
+    @Beta
     public static class ProjectileEffect extends PanelEffect
     {
         /**
@@ -586,7 +649,7 @@ public abstract class PanelEffect extends TemporalAction{
         /**
          * The color used for the projectile as a packed float.
          */
-        public float color = Color.WHITE.toFloatBits();
+        public float color = SColor.FLOAT_WHITE;
         /**
          * The raw list of Coords that might be affected by the projectile, or are on its (potential) path. You can edit
          * this if you need to, but it isn't recommended; because it is an array you would need to assign a new Coord

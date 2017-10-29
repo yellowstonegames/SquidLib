@@ -340,7 +340,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>bestOf</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.159">bestOf</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.195">bestOf</a>(int&nbsp;n,
                   int&nbsp;dice,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</pre>
 <div class="block">Find the best n totals from the provided number of dice rolled according
@@ -361,7 +361,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>worstOf</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.179">worstOf</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.215">worstOf</a>(int&nbsp;n,
                    int&nbsp;dice,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;group)</pre>
 <div class="block">Find the worst n totals from the provided number of dice rolled according
@@ -382,7 +382,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rollDice</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.197">rollDice</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.233">rollDice</a>(int&nbsp;n,
                     int&nbsp;sides)</pre>
 <div class="block">Emulate a dice roll and return the sum.</div>
 <dl>
@@ -400,7 +400,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>rollExplodingDice</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.212">rollExplodingDice</a>(int&nbsp;n,
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.248">rollExplodingDice</a>(int&nbsp;n,
                              int&nbsp;sides)</pre>
 <div class="block">Emulate an exploding dice roll and return the sum.</div>
 <dl>
@@ -418,7 +418,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockList">
 <li class="blockList">
 <h4>independentRolls</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.230">independentRolls</a>(int&nbsp;n,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.266">independentRolls</a>(int&nbsp;n,
                                int&nbsp;sides)</pre>
 <div class="block">Get a list of the independent results of n rolls of dice with the given
  number of sides.</div>
@@ -437,7 +437,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>roll</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.281">roll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;rollCode)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Dice.html#line.325">roll</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;rollCode)</pre>
 <div class="block">Evaluate the String <code>rollCode</code> as dice roll notation and roll to get a random result of that dice roll.
  This is the main way of using the Dice class. This effectively allows rolling one or more dice and performing
  certain operations on the dice and their result. One of the more frequent uses is rolling some amount of dice and
@@ -445,8 +445,10 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
  You can choose to sum only some of the dice, either the "n highest" or "n lowest" values in a group, with "3>4d6"
  to sum the three greatest-value dice in four rolls of six-sided dice, or "2<3d8" to sum the two lowest-value dice
  in three rolls of eight-sided dice. You can apply modifiers to these results, such as "1d20+7" to roll one
- twenty-sided die and add 7 to its result. You can get a random value in an inclusive range with "50:100", which
- is technically equivalent to "1d51+49" but is easier to read and understand. You can treat dice as "exploding,"
+ twenty-sided die and add 7 to its result. These modifiers can be other dice, such as "1d10-1d6", and while
+ multiplication and division are supported, order of operations isn't, so it just rolls dice from left to right
+ and applies operators it find along the way. You can get a random value in an inclusive range with "50:100",
+ which is equivalent to "1d51+49" but is easier to read and understand. You can treat dice as "exploding,"
  where any dice that get the maximum result are rolled again and added to the total along with the previous
  maximum result. As an example, if two exploding six-sided dice are rolled, and their results are 3 and 6, then
  because 6 is the maximum value it is rolled again and added to the earlier rolls; if the additional roll is a 5,
@@ -454,23 +456,29 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
  and added again, potentially many times if 6 is rolled continually. Some players may be familiar with this game
  mechanic from various tabletop games, but many potential players might not be, so it should be explained if you
  show the kinds of dice being rolled to players. The syntax used for exploding dice replaced the "d" in "3d6" for
- normal dice with "!", making "3!6" for exploding dice. Exploding dice and inclusive ranges are not supported with
- best-of and worst-of notation.
+ normal dice with "!", making "3!6" for exploding dice. Inclusive ranges are not supported with best-of and
+ worst-of notation, but exploding dice are. If using a range, the upper bound can be random, decided by dice rolls
+ such as with "1:6d6" (which rolls six 6-sided dice and uses that as the upper bound of the range) or by other
+ ranges such as with "10:100:200", which gets a random number between 100 and 200, then returns a random number
+ between 10 and that. While it is technically allowed to end a dice string with an operator, the partial
+ operator will be ignored. If you start a dice string with an operator, its left-hand-side will always be 0. If
+ you have two operators in a row, only the last will be used, unless one is '-' and can be treated as part of a
+ negative number (this allows "1d20 * -3" to work). Whitespace is allowed between most parts of a dice string.
  <br>
  The following notation is supported:
  <ul>
-     <li><code>42</code> : simple absolute string</li>
+     <li><code>42</code> : simple absolute string; can start with <code>-</code> to make it negative</li>
      <li><code>3d6</code> : sum of 3 6-sided dice</li>
      <li><code>d6</code> : synonym for <code>1d6</code></li>
      <li><code>3&gt;4d6</code> : best 3 of 4 6-sided dice</li>
-     <li><code>3:4d6</code> : synonym for <code>3&gt;4d6</code>; older syntax</li>
+     <li><code>3:4d6</code> : gets a random value between 3 and a roll of <code>4d6</code>; this syntax has changed</li>
      <li><code>2&lt;5d6</code> : worst 2 of 5 6-sided dice</li>
      <li><code>10:20</code> : simple random range (inclusive between 10 and 20)</li>
      <li><code>:20</code> : synonym for <code>0:20</code></li>
      <li><code>3!6</code> : sum of 3 "exploding" 6-sided dice; see above for the semantics of "exploding" dice</li>
      <li><code>!6</code> : synonym for <code>1!6</code></li>
  </ul>
- The following types of suffixes are supported:
+ The following types of operators are supported:
  <ul>
      <li><code>+4</code> : add 4 to the value</li>
      <li><code>-3</code> : subtract 3 from the value</li>
@@ -479,9 +487,9 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
  </ul></div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>rollCode</code> - string using dice roll notation</dd>
+<dd><code>rollCode</code> - dice string using the above notation</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>random number</dd>
+<dd>a random number that is possible with the given dice string</dd>
 </dl>
 </li>
 </ul>

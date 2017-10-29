@@ -9,45 +9,118 @@
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.gui.gdx;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import com.badlogic.gdx.graphics.Color;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import com.badlogic.gdx.math.MathUtils;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import squidpony.panel.IMarkup;<a name="line.5"></a>
-<span class="sourceLineNo">006</span><a name="line.6"></a>
-<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
-<span class="sourceLineNo">008</span> * GDXMarkup implements IMarkup for libGDX Color objects, and can start blocks of markup that libGDX understands that<a name="line.8"></a>
-<span class="sourceLineNo">009</span> * display text in a given Color. Typically, this class needs only to be instantiated and passed to a class that uses<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * IMarkup of Color, and then anything else will be handled internally as Colors are given to the using class.<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * Created by Tommy Ettinger on 1/23/2016.<a name="line.11"></a>
-<span class="sourceLineNo">012</span> */<a name="line.12"></a>
-<span class="sourceLineNo">013</span>public class GDXMarkup implements IMarkup&lt;Color&gt;{<a name="line.13"></a>
-<span class="sourceLineNo">014</span>    public static GDXMarkup instance = new GDXMarkup();<a name="line.14"></a>
-<span class="sourceLineNo">015</span>    public GDXMarkup()<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    {<a name="line.16"></a>
-<span class="sourceLineNo">017</span><a name="line.17"></a>
-<span class="sourceLineNo">018</span>    }<a name="line.18"></a>
-<span class="sourceLineNo">019</span>    private static String floatToHex(float f)<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    {<a name="line.20"></a>
-<span class="sourceLineNo">021</span>        String s = Integer.toHexString(MathUtils.round(f * 255));<a name="line.21"></a>
-<span class="sourceLineNo">022</span>        if(s.length() &lt; 2) return "0" + s;<a name="line.22"></a>
-<span class="sourceLineNo">023</span>        else return s;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    }<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    @Override<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    public String getMarkup(Color value) {<a name="line.26"></a>
-<span class="sourceLineNo">027</span>        return "[#" + floatToHex(value.r) + floatToHex(value.g) + floatToHex(value.b) + floatToHex(value.a) + "]";<a name="line.27"></a>
-<span class="sourceLineNo">028</span>    }<a name="line.28"></a>
-<span class="sourceLineNo">029</span><a name="line.29"></a>
-<span class="sourceLineNo">030</span>    @Override<a name="line.30"></a>
-<span class="sourceLineNo">031</span>    public String closeMarkup() {<a name="line.31"></a>
-<span class="sourceLineNo">032</span>        return "[]";<a name="line.32"></a>
-<span class="sourceLineNo">033</span>    }<a name="line.33"></a>
-<span class="sourceLineNo">034</span><a name="line.34"></a>
-<span class="sourceLineNo">035</span>    /*<a name="line.35"></a>
-<span class="sourceLineNo">036</span>    @Override<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    public String escape(String initialText)<a name="line.37"></a>
-<span class="sourceLineNo">038</span>    {<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        return initialText.replace("[", "[[");<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    }<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    */<a name="line.41"></a>
-<span class="sourceLineNo">042</span>}<a name="line.42"></a>
+<span class="sourceLineNo">004</span>import com.badlogic.gdx.graphics.Colors;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import com.badlogic.gdx.math.MathUtils;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import regexodus.Matcher;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import regexodus.Pattern;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import squidpony.StringKit;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import squidpony.panel.IColoredString;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import squidpony.panel.IMarkup;<a name="line.10"></a>
+<span class="sourceLineNo">011</span><a name="line.11"></a>
+<span class="sourceLineNo">012</span>/**<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * GDXMarkup implements IMarkup for libGDX Color objects, and can start blocks of markup that libGDX understands that<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * display text in a given Color. Typically, the singleton {@link #instance} would be passed to a class that uses<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * IMarkup of Color, and then anything else will be handled internally as Colors are given to the using class. This does<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * extend GDX's markup to handle bold and italic options for text; this only works if you are using a {@link TextFamily}<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * as your {@link TextCellFactory}, such as {@link DefaultResources#getSlabFamily()}, and only if you use<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * {@link #colorString(CharSequence)} to generate a value that can be drawn later.<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * &lt;br&gt;<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * The notation for colors is the same as in the rest of libGDX, but if you make an IColoredString with colorString(),<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * it doesn't need any flag to be changed on your BitmapFont (like it does for GDX markup normally). This notation looks<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * like {@code [#FF00FF]Magenta text here[]}, which starts a tag for a hex color, uses the hex value for bright magenta,<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * then contains the text "Magenta text here" which will be shown in bright magenta, followed by "[]" to change the<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * color (and style, see next) back to the default white (and normal style). You can also use the names of colors, as<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * defined in the documentation for every {@link SColor}, and some libGDX Color values as well; this looks like<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * {@code [Inside Of A Bottle]Gray text[]} to produce the words "Gray text" with the color<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * {@link SColor#INSIDE_OF_A_BOTTLE} (note that the docs for that SColor say what the precise name is, and case needs to<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * match; you can also look up the {@link SColor#name} field). You can use {@code [[} to escape an opening bracket, and<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * {@code []} to reset formatting. As an addition to GDX color markup, if using a TextFamily you can toggle the font<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * style as bold with {@code [*]} and as italic with {@code [/]}. If bold is on when this encounters another bold tag,<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * it will turn bold off; the same is true for italic. These formatting styles can overlap and do not need to be nested<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * as in HTML; this notation is valid: {@code [*]bold, [/]bold and italic, [*] just italic,[] plain}.<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * &lt;br&gt;<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * Created by Tommy Ettinger on 1/23/2016.<a name="line.34"></a>
+<span class="sourceLineNo">035</span> */<a name="line.35"></a>
+<span class="sourceLineNo">036</span>public class GDXMarkup implements IMarkup&lt;Color&gt;{<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    public static GDXMarkup instance = new GDXMarkup();<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    public GDXMarkup()<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    {<a name="line.39"></a>
+<span class="sourceLineNo">040</span><a name="line.40"></a>
+<span class="sourceLineNo">041</span>    }<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    private static String floatToHex(float f)<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    {<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        String s = Integer.toHexString(MathUtils.round(f * 255));<a name="line.44"></a>
+<span class="sourceLineNo">045</span>        if(s.length() &lt; 2) return "0" + s;<a name="line.45"></a>
+<span class="sourceLineNo">046</span>        else return s;<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    }<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    @Override<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    public String getMarkup(Color value) {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        return "[#" + floatToHex(value.r) + floatToHex(value.g) + floatToHex(value.b) + floatToHex(value.a) + "]";<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>    @Override<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    public String closeMarkup() {<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        return "[]";<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    }<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>    private final Matcher markupMatcher = Pattern.compile("({=p}[^\\[]+)|(?:\\[({=e}\\[))|(?:\\[#({=h}[0-9A-Fa-f]{6,8})\\])|(?:\\[({=b}\\*)\\])|(?:\\[({=i}/)\\])|(?:\\[({=n}[^\\]]+?)\\])|(?:\\[({=r}\\]))").matcher();<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    private static final char BOLD = '\u4000', ITALIC = '\u8000', REGULAR = '\0';<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    private final StringBuilder sb = new StringBuilder(128);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    public IColoredString&lt;Color&gt; colorString(final CharSequence markupString)<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        markupMatcher.setTarget(markupString);<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        IColoredString&lt;Color&gt; cs = new IColoredString.Impl&lt;&gt;();<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        Color current = Color.WHITE;<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        char mod = REGULAR;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        String m;<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        while (markupMatcher.find())<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        {<a name="line.69"></a>
+<span class="sourceLineNo">070</span>            if(markupMatcher.getGroup("p", sb))<a name="line.70"></a>
+<span class="sourceLineNo">071</span>            {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>                for (int i = 0; i &lt; sb.length(); i++) {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>                    sb.setCharAt(i, (char)(sb.charAt(i) | mod));<a name="line.73"></a>
+<span class="sourceLineNo">074</span>                }<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                cs.append(sb.toString(), current);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>            }<a name="line.76"></a>
+<span class="sourceLineNo">077</span>            else if(markupMatcher.getGroup("e", sb))<a name="line.77"></a>
+<span class="sourceLineNo">078</span>            {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>                cs.append('[', current);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>            }<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            else if(markupMatcher.getGroup("r", sb))<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            {<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                current = Color.WHITE;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                mod = REGULAR;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            }<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            else if(markupMatcher.getGroup("h", sb))<a name="line.86"></a>
+<span class="sourceLineNo">087</span>            {<a name="line.87"></a>
+<span class="sourceLineNo">088</span>                current.set(StringKit.intFromHex(sb));<a name="line.88"></a>
+<span class="sourceLineNo">089</span>            }<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            else if(markupMatcher.getGroup("n", sb))<a name="line.90"></a>
+<span class="sourceLineNo">091</span>            {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                current = Colors.get(sb.toString());<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            }<a name="line.93"></a>
+<span class="sourceLineNo">094</span>            else if(markupMatcher.getGroup("b", sb))<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                mod ^= BOLD;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            }<a name="line.97"></a>
+<span class="sourceLineNo">098</span>            else if(markupMatcher.getGroup("i", sb))<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            {<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                mod ^= ITALIC;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            }<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            sb.setLength(0);<a name="line.102"></a>
+<span class="sourceLineNo">103</span><a name="line.103"></a>
+<span class="sourceLineNo">104</span>        }<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        return cs;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>    /*<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    @Override<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    public String escape(String initialText)<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    {<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        return initialText.replace("[", "[[");<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    }<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    */<a name="line.114"></a>
+<span class="sourceLineNo">115</span>}<a name="line.115"></a>
 
 
 

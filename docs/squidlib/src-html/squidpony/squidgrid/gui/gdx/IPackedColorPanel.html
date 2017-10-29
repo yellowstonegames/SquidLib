@@ -26,17 +26,28 @@
 <span class="sourceLineNo">018</span>    void put(int x, int y, float color);<a name="line.18"></a>
 <span class="sourceLineNo">019</span><a name="line.19"></a>
 <span class="sourceLineNo">020</span>    /**<a name="line.20"></a>
-<span class="sourceLineNo">021</span>     * Places a char in the given color at the given x,y position; if the implementation has a separate background from<a name="line.21"></a>
-<span class="sourceLineNo">022</span>     * the foreground characters, this will not affect it. The color is given as a packed float, the kind produced by<a name="line.22"></a>
-<span class="sourceLineNo">023</span>     * {@link Color#toFloatBits()}. If the implementation performs color filtering on Color objects, it generally won't<a name="line.23"></a>
-<span class="sourceLineNo">024</span>     * on packed float colors.<a name="line.24"></a>
-<span class="sourceLineNo">025</span>     * @param x x position of the char<a name="line.25"></a>
-<span class="sourceLineNo">026</span>     * @param y y position of the char<a name="line.26"></a>
-<span class="sourceLineNo">027</span>     * @param c the char to put at the given cell<a name="line.27"></a>
-<span class="sourceLineNo">028</span>     * @param encodedColor the color for the char as a packed float, as made by {@link Color#toFloatBits()}<a name="line.28"></a>
-<span class="sourceLineNo">029</span>     */<a name="line.29"></a>
-<span class="sourceLineNo">030</span>    void put(int x, int y, char c, float encodedColor);<a name="line.30"></a>
-<span class="sourceLineNo">031</span>}<a name="line.31"></a>
+<span class="sourceLineNo">021</span>     * Using the existing color at the position x,y, this performs color blending from that existing color to the given<a name="line.21"></a>
+<span class="sourceLineNo">022</span>     * color (as a float), using the mixBy parameter to determine how much of the color parameter to use (1f will set<a name="line.22"></a>
+<span class="sourceLineNo">023</span>     * the color in this to the parameter, while 0f for mixBy will ignore the color parameter entirely).<a name="line.23"></a>
+<span class="sourceLineNo">024</span>     * @param x the x component of the position in this panel to draw the starting color from<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     * @param y the y component of the position in this panel to draw the starting color from<a name="line.25"></a>
+<span class="sourceLineNo">026</span>     * @param color the new color to mix with the starting color; a packed float, as made by {@link Color#toFloatBits()}<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     * @param mixBy the amount by which the new color will affect the old one, between 0 (no effect) and 1 (overwrite)<a name="line.27"></a>
+<span class="sourceLineNo">028</span>     */<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    void blend(int x, int y, float color, float mixBy);<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>    /**<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * Places a char in the given color at the given x,y position; if the implementation has a separate background from<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     * the foreground characters, this will not affect it. The color is given as a packed float, the kind produced by<a name="line.33"></a>
+<span class="sourceLineNo">034</span>     * {@link Color#toFloatBits()}. If the implementation performs color filtering on Color objects, it generally won't<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     * on packed float colors.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * @param x x position of the char<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * @param y y position of the char<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * @param c the char to put at the given cell<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * @param encodedColor the color for the char as a packed float, as made by {@link Color#toFloatBits()}<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     */<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    void put(int x, int y, char c, float encodedColor);<a name="line.41"></a>
+<span class="sourceLineNo">042</span>}<a name="line.42"></a>
 
 
 

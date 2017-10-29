@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -112,12 +112,30 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.13">GDXMarkup</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.36">GDXMarkup</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/IMarkup.html?is-external=true" title="class or interface in squidpony.panel">IMarkup</a>&lt;com.badlogic.gdx.graphics.Color&gt;</pre>
 <div class="block">GDXMarkup implements IMarkup for libGDX Color objects, and can start blocks of markup that libGDX understands that
- display text in a given Color. Typically, this class needs only to be instantiated and passed to a class that uses
- IMarkup of Color, and then anything else will be handled internally as Colors are given to the using class.
+ display text in a given Color. Typically, the singleton <a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html#instance"><code>instance</code></a> would be passed to a class that uses
+ IMarkup of Color, and then anything else will be handled internally as Colors are given to the using class. This does
+ extend GDX's markup to handle bold and italic options for text; this only works if you are using a <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextFamily</code></a>
+ as your <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextCellFactory</code></a>, such as <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getSlabFamily--"><code>DefaultResources.getSlabFamily()</code></a>, and only if you use
+ <a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html#colorString-java.lang.CharSequence-"><code>colorString(CharSequence)</code></a> to generate a value that can be drawn later.
+ <br>
+ The notation for colors is the same as in the rest of libGDX, but if you make an IColoredString with colorString(),
+ it doesn't need any flag to be changed on your BitmapFont (like it does for GDX markup normally). This notation looks
+ like <code>[#FF00FF]Magenta text here[]</code>, which starts a tag for a hex color, uses the hex value for bright magenta,
+ then contains the text "Magenta text here" which will be shown in bright magenta, followed by "[]" to change the
+ color (and style, see next) back to the default white (and normal style). You can also use the names of colors, as
+ defined in the documentation for every <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx"><code>SColor</code></a>, and some libGDX Color values as well; this looks like
+ <code>[Inside Of A Bottle]Gray text[]</code> to produce the words "Gray text" with the color
+ <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#INSIDE_OF_A_BOTTLE"><code>SColor.INSIDE_OF_A_BOTTLE</code></a> (note that the docs for that SColor say what the precise name is, and case needs to
+ match; you can also look up the <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#name"><code>SColor.name</code></a> field). You can use <code>[[</code> to escape an opening bracket, and
+ <code>[]</code> to reset formatting. As an addition to GDX color markup, if using a TextFamily you can toggle the font
+ style as bold with <code>[*]</code> and as italic with <code>[/]</code>. If bold is on when this encounters another bold tag,
+ it will turn bold off; the same is true for italic. These formatting styles can overlap and do not need to be nested
+ as in HTML; this notation is valid: <code>[*]bold, [/]bold and italic, [*] just italic,[] plain</code>.
+ <br>
  Created by Tommy Ettinger on 1/23/2016.</div>
 </li>
 </ul>
@@ -193,6 +211,10 @@ implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html#closeMarkup--">closeMarkup</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel">IColoredString</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html#colorString-java.lang.CharSequence-">colorString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;markupString)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html#getMarkup-com.badlogic.gdx.graphics.Color-">getMarkup</a></span>(com.badlogic.gdx.graphics.Color&nbsp;value)</code>&nbsp;</td>
 </tr>
@@ -224,7 +246,7 @@ implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/
 <ul class="blockListLast">
 <li class="blockList">
 <h4>instance</h4>
-<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html" title="class in squidpony.squidgrid.gui.gdx">GDXMarkup</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.14">instance</a></pre>
+<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html" title="class in squidpony.squidgrid.gui.gdx">GDXMarkup</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.37">instance</a></pre>
 </li>
 </ul>
 </li>
@@ -241,7 +263,7 @@ implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GDXMarkup</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.15">GDXMarkup</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.38">GDXMarkup</a>()</pre>
 </li>
 </ul>
 </li>
@@ -258,7 +280,7 @@ implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/
 <ul class="blockList">
 <li class="blockList">
 <h4>getMarkup</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.26">getMarkup</a>(com.badlogic.gdx.graphics.Color&nbsp;value)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.49">getMarkup</a>(com.badlogic.gdx.graphics.Color&nbsp;value)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/IMarkup.html?is-external=true#getMarkup-T-" title="class or interface in squidpony.panel">getMarkup</a></code>&nbsp;in interface&nbsp;<code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/IMarkup.html?is-external=true" title="class or interface in squidpony.panel">IMarkup</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
@@ -268,14 +290,23 @@ implements <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/
 <a name="closeMarkup--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>closeMarkup</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.31">closeMarkup</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.54">closeMarkup</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/IMarkup.html?is-external=true#closeMarkup--" title="class or interface in squidpony.panel">closeMarkup</a></code>&nbsp;in interface&nbsp;<code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/IMarkup.html?is-external=true" title="class or interface in squidpony.panel">IMarkup</a>&lt;com.badlogic.gdx.graphics.Color&gt;</code></dd>
 </dl>
+</li>
+</ul>
+<a name="colorString-java.lang.CharSequence-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>colorString</h4>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel">IColoredString</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/GDXMarkup.html#line.61">colorString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;markupString)</pre>
 </li>
 </ul>
 </li>

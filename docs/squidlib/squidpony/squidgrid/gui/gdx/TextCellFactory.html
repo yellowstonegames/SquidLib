@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10,"i50":10,"i51":10,"i52":10,"i53":10,"i54":10,"i55":10,"i56":10,"i57":10,"i58":10,"i59":10,"i60":10,"i61":10,"i62":10,"i63":10,"i64":10,"i65":10,"i66":10,"i67":10,"i68":10,"i69":10,"i70":10,"i71":10,"i72":10,"i73":10,"i74":10,"i75":10,"i76":10,"i77":10,"i78":10,"i79":10,"i80":10,"i81":10,"i82":10,"i83":10,"i84":10,"i85":10,"i86":10,"i87":10,"i88":10,"i89":10,"i90":10,"i91":10,"i92":10,"i93":10,"i94":10,"i95":10,"i96":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,6 +109,10 @@ var activeTableTab = "activeTableTab";
 <dl>
 <dt>All Implemented Interfaces:</dt>
 <dd>com.badlogic.gdx.utils.Disposable</dd>
+</dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a></dd>
 </dl>
 <hr>
 <br>
@@ -240,22 +244,38 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#height">height</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initialized">initialized</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initializedByFont">initializedByFont</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initializedBySize">initializedBySize</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#leftPadding">leftPadding</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#LINE_FITTING">LINE_FITTING</a></span></code>
 <div class="block">The commonly used symbols in roguelike games.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#lineHeight">lineHeight</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#msdf">msdf</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#mut">mut</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
@@ -280,14 +300,18 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#style">style</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#swap">swap</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#topPadding">topPadding</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width">width</a></span></code>&nbsp;</td>
 </tr>
@@ -990,42 +1014,49 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 </td>
 </tr>
 <tr id="i89" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setStyle-int-">setStyle</a></span>(int&nbsp;style)</code>
+<div class="block">Not implemented in this class; in subclasses that do, this should change the currently-used font style, such as
+ from regular to italic or bold.</div>
+</td>
+</tr>
+<tr id="i90" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#topPadding--">topPadding</a></span>()</code>
 <div class="block">Returns the padding on the top side.</div>
 </td>
 </tr>
-<tr id="i90" class="altColor">
+<tr id="i91" class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#topPadding-int-">topPadding</a></span>(int&nbsp;padding)</code>
 <div class="block">Sets the amount of padding on the top side to the provided value.</div>
 </td>
 </tr>
-<tr id="i91" class="rowColor">
+<tr id="i92" class="altColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakHeight-float-">tweakHeight</a></span>(float&nbsp;height)</code>
 <div class="block">Sets the factory's height used for text to the provided value, but does not change the size of a cell.</div>
 </td>
 </tr>
-<tr id="i92" class="altColor">
+<tr id="i93" class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakWidth-float-">tweakWidth</a></span>(float&nbsp;width)</code>
 <div class="block">Sets the factory's height used for text to the provided value, but does not change the size of a cell.</div>
 </td>
 </tr>
-<tr id="i93" class="rowColor">
+<tr id="i94" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width--">width</a></span>()</code>
 <div class="block">Returns the width of a single cell.</div>
 </td>
 </tr>
-<tr id="i94" class="altColor">
+<tr id="i95" class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width-float-">width</a></span>(float&nbsp;width)</code>
 <div class="block">Sets the factory's cell width to the provided value.</div>
 </td>
 </tr>
-<tr id="i95" class="rowColor">
+<tr id="i96" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#willFit-int-">willFit</a></span>(int&nbsp;codepoint)</code>
 <div class="block">Returns true if the given character will fit inside the current cell
@@ -1242,6 +1273,33 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <pre>protected&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.72">distanceFieldScaleY</a></pre>
 </li>
 </ul>
+<a name="initialized">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>initialized</h4>
+<pre>protected&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.73">initialized</a></pre>
+</li>
+</ul>
+<a name="initializedByFont">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>initializedByFont</h4>
+<pre>protected&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.73">initializedByFont</a></pre>
+</li>
+</ul>
+<a name="initializedBySize">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>initializedBySize</h4>
+<pre>protected&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.73">initializedBySize</a></pre>
+</li>
+</ul>
 <a name="distanceField">
 <!--   -->
 </a>
@@ -1296,6 +1354,15 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <pre>protected&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.78">lineHeight</a></pre>
 </li>
 </ul>
+<a name="style">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>style</h4>
+<pre>protected&nbsp;com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.79">style</a></pre>
+</li>
+</ul>
 <a name="swap">
 <!--   -->
 </a>
@@ -1317,10 +1384,19 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <a name="glyphTextures">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>glyphTextures</h4>
 <pre>protected&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,com.badlogic.gdx.graphics.g2d.TextureRegion&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.82">glyphTextures</a></pre>
+</li>
+</ul>
+<a name="mut">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>mut</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.84">mut</a></pre>
 </li>
 </ul>
 </li>
@@ -2216,7 +2292,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1010">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1009">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                  float&nbsp;x,
                  float&nbsp;y)</pre>
@@ -2238,7 +2314,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1035">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1034">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                  float&nbsp;r,
                  float&nbsp;g,
@@ -2268,7 +2344,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1064">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1063">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                  com.badlogic.gdx.graphics.Color&nbsp;color,
                  float&nbsp;x,
@@ -2292,7 +2368,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1095">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1094">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                  float&nbsp;encodedColor,
                  float&nbsp;x,
@@ -2319,7 +2395,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1126">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1125">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                  float&nbsp;x,
                  float&nbsp;y,
@@ -2345,7 +2421,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1153">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1152">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                  float&nbsp;r,
                  float&nbsp;g,
@@ -2379,7 +2455,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1184">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1183">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                  com.badlogic.gdx.graphics.Color&nbsp;color,
                  float&nbsp;x,
@@ -2407,7 +2483,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1215">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1214">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                  float&nbsp;encodedColor,
                  float&nbsp;x,
@@ -2435,7 +2511,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1233">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1232">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  float[][]&nbsp;encodedColors,
                  float&nbsp;x,
                  float&nbsp;y)</pre>
@@ -2447,7 +2523,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeWrappingString</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.ui.Label&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1255">makeWrappingString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.ui.Label&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1254">makeWrappingString</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
 <div class="block">Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
  for preparing glyphs for animation effects.</div>
 <dl>
@@ -2464,7 +2540,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1276">makeActor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1275">makeActor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
                                                        com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Converts a String into a Label, or if the argument s is null, creates an Image of a solid block. Can be used
  for preparing glyphs for animation effects, and is used internally for this purpose.</div>
@@ -2483,7 +2559,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1315">makeActor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1314">makeActor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors)</pre>
 <div class="block">Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
  block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
@@ -2505,7 +2581,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1329">makeActor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1328">makeActor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                                        float&nbsp;loopTime)</pre>
 <div class="block">Converts a String into a ColorChangeLabel, or if the argument s is null, creates a ColorChangeImage of a solid
@@ -2529,7 +2605,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1344">makeActor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1343">makeActor</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                                        float&nbsp;loopTime,
                                                        boolean&nbsp;doubleWidth)</pre>
@@ -2554,7 +2630,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1384">makeActor</a>(char&nbsp;c,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1383">makeActor</a>(char&nbsp;c,
                                                        com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Converts a char into a Label, or if the argument c is '\0', creates an Image of a solid block. Can be used
  for preparing glyphs for animation effects, and is used internally for this purpose.</div>
@@ -2573,7 +2649,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1416">makeActor</a>(char&nbsp;c,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1415">makeActor</a>(char&nbsp;c,
                                                        float&nbsp;encodedColor)</pre>
 <div class="block">Converts a char into a Label, or if the argument c is '\0', creates an Image of a solid block. Can be used
  for preparing glyphs for animation effects, and is used internally for this purpose. Instead of a libGDX Color
@@ -2595,7 +2671,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1448">makeActor</a>(char&nbsp;c,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1447">makeActor</a>(char&nbsp;c,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors)</pre>
 <div class="block">Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid
  block. Can be used for preparing glyphs for animation effects, and is used internally for this purpose. The
@@ -2617,7 +2693,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1462">makeActor</a>(char&nbsp;c,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1461">makeActor</a>(char&nbsp;c,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                                        float&nbsp;loopTime)</pre>
 <div class="block">Converts a char into a ColorChangeLabel, or if the argument c is '\0', creates a ColorChangeImage of a solid
@@ -2641,7 +2717,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1477">makeActor</a>(char&nbsp;c,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1476">makeActor</a>(char&nbsp;c,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                                        float&nbsp;loopTime,
                                                        boolean&nbsp;doubleWidth)</pre>
@@ -2666,7 +2742,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1503">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1502">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors)</pre>
 </li>
 </ul>
@@ -2676,7 +2752,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1507">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1506">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                                        float&nbsp;loopTime)</pre>
 </li>
@@ -2687,7 +2763,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1521">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1520">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                                        float&nbsp;loopTime,
                                                        boolean&nbsp;doubleWidth)</pre>
@@ -2711,7 +2787,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1536">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1535">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                                        float&nbsp;loopTime,
                                                        boolean&nbsp;doubleWidth,
@@ -2737,7 +2813,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeDirectionMarker</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.ui.Image&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1569">makeDirectionMarker</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.ui.Image&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1568">makeDirectionMarker</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                                                     float&nbsp;loopTime,
                                                                     boolean&nbsp;doubleWidth)</pre>
 <div class="block">Creates a ColorChangeImage Actor that should look like the glyph '^' in this font, but will be rotate-able. The
@@ -2759,7 +2835,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeDirectionMarker</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.ui.Image&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1591">makeDirectionMarker</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.ui.Image&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1590">makeDirectionMarker</a>(com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Creates a Image Actor that should look like the glyph '^' in this font, but will be rotate-able.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -2775,7 +2851,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeGlyphImage</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1602">makeGlyphImage</a>(char&nbsp;glyph,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1601">makeGlyphImage</a>(char&nbsp;glyph,
                                        com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 </li>
 </ul>
@@ -2785,7 +2861,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeGlyphImage</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1606">makeGlyphImage</a>(char&nbsp;glyph,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1605">makeGlyphImage</a>(char&nbsp;glyph,
                                        com.badlogic.gdx.graphics.Color&nbsp;color,
                                        boolean&nbsp;doubleWidth)</pre>
 </li>
@@ -2796,7 +2872,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeGlyphImage</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1629">makeGlyphImage</a>(char&nbsp;glyph,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ColorChangeImage.html" title="class in squidpony.squidgrid.gui.gdx">ColorChangeImage</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1628">makeGlyphImage</a>(char&nbsp;glyph,
                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colors,
                                        float&nbsp;loopTime,
                                        boolean&nbsp;doubleWidth)</pre>
@@ -2808,7 +2884,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1665">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1664">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                                                        com.badlogic.gdx.graphics.Color&nbsp;color)</pre>
 <div class="block">Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block. Can be
  used for preparing images for animation effects. Stretches the TextureRegion to match a single cell's dimensions.</div>
@@ -2827,7 +2903,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1691">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1690">makeActor</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;tr,
                                                        com.badlogic.gdx.graphics.Color&nbsp;color,
                                                        float&nbsp;width,
                                                        float&nbsp;height)</pre>
@@ -2848,7 +2924,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getSolid</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Texture&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1715">getSolid</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Texture&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1714">getSolid</a>()</pre>
 <div class="block">Returns a solid block of white, 1x1 pixel in size; can be drawn at other sizes by Batch.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -2862,7 +2938,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>glyph</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1732">glyph</a>(char&nbsp;shown,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1731">glyph</a>(char&nbsp;shown,
                                    com.badlogic.gdx.graphics.Color&nbsp;color,
                                    float&nbsp;x,
                                    float&nbsp;y)</pre>
@@ -2886,7 +2962,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>glyph</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1747">glyph</a>(char&nbsp;shown,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory.Glyph</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1746">glyph</a>(char&nbsp;shown,
                                    float&nbsp;encodedColor,
                                    float&nbsp;x,
                                    float&nbsp;y)</pre>
@@ -2910,7 +2986,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>isMultiDistanceField</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1752">isMultiDistanceField</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1751">isMultiDistanceField</a>()</pre>
 </li>
 </ul>
 <a name="isDistanceField--">
@@ -2919,7 +2995,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>isDistanceField</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1756">isDistanceField</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1755">isDistanceField</a>()</pre>
 </li>
 </ul>
 <a name="getDistanceFieldScaleX--">
@@ -2928,7 +3004,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDistanceFieldScaleX</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1760">getDistanceFieldScaleX</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1759">getDistanceFieldScaleX</a>()</pre>
 </li>
 </ul>
 <a name="getDistanceFieldScaleY--">
@@ -2937,7 +3013,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDistanceFieldScaleY</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1763">getDistanceFieldScaleY</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1762">getDistanceFieldScaleY</a>()</pre>
 </li>
 </ul>
 <a name="getSmoothingMultiplier--">
@@ -2946,7 +3022,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getSmoothingMultiplier</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1772">getSmoothingMultiplier</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1771">getSmoothingMultiplier</a>()</pre>
 <div class="block">If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
  numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.</div>
 <dl>
@@ -2961,7 +3037,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setSmoothingMultiplier</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1782">setSmoothingMultiplier</a>(float&nbsp;smoothingMultiplier)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1781">setSmoothingMultiplier</a>(float&nbsp;smoothingMultiplier)</pre>
 <div class="block">If this uses a distance field font, the smoothing multiplier affects how crisp or blurry lines are, with higher
  numbers generally resulting in more crisp fonts, but numbers that are too high cause jagged aliasing.</div>
 <dl>
@@ -2978,7 +3054,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>configureShader</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1802">configureShader</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1801">configureShader</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</pre>
 <div class="block">If using a distance field font, you MUST call this at some point while the batch has begun, or use code that
  calls it for you (which is now much of SquidLib). A typical point to call it is in the
  "void draw(Batch batch, float parentAlpha)" method or an overriding method for a Scene2D class. You should call
@@ -3002,7 +3078,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>dispose</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1820">dispose</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1819">dispose</a>()</pre>
 <div class="block">Releases all resources of this object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -3016,7 +3092,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDescent</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1829">getDescent</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1828">getDescent</a>()</pre>
 <div class="block">Gets the descent of this TextCellFactory's BitmapFont, which may be useful for layout outside this class.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -3030,7 +3106,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDirectionGlyph</h4>
-<pre>public&nbsp;char&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1833">getDirectionGlyph</a>()</pre>
+<pre>public&nbsp;char&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1832">getDirectionGlyph</a>()</pre>
 </li>
 </ul>
 <a name="setDirectionGlyph-char-">
@@ -3039,7 +3115,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setDirectionGlyph</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1837">setDirectionGlyph</a>(char&nbsp;directionGlyph)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1836">setDirectionGlyph</a>(char&nbsp;directionGlyph)</pre>
 </li>
 </ul>
 <a name="addSwap-java.lang.String-java.lang.String-">
@@ -3048,7 +3124,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>addSwap</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1857">addSwap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;find,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1856">addSwap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;find,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;replace)</pre>
 <div class="block">Adds a pair of Strings (typically both with length 1) as a replacement pair, so when the find String is requested
  to be drawn, the replace String is used instead. Swaps are used when drawing text in each cell in SquidPanel and
@@ -3075,7 +3151,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>addSwap</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1879">addSwap</a>(char&nbsp;find,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1878">addSwap</a>(char&nbsp;find,
                                char&nbsp;replace)</pre>
 <div class="block">Adds a pair of chars as a replacement pair, so when the find char is requested to be drawn, the replace char is
  used instead.
@@ -3101,7 +3177,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>removeSwap</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1901">removeSwap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;find)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1900">removeSwap</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;find)</pre>
 <div class="block">Removes the replacement pair, if present, that searches for the given key, find. Swaps are used when drawing text
  in each cell in SquidPanel and related classes, so Strings longer than 1 char are effectively disregarded beyond
  the first char.
@@ -3126,7 +3202,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>removeSwap</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1920">removeSwap</a>(char&nbsp;find)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1919">removeSwap</a>(char&nbsp;find)</pre>
 <div class="block">Removes the replacement pair, if present, that searches for the given key, find.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3147,7 +3223,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAllSwaps</h4>
-<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1938">getAllSwaps</a>()</pre>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1937">getAllSwaps</a>()</pre>
 <div class="block">Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their
  values in the OrderedMap.
  <br>
@@ -3169,7 +3245,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setAllSwaps</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1954">setAllSwaps</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>&gt;&nbsp;swaps)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1953">setAllSwaps</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>&gt;&nbsp;swaps)</pre>
 <div class="block">Sets the mapping of replacement pairs to a different one as a Map of Character keys to String values.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3192,7 +3268,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>addSwaps</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1976">addSwaps</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>&gt;&nbsp;swaps)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1975">addSwaps</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Character.html?is-external=true" title="class or interface in java.lang">Character</a>&gt;&nbsp;swaps)</pre>
 <div class="block">Appends to the mapping of replacement pairs, adding or replacing any entries in the current mapping with the
  entries in a Map of Character keys to String values.
  <br>
@@ -3213,10 +3289,10 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <a name="clearSwaps--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>clearSwaps</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1995">clearSwaps</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.1994">clearSwaps</a>()</pre>
 <div class="block">Clears all replacement pairs this has been told to swap.
  <br>
  This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
@@ -3228,6 +3304,21 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this for chaining</dd>
+</dl>
+</li>
+</ul>
+<a name="setStyle-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setStyle</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2005">setStyle</a>(int&nbsp;style)</pre>
+<div class="block">Not implemented in this class; in subclasses that do, this should change the currently-used font style, such as
+ from regular to italic or bold. Calling this method on a TextCellFactory does nothing, but won't cause problems.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>style</code> - an int, typically a constant in a class that implements this, that determines what style to use.</dd>
 </dl>
 </li>
 </ul>

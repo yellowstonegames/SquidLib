@@ -39,11 +39,11 @@ public class SparseDemo extends ApplicationAdapter {
     private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
-    //We're displaying 25 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
-    //gridHeight is 25 because that variable will be used for generating the dungeon (the actual size of the dungeon
+    //We're displaying 24 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
+    //gridHeight is 24 because that variable will be used for generating the dungeon (the actual size of the dungeon
     //will be triple gridWidth and triple gridHeight), and determines how much off the dungeon is visible at any time.
     //The bonusHeight is the number of additional rows that aren't handled like the dungeon rows and are shown in a
-    //separate area; here we use them for translations. The gridWidth is 90, which means we show 90 grid spaces
+    //separate area; here we use them for translations. The gridWidth is 91, which means we show 91 grid spaces
     //across the whole screen, but the actual dungeon is larger. The cellWidth and cellHeight are 10 and 20, which will
     //match the starting dimensions of a cell in pixels, but won't be stuck at that value because we use a "Stretchable"
     //font, and so the cells can change size (they don't need to be scaled by equal amounts, either). While gridWidth
@@ -51,9 +51,9 @@ public class SparseDemo extends ApplicationAdapter {
     //one cell; resizing the window can make the units cellWidth and cellHeight use smaller or larger than a pixel.
 
     /** In number of cells */
-    private static final int gridWidth = 60;
+    private static final int gridWidth = 91;
     /** In number of cells */
-    private static final int gridHeight = 40;
+    private static final int gridHeight = 24;
 
     /** In number of cells */
     private static final int bigWidth = gridWidth * 3;
@@ -63,9 +63,9 @@ public class SparseDemo extends ApplicationAdapter {
     /** In number of cells */
     private static final int bonusHeight = 7;
     /** The pixel width of a cell */
-    private static final int cellWidth = 6;
+    private static final int cellWidth = 10;
     /** The pixel height of a cell */
-    private static final int cellHeight = 6;
+    private static final int cellHeight = 20;
     private SquidInput input;
     private Color bgColor;
     private Stage stage, languageStage;
@@ -145,13 +145,13 @@ public class SparseDemo extends ApplicationAdapter {
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableHeavySquareFont());
-                //DefaultResources.getStretchableSlabFont());
+                DefaultResources.getStretchableSlabFont());
 
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.font.tweakWidth(cellWidth * 1.0666f).tweakHeight(cellHeight * 1.0666f).initBySize();
+        display.font.tweakWidth(cellWidth * 1.1f).tweakHeight(cellHeight * 1.1f).initBySize();
+
 
         languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
@@ -503,10 +503,12 @@ public class SparseDemo extends ApplicationAdapter {
         else
         {
             display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
+            /*
             display.addAction(new PanelEffect.GibberishEffect(display, 1f, floors, player, 6,
                     burstColors,
                     new char[]{'\u0000'} // the char at Unicode 0 is used to mean a solid block that takes up the cell
-            ));
+            ));*/
+            display.addAction(new PanelEffect.PulseEffect(display, 1f, floors, player, 3, new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}));
             //display.burst(newX, newY, 1, Radius.CIRCLE, StringKit.PUNCTUATION, burstColors[8], burstColors[35], 0.4f);
         }
         // removes the first line displayed of the Art of War text or its translation.

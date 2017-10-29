@@ -464,14 +464,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>preCalcNoise2D</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.439">preCalcNoise2D</a>(int&nbsp;width,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MerlinNoise.html#line.438">preCalcNoise2D</a>(int&nbsp;width,
                                      int&nbsp;height,
                                      long&nbsp;seed)</pre>
 <div class="block">Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.
- Does allow taking a seed because internally it uses a ThunderRNG to quickly generate initial white noise before
+ Does allow taking a seed because internally it uses a ThrustRNG to quickly generate initial white noise before
  processing it into more continuous noise. This generates a lot of random numbers (at least 1 + 14 * height, or
- more if width is greater than 64), so ThunderRNG's high speed and presumed higher-than-2-to-the-64 period are
- both assets here.
+ more if width is greater than 64), so ThrustRNG's high speed and fairly good period are both assets here.
  <br>
  The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is
  impossible for this to generate, it should be fine to use values from this as denominators in division.</div>
