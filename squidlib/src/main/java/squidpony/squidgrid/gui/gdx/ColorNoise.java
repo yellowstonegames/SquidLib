@@ -1,12 +1,13 @@
 package squidpony.squidgrid.gui.gdx;
 
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.SeededNoise;
+import squidpony.squidmath.*;
+
+import static squidpony.squidmath.ThrustAltRNG.determine;
 
 /**
  * Created by Tommy Ettinger on 6/12/2017.
  */
-public class ColorNoise extends SeededNoise {
+public class ColorNoise extends WhirlingNoise {
     public static final ColorNoise instance = new ColorNoise();
     public ColorNoise() {
     }
@@ -26,94 +27,168 @@ public class ColorNoise extends SeededNoise {
 //                (bounce256((int) ((noise * 1.07 + 1.51) * (0x3E99f)) >>> 8)));
     }
 
-    public static float colorNoise(final float x, final float y, final int seed) {
-        final float s = (x + y) * F2;
-        final float[] gradient2DLUT = SeededNoise.gradient2DLUT;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s);
-        final float t = (i + j) * G2,
-                X0 = i - t,
-                Y0 = j - t,
-                x0 = x - X0,
-                y0 = y - Y0;
-        int i1, j1;
+    /**
+     * 2D simplex noise that produces a color, as a packed float.
+     *
+     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param seed a seed that will change how and when any colors will be produced
+     * @return noise in the form of a packed float color
+     */
+    public static float colorNoise(final float xin, final float yin, final int seed) {
+        float noise0, noise1, noise2; // from the three corners
+        // Skew the input space to figure out which simplex cell we're in
+        float skew = (xin + yin) * F2f; // Hairy factor for 2D
+        int i = fastFloor(xin + skew);
+        int j = fastFloor(yin + skew);
+        float t = (i + j) * G2f;
+        float X0 = i - t; // Unskew the cell origin back to (x,y) space
+        float Y0 = j - t;
+        float x0 = xin - X0; // The x,y distances from the cell origin
+        float y0 = yin - Y0;
+        // For the 2D case, the simplex shape is an equilateral triangle.
+        // determine which simplex we are in.
+        int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)
+        // coords
         if (x0 > y0) {
             i1 = 1;
             j1 = 0;
-        } else {
+        } // lower triangle, XY order: (0,0)->(1,0)->(1,1)
+        else {
             i1 = 0;
             j1 = 1;
-        }
-        final float
-                x1 = x0 - i1 + G2,
-                y1 = y0 - j1 + G2,
-                x2 = x0 - 1f + 2f * G2,
-                y2 = y0 - 1f + 2f * G2;
-        int h0 = hash(i, j, seed),
-                h1 = hash(i + i1, j + j1, seed),
-                h2 = hash(i + 1, j + 1, seed);
-        float n0r, n1r, n2r, n0g, n1g, n2g, n0b, n1b, n2b;
-        float t0 = 0.5f - x0 * x0 - y0 * y0;
-        if (t0 < 0)
-        {
-            n0r = n0g = n0b = 0f;
-        }
-        else {
+        } // upper triangle, YX order: (0,0)->(0,1)->(1,1)
+        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
+        // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y),
+        // where
+        // c = (3-sqrt(3))/6
+        float x1 = x0 - i1 + G2f; // Offsets for middle corner in (x,y)
+        // unskewed coords
+        float y1 = y0 - j1 + G2f;
+        float x2 = x0 - 1f + 2f * G2f; // Offsets for last corner in (x,y)
+        // unskewed coords
+        float y2 = y0 - 1f + 2f * G2f;
+        // Work out the hashed gradient indices of the three simplex corners
+        int gi0 = (int)(determine(seed + i + determine(j)));
+        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)));
+        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)));
+        float red, green, blue, t0, t1, t2;
+        // Calculate the contribution from the three corners
+        t0 = 0.5f - x0 * x0 - y0 * y0;
+        if (t0 < 0) {
+            noise0 = 0f;
+        } else {
             t0 *= t0;
-            t0 *= t0;
-            n0r = t0 * (x0 * gradient2DLUT[h0 << 1] + y0 * gradient2DLUT[h0 << 1 | 1]);
-            h0 = h0 * 421 + 61 & 255;
-            n0g = t0 * (x0 * gradient2DLUT[h0 << 1] + y0 * gradient2DLUT[h0 << 1 | 1]);
-            h0 = h0 * 337 + 61 & 255;
-            n0b = t0 * (x0 * gradient2DLUT[h0 << 1] + y0 * gradient2DLUT[h0 << 1 | 1]);
+            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 15], x0, y0);
         }
-        float t1 = 0.5f - x1 * x1 - y1 * y1;
-        if (t1 < 0)
-            n1r = n1g = n1b = 0f;
-        else {
+        t1 = 0.5f - x1 * x1 - y1 * y1;
+        if (t1 < 0) {
+            noise1 = 0f;
+        } else {
             t1 *= t1;
-            t1 *= t1;
-            n1r = t1 * (x1 * gradient2DLUT[h1 << 1] + y1 * gradient2DLUT[h1 << 1 | 1]);
-            h1 = h1 * 421 + 61 & 255;
-            n1g = t1 * (x1 * gradient2DLUT[h1 << 1] + y1 * gradient2DLUT[h1 << 1 | 1]);
-            h1 = h1 * 337 + 61 & 255;
-            n1b = t1 * (x1 * gradient2DLUT[h1 << 1] + y1 * gradient2DLUT[h1 << 1 | 1]);
+            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 15], x1, y1);
         }
-        float t2 = 0.5f - x2 * x2 - y2 * y2;
-        if (t2 < 0)
-            n2r = n2g = n2b = 0f;
-        else {
+        t2 = 0.5f - x2 * x2 - y2 * y2;
+        if (t2 < 0) {
+            noise2 = 0f;
+        } else {
             t2 *= t2;
-            t2 *= t2;
-            n2r = t2 * (x2 * gradient2DLUT[h2 << 1] + y2 * gradient2DLUT[h2 << 1 | 1]);
-            h2 = h2 * 421 + 61 & 255;
-            n2g = t2 * (x2 * gradient2DLUT[h2 << 1] + y2 * gradient2DLUT[h2 << 1 | 1]);
-            h2 = h2 * 337 + 61 & 255;
-            n2b = t2 * (x2 * gradient2DLUT[h2 << 1] + y2 * gradient2DLUT[h2 << 1 | 1]);
+            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 15], x2, y2);
         }
-        return SColor.floatGet((35f * (n0r + n1r + n2r)) * 1.42188695f + 0.5005272445f,
-                (35f * (n0g + n1g + n2g)) * 1.42188695f + 0.5005272445f,
-                (35f * (n0b + n1b + n2b)) * 1.42188695f + 0.5005272445f,
-                1f);
+        // Add contributions from each corner to get the final noise value.
+        // The result is scaled to return values in the interval [-1,1].
+        red = 35f * (noise0 + noise1 + noise2) + 0.5f;
+        gi0 >>>= 8;
+        gi1 >>>= 8;
+        gi2 >>>= 8;
 
+        // Calculate the contribution from the three corners
+        t0 = 0.5f - x0 * x0 - y0 * y0;
+        if (t0 < 0) {
+            noise0 = 0f;
+        } else {
+            t0 *= t0;
+            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 15], x0, y0);
+        }
+        t1 = 0.5f - x1 * x1 - y1 * y1;
+        if (t1 < 0) {
+            noise1 = 0f;
+        } else {
+            t1 *= t1;
+            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 15], x1, y1);
+        }
+        t2 = 0.5f - x2 * x2 - y2 * y2;
+        if (t2 < 0) {
+            noise2 = 0f;
+        } else {
+            t2 *= t2;
+            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 15], x2, y2);
+        }
+        // Add contributions from each corner to get the final noise value.
+        // The result is scaled to return values in the interval [-1,1].
+        green = 35f * (noise0 + noise1 + noise2) + 0.5f;
+        gi0 >>>= 8;
+        gi1 >>>= 8;
+        gi2 >>>= 8;
+        // Calculate the contribution from the three corners
+        t0 = 0.5f - x0 * x0 - y0 * y0;
+        if (t0 < 0) {
+            noise0 = 0f;
+        } else {
+            t0 *= t0;
+            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 15], x0, y0);
+        }
+        t1 = 0.5f - x1 * x1 - y1 * y1;
+        if (t1 < 0) {
+            noise1 = 0f;
+        } else {
+            t1 *= t1;
+            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 15], x1, y1);
+        }
+        t2 = 0.5f - x2 * x2 - y2 * y2;
+        if (t2 < 0) {
+            noise2 = 0f;
+        } else {
+            t2 *= t2;
+            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 15], x2, y2);
+        }
+        // Add contributions from each corner to get the final noise value.
+        // The result is scaled to return values in the interval [-1,1].
+        blue = 35f * (noise0 + noise1 + noise2) + 0.5f;
+        return SColor.floatGet(red, green, blue, 1f);
     }
 
 
-    public static float colorNoise(final float x, final float y, final float z, final int seed) {
-        float n0r, n1r, n2r, n3r, n0g, n1g, n2g, n3g, n0b, n1b, n2b, n3b;
-        final float[] gradient3DLUT = SeededNoise.gradient3DLUT;
-        final float s = (x + y + z) * F3;
-        final int i = fastFloor(x + s),
-                j = fastFloor(y + s),
-                k = fastFloor(z + s);
 
-        final float t = (i + j + k) * G3;
-        final float X0 = i - t, Y0 = j - t, Z0 = k - t,
-                x0 = x - X0, y0 = y - Y0, z0 = z - Z0;
-
-        int i1, j1, k1;
-        int i2, j2, k2;
-
+    /**
+     * 3D simplex noise that produces a color, as a packed float.
+     *
+     * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param zin Z input; works well if between 0.0 and 1.0, but anything is accepted
+     * @param seed a seed that will change how and when any colors will be produced
+     * @return noise in the form of a packed float color
+     */
+    public static float colorNoise(final float xin, final float yin, final float zin, final int seed) {
+        float n0, n1, n2, n3; // Noise contributions from the four corners
+        // Skew the input space to figure out which simplex cell we're in
+        float s = (xin + yin + zin) * F3f; // Very nice and simple skew
+        // factor for 3D
+        int i = fastFloor(xin + s);
+        int j = fastFloor(yin + s);
+        int k = fastFloor(zin + s);
+        float t = (i + j + k) * G3f;
+        float X0 = i - t; // Unskew the cell origin back to (x,y,z) space
+        float Y0 = j - t;
+        float Z0 = k - t;
+        float x0 = xin - X0; // The x,y,z distances from the cell origin
+        float y0 = yin - Y0;
+        float z0 = zin - Z0;
+        // For the 3D case, the simplex shape is a slightly irregular
+        // tetrahedron.
+        // determine which simplex we are in.
+        int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
+        int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
         if (x0 >= y0) {
             if (y0 >= z0) {
                 i1 = 1;
@@ -122,22 +197,24 @@ public class ColorNoise extends SeededNoise {
                 i2 = 1;
                 j2 = 1;
                 k2 = 0;
-            } else if (x0 >= z0) {
+            } // X Y Z order
+            else if (x0 >= z0) {
                 i1 = 1;
                 j1 = 0;
                 k1 = 0;
                 i2 = 1;
                 j2 = 0;
                 k2 = 1;
-            } else {
+            } // X Z Y order
+            else {
                 i1 = 0;
                 j1 = 0;
                 k1 = 1;
                 i2 = 1;
                 j2 = 0;
                 k2 = 1;
-            }
-        } else {
+            } // Z X Y order
+        } else { // x0<y0
             if (y0 < z0) {
                 i1 = 0;
                 j1 = 0;
@@ -145,262 +222,146 @@ public class ColorNoise extends SeededNoise {
                 i2 = 0;
                 j2 = 1;
                 k2 = 1;
-            } else if (x0 < z0) {
+            } // Z Y X order
+            else if (x0 < z0) {
                 i1 = 0;
                 j1 = 1;
                 k1 = 0;
                 i2 = 0;
                 j2 = 1;
                 k2 = 1;
-            } else {
+            } // Y Z X order
+            else {
                 i1 = 0;
                 j1 = 1;
                 k1 = 0;
                 i2 = 1;
                 j2 = 1;
                 k2 = 0;
-            }
+            } // Y X Z order
         }
-
-        float x1 = x0 - i1 + G3,
-                y1 = y0 - j1 + G3,
-                z1 = z0 - k1 + G3,
-                x2 = x0 - i2 + 2f * G3,
-                y2 = y0 - j2 + 2f * G3,
-                z2 = z0 - k2 + 2f * G3,
-                x3 = x0 - 1f + 3f * G3,
-                y3 = y0 - 1f + 3f * G3,
-                z3 = z0 - 1f + 3f * G3;
-
-        int h0 = hash(i, j, k, seed),
-                h1 = hash(i + i1, j + j1, k + k1, seed),
-                h2 = hash(i + i2, j + j2, k + k2, seed),
-                h3 = hash(i + 1, j + 1, k + 1, seed);
-
-        float t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0.0f)
-        {
-            n0r = n0g = n0b = 0.0f;
-        }
-        else {
+        // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
+        // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
+        // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where c = 1/6.
+        float x1 = x0 - i1 + G3f; // Offsets for second corner in (x,y,z) coords
+        float y1 = y0 - j1 + G3f;
+        float z1 = z0 - k1 + G3f;
+        float x2 = x0 - i2 + F3f; // Offsets for third corner in (x,y,z) coords
+        float y2 = y0 - j2 + F3f;
+        float z2 = z0 - k2 + F3f;
+        float x3 = x0 - 0.5f; // Offsets for last corner in (x,y,z) coords
+        float y3 = y0 - 0.5f;
+        float z3 = z0 - 0.5f;
+        // Work out the hashed gradient indices of the four simplex corners
+        int gi0 = (int)(determine(seed + i + determine(j + determine(k))));
+        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1 + determine(k + k1))));
+        int gi2 = (int)(determine(seed + i + i2 + determine(j + j2 + determine(k + k2))));
+        int gi3 = (int)(determine(seed + i + 1 + determine(j + 1 + determine(k + 1))));
+        float red, green, blue, t0, t1, t2, t3;
+        // Calculate the contribution from the four corners
+        t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
+        if (t0 < 0) {
+            n0 = 0f;
+        } else {
             t0 *= t0;
+            n0 = t0 * t0 * dotf(grad3f[gi0 & 31], x0, y0, z0);
+        }
+        t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
+        if (t1 < 0) {
+            n1 = 0f;
+        } else {
+            t1 *= t1;
+            n1 = t1 * t1 * dotf(grad3f[gi1 & 31], x1, y1, z1);
+        }
+        t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
+        if (t2 < 0) {
+            n2 = 0f;
+        } else {
+            t2 *= t2;
+            n2 = t2 * t2 * dotf(grad3f[gi2 & 31], x2, y2, z2);
+        }
+        t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
+        if (t3 < 0) {
+            n3 = 0f;
+        } else {
+            t3 *= t3;
+            n3 = t3 * t3 * dotf(grad3f[gi3 & 31], x3, y3, z3);
+        }
+        // Add contributions from each corner to get the final noise value.
+        // The result is scaled to stay just inside [-1,1]
+        red = 15.75f * (n0 + n1 + n2 + n3) + 0.5f;
+        gi0 >>>= 8;
+        gi1 >>>= 8;
+        gi2 >>>= 8;
+        gi3 >>>= 8;
+        // Calculate the contribution from the four corners
+        t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
+        if (t0 < 0) {
+            n0 = 0f;
+        } else {
             t0 *= t0;
-            n0r = t0 * (x0 * gradient3DLUT[h0 * 3] + y0 * gradient3DLUT[h0 * 3 + 1] + z0 * gradient3DLUT[h0 * 3 + 2]);
-            h0 = h0 * 421 + 61 & 255;
-            n0g = t0 * (x0 * gradient3DLUT[h0 * 3] + y0 * gradient3DLUT[h0 * 3 + 1] + z0 * gradient3DLUT[h0 * 3 + 2]);
-            h0 = h0 * 337 + 61 & 255;
-            n0b = t0 * (x0 * gradient3DLUT[h0 * 3] + y0 * gradient3DLUT[h0 * 3 + 1] + z0 * gradient3DLUT[h0 * 3 + 2]);
+            n0 = t0 * t0 * dotf(grad3f[gi0 & 31], x0, y0, z0);
         }
-
-        float t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0.0f)
-            n1r = n1g = n1b = 0.0f;
-        else {
+        t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
+        if (t1 < 0) {
+            n1 = 0f;
+        } else {
             t1 *= t1;
-            t1 *= t1;
-            n1r = t1 * (x1 * gradient3DLUT[h1 * 3] + y1 * gradient3DLUT[h1 * 3 + 1] + z1 * gradient3DLUT[h1 * 3 + 2]);
-            h1 = h1 * 421 + 61 & 255;
-            n1g = t1 * (x1 * gradient3DLUT[h1 * 3] + y1 * gradient3DLUT[h1 * 3 + 1] + z1 * gradient3DLUT[h1 * 3 + 2]);
-            h1 = h1 * 337 + 61 & 255;
-            n1b = t1 * (x1 * gradient3DLUT[h1 * 3] + y1 * gradient3DLUT[h1 * 3 + 1] + z1 * gradient3DLUT[h1 * 3 + 2]);
+            n1 = t1 * t1 * dotf(grad3f[gi1 & 31], x1, y1, z1);
         }
-
-        float t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0.0f)
-            n2r = n2g = n2b = 0.0f;
-        else {
+        t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
+        if (t2 < 0) {
+            n2 = 0f;
+        } else {
             t2 *= t2;
-            t2 *= t2;
-            n2r = t2 * (x2 * gradient3DLUT[h2 * 3] + y2 * gradient3DLUT[h2 * 3 + 1] + z2 * gradient3DLUT[h2 * 3 + 2]);
-            h2 = h2 * 421 + 61 & 255;
-            n2g = t2 * (x2 * gradient3DLUT[h2 * 3] + y2 * gradient3DLUT[h2 * 3 + 1] + z2 * gradient3DLUT[h2 * 3 + 2]);
-            h2 = h2 * 337 + 61 & 255;
-            n2b = t2 * (x2 * gradient3DLUT[h2 * 3] + y2 * gradient3DLUT[h2 * 3 + 1] + z2 * gradient3DLUT[h2 * 3 + 2]);
+            n2 = t2 * t2 * dotf(grad3f[gi2 & 31], x2, y2, z2);
         }
-
-        float t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0.0f)
-            n3r = n3g = n3b = 0.0f;
-        else {
+        t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
+        if (t3 < 0) {
+            n3 = 0f;
+        } else {
             t3 *= t3;
-            t3 *= t3;
-            n3r = t3 * (x3 * gradient3DLUT[h3 * 3] + y3 * gradient3DLUT[h3 * 3 + 1] + z3 * gradient3DLUT[h3 * 3 + 2]);
-            h3 = h3 * 421 + 61 & 255;
-            n3g = t3 * (x3 * gradient3DLUT[h3 * 3] + y3 * gradient3DLUT[h3 * 3 + 1] + z3 * gradient3DLUT[h3 * 3 + 2]);
-            h3 = h3 * 337 + 61 & 255;
-            n3b = t3 * (x3 * gradient3DLUT[h3 * 3] + y3 * gradient3DLUT[h3 * 3 + 1] + z3 * gradient3DLUT[h3 * 3 + 2]);
+            n3 = t3 * t3 * dotf(grad3f[gi3 & 31], x3, y3, z3);
         }
-//        t0 = (16f * (n0 + n1 - n2 - n3)) * 1.25086885f + 0.5003194984f;
-//        t1 = (16f * (n1 + n2 - n3 - n0)) * 1.25086885f + 0.5003194984f;
-//        t2 = (16f * (n2 + n3 - n0 - n1)) * 1.25086885f + 0.5003194984f;
-        return SColor.floatGet((16f * (n0r + n1r + n2r + n3r)) * 1.25086885f + 0.5001597492f,
-                (16f * (n0g + n1g + n2g + n3g)) * 1.25086885f + 0.5001597492f,
-                (16f * (n0b + n1b + n2b + n3b)) * 1.25086885f + 0.5001597492f,
-                1f);
-//
-//        t0 = NumberTools.bounce((n0 + n1 + n2 + n3) * 40f + 5f);
-//        t1 = NumberTools.bounce((n0 + n1 + n2 + n3 + t0 * 0.0555f) * 40f + 5f);
-//        t2 = NumberTools.bounce((n0 + n1 + n2 + n3 + t1 * 0.0555f) * 40f + 5f);
-//        return SColor.floatGet(t0 * 0.5f + 0.5f, t1 * 0.5f + 0.5f, t2 * 0.5f + 0.5f, 1f);
-//        return SColor.floatGetHSV(NumberTools.bounce((t0 + n0 + n1 * n2) * 0.8125f + 1.375f) * 0.5f + 0.5f,
-//                NumberTools.bounce((t0 + n1 + n2 * n3) * 0.6875f + 2.375f) * 0.5f + 0.5f,
-//                NumberTools.bounce((t0 + n2 + n3 * n0) * 0.9375f + 2.25f) * 0.5f + 0.5f, 1f);
-    }
-
-    public static float colorNoise(final float x, final float y, final float z, final float w, final int seed) {
-        float n0, n1, n2, n3, n4;
-        final float s = (x + y + z + w) * F4;
-        final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
-        final float[] gradient4DLUT = SeededNoise.gradient4DLUT;
-        final float t = (i + j + k + l) * G4,
-                X0 = i - t,
-                Y0 = j - t,
-                Z0 = k - t,
-                W0 = l - t,
-                x0 = x - X0,
-                y0 = y - Y0,
-                z0 = z - Z0,
-                w0 = w - W0;
-        final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
-        final int i1 = SIMPLEX[c] >>> 2,
-                j1 = SIMPLEX[c | 1] >>> 2,
-                k1 = SIMPLEX[c | 2] >>> 2,
-                l1 = SIMPLEX[c | 3] >>> 2,
-                i2 = SIMPLEX[c] >>> 1 & 1,
-                j2 = SIMPLEX[c | 1] >>> 1 & 1,
-                k2 = SIMPLEX[c | 2] >>> 1 & 1,
-                l2 = SIMPLEX[c | 3] >>> 1 & 1,
-                i3 = SIMPLEX[c] & 1,
-                j3 = SIMPLEX[c | 1] & 1,
-                k3 = SIMPLEX[c | 2] & 1,
-                l3 = SIMPLEX[c | 3] & 1;
-        final float x1 = x0 - i1 + G4,
-                y1 = y0 - j1 + G4,
-                z1 = z0 - k1 + G4,
-                w1 = w0 - l1 + G4,
-                x2 = x0 - i2 + 2f * G4,
-                y2 = y0 - j2 + 2f * G4,
-                z2 = z0 - k2 + 2f * G4,
-                w2 = w0 - l2 + 2f * G4,
-                x3 = x0 - i3 + 3f * G4,
-                y3 = y0 - j3 + 3f * G4,
-                z3 = z0 - k3 + 3f * G4,
-                w3 = w0 - l3 + 3f * G4,
-                x4 = x0 - 1f + 4f * G4,
-                y4 = y0 - 1f + 4f * G4,
-                z4 = z0 - 1f + 4f * G4,
-                w4 = w0 - 1f + 4f * G4;
-        final int h0 = hash(i, j, k, l, seed) << 2,
-                h1 = hash(i + i1, j + j1, k + k1, l + l1, seed) << 2,
-                h2 = hash(i + i2, j + j2, k + k2, l + l2, seed) << 2,
-                h3 = hash(i + i3, j + j3, k + k3, l + l3, seed) << 2,
-                h4 = hash(i + 1, j + 1, k + 1, l + 1, seed) << 2;
-        float t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-        if(t0 > 0) {
+        // Add contributions from each corner to get the final noise value.
+        // The result is scaled to stay just inside [-1,1]
+        green = 15.75f * (n0 + n1 + n2 + n3) + 0.5f;
+        gi0 >>>= 8;
+        gi1 >>>= 8;
+        gi2 >>>= 8;
+        gi3 >>>= 8;
+        // Calculate the contribution from the four corners
+        t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
+        if (t0 < 0) {
+            n0 = 0f;
+        } else {
             t0 *= t0;
-            n0 = t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
+            n0 = t0 * t0 * dotf(grad3f[gi0 & 31], x0, y0, z0);
         }
-        else n0 = 0f;
-        float t1 = LIMIT4 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
-        if (t1 > 0) {
+        t1 = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
+        if (t1 < 0) {
+            n1 = 0f;
+        } else {
             t1 *= t1;
-            n1 = t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
+            n1 = t1 * t1 * dotf(grad3f[gi1 & 31], x1, y1, z1);
         }
-        else n1 = 0f;
-        float t2 = LIMIT4 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
-        if (t2 > 0) {
+        t2 = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
+        if (t2 < 0) {
+            n2 = 0f;
+        } else {
             t2 *= t2;
-            n2 = t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
+            n2 = t2 * t2 * dotf(grad3f[gi2 & 31], x2, y2, z2);
         }
-        else n2 = 0f;
-        float t3 = LIMIT4 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
-        if (t3 > 0) {
+        t3 = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
+        if (t3 < 0) {
+            n3 = 0f;
+        } else {
             t3 *= t3;
-            n3 = t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
+            n3 = t3 * t3 * dotf(grad3f[gi3 & 31], x3, y3, z3);
         }
-        else n3 = 0f;
-        float t4 = LIMIT4 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
-        if (t4 > 0) {
-            t4 *= t4;
-            n4 = t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
-        }
-        else n4 = 0f;
-        t0 = NumberTools.bounce(5.0f + 41.0f * (n0 + n1 + n2 - n3 - n4)) * 0.5f + 0.5f;
-        t1 = NumberTools.bounce(5.0f + 41.0f * (n3 + n4 + n0 - n1 - n2)) * 0.5f + 0.5f;
-        t2 = NumberTools.bounce(5.0f + 41.0f * (n1 + n2 + n3 - n4 - n0)) * 0.5f + 0.5f;
-        return SColor.floatGetHSV(t0, t1, t2, 1f);
-    }
-
-    public static float colorNoise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {
-
-        final float s = (x + y + z + w + u + v) * F6;
-
-        final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
-                skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final float[] m = new float[6], gradient6DLUT = SeededNoise.gradient6DLUT;
-        final int[] distOrder = new int[6],
-                intLoc = {skewX, skewY, skewZ, skewW, skewU, skewV};
-
-        final float unskew = (skewX + skewY + skewZ + skewW + skewU + skewV) * G6;
-        final float[] cellDist = {
-                x - skewX + unskew,
-                y - skewY + unskew,
-                z - skewZ + unskew,
-                w - skewW + unskew,
-                u - skewU + unskew,
-                v - skewV + unskew
-        };
-
-        int o0 = (cellDist[0]<cellDist[1]?1:0)+(cellDist[0]<cellDist[2]?1:0)+(cellDist[0]<cellDist[3]?1:0)+(cellDist[0]<cellDist[4]?1:0)+(cellDist[0]<cellDist[5]?1:0);
-        int o1 = (cellDist[1]<=cellDist[0]?1:0)+(cellDist[1]<cellDist[2]?1:0)+(cellDist[1]<cellDist[3]?1:0)+(cellDist[1]<cellDist[4]?1:0)+(cellDist[1]<cellDist[5]?1:0);
-        int o2 = (cellDist[2]<=cellDist[0]?1:0)+(cellDist[2]<=cellDist[1]?1:0)+(cellDist[2]<cellDist[3]?1:0)+(cellDist[2]<cellDist[4]?1:0)+(cellDist[2]<cellDist[5]?1:0);
-        int o3 = (cellDist[3]<=cellDist[0]?1:0)+(cellDist[3]<=cellDist[1]?1:0)+(cellDist[3]<=cellDist[2]?1:0)+(cellDist[3]<cellDist[4]?1:0)+(cellDist[3]<cellDist[5]?1:0);
-        int o4 = (cellDist[4]<=cellDist[0]?1:0)+(cellDist[4]<=cellDist[1]?1:0)+(cellDist[4]<=cellDist[2]?1:0)+(cellDist[4]<=cellDist[3]?1:0)+(cellDist[4]<cellDist[5]?1:0);
-        int o5 = 15-(o0+o1+o2+o3+o4);
-
-        distOrder[o0]=0;
-        distOrder[o1]=1;
-        distOrder[o2]=2;
-        distOrder[o3]=3;
-        distOrder[o4]=4;
-        distOrder[o5]=5;
-
-        float[] n = new float[7];
-        float skewOffset = 0f;
-
-        for (int c = -1; c < 6; c++) {
-            if (c != -1) intLoc[distOrder[c]]++;
-
-            m[0] = cellDist[0] - (intLoc[0] - skewX) + skewOffset;
-            m[1] = cellDist[1] - (intLoc[1] - skewY) + skewOffset;
-            m[2] = cellDist[2] - (intLoc[2] - skewZ) + skewOffset;
-            m[3] = cellDist[3] - (intLoc[3] - skewW) + skewOffset;
-            m[4] = cellDist[4] - (intLoc[4] - skewU) + skewOffset;
-            m[5] = cellDist[5] - (intLoc[5] - skewV) + skewOffset;
-
-            float tc = LIMIT6;
-
-            for (int d = 0; d < 6; d++) {
-                tc -= m[d] * m[d];
-            }
-
-            if (tc > 0f) {
-                final int h = hash(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
-                        intLoc[4], intLoc[5], seed) * 6;
-                float gr = 0f;
-                for (int d = 0; d < 6; d++) {
-                    gr += gradient6DLUT[h + d] * m[d];
-                }
-
-                n[c+1] = gr * tc * tc * tc * tc;
-            }
-            skewOffset += G6;
-        }
-        //return NumberTools.bounce(5.0 + 13.5 * n);
-        m[0] = NumberTools.bounce(10.0f + 16.25f * (n[0] + n[1] + n[2] + n[3] - n[4] - n[5] - n[6])) * 0.5f + 0.5f;
-        m[1] = NumberTools.bounce(10.0f + 16.25f * (n[2] + n[3] + n[4] + n[5] - n[6] - n[0] - n[1])) * 0.5f + 0.5f;
-        m[2] = NumberTools.bounce(10.0f + 16.25f * (n[4] + n[5] + n[6] + n[0] - n[1] - n[2] - n[3])) * 0.5f + 0.5f;
-
-        return SColor.floatGetHSV(m[0], m[1], m[2], 1f);
+        // Add contributions from each corner to get the final noise value.
+        // The result is scaled to stay just inside [-1,1]
+        blue = 15.75f * (n0 + n1 + n2 + n3) + 0.5f;
+        return SColor.floatGet(red, green, blue, 1f);
     }
 }
