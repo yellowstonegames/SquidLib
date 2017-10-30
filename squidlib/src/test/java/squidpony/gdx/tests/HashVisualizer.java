@@ -69,8 +69,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
-    private int hashMode = 64, rngMode = 34, noiseMode = 79;
+    private int testType = 4;
+    private int hashMode = 64, rngMode = 34, noiseMode = 77;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -3409,7 +3409,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
-                                                ColorNoise.colorNoise(x * 0.03125f + 20f + ctr * 0.045f, y * 0.03125f + 30f + ctr * 0.045f, 1234));
+                                                ColorNoise.colorNoise(x * 0.0625f + 20f + ctr * 0.05f, y * 0.0625f + 30f + ctr * 0.05f, 1234));
                             }
                         }
                         break;
@@ -3418,7 +3418,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
-                                        ColorNoise.colorNoise(x * 0.03125f + 20f, y * 0.03125f + 30f, ctr * 0.045f, 1234));
+                                        ColorNoise.colorNoise(x * 0.05f + 20f, y * 0.05f + 30f, ctr * 0.05f, 1234));
                             }
                         }
                         break;
