@@ -2,7 +2,7 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
-import static squidpony.squidmath.ThrustRNG.determine;
+import static squidpony.squidmath.ThrustAltRNG.determine;
 
 /**
  * Another experimental noise class. Extends PerlinNoise and should have similar quality, but can be faster and has less
@@ -55,14 +55,262 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             {unit1_8f, unit3_8f}, {unit1_8f, -unit3_8f}, {-unit1_8f, unit3_8f}, {-unit1_8f, -unit3_8f}};
     */
     protected static final float[][] phiGrad2f = {
-            {1, 0}, {(float)Math.cos(phi), (float)Math.sin(phi)},
-            {(float)Math.cos(phi*2),  (float)Math.sin(phi*2)},  {(float)Math.cos(phi*3),  (float)Math.sin(phi*3)},
-            {(float)Math.cos(phi*4),  (float)Math.sin(phi*4)},  {(float)Math.cos(phi*5),  (float)Math.sin(phi*5)},
-            {(float)Math.cos(phi*6),  (float)Math.sin(phi*6)},  {(float)Math.cos(phi*7),  (float)Math.sin(phi*7)},
-            {(float)Math.cos(phi*8),  (float)Math.sin(phi*8)},  {(float)Math.cos(phi*9),  (float)Math.sin(phi*9)},
-            {(float)Math.cos(phi*10), (float)Math.sin(phi*10)}, {(float)Math.cos(phi*11), (float)Math.sin(phi*11)},
-            {(float)Math.cos(phi*13), (float)Math.sin(phi*12)}, {(float)Math.cos(phi*13), (float)Math.sin(phi*13)},
-            {(float)Math.cos(phi*14), (float)Math.sin(phi*14)}, {(float)Math.cos(phi*15), (float)Math.sin(phi*15)},
+            {0.8150192046878179f, 0.5794339444578966f},
+            {0.3285126080199264f, 0.9444995851624003f},
+            {-0.27953103565117526f, 0.9601366569961702f},
+            {-0.7841589327438924f, 0.6205600439908774f},
+            {-0.9986781437763752f, 0.05140005003279401f}, 
+            {-0.8437248002155627f, -0.5367759881935933f},
+            {-0.37662568751777636f, -0.9263655280189145f},
+            {0.22981046360408072f, -0.9732354035987786f}, 
+            {0.7512255700688496f, -0.6600455612112939f},
+            {0.9947160697132525f, -0.10266421311352707f},
+            {0.8701998299869244f, 0.49269895056791824f}, 
+            {0.4237430769975827f, 0.9057824267983017f},
+            {-0.17948233877384698f, 0.983761195650789f},
+            {-0.7163061830035246f, 0.6977861077657832f}, 
+            {-0.9881242523951498f, 0.15365696153616482f},
+            {-0.894374301636155f, -0.44731935859387983f},
+            {-0.4697402116302938f, -0.8828046973014625f}, 
+            {0.12867971425053623f, -0.991686205984736f},
+            {0.6794930883661505f, -0.7336819085016549f},
+            {0.9789201186915606f, -0.20424348513698282f}, 
+            {0.9161843048116499f, 0.4007571828636311f},
+            {0.5144954882185442f, 0.857493086037877f},
+            {-0.07753689756495279f, 0.9969894831521554f}, 
+            {-0.6408836093932414f, 0.7676380652437f},
+            {-0.9671280016853234f, 0.25429004769387453f},
+            {-0.9355721801365401f, -0.3531355203807194f}, 
+            {-0.5578905866805359f, -0.8299145096293036f},
+            {0.026189095618157535f, -0.9996570068131884f},
+            {0.6005798184449439f, -0.7995648076776756f}, 
+            {0.9527790763429471f, -0.30366434048646623f},
+            {0.9524866716435015f, 0.30458026912701447f},
+            {0.5998107828543199f, 0.8001418779014681f}, 
+            {0.025227942766709196f, 0.9996817248023291f},
+            {-0.5586882671550536f, 0.8293777306772129f},
+            {-0.9359112770969633f, 0.35223583208232967f}, 
+            {-0.9668830622808007f, -0.25521979522462845f},
+            {-0.6401452517954772f, -0.7682539011314586f},
+            {-0.07657828572526153f, -0.997063571772322f}, 
+            {0.5153197047391562f, -0.8569980174466851f},
+            {0.9165691975581982f, -0.39987611342454643f},
+            {0.9787232921313124f, 0.20518459357282604f}, 
+            {0.6787873607664123f, 0.7343348819603821f},
+            {0.12772617771665648f, 0.9918094693669208f},
+            {-0.4705887852055238f, 0.8823526478901672f}, 
+            {-0.8948039726230813f, 0.44645923730834813f},
+            {-0.987976059032004f, -0.1546069428570078f},
+            {-0.7156349511426562f, -0.6984744925214149f}, 
+            {-0.17853639842218227f, -0.9839333079220541f},
+            {0.42461376424291053f, -0.9053745916555567f},
+            {0.8706731432876941f, -0.49186205134928496f}, 
+            {0.9946169013278476f, 0.10362055584193075f},
+            {0.7505906084908771f, 0.6607675373724824f},
+            {0.22887462022891217f, 0.9734559097437702f}, 
+            {-0.37751618658649483f, 0.926002985343563f},
+            {-0.8442405045259113f, 0.53596452356274f},
+            {-0.998628262541406f, -0.052360225873583494f}, 
+            {-0.7835619201046374f, -0.6213137028602651f},
+            {-0.27860776335327647f, -0.9604049740600497f},
+            {0.32942056468855896f, -0.9441832934130274f}, 
+            {0.815575936633839f, -0.5786500596939711f},
+            {0.9999995377871086f, 9.614705243498993E-4f},
+            {0.8144617193170308f, 0.5802172935781439f}, 
+            {0.32760434766577023f, 0.9448150037920043f},
+            {-0.2804540495433758f, 0.9598674523572105f},
+            {-0.7847552204864104f, 0.6198058114597872f}, 
+            {-0.9987271018075193f, 0.05043982667647658f},
+            {-0.8432083159442574f, -0.5375869566148805f},
+            {-0.37573484028656684f, -0.9267272143380857f}, 
+            {0.23074609453653327f, -0.9730139977698868f},
+            {0.7518598371945376f, -0.6593229748869694f},
+            {0.9948143185574757f, -0.10170777547968135f}, 
+            {0.8697257122509974f, 0.4935353943229353f},
+            {0.4228719980332324f, 0.9061894246124161f},
+            {-0.18042811320741017f, 0.9835881739653105f}, 
+            {-0.7169767526924914f, 0.69709707795868f},
+            {-0.9882715323107604f, 0.15270683817086136f},
+            {-0.8939438038665631f, -0.44817906636586646f}, 
+            {-0.4688912038150978f, -0.883255930625336f},
+            {0.1296331318295739f, -0.9915620258622535f},
+            {0.6801981878249586f, -0.7330282568084551f}, 
+            {0.9791160403128117f, -0.20330218789319596f},
+            {0.9157985651207083f, 0.40163788183244326f},
+            {0.5136707960850377f, 0.8579873619403514f}, 
+            {-0.07849543772753681f, 0.9969144728892054f},
+            {-0.6416213745416761f, 0.7670215197315198f},
+            {-0.9673720470517861f, 0.2533600650908442f}, 
+            {-0.9352322183090706f, -0.3540348822315325f},
+            {-0.5570923904775789f, -0.8304505213870221f},
+            {0.0271502242597271f, -0.9996313647153368f}, 
+            {0.6013482988440962f, -0.7989869983155617f},
+            {0.9530706002688482f, -0.30274813113077575f},
+            {0.9521933864408199f, 0.3054959162057056f}, 
+            {0.5990411927831463f, 0.8007182084534767f},
+            {0.02426676659390367f, 0.9997055186599086f},
+            {-0.5594854311637297f, 0.8288401850269662f}, 
+            {-0.9362495088768715f, 0.3513358181680552f},
+            {-0.9666372290646448f, -0.2561493068236286f},
+            {-0.639406302430932f, -0.7688690268255078f}, 
+            {-0.07561960309462855f, -0.9971367386812156f},
+            {0.5161434448849468f, -0.8565021566244302f},
+            {0.9169532430045485f, -0.39899467432967256f}, 
+            {0.9785255608140186f, 0.20612551233074072f},
+            {0.6780810056781368f, 0.7349871765810113f},
+            {0.1267725231094102f, 0.9919318158948598f}, 
+            {-0.4714369237563429f, 0.8818997828093372f},
+            {-0.8952328164301424f, 0.4455987033043912f},
+            {-0.9878269523583152f, -0.15555678125521535f}, 
+            {-0.7149630577303816f, -0.6991622315892235f},
+            {-0.1775902930268572f, -0.9841045106200027f},
+            {0.42548405896433017f, -0.9049659195611945f}, 
+            {0.8711456517157633f, -0.4910246974406867f},
+            {0.9945168134929346f, 0.10457680278082451f},
+            {0.7499549530475861f, 0.6614889027031315f}, 
+            {0.2279385652761324f, 0.973675516001023f},
+            {-0.37840633666951456f, 0.9256395866471777f},
+            {-0.8447554283985693f, 0.535152563472464f}, 
+            {-0.9985774581487236f, -0.05332035331122841f},
+            {-0.782964183120542f, -0.6220667873712457f},
+            {-0.27768423350317883f, -0.9606724033008089f}, 
+            {0.3303282168323275f, -0.9438661288362745f},
+            {0.8161319146404362f, -0.5778656400110114f},
+            {0.9999981511488616f, 0.0019229401598916565f}, 
+            {0.8139034810368312f, 0.5810001063305656f},
+            {0.3266957844657079f, 0.945129549010259f},
+            {-0.281376804176623f, 0.9595973603920294f}, 
+            {-0.7853507827809703f, 0.6190510059642236f},
+            {-0.9987751365895806f, 0.04947955669228112f},
+            {-0.8426910521894434f, -0.538397428076926f}, 
+            {-0.3748436457163809f, -0.9270880439667272f},
+            {0.23168151216134933f, -0.9727916924617678f},
+            {0.7524934092816089f, -0.6585997790674858f}, 
+            {0.994911647769694f, -0.10075124382454212f},
+            {0.8692507905181963f, 0.49437138184111223f},
+            {0.42200052815510103f, 0.906595584721664f}, 
+            {-0.18137372084857706f, 0.9834142430255637f},
+            {-0.7176466595896562f, 0.6964074037370712f},
+            {-0.9884178986426848f, 0.15175657363942827f}, 
+            {-0.8935124797122745f, -0.4490383598295609f},
+            {-0.46804176254479146f, -0.8837063474446503f},
+            {0.1305864295723934f, -0.9914369291142702f}, 
+            {0.6809026584910192f, -0.7323739274850399f},
+            {0.9793110568139495f, -0.20236070271163187f},
+            {0.9154119788419642f, 0.40251820951683553f}, 
+            {0.5128456291010095f, 0.8584808446971836f},
+            {-0.07945390532690727f, 0.9968385410528141f},
+            {-0.6423585465587638f, 0.7664042651648753f}, 
+            {-0.9676151981545856f, 0.2524298482752425f},
+            {-0.934891391928828f, -0.35493391680336583f},
+            {-0.5562936792840555f, -0.8309857654548652f}, 
+            {0.028111327802940005f, -0.9996047985324779f},
+            {0.6021162233413851f, -0.7984084503492602f},
+            {0.9533612431517168f, -0.30183164190689693f}, 
+            {0.9518992210060183f, 0.30641128087610536f},
+            {0.5982710489428404f, 0.8012937988009351f},
+            {0.023305567988262783f, 0.9997283883639319f}, 
+            {-0.5602820779696569f, 0.8283018731754765f},
+            {-0.9365868751635984f, 0.350435479469882f},
+            {-0.9663905022641126f, -0.25707858163160174f}, 
+            {-0.6386667619827179f, -0.7694834417572027f},
+            {-0.07466085055928477f, -0.997208983811199f},
+            {0.5169667078944292f, -0.8560055040294986f}, 
+            {0.9173364407956793f, -0.3981128663938346f},
+            {0.9783269249224673f, 0.2070662405409173f},
+            {0.6773740237542967f, 0.7356387917605443f}, 
+            {0.12581875131036094f, 0.9920532454554551f},
+            {-0.47228462649872727f, 0.8814461024776034f},
+            {-0.8956608326609128f, 0.44473775737749144f}, 
+            {-0.9876769325119248f, -0.1565064758527096f},
+            {-0.7142905033878327f, -0.6998493243334286f},
+            {-0.17664402346250044f, -0.9842748035863661f}, 
+            {0.4263539603573059f, -0.9045564108930083f},
+            {0.8716173548343263f, -0.4901868896162075f},
+            {0.994415806301039f, 0.1055329530462149f}, 
+            {0.7493186043266098f, 0.6622096565363733f},
+            {0.22700229961107984f, 0.9738942221675214f},
+            {-0.37929613694395364f, 0.9252753322656957f}, 
+            {-0.8452695713575256f, 0.5343401086733665f},
+            {-0.998525730645293f, -0.054280431458156884f},
+            {-0.7823657223441729f, -0.6228192968276437f}, 
+            {-0.2767604469546231f, -0.9609389444712277f},
+            {0.3312355636121689f, -0.943548091725339f},
+            {0.8166871381936452f, -0.5770806861341607f}, 
+            {0.999995840086541f, 0.0028844080178108454f},
+            {0.8133444903632729f, 0.5817823819915036f},
+            {0.325786919259646f, 0.9454432205263883f}, 
+            {-0.28229929869789083f, 0.9593263813503092f},
+            {-0.7859456190770135f, 0.6182956282019548f},
+            {-0.998822248078154f, 0.04851924096791483f}, 
+            {-0.8421730094292976f, -0.5392074018305016f},
+            {-0.373952104631071f, -0.9274480165712753f},
+            {0.23261671561379524f, -0.9725684878799286f}, 
+            {0.7531262857443665f, -0.6578759744213911f},
+            {0.9950080572599341f, -0.09979461903234838f},
+            {0.8687750652275492f, 0.49520691234964365f}, 
+            {0.42112866816879463f, 0.9070009067505816f},
+            {-0.18231916082320707f, 0.9832394029923341f},
+            {-0.7183159030757559f, 0.6957170857384928f}, 
+            {-0.9885633512556217f, 0.15080616882029174f},
+            {-0.893080329572006f, -0.44989723819063077f},
+            {-0.46719188860459987f, -0.8841559473430393f}, 
+            {0.1315396065977646f, -0.9913109158564256f},
+            {0.681606499713117f, -0.7317189211362739f},
+            {0.9795051680146997f, -0.20141903046260284f}, 
+            {0.9150245463327793f, 0.40339816510302995f},
+            {0.512019988029247f, 0.858973533852196f},
+            {-0.08041229947705328f, 0.9967616877131729f}, 
+            {-0.6430951247630602f, 0.7657863021143588f},
+            {-0.9678574547689481f, 0.2514993981069807f},
+            {-0.9345497013108786f, -0.35583262326513526f}, 
+            {-0.5554944538383123f, -0.8315202413380417f},
+            {0.02907240535928829f, -0.9995773082891715f},
+            {0.6028835912268903f, -0.7978291643136192f}, 
+            {0.9536510047228631f, -0.3009148736620934f},
+            {0.9516041756110342f, 0.307326362292017f},
+            {0.5975003520453519f, 0.8018686484117461f}, 
+            {0.022344347838353967f, 0.9997503338932568f},
+            {-0.5610782068363855f, 0.8277627956203795f},
+            {-0.93692337564527f, 0.34953481682011633f}, 
+            {-0.966142882107282f, -0.2580076187895127f},
+            {-0.6379266311344768f, -0.7700971453585691f},
+            {-0.0737020290055187f, -0.9972803070954874f}, 
+            {0.5177894930065641f, -0.8555080601210051f},
+            {0.9177187905773555f, -0.3972306904321919f},
+            {0.978127384640281f, 0.20800677733372933f}, 
+            {0.6766664156484392f, 0.7362897268966162f},
+            {0.12486486320121397f, 0.9921737579364525f},
+            {-0.47313189264902605f, 0.8809916073143662f}, 
+            {-0.8960880209197166f, 0.4438764003235422f},
+            {-0.9875259996315107f, -0.15745602577159645f},
+            {-0.713617288736716f, -0.7005357701188843f}, 
+            {-0.17569759060384005f, -0.9844441866637262f},
+            {0.4272234676177009f, -0.9041460660295477f},
+            {0.8720882522073408f, -0.48934862865031664f}, 
+            {0.9943138798455315f, 0.1064890057542367f},
+            {0.7486815629161868f, 0.6629297982059457f},
+            {0.22606582409923492f, 0.9741120280410943f}, 
+            {-0.3801855865872776f, 0.9249102225358349f},
+            {-0.8457829329275041f, 0.5335271599164837f},
+            {-0.9984730800789315f, -0.055240459426869205f}, 
+            {-0.7817665383287496f, -0.6235712305338369f},
+            {-0.2758364045615609f, -0.9612045973249145f},
+            {0.3321426041893285f, -0.9432291823742155f}, 
+            {0.8172416067802154f, -0.5762951987890336f},
+            {0.9999926046022829f, 0.003845873209323106f},
+            {0.8127847478130893f, 0.582564119837819f}, 
+            {0.3248777528877428f, 0.9457560180504329f},
+            {-0.2832215322544221f, 0.9590545154825441f},
+            {-0.7865397288246715f, 0.6175396788712546f}, 
+            {-0.9988684362296896f, 0.04755888039109703f},
+            {-0.8416541881427008f, -0.5400168771268647f},
+            {-0.37306021785478083f, -0.92780713181897f}, 
+            {0.23355170402936554f, -0.9723443842307002f},
+            {0.7537584659977772f, -0.6571515616177731f},
+            {0.9951035469390707f, -0.09883790198744995f}, 
+            {0.8682985368188393f, 0.4960419850761251f},
+            {0.4202564188803024f, 0.90740539032447f}
     };
     /**
      * The 32 3D vertices of a rhombic triacontahedron. These specific values were taken from Vladimir Bulatov's
@@ -485,7 +733,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
      * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
-     * it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather good distribution
+     * it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has very good distribution
      * and is fast) instead of a number chosen by hash from a single 256-element array.
      *
      * @param x X input; works well if between 0.0 and 1.0, but anything is accepted
@@ -510,7 +758,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather good
+     * because it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has very good
      * distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
@@ -536,7 +784,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather good
+     * because it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has very good
      * distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
@@ -565,7 +813,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
      * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
-     * it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather good distribution
+     * it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has very good distribution
      * and is fast) instead of a number chosen by hash from a single 256-element array.
      *
      * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
@@ -580,7 +828,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 2D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double)} and this method. Roughly
      * 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks because
-     * it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather good distribution
+     * it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has very good distribution
      * and is fast) instead of a number chosen by hash from a single 256-element array.
      *
      * @param xin X input; works well if between 0.0 and 1.0, but anything is accepted
@@ -639,12 +887,12 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi1 = (hash >>>= 4) & 15;
         int gi2 = (hash >>> 4) & 15;
         */
-        int gi0 = (int)(determine(seed + i + determine(j)) & 15);
-        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) & 15);
-        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) & 15);
+        int gi0 = (int)(determine(seed + i + determine(j)) >>> 56);
+        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) >>> 56);
+        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) >>> 56);
 
         // Calculate the contribution from the three corners
-        double t0 = 0.5 - x0 * x0 - y0 * y0;
+        double t0 = 0.75 - x0 * x0 - y0 * y0;
         if (t0 < 0) {
             noise0 = 0.0;
         } else {
@@ -652,14 +900,14 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             noise0 = t0 * t0 * dot(phiGrad2[gi0], x0, y0);
             // for 2D gradient
         }
-        double t1 = 0.5 - x1 * x1 - y1 * y1;
+        double t1 = 0.75 - x1 * x1 - y1 * y1;
         if (t1 < 0) {
             noise1 = 0.0;
         } else {
             t1 *= t1;
             noise1 = t1 * t1 * dot(phiGrad2[gi1], x1, y1);
         }
-        double t2 = 0.5 - x2 * x2 - y2 * y2;
+        double t2 = 0.75 - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0.0;
         } else {
@@ -668,7 +916,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
-        return 70.0 * (noise0 + noise1 + noise2);
+        return  9.125 * (noise0 + noise1 + noise2);
     }
 
 
@@ -677,7 +925,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather
+     * because it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has very
      * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param xin X input
      * @param yin Y input
@@ -692,7 +940,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 3D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double)} and this method.
      * Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in chunks
-     * because it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather
+     * because it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has very
      * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param xin X input
      * @param yin Y input
@@ -862,7 +1110,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
      * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
-     * chunks because it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather
+     * chunks because it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has very
      * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
@@ -878,7 +1126,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
      * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
-     * chunks because it uses a pseudo-random function (curiously, {@link ThrustRNG#determine(long)}, which has rather
+     * chunks because it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has veryf
      * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
      * @param x X input
      * @param y Y input
@@ -1066,35 +1314,36 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         // unskewed coords
         float y2 = y0 - 1f + 2f * G2f;
         // Work out the hashed gradient indices of the three simplex corners
-        int gi0 = (int)(determine(i + determine(j)) & 15);
-        int gi1 = (int)(determine(i + i1 + determine(j + j1)) & 15);
-        int gi2 = (int)(determine(i + 1 + determine(j + 1)) & 15);
+        int gi0 = (int)(determine(i + determine(j)) >>> 56);
+        int gi1 = (int)(determine(i + i1 + determine(j + j1)) >>> 56);
+        int gi2 = (int)(determine(i + 1 + determine(j + 1)) >>> 56);
 
         // Calculate the contribution from the three corners
-        float t0 = 0.5f - x0 * x0 - y0 * y0;
+        float t0 = 0.75f - x0 * x0 - y0 * y0;
         if (t0 < 0) {
-            noise0 = 0f;
+            noise0 = 0.0f;
         } else {
             t0 *= t0;
             noise0 = t0 * t0 * dotf(phiGrad2f[gi0], x0, y0);
+            // for 2D gradient
         }
-        float t1 = 0.5f - x1 * x1 - y1 * y1;
+        float t1 = 0.75f - x1 * x1 - y1 * y1;
         if (t1 < 0) {
-            noise1 = 0f;
+            noise1 = 0.0f;
         } else {
             t1 *= t1;
             noise1 = t1 * t1 * dotf(phiGrad2f[gi1], x1, y1);
         }
-        float t2 = 0.5f - x2 * x2 - y2 * y2;
+        float t2 = 0.75f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
-            noise2 = 0f;
+            noise2 = 0.0f;
         } else {
             t2 *= t2;
             noise2 = t2 * t2 * dotf(phiGrad2f[gi2], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
-        return 70f * (noise0 + noise1 + noise2);
+        return 9.125f * (noise0 + noise1 + noise2);
     }
 
     /**
