@@ -69,11 +69,10 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
-    private int hashMode = 64, rngMode = 30, noiseMode = 79;
+    private int testType = 5;
+    private int hashMode = 64, rngMode = 34, noiseMode = 79;
 
     private SpriteBatch batch;
-    private SquidColorCenter colorFactory;
     private SquidPanel display;//, overlay;
     private static final int width = 512, height = 512;
     private static final int cellWidth = 1, cellHeight = 1;
@@ -100,6 +99,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private XorRNG xor = new XorRNG();
     private ZapRNG zap = new ZapRNG();
     private ThrustRNG thrust = new ThrustRNG(123456789L);
+    private ThrustAltRNG ta = new ThrustAltRNG();
 
 
     private final int[] coordinates = new int[2];
@@ -634,7 +634,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                filter3 = new Filters.GrayscaleFilter(),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
 //                filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
 //                filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
-        //colorFactory = new SquidColorCenter();
         storm = new CrossHash.Storm();
         stormA = CrossHash.Storm.alpha;
         stormB = CrossHash.Storm.beta;
@@ -876,7 +875,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 5:
                                 mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 38;
+                                rngMode %= 46;
                                 break;
                             case 0:
                                 hashMode++;
@@ -969,7 +968,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     public void putMap() {
         //display.erase();
         //overlay.erase();
-        long code;
+        long code, extra;
         float bright, s0 = 0, c0 = 0, s1 = 0, c1 = 0, s2 = 0, c2 = 0;
         double dBright;
         int iBright;
@@ -4079,6 +4078,86 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         Gdx.graphics.setTitle("BeardRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
+                    case 38:
+                        thrust.setState(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(thrust.nextLong() | 255L));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ThrustRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 39:
+                        thrust.setState(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = thrust.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ThrustRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 40:
+                        code = ThrustRNG.determine(ctr);
+                        for (int x = 0; x < width; x++) {
+                            extra = ThrustRNG.determine(code + x);
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(ThrustRNG.determine(extra + y) >>> 32 | 255));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ThrustRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 41:
+                        code = ThrustRNG.determine(ctr);
+                        for (int x = 0; x < width; x++) {
+                            extra = ThrustRNG.determine(code + x);
+                            for (int y = 0; y < height; y++) {
+                                iBright = (int)(ThrustRNG.determine(extra + y) >>> 56);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ThrustRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 42:
+                        ta.setState(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(ta.nextLong() | 255L));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ThrustAltRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 43:
+                        ta.setState(ctr);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = ta.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ThrustAltRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 44:
+                        code = ThrustAltRNG.determine(ctr);
+                        for (int x = 0; x < width; x++) {
+                            extra = ThrustAltRNG.determine(code + x);
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(ThrustAltRNG.determine(extra + y) >>> 32 | 255));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ThrustAltRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 45:
+                        code = ThrustAltRNG.determine(ctr);
+                        for (int x = 0; x < width; x++) {
+                            extra = ThrustAltRNG.determine(code + x);
+                            for (int y = 0; y < height; y++) {
+                                iBright = (int)(ThrustAltRNG.determine(extra + y) >>> 56);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("ThrustAltRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
                 }
             }
             break;
@@ -4412,7 +4491,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 ca.runGameOfLife();
             }
         }
-        //colorFactory.clearCache();
     }
 
     private final double[] point5D = new double[5], point7D = new double[7];
