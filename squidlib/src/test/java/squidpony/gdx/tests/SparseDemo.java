@@ -122,9 +122,6 @@ public class SparseDemo extends ApplicationAdapter {
     // build up and slow down the program while they get cleaned up (garbage collection, which is slower on Android).
     private static final float WHITE_FLOAT = SColor.FLOAT_WHITE,
             GRAY_FLOAT = SColor.floatGetI(0x44, 0x44, 0x44);
-    // here we store the colors we will use for a burst effect when the player bumps into a wall. We don't really need
-    // to recalculate this every time a wall gets bumped, and this lets us do more complex things with the colors.
-    private float[] burstColors;
 
     @Override
     public void create () {
@@ -151,7 +148,6 @@ public class SparseDemo extends ApplicationAdapter {
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
         display.font.tweakWidth(cellWidth * 1.1f).tweakHeight(cellHeight * 1.1f).initBySize();
-
 
         languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
@@ -274,6 +270,10 @@ public class SparseDemo extends ApplicationAdapter {
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(player);
+        playerToCursor.setGoal(player);
+        // DijkstraMap.partialScan only finds the distance to get to a cell if that distance is less than some limit,
+        // which is 13 here. It also won't try to find distances through an impassable cell, which here is the blockage
+        // GreasedRegion that contains the cells just past the edge of the player's FOV area.
         playerToCursor.partialScan(13, blockage);
 
         //The next three lines set the background color for anything we don't draw on, but also create 2D arrays of the
@@ -295,18 +295,6 @@ public class SparseDemo extends ApplicationAdapter {
             for (int j = 0; j < bigHeight; j++) {
                 bgColors[i][j] = temp[i][j].toFloatBits();
             }
-        }
-
-        // here we assign the colors that bumping into a wall (using the keyboard controls) will produce in a burst.
-        burstColors = new float[36];
-        for (int i = 0; i < 9; i++) {
-            // floatGetHSV makes a color as a packed float given its hue, saturation, value (lightness), and opacity.
-            // we use groups of 9 where each group goes through the hue rotation once.
-            // later groups become less saturated, darker, and more translucent as the animation continues.
-            burstColors[i   ] = SColor.floatGetHSV(i / 9f, 0.735f - i * 0.015f, 1f, 0.7f);
-            burstColors[i+9 ] = SColor.floatGetHSV(i / 9f, 0.6f, 1f - i * 0.015f, 0.7f);
-            burstColors[i+18] = SColor.floatGetHSV(i / 9f, 0.6f, 0.865f - i * 0.015f, 0.7f - i * 0.025f);
-            burstColors[i+27] = SColor.floatGetHSV(i / 9f, 0.6f - i * 0.015f, 0.73f - i * 0.015f, 0.475f - i * 0.03f);
         }
 
         //places the player as an '@' at his position in orange.
@@ -387,9 +375,9 @@ public class SparseDemo extends ApplicationAdapter {
             }
         },
                 //The second parameter passed to a SquidInput can be a SquidMouse, which takes mouse or touchscreen
-                //input and converts it to grid coordinates (here, a cell is 12 wide and 24 tall, so clicking at the
-                // pixel position 15,51 will pass screenX as 1 (since if you divide 15 by 12 and round down you get 1),
-                // and screenY as 2 (since 51 divided by 24 rounded down is 2)).
+                //input and converts it to grid coordinates (here, a cell is 10 wide and 20 tall, so clicking at the
+                // pixel position 16,51 will pass screenX as 1 (since if you divide 16 by 10 and round down you get 1),
+                // and screenY as 2 (since 51 divided by 20 rounded down is 2)).
                 new SquidMouse(cellWidth, cellHeight, gridWidth, gridHeight, 0, 0, new InputAdapter() {
 
             // if the user clicks and there are no awaitedMoves queued up, generate toCursor if it
@@ -503,15 +491,17 @@ public class SparseDemo extends ApplicationAdapter {
         }
         else
         {
+            // A SparseLayers knows how to move a Glyph (like the one for the player, pg) out of its normal alignment
+            // on the grid, and also how to move it back again. Using bump() will move pg quickly about a third of the
+            // way into a wall, then back to its former position at normal speed.
             display.bump(pg, Direction.getRoughDirection(xmod, ymod), 0.25f);
-
-            //display.addAction(new PanelEffect.ExplosionEffect(display, 1f, floors, player, 6,
-            //        burstColors
-            //));
+            // PanelEffect is a type of Action (from libGDX) that can run on a SparseLayers or SquidPanel.
+            // This particular kind of PanelEffect creates a purple glow around the player when he bumps into a wall.
+            // Other kinds can make explosions or projectiles appear.
             display.addAction(new PanelEffect.PulseEffect(display, 1f, floors, player, 3
                     , new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}
                     ));
-            //display.burst(newX, newY, 1, Radius.CIRCLE, StringKit.PUNCTUATION, burstColors[8], burstColors[35], 0.4f);
+            //display.addAction(new PanelEffect.ExplosionEffect(display, 1f, floors, player, 6));
         }
         // removes the first line displayed of the Art of War text or its translation.
         lang.remove(0);
@@ -601,10 +591,14 @@ public class SparseDemo extends ApplicationAdapter {
                     // the next line marks the player as a "goal" cell, which seems counter-intuitive, but it works because all
                     // cells will try to find the distance between themselves and the nearest goal, and once this is found, the
                     // distances don't change as long as the goals don't change. Since the mouse will move and new paths will be
-                    // found, but the player doesn't move until a cell is clicked, the "goal" is the non-changing cell, so the
-                    // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
+                    // found, but the player doesn't move until a cell is clicked, the "goal" is the non-changing cell (the
+                    // player's position), and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
                     // currently-moused-over cell, which we only need to set where the mouse is being handled.
                     playerToCursor.setGoal(player);
+                    playerToCursor.setGoal(player);
+                    // DijkstraMap.partialScan only finds the distance to get to a cell if that distance is less than some limit,
+                    // which is 13 here. It also won't try to find distances through an impassable cell, which here is the blockage
+                    // GreasedRegion that contains the cells just past the edge of the player's FOV area.
                     playerToCursor.partialScan(13, blockage);
                 }
             }

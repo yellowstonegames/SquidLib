@@ -69,92 +69,92 @@ public class ColorNoise extends WhirlingNoise {
         // unskewed coords
         float y2 = y0 - 1f + 2f * G2f;
         // Work out the hashed gradient indices of the three simplex corners
-        int gi0 = (int)(determine(seed + i + determine(j)));
-        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)));
-        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)));
+        int gi0 = (int)(determine(seed + i + determine(j)) >>> 16);
+        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) >>> 16);
+        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) >>> 16);
         float red, green, blue, t0, t1, t2;
         // Calculate the contribution from the three corners
-        t0 = 0.5f - x0 * x0 - y0 * y0;
+        t0 = 0.75f - x0 * x0 - y0 * y0;
         if (t0 < 0) {
             noise0 = 0f;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 15], x0, y0);
+            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 255], x0, y0);
         }
-        t1 = 0.5f - x1 * x1 - y1 * y1;
+        t1 = 0.75f - x1 * x1 - y1 * y1;
         if (t1 < 0) {
             noise1 = 0f;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 15], x1, y1);
+            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 255], x1, y1);
         }
-        t2 = 0.5f - x2 * x2 - y2 * y2;
+        t2 = 0.75f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0f;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 15], x2, y2);
+            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
-        red = 35f * (noise0 + noise1 + noise2) + 0.5f;
+        red = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;
         gi0 >>>= 8;
         gi1 >>>= 8;
         gi2 >>>= 8;
 
         // Calculate the contribution from the three corners
-        t0 = 0.5f - x0 * x0 - y0 * y0;
+        t0 = 0.75f - x0 * x0 - y0 * y0;
         if (t0 < 0) {
             noise0 = 0f;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 15], x0, y0);
+            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 255], x0, y0);
         }
-        t1 = 0.5f - x1 * x1 - y1 * y1;
+        t1 = 0.75f - x1 * x1 - y1 * y1;
         if (t1 < 0) {
             noise1 = 0f;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 15], x1, y1);
+            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 255], x1, y1);
         }
-        t2 = 0.5f - x2 * x2 - y2 * y2;
+        t2 = 0.75f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0f;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 15], x2, y2);
+            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
-        green = 35f * (noise0 + noise1 + noise2) + 0.5f;
+        green = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;
         gi0 >>>= 8;
         gi1 >>>= 8;
         gi2 >>>= 8;
         // Calculate the contribution from the three corners
-        t0 = 0.5f - x0 * x0 - y0 * y0;
+        t0 = 0.75f - x0 * x0 - y0 * y0;
         if (t0 < 0) {
             noise0 = 0f;
         } else {
             t0 *= t0;
-            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 15], x0, y0);
+            noise0 = t0 * t0 * dotf(phiGrad2f[gi0 & 255], x0, y0);
         }
-        t1 = 0.5f - x1 * x1 - y1 * y1;
+        t1 = 0.75f - x1 * x1 - y1 * y1;
         if (t1 < 0) {
             noise1 = 0f;
         } else {
             t1 *= t1;
-            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 15], x1, y1);
+            noise1 = t1 * t1 * dotf(phiGrad2f[gi1 & 255], x1, y1);
         }
-        t2 = 0.5f - x2 * x2 - y2 * y2;
+        t2 = 0.75f - x2 * x2 - y2 * y2;
         if (t2 < 0) {
             noise2 = 0f;
         } else {
             t2 *= t2;
-            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 15], x2, y2);
+            noise2 = t2 * t2 * dotf(phiGrad2f[gi2 & 255], x2, y2);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
-        blue = 35f * (noise0 + noise1 + noise2) + 0.5f;
+        blue = 4.5625f * (noise0 + noise1 + noise2) + 0.5f;
         return SColor.floatGet(red, green, blue, 1f);
     }
 
