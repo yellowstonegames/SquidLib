@@ -532,13 +532,11 @@ public class ArrayTools {
     {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = z ^ (z >> 28);
+        long r0 = seed, z;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = z ^ (z >>> 29);
             }
         }
     }
@@ -555,13 +553,11 @@ public class ArrayTools {
     {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = (int)(z ^ (z >> 28));
+        long r0 = seed, z;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = (int)(z ^ (z >>> 29));
             }
         }
     }
@@ -579,13 +575,11 @@ public class ArrayTools {
     {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = (int) ((bound * ((z ^ (z >> 28)) & 0x7FFFFFFFL)) >> 31);
+        long r0 = seed, z;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = (int) ((bound * ((z ^ (z >>> 29)) & 0xFFFFFFFFL)) >> 32);
             }
         }
     }
@@ -604,13 +598,11 @@ public class ArrayTools {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
         final int bound = values.length;
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = values[(int) ((bound * ((z ^ (z >> 28)) & 0x7FFFFFFFL)) >> 31)];
+        long r0 = seed + bound, z;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = values[(int) ((bound * ((z ^ (z >>> 29)) & 0xFFFFFFFFL)) >>> 32)];
             }
         }
     }
@@ -630,13 +622,11 @@ public class ArrayTools {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
         final int bound = values.length();
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = values.charAt((int) ((bound * ((z ^ (z >> 28)) & 0x7FFFFFFFL)) >> 31));
+        long r0 = seed + bound, z;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = values.charAt((int) ((bound * ((z ^ (z >>> 29)) & 0xFFFFFFFFL)) >>> 32));
             }
         }
     }
@@ -654,13 +644,11 @@ public class ArrayTools {
     {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = ((z ^ (z >> 28)) & 0xFFFFFFL) * 0x1p-24f;
+        long r0 = seed, z;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = ((z ^ (z >>> 29)) & 0xFFFFFFL) * 0x1p-24f;
             }
         }
     }
@@ -674,18 +662,15 @@ public class ArrayTools {
      * @param bound the upper exclusive limit for the floats this can produce
      * @param seed the seed for the random values, as a long
      */
-    public static void randomFill(float[][] array2d, final float bound, final long seed)
-    {
+    public static void randomFill(float[][] array2d, final float bound, final long seed) {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        long r0 = seed, z;
         final float mul = 0x1p-24f * bound;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = ((z ^ (z >> 28)) & 0xFFFFFFL) * mul;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = ((z ^ (z >>> 29)) & 0xFFFFFFL) * mul;
             }
         }
     }
@@ -703,13 +688,11 @@ public class ArrayTools {
     {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = ((z ^ (z >> 28)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+        long r0 = seed, z;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = ((z ^ (z >>> 29)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
             }
         }
     }
@@ -727,16 +710,15 @@ public class ArrayTools {
     {
         final int width = array2d.length;
         final int height = width == 0 ? 0 : array2d[0].length;
-        long r0 = seed ^ 0x6A5D39E0E116583BL, r1, z;
+        long r0 = seed, z;
         final double mul = 0x1p-53 * bound;
-        for (int x = 0; x < width; x++, r0 += 0x6A5D39E0E116583BL) {
-            z = (r0 ^ r0 >> 26) * (r0 | 0x6A5D39EAE1165865L);
-            r1 = z ^ (z >> 28);
-            for (int y = 0; y < height; y++, r1 += 0x6A5D39E2E116583BL) {
-                z = (r1 ^ r1 >> 26) * (r1 | 0x6A5D39EAE1165865L);
-                array2d[x][y] = ((z ^ (z >> 28)) & 0x1FFFFFFFFFFFFFL) * mul;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                z = r0 ^ (((r0 >>> 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);
+                array2d[x][y] = ((z ^ (z >>> 29)) & 0x1FFFFFFFFFFFFFL) * mul;
             }
         }
+
     }
 
     /**

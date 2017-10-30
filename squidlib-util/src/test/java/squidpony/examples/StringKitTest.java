@@ -107,17 +107,36 @@ public class StringKitTest {
     public void testArrays()
     {
         char[][] arr = new char[80][20];
-        ArrayTools.randomFill(arr, StringKit.BOX_DRAWING_SINGLE, 0x1111111111111111L);
+        ArrayTools.randomFill(arr, StringKit.LATIN_LETTERS_LOWER, 0xFEDCBA9876543210L);
         DungeonUtility.debugPrint(arr);
         System.out.println();
-        ArrayTools.randomFill(arr, StringKit.LATIN_LETTERS_LOWER, 0x1111111111111111L);
+        ArrayTools.randomFill(arr, StringKit.LATIN_LETTERS_LOWER, 0xFEDCBA9876543211L);
         DungeonUtility.debugPrint(arr);
         System.out.println();
-        ArrayTools.randomFill(arr, StringKit.DIGITS, 0x1111111111111111L);
+        ArrayTools.randomFill(arr, StringKit.LATIN_LETTERS_LOWER, 0xFEDCBA9876543212L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+        ArrayTools.randomFill(arr, StringKit.BOX_DRAWING_SINGLE, 0xFEDCBA9876543211L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+        ArrayTools.randomFill(arr, StringKit.ENGLISH_LETTERS, 0xFEDCBA9876543211L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+        ArrayTools.randomFill(arr, StringKit.GREEK_LETTERS, 0xFEDCBA9876543211L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+        ArrayTools.randomFill(arr, StringKit.CYRILLIC_LETTERS, 0xFEDCBA9876543211L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+        ArrayTools.randomFill(arr, StringKit.LETTERS, 0xFEDCBA9876543211L);
+        DungeonUtility.debugPrint(arr);
+        System.out.println();
+
+        ArrayTools.randomFill(arr, StringKit.DIGITS, 0xFEDCBA9876543211L);
         DungeonUtility.debugPrint(arr);
         System.out.println();
         int[][] arr2 = new int[20][10];
-        ArrayTools.randomFill(arr2, 0x1111111111111111L);
+        ArrayTools.randomFill(arr2, 0xFEDCBA9876543211L);
         for (int i = 0; i < arr2.length; i++) {
             System.out.println(StringKit.hex(arr2[i]));
         }
