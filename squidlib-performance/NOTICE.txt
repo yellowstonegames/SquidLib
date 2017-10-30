@@ -67,10 +67,11 @@ The JavaRNG class was contributed by Ben McLean to help compare the default JDK 
 
 The NeuralParticle and WeightedLetterNamegen classes are based on work by Ebyan Alvarez-Buylla .
 
-ShortSet, ShortVLA, and IntVLA are based closely off primitive-backed collections from libGDX, Apache-licensed.
+ShortSet, ShortVLA, IntVLA, and SparseTextMap are based closely off primitive-backed collections from libGDX,
+Apache-licensed.
 
 IntDoubleOrderedMap, OrderedMap, and OrderedSet are based on similar code from Sebastiano Vigna's fastutil library,
-https://github.com/vigna/fastutil .
+https://github.com/vigna/fastutil . Arrangement, K2, and K2V1 have been based on those.
 
 The DijkstraMap class is original but owes substantial credit to Edsger Dijkstra
 for creating the algorithm that shares his name, Brian Pender and Joshua Day for
@@ -90,14 +91,9 @@ The squidpony.squidai.AOE interface and its implementing classes are essentially
 made possible by the Progressive Dijkstra Scan technique, so more thanks must go
 to Brian Pender and Joshua Day.
 
-The hashing techniques used in CrossHash include FNV-1a, which is public domain
-and is the work of Glenn Fowler, Landon Curt Noll, and Phong Vo, site at
-http://www.isthe.com/chongo/tech/comp/fnv/index.html and the Strongly Universal
-String Hashing technique developed by Daniel Lemire, called Chariot here, site
-at https://github.com/lemire/StronglyUniversalStringHashing , and various other
-classes have been improved using techniques posted by Daniel Lemire on his blog
-and GitHub. The Lightning, Storm, Falcon, and Wisp hashes, also in CrossHash,
-are not derived (at least not intentionally) from any other hashing algorithms.
+The hashing techniques used in CrossHash are not derived (at least not
+intentionally) from any other hashing algorithms; earlier versions contained
+code derived from FNV-1a and Daniel Lemire's StronglyUniversalStringHashing projects.
 
 The phonetic locality-sensitive hashing of word sounds in NaturalLanguageCipher
 owes some credit to eudex, a Rust library for the same type of hashing which can
@@ -119,8 +115,7 @@ make use of MixedGenerator, and the Drunkard's Walk technique is very versatile.
 
 MimicFill and DetailedMimic are direct ports of https://github.com/mxgmn/ConvChain and
 https://github.com/mxgmn/SynTex from C# to Java; the former is public domain while the
-latter is MIT-licensed. WaffleFill is a loose port of WaveFunctionCollapse by the same
-author, at https://github.com/mxgmn/WaveFunctionCollapse , which is MIT-licensed.
+latter is MIT-licensed.
 
 A substantial amount of work on SquidLib has been done by smelC, https://github.com/smelc ,
 especially in the areas of color handling, text layout, and shape analysis for dungeons.
@@ -141,6 +136,9 @@ Ettinger and released into the public domain, except:
     characters in the Fonts may be modified and additional glyphs or characters may be added to the Fonts,
     only if the fonts are renamed to names not containing either the words "Bitstream" or the word "Vera".
     ```
+  * DejaVu Sans Mono is also present in DejaVuSansMono-distance.png; a license accompanies it in the same folder.
+  * Iosevka has several variants in the assets folder, including Iosevka and Iosevka Slab, all of which have the
+    same license (SIL OFL 1.1); this license accompanies the fonts wherever they are.
   * The fonts containing CM-Custom in their names are modified from Computer Modern Unicode, also SIL OFL, and
     the originals, plus some related fonts, can be found at https://fontlibrary.org/en/font/cmu-typewriter .
     They were originally the work of Donald Knuth for the TeX typesetting system.
@@ -148,11 +146,14 @@ Ettinger and released into the public domain, except:
     http://software.sil.org/gentium/ .
   * Noto Sans is SIL OFL, originally by Google, Inc., and has had minimal modification. The original files, as
     well as Noto Serif and specialized versions, can be obtained from https://www.google.com/get/noto/ .
+  * Orbitron is SIL OFL 1.1, originally by The League of Movable Type, and can be obtained from
+    http://www.theleagueofmoveabletype.com/fonts/12-orbitron .
   * The .png images containing the name Tentacle are public domain, originally by Henrique Lazarini (also known
     as 7Soul1, http://7soul1.deviantart.com/ ); some have modifications applied to a vector trace of the
     original pixel art.
   * icons.png is derived from the many icons supplied by http://game-icons.net/ ; it has its own license and
     people to credit in a file distributed with it, icons-license.txt .
+  * BoxedIn is Creative Commons Zero-licensed, originally by FontStruct user samw3.
 
 libtcod 1.5.2 license text:
 Copyright (c) 2008,2009,2010,2012 Jice & Mingos

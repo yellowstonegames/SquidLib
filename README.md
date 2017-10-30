@@ -8,26 +8,26 @@ SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, [Dungeon Merce
 Documentation:
 ---
 Jars of javadocs are distributed with each release via Maven Central, and with the current latest via JitPack. You can
-get the docs and source of the latest version, 3.0.0-b8, in two parts for each; squidlib-util (the core of the library,
+get the docs and source of the latest version, 3.0.0-b9, in two parts for each; squidlib-util (the core of the library,
 and also the largest part) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b8/squidlib-util-3.0.0-b8.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b8/squidlib-util-3.0.0-b8-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b8/squidlib-util-3.0.0-b8-sources.jar),
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b9/squidlib-util-3.0.0-b9.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b9/squidlib-util-3.0.0-b9-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-util/3.0.0-b9/squidlib-util-3.0.0-b9-sources.jar),
 while squidlib (the display part of the library, named the way it is because depending on squidlib should also pull in
 squidlib-util to make it a "one-stop shop" dependency) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b8/squidlib-3.0.0-b8.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b8/squidlib-3.0.0-b8-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b8/squidlib-3.0.0-b8-sources.jar).
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b9/squidlib-3.0.0-b9.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b9/squidlib-3.0.0-b9-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib/3.0.0-b9/squidlib-3.0.0-b9-sources.jar).
 The completely-optional squidlib-extra module (primarily used for serialization; relies on libGDX but doesn't use it for display) has its
-[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b8/squidlib-extra-3.0.0-b8.jar),
-[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b8/squidlib-extra-3.0.0-b8-javadoc.jar),
-and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b8/squidlib-extra-3.0.0-b8-sources.jar).
+[library jar here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9.jar),
+[docs here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9-javadoc.jar),
+and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9-sources.jar).
 
-You can browse the javadocs of a recent commit (possibly newer than 3.0.0-b8, but no older)
-[here for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/index.html),
-[here for squidlib](http://squidpony.github.io/SquidLib/squidlib/index.html), and
-[here for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/index.html), though the docs here are
-updated whenever the project is rebuilt fully, which only coincides with releases occasionally.
+You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.0-b9, but no older) here:
+  - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/index.html)
+  - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/index.html)
+  - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/index.html)
+The docs here are updated whenever the project is rebuilt fully, which only coincides with releases occasionally.
 
 Current Features:
 --
@@ -58,7 +58,8 @@ Current Features:
   -  Characters can be used as a drop-in fallback mechanism!
 -   Several fonts provided as resources, some narrow, some square, for unicode line drawing to work out-of-the-box
   -   Multiple fonts use a distance field effect, allowing them to be scaled and stretched smoothly
-  -   The distance field fonts are difficult to make yourself, so lots are provided in the assets folder or zip file.
+  -   The distance field fonts are difficult to make yourself, so lots are provided in the assets folder or zip file
+  -   The TextFamily class allows text to be written in bold and/or italic using some new assets
 -   Multiple grids of different configurations can be used simultaneously in the same display
 -   Multiple grids of different configurations can be overlaid allowing for transparency effects
   -   A convenience class, SquidLayers provides foreground and background setting with this
@@ -157,15 +158,18 @@ Current Features:
 
 ### Math Toolkit
 -   Custom extension(s) of Random allows drop-in replacement with added features
-  -   XorRNG, which is a XorShift128+ RNG
-  -   XoRoRNG, which is a xoroshiro128+ RNG using a very recently-published algorithm
+  -   LightRNG, which is a SplitMix64 RNG, and is the default for much of the library
+    -   LightRNG can skip ahead or behind in its generated sequence, and it's one of the faster RNGs here
+  -   ThrustRNG is significantly faster than LightRNG and passes many statistical tests, though issues can be found when someone can analyze more than 10GB of its random data
+  -   ThrustAltRNG is a slower variant on ThrustRNG (still very fast) that has much higher quality (issues would be found at more than 1TB instead of 10GB).
+  -   XorRNG, which is a XorShift128+ RNG, with a much larger period than LightRNG and comparable speed
+  -   XoRoRNG, which is a xoroshiro128+ RNG using a recently-published algorithm
     -   XoRoRNG is very fast and has good properties for heavy usage
-  -   LightRNG, which is a SplitMix64 RNG
-    -   LightRNG can skip ahead or behind in its generated sequence, and it's one of the fastest of the RNGs here, in a virtual tie with XoRoRNG, just behind ThunderRNG
-  -   LongPeriodRNG, which is a XorShift1024* RNG (it preferred to replace MersenneTwister for applications like shuffling large sequences, and is much faster)
+  -   MersenneTwister, which is an old standard that isn't especially fast but takes an impossibly huge amount of time to cycle through its full period
+  -   LongPeriodRNG, which is a XorShift1024*phi RNG; it is a good choice to replace MersenneTwister for applications like shuffling large sequences
   -   PermutedRNG is fairly fast (not quite as fast as LightRNG), but has potential statistical advantages
-    -   The variant on PermutedRNG called PintRNG is optimized for environments with poor 64-bit math, like GWT
-  -   ThunderRNG has somewhat poor statistical properties and period, but is the fastest RNG we have here
+  -   ThunderRNG has somewhat poor statistical properties and period, but ~is~ was the fastest RNG we have here
+  -   With even worse statistical properties and even better speed than ThunderRNG, LapRNG is very fast but very low-quality.
   -   IsaacRNG implements the ISAAC cipher as an RNG, which is pretty much the closest thing we have to a secure random number generator, but is much faster than the JDK's SecureRandom
   -   DharmaRNG can be used to make more or less "lucky" RNGs that skew towards high or low results
   -   So can EditRNG, but EditRNG also allows tweaking the "centrality" of the numbers it generates, and has an easier-to-understand expected average (recommended for luck alteration in RNGs)
@@ -175,11 +179,12 @@ Current Features:
 -   Able to find Bresenham Lines for 2D and 3D coordinates.
   -   Also can use Wu or Elias Lines (antialiased Bresenham Lines)
   -   Also several other line drawing algorithms, including one that only makes orthogonal movements, another with options to make wider lines, and another that wiggles in random directions and makes a randomized line toward a goal.
--   Perlin noise implementation
+-   Perlin/Simplex noise implementations, in PerlinNoise, WhirlingNoise, and SeededNoise, among others
   -   Used to make Brogue-style "moving" water that works by altering the background lightness
-  -   Also used for a world map generator in MetsaMapFactory
-  -   The variant called WhirlingNoise is slightly faster and has a little better avoidance of patterns
-  -   MerlinNoise is a very aesthetically different kind of noise that tends to look harsh, and is also fairly fast
+  -   Noise class contains various modifications to noise generation, handling layering of different octaves and other changes
+  -   Also used for world map generation, in WorldMapGenerator
+    -   This uses many different parts of the Noise class to affect world maps; see [this preview world map](http://squidpony.github.io/SquidLib/DetailedWorldMapDemo.png)
+  -   Some games can benefit from using very-high-dimensional noise for story generation where each "axis" is some property of the world; CosmicNumbering is meant for this
 -   Lots of code for dealing with oddly-shaped or non-contiguous regions in CoordPacker, GreasedRegion, and some other classes
   -   CoordPacker is optimized for memory usage, while GreasedRegion is optimized for speed; both support similar operations but GreasedRegion is usually preferred
   -   These operations start with finding the parts of a 2D array that match some property and storing them as a region...
@@ -240,10 +245,11 @@ Current Features:
   - 3.0.0-b1 is the last release to contain Swing. If you're porting code that used an earlier version of SquidLib and need Swing for some reason, you may want to stay with the largely-compatible 2.9.1 instead of the very-different 3.0.0-b1.
     - This should also enable SquidLib to be used for rendering on Android/iOS and not only the desktop platforms Swing is limited to
   - There is now a tool that sets up a project for people who want an easy way to handle the dependencies of SquidLib and/or libGDX
-    - You should use [czyzby's gdx-setup application](https://github.com/czyzby/gdx-setup) if you want to use the latest stable SquidLib, since
-      it has squidlib 3.0.0-b8 (as well as squidlib-util and regexodus) as third-party extensions. There's a SquidLib demo as a third-party example
-      that can be selected. You should probably select libGDX version 1.9.3 if you use the stable version, currently.
-    - That application does not include more than a few assets, so if you use the DefaultResources class in the display
+    - You should use [the stable version of SquidSetup](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-b9) if you want to use
+      the latest stable SquidLib, since it has squidlib 3.0.0-b9 (as well as squidlib-util and regexodus) all configured as default.
+      There's a SquidLib demo as an example that defaults to being selected. You should probably select libGDX version 1.9.6 if you use the
+      stable version, currently.
+    - Some ways of setting up a project won't include assets, so if you use the DefaultResources class in the display
       module (recommended for several things, like distance field fonts), you need to get the assets you want separately.
       They're in the assets/ folder of this GitHub repo, or you can get all the assets in a .zip file from SquidLib's
       main folder, [assets.zip](https://github.com/SquidPony/SquidLib/raw/master/assets.zip). If you get the .zip, then
@@ -261,15 +267,13 @@ Download
 
 Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your
 choice of features (display or none, with or without squidlib-extra), or simply use
-[czyzby's gdx-setup tool](https://github.com/czyzby/gdx-setup) to make a new project configured the way libGDX prefers
-to work, and copy in any code you might already have.
+[SquidSetup](https://github.com/tommyettinger/SquidSetup/) to make a new project configured the way libGDX prefers
+to work (including SquidLib's assets), and copy in any code you might already have.
 
-Ideally, if you're starting out you should use [gdx-setup](https://github.com/czyzby/gdx-setup). SquidLib is supported
-as a third-party extension for gdx-setup, an alternative to the current official libGDX setup that aims to have more
-features and update more readily. This replaces the older SquidSetup for stable releases, and it is possible that
-SquidSetup will become a fork of gdx-setup that includes assets and gets the most recent version from JitPack if
-possible. The gdx-setup project also allows demo code to be more easily supplied, and a demo is present for SquidLib,
-updated for 3.0.0-b8 and the various improvements made possible in this release.
+Ideally, if you're starting out you should use [SquidSetup](https://github.com/tommyettinger/SquidSetup/). This is based
+on [czyzby's gdx-setup tool](https://github.com/czyzby/gdx-setup), an alternative to the current official libGDX setup
+that aims to have more features and update more readily. A demo is present for SquidLib, selected by default when making
+a project with SquidSetup (typically if the demo becomes out-of-date, SquidSetup is updated to fix the demo).
 
 If you use a dependency manager already and don't need a new project, you can use these dependencies for Maven projects:
 
@@ -278,25 +282,25 @@ Core of SquidLib:
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-util</artifactId>
-    <version>3.0.0-b8</version>
+    <version>3.0.0-b9</version>
 </dependency>
 ```
 
-Optional Text-Based Display
+Optional Text-Based Display (depends on libGDX 1.9.6)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib</artifactId>
-    <version>3.0.0-b8</version>
+    <version>3.0.0-b9</version>
 </dependency>
 ```
 
-Optional Serialization Support
+Optional Serialization Support (depends on libGDX 1.9.6)
 ```
 <dependency>
     <groupId>com.squidpony</groupId>
     <artifactId>squidlib-extra</artifactId>
-    <version>3.0.0-b8</version>
+    <version>3.0.0-b9</version>
 </dependency>
 ```
 
@@ -304,20 +308,20 @@ Or these dependencies for Gradle:
 
 Core of SquidLib:
 ```
-compile 'com.squidpony:squidlib-util:3.0.0-b8'
+compile 'com.squidpony:squidlib-util:3.0.0-b9'
 ```
 
 Optional Text-Based Display
 ```
-compile 'com.squidpony:squidlib:3.0.0-b8'
+compile 'com.squidpony:squidlib:3.0.0-b9'
 ```
 
 Optional Serialization Support
 ```
-compile 'com.squidpony:squidlib-extra:3.0.0-b8'
+compile 'com.squidpony:squidlib-extra:3.0.0-b9'
 ```
 
-If you want the latest version of SquidLib, which uses libGDX 1.9.6 and GWT 2.8.0 (if you use GWT), you can use JitPack
+If you want the latest version of SquidLib, which uses libGDX 1.9.7 and GWT 2.8.0 (if you use GWT), you can use JitPack
 to build the latest commit on-demand. It needs an additional repository, which is this for Maven:
 
 ```
@@ -379,7 +383,6 @@ If you use the display module, you also need
 And if you use squidlib-extra, you also need
 
 ```
-    <inherits name="blazing.chain"/>
     <inherits name="squidlib-extra" />
 ```
 

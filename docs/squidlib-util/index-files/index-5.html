@@ -524,6 +524,11 @@
 <div class="block">A simple "output stage" applied to a two-part state like what SlapRNG uses normally; this method does not update
  state0 or state1 on its own.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
+<dd>
+<div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
+ number.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath">ThrustRNG</a></dt>
 <dd>
 <div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
@@ -559,6 +564,11 @@
 <dd>
 <div class="block">Method to get a double from the van der Corput sequence with the base 2 at a scrambling of the requested
  <code>index</code> without needing to construct a VanDerCorputQRNG.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineBare-long-">determineBare(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
+<dd>
+<div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
+ number.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlapRNG.html#determineBounded-int-int-">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></dt>
 <dd>
@@ -599,6 +609,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SlapRNG.html#determineBounded-int-int-int-">determineBounded(int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SlapRNG.html" title="class in squidpony.squidmath">SlapRNG</a></dt>
 <dd>
 <div class="block">Like <a href="../squidpony/squidmath/SlapRNG.html#determine-int-int-"><code>SlapRNG.determine(int, int)</code></a>, but limits its results to between 0 (inclusive) and bound (exclusive).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustAltRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></dt>
+<dd>
+<div class="block">Given a state that should usually change each time this is called, and a bound that limits the result to some
+ (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ThrustRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath">ThrustRNG</a></dt>
 <dd>

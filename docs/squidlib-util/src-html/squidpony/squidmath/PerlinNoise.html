@@ -43,507 +43,765 @@
 <span class="sourceLineNo">035</span>    protected static final double phi = 1.61803398875,<a name="line.35"></a>
 <span class="sourceLineNo">036</span>    epi = 1.0 / Math.E / Math.PI, unit1_4 =  0.70710678118, unit1_8 = 0.38268343236, unit3_8 = 0.92387953251;<a name="line.36"></a>
 <span class="sourceLineNo">037</span><a name="line.37"></a>
-<span class="sourceLineNo">038</span>    protected static final double[][] grad2 = {<a name="line.38"></a>
-<span class="sourceLineNo">039</span>            {1, 0}, {-1, 0}, {0, 1}, {0, -1},/*<a name="line.39"></a>
-<span class="sourceLineNo">040</span>            {1, 0}, {-1, 0}, {0, 1}, {0, -1},<a name="line.40"></a>
-<span class="sourceLineNo">041</span>            {1, 0}, {-1, 0}, {0, 1}, {0, -1},<a name="line.41"></a>
-<span class="sourceLineNo">042</span>            {1, 0}, {-1, 0}, {0, 1}, {0, -1},*/<a name="line.42"></a>
-<span class="sourceLineNo">043</span>            {unit3_8, unit1_8}, {unit3_8, -unit1_8}, {-unit3_8, unit1_8}, {-unit3_8, -unit1_8},<a name="line.43"></a>
-<span class="sourceLineNo">044</span>            {unit1_4, unit1_4}, {unit1_4, -unit1_4}, {-unit1_4, unit1_4}, {-unit1_4, -unit1_4},<a name="line.44"></a>
-<span class="sourceLineNo">045</span>            {unit1_8, unit3_8}, {unit1_8, -unit3_8}, {-unit1_8, unit3_8}, {-unit1_8, -unit3_8}};<a name="line.45"></a>
-<span class="sourceLineNo">046</span><a name="line.46"></a>
-<span class="sourceLineNo">047</span>    protected static final double[][] phiGrad2 = {<a name="line.47"></a>
-<span class="sourceLineNo">048</span>            {1, 0}, {Math.cos(phi), Math.sin(phi)},<a name="line.48"></a>
-<span class="sourceLineNo">049</span>            {Math.cos(phi*2), Math.sin(phi*2)}, {Math.cos(phi*3), Math.sin(phi*3)},<a name="line.49"></a>
-<span class="sourceLineNo">050</span>            {Math.cos(phi*4), Math.sin(phi*4)}, {Math.cos(phi*5), Math.sin(phi*5)},<a name="line.50"></a>
-<span class="sourceLineNo">051</span>            {Math.cos(phi*6), Math.sin(phi*6)}, {Math.cos(phi*7), Math.sin(phi*7)},<a name="line.51"></a>
-<span class="sourceLineNo">052</span>            {Math.cos(phi*8), Math.sin(phi*8)}, {Math.cos(phi*9), Math.sin(phi*9)},<a name="line.52"></a>
-<span class="sourceLineNo">053</span>            {Math.cos(phi*10), Math.sin(phi*10)}, {Math.cos(phi*11), Math.sin(phi*11)},<a name="line.53"></a>
-<span class="sourceLineNo">054</span>            {Math.cos(phi*13), Math.sin(phi*12)}, {Math.cos(phi*13), Math.sin(phi*13)},<a name="line.54"></a>
-<span class="sourceLineNo">055</span>            {Math.cos(phi*14), Math.sin(phi*14)}, {Math.cos(phi*15), Math.sin(phi*15)},<a name="line.55"></a>
-<span class="sourceLineNo">056</span>    };<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    protected static final int[][] grad3 = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0},<a name="line.57"></a>
-<span class="sourceLineNo">058</span>            {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1},<a name="line.58"></a>
-<span class="sourceLineNo">059</span>            {1, 0, -1}, {-1, 0, -1}, {0, 1, 1},<a name="line.59"></a>
-<span class="sourceLineNo">060</span>            {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};<a name="line.60"></a>
-<span class="sourceLineNo">061</span>    protected static final int[][] grad4 = {{0, 1, 1, 1}, {0, 1, 1, -1},<a name="line.61"></a>
-<span class="sourceLineNo">062</span>    {0, 1, -1, 1}, {0, 1, -1, -1},<a name="line.62"></a>
-<span class="sourceLineNo">063</span>    {0, -1, 1, 1}, {0, -1, 1, -1},<a name="line.63"></a>
-<span class="sourceLineNo">064</span>    {0, -1, -1, 1}, {0, -1, -1, -1},<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    {1, 0, 1, 1}, {1, 0, 1, -1},<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    {1, 0, -1, 1}, {1, 0, -1, -1},<a name="line.66"></a>
-<span class="sourceLineNo">067</span>    {-1, 0, 1, 1}, {-1, 0, 1, -1},<a name="line.67"></a>
-<span class="sourceLineNo">068</span>    {-1, 0, -1, 1}, {-1, 0, -1, -1},<a name="line.68"></a>
-<span class="sourceLineNo">069</span>    {1, 1, 0, 1}, {1, 1, 0, -1},<a name="line.69"></a>
-<span class="sourceLineNo">070</span>    {1, -1, 0, 1}, {1, -1, 0, -1},<a name="line.70"></a>
-<span class="sourceLineNo">071</span>    {-1, 1, 0, 1}, {-1, 1, 0, -1},<a name="line.71"></a>
-<span class="sourceLineNo">072</span>    {-1, -1, 0, 1}, {-1, -1, 0, -1},<a name="line.72"></a>
-<span class="sourceLineNo">073</span>    {1, 1, 1, 0}, {1, 1, -1, 0},<a name="line.73"></a>
-<span class="sourceLineNo">074</span>    {1, -1, 1, 0}, {1, -1, -1, 0},<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    {-1, 1, 1, 0}, {-1, 1, -1, 0},<a name="line.75"></a>
-<span class="sourceLineNo">076</span>    {-1, -1, 1, 0}, {-1, -1, -1, 0}};<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    private static final int p[] = {151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96,<a name="line.77"></a>
-<span class="sourceLineNo">078</span>        53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142,<a name="line.78"></a>
-<span class="sourceLineNo">079</span>        8, 99, 37, 240, 21, 10, 23, 190, 6, 148, 247,<a name="line.79"></a>
-<span class="sourceLineNo">080</span>        120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203,<a name="line.80"></a>
-<span class="sourceLineNo">081</span>        117, 35, 11, 32, 57, 177, 33, 88, 237, 149, 56,<a name="line.81"></a>
-<span class="sourceLineNo">082</span>        87, 174, 20, 125, 136, 171, 168, 68, 175, 74,<a name="line.82"></a>
-<span class="sourceLineNo">083</span>        165, 71, 134, 139, 48, 27, 166, 77, 146, 158,<a name="line.83"></a>
-<span class="sourceLineNo">084</span>        231, 83, 111, 229, 122, 60, 211, 133, 230, 220,<a name="line.84"></a>
-<span class="sourceLineNo">085</span>        105, 92, 41, 55, 46, 245, 40, 244, 102, 143, 54,<a name="line.85"></a>
-<span class="sourceLineNo">086</span>        65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132,<a name="line.86"></a>
-<span class="sourceLineNo">087</span>        187, 208, 89, 18, 169, 200, 196, 135, 130, 116,<a name="line.87"></a>
-<span class="sourceLineNo">088</span>        188, 159, 86, 164, 100, 109, 198, 173, 186, 3,<a name="line.88"></a>
-<span class="sourceLineNo">089</span>        64, 52, 217, 226, 250, 124, 123, 5, 202, 38, 147,<a name="line.89"></a>
-<span class="sourceLineNo">090</span>        118, 126, 255, 82, 85, 212, 207, 206, 59, 227,<a name="line.90"></a>
-<span class="sourceLineNo">091</span>        47, 16, 58, 17, 182, 189, 28, 42, 223, 183, 170,<a name="line.91"></a>
-<span class="sourceLineNo">092</span>        213, 119, 248, 152, 2, 44, 154, 163, 70, 221,<a name="line.92"></a>
-<span class="sourceLineNo">093</span>        153, 101, 155, 167, 43, 172, 9, 129, 22, 39, 253,<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        19, 98, 108, 110, 79, 113, 224, 232, 178, 185,<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        112, 104, 218, 246, 97, 228, 251, 34, 242, 193,<a name="line.95"></a>
-<span class="sourceLineNo">096</span>        238, 210, 144, 12, 191, 179, 162, 241, 81, 51,<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        145, 235, 249, 14, 239, 107, 49, 192, 214, 31,<a name="line.97"></a>
-<span class="sourceLineNo">098</span>        181, 199, 106, 157, 184, 84, 204, 176, 115, 121,<a name="line.98"></a>
-<span class="sourceLineNo">099</span>        50, 45, 127, 4, 150, 254, 138, 236, 205, 93, 222,<a name="line.99"></a>
-<span class="sourceLineNo">100</span>        114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66,<a name="line.100"></a>
-<span class="sourceLineNo">101</span>        215, 61, 156, 180};<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    protected static final double F2 = 0.5 * (Math.sqrt(3.0) - 1.0);<a name="line.102"></a>
-<span class="sourceLineNo">103</span>    protected static final double G2 = (3.0 - Math.sqrt(3.0)) / 6.0;<a name="line.103"></a>
-<span class="sourceLineNo">104</span>    protected static final double F3 = 1.0 / 3.0;<a name="line.104"></a>
-<span class="sourceLineNo">105</span>    protected static final double G3 = 1.0 / 6.0;<a name="line.105"></a>
-<span class="sourceLineNo">106</span>    protected static final double F4 = (Math.sqrt(5.0) - 1.0) / 4.0;<a name="line.106"></a>
-<span class="sourceLineNo">107</span>    protected static final double G4 = (5.0 - Math.sqrt(5.0)) / 20.0;<a name="line.107"></a>
-<span class="sourceLineNo">108</span>    // To remove the need for index wrapping, double the permutation table<a name="line.108"></a>
-<span class="sourceLineNo">109</span>    // length<a name="line.109"></a>
-<span class="sourceLineNo">110</span>    protected static final int perm[] = new int[512];<a name="line.110"></a>
-<span class="sourceLineNo">111</span><a name="line.111"></a>
-<span class="sourceLineNo">112</span>    static {<a name="line.112"></a>
-<span class="sourceLineNo">113</span>        for (int i = 0; i &lt; 512; i++) {<a name="line.113"></a>
-<span class="sourceLineNo">114</span>            perm[i] = p[i &amp; 255];<a name="line.114"></a>
-<span class="sourceLineNo">115</span>        }<a name="line.115"></a>
-<span class="sourceLineNo">116</span>    }<a name="line.116"></a>
-<span class="sourceLineNo">117</span>    protected PerlinNoise()<a name="line.117"></a>
-<span class="sourceLineNo">118</span>    {<a name="line.118"></a>
-<span class="sourceLineNo">119</span><a name="line.119"></a>
-<span class="sourceLineNo">120</span>    }<a name="line.120"></a>
-<span class="sourceLineNo">121</span>    // A lookup table to traverse the simplex around a given point in 4D.<a name="line.121"></a>
-<span class="sourceLineNo">122</span>    // Details can be found where this table is used, in the 4D noise method.<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    protected static final int simplex[][]<a name="line.123"></a>
-<span class="sourceLineNo">124</span>            = {{0, 1, 2, 3}, {0, 1, 3, 2}, {0, 0, 0, 0}, {0, 2, 3, 1},<a name="line.124"></a>
-<span class="sourceLineNo">125</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 2, 3, 0},<a name="line.125"></a>
-<span class="sourceLineNo">126</span>            {0, 2, 1, 3}, {0, 0, 0, 0}, {0, 3, 1, 2}, {0, 3, 2, 1},<a name="line.126"></a>
-<span class="sourceLineNo">127</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 3, 2, 0},<a name="line.127"></a>
-<span class="sourceLineNo">128</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.128"></a>
-<span class="sourceLineNo">129</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.129"></a>
-<span class="sourceLineNo">130</span>            {1, 2, 0, 3}, {0, 0, 0, 0}, {1, 3, 0, 2}, {0, 0, 0, 0},<a name="line.130"></a>
-<span class="sourceLineNo">131</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {2, 3, 0, 1}, {2, 3, 1, 0},<a name="line.131"></a>
-<span class="sourceLineNo">132</span>            {1, 0, 2, 3}, {1, 0, 3, 2}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.132"></a>
-<span class="sourceLineNo">133</span>            {0, 0, 0, 0}, {2, 0, 3, 1}, {0, 0, 0, 0}, {2, 1, 3, 0},<a name="line.133"></a>
-<span class="sourceLineNo">134</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.134"></a>
-<span class="sourceLineNo">135</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.135"></a>
-<span class="sourceLineNo">136</span>            {2, 0, 1, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.136"></a>
-<span class="sourceLineNo">137</span>            {3, 0, 1, 2}, {3, 0, 2, 1}, {0, 0, 0, 0}, {3, 1, 2, 0},<a name="line.137"></a>
-<span class="sourceLineNo">138</span>            {2, 1, 0, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.138"></a>
-<span class="sourceLineNo">139</span>            {3, 1, 0, 2}, {0, 0, 0, 0}, {3, 2, 0, 1}, {3, 2, 1, 0}};<a name="line.139"></a>
-<span class="sourceLineNo">140</span><a name="line.140"></a>
-<span class="sourceLineNo">141</span>    protected static double dot(double g[], double x, double y) {<a name="line.141"></a>
-<span class="sourceLineNo">142</span>        return g[0] * x + g[1] * y;<a name="line.142"></a>
-<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
-<span class="sourceLineNo">144</span><a name="line.144"></a>
-<span class="sourceLineNo">145</span>    protected static double dot(int g[], double x, double y, double z) {<a name="line.145"></a>
-<span class="sourceLineNo">146</span>        return g[0] * x + g[1] * y + g[2] * z;<a name="line.146"></a>
-<span class="sourceLineNo">147</span>    }<a name="line.147"></a>
-<span class="sourceLineNo">148</span><a name="line.148"></a>
-<span class="sourceLineNo">149</span>    protected static double dot(int g[], double x, double y, double z, double w) {<a name="line.149"></a>
-<span class="sourceLineNo">150</span>        return g[0] * x + g[1] * y + g[2] * z + g[3] * w;<a name="line.150"></a>
-<span class="sourceLineNo">151</span>    }<a name="line.151"></a>
-<span class="sourceLineNo">152</span><a name="line.152"></a>
-<span class="sourceLineNo">153</span>    /**<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     * 2D simplex noise.<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     * This doesn't use its parameters verbatim; xin and yin are both effectively divided by<a name="line.155"></a>
-<span class="sourceLineNo">156</span>     * ({@link Math#E} * {@link Math#PI}), because without a step like that, any integer parameters would return 0 and<a name="line.156"></a>
-<span class="sourceLineNo">157</span>     * only doubles with a decimal component would produce actual noise. This step allows integers to be passed in a<a name="line.157"></a>
-<span class="sourceLineNo">158</span>     * arguments, and changes the cycle at which 0 is repeated to multiples of (E*PI).<a name="line.158"></a>
-<span class="sourceLineNo">159</span>     *<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     * @param xin x input; works well if between 0.0 and 1.0, but anything is accepted<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * @param yin y input; works well if between 0.0 and 1.0, but anything is accepted<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     */<a name="line.163"></a>
-<span class="sourceLineNo">164</span>    public static double noise(double xin, double yin) {<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        xin *= epi;<a name="line.165"></a>
-<span class="sourceLineNo">166</span>        yin *= epi;<a name="line.166"></a>
-<span class="sourceLineNo">167</span>        double noise0, noise1, noise2; // from the three corners<a name="line.167"></a>
-<span class="sourceLineNo">168</span>        // Skew the input space to determine which simplex cell we're in<a name="line.168"></a>
-<span class="sourceLineNo">169</span>        double skew = (xin + yin) * F2; // Hairy factor for 2D<a name="line.169"></a>
-<span class="sourceLineNo">170</span>        int i = (int) Math.floor(xin + skew);<a name="line.170"></a>
-<span class="sourceLineNo">171</span>        int j = (int) Math.floor(yin + skew);<a name="line.171"></a>
-<span class="sourceLineNo">172</span>        double t = (i + j) * G2;<a name="line.172"></a>
-<span class="sourceLineNo">173</span>        double X0 = i - t; // Unskew the cell origin back to (x,y) space<a name="line.173"></a>
-<span class="sourceLineNo">174</span>        double Y0 = j - t;<a name="line.174"></a>
-<span class="sourceLineNo">175</span>        double x0 = xin - X0; // The x,y distances from the cell origin<a name="line.175"></a>
-<span class="sourceLineNo">176</span>        double y0 = yin - Y0;<a name="line.176"></a>
-<span class="sourceLineNo">177</span>        // For the 2D case, the simplex shape is an equilateral triangle.<a name="line.177"></a>
-<span class="sourceLineNo">178</span>        // Determine which simplex we are in.<a name="line.178"></a>
-<span class="sourceLineNo">179</span>        int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)<a name="line.179"></a>
-<span class="sourceLineNo">180</span>        // coords<a name="line.180"></a>
-<span class="sourceLineNo">181</span>        if (x0 &gt; y0) {<a name="line.181"></a>
-<span class="sourceLineNo">182</span>            i1 = 1;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>            j1 = 0;<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        } // lower triangle, XY order: (0,0)-&gt;(1,0)-&gt;(1,1)<a name="line.184"></a>
-<span class="sourceLineNo">185</span>        else {<a name="line.185"></a>
-<span class="sourceLineNo">186</span>            i1 = 0;<a name="line.186"></a>
-<span class="sourceLineNo">187</span>            j1 = 1;<a name="line.187"></a>
-<span class="sourceLineNo">188</span>        } // upper triangle, YX order: (0,0)-&gt;(0,1)-&gt;(1,1)<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and<a name="line.189"></a>
-<span class="sourceLineNo">190</span>        // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y),<a name="line.190"></a>
-<span class="sourceLineNo">191</span>        // where<a name="line.191"></a>
-<span class="sourceLineNo">192</span>        // c = (3-sqrt(3))/6<a name="line.192"></a>
-<span class="sourceLineNo">193</span>        double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y)<a name="line.193"></a>
-<span class="sourceLineNo">194</span>        // unskewed coords<a name="line.194"></a>
-<span class="sourceLineNo">195</span>        double y1 = y0 - j1 + G2;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        double x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y)<a name="line.196"></a>
-<span class="sourceLineNo">197</span>        // unskewed coords<a name="line.197"></a>
-<span class="sourceLineNo">198</span>        double y2 = y0 - 1.0 + 2.0 * G2;<a name="line.198"></a>
-<span class="sourceLineNo">199</span>        // Work out the hashed gradient indices of the three simplex corners<a name="line.199"></a>
-<span class="sourceLineNo">200</span>        int ii = i &amp; 255;<a name="line.200"></a>
-<span class="sourceLineNo">201</span>        int jj = j &amp; 255;<a name="line.201"></a>
-<span class="sourceLineNo">202</span>        int gi0 = perm[ii + perm[jj]] &amp; 15;<a name="line.202"></a>
-<span class="sourceLineNo">203</span>        int gi1 = perm[ii + i1 + perm[jj + j1]] &amp; 15;<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        int gi2 = perm[ii + 1 + perm[jj + 1]] &amp; 15;<a name="line.204"></a>
-<span class="sourceLineNo">205</span>        // Calculate the contribution from the three corners<a name="line.205"></a>
-<span class="sourceLineNo">206</span>        double t0 = 0.5 - x0 * x0 - y0 * y0;<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        if (t0 &lt; 0) {<a name="line.207"></a>
-<span class="sourceLineNo">208</span>            noise0 = 0.0;<a name="line.208"></a>
-<span class="sourceLineNo">209</span>        } else {<a name="line.209"></a>
-<span class="sourceLineNo">210</span>            t0 *= t0;<a name="line.210"></a>
-<span class="sourceLineNo">211</span>            noise0 = t0 * t0 * dot(phiGrad2[gi0], x0, y0); // (x,y) of grad3 used<a name="line.211"></a>
-<span class="sourceLineNo">212</span>            // for 2D gradient<a name="line.212"></a>
-<span class="sourceLineNo">213</span>        }<a name="line.213"></a>
-<span class="sourceLineNo">214</span>        double t1 = 0.5 - x1 * x1 - y1 * y1;<a name="line.214"></a>
-<span class="sourceLineNo">215</span>        if (t1 &lt; 0) {<a name="line.215"></a>
-<span class="sourceLineNo">216</span>            noise1 = 0.0;<a name="line.216"></a>
-<span class="sourceLineNo">217</span>        } else {<a name="line.217"></a>
-<span class="sourceLineNo">218</span>            t1 *= t1;<a name="line.218"></a>
-<span class="sourceLineNo">219</span>            noise1 = t1 * t1 * dot(phiGrad2[gi1], x1, y1);<a name="line.219"></a>
-<span class="sourceLineNo">220</span>        }<a name="line.220"></a>
-<span class="sourceLineNo">221</span>        double t2 = 0.5 - x2 * x2 - y2 * y2;<a name="line.221"></a>
-<span class="sourceLineNo">222</span>        if (t2 &lt; 0) {<a name="line.222"></a>
-<span class="sourceLineNo">223</span>            noise2 = 0.0;<a name="line.223"></a>
-<span class="sourceLineNo">224</span>        } else {<a name="line.224"></a>
-<span class="sourceLineNo">225</span>            t2 *= t2;<a name="line.225"></a>
-<span class="sourceLineNo">226</span>            noise2 = t2 * t2 * dot(phiGrad2[gi2], x2, y2);<a name="line.226"></a>
-<span class="sourceLineNo">227</span>        }<a name="line.227"></a>
-<span class="sourceLineNo">228</span>        // Add contributions from each corner to get the final noise value.<a name="line.228"></a>
-<span class="sourceLineNo">229</span>        // The result is scaled to return values in the interval [-1,1].<a name="line.229"></a>
-<span class="sourceLineNo">230</span>        return 70.0 * (noise0 + noise1 + noise2);<a name="line.230"></a>
-<span class="sourceLineNo">231</span>    }<a name="line.231"></a>
-<span class="sourceLineNo">232</span><a name="line.232"></a>
-<span class="sourceLineNo">233</span>    /**<a name="line.233"></a>
-<span class="sourceLineNo">234</span>     * 3D simplex noise.<a name="line.234"></a>
-<span class="sourceLineNo">235</span>     *<a name="line.235"></a>
-<span class="sourceLineNo">236</span>     * @param xin X input<a name="line.236"></a>
-<span class="sourceLineNo">237</span>     * @param yin Y input<a name="line.237"></a>
-<span class="sourceLineNo">238</span>     * @param zin Z input<a name="line.238"></a>
-<span class="sourceLineNo">239</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.239"></a>
-<span class="sourceLineNo">240</span>     */<a name="line.240"></a>
-<span class="sourceLineNo">241</span>    public static double noise(double xin, double yin, double zin) {<a name="line.241"></a>
-<span class="sourceLineNo">242</span>        xin *= epi;<a name="line.242"></a>
-<span class="sourceLineNo">243</span>        yin *= epi;<a name="line.243"></a>
-<span class="sourceLineNo">244</span>        zin *= epi;<a name="line.244"></a>
-<span class="sourceLineNo">245</span>        double n0, n1, n2, n3; // Noise contributions from the four corners<a name="line.245"></a>
-<span class="sourceLineNo">246</span>        // Skew the input space to determine which simplex cell we're in<a name="line.246"></a>
-<span class="sourceLineNo">247</span>        double s = (xin + yin + zin) * F3; // Very nice and simple skew<a name="line.247"></a>
-<span class="sourceLineNo">248</span>        // factor for 3D<a name="line.248"></a>
-<span class="sourceLineNo">249</span>        int i = (int) Math.floor(xin + s);<a name="line.249"></a>
-<span class="sourceLineNo">250</span>        int j = (int) Math.floor(yin + s);<a name="line.250"></a>
-<span class="sourceLineNo">251</span>        int k = (int) Math.floor(zin + s);<a name="line.251"></a>
-<span class="sourceLineNo">252</span>        double t = (i + j + k) * G3;<a name="line.252"></a>
-<span class="sourceLineNo">253</span>        double X0 = i - t; // Unskew the cell origin back to (x,y,z) space<a name="line.253"></a>
-<span class="sourceLineNo">254</span>        double Y0 = j - t;<a name="line.254"></a>
-<span class="sourceLineNo">255</span>        double Z0 = k - t;<a name="line.255"></a>
-<span class="sourceLineNo">256</span>        double x0 = xin - X0; // The x,y,z distances from the cell origin<a name="line.256"></a>
-<span class="sourceLineNo">257</span>        double y0 = yin - Y0;<a name="line.257"></a>
-<span class="sourceLineNo">258</span>        double z0 = zin - Z0;<a name="line.258"></a>
-<span class="sourceLineNo">259</span>        // For the 3D case, the simplex shape is a slightly irregular<a name="line.259"></a>
-<span class="sourceLineNo">260</span>        // tetrahedron.<a name="line.260"></a>
-<span class="sourceLineNo">261</span>        // Determine which simplex we are in.<a name="line.261"></a>
-<span class="sourceLineNo">262</span>        int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k)<a name="line.262"></a>
-<span class="sourceLineNo">263</span>        // coords<a name="line.263"></a>
-<span class="sourceLineNo">264</span>        int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k)<a name="line.264"></a>
-<span class="sourceLineNo">265</span>        // coords<a name="line.265"></a>
-<span class="sourceLineNo">266</span>        if (x0 &gt;= y0) {<a name="line.266"></a>
-<span class="sourceLineNo">267</span>            if (y0 &gt;= z0) {<a name="line.267"></a>
-<span class="sourceLineNo">268</span>                i1 = 1;<a name="line.268"></a>
-<span class="sourceLineNo">269</span>                j1 = 0;<a name="line.269"></a>
-<span class="sourceLineNo">270</span>                k1 = 0;<a name="line.270"></a>
-<span class="sourceLineNo">271</span>                i2 = 1;<a name="line.271"></a>
-<span class="sourceLineNo">272</span>                j2 = 1;<a name="line.272"></a>
-<span class="sourceLineNo">273</span>                k2 = 0;<a name="line.273"></a>
-<span class="sourceLineNo">274</span>            } // X Y Z order<a name="line.274"></a>
-<span class="sourceLineNo">275</span>            else if (x0 &gt;= z0) {<a name="line.275"></a>
-<span class="sourceLineNo">276</span>                i1 = 1;<a name="line.276"></a>
-<span class="sourceLineNo">277</span>                j1 = 0;<a name="line.277"></a>
-<span class="sourceLineNo">278</span>                k1 = 0;<a name="line.278"></a>
-<span class="sourceLineNo">279</span>                i2 = 1;<a name="line.279"></a>
-<span class="sourceLineNo">280</span>                j2 = 0;<a name="line.280"></a>
-<span class="sourceLineNo">281</span>                k2 = 1;<a name="line.281"></a>
-<span class="sourceLineNo">282</span>            } // X Z Y order<a name="line.282"></a>
-<span class="sourceLineNo">283</span>            else {<a name="line.283"></a>
-<span class="sourceLineNo">284</span>                i1 = 0;<a name="line.284"></a>
-<span class="sourceLineNo">285</span>                j1 = 0;<a name="line.285"></a>
-<span class="sourceLineNo">286</span>                k1 = 1;<a name="line.286"></a>
-<span class="sourceLineNo">287</span>                i2 = 1;<a name="line.287"></a>
-<span class="sourceLineNo">288</span>                j2 = 0;<a name="line.288"></a>
-<span class="sourceLineNo">289</span>                k2 = 1;<a name="line.289"></a>
-<span class="sourceLineNo">290</span>            } // Z X Y order<a name="line.290"></a>
-<span class="sourceLineNo">291</span>        } else { // x0&lt;y0<a name="line.291"></a>
-<span class="sourceLineNo">292</span>            if (y0 &lt; z0) {<a name="line.292"></a>
-<span class="sourceLineNo">293</span>                i1 = 0;<a name="line.293"></a>
-<span class="sourceLineNo">294</span>                j1 = 0;<a name="line.294"></a>
-<span class="sourceLineNo">295</span>                k1 = 1;<a name="line.295"></a>
-<span class="sourceLineNo">296</span>                i2 = 0;<a name="line.296"></a>
-<span class="sourceLineNo">297</span>                j2 = 1;<a name="line.297"></a>
-<span class="sourceLineNo">298</span>                k2 = 1;<a name="line.298"></a>
-<span class="sourceLineNo">299</span>            } // Z Y X order<a name="line.299"></a>
-<span class="sourceLineNo">300</span>            else if (x0 &lt; z0) {<a name="line.300"></a>
-<span class="sourceLineNo">301</span>                i1 = 0;<a name="line.301"></a>
-<span class="sourceLineNo">302</span>                j1 = 1;<a name="line.302"></a>
-<span class="sourceLineNo">303</span>                k1 = 0;<a name="line.303"></a>
-<span class="sourceLineNo">304</span>                i2 = 0;<a name="line.304"></a>
-<span class="sourceLineNo">305</span>                j2 = 1;<a name="line.305"></a>
-<span class="sourceLineNo">306</span>                k2 = 1;<a name="line.306"></a>
-<span class="sourceLineNo">307</span>            } // Y Z X order<a name="line.307"></a>
-<span class="sourceLineNo">308</span>            else {<a name="line.308"></a>
-<span class="sourceLineNo">309</span>                i1 = 0;<a name="line.309"></a>
-<span class="sourceLineNo">310</span>                j1 = 1;<a name="line.310"></a>
-<span class="sourceLineNo">311</span>                k1 = 0;<a name="line.311"></a>
-<span class="sourceLineNo">312</span>                i2 = 1;<a name="line.312"></a>
-<span class="sourceLineNo">313</span>                j2 = 1;<a name="line.313"></a>
-<span class="sourceLineNo">314</span>                k2 = 0;<a name="line.314"></a>
-<span class="sourceLineNo">315</span>            } // Y X Z order<a name="line.315"></a>
-<span class="sourceLineNo">316</span>        }<a name="line.316"></a>
-<span class="sourceLineNo">317</span>        // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in<a name="line.317"></a>
-<span class="sourceLineNo">318</span>        // (x,y,z),<a name="line.318"></a>
-<span class="sourceLineNo">319</span>        // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in<a name="line.319"></a>
-<span class="sourceLineNo">320</span>        // (x,y,z), and<a name="line.320"></a>
-<span class="sourceLineNo">321</span>        // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in<a name="line.321"></a>
-<span class="sourceLineNo">322</span>        // (x,y,z), where<a name="line.322"></a>
-<span class="sourceLineNo">323</span>        // c = 1/6.<a name="line.323"></a>
-<span class="sourceLineNo">324</span>        double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z)<a name="line.324"></a>
-<span class="sourceLineNo">325</span>        // coords<a name="line.325"></a>
-<span class="sourceLineNo">326</span>        double y1 = y0 - j1 + G3;<a name="line.326"></a>
-<span class="sourceLineNo">327</span>        double z1 = z0 - k1 + G3;<a name="line.327"></a>
-<span class="sourceLineNo">328</span>        double x2 = x0 - i2 + 2.0 * G3; // Offsets for third corner in<a name="line.328"></a>
-<span class="sourceLineNo">329</span>        // (x,y,z) coords<a name="line.329"></a>
-<span class="sourceLineNo">330</span>        double y2 = y0 - j2 + 2.0 * G3;<a name="line.330"></a>
-<span class="sourceLineNo">331</span>        double z2 = z0 - k2 + 2.0 * G3;<a name="line.331"></a>
-<span class="sourceLineNo">332</span>        double x3 = x0 - 1.0 + 3.0 * G3; // Offsets for last corner in<a name="line.332"></a>
-<span class="sourceLineNo">333</span>        // (x,y,z) coords<a name="line.333"></a>
-<span class="sourceLineNo">334</span>        double y3 = y0 - 1.0 + 3.0 * G3;<a name="line.334"></a>
-<span class="sourceLineNo">335</span>        double z3 = z0 - 1.0 + 3.0 * G3;<a name="line.335"></a>
-<span class="sourceLineNo">336</span>        // Work out the hashed gradient indices of the four simplex corners<a name="line.336"></a>
-<span class="sourceLineNo">337</span>        int ii = i &amp; 255;<a name="line.337"></a>
-<span class="sourceLineNo">338</span>        int jj = j &amp; 255;<a name="line.338"></a>
-<span class="sourceLineNo">339</span>        int kk = k &amp; 255;<a name="line.339"></a>
-<span class="sourceLineNo">340</span>        int gi0 = perm[ii + perm[jj + perm[kk]]] % 12;<a name="line.340"></a>
-<span class="sourceLineNo">341</span>        int gi1 = perm[ii + i1 + perm[jj + j1 + perm[kk + k1]]] % 12;<a name="line.341"></a>
-<span class="sourceLineNo">342</span>        int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;<a name="line.342"></a>
-<span class="sourceLineNo">343</span>        int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;<a name="line.343"></a>
-<span class="sourceLineNo">344</span>        // Calculate the contribution from the four corners<a name="line.344"></a>
-<span class="sourceLineNo">345</span>        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;<a name="line.345"></a>
-<span class="sourceLineNo">346</span>        if (t0 &lt; 0) {<a name="line.346"></a>
-<span class="sourceLineNo">347</span>            n0 = 0.0;<a name="line.347"></a>
-<span class="sourceLineNo">348</span>        } else {<a name="line.348"></a>
-<span class="sourceLineNo">349</span>            t0 *= t0;<a name="line.349"></a>
-<span class="sourceLineNo">350</span>            n0 = t0 * t0 * dot(grad3[gi0], x0, y0, z0);<a name="line.350"></a>
-<span class="sourceLineNo">351</span>        }<a name="line.351"></a>
-<span class="sourceLineNo">352</span>        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;<a name="line.352"></a>
-<span class="sourceLineNo">353</span>        if (t1 &lt; 0) {<a name="line.353"></a>
-<span class="sourceLineNo">354</span>            n1 = 0.0;<a name="line.354"></a>
-<span class="sourceLineNo">355</span>        } else {<a name="line.355"></a>
-<span class="sourceLineNo">356</span>            t1 *= t1;<a name="line.356"></a>
-<span class="sourceLineNo">357</span>            n1 = t1 * t1 * dot(grad3[gi1], x1, y1, z1);<a name="line.357"></a>
-<span class="sourceLineNo">358</span>        }<a name="line.358"></a>
-<span class="sourceLineNo">359</span>        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;<a name="line.359"></a>
-<span class="sourceLineNo">360</span>        if (t2 &lt; 0) {<a name="line.360"></a>
-<span class="sourceLineNo">361</span>            n2 = 0.0;<a name="line.361"></a>
-<span class="sourceLineNo">362</span>        } else {<a name="line.362"></a>
-<span class="sourceLineNo">363</span>            t2 *= t2;<a name="line.363"></a>
-<span class="sourceLineNo">364</span>            n2 = t2 * t2 * dot(grad3[gi2], x2, y2, z2);<a name="line.364"></a>
-<span class="sourceLineNo">365</span>        }<a name="line.365"></a>
-<span class="sourceLineNo">366</span>        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;<a name="line.366"></a>
-<span class="sourceLineNo">367</span>        if (t3 &lt; 0) {<a name="line.367"></a>
-<span class="sourceLineNo">368</span>            n3 = 0.0;<a name="line.368"></a>
-<span class="sourceLineNo">369</span>        } else {<a name="line.369"></a>
-<span class="sourceLineNo">370</span>            t3 *= t3;<a name="line.370"></a>
-<span class="sourceLineNo">371</span>            n3 = t3 * t3 * dot(grad3[gi3], x3, y3, z3);<a name="line.371"></a>
-<span class="sourceLineNo">372</span>        }<a name="line.372"></a>
-<span class="sourceLineNo">373</span>        // Add contributions from each corner to get the final noise value.<a name="line.373"></a>
-<span class="sourceLineNo">374</span>        // The result is scaled to stay just inside [-1,1]<a name="line.374"></a>
-<span class="sourceLineNo">375</span>        return 32.0 * (n0 + n1 + n2 + n3);<a name="line.375"></a>
-<span class="sourceLineNo">376</span>    }<a name="line.376"></a>
+<span class="sourceLineNo">038</span>    /**<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * Not used currently; see {@link #phiGrad2} instead.<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     */<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    protected static final double[][] grad2 = {<a name="line.41"></a>
+<span class="sourceLineNo">042</span>            {1, 0}, {-1, 0}, {0, 1}, {0, -1},/*<a name="line.42"></a>
+<span class="sourceLineNo">043</span>            {1, 0}, {-1, 0}, {0, 1}, {0, -1},<a name="line.43"></a>
+<span class="sourceLineNo">044</span>            {1, 0}, {-1, 0}, {0, 1}, {0, -1},<a name="line.44"></a>
+<span class="sourceLineNo">045</span>            {1, 0}, {-1, 0}, {0, 1}, {0, -1},*/<a name="line.45"></a>
+<span class="sourceLineNo">046</span>            {unit3_8, unit1_8}, {unit3_8, -unit1_8}, {-unit3_8, unit1_8}, {-unit3_8, -unit1_8},<a name="line.46"></a>
+<span class="sourceLineNo">047</span>            {unit1_4, unit1_4}, {unit1_4, -unit1_4}, {-unit1_4, unit1_4}, {-unit1_4, -unit1_4},<a name="line.47"></a>
+<span class="sourceLineNo">048</span>            {unit1_8, unit3_8}, {unit1_8, -unit3_8}, {-unit1_8, unit3_8}, {-unit1_8, -unit3_8}};<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span>    /**<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     * 256 2-element gradient vectors formed from the cos and sin of increasing multiples of phi, the golden ratio.<a name="line.51"></a>
+<span class="sourceLineNo">052</span>     * This starts with {@code Math.cos(1.61803398875 * 1), Math.sin(1.61803398875 * 1)} and increases the multiple up<a name="line.52"></a>
+<span class="sourceLineNo">053</span>     * to 256 at the end. This is expected to be accessed using an 8-bit int (depending on how you got your int, the<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * normal way to get 8 bits would be {@code index &amp; 255}), but smaller numbers should also work down to about 4 bits<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * (typically using {@code index &amp; 15}).<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     */<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    protected static final double[][] phiGrad2 = {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>            {0.8150192046878179, 0.5794339444578966},<a name="line.58"></a>
+<span class="sourceLineNo">059</span>            {0.3285126080199264, 0.9444995851624003},<a name="line.59"></a>
+<span class="sourceLineNo">060</span>            {-0.27953103565117526, 0.9601366569961702},<a name="line.60"></a>
+<span class="sourceLineNo">061</span>            {-0.7841589327438924, 0.6205600439908774},<a name="line.61"></a>
+<span class="sourceLineNo">062</span>            {-0.9986781437763752, 0.05140005003279401},<a name="line.62"></a>
+<span class="sourceLineNo">063</span>            {-0.8437248002155627, -0.5367759881935933},<a name="line.63"></a>
+<span class="sourceLineNo">064</span>            {-0.37662568751777636, -0.9263655280189145},<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            {0.22981046360408072, -0.9732354035987786},<a name="line.65"></a>
+<span class="sourceLineNo">066</span>            {0.7512255700688496, -0.6600455612112939},<a name="line.66"></a>
+<span class="sourceLineNo">067</span>            {0.9947160697132525, -0.10266421311352707},<a name="line.67"></a>
+<span class="sourceLineNo">068</span>            {0.8701998299869244, 0.49269895056791824},<a name="line.68"></a>
+<span class="sourceLineNo">069</span>            {0.4237430769975827, 0.9057824267983017},<a name="line.69"></a>
+<span class="sourceLineNo">070</span>            {-0.17948233877384698, 0.983761195650789},<a name="line.70"></a>
+<span class="sourceLineNo">071</span>            {-0.7163061830035246, 0.6977861077657832},<a name="line.71"></a>
+<span class="sourceLineNo">072</span>            {-0.9881242523951498, 0.15365696153616482},<a name="line.72"></a>
+<span class="sourceLineNo">073</span>            {-0.894374301636155, -0.44731935859387983},<a name="line.73"></a>
+<span class="sourceLineNo">074</span>            {-0.4697402116302938, -0.8828046973014625},<a name="line.74"></a>
+<span class="sourceLineNo">075</span>            {0.12867971425053623, -0.991686205984736},<a name="line.75"></a>
+<span class="sourceLineNo">076</span>            {0.6794930883661505, -0.7336819085016549},<a name="line.76"></a>
+<span class="sourceLineNo">077</span>            {0.9789201186915606, -0.20424348513698282},<a name="line.77"></a>
+<span class="sourceLineNo">078</span>            {0.9161843048116499, 0.4007571828636311},<a name="line.78"></a>
+<span class="sourceLineNo">079</span>            {0.5144954882185442, 0.857493086037877},<a name="line.79"></a>
+<span class="sourceLineNo">080</span>            {-0.07753689756495279, 0.9969894831521554},<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            {-0.6408836093932414, 0.7676380652437},<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            {-0.9671280016853234, 0.25429004769387453},<a name="line.82"></a>
+<span class="sourceLineNo">083</span>            {-0.9355721801365401, -0.3531355203807194},<a name="line.83"></a>
+<span class="sourceLineNo">084</span>            {-0.5578905866805359, -0.8299145096293036},<a name="line.84"></a>
+<span class="sourceLineNo">085</span>            {0.026189095618157535, -0.9996570068131884},<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            {0.6005798184449439, -0.7995648076776756},<a name="line.86"></a>
+<span class="sourceLineNo">087</span>            {0.9527790763429471, -0.30366434048646623},<a name="line.87"></a>
+<span class="sourceLineNo">088</span>            {0.9524866716435015, 0.30458026912701447},<a name="line.88"></a>
+<span class="sourceLineNo">089</span>            {0.5998107828543199, 0.8001418779014681},<a name="line.89"></a>
+<span class="sourceLineNo">090</span>            {0.025227942766709196, 0.9996817248023291},<a name="line.90"></a>
+<span class="sourceLineNo">091</span>            {-0.5586882671550536, 0.8293777306772129},<a name="line.91"></a>
+<span class="sourceLineNo">092</span>            {-0.9359112770969633, 0.35223583208232967},<a name="line.92"></a>
+<span class="sourceLineNo">093</span>            {-0.9668830622808007, -0.25521979522462845},<a name="line.93"></a>
+<span class="sourceLineNo">094</span>            {-0.6401452517954772, -0.7682539011314586},<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            {-0.07657828572526153, -0.997063571772322},<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            {0.5153197047391562, -0.8569980174466851},<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            {0.9165691975581982, -0.39987611342454643},<a name="line.97"></a>
+<span class="sourceLineNo">098</span>            {0.9787232921313124, 0.20518459357282604},<a name="line.98"></a>
+<span class="sourceLineNo">099</span>            {0.6787873607664123, 0.7343348819603821},<a name="line.99"></a>
+<span class="sourceLineNo">100</span>            {0.12772617771665648, 0.9918094693669208},<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            {-0.4705887852055238, 0.8823526478901672},<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            {-0.8948039726230813, 0.44645923730834813},<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            {-0.987976059032004, -0.1546069428570078},<a name="line.103"></a>
+<span class="sourceLineNo">104</span>            {-0.7156349511426562, -0.6984744925214149},<a name="line.104"></a>
+<span class="sourceLineNo">105</span>            {-0.17853639842218227, -0.9839333079220541},<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            {0.42461376424291053, -0.9053745916555567},<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            {0.8706731432876941, -0.49186205134928496},<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            {0.9946169013278476, 0.10362055584193075},<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            {0.7505906084908771, 0.6607675373724824},<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            {0.22887462022891217, 0.9734559097437702},<a name="line.110"></a>
+<span class="sourceLineNo">111</span>            {-0.37751618658649483, 0.926002985343563},<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            {-0.8442405045259113, 0.53596452356274},<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            {-0.998628262541406, -0.052360225873583494},<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            {-0.7835619201046374, -0.6213137028602651},<a name="line.114"></a>
+<span class="sourceLineNo">115</span>            {-0.27860776335327647, -0.9604049740600497},<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            {0.32942056468855896, -0.9441832934130274},<a name="line.116"></a>
+<span class="sourceLineNo">117</span>            {0.815575936633839, -0.5786500596939711},<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            {0.9999995377871086, 9.614705243498993E-4},<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            {0.8144617193170308, 0.5802172935781439},<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            {0.32760434766577023, 0.9448150037920043},<a name="line.120"></a>
+<span class="sourceLineNo">121</span>            {-0.2804540495433758, 0.9598674523572105},<a name="line.121"></a>
+<span class="sourceLineNo">122</span>            {-0.7847552204864104, 0.6198058114597872},<a name="line.122"></a>
+<span class="sourceLineNo">123</span>            {-0.9987271018075193, 0.05043982667647658},<a name="line.123"></a>
+<span class="sourceLineNo">124</span>            {-0.8432083159442574, -0.5375869566148805},<a name="line.124"></a>
+<span class="sourceLineNo">125</span>            {-0.37573484028656684, -0.9267272143380857},<a name="line.125"></a>
+<span class="sourceLineNo">126</span>            {0.23074609453653327, -0.9730139977698868},<a name="line.126"></a>
+<span class="sourceLineNo">127</span>            {0.7518598371945376, -0.6593229748869694},<a name="line.127"></a>
+<span class="sourceLineNo">128</span>            {0.9948143185574757, -0.10170777547968135},<a name="line.128"></a>
+<span class="sourceLineNo">129</span>            {0.8697257122509974, 0.4935353943229353},<a name="line.129"></a>
+<span class="sourceLineNo">130</span>            {0.4228719980332324, 0.9061894246124161},<a name="line.130"></a>
+<span class="sourceLineNo">131</span>            {-0.18042811320741017, 0.9835881739653105},<a name="line.131"></a>
+<span class="sourceLineNo">132</span>            {-0.7169767526924914, 0.69709707795868},<a name="line.132"></a>
+<span class="sourceLineNo">133</span>            {-0.9882715323107604, 0.15270683817086136},<a name="line.133"></a>
+<span class="sourceLineNo">134</span>            {-0.8939438038665631, -0.44817906636586646},<a name="line.134"></a>
+<span class="sourceLineNo">135</span>            {-0.4688912038150978, -0.883255930625336},<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            {0.1296331318295739, -0.9915620258622535},<a name="line.136"></a>
+<span class="sourceLineNo">137</span>            {0.6801981878249586, -0.7330282568084551},<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            {0.9791160403128117, -0.20330218789319596},<a name="line.138"></a>
+<span class="sourceLineNo">139</span>            {0.9157985651207083, 0.40163788183244326},<a name="line.139"></a>
+<span class="sourceLineNo">140</span>            {0.5136707960850377, 0.8579873619403514},<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            {-0.07849543772753681, 0.9969144728892054},<a name="line.141"></a>
+<span class="sourceLineNo">142</span>            {-0.6416213745416761, 0.7670215197315198},<a name="line.142"></a>
+<span class="sourceLineNo">143</span>            {-0.9673720470517861, 0.2533600650908442},<a name="line.143"></a>
+<span class="sourceLineNo">144</span>            {-0.9352322183090706, -0.3540348822315325},<a name="line.144"></a>
+<span class="sourceLineNo">145</span>            {-0.5570923904775789, -0.8304505213870221},<a name="line.145"></a>
+<span class="sourceLineNo">146</span>            {0.0271502242597271, -0.9996313647153368},<a name="line.146"></a>
+<span class="sourceLineNo">147</span>            {0.6013482988440962, -0.7989869983155617},<a name="line.147"></a>
+<span class="sourceLineNo">148</span>            {0.9530706002688482, -0.30274813113077575},<a name="line.148"></a>
+<span class="sourceLineNo">149</span>            {0.9521933864408199, 0.3054959162057056},<a name="line.149"></a>
+<span class="sourceLineNo">150</span>            {0.5990411927831463, 0.8007182084534767},<a name="line.150"></a>
+<span class="sourceLineNo">151</span>            {0.02426676659390367, 0.9997055186599086},<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            {-0.5594854311637297, 0.8288401850269662},<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            {-0.9362495088768715, 0.3513358181680552},<a name="line.153"></a>
+<span class="sourceLineNo">154</span>            {-0.9666372290646448, -0.2561493068236286},<a name="line.154"></a>
+<span class="sourceLineNo">155</span>            {-0.639406302430932, -0.7688690268255078},<a name="line.155"></a>
+<span class="sourceLineNo">156</span>            {-0.07561960309462855, -0.9971367386812156},<a name="line.156"></a>
+<span class="sourceLineNo">157</span>            {0.5161434448849468, -0.8565021566244302},<a name="line.157"></a>
+<span class="sourceLineNo">158</span>            {0.9169532430045485, -0.39899467432967256},<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            {0.9785255608140186, 0.20612551233074072},<a name="line.159"></a>
+<span class="sourceLineNo">160</span>            {0.6780810056781368, 0.7349871765810113},<a name="line.160"></a>
+<span class="sourceLineNo">161</span>            {0.1267725231094102, 0.9919318158948598},<a name="line.161"></a>
+<span class="sourceLineNo">162</span>            {-0.4714369237563429, 0.8818997828093372},<a name="line.162"></a>
+<span class="sourceLineNo">163</span>            {-0.8952328164301424, 0.4455987033043912},<a name="line.163"></a>
+<span class="sourceLineNo">164</span>            {-0.9878269523583152, -0.15555678125521535},<a name="line.164"></a>
+<span class="sourceLineNo">165</span>            {-0.7149630577303816, -0.6991622315892235},<a name="line.165"></a>
+<span class="sourceLineNo">166</span>            {-0.1775902930268572, -0.9841045106200027},<a name="line.166"></a>
+<span class="sourceLineNo">167</span>            {0.42548405896433017, -0.9049659195611945},<a name="line.167"></a>
+<span class="sourceLineNo">168</span>            {0.8711456517157633, -0.4910246974406867},<a name="line.168"></a>
+<span class="sourceLineNo">169</span>            {0.9945168134929346, 0.10457680278082451},<a name="line.169"></a>
+<span class="sourceLineNo">170</span>            {0.7499549530475861, 0.6614889027031315},<a name="line.170"></a>
+<span class="sourceLineNo">171</span>            {0.2279385652761324, 0.973675516001023},<a name="line.171"></a>
+<span class="sourceLineNo">172</span>            {-0.37840633666951456, 0.9256395866471777},<a name="line.172"></a>
+<span class="sourceLineNo">173</span>            {-0.8447554283985693, 0.535152563472464},<a name="line.173"></a>
+<span class="sourceLineNo">174</span>            {-0.9985774581487236, -0.05332035331122841},<a name="line.174"></a>
+<span class="sourceLineNo">175</span>            {-0.782964183120542, -0.6220667873712457},<a name="line.175"></a>
+<span class="sourceLineNo">176</span>            {-0.27768423350317883, -0.9606724033008089},<a name="line.176"></a>
+<span class="sourceLineNo">177</span>            {0.3303282168323275, -0.9438661288362745},<a name="line.177"></a>
+<span class="sourceLineNo">178</span>            {0.8161319146404362, -0.5778656400110114},<a name="line.178"></a>
+<span class="sourceLineNo">179</span>            {0.9999981511488616, 0.0019229401598916565},<a name="line.179"></a>
+<span class="sourceLineNo">180</span>            {0.8139034810368312, 0.5810001063305656},<a name="line.180"></a>
+<span class="sourceLineNo">181</span>            {0.3266957844657079, 0.945129549010259},<a name="line.181"></a>
+<span class="sourceLineNo">182</span>            {-0.281376804176623, 0.9595973603920294},<a name="line.182"></a>
+<span class="sourceLineNo">183</span>            {-0.7853507827809703, 0.6190510059642236},<a name="line.183"></a>
+<span class="sourceLineNo">184</span>            {-0.9987751365895806, 0.04947955669228112},<a name="line.184"></a>
+<span class="sourceLineNo">185</span>            {-0.8426910521894434, -0.538397428076926},<a name="line.185"></a>
+<span class="sourceLineNo">186</span>            {-0.3748436457163809, -0.9270880439667272},<a name="line.186"></a>
+<span class="sourceLineNo">187</span>            {0.23168151216134933, -0.9727916924617678},<a name="line.187"></a>
+<span class="sourceLineNo">188</span>            {0.7524934092816089, -0.6585997790674858},<a name="line.188"></a>
+<span class="sourceLineNo">189</span>            {0.994911647769694, -0.10075124382454212},<a name="line.189"></a>
+<span class="sourceLineNo">190</span>            {0.8692507905181963, 0.49437138184111223},<a name="line.190"></a>
+<span class="sourceLineNo">191</span>            {0.42200052815510103, 0.906595584721664},<a name="line.191"></a>
+<span class="sourceLineNo">192</span>            {-0.18137372084857706, 0.9834142430255637},<a name="line.192"></a>
+<span class="sourceLineNo">193</span>            {-0.7176466595896562, 0.6964074037370712},<a name="line.193"></a>
+<span class="sourceLineNo">194</span>            {-0.9884178986426848, 0.15175657363942827},<a name="line.194"></a>
+<span class="sourceLineNo">195</span>            {-0.8935124797122745, -0.4490383598295609},<a name="line.195"></a>
+<span class="sourceLineNo">196</span>            {-0.46804176254479146, -0.8837063474446503},<a name="line.196"></a>
+<span class="sourceLineNo">197</span>            {0.1305864295723934, -0.9914369291142702},<a name="line.197"></a>
+<span class="sourceLineNo">198</span>            {0.6809026584910192, -0.7323739274850399},<a name="line.198"></a>
+<span class="sourceLineNo">199</span>            {0.9793110568139495, -0.20236070271163187},<a name="line.199"></a>
+<span class="sourceLineNo">200</span>            {0.9154119788419642, 0.40251820951683553},<a name="line.200"></a>
+<span class="sourceLineNo">201</span>            {0.5128456291010095, 0.8584808446971836},<a name="line.201"></a>
+<span class="sourceLineNo">202</span>            {-0.07945390532690727, 0.9968385410528141},<a name="line.202"></a>
+<span class="sourceLineNo">203</span>            {-0.6423585465587638, 0.7664042651648753},<a name="line.203"></a>
+<span class="sourceLineNo">204</span>            {-0.9676151981545856, 0.2524298482752425},<a name="line.204"></a>
+<span class="sourceLineNo">205</span>            {-0.934891391928828, -0.35493391680336583},<a name="line.205"></a>
+<span class="sourceLineNo">206</span>            {-0.5562936792840555, -0.8309857654548652},<a name="line.206"></a>
+<span class="sourceLineNo">207</span>            {0.028111327802940005, -0.9996047985324779},<a name="line.207"></a>
+<span class="sourceLineNo">208</span>            {0.6021162233413851, -0.7984084503492602},<a name="line.208"></a>
+<span class="sourceLineNo">209</span>            {0.9533612431517168, -0.30183164190689693},<a name="line.209"></a>
+<span class="sourceLineNo">210</span>            {0.9518992210060183, 0.30641128087610536},<a name="line.210"></a>
+<span class="sourceLineNo">211</span>            {0.5982710489428404, 0.8012937988009351},<a name="line.211"></a>
+<span class="sourceLineNo">212</span>            {0.023305567988262783, 0.9997283883639319},<a name="line.212"></a>
+<span class="sourceLineNo">213</span>            {-0.5602820779696569, 0.8283018731754765},<a name="line.213"></a>
+<span class="sourceLineNo">214</span>            {-0.9365868751635984, 0.350435479469882},<a name="line.214"></a>
+<span class="sourceLineNo">215</span>            {-0.9663905022641126, -0.25707858163160174},<a name="line.215"></a>
+<span class="sourceLineNo">216</span>            {-0.6386667619827179, -0.7694834417572027},<a name="line.216"></a>
+<span class="sourceLineNo">217</span>            {-0.07466085055928477, -0.997208983811199},<a name="line.217"></a>
+<span class="sourceLineNo">218</span>            {0.5169667078944292, -0.8560055040294986},<a name="line.218"></a>
+<span class="sourceLineNo">219</span>            {0.9173364407956793, -0.3981128663938346},<a name="line.219"></a>
+<span class="sourceLineNo">220</span>            {0.9783269249224673, 0.2070662405409173},<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            {0.6773740237542967, 0.7356387917605443},<a name="line.221"></a>
+<span class="sourceLineNo">222</span>            {0.12581875131036094, 0.9920532454554551},<a name="line.222"></a>
+<span class="sourceLineNo">223</span>            {-0.47228462649872727, 0.8814461024776034},<a name="line.223"></a>
+<span class="sourceLineNo">224</span>            {-0.8956608326609128, 0.44473775737749144},<a name="line.224"></a>
+<span class="sourceLineNo">225</span>            {-0.9876769325119248, -0.1565064758527096},<a name="line.225"></a>
+<span class="sourceLineNo">226</span>            {-0.7142905033878327, -0.6998493243334286},<a name="line.226"></a>
+<span class="sourceLineNo">227</span>            {-0.17664402346250044, -0.9842748035863661},<a name="line.227"></a>
+<span class="sourceLineNo">228</span>            {0.4263539603573059, -0.9045564108930083},<a name="line.228"></a>
+<span class="sourceLineNo">229</span>            {0.8716173548343263, -0.4901868896162075},<a name="line.229"></a>
+<span class="sourceLineNo">230</span>            {0.994415806301039, 0.1055329530462149},<a name="line.230"></a>
+<span class="sourceLineNo">231</span>            {0.7493186043266098, 0.6622096565363733},<a name="line.231"></a>
+<span class="sourceLineNo">232</span>            {0.22700229961107984, 0.9738942221675214},<a name="line.232"></a>
+<span class="sourceLineNo">233</span>            {-0.37929613694395364, 0.9252753322656957},<a name="line.233"></a>
+<span class="sourceLineNo">234</span>            {-0.8452695713575256, 0.5343401086733665},<a name="line.234"></a>
+<span class="sourceLineNo">235</span>            {-0.998525730645293, -0.054280431458156884},<a name="line.235"></a>
+<span class="sourceLineNo">236</span>            {-0.7823657223441729, -0.6228192968276437},<a name="line.236"></a>
+<span class="sourceLineNo">237</span>            {-0.2767604469546231, -0.9609389444712277},<a name="line.237"></a>
+<span class="sourceLineNo">238</span>            {0.3312355636121689, -0.943548091725339},<a name="line.238"></a>
+<span class="sourceLineNo">239</span>            {0.8166871381936452, -0.5770806861341607},<a name="line.239"></a>
+<span class="sourceLineNo">240</span>            {0.999995840086541, 0.0028844080178108454},<a name="line.240"></a>
+<span class="sourceLineNo">241</span>            {0.8133444903632729, 0.5817823819915036},<a name="line.241"></a>
+<span class="sourceLineNo">242</span>            {0.325786919259646, 0.9454432205263883},<a name="line.242"></a>
+<span class="sourceLineNo">243</span>            {-0.28229929869789083, 0.9593263813503092},<a name="line.243"></a>
+<span class="sourceLineNo">244</span>            {-0.7859456190770135, 0.6182956282019548},<a name="line.244"></a>
+<span class="sourceLineNo">245</span>            {-0.998822248078154, 0.04851924096791483},<a name="line.245"></a>
+<span class="sourceLineNo">246</span>            {-0.8421730094292976, -0.5392074018305016},<a name="line.246"></a>
+<span class="sourceLineNo">247</span>            {-0.373952104631071, -0.9274480165712753},<a name="line.247"></a>
+<span class="sourceLineNo">248</span>            {0.23261671561379524, -0.9725684878799286},<a name="line.248"></a>
+<span class="sourceLineNo">249</span>            {0.7531262857443665, -0.6578759744213911},<a name="line.249"></a>
+<span class="sourceLineNo">250</span>            {0.9950080572599341, -0.09979461903234838},<a name="line.250"></a>
+<span class="sourceLineNo">251</span>            {0.8687750652275492, 0.49520691234964365},<a name="line.251"></a>
+<span class="sourceLineNo">252</span>            {0.42112866816879463, 0.9070009067505816},<a name="line.252"></a>
+<span class="sourceLineNo">253</span>            {-0.18231916082320707, 0.9832394029923341},<a name="line.253"></a>
+<span class="sourceLineNo">254</span>            {-0.7183159030757559, 0.6957170857384928},<a name="line.254"></a>
+<span class="sourceLineNo">255</span>            {-0.9885633512556217, 0.15080616882029174},<a name="line.255"></a>
+<span class="sourceLineNo">256</span>            {-0.893080329572006, -0.44989723819063077},<a name="line.256"></a>
+<span class="sourceLineNo">257</span>            {-0.46719188860459987, -0.8841559473430393},<a name="line.257"></a>
+<span class="sourceLineNo">258</span>            {0.1315396065977646, -0.9913109158564256},<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            {0.681606499713117, -0.7317189211362739},<a name="line.259"></a>
+<span class="sourceLineNo">260</span>            {0.9795051680146997, -0.20141903046260284},<a name="line.260"></a>
+<span class="sourceLineNo">261</span>            {0.9150245463327793, 0.40339816510302995},<a name="line.261"></a>
+<span class="sourceLineNo">262</span>            {0.512019988029247, 0.858973533852196},<a name="line.262"></a>
+<span class="sourceLineNo">263</span>            {-0.08041229947705328, 0.9967616877131729},<a name="line.263"></a>
+<span class="sourceLineNo">264</span>            {-0.6430951247630602, 0.7657863021143588},<a name="line.264"></a>
+<span class="sourceLineNo">265</span>            {-0.9678574547689481, 0.2514993981069807},<a name="line.265"></a>
+<span class="sourceLineNo">266</span>            {-0.9345497013108786, -0.35583262326513526},<a name="line.266"></a>
+<span class="sourceLineNo">267</span>            {-0.5554944538383123, -0.8315202413380417},<a name="line.267"></a>
+<span class="sourceLineNo">268</span>            {0.02907240535928829, -0.9995773082891715},<a name="line.268"></a>
+<span class="sourceLineNo">269</span>            {0.6028835912268903, -0.7978291643136192},<a name="line.269"></a>
+<span class="sourceLineNo">270</span>            {0.9536510047228631, -0.3009148736620934},<a name="line.270"></a>
+<span class="sourceLineNo">271</span>            {0.9516041756110342, 0.307326362292017},<a name="line.271"></a>
+<span class="sourceLineNo">272</span>            {0.5975003520453519, 0.8018686484117461},<a name="line.272"></a>
+<span class="sourceLineNo">273</span>            {0.022344347838353967, 0.9997503338932568},<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            {-0.5610782068363855, 0.8277627956203795},<a name="line.274"></a>
+<span class="sourceLineNo">275</span>            {-0.93692337564527, 0.34953481682011633},<a name="line.275"></a>
+<span class="sourceLineNo">276</span>            {-0.966142882107282, -0.2580076187895127},<a name="line.276"></a>
+<span class="sourceLineNo">277</span>            {-0.6379266311344768, -0.7700971453585691},<a name="line.277"></a>
+<span class="sourceLineNo">278</span>            {-0.0737020290055187, -0.9972803070954874},<a name="line.278"></a>
+<span class="sourceLineNo">279</span>            {0.5177894930065641, -0.8555080601210051},<a name="line.279"></a>
+<span class="sourceLineNo">280</span>            {0.9177187905773555, -0.3972306904321919},<a name="line.280"></a>
+<span class="sourceLineNo">281</span>            {0.978127384640281, 0.20800677733372933},<a name="line.281"></a>
+<span class="sourceLineNo">282</span>            {0.6766664156484392, 0.7362897268966162},<a name="line.282"></a>
+<span class="sourceLineNo">283</span>            {0.12486486320121397, 0.9921737579364525},<a name="line.283"></a>
+<span class="sourceLineNo">284</span>            {-0.47313189264902605, 0.8809916073143662},<a name="line.284"></a>
+<span class="sourceLineNo">285</span>            {-0.8960880209197166, 0.4438764003235422},<a name="line.285"></a>
+<span class="sourceLineNo">286</span>            {-0.9875259996315107, -0.15745602577159645},<a name="line.286"></a>
+<span class="sourceLineNo">287</span>            {-0.713617288736716, -0.7005357701188843},<a name="line.287"></a>
+<span class="sourceLineNo">288</span>            {-0.17569759060384005, -0.9844441866637262},<a name="line.288"></a>
+<span class="sourceLineNo">289</span>            {0.4272234676177009, -0.9041460660295477},<a name="line.289"></a>
+<span class="sourceLineNo">290</span>            {0.8720882522073408, -0.48934862865031664},<a name="line.290"></a>
+<span class="sourceLineNo">291</span>            {0.9943138798455315, 0.1064890057542367},<a name="line.291"></a>
+<span class="sourceLineNo">292</span>            {0.7486815629161868, 0.6629297982059457},<a name="line.292"></a>
+<span class="sourceLineNo">293</span>            {0.22606582409923492, 0.9741120280410943},<a name="line.293"></a>
+<span class="sourceLineNo">294</span>            {-0.3801855865872776, 0.9249102225358349},<a name="line.294"></a>
+<span class="sourceLineNo">295</span>            {-0.8457829329275041, 0.5335271599164837},<a name="line.295"></a>
+<span class="sourceLineNo">296</span>            {-0.9984730800789315, -0.055240459426869205},<a name="line.296"></a>
+<span class="sourceLineNo">297</span>            {-0.7817665383287496, -0.6235712305338369},<a name="line.297"></a>
+<span class="sourceLineNo">298</span>            {-0.2758364045615609, -0.9612045973249145},<a name="line.298"></a>
+<span class="sourceLineNo">299</span>            {0.3321426041893285, -0.9432291823742155},<a name="line.299"></a>
+<span class="sourceLineNo">300</span>            {0.8172416067802154, -0.5762951987890336},<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            {0.9999926046022829, 0.003845873209323106},<a name="line.301"></a>
+<span class="sourceLineNo">302</span>            {0.8127847478130893, 0.582564119837819},<a name="line.302"></a>
+<span class="sourceLineNo">303</span>            {0.3248777528877428, 0.9457560180504329},<a name="line.303"></a>
+<span class="sourceLineNo">304</span>            {-0.2832215322544221, 0.9590545154825441},<a name="line.304"></a>
+<span class="sourceLineNo">305</span>            {-0.7865397288246715, 0.6175396788712546},<a name="line.305"></a>
+<span class="sourceLineNo">306</span>            {-0.9988684362296896, 0.04755888039109703},<a name="line.306"></a>
+<span class="sourceLineNo">307</span>            {-0.8416541881427008, -0.5400168771268647},<a name="line.307"></a>
+<span class="sourceLineNo">308</span>            {-0.37306021785478083, -0.92780713181897},<a name="line.308"></a>
+<span class="sourceLineNo">309</span>            {0.23355170402936554, -0.9723443842307002},<a name="line.309"></a>
+<span class="sourceLineNo">310</span>            {0.7537584659977772, -0.6571515616177731},<a name="line.310"></a>
+<span class="sourceLineNo">311</span>            {0.9951035469390707, -0.09883790198744995},<a name="line.311"></a>
+<span class="sourceLineNo">312</span>            {0.8682985368188393, 0.4960419850761251},<a name="line.312"></a>
+<span class="sourceLineNo">313</span>            {0.4202564188803024, 0.90740539032447}<a name="line.313"></a>
+<span class="sourceLineNo">314</span>    };<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    protected static final int[][] grad3 = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0},<a name="line.315"></a>
+<span class="sourceLineNo">316</span>            {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1},<a name="line.316"></a>
+<span class="sourceLineNo">317</span>            {1, 0, -1}, {-1, 0, -1}, {0, 1, 1},<a name="line.317"></a>
+<span class="sourceLineNo">318</span>            {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    protected static final int[][] grad4 = {{0, 1, 1, 1}, {0, 1, 1, -1},<a name="line.319"></a>
+<span class="sourceLineNo">320</span>    {0, 1, -1, 1}, {0, 1, -1, -1},<a name="line.320"></a>
+<span class="sourceLineNo">321</span>    {0, -1, 1, 1}, {0, -1, 1, -1},<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    {0, -1, -1, 1}, {0, -1, -1, -1},<a name="line.322"></a>
+<span class="sourceLineNo">323</span>    {1, 0, 1, 1}, {1, 0, 1, -1},<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    {1, 0, -1, 1}, {1, 0, -1, -1},<a name="line.324"></a>
+<span class="sourceLineNo">325</span>    {-1, 0, 1, 1}, {-1, 0, 1, -1},<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    {-1, 0, -1, 1}, {-1, 0, -1, -1},<a name="line.326"></a>
+<span class="sourceLineNo">327</span>    {1, 1, 0, 1}, {1, 1, 0, -1},<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    {1, -1, 0, 1}, {1, -1, 0, -1},<a name="line.328"></a>
+<span class="sourceLineNo">329</span>    {-1, 1, 0, 1}, {-1, 1, 0, -1},<a name="line.329"></a>
+<span class="sourceLineNo">330</span>    {-1, -1, 0, 1}, {-1, -1, 0, -1},<a name="line.330"></a>
+<span class="sourceLineNo">331</span>    {1, 1, 1, 0}, {1, 1, -1, 0},<a name="line.331"></a>
+<span class="sourceLineNo">332</span>    {1, -1, 1, 0}, {1, -1, -1, 0},<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    {-1, 1, 1, 0}, {-1, 1, -1, 0},<a name="line.333"></a>
+<span class="sourceLineNo">334</span>    {-1, -1, 1, 0}, {-1, -1, -1, 0}};<a name="line.334"></a>
+<span class="sourceLineNo">335</span>    private static final int p[] = {151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96,<a name="line.335"></a>
+<span class="sourceLineNo">336</span>        53, 194, 233, 7, 225, 140, 36, 103, 30, 69, 142,<a name="line.336"></a>
+<span class="sourceLineNo">337</span>        8, 99, 37, 240, 21, 10, 23, 190, 6, 148, 247,<a name="line.337"></a>
+<span class="sourceLineNo">338</span>        120, 234, 75, 0, 26, 197, 62, 94, 252, 219, 203,<a name="line.338"></a>
+<span class="sourceLineNo">339</span>        117, 35, 11, 32, 57, 177, 33, 88, 237, 149, 56,<a name="line.339"></a>
+<span class="sourceLineNo">340</span>        87, 174, 20, 125, 136, 171, 168, 68, 175, 74,<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        165, 71, 134, 139, 48, 27, 166, 77, 146, 158,<a name="line.341"></a>
+<span class="sourceLineNo">342</span>        231, 83, 111, 229, 122, 60, 211, 133, 230, 220,<a name="line.342"></a>
+<span class="sourceLineNo">343</span>        105, 92, 41, 55, 46, 245, 40, 244, 102, 143, 54,<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        65, 25, 63, 161, 1, 216, 80, 73, 209, 76, 132,<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        187, 208, 89, 18, 169, 200, 196, 135, 130, 116,<a name="line.345"></a>
+<span class="sourceLineNo">346</span>        188, 159, 86, 164, 100, 109, 198, 173, 186, 3,<a name="line.346"></a>
+<span class="sourceLineNo">347</span>        64, 52, 217, 226, 250, 124, 123, 5, 202, 38, 147,<a name="line.347"></a>
+<span class="sourceLineNo">348</span>        118, 126, 255, 82, 85, 212, 207, 206, 59, 227,<a name="line.348"></a>
+<span class="sourceLineNo">349</span>        47, 16, 58, 17, 182, 189, 28, 42, 223, 183, 170,<a name="line.349"></a>
+<span class="sourceLineNo">350</span>        213, 119, 248, 152, 2, 44, 154, 163, 70, 221,<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        153, 101, 155, 167, 43, 172, 9, 129, 22, 39, 253,<a name="line.351"></a>
+<span class="sourceLineNo">352</span>        19, 98, 108, 110, 79, 113, 224, 232, 178, 185,<a name="line.352"></a>
+<span class="sourceLineNo">353</span>        112, 104, 218, 246, 97, 228, 251, 34, 242, 193,<a name="line.353"></a>
+<span class="sourceLineNo">354</span>        238, 210, 144, 12, 191, 179, 162, 241, 81, 51,<a name="line.354"></a>
+<span class="sourceLineNo">355</span>        145, 235, 249, 14, 239, 107, 49, 192, 214, 31,<a name="line.355"></a>
+<span class="sourceLineNo">356</span>        181, 199, 106, 157, 184, 84, 204, 176, 115, 121,<a name="line.356"></a>
+<span class="sourceLineNo">357</span>        50, 45, 127, 4, 150, 254, 138, 236, 205, 93, 222,<a name="line.357"></a>
+<span class="sourceLineNo">358</span>        114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66,<a name="line.358"></a>
+<span class="sourceLineNo">359</span>        215, 61, 156, 180};<a name="line.359"></a>
+<span class="sourceLineNo">360</span>    protected static final double F2 = 0.5 * (Math.sqrt(3.0) - 1.0);<a name="line.360"></a>
+<span class="sourceLineNo">361</span>    protected static final double G2 = (3.0 - Math.sqrt(3.0)) / 6.0;<a name="line.361"></a>
+<span class="sourceLineNo">362</span>    protected static final double F3 = 1.0 / 3.0;<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    protected static final double G3 = 1.0 / 6.0;<a name="line.363"></a>
+<span class="sourceLineNo">364</span>    protected static final double F4 = (Math.sqrt(5.0) - 1.0) / 4.0;<a name="line.364"></a>
+<span class="sourceLineNo">365</span>    protected static final double G4 = (5.0 - Math.sqrt(5.0)) / 20.0;<a name="line.365"></a>
+<span class="sourceLineNo">366</span>    // To remove the need for index wrapping, double the permutation table<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    // length<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    protected static final int perm[] = new int[512];<a name="line.368"></a>
+<span class="sourceLineNo">369</span><a name="line.369"></a>
+<span class="sourceLineNo">370</span>    static {<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        for (int i = 0; i &lt; 512; i++) {<a name="line.371"></a>
+<span class="sourceLineNo">372</span>            perm[i] = p[i &amp; 255];<a name="line.372"></a>
+<span class="sourceLineNo">373</span>        }<a name="line.373"></a>
+<span class="sourceLineNo">374</span>    }<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    protected PerlinNoise()<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    {<a name="line.376"></a>
 <span class="sourceLineNo">377</span><a name="line.377"></a>
-<span class="sourceLineNo">378</span>    /**<a name="line.378"></a>
-<span class="sourceLineNo">379</span>     * 4D simplex noise.<a name="line.379"></a>
-<span class="sourceLineNo">380</span>     *<a name="line.380"></a>
-<span class="sourceLineNo">381</span>     * @param x X position<a name="line.381"></a>
-<span class="sourceLineNo">382</span>     * @param y Y position<a name="line.382"></a>
-<span class="sourceLineNo">383</span>     * @param z Z position<a name="line.383"></a>
-<span class="sourceLineNo">384</span>     * @param w Fourth-dimensional position. It is I, the Fourth-Dimensional Ziltoid the Omniscient!<a name="line.384"></a>
-<span class="sourceLineNo">385</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.385"></a>
-<span class="sourceLineNo">386</span>     */<a name="line.386"></a>
-<span class="sourceLineNo">387</span>    public static double noise(double x, double y, double z, double w) {<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        x *= epi;<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        y *= epi;<a name="line.389"></a>
-<span class="sourceLineNo">390</span>        z *= epi;<a name="line.390"></a>
-<span class="sourceLineNo">391</span>        w *= epi;<a name="line.391"></a>
-<span class="sourceLineNo">392</span>        // The skewing and unskewing factors are hairy again for the 4D case<a name="line.392"></a>
-<span class="sourceLineNo">393</span>        double n0, n1, n2, n3, n4; // Noise contributions from the five<a name="line.393"></a>
-<span class="sourceLineNo">394</span>        // corners<a name="line.394"></a>
-<span class="sourceLineNo">395</span>        // Skew the (x,y,z,w) space to determine which cell of 24 simplices<a name="line.395"></a>
-<span class="sourceLineNo">396</span>        // we're in<a name="line.396"></a>
-<span class="sourceLineNo">397</span>        double s = (x + y + z + w) * F4; // Factor for 4D skewing<a name="line.397"></a>
-<span class="sourceLineNo">398</span>        int i = (int) Math.floor(x + s);<a name="line.398"></a>
-<span class="sourceLineNo">399</span>        int j = (int) Math.floor(y + s);<a name="line.399"></a>
-<span class="sourceLineNo">400</span>        int k = (int) Math.floor(z + s);<a name="line.400"></a>
-<span class="sourceLineNo">401</span>        int l = (int) Math.floor(w + s);<a name="line.401"></a>
-<span class="sourceLineNo">402</span>        double t = (i + j + k + l) * G4; // Factor for 4D unskewing<a name="line.402"></a>
-<span class="sourceLineNo">403</span>        double X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space<a name="line.403"></a>
-<span class="sourceLineNo">404</span>        double Y0 = j - t;<a name="line.404"></a>
-<span class="sourceLineNo">405</span>        double Z0 = k - t;<a name="line.405"></a>
-<span class="sourceLineNo">406</span>        double W0 = l - t;<a name="line.406"></a>
-<span class="sourceLineNo">407</span>        double x0 = x - X0; // The x,y,z,w distances from the cell origin<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        double y0 = y - Y0;<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        double z0 = z - Z0;<a name="line.409"></a>
-<span class="sourceLineNo">410</span>        double w0 = w - W0;<a name="line.410"></a>
-<span class="sourceLineNo">411</span>        // For the 4D case, the simplex is a 4D shape I won't even try to<a name="line.411"></a>
-<span class="sourceLineNo">412</span>        // describe.<a name="line.412"></a>
-<span class="sourceLineNo">413</span>        // To find out which of the 24 possible simplices we're in, we need<a name="line.413"></a>
-<span class="sourceLineNo">414</span>        // to<a name="line.414"></a>
-<span class="sourceLineNo">415</span>        // determine the magnitude ordering of x0, y0, z0 and w0.<a name="line.415"></a>
-<span class="sourceLineNo">416</span>        // The method below is a good way of finding the ordering of x,y,z,w<a name="line.416"></a>
-<span class="sourceLineNo">417</span>        // and<a name="line.417"></a>
-<span class="sourceLineNo">418</span>        // then find the correct traversal order for the simplex we’re in.<a name="line.418"></a>
-<span class="sourceLineNo">419</span>        // First, six pair-wise comparisons are performed between each<a name="line.419"></a>
-<span class="sourceLineNo">420</span>        // possible pair<a name="line.420"></a>
-<span class="sourceLineNo">421</span>        // of the four coordinates, and the results are used to add up binary<a name="line.421"></a>
-<span class="sourceLineNo">422</span>        // bits<a name="line.422"></a>
-<span class="sourceLineNo">423</span>        // for an integer index.<a name="line.423"></a>
-<span class="sourceLineNo">424</span>        int c =<a name="line.424"></a>
-<span class="sourceLineNo">425</span>                (x0 &gt; y0 ? 32 : 0)<a name="line.425"></a>
-<span class="sourceLineNo">426</span>              + (x0 &gt; z0 ? 16 : 0)<a name="line.426"></a>
-<span class="sourceLineNo">427</span>              + (y0 &gt; z0 ? 8 : 0 )<a name="line.427"></a>
-<span class="sourceLineNo">428</span>              + (x0 &gt; w0 ? 4 : 0 )<a name="line.428"></a>
-<span class="sourceLineNo">429</span>              + (y0 &gt; w0 ? 2 : 0 )<a name="line.429"></a>
-<span class="sourceLineNo">430</span>              + (z0 &gt; w0 ? 1 : 0 );<a name="line.430"></a>
-<span class="sourceLineNo">431</span>        int i1, j1, k1, l1; // The integer offsets for the second simplex<a name="line.431"></a>
-<span class="sourceLineNo">432</span>        // corner<a name="line.432"></a>
-<span class="sourceLineNo">433</span>        int i2, j2, k2, l2; // The integer offsets for the third simplex<a name="line.433"></a>
-<span class="sourceLineNo">434</span>        // corner<a name="line.434"></a>
-<span class="sourceLineNo">435</span>        int i3, j3, k3, l3; // The integer offsets for the fourth simplex<a name="line.435"></a>
-<span class="sourceLineNo">436</span>        // corner<a name="line.436"></a>
-<span class="sourceLineNo">437</span>        // simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some<a name="line.437"></a>
-<span class="sourceLineNo">438</span>        // order.<a name="line.438"></a>
-<span class="sourceLineNo">439</span>        // Many values of c will never occur, since e.g. x&gt;y&gt;z&gt;w makes x&lt;z,<a name="line.439"></a>
-<span class="sourceLineNo">440</span>        // y&lt;w and x&lt;w<a name="line.440"></a>
-<span class="sourceLineNo">441</span>        // impossible. Only the 24 indices which have non-zero entries make<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        // any sense.<a name="line.442"></a>
-<span class="sourceLineNo">443</span>        // We use a thresholding to set the coordinates in turn from the<a name="line.443"></a>
-<span class="sourceLineNo">444</span>        // largest magnitude.<a name="line.444"></a>
-<span class="sourceLineNo">445</span>        // The number 3 in the "simplex" array is at the position of the<a name="line.445"></a>
-<span class="sourceLineNo">446</span>        // largest coordinate.<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        i1 = simplex[c][0] &gt;= 3 ? 1 : 0;<a name="line.447"></a>
-<span class="sourceLineNo">448</span>        j1 = simplex[c][1] &gt;= 3 ? 1 : 0;<a name="line.448"></a>
-<span class="sourceLineNo">449</span>        k1 = simplex[c][2] &gt;= 3 ? 1 : 0;<a name="line.449"></a>
-<span class="sourceLineNo">450</span>        l1 = simplex[c][3] &gt;= 3 ? 1 : 0;<a name="line.450"></a>
-<span class="sourceLineNo">451</span>        // The number 2 in the "simplex" array is at the second largest<a name="line.451"></a>
-<span class="sourceLineNo">452</span>        // coordinate.<a name="line.452"></a>
-<span class="sourceLineNo">453</span>        i2 = simplex[c][0] &gt;= 2 ? 1 : 0;<a name="line.453"></a>
-<span class="sourceLineNo">454</span>        j2 = simplex[c][1] &gt;= 2 ? 1 : 0;<a name="line.454"></a>
-<span class="sourceLineNo">455</span>        k2 = simplex[c][2] &gt;= 2 ? 1 : 0;<a name="line.455"></a>
-<span class="sourceLineNo">456</span>        l2 = simplex[c][3] &gt;= 2 ? 1 : 0;<a name="line.456"></a>
-<span class="sourceLineNo">457</span>        // The number 1 in the "simplex" array is at the second smallest<a name="line.457"></a>
-<span class="sourceLineNo">458</span>        // coordinate.<a name="line.458"></a>
-<span class="sourceLineNo">459</span>        i3 = simplex[c][0] &gt;= 1 ? 1 : 0;<a name="line.459"></a>
-<span class="sourceLineNo">460</span>        j3 = simplex[c][1] &gt;= 1 ? 1 : 0;<a name="line.460"></a>
-<span class="sourceLineNo">461</span>        k3 = simplex[c][2] &gt;= 1 ? 1 : 0;<a name="line.461"></a>
-<span class="sourceLineNo">462</span>        l3 = simplex[c][3] &gt;= 1 ? 1 : 0;<a name="line.462"></a>
-<span class="sourceLineNo">463</span>        // The fifth corner has all coordinate offsets = 1, so no need to<a name="line.463"></a>
-<span class="sourceLineNo">464</span>        // look that up.<a name="line.464"></a>
-<span class="sourceLineNo">465</span>        double x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w)<a name="line.465"></a>
-<span class="sourceLineNo">466</span>        // coords<a name="line.466"></a>
-<span class="sourceLineNo">467</span>        double y1 = y0 - j1 + G4;<a name="line.467"></a>
-<span class="sourceLineNo">468</span>        double z1 = z0 - k1 + G4;<a name="line.468"></a>
-<span class="sourceLineNo">469</span>        double w1 = w0 - l1 + G4;<a name="line.469"></a>
-<span class="sourceLineNo">470</span>        double x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in<a name="line.470"></a>
-<span class="sourceLineNo">471</span>        // (x,y,z,w) coords<a name="line.471"></a>
-<span class="sourceLineNo">472</span>        double y2 = y0 - j2 + 2.0 * G4;<a name="line.472"></a>
-<span class="sourceLineNo">473</span>        double z2 = z0 - k2 + 2.0 * G4;<a name="line.473"></a>
-<span class="sourceLineNo">474</span>        double w2 = w0 - l2 + 2.0 * G4;<a name="line.474"></a>
-<span class="sourceLineNo">475</span>        double x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in<a name="line.475"></a>
-<span class="sourceLineNo">476</span>        // (x,y,z,w) coords<a name="line.476"></a>
-<span class="sourceLineNo">477</span>        double y3 = y0 - j3 + 3.0 * G4;<a name="line.477"></a>
-<span class="sourceLineNo">478</span>        double z3 = z0 - k3 + 3.0 * G4;<a name="line.478"></a>
-<span class="sourceLineNo">479</span>        double w3 = w0 - l3 + 3.0 * G4;<a name="line.479"></a>
-<span class="sourceLineNo">480</span>        double x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in<a name="line.480"></a>
-<span class="sourceLineNo">481</span>        // (x,y,z,w) coords<a name="line.481"></a>
-<span class="sourceLineNo">482</span>        double y4 = y0 - 1.0 + 4.0 * G4;<a name="line.482"></a>
-<span class="sourceLineNo">483</span>        double z4 = z0 - 1.0 + 4.0 * G4;<a name="line.483"></a>
-<span class="sourceLineNo">484</span>        double w4 = w0 - 1.0 + 4.0 * G4;<a name="line.484"></a>
-<span class="sourceLineNo">485</span>        // Work out the hashed gradient indices of the five simplex corners<a name="line.485"></a>
-<span class="sourceLineNo">486</span>        int ii = i &amp; 255;<a name="line.486"></a>
-<span class="sourceLineNo">487</span>        int jj = j &amp; 255;<a name="line.487"></a>
-<span class="sourceLineNo">488</span>        int kk = k &amp; 255;<a name="line.488"></a>
-<span class="sourceLineNo">489</span>        int ll = l &amp; 255;<a name="line.489"></a>
-<span class="sourceLineNo">490</span>        int gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] &amp; 31;<a name="line.490"></a>
-<span class="sourceLineNo">491</span>        int gi1<a name="line.491"></a>
-<span class="sourceLineNo">492</span>                = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] &amp; 31;<a name="line.492"></a>
-<span class="sourceLineNo">493</span>        int gi2<a name="line.493"></a>
-<span class="sourceLineNo">494</span>                = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] &amp; 31;<a name="line.494"></a>
-<span class="sourceLineNo">495</span>        int gi3<a name="line.495"></a>
-<span class="sourceLineNo">496</span>                = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] &amp; 31;<a name="line.496"></a>
-<span class="sourceLineNo">497</span>        int gi4<a name="line.497"></a>
-<span class="sourceLineNo">498</span>                = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] &amp; 31;<a name="line.498"></a>
-<span class="sourceLineNo">499</span>        // Calculate the contribution from the five corners<a name="line.499"></a>
-<span class="sourceLineNo">500</span>        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;<a name="line.500"></a>
-<span class="sourceLineNo">501</span>        if (t0 &lt; 0) {<a name="line.501"></a>
-<span class="sourceLineNo">502</span>            n0 = 0.0;<a name="line.502"></a>
-<span class="sourceLineNo">503</span>        } else {<a name="line.503"></a>
-<span class="sourceLineNo">504</span>            t0 *= t0;<a name="line.504"></a>
-<span class="sourceLineNo">505</span>            n0 = t0 * t0 * dot(grad4[gi0], x0, y0, z0, w0);<a name="line.505"></a>
-<span class="sourceLineNo">506</span>        }<a name="line.506"></a>
-<span class="sourceLineNo">507</span>        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;<a name="line.507"></a>
-<span class="sourceLineNo">508</span>        if (t1 &lt; 0) {<a name="line.508"></a>
-<span class="sourceLineNo">509</span>            n1 = 0.0;<a name="line.509"></a>
-<span class="sourceLineNo">510</span>        } else {<a name="line.510"></a>
-<span class="sourceLineNo">511</span>            t1 *= t1;<a name="line.511"></a>
-<span class="sourceLineNo">512</span>            n1 = t1 * t1 * dot(grad4[gi1], x1, y1, z1, w1);<a name="line.512"></a>
-<span class="sourceLineNo">513</span>        }<a name="line.513"></a>
-<span class="sourceLineNo">514</span>        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;<a name="line.514"></a>
-<span class="sourceLineNo">515</span>        if (t2 &lt; 0) {<a name="line.515"></a>
-<span class="sourceLineNo">516</span>            n2 = 0.0;<a name="line.516"></a>
-<span class="sourceLineNo">517</span>        } else {<a name="line.517"></a>
-<span class="sourceLineNo">518</span>            t2 *= t2;<a name="line.518"></a>
-<span class="sourceLineNo">519</span>            n2 = t2 * t2 * dot(grad4[gi2], x2, y2, z2, w2);<a name="line.519"></a>
-<span class="sourceLineNo">520</span>        }<a name="line.520"></a>
-<span class="sourceLineNo">521</span>        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;<a name="line.521"></a>
-<span class="sourceLineNo">522</span>        if (t3 &lt; 0) {<a name="line.522"></a>
-<span class="sourceLineNo">523</span>            n3 = 0.0;<a name="line.523"></a>
-<span class="sourceLineNo">524</span>        } else {<a name="line.524"></a>
-<span class="sourceLineNo">525</span>            t3 *= t3;<a name="line.525"></a>
-<span class="sourceLineNo">526</span>            n3 = t3 * t3 * dot(grad4[gi3], x3, y3, z3, w3);<a name="line.526"></a>
-<span class="sourceLineNo">527</span>        }<a name="line.527"></a>
-<span class="sourceLineNo">528</span>        double t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;<a name="line.528"></a>
-<span class="sourceLineNo">529</span>        if (t4 &lt; 0) {<a name="line.529"></a>
-<span class="sourceLineNo">530</span>            n4 = 0.0;<a name="line.530"></a>
-<span class="sourceLineNo">531</span>        } else {<a name="line.531"></a>
-<span class="sourceLineNo">532</span>            t4 *= t4;<a name="line.532"></a>
-<span class="sourceLineNo">533</span>            n4 = t4 * t4 * dot(grad4[gi4], x4, y4, z4, w4);<a name="line.533"></a>
-<span class="sourceLineNo">534</span>        }<a name="line.534"></a>
-<span class="sourceLineNo">535</span>        // Sum up and scale the result to cover the range [-1,1]<a name="line.535"></a>
-<span class="sourceLineNo">536</span>        return 27.0 * (n0 + n1 + n2 + n3 + n4);<a name="line.536"></a>
-<span class="sourceLineNo">537</span>    }<a name="line.537"></a>
-<span class="sourceLineNo">538</span>}<a name="line.538"></a>
+<span class="sourceLineNo">378</span>    }<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    // A lookup table to traverse the simplex around a given point in 4D.<a name="line.379"></a>
+<span class="sourceLineNo">380</span>    // Details can be found where this table is used, in the 4D noise method.<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    protected static final int simplex[][]<a name="line.381"></a>
+<span class="sourceLineNo">382</span>            = {{0, 1, 2, 3}, {0, 1, 3, 2}, {0, 0, 0, 0}, {0, 2, 3, 1},<a name="line.382"></a>
+<span class="sourceLineNo">383</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 2, 3, 0},<a name="line.383"></a>
+<span class="sourceLineNo">384</span>            {0, 2, 1, 3}, {0, 0, 0, 0}, {0, 3, 1, 2}, {0, 3, 2, 1},<a name="line.384"></a>
+<span class="sourceLineNo">385</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {1, 3, 2, 0},<a name="line.385"></a>
+<span class="sourceLineNo">386</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.386"></a>
+<span class="sourceLineNo">387</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.387"></a>
+<span class="sourceLineNo">388</span>            {1, 2, 0, 3}, {0, 0, 0, 0}, {1, 3, 0, 2}, {0, 0, 0, 0},<a name="line.388"></a>
+<span class="sourceLineNo">389</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {2, 3, 0, 1}, {2, 3, 1, 0},<a name="line.389"></a>
+<span class="sourceLineNo">390</span>            {1, 0, 2, 3}, {1, 0, 3, 2}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.390"></a>
+<span class="sourceLineNo">391</span>            {0, 0, 0, 0}, {2, 0, 3, 1}, {0, 0, 0, 0}, {2, 1, 3, 0},<a name="line.391"></a>
+<span class="sourceLineNo">392</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.392"></a>
+<span class="sourceLineNo">393</span>            {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.393"></a>
+<span class="sourceLineNo">394</span>            {2, 0, 1, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.394"></a>
+<span class="sourceLineNo">395</span>            {3, 0, 1, 2}, {3, 0, 2, 1}, {0, 0, 0, 0}, {3, 1, 2, 0},<a name="line.395"></a>
+<span class="sourceLineNo">396</span>            {2, 1, 0, 3}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0},<a name="line.396"></a>
+<span class="sourceLineNo">397</span>            {3, 1, 0, 2}, {0, 0, 0, 0}, {3, 2, 0, 1}, {3, 2, 1, 0}};<a name="line.397"></a>
+<span class="sourceLineNo">398</span><a name="line.398"></a>
+<span class="sourceLineNo">399</span>    protected static double dot(double g[], double x, double y) {<a name="line.399"></a>
+<span class="sourceLineNo">400</span>        return g[0] * x + g[1] * y;<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    }<a name="line.401"></a>
+<span class="sourceLineNo">402</span><a name="line.402"></a>
+<span class="sourceLineNo">403</span>    protected static double dot(int g[], double x, double y, double z) {<a name="line.403"></a>
+<span class="sourceLineNo">404</span>        return g[0] * x + g[1] * y + g[2] * z;<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    }<a name="line.405"></a>
+<span class="sourceLineNo">406</span><a name="line.406"></a>
+<span class="sourceLineNo">407</span>    protected static double dot(int g[], double x, double y, double z, double w) {<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        return g[0] * x + g[1] * y + g[2] * z + g[3] * w;<a name="line.408"></a>
+<span class="sourceLineNo">409</span>    }<a name="line.409"></a>
+<span class="sourceLineNo">410</span><a name="line.410"></a>
+<span class="sourceLineNo">411</span>    /**<a name="line.411"></a>
+<span class="sourceLineNo">412</span>     * 2D simplex noise.<a name="line.412"></a>
+<span class="sourceLineNo">413</span>     * This doesn't use its parameters verbatim; xin and yin are both effectively divided by<a name="line.413"></a>
+<span class="sourceLineNo">414</span>     * ({@link Math#E} * {@link Math#PI}), because without a step like that, any integer parameters would return 0 and<a name="line.414"></a>
+<span class="sourceLineNo">415</span>     * only doubles with a decimal component would produce actual noise. This step allows integers to be passed in a<a name="line.415"></a>
+<span class="sourceLineNo">416</span>     * arguments, and changes the cycle at which 0 is repeated to multiples of (E*PI).<a name="line.416"></a>
+<span class="sourceLineNo">417</span>     *<a name="line.417"></a>
+<span class="sourceLineNo">418</span>     * @param xin x input; works well if between 0.0 and 1.0, but anything is accepted<a name="line.418"></a>
+<span class="sourceLineNo">419</span>     * @param yin y input; works well if between 0.0 and 1.0, but anything is accepted<a name="line.419"></a>
+<span class="sourceLineNo">420</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     */<a name="line.421"></a>
+<span class="sourceLineNo">422</span>    public static double noise(double xin, double yin) {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>        xin *= epi;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>        yin *= epi;<a name="line.424"></a>
+<span class="sourceLineNo">425</span>        double noise0, noise1, noise2; // from the three corners<a name="line.425"></a>
+<span class="sourceLineNo">426</span>        // Skew the input space to determine which simplex cell we're in<a name="line.426"></a>
+<span class="sourceLineNo">427</span>        double skew = (xin + yin) * F2; // Hairy factor for 2D<a name="line.427"></a>
+<span class="sourceLineNo">428</span>        int i = (int) Math.floor(xin + skew);<a name="line.428"></a>
+<span class="sourceLineNo">429</span>        int j = (int) Math.floor(yin + skew);<a name="line.429"></a>
+<span class="sourceLineNo">430</span>        double t = (i + j) * G2;<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        double X0 = i - t; // Unskew the cell origin back to (x,y) space<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        double Y0 = j - t;<a name="line.432"></a>
+<span class="sourceLineNo">433</span>        double x0 = xin - X0; // The x,y distances from the cell origin<a name="line.433"></a>
+<span class="sourceLineNo">434</span>        double y0 = yin - Y0;<a name="line.434"></a>
+<span class="sourceLineNo">435</span>        // For the 2D case, the simplex shape is an equilateral triangle.<a name="line.435"></a>
+<span class="sourceLineNo">436</span>        // Determine which simplex we are in.<a name="line.436"></a>
+<span class="sourceLineNo">437</span>        int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)<a name="line.437"></a>
+<span class="sourceLineNo">438</span>        // coords<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        if (x0 &gt; y0) {<a name="line.439"></a>
+<span class="sourceLineNo">440</span>            i1 = 1;<a name="line.440"></a>
+<span class="sourceLineNo">441</span>            j1 = 0;<a name="line.441"></a>
+<span class="sourceLineNo">442</span>        } // lower triangle, XY order: (0,0)-&gt;(1,0)-&gt;(1,1)<a name="line.442"></a>
+<span class="sourceLineNo">443</span>        else {<a name="line.443"></a>
+<span class="sourceLineNo">444</span>            i1 = 0;<a name="line.444"></a>
+<span class="sourceLineNo">445</span>            j1 = 1;<a name="line.445"></a>
+<span class="sourceLineNo">446</span>        } // upper triangle, YX order: (0,0)-&gt;(0,1)-&gt;(1,1)<a name="line.446"></a>
+<span class="sourceLineNo">447</span>        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y),<a name="line.448"></a>
+<span class="sourceLineNo">449</span>        // where<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        // c = (3-sqrt(3))/6<a name="line.450"></a>
+<span class="sourceLineNo">451</span>        double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y)<a name="line.451"></a>
+<span class="sourceLineNo">452</span>        // unskewed coords<a name="line.452"></a>
+<span class="sourceLineNo">453</span>        double y1 = y0 - j1 + G2;<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        double x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y)<a name="line.454"></a>
+<span class="sourceLineNo">455</span>        // unskewed coords<a name="line.455"></a>
+<span class="sourceLineNo">456</span>        double y2 = y0 - 1.0 + 2.0 * G2;<a name="line.456"></a>
+<span class="sourceLineNo">457</span>        // Work out the hashed gradient indices of the three simplex corners<a name="line.457"></a>
+<span class="sourceLineNo">458</span>        int ii = i &amp; 255;<a name="line.458"></a>
+<span class="sourceLineNo">459</span>        int jj = j &amp; 255;<a name="line.459"></a>
+<span class="sourceLineNo">460</span>        int gi0 = perm[ii + perm[jj]];<a name="line.460"></a>
+<span class="sourceLineNo">461</span>        int gi1 = perm[ii + i1 + perm[jj + j1]];<a name="line.461"></a>
+<span class="sourceLineNo">462</span>        int gi2 = perm[ii + 1 + perm[jj + 1]];<a name="line.462"></a>
+<span class="sourceLineNo">463</span>        // Calculate the contribution from the three corners<a name="line.463"></a>
+<span class="sourceLineNo">464</span>        double t0 = 0.5 - x0 * x0 - y0 * y0;<a name="line.464"></a>
+<span class="sourceLineNo">465</span>        if (t0 &lt; 0) {<a name="line.465"></a>
+<span class="sourceLineNo">466</span>            noise0 = 0.0;<a name="line.466"></a>
+<span class="sourceLineNo">467</span>        } else {<a name="line.467"></a>
+<span class="sourceLineNo">468</span>            t0 *= t0;<a name="line.468"></a>
+<span class="sourceLineNo">469</span>            noise0 = t0 * t0 * dot(phiGrad2[gi0], x0, y0); // (x,y) of grad3 used<a name="line.469"></a>
+<span class="sourceLineNo">470</span>            // for 2D gradient<a name="line.470"></a>
+<span class="sourceLineNo">471</span>        }<a name="line.471"></a>
+<span class="sourceLineNo">472</span>        double t1 = 0.5 - x1 * x1 - y1 * y1;<a name="line.472"></a>
+<span class="sourceLineNo">473</span>        if (t1 &lt; 0) {<a name="line.473"></a>
+<span class="sourceLineNo">474</span>            noise1 = 0.0;<a name="line.474"></a>
+<span class="sourceLineNo">475</span>        } else {<a name="line.475"></a>
+<span class="sourceLineNo">476</span>            t1 *= t1;<a name="line.476"></a>
+<span class="sourceLineNo">477</span>            noise1 = t1 * t1 * dot(phiGrad2[gi1], x1, y1);<a name="line.477"></a>
+<span class="sourceLineNo">478</span>        }<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        double t2 = 0.5 - x2 * x2 - y2 * y2;<a name="line.479"></a>
+<span class="sourceLineNo">480</span>        if (t2 &lt; 0) {<a name="line.480"></a>
+<span class="sourceLineNo">481</span>            noise2 = 0.0;<a name="line.481"></a>
+<span class="sourceLineNo">482</span>        } else {<a name="line.482"></a>
+<span class="sourceLineNo">483</span>            t2 *= t2;<a name="line.483"></a>
+<span class="sourceLineNo">484</span>            noise2 = t2 * t2 * dot(phiGrad2[gi2], x2, y2);<a name="line.484"></a>
+<span class="sourceLineNo">485</span>        }<a name="line.485"></a>
+<span class="sourceLineNo">486</span>        // Add contributions from each corner to get the final noise value.<a name="line.486"></a>
+<span class="sourceLineNo">487</span>        // The result is scaled to return values in the interval [-1,1].<a name="line.487"></a>
+<span class="sourceLineNo">488</span>        return 70.0 * (noise0 + noise1 + noise2);<a name="line.488"></a>
+<span class="sourceLineNo">489</span>    }<a name="line.489"></a>
+<span class="sourceLineNo">490</span><a name="line.490"></a>
+<span class="sourceLineNo">491</span>    /**<a name="line.491"></a>
+<span class="sourceLineNo">492</span>     * 3D simplex noise.<a name="line.492"></a>
+<span class="sourceLineNo">493</span>     *<a name="line.493"></a>
+<span class="sourceLineNo">494</span>     * @param xin X input<a name="line.494"></a>
+<span class="sourceLineNo">495</span>     * @param yin Y input<a name="line.495"></a>
+<span class="sourceLineNo">496</span>     * @param zin Z input<a name="line.496"></a>
+<span class="sourceLineNo">497</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.497"></a>
+<span class="sourceLineNo">498</span>     */<a name="line.498"></a>
+<span class="sourceLineNo">499</span>    public static double noise(double xin, double yin, double zin) {<a name="line.499"></a>
+<span class="sourceLineNo">500</span>        xin *= epi;<a name="line.500"></a>
+<span class="sourceLineNo">501</span>        yin *= epi;<a name="line.501"></a>
+<span class="sourceLineNo">502</span>        zin *= epi;<a name="line.502"></a>
+<span class="sourceLineNo">503</span>        double n0, n1, n2, n3; // Noise contributions from the four corners<a name="line.503"></a>
+<span class="sourceLineNo">504</span>        // Skew the input space to determine which simplex cell we're in<a name="line.504"></a>
+<span class="sourceLineNo">505</span>        double s = (xin + yin + zin) * F3; // Very nice and simple skew<a name="line.505"></a>
+<span class="sourceLineNo">506</span>        // factor for 3D<a name="line.506"></a>
+<span class="sourceLineNo">507</span>        int i = (int) Math.floor(xin + s);<a name="line.507"></a>
+<span class="sourceLineNo">508</span>        int j = (int) Math.floor(yin + s);<a name="line.508"></a>
+<span class="sourceLineNo">509</span>        int k = (int) Math.floor(zin + s);<a name="line.509"></a>
+<span class="sourceLineNo">510</span>        double t = (i + j + k) * G3;<a name="line.510"></a>
+<span class="sourceLineNo">511</span>        double X0 = i - t; // Unskew the cell origin back to (x,y,z) space<a name="line.511"></a>
+<span class="sourceLineNo">512</span>        double Y0 = j - t;<a name="line.512"></a>
+<span class="sourceLineNo">513</span>        double Z0 = k - t;<a name="line.513"></a>
+<span class="sourceLineNo">514</span>        double x0 = xin - X0; // The x,y,z distances from the cell origin<a name="line.514"></a>
+<span class="sourceLineNo">515</span>        double y0 = yin - Y0;<a name="line.515"></a>
+<span class="sourceLineNo">516</span>        double z0 = zin - Z0;<a name="line.516"></a>
+<span class="sourceLineNo">517</span>        // For the 3D case, the simplex shape is a slightly irregular<a name="line.517"></a>
+<span class="sourceLineNo">518</span>        // tetrahedron.<a name="line.518"></a>
+<span class="sourceLineNo">519</span>        // Determine which simplex we are in.<a name="line.519"></a>
+<span class="sourceLineNo">520</span>        int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k)<a name="line.520"></a>
+<span class="sourceLineNo">521</span>        // coords<a name="line.521"></a>
+<span class="sourceLineNo">522</span>        int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k)<a name="line.522"></a>
+<span class="sourceLineNo">523</span>        // coords<a name="line.523"></a>
+<span class="sourceLineNo">524</span>        if (x0 &gt;= y0) {<a name="line.524"></a>
+<span class="sourceLineNo">525</span>            if (y0 &gt;= z0) {<a name="line.525"></a>
+<span class="sourceLineNo">526</span>                i1 = 1;<a name="line.526"></a>
+<span class="sourceLineNo">527</span>                j1 = 0;<a name="line.527"></a>
+<span class="sourceLineNo">528</span>                k1 = 0;<a name="line.528"></a>
+<span class="sourceLineNo">529</span>                i2 = 1;<a name="line.529"></a>
+<span class="sourceLineNo">530</span>                j2 = 1;<a name="line.530"></a>
+<span class="sourceLineNo">531</span>                k2 = 0;<a name="line.531"></a>
+<span class="sourceLineNo">532</span>            } // X Y Z order<a name="line.532"></a>
+<span class="sourceLineNo">533</span>            else if (x0 &gt;= z0) {<a name="line.533"></a>
+<span class="sourceLineNo">534</span>                i1 = 1;<a name="line.534"></a>
+<span class="sourceLineNo">535</span>                j1 = 0;<a name="line.535"></a>
+<span class="sourceLineNo">536</span>                k1 = 0;<a name="line.536"></a>
+<span class="sourceLineNo">537</span>                i2 = 1;<a name="line.537"></a>
+<span class="sourceLineNo">538</span>                j2 = 0;<a name="line.538"></a>
+<span class="sourceLineNo">539</span>                k2 = 1;<a name="line.539"></a>
+<span class="sourceLineNo">540</span>            } // X Z Y order<a name="line.540"></a>
+<span class="sourceLineNo">541</span>            else {<a name="line.541"></a>
+<span class="sourceLineNo">542</span>                i1 = 0;<a name="line.542"></a>
+<span class="sourceLineNo">543</span>                j1 = 0;<a name="line.543"></a>
+<span class="sourceLineNo">544</span>                k1 = 1;<a name="line.544"></a>
+<span class="sourceLineNo">545</span>                i2 = 1;<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                j2 = 0;<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                k2 = 1;<a name="line.547"></a>
+<span class="sourceLineNo">548</span>            } // Z X Y order<a name="line.548"></a>
+<span class="sourceLineNo">549</span>        } else { // x0&lt;y0<a name="line.549"></a>
+<span class="sourceLineNo">550</span>            if (y0 &lt; z0) {<a name="line.550"></a>
+<span class="sourceLineNo">551</span>                i1 = 0;<a name="line.551"></a>
+<span class="sourceLineNo">552</span>                j1 = 0;<a name="line.552"></a>
+<span class="sourceLineNo">553</span>                k1 = 1;<a name="line.553"></a>
+<span class="sourceLineNo">554</span>                i2 = 0;<a name="line.554"></a>
+<span class="sourceLineNo">555</span>                j2 = 1;<a name="line.555"></a>
+<span class="sourceLineNo">556</span>                k2 = 1;<a name="line.556"></a>
+<span class="sourceLineNo">557</span>            } // Z Y X order<a name="line.557"></a>
+<span class="sourceLineNo">558</span>            else if (x0 &lt; z0) {<a name="line.558"></a>
+<span class="sourceLineNo">559</span>                i1 = 0;<a name="line.559"></a>
+<span class="sourceLineNo">560</span>                j1 = 1;<a name="line.560"></a>
+<span class="sourceLineNo">561</span>                k1 = 0;<a name="line.561"></a>
+<span class="sourceLineNo">562</span>                i2 = 0;<a name="line.562"></a>
+<span class="sourceLineNo">563</span>                j2 = 1;<a name="line.563"></a>
+<span class="sourceLineNo">564</span>                k2 = 1;<a name="line.564"></a>
+<span class="sourceLineNo">565</span>            } // Y Z X order<a name="line.565"></a>
+<span class="sourceLineNo">566</span>            else {<a name="line.566"></a>
+<span class="sourceLineNo">567</span>                i1 = 0;<a name="line.567"></a>
+<span class="sourceLineNo">568</span>                j1 = 1;<a name="line.568"></a>
+<span class="sourceLineNo">569</span>                k1 = 0;<a name="line.569"></a>
+<span class="sourceLineNo">570</span>                i2 = 1;<a name="line.570"></a>
+<span class="sourceLineNo">571</span>                j2 = 1;<a name="line.571"></a>
+<span class="sourceLineNo">572</span>                k2 = 0;<a name="line.572"></a>
+<span class="sourceLineNo">573</span>            } // Y X Z order<a name="line.573"></a>
+<span class="sourceLineNo">574</span>        }<a name="line.574"></a>
+<span class="sourceLineNo">575</span>        // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in<a name="line.575"></a>
+<span class="sourceLineNo">576</span>        // (x,y,z),<a name="line.576"></a>
+<span class="sourceLineNo">577</span>        // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in<a name="line.577"></a>
+<span class="sourceLineNo">578</span>        // (x,y,z), and<a name="line.578"></a>
+<span class="sourceLineNo">579</span>        // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in<a name="line.579"></a>
+<span class="sourceLineNo">580</span>        // (x,y,z), where<a name="line.580"></a>
+<span class="sourceLineNo">581</span>        // c = 1/6.<a name="line.581"></a>
+<span class="sourceLineNo">582</span>        double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z)<a name="line.582"></a>
+<span class="sourceLineNo">583</span>        // coords<a name="line.583"></a>
+<span class="sourceLineNo">584</span>        double y1 = y0 - j1 + G3;<a name="line.584"></a>
+<span class="sourceLineNo">585</span>        double z1 = z0 - k1 + G3;<a name="line.585"></a>
+<span class="sourceLineNo">586</span>        double x2 = x0 - i2 + 2.0 * G3; // Offsets for third corner in<a name="line.586"></a>
+<span class="sourceLineNo">587</span>        // (x,y,z) coords<a name="line.587"></a>
+<span class="sourceLineNo">588</span>        double y2 = y0 - j2 + 2.0 * G3;<a name="line.588"></a>
+<span class="sourceLineNo">589</span>        double z2 = z0 - k2 + 2.0 * G3;<a name="line.589"></a>
+<span class="sourceLineNo">590</span>        double x3 = x0 - 1.0 + 3.0 * G3; // Offsets for last corner in<a name="line.590"></a>
+<span class="sourceLineNo">591</span>        // (x,y,z) coords<a name="line.591"></a>
+<span class="sourceLineNo">592</span>        double y3 = y0 - 1.0 + 3.0 * G3;<a name="line.592"></a>
+<span class="sourceLineNo">593</span>        double z3 = z0 - 1.0 + 3.0 * G3;<a name="line.593"></a>
+<span class="sourceLineNo">594</span>        // Work out the hashed gradient indices of the four simplex corners<a name="line.594"></a>
+<span class="sourceLineNo">595</span>        int ii = i &amp; 255;<a name="line.595"></a>
+<span class="sourceLineNo">596</span>        int jj = j &amp; 255;<a name="line.596"></a>
+<span class="sourceLineNo">597</span>        int kk = k &amp; 255;<a name="line.597"></a>
+<span class="sourceLineNo">598</span>        int gi0 = perm[ii + perm[jj + perm[kk]]] % 12;<a name="line.598"></a>
+<span class="sourceLineNo">599</span>        int gi1 = perm[ii + i1 + perm[jj + j1 + perm[kk + k1]]] % 12;<a name="line.599"></a>
+<span class="sourceLineNo">600</span>        int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;<a name="line.600"></a>
+<span class="sourceLineNo">601</span>        int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;<a name="line.601"></a>
+<span class="sourceLineNo">602</span>        // Calculate the contribution from the four corners<a name="line.602"></a>
+<span class="sourceLineNo">603</span>        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;<a name="line.603"></a>
+<span class="sourceLineNo">604</span>        if (t0 &lt; 0) {<a name="line.604"></a>
+<span class="sourceLineNo">605</span>            n0 = 0.0;<a name="line.605"></a>
+<span class="sourceLineNo">606</span>        } else {<a name="line.606"></a>
+<span class="sourceLineNo">607</span>            t0 *= t0;<a name="line.607"></a>
+<span class="sourceLineNo">608</span>            n0 = t0 * t0 * dot(grad3[gi0], x0, y0, z0);<a name="line.608"></a>
+<span class="sourceLineNo">609</span>        }<a name="line.609"></a>
+<span class="sourceLineNo">610</span>        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;<a name="line.610"></a>
+<span class="sourceLineNo">611</span>        if (t1 &lt; 0) {<a name="line.611"></a>
+<span class="sourceLineNo">612</span>            n1 = 0.0;<a name="line.612"></a>
+<span class="sourceLineNo">613</span>        } else {<a name="line.613"></a>
+<span class="sourceLineNo">614</span>            t1 *= t1;<a name="line.614"></a>
+<span class="sourceLineNo">615</span>            n1 = t1 * t1 * dot(grad3[gi1], x1, y1, z1);<a name="line.615"></a>
+<span class="sourceLineNo">616</span>        }<a name="line.616"></a>
+<span class="sourceLineNo">617</span>        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;<a name="line.617"></a>
+<span class="sourceLineNo">618</span>        if (t2 &lt; 0) {<a name="line.618"></a>
+<span class="sourceLineNo">619</span>            n2 = 0.0;<a name="line.619"></a>
+<span class="sourceLineNo">620</span>        } else {<a name="line.620"></a>
+<span class="sourceLineNo">621</span>            t2 *= t2;<a name="line.621"></a>
+<span class="sourceLineNo">622</span>            n2 = t2 * t2 * dot(grad3[gi2], x2, y2, z2);<a name="line.622"></a>
+<span class="sourceLineNo">623</span>        }<a name="line.623"></a>
+<span class="sourceLineNo">624</span>        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;<a name="line.624"></a>
+<span class="sourceLineNo">625</span>        if (t3 &lt; 0) {<a name="line.625"></a>
+<span class="sourceLineNo">626</span>            n3 = 0.0;<a name="line.626"></a>
+<span class="sourceLineNo">627</span>        } else {<a name="line.627"></a>
+<span class="sourceLineNo">628</span>            t3 *= t3;<a name="line.628"></a>
+<span class="sourceLineNo">629</span>            n3 = t3 * t3 * dot(grad3[gi3], x3, y3, z3);<a name="line.629"></a>
+<span class="sourceLineNo">630</span>        }<a name="line.630"></a>
+<span class="sourceLineNo">631</span>        // Add contributions from each corner to get the final noise value.<a name="line.631"></a>
+<span class="sourceLineNo">632</span>        // The result is scaled to stay just inside [-1,1]<a name="line.632"></a>
+<span class="sourceLineNo">633</span>        return 32.0 * (n0 + n1 + n2 + n3);<a name="line.633"></a>
+<span class="sourceLineNo">634</span>    }<a name="line.634"></a>
+<span class="sourceLineNo">635</span><a name="line.635"></a>
+<span class="sourceLineNo">636</span>    /**<a name="line.636"></a>
+<span class="sourceLineNo">637</span>     * 4D simplex noise.<a name="line.637"></a>
+<span class="sourceLineNo">638</span>     *<a name="line.638"></a>
+<span class="sourceLineNo">639</span>     * @param x X position<a name="line.639"></a>
+<span class="sourceLineNo">640</span>     * @param y Y position<a name="line.640"></a>
+<span class="sourceLineNo">641</span>     * @param z Z position<a name="line.641"></a>
+<span class="sourceLineNo">642</span>     * @param w Fourth-dimensional position. It is I, the Fourth-Dimensional Ziltoid the Omniscient!<a name="line.642"></a>
+<span class="sourceLineNo">643</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.643"></a>
+<span class="sourceLineNo">644</span>     */<a name="line.644"></a>
+<span class="sourceLineNo">645</span>    public static double noise(double x, double y, double z, double w) {<a name="line.645"></a>
+<span class="sourceLineNo">646</span>        x *= epi;<a name="line.646"></a>
+<span class="sourceLineNo">647</span>        y *= epi;<a name="line.647"></a>
+<span class="sourceLineNo">648</span>        z *= epi;<a name="line.648"></a>
+<span class="sourceLineNo">649</span>        w *= epi;<a name="line.649"></a>
+<span class="sourceLineNo">650</span>        // The skewing and unskewing factors are hairy again for the 4D case<a name="line.650"></a>
+<span class="sourceLineNo">651</span>        double n0, n1, n2, n3, n4; // Noise contributions from the five<a name="line.651"></a>
+<span class="sourceLineNo">652</span>        // corners<a name="line.652"></a>
+<span class="sourceLineNo">653</span>        // Skew the (x,y,z,w) space to determine which cell of 24 simplices<a name="line.653"></a>
+<span class="sourceLineNo">654</span>        // we're in<a name="line.654"></a>
+<span class="sourceLineNo">655</span>        double s = (x + y + z + w) * F4; // Factor for 4D skewing<a name="line.655"></a>
+<span class="sourceLineNo">656</span>        int i = (int) Math.floor(x + s);<a name="line.656"></a>
+<span class="sourceLineNo">657</span>        int j = (int) Math.floor(y + s);<a name="line.657"></a>
+<span class="sourceLineNo">658</span>        int k = (int) Math.floor(z + s);<a name="line.658"></a>
+<span class="sourceLineNo">659</span>        int l = (int) Math.floor(w + s);<a name="line.659"></a>
+<span class="sourceLineNo">660</span>        double t = (i + j + k + l) * G4; // Factor for 4D unskewing<a name="line.660"></a>
+<span class="sourceLineNo">661</span>        double X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space<a name="line.661"></a>
+<span class="sourceLineNo">662</span>        double Y0 = j - t;<a name="line.662"></a>
+<span class="sourceLineNo">663</span>        double Z0 = k - t;<a name="line.663"></a>
+<span class="sourceLineNo">664</span>        double W0 = l - t;<a name="line.664"></a>
+<span class="sourceLineNo">665</span>        double x0 = x - X0; // The x,y,z,w distances from the cell origin<a name="line.665"></a>
+<span class="sourceLineNo">666</span>        double y0 = y - Y0;<a name="line.666"></a>
+<span class="sourceLineNo">667</span>        double z0 = z - Z0;<a name="line.667"></a>
+<span class="sourceLineNo">668</span>        double w0 = w - W0;<a name="line.668"></a>
+<span class="sourceLineNo">669</span>        // For the 4D case, the simplex is a 4D shape I won't even try to<a name="line.669"></a>
+<span class="sourceLineNo">670</span>        // describe.<a name="line.670"></a>
+<span class="sourceLineNo">671</span>        // To find out which of the 24 possible simplices we're in, we need<a name="line.671"></a>
+<span class="sourceLineNo">672</span>        // to<a name="line.672"></a>
+<span class="sourceLineNo">673</span>        // determine the magnitude ordering of x0, y0, z0 and w0.<a name="line.673"></a>
+<span class="sourceLineNo">674</span>        // The method below is a good way of finding the ordering of x,y,z,w<a name="line.674"></a>
+<span class="sourceLineNo">675</span>        // and<a name="line.675"></a>
+<span class="sourceLineNo">676</span>        // then find the correct traversal order for the simplex we’re in.<a name="line.676"></a>
+<span class="sourceLineNo">677</span>        // First, six pair-wise comparisons are performed between each<a name="line.677"></a>
+<span class="sourceLineNo">678</span>        // possible pair<a name="line.678"></a>
+<span class="sourceLineNo">679</span>        // of the four coordinates, and the results are used to add up binary<a name="line.679"></a>
+<span class="sourceLineNo">680</span>        // bits<a name="line.680"></a>
+<span class="sourceLineNo">681</span>        // for an integer index.<a name="line.681"></a>
+<span class="sourceLineNo">682</span>        int c =<a name="line.682"></a>
+<span class="sourceLineNo">683</span>                (x0 &gt; y0 ? 32 : 0)<a name="line.683"></a>
+<span class="sourceLineNo">684</span>              + (x0 &gt; z0 ? 16 : 0)<a name="line.684"></a>
+<span class="sourceLineNo">685</span>              + (y0 &gt; z0 ? 8 : 0 )<a name="line.685"></a>
+<span class="sourceLineNo">686</span>              + (x0 &gt; w0 ? 4 : 0 )<a name="line.686"></a>
+<span class="sourceLineNo">687</span>              + (y0 &gt; w0 ? 2 : 0 )<a name="line.687"></a>
+<span class="sourceLineNo">688</span>              + (z0 &gt; w0 ? 1 : 0 );<a name="line.688"></a>
+<span class="sourceLineNo">689</span>        int i1, j1, k1, l1; // The integer offsets for the second simplex<a name="line.689"></a>
+<span class="sourceLineNo">690</span>        // corner<a name="line.690"></a>
+<span class="sourceLineNo">691</span>        int i2, j2, k2, l2; // The integer offsets for the third simplex<a name="line.691"></a>
+<span class="sourceLineNo">692</span>        // corner<a name="line.692"></a>
+<span class="sourceLineNo">693</span>        int i3, j3, k3, l3; // The integer offsets for the fourth simplex<a name="line.693"></a>
+<span class="sourceLineNo">694</span>        // corner<a name="line.694"></a>
+<span class="sourceLineNo">695</span>        // simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some<a name="line.695"></a>
+<span class="sourceLineNo">696</span>        // order.<a name="line.696"></a>
+<span class="sourceLineNo">697</span>        // Many values of c will never occur, since e.g. x&gt;y&gt;z&gt;w makes x&lt;z,<a name="line.697"></a>
+<span class="sourceLineNo">698</span>        // y&lt;w and x&lt;w<a name="line.698"></a>
+<span class="sourceLineNo">699</span>        // impossible. Only the 24 indices which have non-zero entries make<a name="line.699"></a>
+<span class="sourceLineNo">700</span>        // any sense.<a name="line.700"></a>
+<span class="sourceLineNo">701</span>        // We use a thresholding to set the coordinates in turn from the<a name="line.701"></a>
+<span class="sourceLineNo">702</span>        // largest magnitude.<a name="line.702"></a>
+<span class="sourceLineNo">703</span>        // The number 3 in the "simplex" array is at the position of the<a name="line.703"></a>
+<span class="sourceLineNo">704</span>        // largest coordinate.<a name="line.704"></a>
+<span class="sourceLineNo">705</span>        i1 = simplex[c][0] &gt;= 3 ? 1 : 0;<a name="line.705"></a>
+<span class="sourceLineNo">706</span>        j1 = simplex[c][1] &gt;= 3 ? 1 : 0;<a name="line.706"></a>
+<span class="sourceLineNo">707</span>        k1 = simplex[c][2] &gt;= 3 ? 1 : 0;<a name="line.707"></a>
+<span class="sourceLineNo">708</span>        l1 = simplex[c][3] &gt;= 3 ? 1 : 0;<a name="line.708"></a>
+<span class="sourceLineNo">709</span>        // The number 2 in the "simplex" array is at the second largest<a name="line.709"></a>
+<span class="sourceLineNo">710</span>        // coordinate.<a name="line.710"></a>
+<span class="sourceLineNo">711</span>        i2 = simplex[c][0] &gt;= 2 ? 1 : 0;<a name="line.711"></a>
+<span class="sourceLineNo">712</span>        j2 = simplex[c][1] &gt;= 2 ? 1 : 0;<a name="line.712"></a>
+<span class="sourceLineNo">713</span>        k2 = simplex[c][2] &gt;= 2 ? 1 : 0;<a name="line.713"></a>
+<span class="sourceLineNo">714</span>        l2 = simplex[c][3] &gt;= 2 ? 1 : 0;<a name="line.714"></a>
+<span class="sourceLineNo">715</span>        // The number 1 in the "simplex" array is at the second smallest<a name="line.715"></a>
+<span class="sourceLineNo">716</span>        // coordinate.<a name="line.716"></a>
+<span class="sourceLineNo">717</span>        i3 = simplex[c][0] &gt;= 1 ? 1 : 0;<a name="line.717"></a>
+<span class="sourceLineNo">718</span>        j3 = simplex[c][1] &gt;= 1 ? 1 : 0;<a name="line.718"></a>
+<span class="sourceLineNo">719</span>        k3 = simplex[c][2] &gt;= 1 ? 1 : 0;<a name="line.719"></a>
+<span class="sourceLineNo">720</span>        l3 = simplex[c][3] &gt;= 1 ? 1 : 0;<a name="line.720"></a>
+<span class="sourceLineNo">721</span>        // The fifth corner has all coordinate offsets = 1, so no need to<a name="line.721"></a>
+<span class="sourceLineNo">722</span>        // look that up.<a name="line.722"></a>
+<span class="sourceLineNo">723</span>        double x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w)<a name="line.723"></a>
+<span class="sourceLineNo">724</span>        // coords<a name="line.724"></a>
+<span class="sourceLineNo">725</span>        double y1 = y0 - j1 + G4;<a name="line.725"></a>
+<span class="sourceLineNo">726</span>        double z1 = z0 - k1 + G4;<a name="line.726"></a>
+<span class="sourceLineNo">727</span>        double w1 = w0 - l1 + G4;<a name="line.727"></a>
+<span class="sourceLineNo">728</span>        double x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in<a name="line.728"></a>
+<span class="sourceLineNo">729</span>        // (x,y,z,w) coords<a name="line.729"></a>
+<span class="sourceLineNo">730</span>        double y2 = y0 - j2 + 2.0 * G4;<a name="line.730"></a>
+<span class="sourceLineNo">731</span>        double z2 = z0 - k2 + 2.0 * G4;<a name="line.731"></a>
+<span class="sourceLineNo">732</span>        double w2 = w0 - l2 + 2.0 * G4;<a name="line.732"></a>
+<span class="sourceLineNo">733</span>        double x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in<a name="line.733"></a>
+<span class="sourceLineNo">734</span>        // (x,y,z,w) coords<a name="line.734"></a>
+<span class="sourceLineNo">735</span>        double y3 = y0 - j3 + 3.0 * G4;<a name="line.735"></a>
+<span class="sourceLineNo">736</span>        double z3 = z0 - k3 + 3.0 * G4;<a name="line.736"></a>
+<span class="sourceLineNo">737</span>        double w3 = w0 - l3 + 3.0 * G4;<a name="line.737"></a>
+<span class="sourceLineNo">738</span>        double x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in<a name="line.738"></a>
+<span class="sourceLineNo">739</span>        // (x,y,z,w) coords<a name="line.739"></a>
+<span class="sourceLineNo">740</span>        double y4 = y0 - 1.0 + 4.0 * G4;<a name="line.740"></a>
+<span class="sourceLineNo">741</span>        double z4 = z0 - 1.0 + 4.0 * G4;<a name="line.741"></a>
+<span class="sourceLineNo">742</span>        double w4 = w0 - 1.0 + 4.0 * G4;<a name="line.742"></a>
+<span class="sourceLineNo">743</span>        // Work out the hashed gradient indices of the five simplex corners<a name="line.743"></a>
+<span class="sourceLineNo">744</span>        int ii = i &amp; 255;<a name="line.744"></a>
+<span class="sourceLineNo">745</span>        int jj = j &amp; 255;<a name="line.745"></a>
+<span class="sourceLineNo">746</span>        int kk = k &amp; 255;<a name="line.746"></a>
+<span class="sourceLineNo">747</span>        int ll = l &amp; 255;<a name="line.747"></a>
+<span class="sourceLineNo">748</span>        int gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] &amp; 31;<a name="line.748"></a>
+<span class="sourceLineNo">749</span>        int gi1<a name="line.749"></a>
+<span class="sourceLineNo">750</span>                = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] &amp; 31;<a name="line.750"></a>
+<span class="sourceLineNo">751</span>        int gi2<a name="line.751"></a>
+<span class="sourceLineNo">752</span>                = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] &amp; 31;<a name="line.752"></a>
+<span class="sourceLineNo">753</span>        int gi3<a name="line.753"></a>
+<span class="sourceLineNo">754</span>                = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] &amp; 31;<a name="line.754"></a>
+<span class="sourceLineNo">755</span>        int gi4<a name="line.755"></a>
+<span class="sourceLineNo">756</span>                = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] &amp; 31;<a name="line.756"></a>
+<span class="sourceLineNo">757</span>        // Calculate the contribution from the five corners<a name="line.757"></a>
+<span class="sourceLineNo">758</span>        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;<a name="line.758"></a>
+<span class="sourceLineNo">759</span>        if (t0 &lt; 0) {<a name="line.759"></a>
+<span class="sourceLineNo">760</span>            n0 = 0.0;<a name="line.760"></a>
+<span class="sourceLineNo">761</span>        } else {<a name="line.761"></a>
+<span class="sourceLineNo">762</span>            t0 *= t0;<a name="line.762"></a>
+<span class="sourceLineNo">763</span>            n0 = t0 * t0 * dot(grad4[gi0], x0, y0, z0, w0);<a name="line.763"></a>
+<span class="sourceLineNo">764</span>        }<a name="line.764"></a>
+<span class="sourceLineNo">765</span>        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;<a name="line.765"></a>
+<span class="sourceLineNo">766</span>        if (t1 &lt; 0) {<a name="line.766"></a>
+<span class="sourceLineNo">767</span>            n1 = 0.0;<a name="line.767"></a>
+<span class="sourceLineNo">768</span>        } else {<a name="line.768"></a>
+<span class="sourceLineNo">769</span>            t1 *= t1;<a name="line.769"></a>
+<span class="sourceLineNo">770</span>            n1 = t1 * t1 * dot(grad4[gi1], x1, y1, z1, w1);<a name="line.770"></a>
+<span class="sourceLineNo">771</span>        }<a name="line.771"></a>
+<span class="sourceLineNo">772</span>        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;<a name="line.772"></a>
+<span class="sourceLineNo">773</span>        if (t2 &lt; 0) {<a name="line.773"></a>
+<span class="sourceLineNo">774</span>            n2 = 0.0;<a name="line.774"></a>
+<span class="sourceLineNo">775</span>        } else {<a name="line.775"></a>
+<span class="sourceLineNo">776</span>            t2 *= t2;<a name="line.776"></a>
+<span class="sourceLineNo">777</span>            n2 = t2 * t2 * dot(grad4[gi2], x2, y2, z2, w2);<a name="line.777"></a>
+<span class="sourceLineNo">778</span>        }<a name="line.778"></a>
+<span class="sourceLineNo">779</span>        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;<a name="line.779"></a>
+<span class="sourceLineNo">780</span>        if (t3 &lt; 0) {<a name="line.780"></a>
+<span class="sourceLineNo">781</span>            n3 = 0.0;<a name="line.781"></a>
+<span class="sourceLineNo">782</span>        } else {<a name="line.782"></a>
+<span class="sourceLineNo">783</span>            t3 *= t3;<a name="line.783"></a>
+<span class="sourceLineNo">784</span>            n3 = t3 * t3 * dot(grad4[gi3], x3, y3, z3, w3);<a name="line.784"></a>
+<span class="sourceLineNo">785</span>        }<a name="line.785"></a>
+<span class="sourceLineNo">786</span>        double t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;<a name="line.786"></a>
+<span class="sourceLineNo">787</span>        if (t4 &lt; 0) {<a name="line.787"></a>
+<span class="sourceLineNo">788</span>            n4 = 0.0;<a name="line.788"></a>
+<span class="sourceLineNo">789</span>        } else {<a name="line.789"></a>
+<span class="sourceLineNo">790</span>            t4 *= t4;<a name="line.790"></a>
+<span class="sourceLineNo">791</span>            n4 = t4 * t4 * dot(grad4[gi4], x4, y4, z4, w4);<a name="line.791"></a>
+<span class="sourceLineNo">792</span>        }<a name="line.792"></a>
+<span class="sourceLineNo">793</span>        // Sum up and scale the result to cover the range [-1,1]<a name="line.793"></a>
+<span class="sourceLineNo">794</span>        return 27.0 * (n0 + n1 + n2 + n3 + n4);<a name="line.794"></a>
+<span class="sourceLineNo">795</span>    }<a name="line.795"></a>
+<span class="sourceLineNo">796</span>}<a name="line.796"></a>
 
 
 

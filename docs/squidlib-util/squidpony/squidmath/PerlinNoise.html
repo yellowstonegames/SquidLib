@@ -194,7 +194,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static double[][]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#grad2">grad2</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#grad2">grad2</a></span></code>
+<div class="block">Not used currently; see <a href="../../squidpony/squidmath/PerlinNoise.html#phiGrad2"><code>phiGrad2</code></a> instead.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected static int[][]</code></td>
@@ -214,7 +216,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected static double[][]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#phiGrad2">phiGrad2</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/PerlinNoise.html#phiGrad2">phiGrad2</a></span></code>
+<div class="block">256 2-element gradient vectors formed from the cos and sin of increasing multiples of phi, the golden ratio.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static int[][]</code></td>
@@ -404,7 +408,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>grad2</h4>
-<pre>protected static final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.38">grad2</a></pre>
+<pre>protected static final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.41">grad2</a></pre>
+<div class="block">Not used currently; see <a href="../../squidpony/squidmath/PerlinNoise.html#phiGrad2"><code>phiGrad2</code></a> instead.</div>
 </li>
 </ul>
 <a name="phiGrad2">
@@ -413,7 +418,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>phiGrad2</h4>
-<pre>protected static final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.47">phiGrad2</a></pre>
+<pre>protected static final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.57">phiGrad2</a></pre>
+<div class="block">256 2-element gradient vectors formed from the cos and sin of increasing multiples of phi, the golden ratio.
+ This starts with <code>Math.cos(1.61803398875 * 1), Math.sin(1.61803398875 * 1)</code> and increases the multiple up
+ to 256 at the end. This is expected to be accessed using an 8-bit int (depending on how you got your int, the
+ normal way to get 8 bits would be <code>index &amp; 255</code>), but smaller numbers should also work down to about 4 bits
+ (typically using <code>index &amp; 15</code>).</div>
 </li>
 </ul>
 <a name="grad3">
@@ -422,7 +432,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>grad3</h4>
-<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.57">grad3</a></pre>
+<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.315">grad3</a></pre>
 </li>
 </ul>
 <a name="grad4">
@@ -431,7 +441,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>grad4</h4>
-<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.61">grad4</a></pre>
+<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.319">grad4</a></pre>
 </li>
 </ul>
 <a name="F2">
@@ -440,7 +450,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>F2</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.102">F2</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.360">F2</a></pre>
 </li>
 </ul>
 <a name="G2">
@@ -449,7 +459,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>G2</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.103">G2</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.361">G2</a></pre>
 </li>
 </ul>
 <a name="F3">
@@ -458,7 +468,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>F3</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.104">F3</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.362">F3</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.F3">Constant Field Values</a></dd>
@@ -471,7 +481,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>G3</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.105">G3</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.363">G3</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../constant-values.html#squidpony.squidmath.PerlinNoise.G3">Constant Field Values</a></dd>
@@ -484,7 +494,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>F4</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.106">F4</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.364">F4</a></pre>
 </li>
 </ul>
 <a name="G4">
@@ -493,7 +503,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>G4</h4>
-<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.107">G4</a></pre>
+<pre>protected static final&nbsp;double <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.365">G4</a></pre>
 </li>
 </ul>
 <a name="perm">
@@ -502,7 +512,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>perm</h4>
-<pre>protected static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.110">perm</a></pre>
+<pre>protected static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.368">perm</a></pre>
 </li>
 </ul>
 <a name="simplex">
@@ -511,7 +521,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>simplex</h4>
-<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.123">simplex</a></pre>
+<pre>protected static final&nbsp;int[][] <a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.381">simplex</a></pre>
 </li>
 </ul>
 </li>
@@ -528,7 +538,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PerlinNoise</h4>
-<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.117">PerlinNoise</a>()</pre>
+<pre>protected&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.375">PerlinNoise</a>()</pre>
 </li>
 </ul>
 </li>
@@ -545,7 +555,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>dot</h4>
-<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.141">dot</a>(double[]&nbsp;g,
+<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.399">dot</a>(double[]&nbsp;g,
                             double&nbsp;x,
                             double&nbsp;y)</pre>
 </li>
@@ -556,7 +566,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>dot</h4>
-<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.145">dot</a>(int[]&nbsp;g,
+<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.403">dot</a>(int[]&nbsp;g,
                             double&nbsp;x,
                             double&nbsp;y,
                             double&nbsp;z)</pre>
@@ -568,7 +578,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>dot</h4>
-<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.149">dot</a>(int[]&nbsp;g,
+<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.407">dot</a>(int[]&nbsp;g,
                             double&nbsp;x,
                             double&nbsp;y,
                             double&nbsp;z,
@@ -581,7 +591,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.164">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.422">noise</a>(double&nbsp;xin,
                            double&nbsp;yin)</pre>
 <div class="block">2D simplex noise.
  This doesn't use its parameters verbatim; xin and yin are both effectively divided by
@@ -603,7 +613,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.241">noise</a>(double&nbsp;xin,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.499">noise</a>(double&nbsp;xin,
                            double&nbsp;yin,
                            double&nbsp;zin)</pre>
 <div class="block">3D simplex noise.</div>
@@ -623,7 +633,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>noise</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.387">noise</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/PerlinNoise.html#line.645">noise</a>(double&nbsp;x,
                            double&nbsp;y,
                            double&nbsp;z,
                            double&nbsp;w)</pre>
