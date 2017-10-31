@@ -312,7 +312,7 @@ public class TextPanel<T extends Color> {
 		textActor.setHeight(/* Entire height */ totalTextHeight);
 		final boolean yscroll = maxHeight < totalTextHeight;
 		scrollPane.setHeight(/* Maybe not the entire height */ Math.min(totalTextHeight, maxHeight));
-        scrollPane.setActor(new TextActor());
+        scrollPane.setWidget(new TextActor());
 		yScrollingCallback(yscroll);
 	}
 

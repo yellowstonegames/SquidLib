@@ -620,6 +620,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                   mz - zf)));
     }
 
+    public static float prepare(double n)
+    {
+        return NumberTools.swayTight((float)n * 1.5f + 0.5f);
+    }
+
+    public static float prepare(float n)
+    {
+        return NumberTools.swayTight(n * 1.5f + 0.5f);
+    }
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -2375,12 +2385,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = (float)
-                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
+                                bright = (float) (
+                                        //prepare((
+                                        //PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
                                         //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
                                         PerlinNoise.noise(xx * 0.25, yy * 0.25) * 4 +
                                         PerlinNoise.noise(xx * 0.5, yy * 0.5) * 2 +
                                         PerlinNoise.noise(xx, yy)
+                                        ///) 7f);
                                         + 7f) / 14f;
                                         //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2478,11 +2490,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Perlin 3D Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)
-                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
+                                bright = (float) (
+                                        //PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
                                                 PerlinNoise.noise(x * 0.25, y * 0.25, ctr * 0.3) * 4 +
                                                         PerlinNoise.noise(x * 0.5, y * 0.5, ctr * 0.3) * 2 +
                                                         PerlinNoise.noise(x, y, ctr * 0.3)
+                                        // / 7);
+
                                                         + 7f) / 14f;
                                 //+ 15.0f) / 30f;
 
@@ -2527,15 +2541,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
 
                     case 10:
-                        Gdx.graphics.setTitle("Whirling 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 3D Noise, processed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float)
-                                        (//PerlinNoise.noise(x / 8.0, y / 8.0, ctr * 0.125) * 8 +
-                                                //PerlinNoise.noise(x / 4.0, y / 4.0, ctr * 0.125) * 4 +
-                                                //PerlinNoise.noise(x / 2.0, y / 2.0, ctr * 0.125) * 2 +
-                                                WhirlingNoise.noise(x * 0.125, y * 0.125, ctr  * 0.0375)
-                                                        + 1f) * 0.5f;
+                                bright = //(float) (
+                                        prepare(WhirlingNoise.noise(x * 0.125, y * 0.125, ctr  * 0.0375));
+                                         //               + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2544,18 +2555,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
 
                     case 11:
-                        Gdx.graphics.setTitle("Whirling Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Noise, processed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = (float)
-                                        (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
-                                                //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
-                                                //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
-                                                //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
-                                                WhirlingNoise.noise(xx * 0.125, yy * 0.125)
-                                                        + 1f) * 0.5f;
+                                bright = //(float) (
+                                        prepare(WhirlingNoise.noise(xx * 0.125, yy * 0.125));
+                                         //               + 1f) * 0.5f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
@@ -2563,11 +2570,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
 
                     case 12:
-                        Gdx.graphics.setTitle("Whirling 4D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = ((float) WhirlingNoise.noise(x * 0.125, y * 0.125, ctr * 0.0375, 0.0)
-                                                        + 1f) * 0.5f;
+                                bright = ((float)
+                                        WhirlingNoise.noise(x * 0.125, y * 0.125, ctr * 0.0375, ctr * 0.0625 * (0.1f + NumberTools.swayTight(ctr * 0.001f)))
+                                + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2576,16 +2584,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
 
                     case 13:
-                        Gdx.graphics.setTitle("Whirling Alt Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Alt Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = (//PerlinNoise.noise(xx / 16.0, yy / 16.0) * 16 +
-                                                //PerlinNoise.noise(xx / 8.0, yy / 8.0) * 8 +
-                                                //PerlinNoise.noise(xx / 4.0, yy / 4.0) * 4 +
-                                                //PerlinNoise.noise(xx / 2.0, yy / 2.0) * 2 +
-                                                WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
+                                bright = (
+                                        WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
                                                         + 1f) * 0.5f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2595,25 +2600,26 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                         //You can preview this at https://dl.dropboxusercontent.com/u/11914692/rainbow-perlin.gif
                     case 14:
-                        Gdx.graphics.setTitle("Whirling 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Alt 3D Color Noise, processed, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y, floatGet(
-                                        (WhirlingNoise.noiseAlt(x * 0.0625, y * 0.0625, ctr  * 0.125) + 1f) * 0.5f,
-                                        (WhirlingNoise.noiseAlt(x * 0.0625, y * 0.0625, ctr  * 0.125 + 234.5) + 1f) * 0.5f,
-                                        (WhirlingNoise.noiseAlt(x * 0.0625, y * 0.0625, ctr  * 0.125 + 678.9) + 1f) * 0.5f,
+                                        prepare(WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625)), // + 1f) * 0.5f,
+                                        prepare(WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625 + 234.5)), // + 1f) * 0.5f,
+                                        prepare(WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625 + 678.9)), // + 1f) * 0.5f,
                                         1f));
                             }
                         }
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("Whirling 3D Color Noise, one octave as all channels at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 3D Color Noise, * 1.5 before processing " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        NumberTools.intBitsToFloat(0xFE000000 |
-                                                (int)((WhirlingNoise.noise(x * 0.0625, y * 0.0625, ctr  * 0.125)
-                                                        + 1.0) * 8388607.5)));
+                                display.put(x, y, floatGet(
+                                        prepare(1.5f * WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625)), // + 1f) * 0.5f,
+                                        prepare(1.5f * WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625 + 234.5)), // + 1f) * 0.5f,
+                                        prepare(1.5f * WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625 + 678.9)), // + 1f) * 0.5f,
+                                        1f));
                             }
                         }
                         break;
