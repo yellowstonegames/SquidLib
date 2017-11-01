@@ -106,7 +106,7 @@ public class SparseDemo extends ApplicationAdapter {
     // Here, we use a GreasedRegion to store all floors that the player can walk on, a small rim of cells just beyond
     // the player's vision that blocks pathfinding to areas we can't see a path to, and we also store all cells that we
     // have seen in the past in a GreasedRegion (in most roguelikes, there would be one of these per dungeon floor).
-    private GreasedRegion floors, blockage, seen;
+    private GreasedRegion floors, blockage, seen, currentlySeen;
     // a Glyph is a kind of scene2d Actor that only holds one char in a specific color, but is drawn using the behavior
     // of TextCellFactory (which most text in SquidLib is drawn with) instead of the different and not-very-compatible
     // rules of Label, which older SquidLib code used when it needed text in an Actor. Glyphs are also lighter-weight in
@@ -256,6 +256,7 @@ public class SparseDemo extends ApplicationAdapter {
         // to cells we can't see from the start of the move.
         blockage = new GreasedRegion(visible, 0.0);
         seen = blockage.not().copy();
+        currentlySeen = seen.copy();
         blockage.fringe8way();
         //This is used to allow clicks or taps to take the player to the desired area.
         toCursor = new ArrayList<>(200);
@@ -486,7 +487,7 @@ public class SparseDemo extends ApplicationAdapter {
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
             // a new one just for this movement.
             blockage.refill(visible, 0.0);
-            seen.or(blockage.not());
+            seen.or(currentlySeen.remake(blockage.not()));
             blockage.fringe8way();
         }
         else
@@ -498,7 +499,7 @@ public class SparseDemo extends ApplicationAdapter {
             // PanelEffect is a type of Action (from libGDX) that can run on a SparseLayers or SquidPanel.
             // This particular kind of PanelEffect creates a purple glow around the player when he bumps into a wall.
             // Other kinds can make explosions or projectiles appear.
-            display.addAction(new PanelEffect.PulseEffect(display, 1f, floors, player, 3
+            display.addAction(new PanelEffect.PulseEffect(display, 1f, currentlySeen, player, 3
                     , new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}
                     ));
             //display.addAction(new PanelEffect.ExplosionEffect(display, 1f, floors, player, 6));

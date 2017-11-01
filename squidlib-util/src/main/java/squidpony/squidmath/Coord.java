@@ -590,4 +590,9 @@ public class Coord implements Serializable {
         }
         POOL = POOL2;
     }
+
+    public Coord interpolate(Coord end, float amountTraveled) {
+        return Coord.get(x + Math.round((end.x - x) * amountTraveled),
+                y + Math.round((end.y - y) * amountTraveled));
+    }
 }

@@ -11,6 +11,7 @@ import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -117,7 +118,7 @@ public abstract class PanelEffect extends TemporalAction{
             this.radius = radius;
             double[][] resMap = new double[validCells.width][validCells.height];
             lightMap = new double[validCells.width][validCells.height];
-            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius);
+            FOV.reuseFOV(resMap, lightMap, center.x, center.y, radius + 0.5);
             affected = Radius.inCircle(center.x, center.y, radius, false, validCells.width, validCells.height);
         }
         /**
@@ -316,6 +317,7 @@ public abstract class PanelEffect extends TemporalAction{
         }
 
     }
+    @Beta
     public static class GibberishEffect extends ExplosionEffect
     {
         /**
@@ -770,6 +772,180 @@ public abstract class PanelEffect extends TemporalAction{
             }
         }
     }
+    @Beta
+    public static class GlowBallEffect extends PanelEffect
+    {
+        /**
+         * This will change over the course of the effect's duration, and includes 16 overlapping faint glowing areas.
+         */
+        public Coord[] centers = new Coord[16];
+
+        /**
+         * Where the glow effect should travel towards as a whole.
+         */
+        public Coord end;
+        /**
+         * Normally you should set this in the constructor, and not change it later.
+         */
+        public int radius = 3;
+        /**
+         * The default glow ball color is medium-light blue.
+         */
+        public float color = SColor.CW_AZURE.toFloatBits();
+        /**
+         * The internal representation of how affected each cell is by the explosion, based on proximity to center.
+         * This always has 16 light maps, but many will be identical and only calculated once.
+         */
+        public double[][][] lightMaps = new double[16][][];
+        private double[][] resMap;
+        /**
+         * The raw list of Coords that might be affected by the explosion; may include some cells that aren't going to
+         * show as exploding (it usually has some false positives), but shouldn't exclude any cells that should show as
+         * such (no false negatives). You can edit this if you need to, but it isn't recommended.
+         */
+        public List<Coord> affected;
+        /**
+         * Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel. The duration will be 1 second.
+         * @param targeting the IPackedColorPanel to affect
+         * @param start the starting point for the glow ball(s)
+         * @param end the ending point for the glow ball(s)
+         * @param radius the radius of the explosion, in cells
+         */
+
+        public GlowBallEffect(IPackedColorPanel targeting, Coord start, Coord end, int radius)
+        {
+            this(targeting, 1f, start, end, radius);
+        }
+        /**
+         * Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param start the starting point for the glow ball(s)
+         * @param end the ending point for the glow ball(s)
+         * @param radius the radius of the explosion, in cells
+         */
+        public GlowBallEffect(IPackedColorPanel targeting, float duration, Coord start, Coord end, int radius)
+        {
+            super(targeting, duration);
+            Arrays.fill(centers, start);
+            this.end = end;
+            this.radius = radius;
+            resMap = new double[validCells.width][validCells.height];
+            lightMaps[0] = new double[validCells.width][validCells.height];
+            FOV.reuseFOV(resMap, lightMaps[0], start.x, start.y, radius + 0.5);
+            for (int i = 1; i < 16; i++) {
+                lightMaps[i] = lightMaps[0];
+            }
+            affected = Radius.inCircle(start.x, start.y, radius, false, validCells.width, validCells.height);
+        }
+        /**
+         * Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param start the starting point for the glow ball(s)
+         * @param end the ending point for the glow ball(s)
+         * @param radius the radius of the explosion, in cells
+         */
+        public GlowBallEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord start, Coord end, int radius)
+        {
+            super(targeting, duration, valid);
+            Arrays.fill(centers, start);
+            this.end = end;
+            this.radius = radius;
+
+            resMap = ArrayTools.fill(1.0, validCells.width, validCells.height);
+            validCells.writeDoublesInto(resMap, 0.0);
+            lightMaps[0] = new double[validCells.width][validCells.height];
+            FOV.reuseFOV(resMap, lightMaps[0], start.x, start.y, radius + 0.5);
+            validCells.not().writeDoublesInto(lightMaps[0], 0.0);
+            validCells.not();
+            for (int i = 1; i < 16; i++) {
+                lightMaps[i] = lightMaps[0];
+            }
+            affected = Radius.inCircle(start.x, start.y, radius, false, validCells.width, validCells.height);
+        }
+
+        /**
+         * Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param start the starting point for the glow ball(s)
+         * @param end the ending point for the glow ball(s)
+         * @param radius the radius of the explosion, in cells
+         */
+        public GlowBallEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord start, Coord end, int radius, Color coloring)
+        {
+            this(targeting, duration, valid, start, end, radius, coloring.toFloatBits());
+        }
+
+        /**
+         * Constructs a GlowBallEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel.
+         * @param targeting the IPackedColorPanel to affect
+         * @param duration the duration of this PanelEffect in seconds, as a float
+         * @param valid the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param start the starting point for the glow ball(s)
+         * @param end the ending point for the glow ball(s)
+         * @param radius the radius of the explosion, in cells
+         */
+        public GlowBallEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord start, Coord end, int radius, float coloring)
+        {
+            this(targeting, duration, valid, start, end, radius);
+            color = coloring;
+        }
+        private static float adjust(final float x, final int amt) { return ((x * (16 + amt)) + ((16 - amt) * x * x * (3f - 2f * x))) * 0.03125f; }
+        /**
+         * Called each frame.
+         *
+         * @param percent The percentage of completion for this action, growing from 0 to 1 over the duration. If
+         *                {@link #setReverse(boolean) reversed}, this will shrink from 1 to 0.
+         */
+        @Override
+        protected void update(float percent) {
+            affected.clear();
+            Radius.inCircle(centers[0].x, centers[0].y, radius, false, validCells.width, validCells.height, affected);
+            int len = affected.size();
+            Coord c;
+            float f, light;
+            Coord prev = centers[0];
+            for (int i = 0; i < 16; i++) {
+                centers[i] = centers[i].interpolate(end, adjust(percent, i));
+            }
+            validCells.not();
+            if(!prev.equals(centers[0]))
+            {
+                FOV.reuseFOV(resMap, lightMaps[0], centers[0].x, centers[0].y, radius + 0.5);
+                validCells.writeDoublesInto(lightMaps[0], 0.0);
+            }
+            for (int i = 1; i < 16; i++) {
+                if(!centers[i-1].equals(centers[i]))
+                {
+                    FOV.reuseFOV(resMap, lightMaps[i], centers[i].x, centers[i].y, radius + 0.5);
+                    validCells.writeDoublesInto(lightMaps[i], 0.0);
+                }
+                else
+                {
+                    lightMaps[i] = lightMaps[i-1];
+                }
+            }
+            validCells.not();
+            for (int i = 0; i < len; i++) {
+                c = affected.get(i);
+                for (int j = 0; j < 16; j++) {
+                    if ((light = (float) lightMaps[j][c.x][c.y]) <= 0f)
+                        continue;
+                    target.blend(c.x, c.y, color,  light * 0.0625f);
+                }
+            }
+        }
+    }
+
 
     public static Interpolation fastInSlowMidFastOut = new Interpolation() {
         private final float value = 2, power = 3;
