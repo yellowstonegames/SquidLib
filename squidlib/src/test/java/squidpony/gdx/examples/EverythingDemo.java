@@ -110,12 +110,11 @@ public class EverythingDemo extends ApplicationAdapter {
      */
     private int cellHeight;
     private SquidInput input;
-    private boolean[][] seen;
     private int health = 7;
     private SquidColorCenter fgCenter, bgCenter;
     private Color bgColor;
     private SpatialMap<Integer, Monster> monsters;
-    private GreasedRegion floors;
+    private GreasedRegion floors, blockage, seen, currentlySeen;
     private DijkstraMap getToPlayer, playerToCursor;
     private Stage stage, messageStage;
     private int framesWithoutAnimation = 0;
@@ -340,7 +339,12 @@ public class EverythingDemo extends ApplicationAdapter {
         fov = new FOV(FOV.RIPPLE_TIGHT);
         res = DungeonUtility.generateResistances(decoDungeon);
         floors = new GreasedRegion(res, 0.99);
-        fovmap = fov.calculateFOV(res, playerPos.x, playerPos.y, 8, Radius.CIRCLE);
+        fovmap = new double[totalWidth][totalHeight];
+        FOV.reuseFOV(res, fovmap, playerPos.x, playerPos.y, 8, Radius.CIRCLE);
+        blockage = new GreasedRegion(fovmap, 0.0);
+        seen = blockage.not().copy();
+        currentlySeen = seen.copy();
+        blockage.fringe8way();
         getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
         getToPlayer.setGoal(playerPos);
@@ -361,7 +365,7 @@ public class EverythingDemo extends ApplicationAdapter {
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(playerPos);
-        playerToCursor.scan(null);
+        playerToCursor.partialScan(13, blockage);
         bgColor = SColor.DARK_SLATE_GRAY;
         colors = MapUtility.generateDefaultColors(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
@@ -369,7 +373,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // here we simply fill the contents of display with our dungeon (but we don't set the actual colors yet).
         ArrayTools.insert(decoDungeon, display.getForegroundLayer().contents, 0, 0);
         display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.012);
-        seen = new boolean[decoDungeon.length][decoDungeon[0].length];
+
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
         // this is a big one.
@@ -603,18 +607,24 @@ public class EverythingDemo extends ApplicationAdapter {
                 res = DungeonUtility.generateResistances(decoDungeon);
                 floors.refill(res, 0.99);
                 // recalculate FOV, store it in fovmap for the render to use.
-                fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.CIRCLE);
+                FOV.reuseFOV(res, fovmap, player.gridX, player.gridY, 8, Radius.CIRCLE);
+                blockage.refill(fovmap, 0.0);
+                seen.or(currentlySeen.remake(blockage.not()));
+                blockage.fringe8way();
 
             } else {
                 // recalculate FOV, store it in fovmap for the render to use.
-                fovmap = fov.calculateFOV(res, newX, newY, 8, Radius.CIRCLE);
+                FOV.reuseFOV(res, fovmap, newX, newY, 8, Radius.CIRCLE);
+                blockage.refill(fovmap, 0.0);
+                seen.or(currentlySeen.remake(blockage.not()));
+                blockage.fringe8way();
                 //player.gridX = newX;
                 //player.gridY = newY;
 
                 if(monsters.remove(Coord.get(newX, newY)) != null)
                 {
                     display.addAction(new PanelEffect.ExplosionEffect(display.getBackgroundLayer(), 1f,
-                            floors, Coord.get(newX, newY), 5));
+                            currentlySeen, Coord.get(newX, newY), 5));
                 }
                 //display.setGridOffsetX(newX - (width >> 1));
                 //display.setGridOffsetY(newY - (height >> 1));
@@ -669,7 +679,10 @@ public class EverythingDemo extends ApplicationAdapter {
         int monCount = monplaces.size();
 
         // recalculate FOV, store it in fovmap for the render to use.
-        fovmap = fov.calculateFOV(res, player.gridX, player.gridY, 8, Radius.CIRCLE);
+        FOV.reuseFOV(res, fovmap, player.gridX, player.gridY, 8, Radius.CIRCLE);
+        blockage.refill(fovmap, 0.0);
+        seen.or(currentlySeen.remake(blockage.not()));
+        blockage.fringe8way();
         // handle monster turns
         ArrayList<Coord> nextMovePositions;
         for(int ci = 0; ci < monCount; ci++)
@@ -685,8 +698,8 @@ public class EverythingDemo extends ApplicationAdapter {
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
 //                    display.addAction(PanelEffect.makeGrenadeEffect(new PanelEffect.ProjectileEffect(display.getForegroundLayer(), 0.6f, floors, pos, playerArray[0], '*', SColor.DB_GRAPHITE),
 //                            new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 0.8f, floors, playerArray[0], 6)));
-                    display.addAction(new PanelEffect.ProjectileEffect(display.getForegroundLayer(), 0.5f,
-                            floors, pos, playerArray[0], '!', SColor.CW_BRIGHT_RED));
+                    display.addAction(new PanelEffect.GlowBallEffect(display.getBackgroundLayer(), 0.5f,
+                            floors, pos, playerArray[0], 1, SColor.CW_BRIGHT_RED));
                 }
                 getToPlayer.clearGoals();
                 nextMovePositions = getToPlayer.findPath(1, monplaces, null, pos, playerArray);
@@ -857,14 +870,13 @@ public class EverythingDemo extends ApplicationAdapter {
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
                 // and 1.0), with 1.0 being brighter at +75 lightness and 0.0 being rather dark at -105.
                 if (fovmap[ci][cj] > 0.0) {
-                    seen[ci][cj] = true;
                     display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
                             (int) (-95 +
                                     160 * (fovmap[ci][cj] * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.0004, 10000)))));
                     //(-110 + display.lightnesses[ci][cj] +
                     //                18 * fovmap[ci][cj]));// * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.001, 10000)))));
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
-                } else {// if (seen[i][j]) {
+                } else if (seen.contains(ci, cj)) {
                     display.put(ci, cj, lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]), -140);
                 }
             }
@@ -941,7 +953,7 @@ public class EverythingDemo extends ApplicationAdapter {
                                 // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
                                 // currently-moused-over cell, which we only need to set where the mouse is being handled.
                                 playerToCursor.setGoal(m);
-                                playerToCursor.scan(null);
+                                playerToCursor.partialScan(13, blockage);
                             }
 
                             break;
