@@ -622,11 +622,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     public static float prepare(double n)
     {
+        //return (float)n * 0.5f + 0.5f;
         return NumberTools.swayTight((float)n * 1.5f + 0.5f);
     }
 
     public static float prepare(float n)
     {
+        //return (n * 0.5f) + 0.5f;
         return NumberTools.swayTight(n * 1.5f + 0.5f);
     }
 
@@ -2589,9 +2591,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = (
-                                        WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
-                                                        + 1f) * 0.5f;
+                                bright = //(
+                                        prepare(
+                                                WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
+                                        );
+                                                        //+ 1f) * 0.5f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
@@ -2612,13 +2616,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("Whirling 3D Color Noise, * 1.5 before processing " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 3D Color Noise, unprocessed " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y, floatGet(
-                                        prepare(1.5f * WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625)), // + 1f) * 0.5f,
-                                        prepare(1.5f * WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625 + 234.5)), // + 1f) * 0.5f,
-                                        prepare(1.5f * WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625 + 678.9)), // + 1f) * 0.5f,
+                                        (WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr * 0.0625) + 1f) * 0.5f,
+                                        (WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr * 0.0625 + 234.5) + 1f) * 0.5f,
+                                        (WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr * 0.0625 + 678.9) + 1f) * 0.5f,
                                         1f));
                             }
                         }
