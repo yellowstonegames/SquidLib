@@ -31,18 +31,18 @@ public class SaltyQRNG implements StatefulRandomness {
      */
     public SaltyQRNG()
     {
-        salt = (int)((Math.random() - 0.5) * 4.294967296E9) & 0xFFFC | 2;
+        salt = (int)((Math.random() - 0.5) * 4.294967296E9) & 0xFFFF | 1;
         current = (int)((Math.random() - 0.5) * 4.294967296E9) >>> 16;
 
     }
 
     /**
-     * Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384). The salt
+     * Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 32768). The salt
      * determines the precise sequence that will be produced over the whole lifetime of the QRNG, and two SaltyQRNG
      * objects with different salt values should produce different sequences, at least at some points in generation.
      * The starting state will be 0, which this tolerates well. The salt is allowed to be 0, since some changes are made
      * to the salt before use.
-     * @param salt an int; only the bottom 14 bits will be used, so different values range from 0 to 16383
+     * @param salt an int; only the bottom 15 bits will be used, so different values range from 0 to 32767
      */
     public SaltyQRNG(int salt)
     {
@@ -51,13 +51,13 @@ public class SaltyQRNG implements StatefulRandomness {
     }
 
     /**
-     * Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384) and a point
+     * Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 32768) and a point
      * it has already advanced to in the sequence this generates. The salt determines the precise sequence that will be
      * produced over the whole lifetime of the QRNG, and two SaltyQRNG objects with different salt values should produce
      * different sequences, at least at some points in generation. The advance will only have its least-significant 16
      * bits used, so an int can be safely passed as advance without issue (even a negative int). The salt is allowed to
      * be 0, since some changes are made to the salt before use.
-     * @param salt an int; only the bottom 14 bits will be used, so different values range from 0 to 16383
+     * @param salt an int; only the bottom 15 bits will be used, so different values range from 0 to 32767
      * @param advance a long to use as the state; only the bottom 32 bits are used, so any int can also be used
      */
     public SaltyQRNG(int salt, long advance)
@@ -70,19 +70,19 @@ public class SaltyQRNG implements StatefulRandomness {
 
     public int getSalt()
     {
-        return salt >>> 2;
+        return salt >>> 1;
     }
 
     /**
      * Sets the salt, which should usually be a non-negative int less than 16384, though it can be any int (only the
-     * bottom 14 bits are used). The salt determines the precise sequence that will be produced over the whole lifetime
+     * bottom 15 bits are used). The salt determines the precise sequence that will be produced over the whole lifetime
      * of the QRNG, and two SaltyQRNG objects with different salt values should produce different sequences, at least at
      * some points in generation. The salt is allowed to be 0, since some changes are made to the salt before use.
-     * @param newSalt an int; only the bottom 14 bits will be used, so different values range from 0 to 16383
+     * @param newSalt an int; only the bottom 15 bits will be used, so different values range from 0 to 32767
      */
     public void setSalt(int newSalt)
     {
-        salt = newSalt << 2 | 2;
+        salt = newSalt << 1 | 1;
     }
 
     private int current;
@@ -107,8 +107,12 @@ public class SaltyQRNG implements StatefulRandomness {
      */
     public int nextInt()
     {
-        int t = (current + salt) * 0xF7910000;
-        return ((t >>> 26 | t >>> 10) & 0xFFFF) | (((t = (current += salt << 1) * 0xF7910000) >>> 26 | t >>> 10) << 16);
+        int t = (current + salt) * 0xF7911005;
+        return ((t >>> 25 ^ t >>> 9) & 0xFFFF) ^ (((t = (current += salt << 1) * 0xF7912005) >>> 25 ^ t >>> 9) << 16);
+    }
+    public short nextShort()
+    {
+        return (short) ((current += salt) * 0xF791);
     }
     /**
      * Advances the state twice, causing the same state change as a call to {@link #nextInt()} or two calls to
@@ -128,11 +132,11 @@ public class SaltyQRNG implements StatefulRandomness {
      */
     @Override
     public long nextLong() {
-        long t = (current + salt) * 0xF791000000000000L;
-        return ((t >>> 58 | t >>> 42) & 0xFFFF)
-                | (((t = (current + (salt << 1)) * 0xF791000000000000L) >>> 58 | t >>> 42) << 16)
-                | (((t = (current + salt * 3) * 0xF791000000000000L) >>> 58 | t >>> 42) << 32)
-                | (((t = (current += (salt << 2)) * 0xF791000000000000L) >>> 58 | t >>> 42) << 48);
+        long t = (current + salt) * 0xF791100500000000L;
+        return ((t >>> 57 ^ t >>> 41) & 0xFFFF)
+                ^ (((t = (current + (salt << 1)) * 0xF791200500000000L) >>> 57 ^ t >>> 41) << 16)
+                ^ (((t = (current + salt * 3) * 0xF791400500000000L) >>> 57 ^ t >>> 41) << 32)
+                ^ (((t = (current += (salt << 2)) * 0xF791800500000000L) >>> 57 ^ t >>> 41) << 48);
     }
 
     /**
@@ -141,7 +145,9 @@ public class SaltyQRNG implements StatefulRandomness {
      */
     public double nextDouble()
     {
-        return (((current += salt) * 0xDE43) & 0xFFFF) * 0x1p-16;
+        int t = (current + salt) * 0xF7911005;
+        return (((t >>> 25 ^ t >>> 9) & 0xFFFF) ^ (((t = (current += salt << 1) * 0xF7912005) >>> 25 ^ t >>> 9) << 16)) * 0x1p-32;
+        //return (((current += salt) * 0xDE43) & 0xFFFF) * 0x1p-16;
     }
 
     /**
@@ -150,7 +156,8 @@ public class SaltyQRNG implements StatefulRandomness {
      */
     public float nextFloat()
     {
-        return (((current += salt) * 0xDE43) & 0xFFFF) * 0x1p-16f;
+        //return (((current += salt) * 0xDE43) & 0xFFFF) * 0x1p-16f;
+        return (((current += salt) * 0xF791) & 0xFFFF) * 0x1p-16f;
     }
 
     @Override

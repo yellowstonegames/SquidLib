@@ -28,7 +28,6 @@ public class SquidMessageBox extends SquidPanel {
     protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);
     protected ArrayList<Label> labels = new ArrayList<>(256);
     protected int messageIndex = 0;
-    //private static Pattern lineWrapper;
     private char[][] basicBorders;
     /**
      * Creates a bare-bones panel with all default values for text rendering.
@@ -42,7 +41,6 @@ public class SquidMessageBox extends SquidPanel {
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         basicBorders = assembleBorders();
         appendMessage("");
-        //lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
     }
 
     /**
@@ -59,7 +57,6 @@ public class SquidMessageBox extends SquidPanel {
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         basicBorders = assembleBorders();
         appendMessage("");
-        //lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
     }
 
     /**
@@ -79,7 +76,6 @@ public class SquidMessageBox extends SquidPanel {
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         basicBorders = assembleBorders();
         appendMessage("");
-        //lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
     }
 
     /**
@@ -101,7 +97,6 @@ public class SquidMessageBox extends SquidPanel {
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         basicBorders = assembleBorders();
         appendMessage("");
-        //lineWrapper = Pattern.compile(".{1," + (gridWidth - 2) + "}(\\s|-|$)+");
 
     }
     private void makeBordersClickable()
@@ -232,12 +227,12 @@ public class SquidMessageBox extends SquidPanel {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
         put(basicBorders);
         for (int i = 1; i < gridHeight - 1 && i <= messageIndex; i++) {
             put(1, gridHeight - 1 - i, messages.get(messageIndex + 1 - i));
         }
         act(Gdx.graphics.getDeltaTime());
+        super.draw(batch, parentAlpha);
     }
 
     /**

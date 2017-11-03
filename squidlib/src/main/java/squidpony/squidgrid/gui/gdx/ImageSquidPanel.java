@@ -136,8 +136,8 @@ public class ImageSquidPanel extends SquidPanel {
         textFactory.configureShader(batch);
         int inc = onlyRenderEven ? 2 : 1, widthInc = inc * cellWidth, heightInc = inc * cellHeight;
         TextureRegion tr;
-        float screenX = xOffset - (gridOffsetX <= 0 ? 0 : cellWidth)/* - getX()*/,
-                screenY_base = 1f + yOffset + (gridOffsetY <= 0 ? 0 : cellHeight) + gridHeight * cellHeight, screenY;
+        float screenX = xOffset - (gridOffsetX <= 0 ? 0 : cellWidth) + getX(),
+                screenY_base = 1f + yOffset + (gridOffsetY <= 0 ? 0 : cellHeight) + gridHeight * cellHeight + getY(), screenY;
         char c;
         for (int x = Math.max(0, gridOffsetX-1), xx = (gridOffsetX <= 0) ? 0 : -1; xx <= gridWidth && x < contents.length; x += inc, xx += inc, screenX += widthInc) {
             screenY = screenY_base;
@@ -649,22 +649,6 @@ public class ImageSquidPanel extends SquidPanel {
     public Actor cellToActor(int x, int y, boolean doubleWidth)
     {
     	return createActor(x, y, contents[x][y], colors[x][y], doubleWidth);
-    }
-
-    protected /* @Nullable */ Actor createActor(int x, int y, char name, Color color, boolean doubleWidth) {
-        final Actor a = textFactory.makeActor(name, scc.filter(color));
-        a.setName(String.valueOf(name));
-        a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
-        autoActors.add(a);
-        return a;
-    }
-
-    protected /* @Nullable */ Actor createActor(int x, int y, char name, float encodedColor, boolean doubleWidth) {
-        final Actor a = textFactory.makeActor(name, encodedColor);
-        a.setName(String.valueOf(name));
-        a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
-        autoActors.add(a);
-        return a;
     }
 
     public void recallActor(Actor a, boolean restoreSym)

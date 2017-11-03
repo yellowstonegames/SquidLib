@@ -681,8 +681,8 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, float backgroundLightness, float mixBackground) {
         foregroundPanel.put(x, y, c, encodedForeground);
-        backgroundPanel.put(x, y, encodedBackground,
-                lightnesses[x][y] + (int) (backgroundLightness * 255), mixBackground);
+        backgroundPanel.put(x, y, encodedBackground, backgroundLightness, mixBackground);
+        //        lightnesses[x][y] + (int) (backgroundLightness * 255), mixBackground);
         return this;
     }
 
@@ -1173,8 +1173,8 @@ public class SquidLayers extends Group {
      */
     @Override
     public void setPosition(float x, float y) {
-        super.setPosition(x, y);
-        setBounds(x, y, getWidth(), getHeight());
+        //super.setPosition(x, y);
+        //setBounds(x, y, getWidth(), getHeight());
         foregroundPanel.setPosition(x, y);
         backgroundPanel.setPosition(x, y);
         for (SquidPanel panel : extraPanels) {

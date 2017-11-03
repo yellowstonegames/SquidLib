@@ -32,10 +32,23 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     protected static int fastFloor(float t) {
         return t >= 0 ? (int) t : (int) t - 1;
     }
-    public static long determine(long state) {
-        state *= 0x6A5D39EAE12657A9L;
-        state ^= (state ^ (state >>> 26)) * (state | 3L);
-        return state ^ (state >>> 22);
+    public static int determine256(long state) {
+        state *= 0x6D2E9CF570932BD7L;
+        return (int)((state ^ (state >>> 25)) * (state | 1L) >>> 56);
+        //return (int)(state >>> 56);
+        //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 1L) >>> 56);
+    }
+    public static int determine32(long state) {
+        state *= 0x6D2E9CF570932BD7L;
+        return (int)((state ^ (state >>> 25)) * (state | 1L) >>> 59);
+        //return (int)(state >>> 59);
+        //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 1L) >>> 59);
+    }
+    public static long determine(long state)
+    {
+        state *= 0x6D2E9CF570932BD7L;
+        state = (state ^ (state >>> 25)) * (state | 1L);
+        return state ^ (state >>> 21);
     }
     protected static final float
             root2 = 1.4142135f,
@@ -891,9 +904,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi1 = (hash >>>= 4) & 15;
         int gi2 = (hash >>> 4) & 15;
         */
-        int gi0 = (int)(determine(seed + i + determine(j)) >>> 56);
-        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) >>> 56);
-        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) >>> 56);
+        int gi0 = determine256(seed + i + determine(j));
+        int gi1 = determine256(seed + i + i1 + determine(j + j1));
+        int gi2 = determine256(seed + i + 1 + determine(j + 1));
 
         // Calculate the contribution from the three corners
         double t0 = 0.75 - x0 * x0 - y0 * y0;
@@ -1056,10 +1069,10 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
-        int gi0 = (int)(determine(seed + i + determine(j + determine(k))) & 31);
-        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1 + determine(k + k1))) & 31);
-        int gi2 = (int)(determine(seed + i + i2 + determine(j + j2 + determine(k + k2))) & 31);
-        int gi3 = (int)(determine(seed + i + 1 + determine(j + 1 + determine(k + 1))) & 31);
+        int gi0 = determine32(seed + i + determine(j + determine(k)));
+        int gi1 = determine32(seed + i + i1 + determine(j + j1 + determine(k + k1)));
+        int gi2 = determine32(seed + i + i2 + determine(j + j2 + determine(k + k2)));
+        int gi3 = determine32(seed + i + 1 + determine(j + 1 + determine(k + 1)));
 
         /*
         int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),
@@ -1225,11 +1238,11 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         double z4 = z0 - 1.0 + 4.0 * G4;
         double w4 = w0 - 1.0 + 4.0 * G4;
 
-        int gi0 = (int)(determine(seed + i + determine(j + determine(k + determine(l)))) & 255);
-        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1)))) & 255);
-        int gi2 = (int)(determine(seed + i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2)))) & 255);
-        int gi3 = (int)(determine(seed + i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3)))) & 255);
-        int gi4 = (int)(determine(seed + i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1)))) & 255);
+        int gi0 = determine256(seed + i + determine(j + determine(k + determine(l))));
+        int gi1 = determine256(seed + i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1))));
+        int gi2 = determine256(seed + i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2))));
+        int gi3 = determine256(seed + i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3))));
+        int gi4 = determine256(seed + i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1))));
 
         // Noise contributions from the five corners are n0 to n4
 
@@ -1318,9 +1331,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         // unskewed coords
         float y2 = y0 - 1f + 2f * G2f;
         // Work out the hashed gradient indices of the three simplex corners
-        int gi0 = (int)(determine(i + determine(j)) >>> 56);
-        int gi1 = (int)(determine(i + i1 + determine(j + j1)) >>> 56);
-        int gi2 = (int)(determine(i + 1 + determine(j + 1)) >>> 56);
+        int gi0 = determine256(i + determine(j));
+        int gi1 = determine256(i + i1 + determine(j + j1));
+        int gi2 = determine256(i + 1 + determine(j + 1));
 
         // Calculate the contribution from the three corners
         float t0 = 0.75f - x0 * x0 - y0 * y0;
@@ -1469,10 +1482,10 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
-        int gi0 = (int)(determine(i + determine(j + determine(k))) & 31);
-        int gi1 = (int)(determine(i + i1 + determine(j + j1 + determine(k + k1))) & 31);
-        int gi2 = (int)(determine(i + i2 + determine(j + j2 + determine(k + k2))) & 31);
-        int gi3 = (int)(determine(i + 1 + determine(j + 1 + determine(k + 1))) & 31);
+        int gi0 = determine32(i + determine(j + determine(k)));
+        int gi1 = determine32(i + i1 + determine(j + j1 + determine(k + k1)));
+        int gi2 = determine32(i + i2 + determine(j + j2 + determine(k + k2)));
+        int gi3 = determine32(i + 1 + determine(j + 1 + determine(k + 1)));
 
 //        int gi0 = determineBounded(i + determine(j + determine(k)), 92);
 //        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 92);

@@ -9,8 +9,8 @@ import java.io.Serializable;
  * A variant on {@link ThrustRNG} that gives up a small amount of speed to attain better quality. ThrustAltRNG is
  * expected to pass BigCrush, which is a difficult statistical quality test that is part of TestU01, because it does so
  * well on other statistical tests. On <a href="http://gjrand.sourceforge.net/">gjrand</a>'s "testunif" checks, this
- * does very well on 100GB of tested data, with the "Overall summary one sided P-value P = 0.79", where 1 is perfect
- * and 0.1 or less is a failure. On <a href="http://pracrand.sourceforge.net/">PractRand</a>, this runs past 1TB of
+ * does very well on 100GB of tested data, with the "Overall summary one sided P-value P = 0.985", where 1 is perfect
+ * and 0.1 or less is a failure. On <a href="http://pracrand.sourceforge.net/">PractRand</a>, this runs past 256 GB of
  * generated numbers without finding any failures, and this version avoids issues with Gap-16 tests that cause ThrustRNG
  * to fail at 32GB and can cause slight variations on the code here to fail at 256GB. Like ThrustRNG and LightRNG, this
  * changes its state with a steady fixed increment, and does cipher-like adjustments to the current state to randomize
@@ -34,11 +34,10 @@ import java.io.Serializable;
  * during each calculation, while this version only uses the current state (which it updates as it reads it). This makes
  * the {@link #skip(long)} method much simpler and (because it requires less operations in general) probably faster as
  * well, while it seems to have no performance impact on the normal {@link #nextLong()} and {@link #next(int)} methods.
- * Quality is still very high, though not as stellar as in the first version according to gjrand (the earlier one had a
- * P-value of 0.904, while this has 0.79), but there's more potential for this to go even further on PractRand tests
- * than the previous one, which was unlikely to do well beyond 2TB. Since the current algorithm is a 64-bit variant on
- * Jab63RNG's algorithm (even using very similar constants), it seems probable that this will share Jab32RNG's high
- * PractRand results (that generator passes 4TB and seems able to keep going).
+ * Quality is still very high, actually better than the first version according to gjrand (the earlier one had a
+ * P-value of 0.904, while this has 0.985), but there's more potential for this to go even further on PractRand tests
+ * than the previous one, which was unlikely to do well beyond 2TB (similar tests have failed around 2TB, but they did
+ * not have nearly as high of a score on gjrand, so maybe this will do better).
  * <br>
  * Created by Tommy Ettinger on 10/18/2017.
  */
@@ -90,9 +89,9 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public final int next(final int bits) {
-        final long s = (state += 0x6A5D39EAE12657A9L);
-        final long z = (s ^ (s >>> 26)) * (s | 3L);
-        return (int)(z ^ (z >>> 22)) >>> (32 - bits);
+        final long s = (state += 0x6D2E9CF570932BD7L);
+        final long z = (s ^ (s >>> 25)) * (s | 1L);
+        return (int)(z ^ (z >>> 21)) >>> (32 - bits);
     }
     /**
      * Using this method, any algorithm that needs to efficiently generate more
@@ -104,9 +103,9 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public final long nextLong() {
-        final long s = (state += 0x6A5D39EAE12657A9L);
-        final long z = (s ^ (s >>> 26)) * (s | 3L);
-        return z ^ (z >>> 22);
+        final long s = (state += 0x6D2E9CF570932BD7L);
+        final long z = (s ^ (s >>> 25)) * (s | 1L);
+        return z ^ (z >>> 21);
     }
 
     /**
@@ -118,9 +117,9 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      * @return the random long generated after skipping forward or backwards by {@code advance} numbers
      */
     public final long skip(long advance) {
-        final long s = (state += 0x6A5D39EAE12657A9L * advance);
-        final long z = (s ^ (s >>> 26)) * (s | 3L);
-        return z ^ (z >>> 22);
+        final long s = (state += 0x6D2E9CF570932BD7L * advance);
+        final long z = (s ^ (s >>> 25)) * (s | 1L);
+        return z ^ (z >>> 21);
     }
 
 
@@ -159,7 +158,7 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      * Returns a random permutation of state; if state is the same on two calls to this, this will return the same
      * number. This is expected to be called with some changing variable, e.g. {@code determine(++state)}, where
      * the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
-     * {@code 0x6A5D39EAE12657A9L} within this method, so using a small increment won't be much different from using a
+     * {@code 0x6D2E9CF570932BD7L} within this method, so using a small increment won't be much different from using a
      * very large one, as long as it is odd. The period is 2 to the 64.
      * @param state a variable that should be different every time you want a different random result;
      *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
@@ -167,30 +166,30 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      * @return a pseudo-random permutation of state
      */
     public static long determine(long state) {
-        state = ((state *= 0x6A5D39EAE12657A9L) ^ (state >>> 26)) * (state | 3L);
-        return state ^ (state >>> 22);
+        state = ((state *= 0x6D2E9CF570932BD7L) ^ (state >>> 25)) * (state | 1L);
+        return state ^ (state >>> 21);
 
     }
     //for quick one-line pastes of how the algo can be used with "randomize(++state)"
-    //public static long randomize(long state) { state = ((state *= 0x6A5D39EAE12657A9L) ^ (state >>> 26)) * (state | 3L); return state ^ (state >>> 22); }
+    //public static long randomize(long state) { state = ((state *= 0x6D2E9CF570932BD7L) ^ (state >>> 25)) * (state | 1L); return state ^ (state >>> 21); }
 
     /**
      * Returns a random permutation of state; if state is the same on two calls to this, this will return the same
      * number. This is expected to be called with a changing variable using a specific pattern, namely
-     * {@code determine(state += 0x6A5D39EAE12657A9L)}, which was specifically matched up to the rest of the generator.
+     * {@code determine(state += 0x6D2E9CF570932BD7L)}, which was specifically matched up to the rest of the generator.
      * You can add the given number to go forwards or subtract it to go backwards in the sequence. The period
      * is 2 to the 64. This method may rarely be preferable over {@link #determine(long)} if your code controls how
      * state is updated, and can make sure it updates by the given amount or a similar value; this version saves a small
      * amount of time by not needing to multiply the local state.
      * @param state a variable that should be different every time you want a different random result;
-     *              using {@code determine(state += 0x6A5D39EAE12657A9L)} is recommended to go forwards or
-     *              {@code determine(state -= 0x6A5D39EAE12657A9L)} to generate numbers in reverse order
+     *              using {@code determine(state += 0x6D2E9CF570932BD7L)} is recommended to go forwards or
+     *              {@code determine(state -= 0x6D2E9CF570932BD7L)} to generate numbers in reverse order
      * @return a pseudo-random permutation of state
      */
     public static long determineBare(long state)
     {
-        state = (state ^ (state >>> 26)) * (state | 3L);
-        return state ^ (state >>> 22);
+        state = (state ^ (state >>> 25)) * (state | 1L);
+        return state ^ (state >>> 21);
     }
 
     /**
@@ -209,7 +208,7 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      */
     public static int determineBounded(long state, final int bound)
     {
-        state = ((state *= 0x6A5D39EAE12657A9L) ^ (state >>> 26)) * (state | 3L);
-        return (int)((bound * ((state ^ (state >>> 22)) & 0xFFFFFFFFL)) >> 32);
+        state = ((state *= 0x6D2E9CF570932BD7L) ^ (state >>> 25)) * (state | 1L);
+        return (int)((bound * ((state ^ (state >>> 21)) & 0xFFFFFFFFL)) >> 32);
     }
 }
