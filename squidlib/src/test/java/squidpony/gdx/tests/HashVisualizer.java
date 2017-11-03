@@ -2591,11 +2591,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = //(
-                                        prepare(
+                                bright =
+                                        //prepare(
                                                 WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
-                                        );
-                                                        //+ 1f) * 0.5f;
+                                        //);
+                                         * 0.5f + 0.5f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }

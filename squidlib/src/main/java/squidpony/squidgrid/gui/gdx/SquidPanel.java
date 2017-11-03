@@ -653,8 +653,8 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     public void draw (Batch batch, float parentAlpha) {
         textFactory.configureShader(batch);
         int inc = onlyRenderEven ? 2 : 1, widthInc = inc * cellWidth, heightInc = inc * cellHeight;
-        float screenX = xOffset - (gridOffsetX <= 0 ? 0 : cellWidth)/* - getX()*/,
-                screenY_base = 1f + yOffset + (gridOffsetY <= 0 ? 0 : cellHeight) + gridHeight * cellHeight, screenY;
+        float screenX = xOffset - (gridOffsetX <= 0 ? 0 : cellWidth) + getX(),
+                screenY_base = 1f + yOffset + (gridOffsetY <= 0 ? 0 : cellHeight) + gridHeight * cellHeight + getY(), screenY;
         for (int x = Math.max(0, gridOffsetX-1), xx = (gridOffsetX <= 0) ? 0 : -1; xx <= gridWidth && x < contents.length; x += inc, xx += inc, screenX += widthInc) {
             screenY = screenY_base;
             for (int y = Math.max(0, gridOffsetY-1), yy = (gridOffsetY <= 0) ? 0 : -1; yy <= gridHeight && y < contents[x].length; y += inc, yy += inc, screenY -= heightInc) {
@@ -1104,7 +1104,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     protected /* @Nullable */ Actor createActor(int x, int y, char name, Color color, boolean doubleWidth) {
         final Actor a = textFactory.makeActor(name, scc.filter(color));
         a.setName(String.valueOf(name));
-        a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
         autoActors.add(a);
         return a;
     }
@@ -1112,7 +1112,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     protected /* @Nullable */ Actor createActor(int x, int y, char name, float encodedColor, boolean doubleWidth) {
         final Actor a = textFactory.makeActor(name, encodedColor);
         a.setName(String.valueOf(name));
-        a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());
+        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
         autoActors.add(a);
         return a;
     }
@@ -1825,11 +1825,11 @@ public class SquidPanel extends Group implements IPackedColorPanel {
                 public void run() {
                     final ColorChangeImage
                             gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (dur * 40)), dur * 1.1f, doubleWidth);
-                    gi.setPosition(adjustX(startX, doubleWidth) - getX(), adjustY(startY) - getY());
+                    gi.setPosition(adjustX(startX, doubleWidth), adjustY(startY));
                     gi.setRotation(startRotation);
                     autoActors.add(gi);
                     sequence[0] = Actions.parallel(
-                            Actions.moveTo(adjustX(endX, doubleWidth) - getX(), adjustY(endY) - getY(), dur),
+                            Actions.moveTo(adjustX(endX, doubleWidth), adjustY(endY), dur),
                             Actions.rotateTo(endRotation, dur));
                     sequence[1] = Actions.run(new Runnable() {
                         @Override
@@ -1846,11 +1846,11 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         else {
             final ColorChangeImage
                     gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (dur * 40)), dur * 1.1f, doubleWidth);
-            gi.setPosition(adjustX(startX, doubleWidth) - getX(), adjustY(startY) - getY());
+            gi.setPosition(adjustX(startX, doubleWidth), adjustY(startY));
             gi.setRotation(startRotation);
             autoActors.add(gi);
             sequence[0] = Actions.parallel(
-                    Actions.moveTo(adjustX(endX, doubleWidth) - getX(), adjustY(endY) - getY(), dur),
+                    Actions.moveTo(adjustX(endX, doubleWidth), adjustY(endY), dur),
                     Actions.rotateTo(endRotation, dur));
             sequence[1] = Actions.run(new Runnable() {
                 @Override
