@@ -79,7 +79,7 @@ public class SquidLayersTest extends ApplicationAdapter{
         bgColors = MapUtility.generateDefaultBGColors(map);
         resMap = DungeonUtility.generateResistances(map);
         GreasedRegion packed = new GreasedRegion(gen.getBareDungeon(), '.');
-        points = packed.randomPortion(rng, 15);
+        points = packed.randomPortion(rng, 25);
         offsets = new int[points.length];
         markers = new AnimatedEntity[points.length];
         lightness = new int[gridWidth][gridHeight];

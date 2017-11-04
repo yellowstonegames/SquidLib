@@ -11600,7 +11600,7 @@ public class SColor extends Color {
         return new float[][][]
                 {
                         new float[width][height],
-                        ArrayTools.fill(-0x1.fffffep126f, width, height)
+                        ArrayTools.fill(FLOAT_WHITE, width, height)
                 };
     }
 
@@ -11615,7 +11615,7 @@ public class SColor extends Color {
      */
     public static float[][][] eraseColoredLighting(float[][][] original) {
         ArrayTools.fill(original[0], 0f);
-        ArrayTools.fill(original[1], -0x1.fffffep126f);
+        ArrayTools.fill(original[1], FLOAT_WHITE);
         return original;
     }
 
@@ -11655,7 +11655,7 @@ public class SColor extends Color {
             for (int y = 0; y < lights[0].length; y++) {
                 reuse[1][x][y] = ((reuse[0][x][y] = (float) lights[x][y]) > 0f)
                         ? color
-                        : -0x1.fffffep126f; // the color white as a float
+                        : FLOAT_WHITE; // the color white as a float
             }
         }
         return reuse;
@@ -11673,9 +11673,9 @@ public class SColor extends Color {
         int w = basis[0].length, h = basis[0][0].length;
         for (int x = 0; x < w && x < w; x++) {
             for (int y = 0; y < h && y < h; y++) {
-                basis[1][x][y] = (basis[1][x][y] == -0x1.fffffep126f) // white as float
+                basis[1][x][y] = (basis[1][x][y] == FLOAT_WHITE)
                         ? other[1][x][y]
-                        : (other[1][x][y] == -0x1.fffffep126f) // white as float
+                        : (other[1][x][y] == FLOAT_WHITE)
                         ? basis[1][x][y]
                         : lerpFloatColors(basis[1][x][y], other[1][x][y], (other[0][x][y] - basis[0][x][y]) * 0.5f + 0.5f);
                 basis[0][x][y] = Math.min(1.0f, basis[0][x][y] + other[0][x][y]);
