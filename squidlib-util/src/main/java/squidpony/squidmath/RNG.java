@@ -830,8 +830,8 @@ public class RNG implements Serializable {
      * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)
      */
     public double nextDouble() {
-        return (random.nextLong() & 0x1fffffffffffffL) * DOUBLE_UNIT;
-        // consider changing to this in a future version; it will break compatibility but should be fast/correct
+        return (random.nextLong() & 0x1fffffffffffffL) * 0x1p-53;
+        //this is here for a record of another possibility; it can't generate quite a lot of possible values though
         //return Double.longBitsToDouble(0x3FF0000000000000L | random.nextLong() >>> 12) - 1.0;
     }
 
@@ -851,7 +851,7 @@ public class RNG implements Serializable {
      * @return a value between 0 (inclusive) and 0.99999994 (inclusive)
      */
     public float nextFloat() {
-        return next(24) * FLOAT_UNIT;
+        return next(24) * 0x1p-24f;
     }
 
     /**

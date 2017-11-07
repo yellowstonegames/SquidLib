@@ -158,38 +158,46 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      * number. This is expected to be called with some changing variable, e.g. {@code determine(++state)}, where
      * the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
      * {@code 0x6C8E9CF570932BD5L} within this method, so using a small increment won't be much different from using a
-     * very large one, as long as it is odd. The period is 2 to the 64.
+     * very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1.
      * @param state a variable that should be different every time you want a different random result;
      *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
      *              generate numbers in reverse order
      * @return a pseudo-random permutation of state
      */
     public static long determine(long state) {
-        state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L);
-        return state ^ (state >>> 22);
-
+        return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
     }
     //for quick one-line pastes of how the algo can be used with "randomize(++state)"
-    //public static long randomize(long state) { state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L); return state ^ (state >>> 22); }
+    //public static long randomize(long state) { return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22); }
 
     /**
-     * Returns a random permutation of state; if state is the same on two calls to this, this will return the same
-     * number. This is expected to be called with a changing variable using a specific pattern, namely
-     * {@code determine(state += 0x6C8E9CF570932BD5L)}, which was specifically matched up to the rest of the generator.
-     * You can add the given number to go forwards or subtract it to go backwards in the sequence. The period
-     * is 2 to the 64. This method may rarely be preferable over {@link #determine(long)} if your code controls how
-     * state is updated, and can make sure it updates by the given amount or a similar value; this version saves a small
-     * amount of time by not needing to multiply the local state.
+     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+     * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},
+     * where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
+     * {@code 0x6C8E9CF570932BD5L} within this method, so using a small increment won't be much different from using a
+     * very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
+     * only 2 to the 30 possible floats between 0 and 1.
      * @param state a variable that should be different every time you want a different random result;
-     *              using {@code determine(state += 0x6C8E9CF570932BD5L)} is recommended to go forwards or
-     *              {@code determine(state -= 0x6C8E9CF570932BD5L)} to generate numbers in reverse order
-     * @return a pseudo-random permutation of state
+     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
+     *              generate numbers in reverse order
+     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}
      */
-    public static long determineBare(long state)
-    {
-        state = (state ^ (state >>> 25)) * (state | 0xA529L);
-        return state ^ (state >>> 22);
-    }
+    public static float determineFloat(long state) { return (((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22)) & 0xFFFFFF) * 0x1p-24f; }
+
+
+    /**
+     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+     * will return the same float. This is expected to be called with a changing variable, e.g.
+     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't really matter. This
+     * multiplies state by {@code 0x6C8E9CF570932BD5L} within this method, so using a small increment won't be much
+     * different from using a very large one, as long as it is odd. The period is 2 to the 64 if you increment or
+     * decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.
+     * @param state a variable that should be different every time you want a different random result;
+     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
+     *              generate numbers in reverse order
+     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}
+     */
+    public static double determineDouble(long state) { return (((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53; }
 
     /**
      * Given a state that should usually change each time this is called, and a bound that limits the result to some
@@ -197,8 +205,8 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      * negative, which will cause this to produce 0 or a negative int; otherwise this produces 0 or a positive int.
      * The state should change each time this is called, generally by incrementing by an odd number (not an even number,
      * especially not 0). It's fine to use {@code determineBounded(++state, bound)} to get a different int each time.
-     * The period is usually 2 to the 64, but some bounds may reduce the period (in the extreme case, a bound of 1 would
-     * force only 0 to be generated, so that would make the period 1).
+     * The period is usually 2 to the 64 when you increment or decrement by 1, but some bounds may reduce the period (in
+     * the extreme case, a bound of 1 would force only 0 to be generated, so that would make the period 1).
      * @param state a variable that should be different every time you want a different random result;
      *              using {@code determineBounded(++state, bound)} is recommended to go forwards or
      *              {@code determineBounded(--state, bound)} to generate numbers in reverse order
@@ -207,7 +215,9 @@ public final class ThrustAltRNG implements StatefulRandomness, Serializable {
      */
     public static int determineBounded(long state, final int bound)
     {
-        state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L);
-        return (int)((bound * ((state ^ (state >>> 22)) & 0xFFFFFFFFL)) >> 32);
+        return (int)((bound * (
+                ((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22))
+                        & 0xFFFFFFFFL)) >> 32);
     }
 }
+

@@ -12,6 +12,14 @@ public class MessagingTest {
         System.out.println(Messaging.transform(message, "Heero Supra", SECOND_PERSON_SINGULAR, "the goblin", MALE_GENDER, "10", "bludgeoning", "4", "lightning"));
         System.out.println(Messaging.transform(message, "the goblin", MALE_GENDER, "Heero Supra", SECOND_PERSON_SINGULAR, "10", "poison", "3", "piercing"));
 
+        message = "@Name hit$ ^! ";
+        System.out.println(Messaging.transform(message, "Heero Supra", SECOND_PERSON_SINGULAR, "the goblin", MALE_GENDER));
+        System.out.println(Messaging.transform(message, "Heero Supra", SECOND_PERSON_SINGULAR, "the goblins", GROUP));
+        System.out.println(Messaging.transform(message, "the goblin", MALE_GENDER, "Heero Supra", SECOND_PERSON_SINGULAR));
+        System.out.println(Messaging.transform(message, "the goblins", GROUP, "Heero Supra", SECOND_PERSON_SINGULAR));
+        System.out.print(Messaging.transform(message, new Messaging.Group("the goblin", "the kobold", "the owlbears"), GROUP, "Heero Supra", SECOND_PERSON_SINGULAR));
+        System.out.println(Messaging.transform(message, "Heero Supra", SECOND_PERSON_SINGULAR, new Messaging.Group("the goblin", "the kobold", "the owlbears"), GROUP));
+
         message = "@Name spit$ in ^name_s face^s!";
         System.out.println(Messaging.transform(message, "Heero Supra", SECOND_PERSON_SINGULAR, "the goblin", MALE_GENDER));
         System.out.println(Messaging.transform(message, "Heero Supra", SECOND_PERSON_SINGULAR, "the goblins", GROUP));
