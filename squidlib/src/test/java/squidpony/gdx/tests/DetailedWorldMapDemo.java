@@ -56,8 +56,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             biomeUpperCodeData = new int[width][height],
             biomeLowerCodeData = new int[width][height];
     private Noise.Noise4D cloudNoise;
-    private final float[][][] cloudData = new float[128][128][128];
+    //private final float[][][] cloudData = new float[128][128][128];
     private int counter = 0;
+    private boolean cloudy = false;
     private long ttg = 0; // time to generate
     public static final double
             coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0
@@ -302,7 +303,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 seedB = (int)LightRNG.determine(seed + seedA),
                 seedC = (int)LightRNG.determine(seed + seedA + seedB);
         counter = (int)(LightRNG.determine(seed + seedA + seedB + seedC) >>> 48);
-        Noise.seamless3D(cloudData, seedC, 3);
+        //Noise.seamless3D(cloudData, seedC, 3);
     }
 
 
@@ -314,9 +315,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
-        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.7);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
-        cloudNoise = new Noise.Layered4D(SeededNoise.instance, 2, 3.8);
+        cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.9);
         input = new SquidInput(new SquidInput.KeyHandler() {
@@ -335,6 +336,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case '-':
                     case '_':
                         zoomOut();
+                        break;
+                    case 'C':
+                    case 'c':
+                        cloudy = !cloudy;
                         break;
                     case 'T':
                     case 't':
@@ -434,7 +439,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         int[][] heightCodeData = world.heightCodeData;
         double[][] heightData = world.heightData;
         double xp, yp, zp;
-        float cloud, shown, cloudLight;
+        float cloud = 0f, shown, cloudLight = 1f;
         for (int y = 0; y < height; y++) {
             PER_CELL:
             for (int x = 0; x < width; x++) {
@@ -442,7 +447,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 tc = heatCodeData[x][y];
                 //cloud = (float) cloudNoise2.getNoiseWithSeed(xp = world.xPositions[x][y], yp = world.yPositions[x][y],
                 //        zp = world.zPositions[x][y], counter * 0.04, (int) seed) * 0.06f;
-                //cloud = (float) Math.min(1f, cloudNoise.getNoiseWithSeed(xp + cloud, yp + cloud, zp + cloud, counter * 0.015, (int) seed) * 1.6f - 0.07f);
+                if(cloudy) {
+                    cloud = (float) Math.min(1f, (cloudNoise.getNoiseWithSeed(world.xPositions[x][y], world.yPositions[x][y], world.zPositions[x][y], counter * 0.0125, (int) seed) * (0.75 + world.moistureData[x][y]) - 0.07));
+                    cloudLight = 0.65f + NumberTools.swayTight(cloud * 1.4f + 0.55f) * 0.35f;
+                    cloudLight = SColor.floatGet(cloudLight, cloudLight, cloudLight, 1f);
+                }
+                /*
                 cloud = Math.min(1f,
                         cloudData[(int) (world.xPositions[x][y] * 109 + counter * 1.7) & 127]
                         [(int) (world.yPositions[x][y] * 109) & 127]
@@ -455,6 +465,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                 [(int) (world.yPositions[x][y] * 233) & 127]
                                 [(int) (world.zPositions[x][y] * 233 + counter * 2.3) & 127] * 0.64f);
                 cloudLight = SColor.floatGet(cloudLight, cloudLight, cloudLight, 1f);
+                                */
+
                 if(tc == 0)
                 {
                     switch (hc)

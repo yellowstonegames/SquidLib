@@ -33,23 +33,33 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         return t >= 0 ? (int) t : (int) t - 1;
     }
     public static int determine256(long state) {
-        state *= 0x6D2E9CF570932BD7L;
-        return (int)((state ^ (state >>> 25)) * (state | 1L) >>> 56);
+        state *= 0x6C8E9CF570932BD5L;
+        state = (state ^ (state >>> 25)) * (state | 0xA529L);
+        return (int)(state ^ state >>> 22) >>> 24;
         //return (int)(state >>> 56);
         //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 1L) >>> 56);
     }
     public static int determine32(long state) {
-        state *= 0x6D2E9CF570932BD7L;
-        return (int)((state ^ (state >>> 25)) * (state | 1L) >>> 59);
+        state *= 0x6C8E9CF570932BD5L;
+        state = (state ^ (state >>> 25)) * (state | 0xA529L);
+        return (int)(state ^ state >>> 22) >>> 27;
         //return (int)(state >>> 59);
         //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 1L) >>> 59);
     }
+    public static long determine(long state)
+    {
+        state *= 0x6C8E9CF570932BD5L;
+        state = (state ^ (state >>> 25)) * (state | 0xA529L);
+        return state ^ (state >>> 22);
+    }
+    /*
     public static long determine(long state)
     {
         state *= 0x6D2E9CF570932BD7L;
         state = (state ^ (state >>> 25)) * (state | 1L);
         return state ^ (state >>> 21);
     }
+    */
     protected static final float
             root2 = 1.4142135f,
             root3 = 1.7320508f,

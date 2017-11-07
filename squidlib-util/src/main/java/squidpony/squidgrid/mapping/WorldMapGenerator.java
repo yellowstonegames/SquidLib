@@ -1087,10 +1087,10 @@ public abstract class WorldMapGenerator {
          */
         public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator, double octaveMultiplier) {
             super(initialSeed, mapWidth, mapHeight);
-            terrain = new Noise.Layered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+            terrain = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
             terrainRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
-            heat = new Noise.Layered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
-            moisture = new Noise.Layered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
+            heat = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
+            moisture = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
             otherRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
             riverRidged = new Noise.Ridged4D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
@@ -1152,8 +1152,9 @@ public abstract class WorldMapGenerator {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = riverRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC - seedA - seedB) + 0.125)
-                            * ps * ps * 45.42;
+                    freshwaterData[x][y] = (ps = Math.min(
+                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qc * 0.46,qs * 0.46, seedC - seedA - seedB) + 0.38),
+                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
 
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -1406,10 +1407,10 @@ public abstract class WorldMapGenerator {
             xPositions = new double[width][height];
             yPositions = new double[width][height];
             zPositions = new double[width][height];
-            terrain = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+            terrain = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
             terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
-            heat = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
-            moisture = new Noise.Layered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
+            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
+            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
             riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
@@ -1479,8 +1480,9 @@ public abstract class WorldMapGenerator {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                             + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = riverRidged.getNoiseWithSeed(pc,// * (temp + 1.5) * 0.25
-                            ps, qs, seedC - seedA - seedB) + 0.125) * ps * ps * 45.42;
+                    freshwaterData[x][y] = (ps = Math.min(
+                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
+                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {

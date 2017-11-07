@@ -137,6 +137,16 @@ public class NumberTools {
         return a * a * a * (a * (a * 6f - 15f) + 10f);
     }
 
+    public static double swayTight(final double value)
+    {
+        wda.set(0, value + (value < 0.0 ? -2.0 : 2.0));
+        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
+        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
+        wia.set(0, wia.get(0) ^ flip);
+        final double a = wda.get(0) - 2.0;
+        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0);
+    }
+
     public static int floatToIntBits(final float value) {
         wfa.set(0, value);
         return wia.get(0);
