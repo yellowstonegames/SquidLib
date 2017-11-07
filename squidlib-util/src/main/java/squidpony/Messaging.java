@@ -96,7 +96,6 @@ public class Messaging {
      * the female pronoun is the usefully distinct "her". Here, the "special case" gender diverges from what it usually
      * does, and uses "qvqims" in place of "his" or "hers". The "special case" pronouns should be replaced before being
      * displayed, since they look like gibberish or a glitch and so are probably confusing out of context.
-
      */
     public enum NounTrait {
         /**
@@ -393,6 +392,20 @@ public class Messaging {
         }
     }
 
+    public static class Group
+    {
+        public String[] members;
+
+        public Group()
+        {
+            members = new String[]{"the goblin", "the dragon", "the warlock"};
+        }
+        public Group(String... members)
+        {
+            this.members = members;
+        }
+    }
+
 
     /**
      * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
@@ -410,6 +423,23 @@ public class Messaging {
 
     /**
      * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+     * conjugated terms for the given group of users and that group's associated NounTrait. The NounTrait only matters
+     * if it is first-person or second-person (in which case this uses the plural form) or if the Group contains one
+     * member (in which case it uses any gendered pronouns specified by userTrait); it uses {@link NounTrait#GROUP} in
+     * any other case.
+     * @param message the message to transform; should contain "@" or "$" in it, at least, to be replaced
+     * @param user a {@link Group} of users (a String array) for cases where it can replace text, like "@" or "@Name"
+     * @param userTrait the {@link NounTrait} enum that determines how user should be referred to
+     * @return a String resulting from the processing of message
+     */
+    public static String transform(CharSequence message, Group user, NounTrait userTrait)
+    {
+        Replacer ur = new Replacer(userPattern, new BeingSubstitution(userTrait, true, user.members));
+        return ur.replace(message);
+    }
+
+    /**
+     * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
      * conjugated terms for the given user, their associated NounTrait, the given target, and their NounTrait.
      * @param message the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced
      * @param user the name of the user for cases where it can replace text like "@" or "@Name"
@@ -421,6 +451,67 @@ public class Messaging {
     public static String transform(CharSequence message, String user, NounTrait userTrait, String target, NounTrait targetTrait)
     {
         Replacer tr = new Replacer(targetPattern, new BeingSubstitution(target, targetTrait, false)),
+                ur = new Replacer(userPattern, new BeingSubstitution(user, userTrait, true));
+        return ur.replace(tr.replace(message));
+    }
+
+    /**
+     * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+     * conjugated terms for the given Group of users, that group's associated NounTrait, the given target, and their
+     * NounTrait. The NounTrait for user only matters if it is first-person or second-person (in which case this uses
+     * the plural form) or if the Group contains one member (in which case it uses any gendered pronouns specified by
+     * userTrait); it uses {@link NounTrait#GROUP} in any other case.
+     * @param message the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced
+     * @param user the {@link Group} of users for cases where they can replace text like "@" or "@Name"
+     * @param userTrait the {@link NounTrait} enum that determines how user should be referred to
+     * @param target the name of the target for cases where it can replace text like "^" or "^Name"
+     * @param targetTrait the {@link NounTrait} enum that determines how the target should be referred to
+     * @return a String resulting from the processing of message
+     */
+    public static String transform(CharSequence message, Group user, NounTrait userTrait, String target, NounTrait targetTrait)
+    {
+        Replacer tr = new Replacer(targetPattern, new BeingSubstitution(target, targetTrait, false)),
+                ur = new Replacer(userPattern, new BeingSubstitution(userTrait, true, user.members));
+        return ur.replace(tr.replace(message));
+    }
+
+    /**
+     * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+     * conjugated terms for the given Group of users, that group's associated NounTrait, the given group of targets, and
+     * that group's NounTrait. The NounTraits only matter if they are is first-person or second-person (in which case
+     * this uses the plural form) or if a Group contains one member (in which case it uses any gendered pronouns
+     * specified by userTrait or targetTrait); it uses {@link NounTrait#GROUP} in any other case.
+     * @param message the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced
+     * @param user the {@link Group} of users for cases where they can replace text like "@" or "@Name"
+     * @param userTrait the {@link NounTrait} enum that determines how user should be referred to
+     * @param target the {@link Group} of targets for cases where they can replace text like "@" or "@Name"
+     * @param targetTrait the {@link NounTrait} enum that determines how the target should be referred to
+     * @return a String resulting from the processing of message
+     */
+    public static String transform(CharSequence message, Group user, NounTrait userTrait, Group target, NounTrait targetTrait)
+    {
+        Replacer tr = new Replacer(targetPattern, new BeingSubstitution(targetTrait, false, target.members)),
+                ur = new Replacer(userPattern, new BeingSubstitution(userTrait, true, user.members));
+        return ur.replace(tr.replace(message));
+    }
+
+
+    /**
+     * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+     * conjugated terms for the given user, that user's associated NounTrait, the given Group of targets, and that
+     * group's NounTrait. The NounTrait for target only matters if it is first-person or second-person (in which case
+     * this uses the plural form) or if the Group contains one member (in which case it uses any gendered pronouns
+     * specified by targetTrait); it uses {@link NounTrait#GROUP} in any other case.
+     * @param message the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced
+     * @param user the name of the user for cases where it can replace text like "@" or "@Name"
+     * @param userTrait the {@link NounTrait} enum that determines how user should be referred to
+     * @param target the {@link Group} of targets for cases where they can replace text like "@" or "@Name"
+     * @param targetTrait the {@link NounTrait} enum that determines how the target should be referred to
+     * @return a String resulting from the processing of message
+     */
+    public static String transform(CharSequence message, String user, NounTrait userTrait, Group target, NounTrait targetTrait)
+    {
+        Replacer tr = new Replacer(targetPattern, new BeingSubstitution(targetTrait, false, target.members)),
                 ur = new Replacer(userPattern, new BeingSubstitution(user, userTrait, true));
         return ur.replace(tr.replace(message));
     }
@@ -445,13 +536,105 @@ public class Messaging {
         String text = ur.replace(tr.replace(message));
         if(extra != null && extra.length > 0)
         {
-            Matcher m = Pattern.compile("~").matcher(text);
             for (int i = 0; i < extra.length; i++) {
-                text = m.replaceFirst(extra[i]);
+                text = text.replaceFirst("~", extra[i]);
             }
         }
         return text;
     }
+
+    /**
+     * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+     * conjugated terms for the given Group of users, that group's associated NounTrait, the given target, and their
+     * NounTrait. Also replaces the nth occurrence of "~" with the matching nth item in extra, so the first "~" is
+     * replaced with the first item in extra, the second "~" with the second item, and so on until one is exhausted. The
+     * NounTrait for user only matters if it is first-person or second-person (in which case this uses the plural form)
+     * or if the Group contains one member (in which case it uses any gendered pronouns specified by userTrait); it uses
+     * {@link NounTrait#GROUP} in any other case.
+     * @param message the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced
+     * @param user the {@link Group} of users for cases where they can replace text like "@" or "@Name"
+     * @param userTrait the {@link NounTrait} enum that determines how user should be referred to
+     * @param target the name of the target for cases where it can replace text like "^" or "^Name"
+     * @param targetTrait the {@link NounTrait} enum that determines how the target should be referred to
+     * @param extra an array or vararg of String where the nth item in extra will replace the nth occurrence of "~"
+     * @return a String resulting from the processing of message
+     */
+    public static String transform(CharSequence message, Group user, NounTrait userTrait, String target, NounTrait targetTrait, String... extra)
+    {
+        Replacer tr = new Replacer(targetPattern, new BeingSubstitution(target, targetTrait, false)),
+                ur = new Replacer(userPattern, new BeingSubstitution(userTrait, true, user.members));
+        String text = ur.replace(tr.replace(message));
+        if(extra != null && extra.length > 0)
+        {
+            for (int i = 0; i < extra.length; i++) {
+                text = text.replaceFirst("~", extra[i]);
+            }
+        }
+        return text;
+    }
+
+    /**
+     * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+     * conjugated terms for the given Group of users, that group's associated NounTrait, the given group of targets, and
+     * that group's NounTrait. Also replaces the nth occurrence of "~" with the matching nth item in extra, so the first
+     * "~" is replaced with the first item in extra, the second "~" with the second item, and so on until one is
+     * exhausted. The NounTraits only matter if they are is first-person or second-person (in which case
+     * this uses the plural form) or if a Group contains one member (in which case it uses any gendered pronouns
+     * specified by userTrait or targetTrait); it uses {@link NounTrait#GROUP} in any other case.
+     * @param message the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced
+     * @param user the {@link Group} of users for cases where they can replace text like "@" or "@Name"
+     * @param userTrait the {@link NounTrait} enum that determines how user should be referred to
+     * @param target the {@link Group} of targets for cases where they can replace text like "@" or "@Name"
+     * @param targetTrait the {@link NounTrait} enum that determines how the target should be referred to
+     * @param extra an array or vararg of String where the nth item in extra will replace the nth occurrence of "~"
+     * @return a String resulting from the processing of message
+     */
+    public static String transform(CharSequence message, Group user, NounTrait userTrait, Group target, NounTrait targetTrait, String... extra)
+    {
+        Replacer tr = new Replacer(targetPattern, new BeingSubstitution(targetTrait, false, target.members)),
+                ur = new Replacer(userPattern, new BeingSubstitution(userTrait, true, user.members));
+        String text = ur.replace(tr.replace(message));
+        if(extra != null && extra.length > 0)
+        {
+            for (int i = 0; i < extra.length; i++) {
+                text = text.replaceFirst("~", extra[i]);
+            }
+        }
+        return text;
+    }
+
+
+    /**
+     * Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+     * conjugated terms for the given user, that user's associated NounTrait, the given Group of targets, and that
+     * group's NounTrait. Also replaces the nth occurrence of "~" with the matching nth item in extra, so the first "~"
+     * is replaced with the first item in extra, the second "~" with the second item, and so on until one is exhausted.
+     * The NounTrait for target only matters if it is first-person or second-person (in which case this uses the plural
+     * form) or if the Group contains one member (in which case it uses any gendered pronouns specified by targetTrait);
+     * it uses {@link NounTrait#GROUP} in any other case.
+     * @param message the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced
+     * @param user the name of the user for cases where it can replace text like "@" or "@Name"
+     * @param userTrait the {@link NounTrait} enum that determines how user should be referred to
+     * @param target the {@link Group} of targets for cases where they can replace text like "@" or "@Name"
+     * @param targetTrait the {@link NounTrait} enum that determines how the target should be referred to
+     * @param extra an array or vararg of String where the nth item in extra will replace the nth occurrence of "~"
+     * @return a String resulting from the processing of message
+     */
+    public static String transform(CharSequence message, String user, NounTrait userTrait, Group target, NounTrait targetTrait, String... extra)
+    {
+        Replacer tr = new Replacer(targetPattern, new BeingSubstitution(targetTrait, false, target.members)),
+                ur = new Replacer(userPattern, new BeingSubstitution(user, userTrait, true));
+        String text = ur.replace(tr.replace(message));
+        if(extra != null && extra.length > 0)
+        {
+            for (int i = 0; i < extra.length; i++) {
+                text = text.replaceFirst("~", extra[i]);
+            }
+        }
+        return text;
+    }
+
+
     protected static final Pattern
             userPattern = Pattern.compile("({at_sign}\\\\@)|({caret_sign}\\\\\\^)|({dollar_sign}\\\\\\$)|({tilde_sign}\\\\~)|" +
             "({$$$}\\$\\$\\$)|({$$}\\$\\$)|({$}\\$)|({sss}@sss\\b)|({ss}@ss\\b)|({s}@s\\b)|({usi}@usi\\b)|({fves}@fves\\b)|" +
@@ -515,6 +698,61 @@ public class Messaging {
             this.term = (term == null) ? "Nullberoth of the North" : term;
             this.trait = (trait == null) ? NounTrait.UNSPECIFIED_GENDER : trait;
             finisher = finish;
+        }
+        public BeingSubstitution(NounTrait firstTrait, boolean finish, String... terms) {
+            int len;
+            if (terms == null || (len = terms.length) <= 0) {
+                term = "Nihilatia of Voidetica";
+                trait = (firstTrait == null) ? NounTrait.UNSPECIFIED_GENDER : firstTrait;
+                finisher = finish;
+            } else if (len == 1) {
+                term = (terms[0] == null) ? "Nullberoth of the North" : terms[0];
+                trait = (trait == null) ? NounTrait.UNSPECIFIED_GENDER : firstTrait;
+                finisher = finish;
+            } else if (len == 2) {
+                term = terms[0] + " and " + terms[1];
+                if (firstTrait == null)
+                    trait = NounTrait.GROUP;
+                else {
+                    switch (firstTrait) {
+                        case FIRST_PERSON_PLURAL:
+                        case FIRST_PERSON_SINGULAR:
+                            trait = NounTrait.FIRST_PERSON_PLURAL;
+                            break;
+                        case SECOND_PERSON_PLURAL:
+                        case SECOND_PERSON_SINGULAR:
+                            trait = NounTrait.SECOND_PERSON_PLURAL;
+                            break;
+                        default:
+                            trait = NounTrait.GROUP;
+                    }
+                }
+                finisher = finish;
+            } else {
+                StringBuilder sb = new StringBuilder().append(terms[0]).append(", ");
+                for (int i = 1; i < len - 1; i++) {
+                    sb.append(terms[i]).append(", ");
+                }
+                term = sb.append("and ").append(terms[len - 1]).toString();
+                if (firstTrait == null)
+                    trait = NounTrait.GROUP;
+                else {
+                    switch (firstTrait) {
+                        case FIRST_PERSON_PLURAL:
+                        case FIRST_PERSON_SINGULAR:
+                            trait = NounTrait.FIRST_PERSON_PLURAL;
+                            break;
+                        case SECOND_PERSON_PLURAL:
+                        case SECOND_PERSON_SINGULAR:
+                            trait = NounTrait.SECOND_PERSON_PLURAL;
+                            break;
+                        default:
+                            trait = NounTrait.GROUP;
+                    }
+                }
+                finisher = finish;
+
+            }
         }
         public static void appendCapitalized(String s, TextBuffer dest)
         {
