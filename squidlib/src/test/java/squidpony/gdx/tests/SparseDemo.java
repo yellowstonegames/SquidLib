@@ -544,7 +544,7 @@ public class SparseDemo extends ApplicationAdapter {
                     // 0.3 - 0.2 is not equal to 0.1 with doubles, because tenths are inaccurate with floats and
                     // doubles, and hex literals won't have the option to write an inaccurate float or double.
                     float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(196f + (
-                            180f * ((float)visible[i][j] * (1.0f + 0.2f * SeededNoise.noise(i * 0.2f, j * 0.2f, tm, 10000)))))
+                            180f * (float)(visible[i][j] * (1.0 + 0.2 * SeededNoise.noise(i * 0.2, j * 0.2, tm, 10000)))))
                             * 0x1p-9f); // as above, "* 0x1p-9f" is roughly equivalent to "/ 512.0"
                     display.put(i, j, lineDungeon[i][j], colors[i][j], bg);
                 } else if(seen.contains(i, j))

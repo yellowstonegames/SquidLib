@@ -110,10 +110,13 @@ public class HashVisualizer extends ApplicationAdapter {
     private final MeadNoise mead = new MeadNoise(); //new Noise.Layered4D(new MeadNoise(0xDEADD00D), 1, 4.55);
     private final Noise.Noise2D mead2D = new Noise.Layered2D(MeadNoise.instance, 3);
     private final Noise.Noise3D mead3D = new Noise.Layered3D(MeadNoise.instance, 3);
-    private final Noise.Noise2D layered2D = new Noise.Layered2D(SeededNoise.instance, 2, 1.75);
-    private final Noise.Noise3D layered3D = new Noise.Layered3D(SeededNoise.instance, 2, 1.75);
-    private final Noise.Noise4D layered4D = new Noise.Layered4D(SeededNoise.instance, 2, 1.75);
-    private final Noise.Noise6D layered6D = new Noise.Layered6D(SeededNoise.instance, 2, 1.75);
+    private final Noise.Noise2D layered2D = new Noise.Layered2D(WhirlingNoise.instance, 3);
+    private final Noise.Noise3D layered3D = new Noise.Layered3D(WhirlingNoise.instance, 3);
+    private final Noise.Noise4D layered4D = new Noise.Layered4D(WhirlingNoise.instance, 3);
+    private final Noise.Noise2D invLayered2D = new Noise.InverseLayered2D(WhirlingNoise.instance, 3);
+    private final Noise.Noise3D invLayered3D = new Noise.InverseLayered3D(WhirlingNoise.instance, 3);
+    private final Noise.Noise4D invLayered4D = new Noise.InverseLayered4D(WhirlingNoise.instance, 3);
+    //private final Noise.Noise6D layered6D = new Noise.Layered6D(WhirlingNoise.instance, 3, 1.75);
     private final Noise.Noise2D value2D = new Noise.Layered2D(ValueNoise.instance, 2);
     private final Noise.Noise3D value3D = new Noise.Layered3D(ValueNoise.instance, 2);
     private final Noise.Noise4D value4D = new Noise.Layered4D(ValueNoise.instance, 2);
@@ -132,10 +135,10 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
 
-    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(mead, ridged2D, 1, 1);
-    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(mead, ridged3D, 1, 1);
-    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(mead, ridged4D, 1, 1);
-    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(mead, ridged6D, 1, 1);
+    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(SeededNoise.instance, ridged2D, 3, 2);
+    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(SeededNoise.instance, ridged3D, 3, 2);
+    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
+    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
     private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
 
@@ -632,6 +635,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return NumberTools.swayTight(n * 1.5f + 0.5f);
     }
 
+    public static float basicPrepare(double n)
+    {
+        return (float)n * 0.5f + 0.5f;
+    }
+
+    public static float basicPrepare(float n)
+    {
+        return n * 0.5f + 0.5f;
+    }
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -966,7 +978,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(input);
         // and then add display, our one visual component, to the list of things that act in Stage.
-        display.setPosition(0, 0);
+        display.setPosition(0, -1);
         //overlay.setPosition(0, 0);
         //Stack stk = new Stack(display, overlay);
         //stage.addActor(stk);
@@ -2381,7 +2393,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             case 4: { //Noise mode
                 switch (noiseMode) {
                     case 0:
-                        Gdx.graphics.setTitle("Perlin Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond() +
+                        Gdx.graphics.setTitle("Perlin Noise, 3 manual octaves at " + Gdx.graphics.getFramesPerSecond() +
                                 " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
@@ -2401,6 +2413,44 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
+                    case 1:
+                        Gdx.graphics.setTitle("Perlin 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(layered2D.getNoise(xx * 0.125, yy * 0.125));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 2:
+                        Gdx.graphics.setTitle("Perlin 2D Noise, 3 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = //(float) (
+                                        basicPrepare(invLayered2D.getNoise(xx * 0.125, yy * 0.125));
+                                //               + 1f) * 0.5f;
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 3:
+                        Gdx.graphics.setTitle("Perlin 3D Noise, 3 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(invLayered3D.getNoise(xx * 0.0625, yy * 0.0625, ctr * 0.03125));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
+                        /*
                     case 1:
                         Gdx.graphics.setTitle("Merlin Noise, no zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -2429,16 +2479,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                /*
-                                iBright = (MerlinNoise.noise2D(x, y, 8) * 10
-                                        + MerlinNoise.noise2D(x + 333 * 3, y + 333 * 3, 5) * 3
-                                        + MerlinNoise.noise2D(x + 333 * 4, y + 333 * 4, 3) * 2
-                                        + MerlinNoise.noise2D(x + 333 * 5, y + 333 * 5)) >> 4;*/
                                 iBright = MerlinNoise.noise2D_alt(xx, yy, 3);
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
+                        */
                     case 78: // case 4:
                         Gdx.graphics.setTitle("Merlin Noise 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -2489,7 +2535,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;*/
                     case 7:
-                        Gdx.graphics.setTitle("Perlin 3D Noise, x3 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Perlin 3D Noise, 3 manual octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (
@@ -2507,7 +2553,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 8:
-                        Gdx.graphics.setTitle("Perlin Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Perlin 2D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2557,7 +2603,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
 
                     case 11:
-                        Gdx.graphics.setTitle("Whirling Noise, processed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 2D Noise, processed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2604,14 +2650,21 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                         //You can preview this at https://dl.dropboxusercontent.com/u/11914692/rainbow-perlin.gif
                     case 14:
-                        Gdx.graphics.setTitle("Whirling Alt 3D Color Noise, processed, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Alt 2D Noise, processed, three octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(
-                                        prepare(WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625)), // + 1f) * 0.5f,
-                                        prepare(WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625 + 234.5)), // + 1f) * 0.5f,
-                                        prepare(WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr  * 0.0625 + 678.9)), // + 1f) * 0.5f,
-                                        1f));
+                                yy = y + ctr;
+                                /*
+                                (
+                                        (WhirlingNoise.noiseAlt(xx * 0.0625, yy * 0.0625)) * 4.47f+
+                                        (WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)) * 2.34f +
+                                        (WhirlingNoise.noiseAlt(xx * 0.25, yy * 0.25)) * 1.19f)
+                                 */
+                                bright = prepare(layered2D.getNoise(xx * 0.0625, yy * 0.0625)
+                                );
+
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;

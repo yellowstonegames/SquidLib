@@ -1436,7 +1436,7 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
     public static double noise(final float x, final float y, final float z, final int seed) {
         double n0, n1, n2, n3;
-        final float[] gradient3DLUT = SeededNoise.gradient3DLUT;
+        final double[] gradient3DLUT = SeededNoise.gradient3DLUT;
         final float s = (x + y + z) * F3;
         final int i = fastFloor(x + s),
                 j = fastFloor(y + s),

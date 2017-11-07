@@ -287,6 +287,28 @@ public class NumberTools {
         final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
         return a * a * a * (a * (a * 6f - 15f) + 10f);
     }
+    /**
+     * Limited-use; takes any double and produces a double in the 0.0 to 1.0 range, with a graph of input to output that
+     * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+     * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
+     * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
+     * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
+     * similar to {@link #bounce(double)} and {@link #zigzag(double)}, but unlike bounce() this will maintain not change
+     * its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
+     * will smooth its path. An input of any even number should produce something very close to 0.0, any odd
+     * number should produce something very close to 1.0, and any number halfway between two incremental integers (like
+     * 8.5 or -10.5) should produce 0.5. This version is called "Tight" because its range is tighter than
+     * {@link #sway(double)}.
+     * @param value any double other than NaN or infinite values
+     * @return a double from 0.0 (inclusive) to 1.0 (inclusive)
+     */
+    public static double swayTight(final double value)
+    {
+        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
+        final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+                | 0x4000000000000000L) - 2.0);
+        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0);
+    }
 
     /**
      * Identical to {@link Float#floatToIntBits(float)} on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
