@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -117,17 +117,18 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.27">TextFamily</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.19">TextFamily</a>
 extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></pre>
 <div class="block">A variant of <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextCellFactory</code></a> that allows switching between regular, bold, italic, and bold italic styles.
- While almost interchangeable with TextCellFactory, it must be set up differently, using the
- <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#fontFamily-java.lang.String-java.lang.String...-"><code>fontFamily(String, String...)</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#fontFamilyDistance-java.lang.String-java.lang.String...-"><code>fontFamilyDistance(String, String...)</code></a> methods, and (potentially
- importantly) it does not correctly render chars above <code>'\\u3fff'</code> due to using some of the bits that normally
- represent late-in-Unicode character codes to instead represent bold and italic modes. Two TextFamily values are
- present in DefaultResources, <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getLeanFamily--"><code>DefaultResources.getLeanFamily()</code></a> and <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getSlabFamily--"><code>DefaultResources.getSlabFamily()</code></a>;
- using them is currently the recommended way because this class is somewhat picky about how it can be built.
+ It adds only one field to TextCellFactory, and is interchangeable except that (potentially importantly) it does not
+ correctly render chars above <code>'\\u3fff'</code> due to using some of the bits that normally represent late-in-Unicode
+ character codes to instead represent bold and italic modes. Two TextFamily values are present in DefaultResources,
+ <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getLeanFamily--"><code>DefaultResources.getLeanFamily()</code></a> and <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getSlabFamily--"><code>DefaultResources.getSlabFamily()</code></a>; using them is currently the
+ recommended way to use this class.
+ <br>
  You may want to use <a href="../../../../squidpony/squidgrid/gui/gdx/GDXMarkup.html#colorString-java.lang.CharSequence-"><code>GDXMarkup.colorString(CharSequence)</code></a> to produce an <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/panel/IColoredString.html?is-external=true" title="class or interface in squidpony.panel"><code>IColoredString</code></a>
  that contains the specially-altered chars that store bold and italic mode data.
+ <br>
  Created by Tommy Ettinger on 10/26/2017.</div>
 </li>
 </ul>
@@ -171,28 +172,18 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#BOLD_ITALIC">BOLD_ITALIC</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#currentStyle">currentStyle</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected float[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#dfx">dfx</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected float[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#dfy">dfy</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>com.badlogic.gdx.graphics.g2d.BitmapFont[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#family">family</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#ITALIC">ITALIC</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#REGULAR">REGULAR</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#STYLES">STYLES</a></span></code>
+<div class="block">How many styles are supported by this TextCellFactory; always 4 in TextFamily.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -253,48 +244,13 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#defaultFamilySlabDistance--">defaultFamilySlabDistance</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#draw-com.badlogic.gdx.graphics.g2d.Batch-char-float-float-float-">draw</a></span>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
-    char&nbsp;c,
-    float&nbsp;encodedColor,
-    float&nbsp;x,
-    float&nbsp;y)</code>
-<div class="block">Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
- determining the world-space coordinates for the upper-left corner.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#fontFamily-java.lang.String-java.lang.String...-">fontFamily</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;atlasName,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;fontNames)</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#fontFamilyDistance-java.lang.String-java.lang.String...-">fontFamilyDistance</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;atlasName,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;fontNames)</code>&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#initBySize--">initBySize</a></span>()</code>
-<div class="block">Initializes the factory to then be able to create text cells on demand.</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#setStyle-int-">setStyle</a></span>(int&nbsp;style)</code>
-<div class="block">Changes the currently-used font style, such as from regular to italic or bold; values for style can range from 0
- to 3 (inclusive), and normally you would use one of the constants <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#REGULAR"><code>REGULAR</code></a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#BOLD"><code>BOLD</code></a>,
- <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#ITALIC"><code>ITALIC</code></a>, or <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#BOLD_ITALIC"><code>BOLD_ITALIC</code></a> as that parameter.</div>
-</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.squidpony.squidgrid.gui.gdx.TextCellFactory">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.gui.gdx.<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></h3>
-<code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#addFit-java.lang.String-">addFit</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#addSwap-char-char-">addSwap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#addSwap-java.lang.String-java.lang.String-">addSwap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#addSwaps-squidpony.squidmath.OrderedMap-">addSwaps</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#antialias--">antialias</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#antialias-boolean-">antialias</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#bottomPadding--">bottomPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#bottomPadding-int-">bottomPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#clearSwaps--">clearSwaps</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#configureShader-com.badlogic.gdx.graphics.g2d.Batch-">configureShader</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultDistanceFieldFont--">defaultDistanceFieldFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultFont--">defaultFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultNarrowDistanceFieldFont--">defaultNarrowDistanceFieldFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultNarrowFont--">defaultNarrowFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultSquareFont--">defaultSquareFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#dispose--">dispose</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-char-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float:A:A-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-java.lang.String-com.badlogic.gdx.graphics.Color-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-java.lang.String-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-java.lang.String-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-java.lang.String-float-float-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-com.badlogic.gdx.graphics.Color-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-com.badlogic.gdx.graphics.Color-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-float-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#fit--">fit</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#fit-java.lang.String-">fit</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#font--">font</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#font-com.badlogic.gdx.graphics.g2d.BitmapFont-">font</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#font-java.lang.String-">font</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#fontDistanceField-java.lang.String-java.lang.String-">fontDistanceField</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#fontMultiDistanceField-java.lang.String-java.lang.String-">fontMultiDistanceField</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getAllSwaps--">getAllSwaps</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getDescent--">getDescent</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getDirectionGlyph--">getDirectionGlyph</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getDistanceFieldScaleX--">getDistanceFieldScaleX</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getDistanceFieldScaleY--">getDistanceFieldScaleY</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getSmoothingMultiplier--">getSmoothingMultiplier</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getSolid--">getSolid</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#glyph-char-com.badlogic.gdx.graphics.Color-float-float-">glyph</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#glyph-char-float-float-float-">glyph</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#height--">height</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#height-float-">height</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#includedFont--">includedFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initByFont--">initByFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initialized--">initialized</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initVerbatim--">initVerbatim</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#isDistanceField--">isDistanceField</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#isMultiDistanceField--">isMultiDistanceField</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#leftPadding--">leftPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#leftPadding-int-">leftPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-java.util.Collection-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-java.util.Collection-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-java.util.Collection-float-boolean-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-com.badlogic.gdx.graphics.Color-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-java.lang.String-java.util.Collection-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-java.lang.String-java.util.Collection-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-java.lang.String-java.util.Collection-float-boolean-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-java.lang.String-com.badlogic.gdx.graphics.Color-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-java.util.Collection-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-java.util.Collection-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-java.util.Collection-float-boolean-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-java.util.Collection-float-boolean-float-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-com.badlogic.gdx.graphics.Color-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-com.badlogic.gdx.graphics.Color-float-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeDirectionMarker-java.util.Collection-float-boolean-">makeDirectionMarker</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeDirectionMarker-com.badlogic.gdx.graphics.Color-">makeDirectionMarker</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeGlyphImage-char-java.util.Collection-float-boolean-">makeGlyphImage</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeGlyphImage-char-com.badlogic.gdx.graphics.Color-">makeGlyphImage</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeGlyphImage-char-com.badlogic.gdx.graphics.Color-boolean-">makeGlyphImage</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeWrappingString-java.lang.String-">makeWrappingString</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#padding-int-">padding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#removeSwap-char-">removeSwap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#removeSwap-java.lang.String-">removeSwap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#rightPadding--">rightPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#rightPadding-int-">rightPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setAllSwaps-squidpony.squidmath.OrderedMap-">setAllSwaps</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setColorCenter-squidpony.IColorCenter-">setColorCenter</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setDirectionGlyph-char-">setDirectionGlyph</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setSmoothingMultiplier-float-">setSmoothingMultiplier</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#topPadding--">topPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#topPadding-int-">topPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakHeight-float-">tweakHeight</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakWidth-float-">tweakWidth</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width--">width</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width-float-">width</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#willFit-int-">willFit</a></code></li>
+<code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#addFit-java.lang.String-">addFit</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#addSwap-char-char-">addSwap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#addSwap-java.lang.String-java.lang.String-">addSwap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#addSwaps-squidpony.squidmath.OrderedMap-">addSwaps</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#antialias--">antialias</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#antialias-boolean-">antialias</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#bottomPadding--">bottomPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#bottomPadding-int-">bottomPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#clearSwaps--">clearSwaps</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#configureShader-com.badlogic.gdx.graphics.g2d.Batch-">configureShader</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultDistanceFieldFont--">defaultDistanceFieldFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultFont--">defaultFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultNarrowDistanceFieldFont--">defaultNarrowDistanceFieldFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultNarrowFont--">defaultNarrowFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#defaultSquareFont--">defaultSquareFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#dispose--">dispose</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-char-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-char-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float:A:A-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-java.lang.String-com.badlogic.gdx.graphics.Color-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-java.lang.String-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-java.lang.String-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-java.lang.String-float-float-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-com.badlogic.gdx.graphics.Color-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-com.badlogic.gdx.graphics.Color-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-com.badlogic.gdx.graphics.g2d.TextureRegion-float-float-float-float-float-float-float-float-">draw</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#fit--">fit</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#fit-java.lang.String-">fit</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#font--">font</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#font-com.badlogic.gdx.graphics.g2d.BitmapFont-">font</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#font-java.lang.String-">font</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#fontDistanceField-java.lang.String-java.lang.String-">fontDistanceField</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#fontMultiDistanceField-java.lang.String-java.lang.String-">fontMultiDistanceField</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getAllSwaps--">getAllSwaps</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getDescent--">getDescent</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getDirectionGlyph--">getDirectionGlyph</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getDistanceFieldScaleX--">getDistanceFieldScaleX</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getDistanceFieldScaleY--">getDistanceFieldScaleY</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getSmoothingMultiplier--">getSmoothingMultiplier</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#getSolid--">getSolid</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#glyph-char-com.badlogic.gdx.graphics.Color-float-float-">glyph</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#glyph-char-float-float-float-">glyph</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#height--">height</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#height-float-">height</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#includedFont--">includedFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initByFont--">initByFont</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initBySize--">initBySize</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initialized--">initialized</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initVerbatim--">initVerbatim</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#isDistanceField--">isDistanceField</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#isMultiDistanceField--">isMultiDistanceField</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#leftPadding--">leftPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#leftPadding-int-">leftPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-java.util.Collection-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-java.util.Collection-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-java.util.Collection-float-boolean-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-com.badlogic.gdx.graphics.Color-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-char-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-java.lang.String-java.util.Collection-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-java.lang.String-java.util.Collection-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-java.lang.String-java.util.Collection-float-boolean-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-java.lang.String-com.badlogic.gdx.graphics.Color-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-java.util.Collection-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-java.util.Collection-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-java.util.Collection-float-boolean-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-java.util.Collection-float-boolean-float-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-com.badlogic.gdx.graphics.Color-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeActor-com.badlogic.gdx.graphics.g2d.TextureRegion-com.badlogic.gdx.graphics.Color-float-float-">makeActor</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeDirectionMarker-java.util.Collection-float-boolean-">makeDirectionMarker</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeDirectionMarker-com.badlogic.gdx.graphics.Color-">makeDirectionMarker</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeGlyphImage-char-java.util.Collection-float-boolean-">makeGlyphImage</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeGlyphImage-char-com.badlogic.gdx.graphics.Color-">makeGlyphImage</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeGlyphImage-char-com.badlogic.gdx.graphics.Color-boolean-">makeGlyphImage</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeWrappingString-java.lang.String-">makeWrappingString</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#padding-int-">padding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#removeSwap-char-">removeSwap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#removeSwap-java.lang.String-">removeSwap</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#rightPadding--">rightPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#rightPadding-int-">rightPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setAllSwaps-squidpony.squidmath.OrderedMap-">setAllSwaps</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setColorCenter-squidpony.IColorCenter-">setColorCenter</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setDirectionGlyph-char-">setDirectionGlyph</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setSmoothingMultiplier-float-">setSmoothingMultiplier</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setStyle-int-">setStyle</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#topPadding--">topPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#topPadding-int-">topPadding</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakHeight-float-">tweakHeight</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#tweakWidth-float-">tweakWidth</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width--">width</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#width-float-">width</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#willFit-int-">willFit</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -323,7 +279,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <ul class="blockList">
 <li class="blockList">
 <h4>REGULAR</h4>
-<pre>public static final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.29">REGULAR</a></pre>
+<pre>public static final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.22">REGULAR</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#squidpony.squidgrid.gui.gdx.TextFamily.REGULAR">Constant Field Values</a></dd>
@@ -336,7 +292,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <ul class="blockList">
 <li class="blockList">
 <h4>BOLD</h4>
-<pre>public static final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.29">BOLD</a></pre>
+<pre>public static final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.22">BOLD</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#squidpony.squidgrid.gui.gdx.TextFamily.BOLD">Constant Field Values</a></dd>
@@ -349,7 +305,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <ul class="blockList">
 <li class="blockList">
 <h4>ITALIC</h4>
-<pre>public static final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.29">ITALIC</a></pre>
+<pre>public static final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.22">ITALIC</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#squidpony.squidgrid.gui.gdx.TextFamily.ITALIC">Constant Field Values</a></dd>
@@ -362,47 +318,25 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <ul class="blockList">
 <li class="blockList">
 <h4>BOLD_ITALIC</h4>
-<pre>public static final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.29">BOLD_ITALIC</a></pre>
+<pre>public static final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.22">BOLD_ITALIC</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#squidpony.squidgrid.gui.gdx.TextFamily.BOLD_ITALIC">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
-<a name="currentStyle">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>currentStyle</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.30">currentStyle</a></pre>
-</li>
-</ul>
-<a name="family">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>family</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.g2d.BitmapFont[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.31">family</a></pre>
-</li>
-</ul>
-<a name="dfx">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>dfx</h4>
-<pre>protected&nbsp;float[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.32">dfx</a></pre>
-</li>
-</ul>
-<a name="dfy">
+<a name="STYLES">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>dfy</h4>
-<pre>protected&nbsp;float[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.32">dfy</a></pre>
+<h4>STYLES</h4>
+<pre>public final&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.26">STYLES</a></pre>
+<div class="block">How many styles are supported by this TextCellFactory; always 4 in TextFamily.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../constant-values.html#squidpony.squidgrid.gui.gdx.TextFamily.STYLES">Constant Field Values</a></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -419,7 +353,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <ul class="blockList">
 <li class="blockList">
 <h4>TextFamily</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.37">TextFamily</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.31">TextFamily</a>()</pre>
 <div class="block">Creates a default valued factory. One of the initialization methods must
  be called before this factory can be used!</div>
 </li>
@@ -430,7 +364,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <ul class="blockListLast">
 <li class="blockList">
 <h4>TextFamily</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.52">TextFamily</a>(com.badlogic.gdx.assets.AssetManager&nbsp;assetManager)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.46">TextFamily</a>(com.badlogic.gdx.assets.AssetManager&nbsp;assetManager)</pre>
 <div class="block">A default valued factory that uses the given <code>AssetManager</code> to load
  the font file. Use this constructor if you are likely to load the same
  font over and over (recall that, without an <code>AssetManager</code>, each
@@ -458,7 +392,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.56">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.50">copy</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#copy--">copy</a></code>&nbsp;in class&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></dd>
@@ -471,101 +405,16 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" t
 <ul class="blockList">
 <li class="blockList">
 <h4>defaultFamilyLeanDistance</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.113">defaultFamilyLeanDistance</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.79">defaultFamilyLeanDistance</a>()</pre>
 </li>
 </ul>
 <a name="defaultFamilySlabDistance--">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>defaultFamilySlabDistance</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.120">defaultFamilySlabDistance</a>()</pre>
-</li>
-</ul>
-<a name="fontFamilyDistance-java.lang.String-java.lang.String...-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>fontFamilyDistance</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.127">fontFamilyDistance</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;atlasName,
-                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;fontNames)</pre>
-</li>
-</ul>
-<a name="fontFamily-java.lang.String-java.lang.String...-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>fontFamily</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.139">fontFamily</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;atlasName,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;fontNames)</pre>
-</li>
-</ul>
-<a name="initBySize--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>initBySize</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.203">initBySize</a>()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initBySize--">TextCellFactory</a></code></span></div>
-<div class="block">Initializes the factory to then be able to create text cells on demand.
-
- Will strictly use the provided width and height values to size the cells.
-
- Calling this after the factory has already been initialized will
- re-initialize it.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#initBySize--">initBySize</a></code>&nbsp;in class&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this for method chaining</dd>
-</dl>
-</li>
-</ul>
-<a name="draw-com.badlogic.gdx.graphics.g2d.Batch-char-float-float-float-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.265">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
-                 char&nbsp;c,
-                 float&nbsp;encodedColor,
-                 float&nbsp;x,
-                 float&nbsp;y)</pre>
-<div class="block">Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
- determining the world-space coordinates for the upper-left corner.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-char-float-float-float-">draw</a></code>&nbsp;in class&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>batch</code> - the LibGDX Batch to do the drawing</dd>
-<dd><code>c</code> - the char to draw, often but not necessarily one char. Can be null to draw a solid block instead.</dd>
-<dd><code>encodedColor</code> - the LibGDX Color to use, converted to float as by <code>Color.toFloatBits()</code></dd>
-<dd><code>x</code> - x of the upper-left corner of the region of text in world coordinates.</dd>
-<dd><code>y</code> - y of the upper-left corner of the region of text in world coordinates.</dd>
-</dl>
-</li>
-</ul>
-<a name="setStyle-int-">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setStyle</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.278">setStyle</a>(int&nbsp;style)</pre>
-<div class="block">Changes the currently-used font style, such as from regular to italic or bold; values for style can range from 0
- to 3 (inclusive), and normally you would use one of the constants <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#REGULAR"><code>REGULAR</code></a>, <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#BOLD"><code>BOLD</code></a>,
- <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#ITALIC"><code>ITALIC</code></a>, or <a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html#BOLD_ITALIC"><code>BOLD_ITALIC</code></a> as that parameter.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#setStyle-int-">setStyle</a></code>&nbsp;in class&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>style</code> - an int (can be 0, 1, 2, or 3) that determines which style to use; typically a constant in this class</dd>
-</dl>
+<h4>defaultFamilySlabDistance</h4>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextFamily.html#line.84">defaultFamilySlabDistance</a>()</pre>
 </li>
 </ul>
 </li>

@@ -1410,315 +1410,363 @@
 <span class="sourceLineNo">1402</span>            return instance.msdfDejaVuItalic.copy();<a name="line.1402"></a>
 <span class="sourceLineNo">1403</span>        return null;<a name="line.1403"></a>
 <span class="sourceLineNo">1404</span>    }<a name="line.1404"></a>
-<span class="sourceLineNo">1405</span><a name="line.1405"></a>
-<span class="sourceLineNo">1406</span>    public static TextFamily getSlabFamily()<a name="line.1406"></a>
-<span class="sourceLineNo">1407</span>    {<a name="line.1407"></a>
-<span class="sourceLineNo">1408</span>        initialize();<a name="line.1408"></a>
-<span class="sourceLineNo">1409</span>        if(instance.familySlab == null)<a name="line.1409"></a>
-<span class="sourceLineNo">1410</span>        {<a name="line.1410"></a>
-<span class="sourceLineNo">1411</span>            try {<a name="line.1411"></a>
-<span class="sourceLineNo">1412</span>                instance.familySlab = new TextFamily()<a name="line.1412"></a>
-<span class="sourceLineNo">1413</span>                        .defaultFamilySlabDistance();<a name="line.1413"></a>
-<span class="sourceLineNo">1414</span>            } catch (Exception e) {<a name="line.1414"></a>
-<span class="sourceLineNo">1415</span>                e.printStackTrace();<a name="line.1415"></a>
-<span class="sourceLineNo">1416</span>            }<a name="line.1416"></a>
-<span class="sourceLineNo">1417</span>        }<a name="line.1417"></a>
-<span class="sourceLineNo">1418</span>        if(instance.familySlab != null)<a name="line.1418"></a>
-<span class="sourceLineNo">1419</span>            return instance.familySlab.copy();<a name="line.1419"></a>
-<span class="sourceLineNo">1420</span>        return null;<a name="line.1420"></a>
-<span class="sourceLineNo">1421</span>    }<a name="line.1421"></a>
-<span class="sourceLineNo">1422</span><a name="line.1422"></a>
-<span class="sourceLineNo">1423</span>    public static TextFamily getLeanFamily()<a name="line.1423"></a>
-<span class="sourceLineNo">1424</span>    {<a name="line.1424"></a>
-<span class="sourceLineNo">1425</span>        initialize();<a name="line.1425"></a>
-<span class="sourceLineNo">1426</span>        if(instance.familyLean == null)<a name="line.1426"></a>
-<span class="sourceLineNo">1427</span>        {<a name="line.1427"></a>
-<span class="sourceLineNo">1428</span>            try {<a name="line.1428"></a>
-<span class="sourceLineNo">1429</span>                instance.familyLean = new TextFamily()<a name="line.1429"></a>
-<span class="sourceLineNo">1430</span>                        .defaultFamilyLeanDistance();<a name="line.1430"></a>
-<span class="sourceLineNo">1431</span>            } catch (Exception e) {<a name="line.1431"></a>
-<span class="sourceLineNo">1432</span>                e.printStackTrace();<a name="line.1432"></a>
-<span class="sourceLineNo">1433</span>            }<a name="line.1433"></a>
-<span class="sourceLineNo">1434</span>        }<a name="line.1434"></a>
-<span class="sourceLineNo">1435</span>        if(instance.familyLean != null)<a name="line.1435"></a>
-<span class="sourceLineNo">1436</span>            return instance.familyLean.copy();<a name="line.1436"></a>
-<span class="sourceLineNo">1437</span>        return null;<a name="line.1437"></a>
-<span class="sourceLineNo">1438</span>    }<a name="line.1438"></a>
-<span class="sourceLineNo">1439</span><a name="line.1439"></a>
-<span class="sourceLineNo">1440</span><a name="line.1440"></a>
-<span class="sourceLineNo">1441</span>    /**<a name="line.1441"></a>
-<span class="sourceLineNo">1442</span>     * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.<a name="line.1442"></a>
-<span class="sourceLineNo">1443</span>     * Source is public domain: http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg<a name="line.1443"></a>
-<span class="sourceLineNo">1444</span>     * Created by Henrique Lazarini (7Soul1, http://7soul1.deviantart.com/ )<a name="line.1444"></a>
-<span class="sourceLineNo">1445</span>     * &lt;br&gt;<a name="line.1445"></a>
-<span class="sourceLineNo">1446</span>     * Needs file:<a name="line.1446"></a>
-<span class="sourceLineNo">1447</span>     * &lt;ul&gt;<a name="line.1447"></a>
-<span class="sourceLineNo">1448</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Tentacle.png&lt;/li&gt;<a name="line.1448"></a>
-<span class="sourceLineNo">1449</span>     * &lt;/ul&gt;<a name="line.1449"></a>
-<span class="sourceLineNo">1450</span>     * @return a TextureRegion containing an image of a tentacle.<a name="line.1450"></a>
-<span class="sourceLineNo">1451</span>     */<a name="line.1451"></a>
-<span class="sourceLineNo">1452</span>    public static TextureRegion getTentacle()<a name="line.1452"></a>
-<span class="sourceLineNo">1453</span>    {<a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>        initialize();<a name="line.1454"></a>
-<span class="sourceLineNo">1455</span>        if(instance.tentacle == null || instance.tentacleRegion == null)<a name="line.1455"></a>
-<span class="sourceLineNo">1456</span>        {<a name="line.1456"></a>
-<span class="sourceLineNo">1457</span>            try {<a name="line.1457"></a>
-<span class="sourceLineNo">1458</span>                instance.tentacle = new Texture(Gdx.files.internal("Tentacle.png"));<a name="line.1458"></a>
-<span class="sourceLineNo">1459</span>                instance.tentacleRegion = new TextureRegion(instance.tentacle);<a name="line.1459"></a>
-<span class="sourceLineNo">1460</span>            } catch (Exception ignored) {<a name="line.1460"></a>
-<span class="sourceLineNo">1461</span>            }<a name="line.1461"></a>
-<span class="sourceLineNo">1462</span>        }<a name="line.1462"></a>
-<span class="sourceLineNo">1463</span>        return instance.tentacleRegion;<a name="line.1463"></a>
-<span class="sourceLineNo">1464</span>    }<a name="line.1464"></a>
-<span class="sourceLineNo">1465</span><a name="line.1465"></a>
-<span class="sourceLineNo">1466</span><a name="line.1466"></a>
-<span class="sourceLineNo">1467</span>    /**<a name="line.1467"></a>
-<span class="sourceLineNo">1468</span>     * Gets a TextureAtlas containing many icons with a distance field effect applied, allowing them to be used with<a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>     * "stretchable" fonts and be resized in the same way. These will not look as-expected if stretchable fonts are not<a name="line.1469"></a>
-<span class="sourceLineNo">1470</span>     * in use, and will seem hazy and indistinct if the shader hasn't been set up for a distance field effect by<a name="line.1470"></a>
-<span class="sourceLineNo">1471</span>     * TextCellFactory (which stretchable fonts will do automatically). The one page of the TextureAtlas is 2048x2048,<a name="line.1471"></a>
-<span class="sourceLineNo">1472</span>     * which may be too large for some old, low-end Android phones, and possibly integrated graphics with fairly old<a name="line.1472"></a>
-<span class="sourceLineNo">1473</span>     * processors on desktop. It has over 2000 icons.<a name="line.1473"></a>
-<span class="sourceLineNo">1474</span>     * &lt;br&gt;<a name="line.1474"></a>
-<span class="sourceLineNo">1475</span>     * The icons are CC-BY and the license is distributed with them, though the icons are not necessarily included with<a name="line.1475"></a>
-<span class="sourceLineNo">1476</span>     * SquidLib. If you use the icon atlas, be sure to include icons-license.txt with it and reference it with your<a name="line.1476"></a>
-<span class="sourceLineNo">1477</span>     * game's license and/or credits information.<a name="line.1477"></a>
-<span class="sourceLineNo">1478</span>     * &lt;br&gt;<a name="line.1478"></a>
-<span class="sourceLineNo">1479</span>     * Needs files:<a name="line.1479"></a>
-<span class="sourceLineNo">1480</span>     * &lt;ul&gt;<a name="line.1480"></a>
-<span class="sourceLineNo">1481</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons.atlas&lt;/li&gt;<a name="line.1481"></a>
-<span class="sourceLineNo">1482</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons.png&lt;/li&gt;<a name="line.1482"></a>
-<span class="sourceLineNo">1483</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons-license.txt Needed to credit artists&lt;/li&gt;<a name="line.1483"></a>
-<span class="sourceLineNo">1484</span>     * &lt;/ul&gt;<a name="line.1484"></a>
-<span class="sourceLineNo">1485</span>     * @return a TextureAtlas containing over 2000 icons with a distance field effect<a name="line.1485"></a>
-<span class="sourceLineNo">1486</span>     */<a name="line.1486"></a>
-<span class="sourceLineNo">1487</span>    public static TextureAtlas getIconAtlas()<a name="line.1487"></a>
-<span class="sourceLineNo">1488</span>    {<a name="line.1488"></a>
-<span class="sourceLineNo">1489</span>        initialize();<a name="line.1489"></a>
-<span class="sourceLineNo">1490</span>        if(instance.iconAtlas == null)<a name="line.1490"></a>
-<span class="sourceLineNo">1491</span>        {<a name="line.1491"></a>
-<span class="sourceLineNo">1492</span>            try {<a name="line.1492"></a>
-<span class="sourceLineNo">1493</span>                instance.iconAtlas = new TextureAtlas(Gdx.files.internal("icons.atlas"));<a name="line.1493"></a>
-<span class="sourceLineNo">1494</span>            } catch (Exception ignored) {<a name="line.1494"></a>
-<span class="sourceLineNo">1495</span>            }<a name="line.1495"></a>
-<span class="sourceLineNo">1496</span>        }<a name="line.1496"></a>
-<span class="sourceLineNo">1497</span>        return instance.iconAtlas;<a name="line.1497"></a>
-<span class="sourceLineNo">1498</span>    }<a name="line.1498"></a>
-<span class="sourceLineNo">1499</span><a name="line.1499"></a>
-<span class="sourceLineNo">1500</span>    /**<a name="line.1500"></a>
-<span class="sourceLineNo">1501</span>     * This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any<a name="line.1501"></a>
-<span class="sourceLineNo">1502</span>     * changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.<a name="line.1502"></a>
-<span class="sourceLineNo">1503</span>     */<a name="line.1503"></a>
-<span class="sourceLineNo">1504</span>    public static StatefulRNG getGuiRandom()<a name="line.1504"></a>
-<span class="sourceLineNo">1505</span>    {<a name="line.1505"></a>
-<span class="sourceLineNo">1506</span>        initialize();<a name="line.1506"></a>
-<span class="sourceLineNo">1507</span>        if(instance.guiRandom == null)<a name="line.1507"></a>
-<span class="sourceLineNo">1508</span>        {<a name="line.1508"></a>
-<span class="sourceLineNo">1509</span>            instance.guiRandom =  new StatefulRNG();<a name="line.1509"></a>
+<span class="sourceLineNo">1405</span>    /**<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>     * Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span>     * slab-serif geometric style, that should scale cleanly to many sizes and supports 4 styles (regular, bold, italic,<a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>     * and bold italic). Caches the result for later calls. The font used is Iosevka with Slab style, an open-source<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>     * (SIL Open Font License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>     * customizations thanks to Iosevka's special build process, applied to the 4 styles. It supports a lot of glyphs,<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span>     * including quite a bit of extended Latin, Greek, and Cyrillic, but also circled letters and digits and the<a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>     * necessary box drawing characters (which line up even for italic text). The high glyph count means the part of the<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span>     * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to<a name="line.1413"></a>
+<span class="sourceLineNo">1414</span>     * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect<a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>     * ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>     * true typography expert) called Iosevka &lt;a href="http://luc.devroye.org/fonts-82704.html"&gt;"A tour de force that<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>     * deserves an award."&lt;/a&gt; You may want to try using both this version of Iosevka with slab serifs and the other<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span>     * version SquidLib has, {@link #getLeanFamily()}.<a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>     * &lt;br&gt;<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>     * &lt;br&gt;<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span>     * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the<a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>     * distance field font technique this uses can work, but it can also be used as a TextCellFactory.<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span>     * &lt;br&gt;<a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>     * Needs files:<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span>     * &lt;ul&gt;<a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-distance.fnt&lt;/li&gt;<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-distance.png&lt;/li&gt;<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span>     * &lt;/ul&gt;<a name="line.1428"></a>
+<span class="sourceLineNo">1429</span>     * @return the TextFamily object that can represent many sizes of the font Iosevka-Slab.ttf with 4 styles<a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>     */<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>    public static TextFamily getSlabFamily()<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>    {<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>        initialize();<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>        if(instance.familySlab == null)<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>        {<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>            try {<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span>                instance.familySlab = new TextFamily().defaultFamilySlabDistance();<a name="line.1437"></a>
+<span class="sourceLineNo">1438</span>            } catch (Exception e) {<a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>                e.printStackTrace();<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>            }<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>        }<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span>        if(instance.familySlab != null)<a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>            return instance.familySlab.copy();<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>        return null;<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>    }<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span>    /**<a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>     * Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>     * sans-serif geometric style, that should scale cleanly to many sizes and supports 4 styles (regular, bold, italic,<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>     * and bold italic). Caches the result for later calls. The font used is Iosevka, an open-source (SIL Open Font<a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>     * thanks to Iosevka's special build process, applied to the 4 styles. It supports a lot of glyphs, including quite<a name="line.1451"></a>
+<span class="sourceLineNo">1452</span>     * a bit of extended Latin, Greek, and Cyrillic, but also circled letters and digits and the necessary box drawing<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>     * characters (which line up even for italic text). The high glyph count means the part of the image for each glyph<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>     * is smaller, though, so this may look slightly pixelated if it starts small and is resized to much larger. A cell<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>     * width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect ratio); this allows the<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>     * font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a true typography expert)<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>     * called Iosevka &lt;a href="http://luc.devroye.org/fonts-82704.html"&gt;"A tour de force that deserves an award."&lt;/a&gt;<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>     * You may want to try using both this version of Iosevka without serifs and the other version SquidLib has,<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>     * {@link #getSlabFamily()}.<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>     * &lt;br&gt;<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>     * &lt;br&gt;<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span>     * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the<a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>     * distance field font technique this uses can work, but it can also be used as a TextCellFactory.<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>     * &lt;br&gt;<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>     * Needs files:<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>     * &lt;ul&gt;<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-distance.fnt&lt;/li&gt;<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-distance.png&lt;/li&gt;<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>     * &lt;/ul&gt;<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>     * @return the TextFamily object that can represent many sizes of the font Iosevka.ttf with 4 styles<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>     */<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>    public static TextFamily getLeanFamily()<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>    {<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>        initialize();<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>        if(instance.familyLean == null)<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>        {<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>            try {<a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>                instance.familyLean = new TextFamily().defaultFamilyLeanDistance();<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>            } catch (Exception e) {<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>                e.printStackTrace();<a name="line.1480"></a>
+<span class="sourceLineNo">1481</span>            }<a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>        }<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span>        if(instance.familyLean != null)<a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>            return instance.familyLean.copy();<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span>        return null;<a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>    }<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span><a name="line.1487"></a>
+<span class="sourceLineNo">1488</span><a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>    /**<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>     * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span>     * Source is public domain: http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg<a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>     * Created by Henrique Lazarini (7Soul1, http://7soul1.deviantart.com/ )<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span>     * &lt;br&gt;<a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>     * Needs file:<a name="line.1494"></a>
+<span class="sourceLineNo">1495</span>     * &lt;ul&gt;<a name="line.1495"></a>
+<span class="sourceLineNo">1496</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/Tentacle.png&lt;/li&gt;<a name="line.1496"></a>
+<span class="sourceLineNo">1497</span>     * &lt;/ul&gt;<a name="line.1497"></a>
+<span class="sourceLineNo">1498</span>     * @return a TextureRegion containing an image of a tentacle.<a name="line.1498"></a>
+<span class="sourceLineNo">1499</span>     */<a name="line.1499"></a>
+<span class="sourceLineNo">1500</span>    public static TextureRegion getTentacle()<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>    {<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>        initialize();<a name="line.1502"></a>
+<span class="sourceLineNo">1503</span>        if(instance.tentacle == null || instance.tentacleRegion == null)<a name="line.1503"></a>
+<span class="sourceLineNo">1504</span>        {<a name="line.1504"></a>
+<span class="sourceLineNo">1505</span>            try {<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>                instance.tentacle = new Texture(Gdx.files.internal("Tentacle.png"));<a name="line.1506"></a>
+<span class="sourceLineNo">1507</span>                instance.tentacleRegion = new TextureRegion(instance.tentacle);<a name="line.1507"></a>
+<span class="sourceLineNo">1508</span>            } catch (Exception ignored) {<a name="line.1508"></a>
+<span class="sourceLineNo">1509</span>            }<a name="line.1509"></a>
 <span class="sourceLineNo">1510</span>        }<a name="line.1510"></a>
-<span class="sourceLineNo">1511</span>        return instance.guiRandom;<a name="line.1511"></a>
+<span class="sourceLineNo">1511</span>        return instance.tentacleRegion;<a name="line.1511"></a>
 <span class="sourceLineNo">1512</span>    }<a name="line.1512"></a>
-<span class="sourceLineNo">1513</span>    /**<a name="line.1513"></a>
-<span class="sourceLineNo">1514</span>     * This is a static global SquidColorCenter that can be used in places that just need an existing object that can do<a name="line.1514"></a>
-<span class="sourceLineNo">1515</span>     * things like analyze hue or saturation of a color.<a name="line.1515"></a>
-<span class="sourceLineNo">1516</span>     */<a name="line.1516"></a>
-<span class="sourceLineNo">1517</span>    public static SquidColorCenter getSCC()<a name="line.1517"></a>
-<span class="sourceLineNo">1518</span>    {<a name="line.1518"></a>
-<span class="sourceLineNo">1519</span>        initialize();<a name="line.1519"></a>
-<span class="sourceLineNo">1520</span>        if(instance.scc == null)<a name="line.1520"></a>
-<span class="sourceLineNo">1521</span>        {<a name="line.1521"></a>
-<span class="sourceLineNo">1522</span>            instance.scc =  new SquidColorCenter();<a name="line.1522"></a>
-<span class="sourceLineNo">1523</span>        }<a name="line.1523"></a>
-<span class="sourceLineNo">1524</span>        return instance.scc;<a name="line.1524"></a>
-<span class="sourceLineNo">1525</span>    }<a name="line.1525"></a>
-<span class="sourceLineNo">1526</span><a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>    /**<a name="line.1527"></a>
-<span class="sourceLineNo">1528</span>     * Special symbols that can be used as icons if you use the narrow default font.<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>     */<a name="line.1529"></a>
-<span class="sourceLineNo">1530</span>    public static final String narrowFontSymbols = "ሀሁሂሃሄህሆሇለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማሜ",<a name="line.1530"></a>
-<span class="sourceLineNo">1531</span>                                  narrowFontAll = " !\"#$%&amp;'()*+,-./0123\n" +<a name="line.1531"></a>
-<span class="sourceLineNo">1532</span>                                          "456789:;&lt;=&gt;?@ABCDEFG\n" +<a name="line.1532"></a>
-<span class="sourceLineNo">1533</span>                                          "HIJKLMNOPQRSTUVWXYZ[\n" +<a name="line.1533"></a>
-<span class="sourceLineNo">1534</span>                                          "\\]^_`abcdefghijklmno\n" +<a name="line.1534"></a>
-<span class="sourceLineNo">1535</span>                                          "pqrstuvwxyz{|}~¡¢£¤¥\n" +<a name="line.1535"></a>
-<span class="sourceLineNo">1536</span>                                          "¦§¨©ª«¬\u00AD®¯°±²³´µ¶·¸¹\n" +<a name="line.1536"></a>
-<span class="sourceLineNo">1537</span>                                          "º»¼½¾¿×ß÷øɍɎሀሁሂሃሄህሆሇ\n" +<a name="line.1537"></a>
-<span class="sourceLineNo">1538</span>                                          "ለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማ\n" +<a name="line.1538"></a>
-<span class="sourceLineNo">1539</span>                                          "ሜẞ‐‒–—―‖‗‘’‚‛“”„‟†‡•\n" +<a name="line.1539"></a>
-<span class="sourceLineNo">1540</span>                                          "…‧‹›€™"+<a name="line.1540"></a>
-<span class="sourceLineNo">1541</span>                                          "←↑→↓↷↺↻"+ // left, up, right, down, "tap", "counterclockwise", "clockwise"<a name="line.1541"></a>
-<span class="sourceLineNo">1542</span>                                          "∀∁∂∃∄∅∆\n" +<a name="line.1542"></a>
-<span class="sourceLineNo">1543</span>                                          "∇∈∉∋∌∎∏∐∑−∓∔∕∖∘∙√∛∜∝\n" +<a name="line.1543"></a>
-<span class="sourceLineNo">1544</span>                                          "∞∟∠∡∢∣∤∥∦∧∨∩∪∫∬∮∯∱∲∳\n" +<a name="line.1544"></a>
-<span class="sourceLineNo">1545</span>                                          "∴∵∶∷≈≋≠≡≢≣≤≥≦≧≨≩≪≫─━\n" +<a name="line.1545"></a>
-<span class="sourceLineNo">1546</span>                                          "│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕\n" +<a name="line.1546"></a>
-<span class="sourceLineNo">1547</span>                                          "┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩\n" +<a name="line.1547"></a>
-<span class="sourceLineNo">1548</span>                                          "┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽\n" +<a name="line.1548"></a>
-<span class="sourceLineNo">1549</span>                                          "┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║\n" +<a name="line.1549"></a>
-<span class="sourceLineNo">1550</span>                                          "╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥\n" +<a name="line.1550"></a>
-<span class="sourceLineNo">1551</span>                                          "╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹\n" +<a name="line.1551"></a>
-<span class="sourceLineNo">1552</span>                                          "╺╻╼╽╾╿▁▄▅▆▇█▌▐░▒▓▔▖▗\n" +<a name="line.1552"></a>
-<span class="sourceLineNo">1553</span>                                          "▘▙▚▛▜▝▞▟";<a name="line.1553"></a>
-<span class="sourceLineNo">1554</span><a name="line.1554"></a>
-<span class="sourceLineNo">1555</span>    /**<a name="line.1555"></a>
-<span class="sourceLineNo">1556</span>     * Called when the {@link Application} is about to pause<a name="line.1556"></a>
-<span class="sourceLineNo">1557</span>     */<a name="line.1557"></a>
-<span class="sourceLineNo">1558</span>    @Override<a name="line.1558"></a>
-<span class="sourceLineNo">1559</span>    public void pause() {<a name="line.1559"></a>
+<span class="sourceLineNo">1513</span><a name="line.1513"></a>
+<span class="sourceLineNo">1514</span><a name="line.1514"></a>
+<span class="sourceLineNo">1515</span>    /**<a name="line.1515"></a>
+<span class="sourceLineNo">1516</span>     * Gets a TextureAtlas containing many icons with a distance field effect applied, allowing them to be used with<a name="line.1516"></a>
+<span class="sourceLineNo">1517</span>     * "stretchable" fonts and be resized in the same way. These will not look as-expected if stretchable fonts are not<a name="line.1517"></a>
+<span class="sourceLineNo">1518</span>     * in use, and will seem hazy and indistinct if the shader hasn't been set up for a distance field effect by<a name="line.1518"></a>
+<span class="sourceLineNo">1519</span>     * TextCellFactory (which stretchable fonts will do automatically). The one page of the TextureAtlas is 2048x2048,<a name="line.1519"></a>
+<span class="sourceLineNo">1520</span>     * which may be too large for some old, low-end Android phones, and possibly integrated graphics with fairly old<a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>     * processors on desktop. It has over 2000 icons.<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>     * &lt;br&gt;<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>     * The icons are CC-BY and the license is distributed with them, though the icons are not necessarily included with<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>     * SquidLib. If you use the icon atlas, be sure to include icons-license.txt with it and reference it with your<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>     * game's license and/or credits information.<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>     * &lt;br&gt;<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span>     * Needs files:<a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>     * &lt;ul&gt;<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons.atlas&lt;/li&gt;<a name="line.1529"></a>
+<span class="sourceLineNo">1530</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons.png&lt;/li&gt;<a name="line.1530"></a>
+<span class="sourceLineNo">1531</span>     *     &lt;li&gt;https://github.com/SquidPony/SquidLib/blob/master/assets/icons-license.txt Needed to credit artists&lt;/li&gt;<a name="line.1531"></a>
+<span class="sourceLineNo">1532</span>     * &lt;/ul&gt;<a name="line.1532"></a>
+<span class="sourceLineNo">1533</span>     * @return a TextureAtlas containing over 2000 icons with a distance field effect<a name="line.1533"></a>
+<span class="sourceLineNo">1534</span>     */<a name="line.1534"></a>
+<span class="sourceLineNo">1535</span>    public static TextureAtlas getIconAtlas()<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span>    {<a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>        initialize();<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span>        if(instance.iconAtlas == null)<a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>        {<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>            try {<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>                instance.iconAtlas = new TextureAtlas(Gdx.files.internal("icons.atlas"));<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>            } catch (Exception ignored) {<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>            }<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span>        }<a name="line.1544"></a>
+<span class="sourceLineNo">1545</span>        return instance.iconAtlas;<a name="line.1545"></a>
+<span class="sourceLineNo">1546</span>    }<a name="line.1546"></a>
+<span class="sourceLineNo">1547</span><a name="line.1547"></a>
+<span class="sourceLineNo">1548</span>    /**<a name="line.1548"></a>
+<span class="sourceLineNo">1549</span>     * This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any<a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>     * changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span>     */<a name="line.1551"></a>
+<span class="sourceLineNo">1552</span>    public static StatefulRNG getGuiRandom()<a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>    {<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span>        initialize();<a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>        if(instance.guiRandom == null)<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span>        {<a name="line.1556"></a>
+<span class="sourceLineNo">1557</span>            instance.guiRandom =  new StatefulRNG();<a name="line.1557"></a>
+<span class="sourceLineNo">1558</span>        }<a name="line.1558"></a>
+<span class="sourceLineNo">1559</span>        return instance.guiRandom;<a name="line.1559"></a>
 <span class="sourceLineNo">1560</span>    }<a name="line.1560"></a>
-<span class="sourceLineNo">1561</span><a name="line.1561"></a>
-<span class="sourceLineNo">1562</span>    /**<a name="line.1562"></a>
-<span class="sourceLineNo">1563</span>     * Called when the Application is about to be resumed<a name="line.1563"></a>
+<span class="sourceLineNo">1561</span>    /**<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span>     * This is a static global SquidColorCenter that can be used in places that just need an existing object that can do<a name="line.1562"></a>
+<span class="sourceLineNo">1563</span>     * things like analyze hue or saturation of a color.<a name="line.1563"></a>
 <span class="sourceLineNo">1564</span>     */<a name="line.1564"></a>
-<span class="sourceLineNo">1565</span>    @Override<a name="line.1565"></a>
-<span class="sourceLineNo">1566</span>    public void resume() {<a name="line.1566"></a>
-<span class="sourceLineNo">1567</span>    }<a name="line.1567"></a>
-<span class="sourceLineNo">1568</span><a name="line.1568"></a>
-<span class="sourceLineNo">1569</span>    /**<a name="line.1569"></a>
-<span class="sourceLineNo">1570</span>     * Called when the {@link Application} is about to be disposed<a name="line.1570"></a>
-<span class="sourceLineNo">1571</span>     */<a name="line.1571"></a>
-<span class="sourceLineNo">1572</span>    @Override<a name="line.1572"></a>
-<span class="sourceLineNo">1573</span>    public void dispose() {<a name="line.1573"></a>
-<span class="sourceLineNo">1574</span>        if(arial15 != null) {<a name="line.1574"></a>
-<span class="sourceLineNo">1575</span>            arial15.dispose();<a name="line.1575"></a>
-<span class="sourceLineNo">1576</span>            arial15 = null;<a name="line.1576"></a>
-<span class="sourceLineNo">1577</span>        }<a name="line.1577"></a>
-<span class="sourceLineNo">1578</span>        if(narrow1 != null) {<a name="line.1578"></a>
-<span class="sourceLineNo">1579</span>            narrow1.dispose();<a name="line.1579"></a>
-<span class="sourceLineNo">1580</span>            narrow1 = null;<a name="line.1580"></a>
-<span class="sourceLineNo">1581</span>        }<a name="line.1581"></a>
-<span class="sourceLineNo">1582</span>        if(narrow2 != null) {<a name="line.1582"></a>
-<span class="sourceLineNo">1583</span>            narrow2.dispose();<a name="line.1583"></a>
-<span class="sourceLineNo">1584</span>            narrow2 = null;<a name="line.1584"></a>
-<span class="sourceLineNo">1585</span>        }<a name="line.1585"></a>
-<span class="sourceLineNo">1586</span>        if(narrow3 != null) {<a name="line.1586"></a>
-<span class="sourceLineNo">1587</span>            narrow3.dispose();<a name="line.1587"></a>
-<span class="sourceLineNo">1588</span>            narrow3 = null;<a name="line.1588"></a>
-<span class="sourceLineNo">1589</span>        }<a name="line.1589"></a>
-<span class="sourceLineNo">1590</span>        if(smooth1 != null) {<a name="line.1590"></a>
-<span class="sourceLineNo">1591</span>            smooth1.dispose();<a name="line.1591"></a>
-<span class="sourceLineNo">1592</span>            smooth1 = null;<a name="line.1592"></a>
-<span class="sourceLineNo">1593</span>        }<a name="line.1593"></a>
-<span class="sourceLineNo">1594</span>        if(smooth2 != null) {<a name="line.1594"></a>
-<span class="sourceLineNo">1595</span>            smooth2.dispose();<a name="line.1595"></a>
-<span class="sourceLineNo">1596</span>            smooth2 = null;<a name="line.1596"></a>
-<span class="sourceLineNo">1597</span>        }<a name="line.1597"></a>
-<span class="sourceLineNo">1598</span>        if(square1 != null) {<a name="line.1598"></a>
-<span class="sourceLineNo">1599</span>            square1.dispose();<a name="line.1599"></a>
-<span class="sourceLineNo">1600</span>            square1 = null;<a name="line.1600"></a>
-<span class="sourceLineNo">1601</span>        }<a name="line.1601"></a>
-<span class="sourceLineNo">1602</span>        if(square2 != null) {<a name="line.1602"></a>
-<span class="sourceLineNo">1603</span>            square2.dispose();<a name="line.1603"></a>
-<span class="sourceLineNo">1604</span>            square2 = null;<a name="line.1604"></a>
-<span class="sourceLineNo">1605</span>        }<a name="line.1605"></a>
-<span class="sourceLineNo">1606</span>        if(smoothSquare != null) {<a name="line.1606"></a>
-<span class="sourceLineNo">1607</span>            smoothSquare.dispose();<a name="line.1607"></a>
-<span class="sourceLineNo">1608</span>            smoothSquare = null;<a name="line.1608"></a>
-<span class="sourceLineNo">1609</span>        }<a name="line.1609"></a>
-<span class="sourceLineNo">1610</span>        if(smoothSquareOld != null) {<a name="line.1610"></a>
-<span class="sourceLineNo">1611</span>            smoothSquareOld.dispose();<a name="line.1611"></a>
-<span class="sourceLineNo">1612</span>            smoothSquareOld = null;<a name="line.1612"></a>
-<span class="sourceLineNo">1613</span>        }<a name="line.1613"></a>
-<span class="sourceLineNo">1614</span>        if(distanceSquare != null) {<a name="line.1614"></a>
-<span class="sourceLineNo">1615</span>            distanceSquare.dispose();<a name="line.1615"></a>
-<span class="sourceLineNo">1616</span>            distanceSquare = null;<a name="line.1616"></a>
-<span class="sourceLineNo">1617</span>        }<a name="line.1617"></a>
-<span class="sourceLineNo">1618</span>        if(distanceNarrow != null) {<a name="line.1618"></a>
-<span class="sourceLineNo">1619</span>            distanceNarrow.dispose();<a name="line.1619"></a>
-<span class="sourceLineNo">1620</span>            distanceNarrow = null;<a name="line.1620"></a>
-<span class="sourceLineNo">1621</span>        }<a name="line.1621"></a>
-<span class="sourceLineNo">1622</span>        if(typewriterDistanceNarrow != null) {<a name="line.1622"></a>
-<span class="sourceLineNo">1623</span>            typewriterDistanceNarrow.dispose();<a name="line.1623"></a>
-<span class="sourceLineNo">1624</span>            typewriterDistanceNarrow = null;<a name="line.1624"></a>
+<span class="sourceLineNo">1565</span>    public static SquidColorCenter getSCC()<a name="line.1565"></a>
+<span class="sourceLineNo">1566</span>    {<a name="line.1566"></a>
+<span class="sourceLineNo">1567</span>        initialize();<a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>        if(instance.scc == null)<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>        {<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span>            instance.scc =  new SquidColorCenter();<a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>        }<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>        return instance.scc;<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>    }<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span><a name="line.1574"></a>
+<span class="sourceLineNo">1575</span>    /**<a name="line.1575"></a>
+<span class="sourceLineNo">1576</span>     * Special symbols that can be used as icons if you use the narrow default font.<a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>     */<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span>    public static final String narrowFontSymbols = "ሀሁሂሃሄህሆሇለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማሜ",<a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>                                  narrowFontAll = " !\"#$%&amp;'()*+,-./0123\n" +<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>                                          "456789:;&lt;=&gt;?@ABCDEFG\n" +<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span>                                          "HIJKLMNOPQRSTUVWXYZ[\n" +<a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>                                          "\\]^_`abcdefghijklmno\n" +<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span>                                          "pqrstuvwxyz{|}~¡¢£¤¥\n" +<a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>                                          "¦§¨©ª«¬\u00AD®¯°±²³´µ¶·¸¹\n" +<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>                                          "º»¼½¾¿×ß÷øɍɎሀሁሂሃሄህሆሇ\n" +<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span>                                          "ለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማ\n" +<a name="line.1586"></a>
+<span class="sourceLineNo">1587</span>                                          "ሜẞ‐‒–—―‖‗‘’‚‛“”„‟†‡•\n" +<a name="line.1587"></a>
+<span class="sourceLineNo">1588</span>                                          "…‧‹›€™"+<a name="line.1588"></a>
+<span class="sourceLineNo">1589</span>                                          "←↑→↓↷↺↻"+ // left, up, right, down, "tap", "counterclockwise", "clockwise"<a name="line.1589"></a>
+<span class="sourceLineNo">1590</span>                                          "∀∁∂∃∄∅∆\n" +<a name="line.1590"></a>
+<span class="sourceLineNo">1591</span>                                          "∇∈∉∋∌∎∏∐∑−∓∔∕∖∘∙√∛∜∝\n" +<a name="line.1591"></a>
+<span class="sourceLineNo">1592</span>                                          "∞∟∠∡∢∣∤∥∦∧∨∩∪∫∬∮∯∱∲∳\n" +<a name="line.1592"></a>
+<span class="sourceLineNo">1593</span>                                          "∴∵∶∷≈≋≠≡≢≣≤≥≦≧≨≩≪≫─━\n" +<a name="line.1593"></a>
+<span class="sourceLineNo">1594</span>                                          "│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕\n" +<a name="line.1594"></a>
+<span class="sourceLineNo">1595</span>                                          "┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩\n" +<a name="line.1595"></a>
+<span class="sourceLineNo">1596</span>                                          "┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽\n" +<a name="line.1596"></a>
+<span class="sourceLineNo">1597</span>                                          "┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║\n" +<a name="line.1597"></a>
+<span class="sourceLineNo">1598</span>                                          "╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥\n" +<a name="line.1598"></a>
+<span class="sourceLineNo">1599</span>                                          "╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹\n" +<a name="line.1599"></a>
+<span class="sourceLineNo">1600</span>                                          "╺╻╼╽╾╿▁▄▅▆▇█▌▐░▒▓▔▖▗\n" +<a name="line.1600"></a>
+<span class="sourceLineNo">1601</span>                                          "▘▙▚▛▜▝▞▟";<a name="line.1601"></a>
+<span class="sourceLineNo">1602</span><a name="line.1602"></a>
+<span class="sourceLineNo">1603</span>    /**<a name="line.1603"></a>
+<span class="sourceLineNo">1604</span>     * Called when the {@link Application} is about to pause<a name="line.1604"></a>
+<span class="sourceLineNo">1605</span>     */<a name="line.1605"></a>
+<span class="sourceLineNo">1606</span>    @Override<a name="line.1606"></a>
+<span class="sourceLineNo">1607</span>    public void pause() {<a name="line.1607"></a>
+<span class="sourceLineNo">1608</span>    }<a name="line.1608"></a>
+<span class="sourceLineNo">1609</span><a name="line.1609"></a>
+<span class="sourceLineNo">1610</span>    /**<a name="line.1610"></a>
+<span class="sourceLineNo">1611</span>     * Called when the Application is about to be resumed<a name="line.1611"></a>
+<span class="sourceLineNo">1612</span>     */<a name="line.1612"></a>
+<span class="sourceLineNo">1613</span>    @Override<a name="line.1613"></a>
+<span class="sourceLineNo">1614</span>    public void resume() {<a name="line.1614"></a>
+<span class="sourceLineNo">1615</span>    }<a name="line.1615"></a>
+<span class="sourceLineNo">1616</span><a name="line.1616"></a>
+<span class="sourceLineNo">1617</span>    /**<a name="line.1617"></a>
+<span class="sourceLineNo">1618</span>     * Called when the {@link Application} is about to be disposed<a name="line.1618"></a>
+<span class="sourceLineNo">1619</span>     */<a name="line.1619"></a>
+<span class="sourceLineNo">1620</span>    @Override<a name="line.1620"></a>
+<span class="sourceLineNo">1621</span>    public void dispose() {<a name="line.1621"></a>
+<span class="sourceLineNo">1622</span>        if(arial15 != null) {<a name="line.1622"></a>
+<span class="sourceLineNo">1623</span>            arial15.dispose();<a name="line.1623"></a>
+<span class="sourceLineNo">1624</span>            arial15 = null;<a name="line.1624"></a>
 <span class="sourceLineNo">1625</span>        }<a name="line.1625"></a>
-<span class="sourceLineNo">1626</span>        if(distanceCode != null) {<a name="line.1626"></a>
-<span class="sourceLineNo">1627</span>            distanceCode.dispose();<a name="line.1627"></a>
-<span class="sourceLineNo">1628</span>            distanceCode = null;<a name="line.1628"></a>
+<span class="sourceLineNo">1626</span>        if(narrow1 != null) {<a name="line.1626"></a>
+<span class="sourceLineNo">1627</span>            narrow1.dispose();<a name="line.1627"></a>
+<span class="sourceLineNo">1628</span>            narrow1 = null;<a name="line.1628"></a>
 <span class="sourceLineNo">1629</span>        }<a name="line.1629"></a>
-<span class="sourceLineNo">1630</span>        if(distanceDejaVu != null) {<a name="line.1630"></a>
-<span class="sourceLineNo">1631</span>            distanceDejaVu.dispose();<a name="line.1631"></a>
-<span class="sourceLineNo">1632</span>            distanceDejaVu = null;<a name="line.1632"></a>
+<span class="sourceLineNo">1630</span>        if(narrow2 != null) {<a name="line.1630"></a>
+<span class="sourceLineNo">1631</span>            narrow2.dispose();<a name="line.1631"></a>
+<span class="sourceLineNo">1632</span>            narrow2 = null;<a name="line.1632"></a>
 <span class="sourceLineNo">1633</span>        }<a name="line.1633"></a>
-<span class="sourceLineNo">1634</span>        if(distanceLean != null) {<a name="line.1634"></a>
-<span class="sourceLineNo">1635</span>            distanceLean.dispose();<a name="line.1635"></a>
-<span class="sourceLineNo">1636</span>            distanceLean = null;<a name="line.1636"></a>
+<span class="sourceLineNo">1634</span>        if(narrow3 != null) {<a name="line.1634"></a>
+<span class="sourceLineNo">1635</span>            narrow3.dispose();<a name="line.1635"></a>
+<span class="sourceLineNo">1636</span>            narrow3 = null;<a name="line.1636"></a>
 <span class="sourceLineNo">1637</span>        }<a name="line.1637"></a>
-<span class="sourceLineNo">1638</span>        if(distanceSlab != null) {<a name="line.1638"></a>
-<span class="sourceLineNo">1639</span>            distanceSlab.dispose();<a name="line.1639"></a>
-<span class="sourceLineNo">1640</span>            distanceSlab = null;<a name="line.1640"></a>
+<span class="sourceLineNo">1638</span>        if(smooth1 != null) {<a name="line.1638"></a>
+<span class="sourceLineNo">1639</span>            smooth1.dispose();<a name="line.1639"></a>
+<span class="sourceLineNo">1640</span>            smooth1 = null;<a name="line.1640"></a>
 <span class="sourceLineNo">1641</span>        }<a name="line.1641"></a>
-<span class="sourceLineNo">1642</span>        if(distanceLeanLight != null) {<a name="line.1642"></a>
-<span class="sourceLineNo">1643</span>            distanceLeanLight.dispose();<a name="line.1643"></a>
-<span class="sourceLineNo">1644</span>            distanceLeanLight = null;<a name="line.1644"></a>
+<span class="sourceLineNo">1642</span>        if(smooth2 != null) {<a name="line.1642"></a>
+<span class="sourceLineNo">1643</span>            smooth2.dispose();<a name="line.1643"></a>
+<span class="sourceLineNo">1644</span>            smooth2 = null;<a name="line.1644"></a>
 <span class="sourceLineNo">1645</span>        }<a name="line.1645"></a>
-<span class="sourceLineNo">1646</span>        if(distanceSlabLight != null) {<a name="line.1646"></a>
-<span class="sourceLineNo">1647</span>            distanceSlabLight.dispose();<a name="line.1647"></a>
-<span class="sourceLineNo">1648</span>            distanceSlabLight = null;<a name="line.1648"></a>
+<span class="sourceLineNo">1646</span>        if(square1 != null) {<a name="line.1646"></a>
+<span class="sourceLineNo">1647</span>            square1.dispose();<a name="line.1647"></a>
+<span class="sourceLineNo">1648</span>            square1 = null;<a name="line.1648"></a>
 <span class="sourceLineNo">1649</span>        }<a name="line.1649"></a>
-<span class="sourceLineNo">1650</span>        if(distanceClean != null) {<a name="line.1650"></a>
-<span class="sourceLineNo">1651</span>            distanceClean.dispose();<a name="line.1651"></a>
-<span class="sourceLineNo">1652</span>            distanceClean = null;<a name="line.1652"></a>
+<span class="sourceLineNo">1650</span>        if(square2 != null) {<a name="line.1650"></a>
+<span class="sourceLineNo">1651</span>            square2.dispose();<a name="line.1651"></a>
+<span class="sourceLineNo">1652</span>            square2 = null;<a name="line.1652"></a>
 <span class="sourceLineNo">1653</span>        }<a name="line.1653"></a>
-<span class="sourceLineNo">1654</span>        if(distancePrint != null) {<a name="line.1654"></a>
-<span class="sourceLineNo">1655</span>            distancePrint.dispose();<a name="line.1655"></a>
-<span class="sourceLineNo">1656</span>            distancePrint = null;<a name="line.1656"></a>
+<span class="sourceLineNo">1654</span>        if(smoothSquare != null) {<a name="line.1654"></a>
+<span class="sourceLineNo">1655</span>            smoothSquare.dispose();<a name="line.1655"></a>
+<span class="sourceLineNo">1656</span>            smoothSquare = null;<a name="line.1656"></a>
 <span class="sourceLineNo">1657</span>        }<a name="line.1657"></a>
-<span class="sourceLineNo">1658</span>        if(distanceOrbit != null) {<a name="line.1658"></a>
-<span class="sourceLineNo">1659</span>            distanceOrbit.dispose();<a name="line.1659"></a>
-<span class="sourceLineNo">1660</span>            distanceOrbit = null;<a name="line.1660"></a>
+<span class="sourceLineNo">1658</span>        if(smoothSquareOld != null) {<a name="line.1658"></a>
+<span class="sourceLineNo">1659</span>            smoothSquareOld.dispose();<a name="line.1659"></a>
+<span class="sourceLineNo">1660</span>            smoothSquareOld = null;<a name="line.1660"></a>
 <span class="sourceLineNo">1661</span>        }<a name="line.1661"></a>
-<span class="sourceLineNo">1662</span>        if(msdfSlab != null) {<a name="line.1662"></a>
-<span class="sourceLineNo">1663</span>            msdfSlab.dispose();<a name="line.1663"></a>
-<span class="sourceLineNo">1664</span>            msdfSlab = null;<a name="line.1664"></a>
+<span class="sourceLineNo">1662</span>        if(distanceSquare != null) {<a name="line.1662"></a>
+<span class="sourceLineNo">1663</span>            distanceSquare.dispose();<a name="line.1663"></a>
+<span class="sourceLineNo">1664</span>            distanceSquare = null;<a name="line.1664"></a>
 <span class="sourceLineNo">1665</span>        }<a name="line.1665"></a>
-<span class="sourceLineNo">1666</span>        if(msdfSlabItalic != null) {<a name="line.1666"></a>
-<span class="sourceLineNo">1667</span>            msdfSlabItalic.dispose();<a name="line.1667"></a>
-<span class="sourceLineNo">1668</span>            msdfSlabItalic = null;<a name="line.1668"></a>
+<span class="sourceLineNo">1666</span>        if(distanceNarrow != null) {<a name="line.1666"></a>
+<span class="sourceLineNo">1667</span>            distanceNarrow.dispose();<a name="line.1667"></a>
+<span class="sourceLineNo">1668</span>            distanceNarrow = null;<a name="line.1668"></a>
 <span class="sourceLineNo">1669</span>        }<a name="line.1669"></a>
-<span class="sourceLineNo">1670</span>        if(msdfLean != null) {<a name="line.1670"></a>
-<span class="sourceLineNo">1671</span>            msdfLean.dispose();<a name="line.1671"></a>
-<span class="sourceLineNo">1672</span>            msdfLean = null;<a name="line.1672"></a>
+<span class="sourceLineNo">1670</span>        if(typewriterDistanceNarrow != null) {<a name="line.1670"></a>
+<span class="sourceLineNo">1671</span>            typewriterDistanceNarrow.dispose();<a name="line.1671"></a>
+<span class="sourceLineNo">1672</span>            typewriterDistanceNarrow = null;<a name="line.1672"></a>
 <span class="sourceLineNo">1673</span>        }<a name="line.1673"></a>
-<span class="sourceLineNo">1674</span>        if(msdfLeanItalic != null) {<a name="line.1674"></a>
-<span class="sourceLineNo">1675</span>            msdfLeanItalic.dispose();<a name="line.1675"></a>
-<span class="sourceLineNo">1676</span>            msdfLeanItalic = null;<a name="line.1676"></a>
+<span class="sourceLineNo">1674</span>        if(distanceCode != null) {<a name="line.1674"></a>
+<span class="sourceLineNo">1675</span>            distanceCode.dispose();<a name="line.1675"></a>
+<span class="sourceLineNo">1676</span>            distanceCode = null;<a name="line.1676"></a>
 <span class="sourceLineNo">1677</span>        }<a name="line.1677"></a>
-<span class="sourceLineNo">1678</span>        if(msdfDejaVu != null) {<a name="line.1678"></a>
-<span class="sourceLineNo">1679</span>            msdfDejaVu.dispose();<a name="line.1679"></a>
-<span class="sourceLineNo">1680</span>            msdfDejaVu = null;<a name="line.1680"></a>
+<span class="sourceLineNo">1678</span>        if(distanceDejaVu != null) {<a name="line.1678"></a>
+<span class="sourceLineNo">1679</span>            distanceDejaVu.dispose();<a name="line.1679"></a>
+<span class="sourceLineNo">1680</span>            distanceDejaVu = null;<a name="line.1680"></a>
 <span class="sourceLineNo">1681</span>        }<a name="line.1681"></a>
-<span class="sourceLineNo">1682</span>        if(msdfDejaVuItalic != null) {<a name="line.1682"></a>
-<span class="sourceLineNo">1683</span>            msdfDejaVuItalic.dispose();<a name="line.1683"></a>
-<span class="sourceLineNo">1684</span>            msdfDejaVuItalic = null;<a name="line.1684"></a>
+<span class="sourceLineNo">1682</span>        if(distanceLean != null) {<a name="line.1682"></a>
+<span class="sourceLineNo">1683</span>            distanceLean.dispose();<a name="line.1683"></a>
+<span class="sourceLineNo">1684</span>            distanceLean = null;<a name="line.1684"></a>
 <span class="sourceLineNo">1685</span>        }<a name="line.1685"></a>
-<span class="sourceLineNo">1686</span>        if (unicode1 != null) {<a name="line.1686"></a>
-<span class="sourceLineNo">1687</span>            unicode1.dispose();<a name="line.1687"></a>
-<span class="sourceLineNo">1688</span>            unicode1 = null;<a name="line.1688"></a>
+<span class="sourceLineNo">1686</span>        if(distanceSlab != null) {<a name="line.1686"></a>
+<span class="sourceLineNo">1687</span>            distanceSlab.dispose();<a name="line.1687"></a>
+<span class="sourceLineNo">1688</span>            distanceSlab = null;<a name="line.1688"></a>
 <span class="sourceLineNo">1689</span>        }<a name="line.1689"></a>
-<span class="sourceLineNo">1690</span>        if (unicode2 != null) {<a name="line.1690"></a>
-<span class="sourceLineNo">1691</span>            unicode2.dispose();<a name="line.1691"></a>
-<span class="sourceLineNo">1692</span>            unicode2 = null;<a name="line.1692"></a>
+<span class="sourceLineNo">1690</span>        if(distanceLeanLight != null) {<a name="line.1690"></a>
+<span class="sourceLineNo">1691</span>            distanceLeanLight.dispose();<a name="line.1691"></a>
+<span class="sourceLineNo">1692</span>            distanceLeanLight = null;<a name="line.1692"></a>
 <span class="sourceLineNo">1693</span>        }<a name="line.1693"></a>
-<span class="sourceLineNo">1694</span>        if(familyLean != null) {<a name="line.1694"></a>
-<span class="sourceLineNo">1695</span>            familyLean.dispose();<a name="line.1695"></a>
-<span class="sourceLineNo">1696</span>            familyLean = null;<a name="line.1696"></a>
+<span class="sourceLineNo">1694</span>        if(distanceSlabLight != null) {<a name="line.1694"></a>
+<span class="sourceLineNo">1695</span>            distanceSlabLight.dispose();<a name="line.1695"></a>
+<span class="sourceLineNo">1696</span>            distanceSlabLight = null;<a name="line.1696"></a>
 <span class="sourceLineNo">1697</span>        }<a name="line.1697"></a>
-<span class="sourceLineNo">1698</span>        if(familySlab != null) {<a name="line.1698"></a>
-<span class="sourceLineNo">1699</span>            familySlab.dispose();<a name="line.1699"></a>
-<span class="sourceLineNo">1700</span>            familySlab = null;<a name="line.1700"></a>
+<span class="sourceLineNo">1698</span>        if(distanceClean != null) {<a name="line.1698"></a>
+<span class="sourceLineNo">1699</span>            distanceClean.dispose();<a name="line.1699"></a>
+<span class="sourceLineNo">1700</span>            distanceClean = null;<a name="line.1700"></a>
 <span class="sourceLineNo">1701</span>        }<a name="line.1701"></a>
-<span class="sourceLineNo">1702</span>        if(tentacle != null) {<a name="line.1702"></a>
-<span class="sourceLineNo">1703</span>            tentacle.dispose();<a name="line.1703"></a>
-<span class="sourceLineNo">1704</span>            tentacle = null;<a name="line.1704"></a>
+<span class="sourceLineNo">1702</span>        if(distancePrint != null) {<a name="line.1702"></a>
+<span class="sourceLineNo">1703</span>            distancePrint.dispose();<a name="line.1703"></a>
+<span class="sourceLineNo">1704</span>            distancePrint = null;<a name="line.1704"></a>
 <span class="sourceLineNo">1705</span>        }<a name="line.1705"></a>
-<span class="sourceLineNo">1706</span>        if(iconAtlas != null) {<a name="line.1706"></a>
-<span class="sourceLineNo">1707</span>            iconAtlas.dispose();<a name="line.1707"></a>
-<span class="sourceLineNo">1708</span>            iconAtlas = null;<a name="line.1708"></a>
+<span class="sourceLineNo">1706</span>        if(distanceOrbit != null) {<a name="line.1706"></a>
+<span class="sourceLineNo">1707</span>            distanceOrbit.dispose();<a name="line.1707"></a>
+<span class="sourceLineNo">1708</span>            distanceOrbit = null;<a name="line.1708"></a>
 <span class="sourceLineNo">1709</span>        }<a name="line.1709"></a>
-<span class="sourceLineNo">1710</span>        Gdx.app.removeLifecycleListener(this);<a name="line.1710"></a>
-<span class="sourceLineNo">1711</span>        instance = null;<a name="line.1711"></a>
-<span class="sourceLineNo">1712</span>    }<a name="line.1712"></a>
-<span class="sourceLineNo">1713</span>}<a name="line.1713"></a>
+<span class="sourceLineNo">1710</span>        if(msdfSlab != null) {<a name="line.1710"></a>
+<span class="sourceLineNo">1711</span>            msdfSlab.dispose();<a name="line.1711"></a>
+<span class="sourceLineNo">1712</span>            msdfSlab = null;<a name="line.1712"></a>
+<span class="sourceLineNo">1713</span>        }<a name="line.1713"></a>
+<span class="sourceLineNo">1714</span>        if(msdfSlabItalic != null) {<a name="line.1714"></a>
+<span class="sourceLineNo">1715</span>            msdfSlabItalic.dispose();<a name="line.1715"></a>
+<span class="sourceLineNo">1716</span>            msdfSlabItalic = null;<a name="line.1716"></a>
+<span class="sourceLineNo">1717</span>        }<a name="line.1717"></a>
+<span class="sourceLineNo">1718</span>        if(msdfLean != null) {<a name="line.1718"></a>
+<span class="sourceLineNo">1719</span>            msdfLean.dispose();<a name="line.1719"></a>
+<span class="sourceLineNo">1720</span>            msdfLean = null;<a name="line.1720"></a>
+<span class="sourceLineNo">1721</span>        }<a name="line.1721"></a>
+<span class="sourceLineNo">1722</span>        if(msdfLeanItalic != null) {<a name="line.1722"></a>
+<span class="sourceLineNo">1723</span>            msdfLeanItalic.dispose();<a name="line.1723"></a>
+<span class="sourceLineNo">1724</span>            msdfLeanItalic = null;<a name="line.1724"></a>
+<span class="sourceLineNo">1725</span>        }<a name="line.1725"></a>
+<span class="sourceLineNo">1726</span>        if(msdfDejaVu != null) {<a name="line.1726"></a>
+<span class="sourceLineNo">1727</span>            msdfDejaVu.dispose();<a name="line.1727"></a>
+<span class="sourceLineNo">1728</span>            msdfDejaVu = null;<a name="line.1728"></a>
+<span class="sourceLineNo">1729</span>        }<a name="line.1729"></a>
+<span class="sourceLineNo">1730</span>        if(msdfDejaVuItalic != null) {<a name="line.1730"></a>
+<span class="sourceLineNo">1731</span>            msdfDejaVuItalic.dispose();<a name="line.1731"></a>
+<span class="sourceLineNo">1732</span>            msdfDejaVuItalic = null;<a name="line.1732"></a>
+<span class="sourceLineNo">1733</span>        }<a name="line.1733"></a>
+<span class="sourceLineNo">1734</span>        if (unicode1 != null) {<a name="line.1734"></a>
+<span class="sourceLineNo">1735</span>            unicode1.dispose();<a name="line.1735"></a>
+<span class="sourceLineNo">1736</span>            unicode1 = null;<a name="line.1736"></a>
+<span class="sourceLineNo">1737</span>        }<a name="line.1737"></a>
+<span class="sourceLineNo">1738</span>        if (unicode2 != null) {<a name="line.1738"></a>
+<span class="sourceLineNo">1739</span>            unicode2.dispose();<a name="line.1739"></a>
+<span class="sourceLineNo">1740</span>            unicode2 = null;<a name="line.1740"></a>
+<span class="sourceLineNo">1741</span>        }<a name="line.1741"></a>
+<span class="sourceLineNo">1742</span>        if(familyLean != null) {<a name="line.1742"></a>
+<span class="sourceLineNo">1743</span>            familyLean.dispose();<a name="line.1743"></a>
+<span class="sourceLineNo">1744</span>            familyLean = null;<a name="line.1744"></a>
+<span class="sourceLineNo">1745</span>        }<a name="line.1745"></a>
+<span class="sourceLineNo">1746</span>        if(familySlab != null) {<a name="line.1746"></a>
+<span class="sourceLineNo">1747</span>            familySlab.dispose();<a name="line.1747"></a>
+<span class="sourceLineNo">1748</span>            familySlab = null;<a name="line.1748"></a>
+<span class="sourceLineNo">1749</span>        }<a name="line.1749"></a>
+<span class="sourceLineNo">1750</span>        if(tentacle != null) {<a name="line.1750"></a>
+<span class="sourceLineNo">1751</span>            tentacle.dispose();<a name="line.1751"></a>
+<span class="sourceLineNo">1752</span>            tentacle = null;<a name="line.1752"></a>
+<span class="sourceLineNo">1753</span>        }<a name="line.1753"></a>
+<span class="sourceLineNo">1754</span>        if(iconAtlas != null) {<a name="line.1754"></a>
+<span class="sourceLineNo">1755</span>            iconAtlas.dispose();<a name="line.1755"></a>
+<span class="sourceLineNo">1756</span>            iconAtlas = null;<a name="line.1756"></a>
+<span class="sourceLineNo">1757</span>        }<a name="line.1757"></a>
+<span class="sourceLineNo">1758</span>        Gdx.app.removeLifecycleListener(this);<a name="line.1758"></a>
+<span class="sourceLineNo">1759</span>        instance = null;<a name="line.1759"></a>
+<span class="sourceLineNo">1760</span>    }<a name="line.1760"></a>
+<span class="sourceLineNo">1761</span>}<a name="line.1761"></a>
 
 
 

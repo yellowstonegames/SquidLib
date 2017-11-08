@@ -661,8 +661,8 @@
 <span class="sourceLineNo">653</span>    public void draw (Batch batch, float parentAlpha) {<a name="line.653"></a>
 <span class="sourceLineNo">654</span>        textFactory.configureShader(batch);<a name="line.654"></a>
 <span class="sourceLineNo">655</span>        int inc = onlyRenderEven ? 2 : 1, widthInc = inc * cellWidth, heightInc = inc * cellHeight;<a name="line.655"></a>
-<span class="sourceLineNo">656</span>        float screenX = xOffset - (gridOffsetX &lt;= 0 ? 0 : cellWidth)/* - getX()*/,<a name="line.656"></a>
-<span class="sourceLineNo">657</span>                screenY_base = 1f + yOffset + (gridOffsetY &lt;= 0 ? 0 : cellHeight) + gridHeight * cellHeight, screenY;<a name="line.657"></a>
+<span class="sourceLineNo">656</span>        float screenX = xOffset - (gridOffsetX &lt;= 0 ? 0 : cellWidth) + getX(),<a name="line.656"></a>
+<span class="sourceLineNo">657</span>                screenY_base = 1f + yOffset + (gridOffsetY &lt;= 0 ? 0 : cellHeight) + gridHeight * cellHeight + getY(), screenY;<a name="line.657"></a>
 <span class="sourceLineNo">658</span>        for (int x = Math.max(0, gridOffsetX-1), xx = (gridOffsetX &lt;= 0) ? 0 : -1; xx &lt;= gridWidth &amp;&amp; x &lt; contents.length; x += inc, xx += inc, screenX += widthInc) {<a name="line.658"></a>
 <span class="sourceLineNo">659</span>            screenY = screenY_base;<a name="line.659"></a>
 <span class="sourceLineNo">660</span>            for (int y = Math.max(0, gridOffsetY-1), yy = (gridOffsetY &lt;= 0) ? 0 : -1; yy &lt;= gridHeight &amp;&amp; y &lt; contents[x].length; y += inc, yy += inc, screenY -= heightInc) {<a name="line.660"></a>
@@ -1112,7 +1112,7 @@
 <span class="sourceLineNo">1104</span>    protected /* @Nullable */ Actor createActor(int x, int y, char name, Color color, boolean doubleWidth) {<a name="line.1104"></a>
 <span class="sourceLineNo">1105</span>        final Actor a = textFactory.makeActor(name, scc.filter(color));<a name="line.1105"></a>
 <span class="sourceLineNo">1106</span>        a.setName(String.valueOf(name));<a name="line.1106"></a>
-<span class="sourceLineNo">1107</span>        a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());<a name="line.1107"></a>
+<span class="sourceLineNo">1107</span>        a.setPosition(adjustX(x, doubleWidth), adjustY(y));<a name="line.1107"></a>
 <span class="sourceLineNo">1108</span>        autoActors.add(a);<a name="line.1108"></a>
 <span class="sourceLineNo">1109</span>        return a;<a name="line.1109"></a>
 <span class="sourceLineNo">1110</span>    }<a name="line.1110"></a>
@@ -1120,7 +1120,7 @@
 <span class="sourceLineNo">1112</span>    protected /* @Nullable */ Actor createActor(int x, int y, char name, float encodedColor, boolean doubleWidth) {<a name="line.1112"></a>
 <span class="sourceLineNo">1113</span>        final Actor a = textFactory.makeActor(name, encodedColor);<a name="line.1113"></a>
 <span class="sourceLineNo">1114</span>        a.setName(String.valueOf(name));<a name="line.1114"></a>
-<span class="sourceLineNo">1115</span>        a.setPosition(adjustX(x, doubleWidth) - getX(), adjustY(y) - getY());<a name="line.1115"></a>
+<span class="sourceLineNo">1115</span>        a.setPosition(adjustX(x, doubleWidth), adjustY(y));<a name="line.1115"></a>
 <span class="sourceLineNo">1116</span>        autoActors.add(a);<a name="line.1116"></a>
 <span class="sourceLineNo">1117</span>        return a;<a name="line.1117"></a>
 <span class="sourceLineNo">1118</span>    }<a name="line.1118"></a>
@@ -1833,11 +1833,11 @@
 <span class="sourceLineNo">1825</span>                public void run() {<a name="line.1825"></a>
 <span class="sourceLineNo">1826</span>                    final ColorChangeImage<a name="line.1826"></a>
 <span class="sourceLineNo">1827</span>                            gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (dur * 40)), dur * 1.1f, doubleWidth);<a name="line.1827"></a>
-<span class="sourceLineNo">1828</span>                    gi.setPosition(adjustX(startX, doubleWidth) - getX(), adjustY(startY) - getY());<a name="line.1828"></a>
+<span class="sourceLineNo">1828</span>                    gi.setPosition(adjustX(startX, doubleWidth), adjustY(startY));<a name="line.1828"></a>
 <span class="sourceLineNo">1829</span>                    gi.setRotation(startRotation);<a name="line.1829"></a>
 <span class="sourceLineNo">1830</span>                    autoActors.add(gi);<a name="line.1830"></a>
 <span class="sourceLineNo">1831</span>                    sequence[0] = Actions.parallel(<a name="line.1831"></a>
-<span class="sourceLineNo">1832</span>                            Actions.moveTo(adjustX(endX, doubleWidth) - getX(), adjustY(endY) - getY(), dur),<a name="line.1832"></a>
+<span class="sourceLineNo">1832</span>                            Actions.moveTo(adjustX(endX, doubleWidth), adjustY(endY), dur),<a name="line.1832"></a>
 <span class="sourceLineNo">1833</span>                            Actions.rotateTo(endRotation, dur));<a name="line.1833"></a>
 <span class="sourceLineNo">1834</span>                    sequence[1] = Actions.run(new Runnable() {<a name="line.1834"></a>
 <span class="sourceLineNo">1835</span>                        @Override<a name="line.1835"></a>
@@ -1854,11 +1854,11 @@
 <span class="sourceLineNo">1846</span>        else {<a name="line.1846"></a>
 <span class="sourceLineNo">1847</span>            final ColorChangeImage<a name="line.1847"></a>
 <span class="sourceLineNo">1848</span>                    gi = textFactory.makeGlyphImage(glyph, scc.gradient(startColor, endColor, (int) (dur * 40)), dur * 1.1f, doubleWidth);<a name="line.1848"></a>
-<span class="sourceLineNo">1849</span>            gi.setPosition(adjustX(startX, doubleWidth) - getX(), adjustY(startY) - getY());<a name="line.1849"></a>
+<span class="sourceLineNo">1849</span>            gi.setPosition(adjustX(startX, doubleWidth), adjustY(startY));<a name="line.1849"></a>
 <span class="sourceLineNo">1850</span>            gi.setRotation(startRotation);<a name="line.1850"></a>
 <span class="sourceLineNo">1851</span>            autoActors.add(gi);<a name="line.1851"></a>
 <span class="sourceLineNo">1852</span>            sequence[0] = Actions.parallel(<a name="line.1852"></a>
-<span class="sourceLineNo">1853</span>                    Actions.moveTo(adjustX(endX, doubleWidth) - getX(), adjustY(endY) - getY(), dur),<a name="line.1853"></a>
+<span class="sourceLineNo">1853</span>                    Actions.moveTo(adjustX(endX, doubleWidth), adjustY(endY), dur),<a name="line.1853"></a>
 <span class="sourceLineNo">1854</span>                    Actions.rotateTo(endRotation, dur));<a name="line.1854"></a>
 <span class="sourceLineNo">1855</span>            sequence[1] = Actions.run(new Runnable() {<a name="line.1855"></a>
 <span class="sourceLineNo">1856</span>                @Override<a name="line.1856"></a>

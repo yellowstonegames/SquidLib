@@ -59,11 +59,16 @@ Current Features:
 -   Several fonts provided as resources, some narrow, some square, for unicode line drawing to work out-of-the-box
   -   Multiple fonts use a distance field effect, allowing them to be scaled and stretched smoothly
   -   The distance field fonts are difficult to make yourself, so lots are provided in the assets folder or zip file
-  -   The TextFamily class allows text to be written in bold and/or italic using some new assets
+  -   GDXMarkup allows text to be written with tags to specify color, bold and/or italic formatting (the last two use special fonts)
 -   Multiple grids of different configurations can be used simultaneously in the same display
 -   Multiple grids of different configurations can be overlaid allowing for transparency effects
   -   A convenience class, SquidLayers provides foreground and background setting with this
   -   SquidLayers also allows background brightness changes (such as from torchlight) with just an int argument
+-   The SparseLayers class revises some earlier classes for simplicity and a cleaner implementation, but can also be significantly faster
+  -   Unlike SquidLayers, it doesn't render any cells in any layers unless they have something in them, so it makes more sense when there are many layers
+    -   (SquidLayers renders all cells in all layers each frame, with an exception that it won't render cells that are outside the rendered rectangle)
+  -   SparseLayers is still capable of pretty much everything SquidLayers can do, just with an API that's a lot smaller
+  -   The demo distributed with SquidSetup uses SparseLayers by default
 -   Robust libGDX animation support, from simple sliding to "burst" effects that create rotating chars spreading out of a cell
 -   Starting with 3.0.0 beta 5, there is support for variable-width fonts in various widgets, which can be much more legible
 -   Can create multiple overlapping layers
@@ -89,6 +94,9 @@ Current Features:
 -   Starting with 3.0.0 beta 5, lots of options are available for generating gradients, including with Filters, and gradients that wrap around like a rainbow
 -   In recent betas (7 onward), there's a filter that adjusts the brightness of red and green to help players with common forms of red-green colorblindness distinguish game objects that would otherwise be too similar
 -   SquidColorCenter (and potentially other IColorCenter implementations) allow finding and adjusting the hue, saturation, and value of colors
+-   GDXMarkup allows interaction with LibGDX's system of markup tags if you want, or it can generate special IColoredString values
+  -   IColoredStrings can be created on their own and used throughout SquidLib; they don't need to use LibGDX's Color class but usually do
+  -   The IColoredString values GDXMarkup produces can also have bold and italic info, which some fonts (any font with "Family" in the name) can render
 
 ### Roguelike-Intended Toolkit
 -   Robust Field of View and Line of Sight system

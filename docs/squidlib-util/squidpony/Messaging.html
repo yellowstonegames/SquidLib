@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -193,6 +193,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></span></code>
 <div class="block">Properties of nouns needed to correctly conjugate those nouns and refer to them with pronouns, such as genders.</div>
 </td>
@@ -267,6 +271,65 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait)</code>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given group of users and that group's associated NounTrait.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;target,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait)</code>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given Group of users, that group's associated NounTrait, the given group of targets, and
+ that group's NounTrait.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-java.lang.String...-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;target,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;extra)</code>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given Group of users, that group's associated NounTrait, the given group of targets, and
+ that group's NounTrait.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-java.lang.String-squidpony.Messaging.NounTrait-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;target,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait)</code>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given Group of users, that group's associated NounTrait, the given target, and their
+ NounTrait.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-java.lang.String-squidpony.Messaging.NounTrait-java.lang.String...-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;target,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;extra)</code>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given Group of users, that group's associated NounTrait, the given target, and their
+ NounTrait.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
          <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait)</code>
@@ -274,7 +337,32 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  conjugated terms for the given user and their associated NounTrait.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;target,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait)</code>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given user, that user's associated NounTrait, the given Group of targets, and that
+ group's NounTrait.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-java.lang.String...-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+         <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;target,
+         <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;extra)</code>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given user, that user's associated NounTrait, the given Group of targets, and that
+ group's NounTrait.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-java.lang.String-squidpony.Messaging.NounTrait-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
@@ -285,7 +373,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  conjugated terms for the given user, their associated NounTrait, the given target, and their NounTrait.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Messaging.html#transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-java.lang.String-squidpony.Messaging.NounTrait-java.lang.String...-">transform</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
@@ -325,7 +413,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>userPattern</h4>
-<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/Messaging.html#line.456">userPattern</a></pre>
+<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/Messaging.html#line.639">userPattern</a></pre>
 </li>
 </ul>
 <a name="targetPattern">
@@ -334,7 +422,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>targetPattern</h4>
-<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/Messaging.html#line.461">targetPattern</a></pre>
+<pre>protected static final&nbsp;regexodus.Pattern <a href="../src-html/squidpony/Messaging.html#line.644">targetPattern</a></pre>
 </li>
 </ul>
 </li>
@@ -368,7 +456,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>transform</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.405">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.418">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
                                <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait)</pre>
 <div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
@@ -383,13 +471,37 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>transform</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.435">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait)</pre>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given group of users and that group's associated NounTrait. The NounTrait only matters
+ if it is first-person or second-person (in which case this uses the plural form) or if the Group contains one
+ member (in which case it uses any gendered pronouns specified by userTrait); it uses <a href="../squidpony/Messaging.NounTrait.html#GROUP"><code>Messaging.NounTrait.GROUP</code></a> in
+ any other case.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the message to transform; should contain "@" or "$" in it, at least, to be replaced</dd>
+<dd><code>user</code> - a <code>Group</code> of users (a String array) for cases where it can replace text, like "@" or "@Name"</dd>
+<dd><code>userTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how user should be referred to</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String resulting from the processing of message</dd>
+</dl>
+</li>
+</ul>
 <a name="transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-java.lang.String-squidpony.Messaging.NounTrait-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>transform</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.421">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.451">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
                                <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;target,
@@ -408,13 +520,97 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-java.lang.String-squidpony.Messaging.NounTrait-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>transform</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.471">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;target,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait)</pre>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given Group of users, that group's associated NounTrait, the given target, and their
+ NounTrait. The NounTrait for user only matters if it is first-person or second-person (in which case this uses
+ the plural form) or if the Group contains one member (in which case it uses any gendered pronouns specified by
+ userTrait); it uses <a href="../squidpony/Messaging.NounTrait.html#GROUP"><code>Messaging.NounTrait.GROUP</code></a> in any other case.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced</dd>
+<dd><code>user</code> - the <code>Group</code> of users for cases where they can replace text like "@" or "@Name"</dd>
+<dd><code>userTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how user should be referred to</dd>
+<dd><code>target</code> - the name of the target for cases where it can replace text like "^" or "^Name"</dd>
+<dd><code>targetTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how the target should be referred to</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String resulting from the processing of message</dd>
+</dl>
+</li>
+</ul>
+<a name="transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>transform</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.491">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;target,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait)</pre>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given Group of users, that group's associated NounTrait, the given group of targets, and
+ that group's NounTrait. The NounTraits only matter if they are is first-person or second-person (in which case
+ this uses the plural form) or if a Group contains one member (in which case it uses any gendered pronouns
+ specified by userTrait or targetTrait); it uses <a href="../squidpony/Messaging.NounTrait.html#GROUP"><code>Messaging.NounTrait.GROUP</code></a> in any other case.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced</dd>
+<dd><code>user</code> - the <code>Group</code> of users for cases where they can replace text like "@" or "@Name"</dd>
+<dd><code>userTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how user should be referred to</dd>
+<dd><code>target</code> - the <code>Group</code> of targets for cases where they can replace text like "@" or "@Name"</dd>
+<dd><code>targetTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how the target should be referred to</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String resulting from the processing of message</dd>
+</dl>
+</li>
+</ul>
+<a name="transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>transform</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.512">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;target,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait)</pre>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given user, that user's associated NounTrait, the given Group of targets, and that
+ group's NounTrait. The NounTrait for target only matters if it is first-person or second-person (in which case
+ this uses the plural form) or if the Group contains one member (in which case it uses any gendered pronouns
+ specified by targetTrait); it uses <a href="../squidpony/Messaging.NounTrait.html#GROUP"><code>Messaging.NounTrait.GROUP</code></a> in any other case.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced</dd>
+<dd><code>user</code> - the name of the user for cases where it can replace text like "@" or "@Name"</dd>
+<dd><code>userTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how user should be referred to</dd>
+<dd><code>target</code> - the <code>Group</code> of targets for cases where they can replace text like "@" or "@Name"</dd>
+<dd><code>targetTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how the target should be referred to</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String resulting from the processing of message</dd>
+</dl>
+</li>
+</ul>
 <a name="transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-java.lang.String-squidpony.Messaging.NounTrait-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>transform</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.441">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.532">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
                                <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;target,
@@ -437,13 +633,109 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-java.lang.String-squidpony.Messaging.NounTrait-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>transform</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.562">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;target,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;extra)</pre>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given Group of users, that group's associated NounTrait, the given target, and their
+ NounTrait. Also replaces the nth occurrence of "~" with the matching nth item in extra, so the first "~" is
+ replaced with the first item in extra, the second "~" with the second item, and so on until one is exhausted. The
+ NounTrait for user only matters if it is first-person or second-person (in which case this uses the plural form)
+ or if the Group contains one member (in which case it uses any gendered pronouns specified by userTrait); it uses
+ <a href="../squidpony/Messaging.NounTrait.html#GROUP"><code>Messaging.NounTrait.GROUP</code></a> in any other case.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced</dd>
+<dd><code>user</code> - the <code>Group</code> of users for cases where they can replace text like "@" or "@Name"</dd>
+<dd><code>userTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how user should be referred to</dd>
+<dd><code>target</code> - the name of the target for cases where it can replace text like "^" or "^Name"</dd>
+<dd><code>targetTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how the target should be referred to</dd>
+<dd><code>extra</code> - an array or vararg of String where the nth item in extra will replace the nth occurrence of "~"</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String resulting from the processing of message</dd>
+</dl>
+</li>
+</ul>
+<a name="transform-java.lang.CharSequence-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>transform</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.592">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;user,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;target,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;extra)</pre>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given Group of users, that group's associated NounTrait, the given group of targets, and
+ that group's NounTrait. Also replaces the nth occurrence of "~" with the matching nth item in extra, so the first
+ "~" is replaced with the first item in extra, the second "~" with the second item, and so on until one is
+ exhausted. The NounTraits only matter if they are is first-person or second-person (in which case
+ this uses the plural form) or if a Group contains one member (in which case it uses any gendered pronouns
+ specified by userTrait or targetTrait); it uses <a href="../squidpony/Messaging.NounTrait.html#GROUP"><code>Messaging.NounTrait.GROUP</code></a> in any other case.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced</dd>
+<dd><code>user</code> - the <code>Group</code> of users for cases where they can replace text like "@" or "@Name"</dd>
+<dd><code>userTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how user should be referred to</dd>
+<dd><code>target</code> - the <code>Group</code> of targets for cases where they can replace text like "@" or "@Name"</dd>
+<dd><code>targetTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how the target should be referred to</dd>
+<dd><code>extra</code> - an array or vararg of String where the nth item in extra will replace the nth occurrence of "~"</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String resulting from the processing of message</dd>
+</dl>
+</li>
+</ul>
+<a name="transform-java.lang.CharSequence-java.lang.String-squidpony.Messaging.NounTrait-squidpony.Messaging.Group-squidpony.Messaging.NounTrait-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>transform</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Messaging.html#line.623">transform</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;message,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;user,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;userTrait,
+                               <a href="../squidpony/Messaging.Group.html" title="class in squidpony">Messaging.Group</a>&nbsp;target,
+                               <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a>&nbsp;targetTrait,
+                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;extra)</pre>
+<div class="block">Takes message and replaces any of the special terms this recognizes, like @, ^, and $, with the appropriately-
+ conjugated terms for the given user, that user's associated NounTrait, the given Group of targets, and that
+ group's NounTrait. Also replaces the nth occurrence of "~" with the matching nth item in extra, so the first "~"
+ is replaced with the first item in extra, the second "~" with the second item, and so on until one is exhausted.
+ The NounTrait for target only matters if it is first-person or second-person (in which case this uses the plural
+ form) or if the Group contains one member (in which case it uses any gendered pronouns specified by targetTrait);
+ it uses <a href="../squidpony/Messaging.NounTrait.html#GROUP"><code>Messaging.NounTrait.GROUP</code></a> in any other case.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>message</code> - the message to transform; should contain "@", "^", or "$" in it, at least, to be replaced</dd>
+<dd><code>user</code> - the name of the user for cases where it can replace text like "@" or "@Name"</dd>
+<dd><code>userTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how user should be referred to</dd>
+<dd><code>target</code> - the <code>Group</code> of targets for cases where they can replace text like "@" or "@Name"</dd>
+<dd><code>targetTrait</code> - the <a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony"><code>Messaging.NounTrait</code></a> enum that determines how the target should be referred to</dd>
+<dd><code>extra</code> - an array or vararg of String where the nth item in extra will replace the nth occurrence of "~"</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String resulting from the processing of message</dd>
+</dl>
+</li>
+</ul>
 <a name="learnIrregularWord-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>learnIrregularWord</h4>
-<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/Messaging.html#line.482">learnIrregularWord</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;word,
+<pre>public static&nbsp;void&nbsp;<a href="../src-html/squidpony/Messaging.html#line.665">learnIrregularWord</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;word,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;firstPersonSingular,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;firstPersonPlural,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;secondPersonSingular,

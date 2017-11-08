@@ -689,8 +689,8 @@
 <span class="sourceLineNo">681</span>     */<a name="line.681"></a>
 <span class="sourceLineNo">682</span>    public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, float backgroundLightness, float mixBackground) {<a name="line.682"></a>
 <span class="sourceLineNo">683</span>        foregroundPanel.put(x, y, c, encodedForeground);<a name="line.683"></a>
-<span class="sourceLineNo">684</span>        backgroundPanel.put(x, y, encodedBackground,<a name="line.684"></a>
-<span class="sourceLineNo">685</span>                lightnesses[x][y] + (int) (backgroundLightness * 255), mixBackground);<a name="line.685"></a>
+<span class="sourceLineNo">684</span>        backgroundPanel.put(x, y, encodedBackground, backgroundLightness, mixBackground);<a name="line.684"></a>
+<span class="sourceLineNo">685</span>        //        lightnesses[x][y] + (int) (backgroundLightness * 255), mixBackground);<a name="line.685"></a>
 <span class="sourceLineNo">686</span>        return this;<a name="line.686"></a>
 <span class="sourceLineNo">687</span>    }<a name="line.687"></a>
 <span class="sourceLineNo">688</span><a name="line.688"></a>
@@ -1181,8 +1181,8 @@
 <span class="sourceLineNo">1173</span>     */<a name="line.1173"></a>
 <span class="sourceLineNo">1174</span>    @Override<a name="line.1174"></a>
 <span class="sourceLineNo">1175</span>    public void setPosition(float x, float y) {<a name="line.1175"></a>
-<span class="sourceLineNo">1176</span>        super.setPosition(x, y);<a name="line.1176"></a>
-<span class="sourceLineNo">1177</span>        setBounds(x, y, getWidth(), getHeight());<a name="line.1177"></a>
+<span class="sourceLineNo">1176</span>        //super.setPosition(x, y);<a name="line.1176"></a>
+<span class="sourceLineNo">1177</span>        //setBounds(x, y, getWidth(), getHeight());<a name="line.1177"></a>
 <span class="sourceLineNo">1178</span>        foregroundPanel.setPosition(x, y);<a name="line.1178"></a>
 <span class="sourceLineNo">1179</span>        backgroundPanel.setPosition(x, y);<a name="line.1179"></a>
 <span class="sourceLineNo">1180</span>        for (SquidPanel panel : extraPanels) {<a name="line.1180"></a>

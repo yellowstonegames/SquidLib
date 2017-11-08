@@ -1444,7 +1444,7 @@
 <span class="sourceLineNo">1436</span>    }<a name="line.1436"></a>
 <span class="sourceLineNo">1437</span>    public static double noise(final float x, final float y, final float z, final int seed) {<a name="line.1437"></a>
 <span class="sourceLineNo">1438</span>        double n0, n1, n2, n3;<a name="line.1438"></a>
-<span class="sourceLineNo">1439</span>        final float[] gradient3DLUT = SeededNoise.gradient3DLUT;<a name="line.1439"></a>
+<span class="sourceLineNo">1439</span>        final double[] gradient3DLUT = SeededNoise.gradient3DLUT;<a name="line.1439"></a>
 <span class="sourceLineNo">1440</span>        final float s = (x + y + z) * F3;<a name="line.1440"></a>
 <span class="sourceLineNo">1441</span>        final int i = fastFloor(x + s),<a name="line.1441"></a>
 <span class="sourceLineNo">1442</span>                j = fastFloor(y + s),<a name="line.1442"></a>

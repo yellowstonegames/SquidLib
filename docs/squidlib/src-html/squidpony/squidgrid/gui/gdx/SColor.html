@@ -11608,7 +11608,7 @@
 <span class="sourceLineNo">11600</span>        return new float[][][]<a name="line.11600"></a>
 <span class="sourceLineNo">11601</span>                {<a name="line.11601"></a>
 <span class="sourceLineNo">11602</span>                        new float[width][height],<a name="line.11602"></a>
-<span class="sourceLineNo">11603</span>                        ArrayTools.fill(-0x1.fffffep126f, width, height)<a name="line.11603"></a>
+<span class="sourceLineNo">11603</span>                        ArrayTools.fill(FLOAT_WHITE, width, height)<a name="line.11603"></a>
 <span class="sourceLineNo">11604</span>                };<a name="line.11604"></a>
 <span class="sourceLineNo">11605</span>    }<a name="line.11605"></a>
 <span class="sourceLineNo">11606</span><a name="line.11606"></a>
@@ -11623,7 +11623,7 @@
 <span class="sourceLineNo">11615</span>     */<a name="line.11615"></a>
 <span class="sourceLineNo">11616</span>    public static float[][][] eraseColoredLighting(float[][][] original) {<a name="line.11616"></a>
 <span class="sourceLineNo">11617</span>        ArrayTools.fill(original[0], 0f);<a name="line.11617"></a>
-<span class="sourceLineNo">11618</span>        ArrayTools.fill(original[1], -0x1.fffffep126f);<a name="line.11618"></a>
+<span class="sourceLineNo">11618</span>        ArrayTools.fill(original[1], FLOAT_WHITE);<a name="line.11618"></a>
 <span class="sourceLineNo">11619</span>        return original;<a name="line.11619"></a>
 <span class="sourceLineNo">11620</span>    }<a name="line.11620"></a>
 <span class="sourceLineNo">11621</span><a name="line.11621"></a>
@@ -11663,7 +11663,7 @@
 <span class="sourceLineNo">11655</span>            for (int y = 0; y &lt; lights[0].length; y++) {<a name="line.11655"></a>
 <span class="sourceLineNo">11656</span>                reuse[1][x][y] = ((reuse[0][x][y] = (float) lights[x][y]) &gt; 0f)<a name="line.11656"></a>
 <span class="sourceLineNo">11657</span>                        ? color<a name="line.11657"></a>
-<span class="sourceLineNo">11658</span>                        : -0x1.fffffep126f; // the color white as a float<a name="line.11658"></a>
+<span class="sourceLineNo">11658</span>                        : FLOAT_WHITE; // the color white as a float<a name="line.11658"></a>
 <span class="sourceLineNo">11659</span>            }<a name="line.11659"></a>
 <span class="sourceLineNo">11660</span>        }<a name="line.11660"></a>
 <span class="sourceLineNo">11661</span>        return reuse;<a name="line.11661"></a>
@@ -11681,9 +11681,9 @@
 <span class="sourceLineNo">11673</span>        int w = basis[0].length, h = basis[0][0].length;<a name="line.11673"></a>
 <span class="sourceLineNo">11674</span>        for (int x = 0; x &lt; w &amp;&amp; x &lt; w; x++) {<a name="line.11674"></a>
 <span class="sourceLineNo">11675</span>            for (int y = 0; y &lt; h &amp;&amp; y &lt; h; y++) {<a name="line.11675"></a>
-<span class="sourceLineNo">11676</span>                basis[1][x][y] = (basis[1][x][y] == -0x1.fffffep126f) // white as float<a name="line.11676"></a>
+<span class="sourceLineNo">11676</span>                basis[1][x][y] = (basis[1][x][y] == FLOAT_WHITE)<a name="line.11676"></a>
 <span class="sourceLineNo">11677</span>                        ? other[1][x][y]<a name="line.11677"></a>
-<span class="sourceLineNo">11678</span>                        : (other[1][x][y] == -0x1.fffffep126f) // white as float<a name="line.11678"></a>
+<span class="sourceLineNo">11678</span>                        : (other[1][x][y] == FLOAT_WHITE)<a name="line.11678"></a>
 <span class="sourceLineNo">11679</span>                        ? basis[1][x][y]<a name="line.11679"></a>
 <span class="sourceLineNo">11680</span>                        : lerpFloatColors(basis[1][x][y], other[1][x][y], (other[0][x][y] - basis[0][x][y]) * 0.5f + 0.5f);<a name="line.11680"></a>
 <span class="sourceLineNo">11681</span>                basis[0][x][y] = Math.min(1.0f, basis[0][x][y] + other[0][x][y]);<a name="line.11681"></a>

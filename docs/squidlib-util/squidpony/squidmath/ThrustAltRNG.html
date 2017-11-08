@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,25 +113,23 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.36">ThrustAltRNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.43">ThrustAltRNG</a>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A variant on <a href="../../squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath"><code>ThrustRNG</code></a> that gives up a small amount of speed to attain better quality. ThrustAltRNG is
  expected to pass BigCrush, which is a difficult statistical quality test that is part of TestU01, because it does so
  well on other statistical tests. On <a href="http://gjrand.sourceforge.net/">gjrand</a>'s "testunif" checks, this
- does very well on 100GB of tested data, with the "Overall summary one sided P-value P = 0.904", where 1 is perfect
- and 0.1 or less is a failure. On <a href="http://pracrand.sourceforge.net/">PractRand</a>, this runs past 1TB of
+ does very well on 100GB of tested data, with the "Overall summary one sided P-value P = 0.981", where 1 is perfect
+ and 0.1 or less is a failure. On <a href="http://pracrand.sourceforge.net/">PractRand</a>, this runs past 4TB of
  generated numbers without finding any failures, and this version avoids issues with Gap-16 tests that cause ThrustRNG
  to fail at 32GB and can cause slight variations on the code here to fail at 256GB. Like ThrustRNG and LightRNG, this
  changes its state with a steady fixed increment, and does cipher-like adjustments to the current state to randomize
- it. Unlike those two RNGs, ThrustAltRNG uses both the current and subsequent state in its calculations, which appears
- critical to improve quality given how simple the algorithm is. The period on ThrustAltRNG is 2 to the 64.
- ThrustAltRNG is a bit slower than ThrustRNG (but seems to have better quality), while it is faster than LightRNG,
- XoRoRNG, and most other very-high-quality generators (not counting ThrustRNG). Similarly to other cipher-like PRNGs,
- ThrustAltRNG has a <a href="../../squidpony/squidmath/ThrustAltRNG.html#determine-long-"><code>determine(long)</code></a> method that takes a state as a long and returns a deterministic random
- number (each input has one output). Unlike some generators (like PermutedRNG), changing the seed even slightly
- generally produces completely different results, which applies primarily to determine() but also the first number
- generated in a series of nextLong() calls.
+ it. The period on ThrustAltRNG is 2 to the 64. ThrustAltRNG is a bit slower than ThrustRNG (but seems to have better
+ quality), while it is faster than LightRNG, XoRoRNG, and most other very-high-quality generators (not counting
+ ThrustRNG). Similarly to other cipher-like PRNGs, ThrustAltRNG has a <a href="../../squidpony/squidmath/ThrustAltRNG.html#determine-long-"><code>determine(long)</code></a> method that takes a
+ state as a long and returns a deterministic random number (each input has one output). Unlike some generators (like
+ PermutedRNG), changing the seed even slightly generally produces completely different results, which applies
+ primarily to determine() but also the first number generated in a series of nextLong() calls.
  <br>
  As an aside, this generator has probably been adjusted more by me than any other generator in the library, and if
  quality is only somewhat more important than speed, this should be ideal, though it isn't the fastest and doesn't
@@ -141,6 +139,14 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  LightRNG on gjrand's tests despite LightRNG using significantly more operations (LightRNG has "P = 0.305" on gjrand
  with 100GB tested and fails 2 of 13 tests with grade 1 failures, while ThrustAltRNG fails none). IsaacRNG is also
  substantially slower than most other generators, though it offers better promise of security.
+ <br>
+ This generator has changed since its introduction; the initial version used both the current and subsequent states
+ during each calculation, while this version only uses the current state (which it updates as it reads it). This makes
+ the <a href="../../squidpony/squidmath/ThrustAltRNG.html#skip-long-"><code>skip(long)</code></a> method much simpler and (because it requires less operations in general) probably faster as
+ well, while it seems to have no performance impact on the normal <a href="../../squidpony/squidmath/ThrustAltRNG.html#nextLong--"><code>nextLong()</code></a> and <a href="../../squidpony/squidmath/ThrustAltRNG.html#next-int-"><code>next(int)</code></a> methods.
+ Quality is very high, actually better than the first version according to gjrand (the earlier one had a P-value of
+ 0.904, while this has 0.981), but this goes even further on PractRand tests than the previous one (passing 4TB after
+ almost a day of testing), while the earlier version was showing signs of imminent failure around 2TB.
  <br>
  Created by Tommy Ettinger on 10/18/2017.</div>
 <dl>
@@ -223,13 +229,6 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#determineBare-long-">determineBare</a></span>(long&nbsp;state)</code>
-<div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
- number.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#determineBounded-long-int-">determineBounded</a></span>(long&nbsp;state,
                 int&nbsp;bound)</code>
@@ -237,47 +236,61 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive).</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#determineDouble-long-">determineDouble</a></span>(long&nbsp;state)</code>
+<div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+ will return the same float.</div>
+</td>
+</tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#determineFloat-long-">determineFloat</a></span>(long&nbsp;state)</code>
+<div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+ return the same float.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#equals-java.lang.Object-">equals</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#getState--">getState</a></span>()</code>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#setState-long-">setState</a></span>(long&nbsp;state)</code>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#skip-long-">skip</a></span>(long&nbsp;advance)</code>
 <div class="block">Advances or rolls back the ThrustAltRNG's state without actually generating each number.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ThrustAltRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -309,7 +322,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>state</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.41">state</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.48">state</a></pre>
 <div class="block">Can be any long value.</div>
 </li>
 </ul>
@@ -327,7 +340,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>ThrustAltRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.46">ThrustAltRNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.53">ThrustAltRNG</a>()</pre>
 <div class="block">Creates a new generator seeded using Math.random.</div>
 </li>
 </ul>
@@ -337,7 +350,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ThrustAltRNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.51">ThrustAltRNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.58">ThrustAltRNG</a>(long&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -354,7 +367,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.61">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.68">getState</a>()</pre>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -370,7 +383,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.71">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.78">setState</a>(long&nbsp;state)</pre>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -386,7 +399,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.83">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.90">next</a>(int&nbsp;bits)</pre>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
 <dl>
@@ -405,7 +418,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.97">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.104">nextLong</a>()</pre>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
  <p>
@@ -424,7 +437,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>skip</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.111">skip</a>(long&nbsp;advance)</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.118">skip</a>(long&nbsp;advance)</pre>
 <div class="block">Advances or rolls back the ThrustAltRNG's state without actually generating each number. Skips forward
  or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
  and returns the random number produced at that step (you can get the state with <a href="../../squidpony/squidmath/ThrustAltRNG.html#getState--"><code>getState()</code></a>).</div>
@@ -442,7 +455,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.126">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.133">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -460,7 +473,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.130">toString</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.137">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -473,7 +486,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.135">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.142">equals</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -486,7 +499,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.145">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.152">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -499,12 +512,12 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.160">determine</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.167">determine</a>(long&nbsp;state)</pre>
 <div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
  number. This is expected to be called with some changing variable, e.g. <code>determine(++state)</code>, where
  the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
- <code>0xA99635D5B8597AE5L</code> within this method, so using a small increment won't be much different from using a
- very large one, as long as it is odd. The period is 2 to the 64.</div>
+ <code>0x6C8E9CF570932BD5L</code> within this method, so using a small increment won't be much different from using a
+ very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - a variable that should be different every time you want a different random result;
@@ -515,27 +528,49 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </dl>
 </li>
 </ul>
-<a name="determineBare-long-">
+<a name="determineFloat-long-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>determineBare</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.180">determineBare</a>(long&nbsp;state)</pre>
-<div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
- number. This is expected to be called with a changing variable using a specific pattern, namely
- <code>determine(state += 0xA99635D5B8597AE5L)</code>, which was specifically matched up to the rest of the generator.
- You can add the given number to go forwards or subtract it to go backwards in the sequence. The period
- is 2 to the 64. This method may rarely be preferable over <a href="../../squidpony/squidmath/ThrustAltRNG.html#determine-long-"><code>determine(long)</code></a> if your code controls how
- state is updated, and can make sure it updates by the given amount or a similar value; this version saves a small
- amount of time by not needing to multiply the local state.</div>
+<h4>determineFloat</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.185">determineFloat</a>(long&nbsp;state)</pre>
+<div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+ return the same float. This is expected to be called with a changing variable, e.g. <code>determine(++state)</code>,
+ where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
+ <code>0x6C8E9CF570932BD5L</code> within this method, so using a small increment won't be much different from using a
+ very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
+ only 2 to the 30 possible floats between 0 and 1.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - a variable that should be different every time you want a different random result;
-              using <code>determine(state += 0xA99635D5B8597AE5L)</code> is recommended to go forwards or
-              <code>determine(state -= 0xA99635D5B8597AE5L)</code> to generate numbers in reverse order</dd>
+              using <code>determine(++state)</code> is recommended to go forwards or <code>determine(--state)</code> to
+              generate numbers in reverse order</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a pseudo-random permutation of state</dd>
+<dd>a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by <code>state</code></dd>
+</dl>
+</li>
+</ul>
+<a name="determineDouble-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>determineDouble</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.200">determineDouble</a>(long&nbsp;state)</pre>
+<div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+ will return the same float. This is expected to be called with a changing variable, e.g.
+ <code>determine(++state)</code>, where the increment for state should be odd but otherwise doesn't really matter. This
+ multiplies state by <code>0x6C8E9CF570932BD5L</code> within this method, so using a small increment won't be much
+ different from using a very large one, as long as it is odd. The period is 2 to the 64 if you increment or
+ decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - a variable that should be different every time you want a different random result;
+              using <code>determine(++state)</code> is recommended to go forwards or <code>determine(--state)</code> to
+              generate numbers in reverse order</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by <code>state</code></dd>
 </dl>
 </li>
 </ul>
@@ -545,15 +580,15 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.200">determineBounded</a>(long&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ThrustAltRNG.html#line.216">determineBounded</a>(long&nbsp;state,
                                    int&nbsp;bound)</pre>
 <div class="block">Given a state that should usually change each time this is called, and a bound that limits the result to some
  (typically fairly small) int, produces a pseudo-random int between 0 and bound (exclusive). The bound can be
  negative, which will cause this to produce 0 or a negative int; otherwise this produces 0 or a positive int.
  The state should change each time this is called, generally by incrementing by an odd number (not an even number,
  especially not 0). It's fine to use <code>determineBounded(++state, bound)</code> to get a different int each time.
- The period is usually 2 to the 64, but some bounds may reduce the period (in the extreme case, a bound of 1 would
- force only 0 to be generated, so that would make the period 1).</div>
+ The period is usually 2 to the 64 when you increment or decrement by 1, but some bounds may reduce the period (in
+ the extreme case, a bound of 1 would force only 0 to be generated, so that would make the period 1).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - a variable that should be different every time you want a different random result;

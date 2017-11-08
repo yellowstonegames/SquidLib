@@ -9,8 +9,8 @@ public class ZoneDemoLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "SquidLib GDX Zone Demo";
-		config.width = 50 * 25;
-		config.height = 30 * 25;
+		config.width = 90 * 18;
+		config.height = 40 * 18;
 		config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
 		config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
 		config.addIcon("Tentacle-128.png", Files.FileType.Classpath);

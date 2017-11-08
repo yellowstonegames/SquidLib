@@ -1402,15 +1402,39 @@ public class DefaultResources implements LifecycleListener {
             return instance.msdfDejaVuItalic.copy();
         return null;
     }
-
+    /**
+     * Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a
+     * slab-serif geometric style, that should scale cleanly to many sizes and supports 4 styles (regular, bold, italic,
+     * and bold italic). Caches the result for later calls. The font used is Iosevka with Slab style, an open-source
+     * (SIL Open Font License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several
+     * customizations thanks to Iosevka's special build process, applied to the 4 styles. It supports a lot of glyphs,
+     * including quite a bit of extended Latin, Greek, and Cyrillic, but also circled letters and digits and the
+     * necessary box drawing characters (which line up even for italic text). The high glyph count means the part of the
+     * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
+     * much larger. A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect
+     * ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a
+     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
+     * deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
+     * version SquidLib has, {@link #getLeanFamily()}.
+     * <br>
+     * <br>
+     * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work, but it can also be used as a TextCellFactory.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-distance.png</li>
+     * </ul>
+     * @return the TextFamily object that can represent many sizes of the font Iosevka-Slab.ttf with 4 styles
+     */
     public static TextFamily getSlabFamily()
     {
         initialize();
         if(instance.familySlab == null)
         {
             try {
-                instance.familySlab = new TextFamily()
-                        .defaultFamilySlabDistance();
+                instance.familySlab = new TextFamily().defaultFamilySlabDistance();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1419,15 +1443,39 @@ public class DefaultResources implements LifecycleListener {
             return instance.familySlab.copy();
         return null;
     }
-
+    /**
+     * Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a
+     * sans-serif geometric style, that should scale cleanly to many sizes and supports 4 styles (regular, bold, italic,
+     * and bold italic). Caches the result for later calls. The font used is Iosevka, an open-source (SIL Open Font
+     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations
+     * thanks to Iosevka's special build process, applied to the 4 styles. It supports a lot of glyphs, including quite
+     * a bit of extended Latin, Greek, and Cyrillic, but also circled letters and digits and the necessary box drawing
+     * characters (which line up even for italic text). The high glyph count means the part of the image for each glyph
+     * is smaller, though, so this may look slightly pixelated if it starts small and is resized to much larger. A cell
+     * width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect ratio); this allows the
+     * font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a true typography expert)
+     * called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a>
+     * You may want to try using both this version of Iosevka without serifs and the other version SquidLib has,
+     * {@link #getSlabFamily()}.
+     * <br>
+     * <br>
+     * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work, but it can also be used as a TextCellFactory.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-distance.png</li>
+     * </ul>
+     * @return the TextFamily object that can represent many sizes of the font Iosevka.ttf with 4 styles
+     */
     public static TextFamily getLeanFamily()
     {
         initialize();
         if(instance.familyLean == null)
         {
             try {
-                instance.familyLean = new TextFamily()
-                        .defaultFamilyLeanDistance();
+                instance.familyLean = new TextFamily().defaultFamilyLeanDistance();
             } catch (Exception e) {
                 e.printStackTrace();
             }

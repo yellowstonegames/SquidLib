@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -163,13 +163,13 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SaltyQRNG.html#SaltyQRNG-int-">SaltyQRNG</a></span>(int&nbsp;salt)</code>
-<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384).</div>
+<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 32768).</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SaltyQRNG.html#SaltyQRNG-int-long-">SaltyQRNG</a></span>(int&nbsp;salt,
          long&nbsp;advance)</code>
-<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384) and a point
+<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 32768) and a point
  it has already advanced to in the sequence this generates.</div>
 </td>
 </tr>
@@ -239,13 +239,17 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SaltyQRNG.html#nextShort--">nextShort</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SaltyQRNG.html#setSalt-int-">setSalt</a></span>(int&nbsp;newSalt)</code>
 <div class="block">Sets the salt, which should usually be a non-negative int less than 16384, though it can be any int (only the
- bottom 14 bits are used).</div>
+ bottom 15 bits are used).</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SaltyQRNG.html#setState-long-">setState</a></span>(long&nbsp;state)</code>
 <div class="block">Sets the current "state" of the QRNG (which number in the sequence it will produce), using the least-significant
@@ -292,14 +296,14 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <li class="blockList">
 <h4>SaltyQRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.47">SaltyQRNG</a>(int&nbsp;salt)</pre>
-<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384). The salt
+<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 32768). The salt
  determines the precise sequence that will be produced over the whole lifetime of the QRNG, and two SaltyQRNG
  objects with different salt values should produce different sequences, at least at some points in generation.
  The starting state will be 0, which this tolerates well. The salt is allowed to be 0, since some changes are made
  to the salt before use.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>salt</code> - an int; only the bottom 14 bits will be used, so different values range from 0 to 16383</dd>
+<dd><code>salt</code> - an int; only the bottom 15 bits will be used, so different values range from 0 to 32767</dd>
 </dl>
 </li>
 </ul>
@@ -311,7 +315,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <h4>SaltyQRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.63">SaltyQRNG</a>(int&nbsp;salt,
                  long&nbsp;advance)</pre>
-<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384) and a point
+<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 32768) and a point
  it has already advanced to in the sequence this generates. The salt determines the precise sequence that will be
  produced over the whole lifetime of the QRNG, and two SaltyQRNG objects with different salt values should produce
  different sequences, at least at some points in generation. The advance will only have its least-significant 16
@@ -319,7 +323,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  be 0, since some changes are made to the salt before use.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>salt</code> - an int; only the bottom 14 bits will be used, so different values range from 0 to 16383</dd>
+<dd><code>salt</code> - an int; only the bottom 15 bits will be used, so different values range from 0 to 32767</dd>
 <dd><code>advance</code> - a long to use as the state; only the bottom 32 bits are used, so any int can also be used</dd>
 </dl>
 </li>
@@ -349,12 +353,12 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <h4>setSalt</h4>
 <pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.83">setSalt</a>(int&nbsp;newSalt)</pre>
 <div class="block">Sets the salt, which should usually be a non-negative int less than 16384, though it can be any int (only the
- bottom 14 bits are used). The salt determines the precise sequence that will be produced over the whole lifetime
+ bottom 15 bits are used). The salt determines the precise sequence that will be produced over the whole lifetime
  of the QRNG, and two SaltyQRNG objects with different salt values should produce different sequences, at least at
  some points in generation. The salt is allowed to be 0, since some changes are made to the salt before use.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>newSalt</code> - an int; only the bottom 14 bits will be used, so different values range from 0 to 16383</dd>
+<dd><code>newSalt</code> - an int; only the bottom 15 bits will be used, so different values range from 0 to 32767</dd>
 </dl>
 </li>
 </ul>
@@ -407,13 +411,22 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </dl>
 </li>
 </ul>
+<a name="nextShort--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextShort</h4>
+<pre>public&nbsp;short&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.113">nextShort</a>()</pre>
+</li>
+</ul>
 <a name="next-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.120">next</a>(int&nbsp;bits)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.124">next</a>(int&nbsp;bits)</pre>
 <div class="block">Advances the state twice, causing the same state change as a call to <a href="../../squidpony/squidmath/SaltyQRNG.html#nextInt--"><code>nextInt()</code></a> or two calls to
  <a href="../../squidpony/squidmath/SaltyQRNG.html#nextFloat--"><code>nextFloat()</code></a> or <a href="../../squidpony/squidmath/SaltyQRNG.html#nextDouble--"><code>nextDouble()</code></a>.</div>
 <dl>
@@ -432,7 +445,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.130">nextLong</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.134">nextLong</a>()</pre>
 <div class="block">Advances the state four times, causing the same state change as two calls to <a href="../../squidpony/squidmath/SaltyQRNG.html#nextInt--"><code>nextInt()</code></a> or
  <a href="../../squidpony/squidmath/SaltyQRNG.html#next-int-"><code>next(int)</code></a>, or four calls to <a href="../../squidpony/squidmath/SaltyQRNG.html#nextFloat--"><code>nextFloat()</code></a> or <a href="../../squidpony/squidmath/SaltyQRNG.html#nextDouble--"><code>nextDouble()</code></a>.</div>
 <dl>
@@ -449,7 +462,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.142">nextDouble</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.146">nextDouble</a>()</pre>
 <div class="block">Gets the next double in the sequence, between 0.0 (inclusive) and 1.0 (exclusive)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -463,7 +476,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextFloat</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.151">nextFloat</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.157">nextFloat</a>()</pre>
 <div class="block">Gets the next float in the sequence, between 0.0f (inclusive) and 1.0f (exclusive)</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -477,7 +490,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.157">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;<a href="../../src-html/squidpony/squidmath/SaltyQRNG.html#line.164">copy</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#copy--">RandomnessSource</a></code></span></div>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to

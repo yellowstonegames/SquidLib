@@ -122,12 +122,12 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a></dd>
+<dd><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ExplosionEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ExplosionEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.GlowBallEffect</a>, <a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a></dd>
 </dl>
 <hr>
 <br>
 <pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/annotation/Beta.html?is-external=true" title="class or interface in squidpony.annotation">@Beta</a>
-public abstract class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.31">PanelEffect</a>
+public abstract class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.32">PanelEffect</a>
 extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <div class="block">Various special effects that can be applied to a <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> as an
  <code>Action</code>. The PanelEffect class is abstract and has implementations as static
@@ -169,9 +169,13 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.GlowBallEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.GlowBallEffect</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.PulseEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.PulseEffect</a></span></code>&nbsp;</td>
 </tr>
@@ -306,7 +310,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>target</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.32">target</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.33">target</a></pre>
 </li>
 </ul>
 <a name="validCells">
@@ -315,7 +319,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>validCells</h4>
-<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.33">validCells</a></pre>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.34">validCells</a></pre>
 </li>
 </ul>
 <a name="fastInSlowMidFastOut">
@@ -324,7 +328,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>fastInSlowMidFastOut</h4>
-<pre>public static&nbsp;com.badlogic.gdx.math.Interpolation <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.774">fastInSlowMidFastOut</a></pre>
+<pre>public static&nbsp;com.badlogic.gdx.math.Interpolation <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.950">fastInSlowMidFastOut</a></pre>
 </li>
 </ul>
 </li>
@@ -341,7 +345,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.35">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting)</pre>
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.36">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting)</pre>
 </li>
 </ul>
 <a name="PanelEffect-squidpony.squidgrid.gui.gdx.IPackedColorPanel-float-">
@@ -350,7 +354,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.40">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.41">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                       float&nbsp;duration)</pre>
 </li>
 </ul>
@@ -360,7 +364,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PanelEffect</h4>
-<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.46">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
+<pre>protected&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.47">PanelEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/IPackedColorPanel.html" title="interface in squidpony.squidgrid.gui.gdx">IPackedColorPanel</a>&nbsp;targeting,
                       float&nbsp;duration,
                       <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a>&nbsp;valid)</pre>
 </li>
@@ -379,7 +383,7 @@ extends com.badlogic.gdx.scenes.scene2d.actions.TemporalAction</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeGrenadeEffect</h4>
-<pre>public static&nbsp;com.badlogic.gdx.scenes.scene2d.Action&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.792">makeGrenadeEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a>&nbsp;projectile,
+<pre>public static&nbsp;com.badlogic.gdx.scenes.scene2d.Action&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PanelEffect.html#line.968">makeGrenadeEffect</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/PanelEffect.ProjectileEffect.html" title="class in squidpony.squidgrid.gui.gdx">PanelEffect.ProjectileEffect</a>&nbsp;projectile,
                                                                        com.badlogic.gdx.scenes.scene2d.Action&nbsp;result)</pre>
 <div class="block">Convenience method to make a ProjectileEffect take an "arc-like" path toward the target, where it is fast at the
  beginning and end of its motion and is reaching the height of its arc at the center, before triggering another

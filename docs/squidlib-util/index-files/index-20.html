@@ -89,11 +89,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#SaltyQRNG-int-">SaltyQRNG(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
 <dd>
-<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384).</div>
+<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 32768).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#SaltyQRNG-int-long-">SaltyQRNG(int, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
 <dd>
-<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 16384) and a point
+<div class="block">Creates a SaltyQRNG with a specific salt (this should usually be a non-negative int less than 32768) and a point
  it has already advanced to in the sequence this generates.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PoissonDisk.html#sampleCircle-squidpony.squidmath.Coord-float-float-int-int-">sampleCircle(Coord, float, float, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PoissonDisk.html" title="class in squidpony.squidmath">PoissonDisk</a></dt>
@@ -1062,7 +1062,7 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SaltyQRNG.html#setSalt-int-">setSalt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></dt>
 <dd>
 <div class="block">Sets the salt, which should usually be a non-negative int less than 16384, though it can be any int (only the
- bottom 14 bits are used).</div>
+ bottom 15 bits are used).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/WaveletNoise.html#setScale-float-">setScale(float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/WaveletNoise.html" title="class in squidpony.squidmath">WaveletNoise</a></dt>
 <dd>&nbsp;</dd>
@@ -2637,6 +2637,12 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#swayTight-float-">swayTight(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">Limited-use; takes any float and produces a float in the 0f to 1f range, with a graph of input to output that
+ looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
+ input is halfway between two integers, smoothly curving at any points between those extremes.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#swayTight-double-">swayTight(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Limited-use; takes any double and produces a double in the 0.0 to 1.0 range, with a graph of input to output that
  looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
  input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </dd>
