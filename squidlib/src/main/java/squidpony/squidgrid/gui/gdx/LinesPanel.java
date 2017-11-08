@@ -186,6 +186,18 @@ public class LinesPanel<T extends Color> extends Actor {
 	}
 
 	/**
+	 * Used to help find the last parameter to give the constructor of this class.
+	 * @param tcf the TextCellFactory being used
+	 * @param height the height of the area you want to put text into
+	 * @return The last argument to give to
+	 *         {@link #LinesPanel(IMarkup, BitmapFont, int)} when the
+	 *         desired <b>pixel</b> height is {@code height}
+	 */
+	public static int computeMaxLines(TextCellFactory tcf, float height) {
+		return MathUtils.ceil(height / tcf.lineHeight);
+	}
+
+	/**
 	 * Adds {@code ics} first in {@code this}, possibly removing the last entry,
 	 * if {@code this}' size would grow over {@link #maxLines}.
 	 *
@@ -248,6 +260,7 @@ public class LinesPanel<T extends Color> extends Actor {
 		final float width = getWidth();
 		if(tcf != null)
 			tcf.configureShader(batch);
+
 		final BitmapFontData data = font.getData();
 		final float lineHeight = data.lineHeight;
 		final float height = lineHeight * maxLines;

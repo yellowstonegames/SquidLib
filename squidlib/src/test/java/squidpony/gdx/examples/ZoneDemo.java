@@ -16,7 +16,6 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.MixedGenerator;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
@@ -48,13 +47,14 @@ public class ZoneDemo extends ApplicationAdapter {
     @Override
     public void create () {
         batch = new SpriteBatch();
-        width = 50;
-        height = 30;
+        width = 90;
+        height = 40;
 
-        cellWidth = 25 * INTERNAL_ZOOM;
-        cellHeight = 25 * INTERNAL_ZOOM;
-        TextCellFactory tcf = DefaultResources.getStretchableSquareFont().addSwap('.', ' ');
+        cellWidth = 18 * INTERNAL_ZOOM;
+        cellHeight = 18 * INTERNAL_ZOOM;
+        TextCellFactory tcf = DefaultResources.getStretchableHeavySquareFont().addSwap('.', ' ');
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
+        //display.setTextSize(cellWidth, cellHeight);
         //tcf.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f));
         screenWidth = width * cellWidth;
         screenHeight = height * cellHeight;
@@ -67,17 +67,19 @@ public class ZoneDemo extends ApplicationAdapter {
         dungeonGen = new DungeonGenerator(width, height, rng);
 //        dungeonGen.addWater(10);
         //dungeonGen.addDoors(15, true);
-        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.4);
-        serpent.putBoxRoomCarvers(2);
-        serpent.putWalledBoxRoomCarvers(2);
-        serpent.putWalledRoundRoomCarvers(2);
-        serpent.putCaveCarvers(4);
+        SerpentMapGenerator serpent = new SerpentMapGenerator(width, height, rng, 0.2);
+        serpent.putBoxRoomCarvers(1);
+        serpent.putWalledBoxRoomCarvers(3);
+        serpent.putWalledRoundRoomCarvers(4);
+        serpent.putCaveCarvers(2);
+        /*
         MixedGenerator mixed = new MixedGenerator(width, height, rng);
         mixed.putWalledBoxRoomCarvers(9);
         mixed.putWalledRoundRoomCarvers(6);
         mixed.putCaveCarvers(2);
+        */
         //OrganicMapGenerator organic = new OrganicMapGenerator(0.55, 0.65, width, height, rng);
-        bareDungeon = dungeonGen.generate(mixed.generate());
+        bareDungeon = dungeonGen.generate(serpent.generate());
 
         //bareDungeon = DungeonUtility.closeDoors(bareDungeon);
 
@@ -262,15 +264,15 @@ public class ZoneDemo extends ApplicationAdapter {
                 //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
                 //new TextCellFactory().fontDistanceField("Noto-Sans-distance.fnt", "Noto-Sans-distance.png")
                 //        .setSmoothingMultiplier(0.4f).height(30).width(7)
-                DefaultResources.getStretchablePrintFont().width(7 * INTERNAL_ZOOM).height(30 * INTERNAL_ZOOM));
+                DefaultResources.getSlabFamily().width(11).height(24));
+                //DefaultResources.getStretchablePrintFont().width(7 * INTERNAL_ZOOM).height(30 * INTERNAL_ZOOM));
         current.backgroundColor = colorCenter.get(30, 30, 30);
         final ColoredStringList<Color> text = new ColoredStringList<Color>();
-        text.addColoredText("SquidLib ", colorCenter.get(255, 0, 0));
-        text.addText("is brought to you by Tommy Ettinger, Eben Howard, smelC, and others");
+        //text.addColoredText("SquidLib ", colorCenter.get(255, 0, 0));
+        text.addText(GDXMarkup.instance.colorString("[*][CW Pale Indigo]SquidLib[] is brought to you by Tommy Ettinger, Eben Howard, smelC, and others"));
         /* Jump a line */
-        text.addEmptyLine();
-        text.addText("If you wanna contribute, visit ");
-        text.addColoredText("https://github.com/SquidPony/SquidLib", colorCenter.get(29, 0, 253));
+        text.addTextOnNewLine(GDXMarkup.instance.colorString("If you wanna contribute, visit " +
+                "[/][CW Bright Sapphire]https://github.com/SquidPony/SquidLib[]"));
         /* // useful during debugging
         char[] big = new char[50];
         Arrays.fill(big, 'A');

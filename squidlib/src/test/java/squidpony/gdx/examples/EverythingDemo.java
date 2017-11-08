@@ -126,7 +126,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private SquidColorCenter[] colorCenters;
     private int currentCenter;
     private boolean changingColors = false;
-    private TextFamily textFactory;
+    private TextCellFactory textFactory;
     public static final int INTERNAL_ZOOM = 1;
     private Viewport viewport, messageViewport;
     private Camera camera;
@@ -233,17 +233,21 @@ public class EverythingDemo extends ApplicationAdapter {
         //in the EverythingDemoLauncher's main method. Because they are scaled up by an integer here, they can be scaled
         //down when rendered, allowing certain small details to appear sharper. This _only_ works with distance field,
         //a.k.a. stretchable, fonts! INTERNAL_ZOOM is a tradeoff between rendering more pixels to increase quality (when
-        // values are high) or rendering fewer pixels for speed (when values are low). Using 2 seems to work well.
+        //values are high) or rendering fewer pixels for speed (when values are low). Using 1 seems to work well with
+        //the current technique for distance field font rendering, and in contrast to earlier versions, using higher
+        //internal zoom levels can actually reduce quality when the font is scaled down to be fairly small.
         cellWidth = 13 * INTERNAL_ZOOM;
         cellHeight = 23 * INTERNAL_ZOOM;
-        // getStretchableFont loads an embedded font, Inconsolata-LGC-Custom, that is a distance field font as mentioned
-        // earlier. We set the smoothing multiplier on it only because we are using internal zoom to increase sharpness
-        // on small details, but if the smoothing is incorrect some sizes look blurry or over-sharpened. This can be set
-        // manually if you use a constant internal zoom; here we use 1f for internal zoom 1, about 2/3f for zoom 2, and
-        // about 1/2f for zoom 3. If you have more zooms as options for some reason, this formula should hold for many
-        // cases but probably not all.
-        textFactory = DefaultResources.getSlabFamily();
-        textFactory.width(cellWidth).height(cellHeight).initBySize();
+        // getSlabFamily loads a family of fonts, Iosevka Slab, that have a distance field effect as mentioned earlier.
+        // We set its width and height to the cellWidth and cellHeight, then call initBySize() to finish its setup.
+        // SquidLib has font families so that different formatting can be rendered without changing the font.
+        // getSlabFamily is actually 4 fonts merged into one, with a regular, bold, italic, and bold italic version all
+        // clumped into one TextCellFactory; some parts of SquidLib, like GDXMarkup, know how to turn special markup in
+        // a String into a modified IColoredString with not just color markup coded into the IColoredString, but bold
+        // and italic stored specially in (usually) unused parts of the font. Unlike one approach tried briefly, this
+        // technique does not require any changes to the classes used, and works with an ordinary TextCellFactory and a
+        // GDXMarkup to apply the bold and italic alterations.
+        textFactory = DefaultResources.getSlabFamily().width(cellWidth).height(cellHeight).initBySize();
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
@@ -269,8 +273,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1.175f,cellHeight * 1.11f);
-        display.setTextSize(cellWidth * 1.175f, cellHeight  * 1.11f);
+        messages.setTextSize(cellWidth * 1.1f,cellHeight * 1.125f);
+        display.setTextSize(cellWidth * 1.1f, cellHeight  * 1.125f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
