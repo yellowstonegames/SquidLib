@@ -22,256 +22,256 @@ public class WeightedLetterNamegen {
 //<editor-fold defaultstate="collapsed" desc="Viking Style static name list">
 
     public static final String[] VIKING_STYLE_NAMES = new String[]{
-        "Andor",
-        "Baatar",
-        "Beowulf",
-        "Drogo",
-        "Freya",
-        "Grog",
-        "Gruumsh",
-        "Grunt",
-        "Hodor",
-        "Hrothgar",
-        "Hrun",
-        "Korg",
-        "Lothar",
-        "Odin",
-        "Theodrin",
-        "Thor",
-        "Yngvar",
-        "Xandor"
+            "Andor",
+            "Baatar",
+            "Beowulf",
+            "Drogo",
+            "Freya",
+            "Grog",
+            "Gruumsh",
+            "Grunt",
+            "Hodor",
+            "Hrothgar",
+            "Hrun",
+            "Korg",
+            "Lothar",
+            "Odin",
+            "Theodrin",
+            "Thor",
+            "Yngvar",
+            "Xandor"
     };
-//</editor-fold>
+    //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Star Wars Style static name list">
     public static final String[] STAR_WARS_STYLE_NAMES = new String[]{
-        "Lutoif Vap",
-        "Nasoi Seert",
-        "Jitpai",
-        "Sose",
-        "Vainau",
-        "Jairkau",
-        "Tirka Kist",
-        "Boush",
-        "Wofe",
-        "Voxin Voges",
-        "Koux Boiti",
-        "Loim",
-        "Gaungu",
-        "Mut Tep",
-        "Foimo Saispi",
-        "Toneeg Vaiba",
-        "Nix Nast",
-        "Gup Dangisp",
-        "Distark Toonausp",
-        "Tex Brinki",
-        "Kat Tosha",
-        "Tauna Foip",
-        "Frip Cex",
-        "Fexa Lun",
-        "Tafa",
-        "Zeesheerk",
-        "Cremoim Kixoop",
-        "Tago",
-        "Kesha Diplo"
+            "Lutoif Vap",
+            "Nasoi Seert",
+            "Jitpai",
+            "Sose",
+            "Vainau",
+            "Jairkau",
+            "Tirka Kist",
+            "Boush",
+            "Wofe",
+            "Voxin Voges",
+            "Koux Boiti",
+            "Loim",
+            "Gaungu",
+            "Mut Tep",
+            "Foimo Saispi",
+            "Toneeg Vaiba",
+            "Nix Nast",
+            "Gup Dangisp",
+            "Distark Toonausp",
+            "Tex Brinki",
+            "Kat Tosha",
+            "Tauna Foip",
+            "Frip Cex",
+            "Fexa Lun",
+            "Tafa",
+            "Zeesheerk",
+            "Cremoim Kixoop",
+            "Tago",
+            "Kesha Diplo"
     };
-//</editor-fold>
+    //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="USA male names static name list">
     public static final String[] COMMON_USA_MALE_NAMES = new String[]{
-        "James",
-        "John",
-        "Robert",
-        "Michael",
-        "William",
-        "David",
-        "Richard",
-        "Charles",
-        "Joseph",
-        "Tomas",
-        "Christopher",
-        "Daniel",
-        "Paul",
-        "Mark",
-        "Donald",
-        "George",
-        "Kenneth",
-        "Steven",
-        "Edward",
-        "Brian",
-        "Ronald",
-        "Anthony",
-        "Kevin",
-        "Jason",
-        "Matthew",
-        "Gary",
-        "Timothy",
-        "Jose",
-        "Larry",
-        "Jeffrey",
-        "Frank",
-        "Scott",
-        "Eric",
-        "Stephen",
-        "Andrew",
-        "Raymond",
-        "Gregory",
-        "Joshua",
-        "Jerry",
-        "Dennis",
-        "Walter",
-        "Patrick",
-        "Peter",
-        "Harold",
-        "Douglas",
-        "Henry",
-        "Carl",
-        "Arthur",
-        "Ryan",
-        "Roger"
+            "James",
+            "John",
+            "Robert",
+            "Michael",
+            "William",
+            "David",
+            "Richard",
+            "Charles",
+            "Joseph",
+            "Tomas",
+            "Christopher",
+            "Daniel",
+            "Paul",
+            "Mark",
+            "Donald",
+            "George",
+            "Kenneth",
+            "Steven",
+            "Edward",
+            "Brian",
+            "Ronald",
+            "Anthony",
+            "Kevin",
+            "Jason",
+            "Matthew",
+            "Gary",
+            "Timothy",
+            "Jose",
+            "Larry",
+            "Jeffrey",
+            "Frank",
+            "Scott",
+            "Eric",
+            "Stephen",
+            "Andrew",
+            "Raymond",
+            "Gregory",
+            "Joshua",
+            "Jerry",
+            "Dennis",
+            "Walter",
+            "Patrick",
+            "Peter",
+            "Harold",
+            "Douglas",
+            "Henry",
+            "Carl",
+            "Arthur",
+            "Ryan",
+            "Roger"
     };
-//</editor-fold>
+    //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="USA female names static name list">
     public static final String[] COMMON_USA_FEMALE_NAMES = new String[]{
-        "Mary",
-        "Patricia",
-        "Linda",
-        "Barbara",
-        "Elizabeth",
-        "Jennifer",
-        "Maria",
-        "Susan",
-        "Margaret",
-        "Dorothy",
-        "Lisa",
-        "Nancy",
-        "Karen",
-        "Betty",
-        "Helen",
-        "Sandra",
-        "Donna",
-        "Carol",
-        "Ruth",
-        "Sharon",
-        "Michelle",
-        "Laura",
-        "Sarah",
-        "Kimberly",
-        "Deborah",
-        "Jessica",
-        "Shirley",
-        "Cynthia",
-        "Angela",
-        "Melissa",
-        "Brenda",
-        "Amy",
-        "Anna",
-        "Crystal",
-        "Virginia",
-        "Kathleen",
-        "Pamela",
-        "Martha",
-        "Becky",
-        "Amanda",
-        "Stephanie",
-        "Carolyn",
-        "Christine",
-        "Marie",
-        "Janet",
-        "Catherine",
-        "Frances",
-        "Ann",
-        "Joyce",
-        "Diane",
-        "Jane",
-        "Shauna",
-        "Trisha",
-        "Eileen",
-        "Danielle",
-        "Jacquelyn",
-        "Lynn",
-        "Hannah",
-        "Brittany"
+            "Mary",
+            "Patricia",
+            "Linda",
+            "Barbara",
+            "Elizabeth",
+            "Jennifer",
+            "Maria",
+            "Susan",
+            "Margaret",
+            "Dorothy",
+            "Lisa",
+            "Nancy",
+            "Karen",
+            "Betty",
+            "Helen",
+            "Sandra",
+            "Donna",
+            "Carol",
+            "Ruth",
+            "Sharon",
+            "Michelle",
+            "Laura",
+            "Sarah",
+            "Kimberly",
+            "Deborah",
+            "Jessica",
+            "Shirley",
+            "Cynthia",
+            "Angela",
+            "Melissa",
+            "Brenda",
+            "Amy",
+            "Anna",
+            "Crystal",
+            "Virginia",
+            "Kathleen",
+            "Pamela",
+            "Martha",
+            "Becky",
+            "Amanda",
+            "Stephanie",
+            "Carolyn",
+            "Christine",
+            "Marie",
+            "Janet",
+            "Catherine",
+            "Frances",
+            "Ann",
+            "Joyce",
+            "Diane",
+            "Jane",
+            "Shauna",
+            "Trisha",
+            "Eileen",
+            "Danielle",
+            "Jacquelyn",
+            "Lynn",
+            "Hannah",
+            "Brittany"
     };
-//</editor-fold>
+    //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="USA last names static name list">
     public static final String[] COMMON_USA_LAST_NAMES = new String[]{
-        "Smith",
-        "Johnson",
-        "Williams",
-        "Brown",
-        "Jones",
-        "Miller",
-        "Davis",
-        "Wilson",
-        "Anderson",
-        "Taylor",
-        "Thomas",
-        "Moore",
-        "Martin",
-        "Jackson",
-        "Thompson",
-        "White",
-        "Clark",
-        "Lewis",
-        "Robinson",
-        "Walker",
-        "Willis",
-        "Carter",
-        "King",
-        "Lee",
-        "Grant",
-        "Howard",
-        "Morris",
-        "Bartlett",
-        "Paine",
-        "Wayne",
-        "Lorraine"
-};
-//</editor-fold>
-
-//<editor-fold defaultstate="collapsed" desc="Lovecraft Mythos style static name list">
-    public static final String[] LOVECRAFT_MYTHOS_NAMES = new String[]{
-        "Koth",
-        "Ghlatelilt",
-        "Siarlut",
-        "Nyogongogg",
-        "Nyialan",
-        "Nyithiark",
-        "Lyun",
-        "Kethoshigr",
-        "Shobik",
-        "Tekogr",
-        "Hru-yn",
-        "Lya-ehibos",
-        "Hruna-oma-ult",
-        "Shabo'en",
-        "Shrashangal",
-        "Shukhaniark",
-        "Thaghum",
-        "Shrilang",
-        "Lukhungu'ith",
-        "Nyun",
-        "Nyia-ongin",
-        "Shogia-usun",
-        "Lyu-yl",
-        "Liathiagragr",
-        "Lyathagg",
-        "Hri'osurkut",
-        "Shothegh",
-        "No-orleshigh",
-        "Zvriangekh",
-        "Nyesashiv",
-        "Lyarkio",
-        "Le'akh",
-        "Liashi-en",
-        "Shurkano'um",
-        "Hrakhanoth",
-        "Ghlotsuban",
-        "Cthitughias",
-        "Ftanugh"
+            "Smith",
+            "Johnson",
+            "Williams",
+            "Brown",
+            "Jones",
+            "Miller",
+            "Davis",
+            "Wilson",
+            "Anderson",
+            "Taylor",
+            "Thomas",
+            "Moore",
+            "Martin",
+            "Jackson",
+            "Thompson",
+            "White",
+            "Clark",
+            "Lewis",
+            "Robinson",
+            "Walker",
+            "Willis",
+            "Carter",
+            "King",
+            "Lee",
+            "Grant",
+            "Howard",
+            "Morris",
+            "Bartlett",
+            "Paine",
+            "Wayne",
+            "Lorraine"
     };
 //</editor-fold>
 
-    private static final char[] vowels = new char[]{'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names
+    //<editor-fold defaultstate="collapsed" desc="Lovecraft Mythos style static name list">
+    public static final String[] LOVECRAFT_MYTHOS_NAMES = new String[]{
+            "Koth",
+            "Ghlatelilt",
+            "Siarlut",
+            "Nyogongogg",
+            "Nyialan",
+            "Nyithiark",
+            "Lyun",
+            "Kethoshigr",
+            "Shobik",
+            "Tekogr",
+            "Hru-yn",
+            "Lya-ehibos",
+            "Hruna-oma-ult",
+            "Shabo'en",
+            "Shrashangal",
+            "Shukhaniark",
+            "Thaghum",
+            "Shrilang",
+            "Lukhungu'ith",
+            "Nyun",
+            "Nyia-ongin",
+            "Shogia-usun",
+            "Lyu-yl",
+            "Liathiagragr",
+            "Lyathagg",
+            "Hri'osurkut",
+            "Shothegh",
+            "No-orleshigh",
+            "Zvriangekh",
+            "Nyesashiv",
+            "Lyarkio",
+            "Le'akh",
+            "Liashi-en",
+            "Shurkano'um",
+            "Hrakhanoth",
+            "Ghlotsuban",
+            "Cthitughias",
+            "Ftanugh"
+    };
+//</editor-fold>
+
+    private static final char[] vowels = {'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names
     private static final int LAST_LETTER_CANDIDATES_MAX = 52;
 
     private RNG rng;
@@ -296,7 +296,7 @@ public class WeightedLetterNamegen {
     /**
      * Creates the generator by seeding the provided list of names.
      *
-     * @param names an array of Strings that are typical names to be emulated
+     * @param names          an array of Strings that are typical names to be emulated
      * @param consonantLimit the maximum allowed consonants in a row
      */
     public WeightedLetterNamegen(String[] names, int consonantLimit) {
@@ -304,11 +304,13 @@ public class WeightedLetterNamegen {
     }
 
     /**
-     * Creates the generator by seeding the provided list of names.
+     * Creates the generator by seeding the provided list of names. The given RNG will be used for
+     * all random decisions this has to make, so if it has the same state (and RandomnessSource) on
+     * different runs through the program, it will produce the same names reliably.
      *
-     * @param names an array of Strings that are typical names to be emulated
+     * @param names          an array of Strings that are typical names to be emulated
      * @param consonantLimit the maximum allowed consonants in a row
-     * @param rng the source of randomness to be used
+     * @param rng            the source of randomness to be used
      */
     public WeightedLetterNamegen(String[] names, int consonantLimit, RNG rng) {
         this.names = names;
@@ -354,7 +356,7 @@ public class WeightedLetterNamegen {
                 }
                 ProbabilityTable<Character> wlg = wl.get(letter);
                 if (wlg == null) {
-                    wlg = new ProbabilityTable<>();
+                    wlg = new ProbabilityTable<>(rng);
                     wl.put(letter, wlg);
                 }
                 wlg.add(nextLetter, 1);
@@ -365,7 +367,7 @@ public class WeightedLetterNamegen {
 
                     wlg = wl.get(letter);
                     if (wlg == null) {
-                        wlg = new ProbabilityTable<>();
+                        wlg = new ProbabilityTable<>(rng);
                         wl.put(letter, wlg);
                     }
                     wlg.add(nextLetter, 1);
@@ -374,54 +376,75 @@ public class WeightedLetterNamegen {
         }
     }
 
-    public String[] generate() {
-        return generate(1);
-    }
-
-    public String[] generate(int amountToGenerate) {
-        ArrayList<String> result = new ArrayList<>();
-
-        int nameCount = 0;
-        while (nameCount < amountToGenerate) {
-            String name = "";
-
+    private StringBuilder generateInner(StringBuilder name) {
+        for (int runs = 0; runs < LAST_LETTER_CANDIDATES_MAX; runs++) {
+            name.setLength(0);
             // Pick size
             int size = rng.getRandomElement(sizes);
 
             // Pick first letter
-            char firstLetter = rng.getRandomElement(firstLetterSamples);
-
-            name += firstLetter;
+            char latest = rng.getRandomElement(firstLetterSamples);
+            name.append(latest);
 
             for (int i = 1; i < size - 2; i++) {
-                name += getRandomNextLetter(name.charAt(name.length() - 1));
+                name.append(latest = getRandomNextLetter(latest));
             }
 
             // Attempt to find a last letter
             for (int lastLetterFits = 0; lastLetterFits < LAST_LETTER_CANDIDATES_MAX; lastLetterFits++) {
                 char lastLetter = rng.getRandomElement(lastLetterSamples);
-                char intermediateLetterCandidate = getIntermediateLetter(name.charAt(name.length() - 1), lastLetter);
+                char intermediateLetterCandidate = getIntermediateLetter(latest, lastLetter);
 
                 // Only attach last letter if the candidate is valid (if no candidate, the antepenultimate letter always occurs at the end)
                 if (Category.L.contains(intermediateLetterCandidate)) {
-                    name += intermediateLetterCandidate;
-                    name += lastLetter;
+                    name.append(intermediateLetterCandidate).append(lastLetter);
                     break;
                 }
             }
 
-            String nameString = name;
-
             // Check that the word has no triple letter sequences, and that the Levenshtein distance is kosher
-            if (validateGrouping(name) && checkLevenshtein(nameString)) {
-                result.add(nameString);
-
-                // Only increase the counter if we've successfully added a name
-                nameCount++;
+            if (validateGrouping(name) && checkLevenshtein(name)) {
+                return name;
             }
         }
+        name.setLength(0);
+        return name.append(rng.getRandomElement(names));
+    }
+    /**
+     * Gets one random String name.
+     *
+     * @return a single random String name
+     */
 
-        return result.toArray(new String[0]);
+    public String generate() {
+        return generateInner(new StringBuilder(32)).toString();
+    }
+
+    /**
+     * Gets an ArrayList of random String names, sized to match amountToGenerate.
+     * @param amountToGenerate how many String items to include in the returned ArrayList
+     * @return an ArrayList of random String names
+     */
+    public ArrayList<String> generateList(int amountToGenerate) {
+        ArrayList<String> result = new ArrayList<>();
+
+        StringBuilder name = new StringBuilder(32);
+        for (int i = 0; i < amountToGenerate; i++) {
+            result.add(generateInner(name).toString());
+        }
+
+        return result;
+    }
+    /**
+     * Gets an array of random String names, sized to match amountToGenerate.
+     *
+     * @param amountToGenerate how many String items to include in the returned array
+     * @return an array of random String names
+     */
+
+    public String[] generate(int amountToGenerate)
+    {
+        return generateList(amountToGenerate).toArray(new String[0]);
     }
 
     /**
@@ -472,7 +495,7 @@ public class WeightedLetterNamegen {
      * @param	name	The name array (easier to iterate)
      * @return	True if no triple letter sequence is found.
      */
-    private boolean validateGrouping(String name) {
+    private boolean validateGrouping(CharSequence name) {
         for (int i = 2; i < name.length(); i++) {
             if (name.charAt(i) == name.charAt(i - 1) && name.charAt(i) == name.charAt(i - 2)) {
                 return false;
@@ -500,6 +523,7 @@ public class WeightedLetterNamegen {
             case 'e':
             case 'i':
             case 'o':
+            case 'u':
                 return true;
             default:
                 return false;
@@ -513,7 +537,7 @@ public class WeightedLetterNamegen {
      * @param	name	The name string.
      * @return	True if a name is found that is within the bias.
      */
-    private boolean checkLevenshtein(String name) {
+    private boolean checkLevenshtein(CharSequence name) {
         int levenshteinBias = name.length() / 2;
 
         for (String name1 : names) {
