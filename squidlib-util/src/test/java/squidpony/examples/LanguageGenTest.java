@@ -1,21 +1,25 @@
 package squidpony.examples;
 
+import org.junit.Test;
 import squidpony.FakeLanguageGen;
 import squidpony.NaturalLanguageCipher;
+import squidpony.WeightedLetterNamegen;
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.StatefulRNG;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by Tommy Ettinger on 11/29/2015.
  */
 public class LanguageGenTest {
-    public static void main(String[] args)
-    {
+    public static boolean PRINTING = true;
+    @Test
+    public void testOutput() {
+        if(!PRINTING) return;
         StatefulRNG rng = new StatefulRNG(0xf00df00L);
         FakeLanguageGen flg = FakeLanguageGen.ENGLISH;
-
         for (int i = 0; i < 40; i++) {
             System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ",", ";"},
                     new String[]{".", ".", ".", "!", "?", "..."}, 0.17));
@@ -274,6 +278,13 @@ public class LanguageGenTest {
         for (int i = 1; i < 10; i++) {
             System.out.print(", " + flg.word(rng, true, rng.between(2, 4)));
         }
+    }
+    @Test
+    public void testSentences()
+    {
+        if(!PRINTING) return;
+        StatefulRNG rng = new StatefulRNG(0xf00df00L);
+        FakeLanguageGen flg;
         System.out.println("\n\nDEFAULT SENTENCES:\n\n");
         System.out.println('"' + FakeLanguageGen.ENGLISH.sentence(rng, 4, 10,
                 new String[]{" -", ",", ",", ";"}, new String[]{"!", "!", "...", "...", ".", "?"}, 0.2) + "\",");
@@ -335,9 +346,11 @@ public class LanguageGenTest {
         flg = FakeLanguageGen.KOREAN_ROMANIZED;
         System.out.println('"' + flg.sentence(rng, 5, 9, new String[]{",", ",", ";", ","},
                 new String[]{"!", "?", ".", ".", ".", ".", "..."}, 0.13) + "\",");
-
-        System.out.println("\n-----------------------------------------------------------------------------");
-        System.out.println();
+    }
+    @Test
+    public void testNaturalCipher()
+    {
+        if(!PRINTING) return;
         FakeLanguageGen[] languages = new FakeLanguageGen[]{
 
                 FakeLanguageGen.ENGLISH,
@@ -523,5 +536,18 @@ public class LanguageGenTest {
             System.out.println();
         }
         */
+    }
+    @Test
+    public void testNameGen()
+    {
+        if(!PRINTING) return;
+        StatefulRNG rng = new StatefulRNG(2252637788195L);
+        ArrayList<String> men = new WeightedLetterNamegen(WeightedLetterNamegen.COMMON_USA_MALE_NAMES, 2, rng).generateList(50),
+                women = new WeightedLetterNamegen(WeightedLetterNamegen.COMMON_USA_FEMALE_NAMES, 2, rng).generateList(50),
+                family = new WeightedLetterNamegen(WeightedLetterNamegen.COMMON_USA_LAST_NAMES, 2, rng).generateList(100);
+        for (int i = 0; i < 50; i++) {
+            System.out.println(men.get(i) + " " + family.get(i << 1) + ", " + women.get(i) + " " + family.get(i << 1 | 1)
+                    + ", " + FakeLanguageGen.SIMPLISH.word(rng, true, rng.betweenWeighted(1, rng.between(1, 4), 3)) + " " + FakeLanguageGen.SIMPLISH.word(rng, true, rng.betweenWeighted(1, 4, 3)));
+        }
     }
 }
