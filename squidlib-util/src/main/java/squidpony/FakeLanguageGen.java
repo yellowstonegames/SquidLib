@@ -3704,7 +3704,7 @@ public class FakeLanguageGen implements Serializable {
         result = 31L * result + CrossHash.hash64(vowelSplitters);
         result = 31L * result + CrossHash.hash64(closingSyllables);
         result = 31L * result + (clean ? 1L : 0L);
-        result = 31L * result + syllableFrequencies.hashCode();
+        result = 31L * result + syllableFrequencies.hash64();
         result = 31L * result + NumberTools.doubleToLongBits(totalSyllableFrequency);
         result = 31L * result + NumberTools.doubleToLongBits(vowelStartFrequency);
         result = 31L * result + NumberTools.doubleToLongBits(vowelEndFrequency);
@@ -4202,12 +4202,11 @@ public class FakeLanguageGen implements Serializable {
 
         @Override
         public int hashCode() {
-            int result;
-            long temp;
-            result = replacer.hashCode();
-            temp = NumberTools.doubleToLongBits(chance);
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
-            return result;
+            long result;
+            result = CrossHash.hash64(replacer.getPattern().serializeToString());
+            result = 31L * result + NumberTools.doubleToLongBits(chance);
+            result ^= result >>> 32;
+            return (int) (0xFFFFFFFFL & result);
         }
 
         @Override
