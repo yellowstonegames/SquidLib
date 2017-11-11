@@ -442,6 +442,56 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     }
 
     /**
+     * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in white.
+     */
+    public void putBorders()
+    {
+        putBorders(SColor.FLOAT_WHITE);
+    }
+    /**
+     * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
+     * Color, which will be run through any IColorCenter this has for filtering.
+     * @param color a libGDX Color to use for the borders
+     */
+    public void putBorders(Color color)
+    {
+        putBorders(scc.filter(color).toFloatBits());
+    }
+
+    /**
+     * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
+     * color as a packed float.
+     * @param encodedColor a packed float color to use for the borders, as from {@link Color#toFloatBits()}
+     */
+    public void putBorders(float encodedColor)
+    {
+        contents[0][0] = '┌';
+        contents[gridWidth - 1][0] = '┐';
+        contents[0][gridHeight - 1] = '└';
+        contents[gridWidth - 1][gridHeight - 1] = '┘';
+        for (int i = 1; i < gridWidth - 1; i++) {
+            contents[i][0] = '─';
+            contents[i][gridHeight - 1] = '─';
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            contents[0][y] = '│';
+            contents[gridWidth - 1][y] = '│';
+            colors[0][y] = encodedColor;
+            colors[gridWidth - 1][y] = encodedColor;
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            for (int x = 1; x < gridWidth - 1; x++) {
+                contents[x][y] = ' ';
+                contents[x][y] = ' ';
+            }
+        }
+        for (int i = 0; i < gridWidth; i++) {
+            colors[i][0] = encodedColor;
+            colors[i][gridHeight - 1] = encodedColor;
+        }
+    }
+
+    /**
      * Erases the entire panel, leaving only a transparent space.
      */
     public void erase() {

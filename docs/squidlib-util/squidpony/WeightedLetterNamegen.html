@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -209,12 +209,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#generate--">generate</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#generate--">generate</a></span>()</code>
+<div class="block">Gets one random String name.</div>
+</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#generate-int-">generate</a></span>(int&nbsp;amountToGenerate)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#generate-int-">generate</a></span>(int&nbsp;amountToGenerate)</code>
+<div class="block">Gets an array of random String names, sized to match amountToGenerate.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#generateList-int-">generateList</a></span>(int&nbsp;amountToGenerate)</code>
+<div class="block">Gets an ArrayList of random String names, sized to match amountToGenerate.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -336,10 +346,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>WeightedLetterNamegen</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/WeightedLetterNamegen.html#line.313">WeightedLetterNamegen</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;names,
+<pre>public&nbsp;<a href="../src-html/squidpony/WeightedLetterNamegen.html#line.315">WeightedLetterNamegen</a>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;names,
                              int&nbsp;consonantLimit,
                              <a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
-<div class="block">Creates the generator by seeding the provided list of names.</div>
+<div class="block">Creates the generator by seeding the provided list of names. The given RNG will be used for
+ all random decisions this has to make, so if it has the same state (and RandomnessSource) on
+ different runs through the program, it will produce the same names reliably.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>names</code> - an array of Strings that are typical names to be emulated</dd>
@@ -362,7 +374,28 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/WeightedLetterNamegen.html#line.377">generate</a>()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/WeightedLetterNamegen.html#line.419">generate</a>()</pre>
+<div class="block">Gets one random String name.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a single random String name</dd>
+</dl>
+</li>
+</ul>
+<a name="generateList-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateList</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../src-html/squidpony/WeightedLetterNamegen.html#line.428">generateList</a>(int&nbsp;amountToGenerate)</pre>
+<div class="block">Gets an ArrayList of random String names, sized to match amountToGenerate.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>amountToGenerate</code> - how many String items to include in the returned ArrayList</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an ArrayList of random String names</dd>
+</dl>
 </li>
 </ul>
 <a name="generate-int-">
@@ -371,7 +404,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/WeightedLetterNamegen.html#line.381">generate</a>(int&nbsp;amountToGenerate)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../src-html/squidpony/WeightedLetterNamegen.html#line.445">generate</a>(int&nbsp;amountToGenerate)</pre>
+<div class="block">Gets an array of random String names, sized to match amountToGenerate.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>amountToGenerate</code> - how many String items to include in the returned array</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of random String names</dd>
+</dl>
 </li>
 </ul>
 </li>

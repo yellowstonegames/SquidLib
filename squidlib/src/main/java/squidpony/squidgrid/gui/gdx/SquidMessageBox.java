@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 
@@ -26,9 +26,7 @@ import java.util.List;
  */
 public class SquidMessageBox extends SquidPanel {
     protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);
-    protected ArrayList<Label> labels = new ArrayList<>(256);
     protected int messageIndex = 0;
-    private char[][] basicBorders;
     /**
      * Creates a bare-bones panel with all default values for text rendering.
      *
@@ -39,8 +37,8 @@ public class SquidMessageBox extends SquidPanel {
         super(gridWidth, gridHeight);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        basicBorders = assembleBorders();
         appendMessage("");
+        putBorders();
     }
 
     /**
@@ -55,8 +53,8 @@ public class SquidMessageBox extends SquidPanel {
         super(gridWidth, gridHeight, cellWidth, cellHeight);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        basicBorders = assembleBorders();
         appendMessage("");
+        putBorders();
     }
 
     /**
@@ -74,8 +72,9 @@ public class SquidMessageBox extends SquidPanel {
         super(gridWidth, gridHeight, factory);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        basicBorders = assembleBorders();
         appendMessage("");
+        putBorders();
+
     }
 
     /**
@@ -95,8 +94,9 @@ public class SquidMessageBox extends SquidPanel {
         super(gridWidth, gridHeight, factory, center);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        basicBorders = assembleBorders();
         appendMessage("");
+        putBorders();
+
 
     }
     private void makeBordersClickable()
@@ -202,32 +202,10 @@ public class SquidMessageBox extends SquidPanel {
     {
         messageIndex = Math.min(messages.size() - 1, messageIndex + 1);
     }
-    private char[][] assembleBorders() {
-        char[][] result = new char[gridWidth][gridHeight];
-        result[0][0] = '┌';
-        result[gridWidth - 1][0] = '┐';
-        result[0][gridHeight - 1] = '└';
-        result[gridWidth - 1][gridHeight - 1] = '┘';
-        for (int i = 1; i < gridWidth - 1; i++) {
-            result[i][0] = '─';
-            result[i][gridHeight - 1] = '─';
-        }
-        for (int y = 1; y < gridHeight - 1; y++) {
-            result[0][y] = '│';
-            result[gridWidth - 1][y] = '│';
-        }
-        for (int y = 1; y < gridHeight - 1; y++) {
-            for (int x = 1; x < gridWidth - 1; x++) {
-                result[x][y] = ' ';
-                result[x][y] = ' ';
-            }
-        }
-        return result;
-    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        put(basicBorders);
+        ArrayTools.fill(contents, ' ', 1, 1, gridWidth - 2, gridHeight - 2);
         for (int i = 1; i < gridHeight - 1 && i <= messageIndex; i++) {
             put(1, gridHeight - 1 - i, messages.get(messageIndex + 1 - i));
         }
