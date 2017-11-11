@@ -519,6 +519,107 @@ public class ArrayTools {
         }
     }
 
+
+    /**
+     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.
+     * Not to be confused with {@link #fill(boolean, int, int)}, which makes a new 2D array.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @param startX the first x position to fill (inclusive)
+     * @param startY the first y position to fill (inclusive)
+     * @param endX the last x position to fill (inclusive)
+     * @param endY the last y position to fill (inclusive)
+     */
+    public static void fill(boolean[][] array2d, boolean value, int startX, int startY, int endX, int endY) {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        for (int x = startX; x <= endX && x < width; x++) {
+            for (int y = startY; y <= endY && y < height; y++) {
+                array2d[x][y] = value;
+            }
+        }
+    }
+
+    /**
+     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.
+     * Not to be confused with {@link #fill(char, int, int)}, which makes a new 2D array.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @param startX the first x position to fill (inclusive)
+     * @param startY the first y position to fill (inclusive)
+     * @param endX the last x position to fill (inclusive)
+     * @param endY the last y position to fill (inclusive)
+     */
+    public static void fill(char[][] array2d, char value, int startX, int startY, int endX, int endY) {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        for (int x = startX; x <= endX && x < width; x++) {
+            for (int y = startY; y <= endY && y < height; y++) {
+                array2d[x][y] = value;
+            }
+        }
+    }
+
+    /**
+     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.
+     * Not to be confused with {@link #fill(float, int, int)}, which makes a new 2D array.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @param startX the first x position to fill (inclusive)
+     * @param startY the first y position to fill (inclusive)
+     * @param endX the last x position to fill (inclusive)
+     * @param endY the last y position to fill (inclusive)
+     */
+    public static void fill(float[][] array2d, float value, int startX, int startY, int endX, int endY) {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        for (int x = startX; x <= endX && x < width; x++) {
+            for (int y = startY; y <= endY && y < height; y++) {
+                array2d[x][y] = value;
+            }
+        }
+    }
+
+    /**
+     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.
+     * Not to be confused with {@link #fill(double, int, int)}, which makes a new 2D array.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @param startX the first x position to fill (inclusive)
+     * @param startY the first y position to fill (inclusive)
+     * @param endX the last x position to fill (inclusive)
+     * @param endY the last y position to fill (inclusive)
+     */
+    public static void fill(double[][] array2d, double value, int startX, int startY, int endX, int endY) {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        for (int x = startX; x <= endX && x < width; x++) {
+            for (int y = startY; y <= endY && y < height; y++) {
+                array2d[x][y] = value;
+            }
+        }
+    }
+
+    /**
+     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.
+     * Not to be confused with {@link #fill(int, int, int)}, which makes a new 2D array.
+     * @param array2d a 2D array that will be modified in-place
+     * @param value the value to fill all of array2D with
+     * @param startX the first x position to fill (inclusive)
+     * @param startY the first y position to fill (inclusive)
+     * @param endX the last x position to fill (inclusive)
+     * @param endY the last y position to fill (inclusive)
+     */
+    public static void fill(int[][] array2d, int value, int startX, int startY, int endX, int endY) {
+        final int width = array2d.length;
+        final int height = width == 0 ? 0 : array2d[0].length;
+        for (int x = startX; x <= endX && x < width; x++) {
+            for (int y = startY; y <= endY && y < height; y++) {
+                array2d[x][y] = value;
+            }
+        }
+    }
+
     /**
      * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with
      * any long, positive or negative.
