@@ -3376,7 +3376,7 @@ public class FakeLanguageGen implements Serializable {
         otherInfluence = Math.max(0.0, Math.min(otherInfluence, 1.0));
         double myInfluence = 1.0 - otherInfluence;
 
-        RNG rng = new RNG((hashCode() & 0xffffffffL) | ((other.hashCode() & 0xffffffffL) << 32)
+        RNG rng = new RNG((hash64() & 0xffffffffL) | ((other.hash64() & 0xffffffffL) << 32)
                 ^ NumberTools.doubleToLongBits(otherInfluence));
 
         String[] ov = merge1000(rng, openingVowels, other.openingVowels, otherInfluence),
@@ -3532,7 +3532,7 @@ public class FakeLanguageGen implements Serializable {
         vowelInfluence = Math.max(0.0, Math.min(vowelInfluence, 1.0));
         consonantInfluence = Math.max(0.0, Math.min(consonantInfluence, 1.0));
 
-        RNG rng = new RNG((hashCode() & 0xffffffffL) ^
+        RNG rng = new RNG((hash64() & 0xffffffffL) ^
                 ((NumberTools.doubleToLongBits(vowelInfluence) & 0xffffffffL) | (NumberTools.doubleToLongBits(consonantInfluence) << 32)));
         String[] ov = accentVowels(rng, openingVowels, vowelInfluence),
                 mv = accentVowels(rng, midVowels, vowelInfluence),
@@ -3672,28 +3672,51 @@ public class FakeLanguageGen implements Serializable {
     @Override
     public int hashCode() {
         int result;
-        long temp;
-        result = CrossHash.Lightning.hash(openingVowels);
-        result = 31 * result + CrossHash.Lightning.hash(midVowels);
-        result = 31 * result + CrossHash.Lightning.hash(openingConsonants);
-        result = 31 * result + CrossHash.Lightning.hash(midConsonants);
-        result = 31 * result + CrossHash.Lightning.hash(closingConsonants);
-        result = 31 * result + CrossHash.Lightning.hash(vowelSplitters);
-        result = 31 * result + CrossHash.Lightning.hash(closingSyllables);
+        result = CrossHash.hash(openingVowels);
+        result = 31 * result + CrossHash.hash(midVowels);
+        result = 31 * result + CrossHash.hash(openingConsonants);
+        result = 31 * result + CrossHash.hash(midConsonants);
+        result = 31 * result + CrossHash.hash(closingConsonants);
+        result = 31 * result + CrossHash.hash(vowelSplitters);
+        result = 31 * result + CrossHash.hash(closingSyllables);
         result = 31 * result + (clean ? 1 : 0);
         result = 31 * result + syllableFrequencies.hashCode();
-        temp = NumberTools.doubleToLongBits(totalSyllableFrequency);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = NumberTools.doubleToLongBits(vowelStartFrequency);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = NumberTools.doubleToLongBits(vowelEndFrequency);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = NumberTools.doubleToLongBits(vowelSplitFrequency);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = NumberTools.doubleToLongBits(syllableEndFrequency);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + NumberTools.doubleToMixedIntBits(totalSyllableFrequency);
+        result = 31 * result + NumberTools.doubleToMixedIntBits(vowelStartFrequency);
+        result = 31 * result + NumberTools.doubleToMixedIntBits(vowelEndFrequency);
+        result = 31 * result + NumberTools.doubleToMixedIntBits(vowelSplitFrequency);
+        result = 31 * result + NumberTools.doubleToMixedIntBits(syllableEndFrequency);
         result = 31 * result + (sanityChecks != null ? sanityChecks.length + 1 : 0);
-        result = 31 * result + (modifiers != null ? modifiers.hashCode() : 0);
+        result *= 31;
+        if(modifiers != null) {
+            for (int i = 0; i < modifiers.size(); i++) {
+                result += 7 * (i + 1) * modifiers.get(i).hashCode();
+            }
+        }
+        return result;
+    }
+    public long hash64() {
+        long result           = CrossHash.hash64(openingVowels);
+        result = 31L * result + CrossHash.hash64(midVowels);
+        result = 31L * result + CrossHash.hash64(openingConsonants);
+        result = 31L * result + CrossHash.hash64(midConsonants);
+        result = 31L * result + CrossHash.hash64(closingConsonants);
+        result = 31L * result + CrossHash.hash64(vowelSplitters);
+        result = 31L * result + CrossHash.hash64(closingSyllables);
+        result = 31L * result + (clean ? 1L : 0L);
+        result = 31L * result + syllableFrequencies.hashCode();
+        result = 31L * result + NumberTools.doubleToLongBits(totalSyllableFrequency);
+        result = 31L * result + NumberTools.doubleToLongBits(vowelStartFrequency);
+        result = 31L * result + NumberTools.doubleToLongBits(vowelEndFrequency);
+        result = 31L * result + NumberTools.doubleToLongBits(vowelSplitFrequency);
+        result = 31L * result + NumberTools.doubleToLongBits(syllableEndFrequency);
+        result = 31L * result + (sanityChecks != null ? sanityChecks.length + 1L : 0L);
+        result *= 31L;
+        if(modifiers != null) {
+            for (int i = 0; i < modifiers.size(); i++) {
+                result += 7L * (i + 1L) * CrossHash.hash64(modifiers.get(i).alterations);
+            }
+        }
         return result;
     }
 
@@ -4104,7 +4127,7 @@ public class FakeLanguageGen implements Serializable {
 
         @Override
         public int hashCode() {
-            return CrossHash.Lightning.hash(alterations);
+            return CrossHash.hash(alterations);
         }
 
         @Override

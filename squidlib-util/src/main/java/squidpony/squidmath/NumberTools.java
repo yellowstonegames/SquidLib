@@ -82,7 +82,7 @@ public class NumberTools {
     public static int doubleToMixedIntBits(final double value)
     {
         final long l = Double.doubleToLongBits(value);
-        return (int)l ^ (int)(l >>> 32);
+        return (int)(l & 0xFFFFFFFFL) ^ (int)(l >>> 32);
     }
 
     /**
