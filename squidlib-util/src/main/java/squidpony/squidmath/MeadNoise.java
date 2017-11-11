@@ -52,19 +52,19 @@ import squidpony.annotation.Beta;
 /**
  * Experiments with noise functions.
  * <br>
- * All functions can take an int seed that should significantly change the pattern of noise produced. Based on code from
+ * All functions can take an long seed that should significantly change the pattern of noise produced. Based on code from
  * Joise; the full library is available at https://github.com/SudoPlayGames/Joise . Joise is derived from the Accidental
  * Noise Library, available in C++ at http://accidentalnoise.sourceforge.net/index.html .
  */
 @Beta
 public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
-    protected final int defaultSeed;
+    protected final long defaultSeed;
     public static final MeadNoise instance = new MeadNoise();
 
     public MeadNoise() {
-        this(0x1337BEEF);
+        this(0x1337BEEFL);
     }
-    public MeadNoise(int seed)
+    public MeadNoise(long seed)
     {
         defaultSeed = seed;
     }
@@ -82,16 +82,16 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         return noise(x, y, z, w, u, v, defaultSeed);
     }
 
-    public double getNoiseWithSeed(final double x, final double y, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final long seed) {
         return noise(x, y, seed);
     }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         return noise(x, y, z, seed);
     }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         return noise(x, y, z, w, seed);
     }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {
         return noise(x, y, z, w, u, v, seed);
     }
 
@@ -1018,13 +1018,13 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
     /*
-    public static int hash(final int x, final int y, final int seed) {
+    public static int hash(final int x, final int y, final long seed) {
         return   ((x    ^ 0x9E3779B9 * (seed + y))
                 + (y    ^ 0x632BE5AB * (x + seed))
                 + (seed ^ 0x632BE5AB * (y + x))) >>> 24;
     }
     */
-    public static int hash(final int x, final int y, final int seed) {
+    public static int hash(final int x, final int y, final long seed) {
         int a = 0x632BE5AB;
         return  (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1042,14 +1042,14 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
     /*
-    public static int hash(final int x, final int y, final int z, final int seed) {
+    public static int hash(final int x, final int y, final int z, final long seed) {
         return   (z    + 0xD3 * (seed + y)
                 ^ seed + 0xB5 * (x + z   )
                 ^ x    + 0xC1 * (y + seed)
                 ^ y    + 0xE3 * (z + x   )) & 255;
     }
     */
-    public static int hash(final int x, final int y, final int z, final int seed) {
+    public static int hash(final int x, final int y, final int z, final long seed) {
         int a = 0x632BE5AB;
         return  (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1059,25 +1059,6 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     }
 
     /**
-     * Possibly useful outside SeededNoise. A customized 5-input hash that mixes around all inputs fairly well, and
-     * produces 8 bits.
-     * @param x an int to incorporate into the hash
-     * @param y an int to incorporate into the hash
-     * @param z an int to incorporate into the hash
-     * @param w an int to incorporate into the hash
-     * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-     */
-    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
-    public static int hashAlt(final int x, final int y, final int z, final int w, final int seed) {
-        return (
-                z    + 0xD3 * (seed + y)
-                        ^ w    + 0xB5 * (x + z   )
-                        ^ seed + 0xC1 * (y + w   )
-                        ^ x    + 0x95 * (z + seed)
-                        ^ y    + 0xA3 * (w + x   )) & 255;
-    }
-    /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
      * @param x an int to incorporate into the hash
      * @param y an int to incorporate into the hash
@@ -1086,7 +1067,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
-    public static int hash(final int x, final int y, final int z, final int w, final int seed) {
+    public static int hash(final int x, final int y, final int z, final int w, final long seed) {
         int a = 0x632BE5AB;
         return (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1094,29 +1075,6 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
                 + (a ^= 0x85157AF5 * y + z)
                 + (a ^= 0x85157AF5 * z + w)
                 + (a ^= 0x85157AF5 * w + seed)) * a >>> 24;
-    }
-    /**
-     * Possibly useful outside SeededNoise. A customized 5-input hash that mixes around all inputs fairly well, and
-     * produces 8 bits.
-     * @param x an int to incorporate into the hash
-     * @param y an int to incorporate into the hash
-     * @param z an int to incorporate into the hash
-     * @param w an int to incorporate into the hash
-     * @param u an int to incorporate into the hash
-     * @param v an int to incorporate into the hash
-     * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-     */
-    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
-    public static int hashAlt(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
-        return (
-                z    + 0x89 * (seed + x)
-                        ^ w    + 0xC1 * (x + y)
-                        ^ u    + 0x95 * (y + z)
-                        ^ v    + 0xD3 * (z + w)
-                        ^ seed + 0xA3 * (w + u)
-                        ^ x    + 0xE3 * (u + v)
-                        ^ y    + 0xB5 * (v + seed)) & 255;
     }
 
     /**
@@ -1130,7 +1088,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
-    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
+    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final long seed) {
         int a = 0x632BE5AB;
         return (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1143,7 +1101,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
     }
 
     /*
-    private static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
+    private static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final long seed) {
         final int result = 191 * x + 151 * y + 181 * w + 139 * z + 179 * u + 149 * v + 167 * seed;
         return 0xFF & (result ^ (result >>> 7));
     }
@@ -1155,7 +1113,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //     * @param seed an int to incorporate into the hash
 //     * @return a pseudo-random-like int between 0 and 255, inclusive on both
 //     */
-//    public static int hash(final int x, final int y, int seed) {
+//    public static int hash(final int x, final int y, long seed) {
 //        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ seed * 0x63413) ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
 //
@@ -1167,7 +1125,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //     * @param seed an int to incorporate into the hash
 //     * @return a pseudo-random-like int between 0 and 255, inclusive on both
 //     */
-//    public static int hash(final int x, final int y, final int z, int seed) {
+//    public static int hash(final int x, final int y, final int z, long seed) {
 //        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ seed * 0x63413)
 //                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
@@ -1180,7 +1138,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //     * @param seed an int to incorporate into the hash
 //     * @return a pseudo-random-like int between 0 and 255, inclusive on both
 //     */
-//    public static int hash(final int x, final int y, final int z, final int w, int seed) {
+//    public static int hash(final int x, final int y, final int z, final int w, long seed) {
 //        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ seed * 0x63413)
 //                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
@@ -1195,7 +1153,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //     * @param seed an int to incorporate into the hash
 //     * @return a pseudo-random-like int between 0 and 255, inclusive on both
 //     */
-//    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, int seed) {
+//    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, long seed) {
 //        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ u * 0xb34eb ^ v * 0x2feb7 ^ seed * 0x63413)
 //                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
@@ -1278,7 +1236,7 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
     }
 
-    public static double noise(double x, double y, int seed) {
+    public static double noise(double x, double y, long seed) {
 //        final float
 //                rx = NumberTools.formFloat(seed + (~seed << 15)) + 0.5f,
 //                ry = NumberTools.formFloat(~seed ^ (seed << 14)) + 0.5f,
@@ -1291,10 +1249,11 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
         y *= 3.25;
         final float[] jitterLUT = MeadNoise.jitter2DLUT;
         final long s = ThrustRNG.determine(seed);
+        final int iseed = (int)(s >>> 32);
         final double
                 r = NumberTools.longBitsToDouble((longFloor(s * x + y * s * s + s) & 0x000FFFFFFFFFFFFFL) | 0x3FF0000000000000L) * 0.6 - 0.4,
-                mx0 = jitterLUT[(seed & 510)] * PI_F * r, my0 = jitterLUT[(seed & 510)|1] * PI_F * (1.0 - r),
-                mx1 = jitterLUT[(seed >>> 10 & 510)] * PI_F * r, my1 = jitterLUT[(seed >>> 10 & 510)|1] * PI_F * (1.0 - r),
+                mx0 = jitterLUT[(iseed & 510)] * PI_F * r, my0 = jitterLUT[(iseed & 510)|1] * PI_F * (1.0 - r),
+                mx1 = jitterLUT[(iseed >>> 10 & 510)] * PI_F * r, my1 = jitterLUT[(iseed >>> 10 & 510)|1] * PI_F * (1.0 - r),
                 sx = NumberTools.sway(x * mx0 + y * my0) * 0.55, sy = NumberTools.sway(y * mx1 + x * my1) * 0.55;
         final long ix = longFloor(x + sy), iy = longFloor(y + sx);
         final double
@@ -1389,20 +1348,21 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //        return NumberTools.bounce((n0 + n1 + n2) * 11.5f + 10f);
     }
 
-    public static double noise(final double x, final double y, final double z, final int seed) {
+    public static double noise(final double x, final double y, final double z, final long seed) {
         return noise((float)x, (float)y, (float)z, seed);
     }
-    public static float noise(float x, float y, float z, int seed) {
+    public static float noise(float x, float y, float z, long seed) {
         // produces a spotted pattern
         final float[] jitterLUT = MeadNoise.jitter3DLUT;
-        seed = (0x632BE5AB + seed * 0x9E3779B9) ^ 0x85157AF5;
+        seed = ThrustRNG.determine(seed);
+        final int iseed = (int)(seed >>> 32);
         final float
                 //gxy = NumberTools.zigzag(x + y) * 0.3f + 0.7f,
                 sx = NumberTools.zigzag(x) * 0.47f, sy = NumberTools.zigzag(y) * 0.47f, sz = NumberTools.zigzag(z) * 0.47f,
-                mx0 = jitterLUT[(seed & 255) * 3], my0 = jitterLUT[(seed & 255) * 3 + 1], mz0 = jitterLUT[(seed & 255) * 3 + 2],
-                mx1 = jitterLUT[(seed >>> 8 & 255) * 3], my1 = jitterLUT[(seed >>> 8 & 255) * 3 + 1], mz1 = jitterLUT[(seed >>> 8 & 255) * 3 + 2],
-                mx2 = jitterLUT[(seed >>> 16 & 255) * 3], my2 = jitterLUT[(seed >>> 16 & 255) * 3 + 1], mz2 = jitterLUT[(seed >>> 16 & 255) * 3 + 2],
-                mx3 = jitterLUT[(seed >>> 24) * 3], my3 = jitterLUT[(seed >>> 24) * 3 + 1], mz3 = jitterLUT[(seed >>> 24) * 3 + 2];
+                mx0 = jitterLUT[(iseed & 255) * 3], my0 = jitterLUT[(iseed & 255) * 3 + 1], mz0 = jitterLUT[(iseed & 255) * 3 + 2],
+                mx1 = jitterLUT[(iseed >>> 8 & 255) * 3], my1 = jitterLUT[(iseed >>> 8 & 255) * 3 + 1], mz1 = jitterLUT[(iseed >>> 8 & 255) * 3 + 2],
+                mx2 = jitterLUT[(iseed >>> 16 & 255) * 3], my2 = jitterLUT[(iseed >>> 16 & 255) * 3 + 1], mz2 = jitterLUT[(iseed >>> 16 & 255) * 3 + 2],
+                mx3 = jitterLUT[(iseed >>> 24) * 3], my3 = jitterLUT[(iseed >>> 24) * 3 + 1], mz3 = jitterLUT[(iseed >>> 24) * 3 + 2];
         x *= 7f;
         y *= 7f;
         z *= 7f;
@@ -1529,10 +1489,10 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //        return NumberTools.bounce((18.0f * (n0 + n1 + n2 + n3)) + 10f);
     }
 
-    public static double noise(final double x, final double y, final double z, final double w, final int seed) {
+    public static double noise(final double x, final double y, final double z, final double w, final long seed) {
         return noise((float)x, (float)y, (float)z, (float)w, seed);
     }
-    public static double noise(final float x, final float y, final float z, final float w, final int seed) {
+    public static double noise(final float x, final float y, final float z, final float w, final long seed) {
         float n = 0.0f;
         final float s = (x + y + z + w) * F4;
         final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
@@ -1610,11 +1570,11 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 
 
     public static double noise(final double x, final double y, final double z,
-                               final double w, final double u, final double v, final int seed) {
+                               final double w, final double u, final double v, final long seed) {
         return noise((float)x, (float)y, (float)z, (float)w, (float)u, (float)v, seed);
     }
 
-    public static double noise(final float x, final float y, final float z, final float w, final float u, final float v, final int seed) {
+    public static double noise(final float x, final float y, final float z, final float w, final float u, final float v, final long seed) {
 
         final float s = (x + y + z + w + u + v) * F6;
 

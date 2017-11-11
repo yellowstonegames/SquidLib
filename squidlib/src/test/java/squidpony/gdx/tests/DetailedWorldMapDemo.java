@@ -57,7 +57,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             biomeLowerCodeData = new int[width][height];
     private Noise.Noise4D cloudNoise;
     //private final float[][][] cloudData = new float[128][128][128];
-    private int counter = 0;
+    private long counter = 0;
     private boolean cloudy = false;
     private long ttg = 0; // time to generate
     public static final double
@@ -299,10 +299,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                     NumberTools.bounce((high + moist) * (4.1 + high - hot)) * 0.5 + 0.5; // * (7.5 + moist * 1.9 - hot * 0.9)
             }
         }
-        int seedA = (int) LightRNG.determine(seed),
-                seedB = (int)LightRNG.determine(seed + seedA),
-                seedC = (int)LightRNG.determine(seed + seedA + seedB);
-        counter = (int)(LightRNG.determine(seed + seedA + seedB + seedC) >>> 48);
+        long seedA = LightRNG.determine(seed),
+                seedB = LightRNG.determine(seed + seedA),
+                seedC = LightRNG.determine(seed + seedA + seedB);
+        counter = LightRNG.determine(seed + seedA + seedB + seedC) >>> 48;
         //Noise.seamless3D(cloudData, seedC, 3);
     }
 
@@ -448,7 +448,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 //cloud = (float) cloudNoise2.getNoiseWithSeed(xp = world.xPositions[x][y], yp = world.yPositions[x][y],
                 //        zp = world.zPositions[x][y], counter * 0.04, (int) seed) * 0.06f;
                 if(cloudy) {
-                    cloud = (float) Math.min(1f, (cloudNoise.getNoiseWithSeed(world.xPositions[x][y], world.yPositions[x][y], world.zPositions[x][y], counter * 0.0125, (int) seed) * (0.75 + world.moistureData[x][y]) - 0.07));
+                    cloud = (float) Math.min(1f, (cloudNoise.getNoiseWithSeed(world.xPositions[x][y], world.yPositions[x][y], world.zPositions[x][y], counter * 0.0125, seed) * (0.75 + world.moistureData[x][y]) - 0.07));
                     cloudLight = 0.65f + NumberTools.swayTight(cloud * 1.4f + 0.55f) * 0.35f;
                     cloudLight = SColor.floatGet(cloudLight, cloudLight, cloudLight, 1f);
                 }

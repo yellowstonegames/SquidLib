@@ -53,7 +53,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
             }, upCoefficients = {0.25f, 0.75f, 0.75f, 0.25f};
     public float m_Scale;
 
-    public int seed = 0x1337BEEF;
+    public long seed = 0x1337BEEFBEE7L;
     public static final WaveletNoise instance = new WaveletNoise();
 
 
@@ -82,7 +82,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
     }
 
     @Override
-    public double getNoiseWithSeed(double x, int seed) {
+    public double getNoiseWithSeed(double x, long seed) {
         return getRawNoise((float) x * m_Scale, 0f, 0f, seed);
     }
 
@@ -93,7 +93,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
     }
 
     @Override
-    public double getNoiseWithSeed(double x, double y, int seed) {
+    public double getNoiseWithSeed(double x, double y, long seed) {
         return getRawNoise((float) x * m_Scale, (float) y * m_Scale, 0f, seed);
     }
 
@@ -103,7 +103,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
     }
 
     @Override
-    public double getNoiseWithSeed(double x, double y, double z, int seed) {
+    public double getNoiseWithSeed(double x, double y, double z, long seed) {
         return getRawNoise((float) x * m_Scale, (float) y * m_Scale, (float) z * m_Scale, seed);
     }
 
@@ -152,7 +152,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
      * @param seed seed as an int to modify the noise produced
      * @return a float between -1.0f (inclusive) and 1.0f (exclusive)
      */
-    public float getRawNoise(float x, float y, float z, int seed) {
+    public float getRawNoise(float x, float y, float z, long seed) {
         int n = m_Dimensions;
         int[] f = this.f;
         int[] c = this.c;
@@ -204,13 +204,13 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
     }
 
     /**
-     * Makes a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, int, float[])}.
+     * Makes a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, long, float[])}.
      * This takes an array or varargs of floats, which are used in order as weights for successively doubled frequencies
      * for the noise. It may be good to experiment with this; {@code 0.5f, 1.1f, 1.9f, 1.2f, 0.6f} will be different
      * from {@code 2f, 0.8f, 0f, 0.4f, 1.3f}. Lengths for the weights array of 10 or more can yield nice results, but
      * take longer to compute. Weights of 0 do not require calculating any noise when they are used.
      * @param weights an array or varargs of float, where each float, in order, corresponds to a weight for a higher frequency of noise
-     * @return a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, int, float[])}
+     * @return a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, long, float[])}
      */
     public static float[] prepareBands(float... weights)
     {
@@ -230,7 +230,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
     /**
      * A 3D noise function that allows different frequencies to be mixed in unusual ways, similarly to octaves in other
      * noise functions but allowing arbitrary weights for frequencies. This takes x, y, and z coordinates as floats, a
-     * seed that will alter the noise calls like it does in {@link #getRawNoise(float, float, float, int)}, and a float
+     * seed that will alter the noise calls like it does in {@link #getRawNoise(float, float, float, long)}, and a float
      * array of bands. The bands must be readied by {@link #prepareBands(float...)}, which creates a specially formatted
      * float array that can (and probably should) be reused; the items given to prepareBands are each weights for
      * successively doubled frequencies. Returns a float between -1.0f (inclusive, in theory) and 1.0f exclusive.
@@ -241,7 +241,7 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
      * @param bands a float array that was created by {@link #prepareBands(float...)}; holds frequency band data
      * @return a float between -1.0f (inclusive) and 1.0f (exclusive)
      */
-    public float getBandedNoise(float x, float y, float z, int seed, float[] bands) {
+    public float getBandedNoise(float x, float y, float z, long seed, float[] bands) {
         float result=0, ax, ay, az, t;
         final int len = bands.length - 1;
         for (int b = 0; b < len; b++) {

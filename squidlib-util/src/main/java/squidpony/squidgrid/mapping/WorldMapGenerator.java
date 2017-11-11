@@ -1117,7 +1117,8 @@ public abstract class WorldMapGenerator {
                 fresh = true;
             }
             rng.setState(state);
-            int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
+            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
+            int t;
 
             waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
@@ -1440,7 +1441,8 @@ public abstract class WorldMapGenerator {
                 fresh = true;
             }
             rng.setState(state);
-            int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;
+            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
+            int t;
 
             waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;

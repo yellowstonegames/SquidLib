@@ -16,13 +16,13 @@ import squidpony.annotation.Beta;
 @Beta
 public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
 
-    public int seed;
+    public long seed;
     public static final WhirlingNoise instance = new WhirlingNoise();
     public WhirlingNoise()
     {
         seed = 123456789;
     }
-    public WhirlingNoise(int seed)
+    public WhirlingNoise(long seed)
     {
         this.seed = seed;
     }
@@ -631,7 +631,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             {-0.5569895f, -0.006145278f, -0.37386537f, -0.7415859f},
             {-0.17033575f, -0.846144f, 0.22243054f, -0.45337692f},
     };
-//    public static void randomUnitVector4(int seed, final float[] vector)
+//    public static void randomUnitVector4(long seed, final float[] vector)
 //    {
 //        double mag = 0.0;
 //        float t;
@@ -772,7 +772,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param seed ignored entirely.
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public double getNoiseWithSeed(final double x, final double y, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final long seed) {
         return noise(x, y, seed);
     }
     /**
@@ -797,7 +797,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param seed ignored entirely.
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         return noise(x, y, z, seed);
     }
 
@@ -825,7 +825,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param seed ignored entirely.
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         return noise(x, y, z, w, seed);
     }
 
@@ -856,7 +856,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(final double xin, final double yin, final int seed) {
+    public static double noise(final double xin, final double yin, final long seed) {
         //xin *= epi;
         //yin *= epi;
         double noise0, noise1, noise2; // from the three corners
@@ -968,7 +968,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param zin Z input
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(final double xin, final double yin, final double zin, final int seed){
+    public static double noise(final double xin, final double yin, final double zin, final long seed){
         //xin *= epi;
         //yin *= epi;
         //zin *= epi;
@@ -1156,7 +1156,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param seed any int; will be used to completely alter the noise
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(final double x, final double y, final double z, final double w, final int seed)
+    public static double noise(final double x, final double y, final double z, final double w, final long seed)
     {
         // The skewing and unskewing factors are hairy again for the 4D case
 
