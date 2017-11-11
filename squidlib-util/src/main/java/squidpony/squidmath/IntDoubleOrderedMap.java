@@ -2040,7 +2040,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
     public int hashCode() {
         int h = 0;
-        for (int j = realSize(), i = 0, t = 0; j-- != 0; ) {
+        for (int j = realSize(), i = 0, t; j-- != 0; ) {
             while (key[i] == 0)
                 i++;
             t = key[i];
@@ -2052,6 +2052,10 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         if (containsNullKey) h += NumberTools.doubleToMixedIntBits(value[n]);
         return h;
     }
+    public long hash64()
+    {
+        return 31L * CrossHash.hash64(key) + CrossHash.hash64(value);
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -2060,9 +2064,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         if (!(o instanceof Map))
             return false;
         Map<?, ?> m = (Map<?, ?>) o;
-        if (m.size() != size())
-            return false;
-        return mapEntrySet().containsAll(m.entrySet());
+        return m.size() == size() && mapEntrySet().containsAll(m.entrySet());
     }
 
 
