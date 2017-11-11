@@ -4413,6 +4413,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     }
                 }
             }
+            vl[i] = atFraction(tmp);
         }
         return vl;
     }
