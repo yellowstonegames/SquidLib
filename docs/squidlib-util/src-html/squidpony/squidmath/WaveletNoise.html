@@ -61,7 +61,7 @@
 <span class="sourceLineNo">053</span>            }, upCoefficients = {0.25f, 0.75f, 0.75f, 0.25f};<a name="line.53"></a>
 <span class="sourceLineNo">054</span>    public float m_Scale;<a name="line.54"></a>
 <span class="sourceLineNo">055</span><a name="line.55"></a>
-<span class="sourceLineNo">056</span>    public int seed = 0x1337BEEF;<a name="line.56"></a>
+<span class="sourceLineNo">056</span>    public long seed = 0x1337BEEFBEE7L;<a name="line.56"></a>
 <span class="sourceLineNo">057</span>    public static final WaveletNoise instance = new WaveletNoise();<a name="line.57"></a>
 <span class="sourceLineNo">058</span><a name="line.58"></a>
 <span class="sourceLineNo">059</span><a name="line.59"></a>
@@ -90,7 +90,7 @@
 <span class="sourceLineNo">082</span>    }<a name="line.82"></a>
 <span class="sourceLineNo">083</span><a name="line.83"></a>
 <span class="sourceLineNo">084</span>    @Override<a name="line.84"></a>
-<span class="sourceLineNo">085</span>    public double getNoiseWithSeed(double x, int seed) {<a name="line.85"></a>
+<span class="sourceLineNo">085</span>    public double getNoiseWithSeed(double x, long seed) {<a name="line.85"></a>
 <span class="sourceLineNo">086</span>        return getRawNoise((float) x * m_Scale, 0f, 0f, seed);<a name="line.86"></a>
 <span class="sourceLineNo">087</span>    }<a name="line.87"></a>
 <span class="sourceLineNo">088</span><a name="line.88"></a>
@@ -101,7 +101,7 @@
 <span class="sourceLineNo">093</span>    }<a name="line.93"></a>
 <span class="sourceLineNo">094</span><a name="line.94"></a>
 <span class="sourceLineNo">095</span>    @Override<a name="line.95"></a>
-<span class="sourceLineNo">096</span>    public double getNoiseWithSeed(double x, double y, int seed) {<a name="line.96"></a>
+<span class="sourceLineNo">096</span>    public double getNoiseWithSeed(double x, double y, long seed) {<a name="line.96"></a>
 <span class="sourceLineNo">097</span>        return getRawNoise((float) x * m_Scale, (float) y * m_Scale, 0f, seed);<a name="line.97"></a>
 <span class="sourceLineNo">098</span>    }<a name="line.98"></a>
 <span class="sourceLineNo">099</span><a name="line.99"></a>
@@ -111,7 +111,7 @@
 <span class="sourceLineNo">103</span>    }<a name="line.103"></a>
 <span class="sourceLineNo">104</span><a name="line.104"></a>
 <span class="sourceLineNo">105</span>    @Override<a name="line.105"></a>
-<span class="sourceLineNo">106</span>    public double getNoiseWithSeed(double x, double y, double z, int seed) {<a name="line.106"></a>
+<span class="sourceLineNo">106</span>    public double getNoiseWithSeed(double x, double y, double z, long seed) {<a name="line.106"></a>
 <span class="sourceLineNo">107</span>        return getRawNoise((float) x * m_Scale, (float) y * m_Scale, (float) z * m_Scale, seed);<a name="line.107"></a>
 <span class="sourceLineNo">108</span>    }<a name="line.108"></a>
 <span class="sourceLineNo">109</span><a name="line.109"></a>
@@ -160,7 +160,7 @@
 <span class="sourceLineNo">152</span>     * @param seed seed as an int to modify the noise produced<a name="line.152"></a>
 <span class="sourceLineNo">153</span>     * @return a float between -1.0f (inclusive) and 1.0f (exclusive)<a name="line.153"></a>
 <span class="sourceLineNo">154</span>     */<a name="line.154"></a>
-<span class="sourceLineNo">155</span>    public float getRawNoise(float x, float y, float z, int seed) {<a name="line.155"></a>
+<span class="sourceLineNo">155</span>    public float getRawNoise(float x, float y, float z, long seed) {<a name="line.155"></a>
 <span class="sourceLineNo">156</span>        int n = m_Dimensions;<a name="line.156"></a>
 <span class="sourceLineNo">157</span>        int[] f = this.f;<a name="line.157"></a>
 <span class="sourceLineNo">158</span>        int[] c = this.c;<a name="line.158"></a>
@@ -212,13 +212,13 @@
 <span class="sourceLineNo">204</span>    }<a name="line.204"></a>
 <span class="sourceLineNo">205</span><a name="line.205"></a>
 <span class="sourceLineNo">206</span>    /**<a name="line.206"></a>
-<span class="sourceLineNo">207</span>     * Makes a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, int, float[])}.<a name="line.207"></a>
+<span class="sourceLineNo">207</span>     * Makes a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, long, float[])}.<a name="line.207"></a>
 <span class="sourceLineNo">208</span>     * This takes an array or varargs of floats, which are used in order as weights for successively doubled frequencies<a name="line.208"></a>
 <span class="sourceLineNo">209</span>     * for the noise. It may be good to experiment with this; {@code 0.5f, 1.1f, 1.9f, 1.2f, 0.6f} will be different<a name="line.209"></a>
 <span class="sourceLineNo">210</span>     * from {@code 2f, 0.8f, 0f, 0.4f, 1.3f}. Lengths for the weights array of 10 or more can yield nice results, but<a name="line.210"></a>
 <span class="sourceLineNo">211</span>     * take longer to compute. Weights of 0 do not require calculating any noise when they are used.<a name="line.211"></a>
 <span class="sourceLineNo">212</span>     * @param weights an array or varargs of float, where each float, in order, corresponds to a weight for a higher frequency of noise<a name="line.212"></a>
-<span class="sourceLineNo">213</span>     * @return a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, int, float[])}<a name="line.213"></a>
+<span class="sourceLineNo">213</span>     * @return a float array that can be passed as bands to {@link #getBandedNoise(float, float, float, long, float[])}<a name="line.213"></a>
 <span class="sourceLineNo">214</span>     */<a name="line.214"></a>
 <span class="sourceLineNo">215</span>    public static float[] prepareBands(float... weights)<a name="line.215"></a>
 <span class="sourceLineNo">216</span>    {<a name="line.216"></a>
@@ -238,7 +238,7 @@
 <span class="sourceLineNo">230</span>    /**<a name="line.230"></a>
 <span class="sourceLineNo">231</span>     * A 3D noise function that allows different frequencies to be mixed in unusual ways, similarly to octaves in other<a name="line.231"></a>
 <span class="sourceLineNo">232</span>     * noise functions but allowing arbitrary weights for frequencies. This takes x, y, and z coordinates as floats, a<a name="line.232"></a>
-<span class="sourceLineNo">233</span>     * seed that will alter the noise calls like it does in {@link #getRawNoise(float, float, float, int)}, and a float<a name="line.233"></a>
+<span class="sourceLineNo">233</span>     * seed that will alter the noise calls like it does in {@link #getRawNoise(float, float, float, long)}, and a float<a name="line.233"></a>
 <span class="sourceLineNo">234</span>     * array of bands. The bands must be readied by {@link #prepareBands(float...)}, which creates a specially formatted<a name="line.234"></a>
 <span class="sourceLineNo">235</span>     * float array that can (and probably should) be reused; the items given to prepareBands are each weights for<a name="line.235"></a>
 <span class="sourceLineNo">236</span>     * successively doubled frequencies. Returns a float between -1.0f (inclusive, in theory) and 1.0f exclusive.<a name="line.236"></a>
@@ -249,7 +249,7 @@
 <span class="sourceLineNo">241</span>     * @param bands a float array that was created by {@link #prepareBands(float...)}; holds frequency band data<a name="line.241"></a>
 <span class="sourceLineNo">242</span>     * @return a float between -1.0f (inclusive) and 1.0f (exclusive)<a name="line.242"></a>
 <span class="sourceLineNo">243</span>     */<a name="line.243"></a>
-<span class="sourceLineNo">244</span>    public float getBandedNoise(float x, float y, float z, int seed, float[] bands) {<a name="line.244"></a>
+<span class="sourceLineNo">244</span>    public float getBandedNoise(float x, float y, float z, long seed, float[] bands) {<a name="line.244"></a>
 <span class="sourceLineNo">245</span>        float result=0, ax, ay, az, t;<a name="line.245"></a>
 <span class="sourceLineNo">246</span>        final int len = bands.length - 1;<a name="line.246"></a>
 <span class="sourceLineNo">247</span>        for (int b = 0; b &lt; len; b++) {<a name="line.247"></a>

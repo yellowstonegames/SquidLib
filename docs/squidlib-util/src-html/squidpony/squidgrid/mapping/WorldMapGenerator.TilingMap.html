@@ -1125,515 +1125,517 @@
 <span class="sourceLineNo">1117</span>                fresh = true;<a name="line.1117"></a>
 <span class="sourceLineNo">1118</span>            }<a name="line.1118"></a>
 <span class="sourceLineNo">1119</span>            rng.setState(state);<a name="line.1119"></a>
-<span class="sourceLineNo">1120</span>            int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;<a name="line.1120"></a>
-<span class="sourceLineNo">1121</span><a name="line.1121"></a>
-<span class="sourceLineNo">1122</span>            waterModifier = (waterMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;<a name="line.1122"></a>
-<span class="sourceLineNo">1123</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1123"></a>
-<span class="sourceLineNo">1124</span><a name="line.1124"></a>
-<span class="sourceLineNo">1125</span>            double p, q,<a name="line.1125"></a>
-<span class="sourceLineNo">1126</span>                    ps, pc,<a name="line.1126"></a>
-<span class="sourceLineNo">1127</span>                    qs, qc,<a name="line.1127"></a>
-<span class="sourceLineNo">1128</span>                    h, temp,<a name="line.1128"></a>
-<span class="sourceLineNo">1129</span>                    i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,<a name="line.1129"></a>
-<span class="sourceLineNo">1130</span>                    xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;<a name="line.1130"></a>
-<span class="sourceLineNo">1131</span>            double[] trigTable = new double[width &lt;&lt; 1];<a name="line.1131"></a>
-<span class="sourceLineNo">1132</span>            for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.1132"></a>
-<span class="sourceLineNo">1133</span>                p = xPos * i_w;<a name="line.1133"></a>
-<span class="sourceLineNo">1134</span>                trigTable[x&lt;&lt;1]   = Math.sin(p);<a name="line.1134"></a>
-<span class="sourceLineNo">1135</span>                trigTable[x&lt;&lt;1|1] = Math.cos(p);<a name="line.1135"></a>
-<span class="sourceLineNo">1136</span>            }<a name="line.1136"></a>
-<span class="sourceLineNo">1137</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1137"></a>
-<span class="sourceLineNo">1138</span>                q = yPos * i_h;<a name="line.1138"></a>
-<span class="sourceLineNo">1139</span>                qs = Math.sin(q);<a name="line.1139"></a>
-<span class="sourceLineNo">1140</span>                qc = Math.cos(q);<a name="line.1140"></a>
-<span class="sourceLineNo">1141</span>                for (int x = 0, xt = 0; x &lt; width; x++) {<a name="line.1141"></a>
-<span class="sourceLineNo">1142</span>                    ps = trigTable[xt++];//Math.sin(p);<a name="line.1142"></a>
-<span class="sourceLineNo">1143</span>                    pc = trigTable[xt++];//Math.cos(p);<a name="line.1143"></a>
-<span class="sourceLineNo">1144</span>                    h = terrain.getNoiseWithSeed(pc +<a name="line.1144"></a>
-<span class="sourceLineNo">1145</span>                                    terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),<a name="line.1145"></a>
-<span class="sourceLineNo">1146</span>                            ps, qc, qs, seedA);<a name="line.1146"></a>
-<span class="sourceLineNo">1147</span>                    h *= waterModifier;<a name="line.1147"></a>
-<span class="sourceLineNo">1148</span>                    heightData[x][y] = h;<a name="line.1148"></a>
-<span class="sourceLineNo">1149</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc<a name="line.1149"></a>
-<span class="sourceLineNo">1150</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)<a name="line.1150"></a>
-<span class="sourceLineNo">1151</span>                            , qs, seedB));<a name="line.1151"></a>
-<span class="sourceLineNo">1152</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs<a name="line.1152"></a>
-<span class="sourceLineNo">1153</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)<a name="line.1153"></a>
-<span class="sourceLineNo">1154</span>                            , seedC));<a name="line.1154"></a>
-<span class="sourceLineNo">1155</span>                    freshwaterData[x][y] = (ps = Math.min(<a name="line.1155"></a>
-<span class="sourceLineNo">1156</span>                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qc * 0.46,qs * 0.46, seedC - seedA - seedB) + 0.38),<a name="line.1156"></a>
-<span class="sourceLineNo">1157</span>                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;<a name="line.1157"></a>
-<span class="sourceLineNo">1158</span><a name="line.1158"></a>
-<span class="sourceLineNo">1159</span>                    minHeightActual = Math.min(minHeightActual, h);<a name="line.1159"></a>
-<span class="sourceLineNo">1160</span>                    maxHeightActual = Math.max(maxHeightActual, h);<a name="line.1160"></a>
-<span class="sourceLineNo">1161</span>                    if(fresh) {<a name="line.1161"></a>
-<span class="sourceLineNo">1162</span>                        minHeight = Math.min(minHeight, h);<a name="line.1162"></a>
-<span class="sourceLineNo">1163</span>                        maxHeight = Math.max(maxHeight, h);<a name="line.1163"></a>
-<span class="sourceLineNo">1164</span><a name="line.1164"></a>
-<span class="sourceLineNo">1165</span>                        minHeat0 = Math.min(minHeat0, p);<a name="line.1165"></a>
-<span class="sourceLineNo">1166</span>                        maxHeat0 = Math.max(maxHeat0, p);<a name="line.1166"></a>
-<span class="sourceLineNo">1167</span><a name="line.1167"></a>
-<span class="sourceLineNo">1168</span>                        minWet0 = Math.min(minWet0, temp);<a name="line.1168"></a>
-<span class="sourceLineNo">1169</span>                        maxWet0 = Math.max(maxWet0, temp);<a name="line.1169"></a>
-<span class="sourceLineNo">1170</span><a name="line.1170"></a>
-<span class="sourceLineNo">1171</span>                    }<a name="line.1171"></a>
-<span class="sourceLineNo">1172</span>                }<a name="line.1172"></a>
-<span class="sourceLineNo">1173</span>                minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.1173"></a>
-<span class="sourceLineNo">1174</span>                maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.1174"></a>
-<span class="sourceLineNo">1175</span><a name="line.1175"></a>
-<span class="sourceLineNo">1176</span>            }<a name="line.1176"></a>
-<span class="sourceLineNo">1177</span>            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),<a name="line.1177"></a>
-<span class="sourceLineNo">1178</span>                    heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.1178"></a>
-<span class="sourceLineNo">1179</span>                    wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.1179"></a>
-<span class="sourceLineNo">1180</span>                    hMod,<a name="line.1180"></a>
-<span class="sourceLineNo">1181</span>                    halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;<a name="line.1181"></a>
-<span class="sourceLineNo">1182</span>            double minHeightActual0 = minHeightActual;<a name="line.1182"></a>
-<span class="sourceLineNo">1183</span>            double maxHeightActual0 = maxHeightActual;<a name="line.1183"></a>
-<span class="sourceLineNo">1184</span>            yPos = startY;<a name="line.1184"></a>
-<span class="sourceLineNo">1185</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1185"></a>
-<span class="sourceLineNo">1186</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.1186"></a>
-<span class="sourceLineNo">1187</span><a name="line.1187"></a>
-<span class="sourceLineNo">1188</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1188"></a>
-<span class="sourceLineNo">1189</span>                temp = Math.abs(yPos - halfHeight) * i_half;<a name="line.1189"></a>
-<span class="sourceLineNo">1190</span>                temp *= (2.4 - temp);<a name="line.1190"></a>
-<span class="sourceLineNo">1191</span>                temp = 2.2 - temp;<a name="line.1191"></a>
-<span class="sourceLineNo">1192</span>                for (int x = 0; x &lt; width; x++) {<a name="line.1192"></a>
-<span class="sourceLineNo">1193</span>                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);<a name="line.1193"></a>
-<span class="sourceLineNo">1194</span>                    minHeightActual0 = Math.min(minHeightActual0, h);<a name="line.1194"></a>
-<span class="sourceLineNo">1195</span>                    maxHeightActual0 = Math.max(maxHeightActual0, h);<a name="line.1195"></a>
-<span class="sourceLineNo">1196</span>                    heightCodeData[x][y] = (t = codeHeight(h));<a name="line.1196"></a>
-<span class="sourceLineNo">1197</span>                    hMod = 1.0;<a name="line.1197"></a>
-<span class="sourceLineNo">1198</span>                    switch (t) {<a name="line.1198"></a>
-<span class="sourceLineNo">1199</span>                        case 0:<a name="line.1199"></a>
-<span class="sourceLineNo">1200</span>                        case 1:<a name="line.1200"></a>
-<span class="sourceLineNo">1201</span>                        case 2:<a name="line.1201"></a>
-<span class="sourceLineNo">1202</span>                        case 3:<a name="line.1202"></a>
-<span class="sourceLineNo">1203</span>                            h = 0.4;<a name="line.1203"></a>
-<span class="sourceLineNo">1204</span>                            hMod = 0.2;<a name="line.1204"></a>
-<span class="sourceLineNo">1205</span>                            break;<a name="line.1205"></a>
-<span class="sourceLineNo">1206</span>                        case 6:<a name="line.1206"></a>
-<span class="sourceLineNo">1207</span>                            h = -0.1 * (h - forestLower - 0.08);<a name="line.1207"></a>
-<span class="sourceLineNo">1208</span>                            break;<a name="line.1208"></a>
-<span class="sourceLineNo">1209</span>                        case 7:<a name="line.1209"></a>
-<span class="sourceLineNo">1210</span>                            h *= -0.25;<a name="line.1210"></a>
-<span class="sourceLineNo">1211</span>                            break;<a name="line.1211"></a>
-<span class="sourceLineNo">1212</span>                        case 8:<a name="line.1212"></a>
-<span class="sourceLineNo">1213</span>                            h *= -0.4;<a name="line.1213"></a>
-<span class="sourceLineNo">1214</span>                            break;<a name="line.1214"></a>
-<span class="sourceLineNo">1215</span>                        default:<a name="line.1215"></a>
-<span class="sourceLineNo">1216</span>                            h *= 0.05;<a name="line.1216"></a>
-<span class="sourceLineNo">1217</span>                    }<a name="line.1217"></a>
-<span class="sourceLineNo">1218</span>                    heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);<a name="line.1218"></a>
-<span class="sourceLineNo">1219</span>                    if (fresh) {<a name="line.1219"></a>
-<span class="sourceLineNo">1220</span>                        ps = Math.min(ps, h); //minHeat0<a name="line.1220"></a>
-<span class="sourceLineNo">1221</span>                        pc = Math.max(pc, h); //maxHeat0<a name="line.1221"></a>
-<span class="sourceLineNo">1222</span>                    }<a name="line.1222"></a>
-<span class="sourceLineNo">1223</span>                }<a name="line.1223"></a>
-<span class="sourceLineNo">1224</span>            }<a name="line.1224"></a>
-<span class="sourceLineNo">1225</span>            if(fresh)<a name="line.1225"></a>
-<span class="sourceLineNo">1226</span>            {<a name="line.1226"></a>
-<span class="sourceLineNo">1227</span>                minHeat1 = ps;<a name="line.1227"></a>
-<span class="sourceLineNo">1228</span>                maxHeat1 = pc;<a name="line.1228"></a>
-<span class="sourceLineNo">1229</span>            }<a name="line.1229"></a>
-<span class="sourceLineNo">1230</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.1230"></a>
-<span class="sourceLineNo">1231</span>            qs = Double.POSITIVE_INFINITY;<a name="line.1231"></a>
-<span class="sourceLineNo">1232</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.1232"></a>
-<span class="sourceLineNo">1233</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1233"></a>
-<span class="sourceLineNo">1234</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.1234"></a>
-<span class="sourceLineNo">1235</span><a name="line.1235"></a>
+<span class="sourceLineNo">1120</span>            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();<a name="line.1120"></a>
+<span class="sourceLineNo">1121</span>            int t;<a name="line.1121"></a>
+<span class="sourceLineNo">1122</span><a name="line.1122"></a>
+<span class="sourceLineNo">1123</span>            waterModifier = (waterMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;<a name="line.1123"></a>
+<span class="sourceLineNo">1124</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1124"></a>
+<span class="sourceLineNo">1125</span><a name="line.1125"></a>
+<span class="sourceLineNo">1126</span>            double p, q,<a name="line.1126"></a>
+<span class="sourceLineNo">1127</span>                    ps, pc,<a name="line.1127"></a>
+<span class="sourceLineNo">1128</span>                    qs, qc,<a name="line.1128"></a>
+<span class="sourceLineNo">1129</span>                    h, temp,<a name="line.1129"></a>
+<span class="sourceLineNo">1130</span>                    i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,<a name="line.1130"></a>
+<span class="sourceLineNo">1131</span>                    xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;<a name="line.1131"></a>
+<span class="sourceLineNo">1132</span>            double[] trigTable = new double[width &lt;&lt; 1];<a name="line.1132"></a>
+<span class="sourceLineNo">1133</span>            for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.1133"></a>
+<span class="sourceLineNo">1134</span>                p = xPos * i_w;<a name="line.1134"></a>
+<span class="sourceLineNo">1135</span>                trigTable[x&lt;&lt;1]   = Math.sin(p);<a name="line.1135"></a>
+<span class="sourceLineNo">1136</span>                trigTable[x&lt;&lt;1|1] = Math.cos(p);<a name="line.1136"></a>
+<span class="sourceLineNo">1137</span>            }<a name="line.1137"></a>
+<span class="sourceLineNo">1138</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1138"></a>
+<span class="sourceLineNo">1139</span>                q = yPos * i_h;<a name="line.1139"></a>
+<span class="sourceLineNo">1140</span>                qs = Math.sin(q);<a name="line.1140"></a>
+<span class="sourceLineNo">1141</span>                qc = Math.cos(q);<a name="line.1141"></a>
+<span class="sourceLineNo">1142</span>                for (int x = 0, xt = 0; x &lt; width; x++) {<a name="line.1142"></a>
+<span class="sourceLineNo">1143</span>                    ps = trigTable[xt++];//Math.sin(p);<a name="line.1143"></a>
+<span class="sourceLineNo">1144</span>                    pc = trigTable[xt++];//Math.cos(p);<a name="line.1144"></a>
+<span class="sourceLineNo">1145</span>                    h = terrain.getNoiseWithSeed(pc +<a name="line.1145"></a>
+<span class="sourceLineNo">1146</span>                                    terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),<a name="line.1146"></a>
+<span class="sourceLineNo">1147</span>                            ps, qc, qs, seedA);<a name="line.1147"></a>
+<span class="sourceLineNo">1148</span>                    h *= waterModifier;<a name="line.1148"></a>
+<span class="sourceLineNo">1149</span>                    heightData[x][y] = h;<a name="line.1149"></a>
+<span class="sourceLineNo">1150</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc<a name="line.1150"></a>
+<span class="sourceLineNo">1151</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)<a name="line.1151"></a>
+<span class="sourceLineNo">1152</span>                            , qs, seedB));<a name="line.1152"></a>
+<span class="sourceLineNo">1153</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs<a name="line.1153"></a>
+<span class="sourceLineNo">1154</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)<a name="line.1154"></a>
+<span class="sourceLineNo">1155</span>                            , seedC));<a name="line.1155"></a>
+<span class="sourceLineNo">1156</span>                    freshwaterData[x][y] = (ps = Math.min(<a name="line.1156"></a>
+<span class="sourceLineNo">1157</span>                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qc * 0.46,qs * 0.46, seedC - seedA - seedB) + 0.38),<a name="line.1157"></a>
+<span class="sourceLineNo">1158</span>                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;<a name="line.1158"></a>
+<span class="sourceLineNo">1159</span><a name="line.1159"></a>
+<span class="sourceLineNo">1160</span>                    minHeightActual = Math.min(minHeightActual, h);<a name="line.1160"></a>
+<span class="sourceLineNo">1161</span>                    maxHeightActual = Math.max(maxHeightActual, h);<a name="line.1161"></a>
+<span class="sourceLineNo">1162</span>                    if(fresh) {<a name="line.1162"></a>
+<span class="sourceLineNo">1163</span>                        minHeight = Math.min(minHeight, h);<a name="line.1163"></a>
+<span class="sourceLineNo">1164</span>                        maxHeight = Math.max(maxHeight, h);<a name="line.1164"></a>
+<span class="sourceLineNo">1165</span><a name="line.1165"></a>
+<span class="sourceLineNo">1166</span>                        minHeat0 = Math.min(minHeat0, p);<a name="line.1166"></a>
+<span class="sourceLineNo">1167</span>                        maxHeat0 = Math.max(maxHeat0, p);<a name="line.1167"></a>
+<span class="sourceLineNo">1168</span><a name="line.1168"></a>
+<span class="sourceLineNo">1169</span>                        minWet0 = Math.min(minWet0, temp);<a name="line.1169"></a>
+<span class="sourceLineNo">1170</span>                        maxWet0 = Math.max(maxWet0, temp);<a name="line.1170"></a>
+<span class="sourceLineNo">1171</span><a name="line.1171"></a>
+<span class="sourceLineNo">1172</span>                    }<a name="line.1172"></a>
+<span class="sourceLineNo">1173</span>                }<a name="line.1173"></a>
+<span class="sourceLineNo">1174</span>                minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.1174"></a>
+<span class="sourceLineNo">1175</span>                maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.1175"></a>
+<span class="sourceLineNo">1176</span><a name="line.1176"></a>
+<span class="sourceLineNo">1177</span>            }<a name="line.1177"></a>
+<span class="sourceLineNo">1178</span>            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),<a name="line.1178"></a>
+<span class="sourceLineNo">1179</span>                    heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.1179"></a>
+<span class="sourceLineNo">1180</span>                    wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.1180"></a>
+<span class="sourceLineNo">1181</span>                    hMod,<a name="line.1181"></a>
+<span class="sourceLineNo">1182</span>                    halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;<a name="line.1182"></a>
+<span class="sourceLineNo">1183</span>            double minHeightActual0 = minHeightActual;<a name="line.1183"></a>
+<span class="sourceLineNo">1184</span>            double maxHeightActual0 = maxHeightActual;<a name="line.1184"></a>
+<span class="sourceLineNo">1185</span>            yPos = startY;<a name="line.1185"></a>
+<span class="sourceLineNo">1186</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1186"></a>
+<span class="sourceLineNo">1187</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span><a name="line.1188"></a>
+<span class="sourceLineNo">1189</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1189"></a>
+<span class="sourceLineNo">1190</span>                temp = Math.abs(yPos - halfHeight) * i_half;<a name="line.1190"></a>
+<span class="sourceLineNo">1191</span>                temp *= (2.4 - temp);<a name="line.1191"></a>
+<span class="sourceLineNo">1192</span>                temp = 2.2 - temp;<a name="line.1192"></a>
+<span class="sourceLineNo">1193</span>                for (int x = 0; x &lt; width; x++) {<a name="line.1193"></a>
+<span class="sourceLineNo">1194</span>                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);<a name="line.1194"></a>
+<span class="sourceLineNo">1195</span>                    minHeightActual0 = Math.min(minHeightActual0, h);<a name="line.1195"></a>
+<span class="sourceLineNo">1196</span>                    maxHeightActual0 = Math.max(maxHeightActual0, h);<a name="line.1196"></a>
+<span class="sourceLineNo">1197</span>                    heightCodeData[x][y] = (t = codeHeight(h));<a name="line.1197"></a>
+<span class="sourceLineNo">1198</span>                    hMod = 1.0;<a name="line.1198"></a>
+<span class="sourceLineNo">1199</span>                    switch (t) {<a name="line.1199"></a>
+<span class="sourceLineNo">1200</span>                        case 0:<a name="line.1200"></a>
+<span class="sourceLineNo">1201</span>                        case 1:<a name="line.1201"></a>
+<span class="sourceLineNo">1202</span>                        case 2:<a name="line.1202"></a>
+<span class="sourceLineNo">1203</span>                        case 3:<a name="line.1203"></a>
+<span class="sourceLineNo">1204</span>                            h = 0.4;<a name="line.1204"></a>
+<span class="sourceLineNo">1205</span>                            hMod = 0.2;<a name="line.1205"></a>
+<span class="sourceLineNo">1206</span>                            break;<a name="line.1206"></a>
+<span class="sourceLineNo">1207</span>                        case 6:<a name="line.1207"></a>
+<span class="sourceLineNo">1208</span>                            h = -0.1 * (h - forestLower - 0.08);<a name="line.1208"></a>
+<span class="sourceLineNo">1209</span>                            break;<a name="line.1209"></a>
+<span class="sourceLineNo">1210</span>                        case 7:<a name="line.1210"></a>
+<span class="sourceLineNo">1211</span>                            h *= -0.25;<a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>                            break;<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>                        case 8:<a name="line.1213"></a>
+<span class="sourceLineNo">1214</span>                            h *= -0.4;<a name="line.1214"></a>
+<span class="sourceLineNo">1215</span>                            break;<a name="line.1215"></a>
+<span class="sourceLineNo">1216</span>                        default:<a name="line.1216"></a>
+<span class="sourceLineNo">1217</span>                            h *= 0.05;<a name="line.1217"></a>
+<span class="sourceLineNo">1218</span>                    }<a name="line.1218"></a>
+<span class="sourceLineNo">1219</span>                    heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);<a name="line.1219"></a>
+<span class="sourceLineNo">1220</span>                    if (fresh) {<a name="line.1220"></a>
+<span class="sourceLineNo">1221</span>                        ps = Math.min(ps, h); //minHeat0<a name="line.1221"></a>
+<span class="sourceLineNo">1222</span>                        pc = Math.max(pc, h); //maxHeat0<a name="line.1222"></a>
+<span class="sourceLineNo">1223</span>                    }<a name="line.1223"></a>
+<span class="sourceLineNo">1224</span>                }<a name="line.1224"></a>
+<span class="sourceLineNo">1225</span>            }<a name="line.1225"></a>
+<span class="sourceLineNo">1226</span>            if(fresh)<a name="line.1226"></a>
+<span class="sourceLineNo">1227</span>            {<a name="line.1227"></a>
+<span class="sourceLineNo">1228</span>                minHeat1 = ps;<a name="line.1228"></a>
+<span class="sourceLineNo">1229</span>                maxHeat1 = pc;<a name="line.1229"></a>
+<span class="sourceLineNo">1230</span>            }<a name="line.1230"></a>
+<span class="sourceLineNo">1231</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.1231"></a>
+<span class="sourceLineNo">1232</span>            qs = Double.POSITIVE_INFINITY;<a name="line.1232"></a>
+<span class="sourceLineNo">1233</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.1233"></a>
+<span class="sourceLineNo">1234</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1234"></a>
+<span class="sourceLineNo">1235</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.1235"></a>
 <span class="sourceLineNo">1236</span><a name="line.1236"></a>
-<span class="sourceLineNo">1237</span>            for (int y = 0; y &lt; height; y++) {<a name="line.1237"></a>
-<span class="sourceLineNo">1238</span>                for (int x = 0; x &lt; width; x++) {<a name="line.1238"></a>
-<span class="sourceLineNo">1239</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.1239"></a>
-<span class="sourceLineNo">1240</span>                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.1240"></a>
-<span class="sourceLineNo">1241</span>                    if (fresh) {<a name="line.1241"></a>
-<span class="sourceLineNo">1242</span>                        qs = Math.min(qs, h);<a name="line.1242"></a>
-<span class="sourceLineNo">1243</span>                        qc = Math.max(qc, h);<a name="line.1243"></a>
-<span class="sourceLineNo">1244</span>                        ps = Math.min(ps, temp);<a name="line.1244"></a>
-<span class="sourceLineNo">1245</span>                        pc = Math.max(pc, temp);<a name="line.1245"></a>
-<span class="sourceLineNo">1246</span>                    }<a name="line.1246"></a>
-<span class="sourceLineNo">1247</span>                }<a name="line.1247"></a>
-<span class="sourceLineNo">1248</span>            }<a name="line.1248"></a>
-<span class="sourceLineNo">1249</span>            if(fresh)<a name="line.1249"></a>
-<span class="sourceLineNo">1250</span>            {<a name="line.1250"></a>
-<span class="sourceLineNo">1251</span>                minHeat = qs;<a name="line.1251"></a>
-<span class="sourceLineNo">1252</span>                maxHeat = qc;<a name="line.1252"></a>
-<span class="sourceLineNo">1253</span>                minWet = ps;<a name="line.1253"></a>
-<span class="sourceLineNo">1254</span>                maxWet = pc;<a name="line.1254"></a>
-<span class="sourceLineNo">1255</span>            }<a name="line.1255"></a>
-<span class="sourceLineNo">1256</span>            landData.refill(heightCodeData, 4, 999);<a name="line.1256"></a>
-<span class="sourceLineNo">1257</span>            /*<a name="line.1257"></a>
-<span class="sourceLineNo">1258</span>            if(generateRivers) {<a name="line.1258"></a>
-<span class="sourceLineNo">1259</span>                if (fresh) {<a name="line.1259"></a>
-<span class="sourceLineNo">1260</span>                    addRivers();<a name="line.1260"></a>
-<span class="sourceLineNo">1261</span>                    riverData.connect8way().thin().thin();<a name="line.1261"></a>
-<span class="sourceLineNo">1262</span>                    lakeData.connect8way().thin();<a name="line.1262"></a>
-<span class="sourceLineNo">1263</span>                    partialRiverData.remake(riverData);<a name="line.1263"></a>
-<span class="sourceLineNo">1264</span>                    partialLakeData.remake(lakeData);<a name="line.1264"></a>
-<span class="sourceLineNo">1265</span>                } else {<a name="line.1265"></a>
-<span class="sourceLineNo">1266</span>                    partialRiverData.remake(riverData);<a name="line.1266"></a>
-<span class="sourceLineNo">1267</span>                    partialLakeData.remake(lakeData);<a name="line.1267"></a>
-<span class="sourceLineNo">1268</span>                    int stx = (zoomStartX &gt;&gt; (zoom)) - (width &gt;&gt; 1),<a name="line.1268"></a>
-<span class="sourceLineNo">1269</span>                            sty = (zoomStartY &gt;&gt; (zoom)) - (height &gt;&gt; 1);<a name="line.1269"></a>
-<span class="sourceLineNo">1270</span>                    for (int i = 1; i &lt;= zoom; i++) {<a name="line.1270"></a>
-<span class="sourceLineNo">1271</span>//                        int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) &lt;&lt; (i - 1),<a name="line.1271"></a>
-<span class="sourceLineNo">1272</span>//                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) &lt;&lt; (i - 1);<a name="line.1272"></a>
-<span class="sourceLineNo">1273</span>                        if ((i &amp; 3) == 3) {<a name="line.1273"></a>
-<span class="sourceLineNo">1274</span>                            partialRiverData.zoom(stx, sty).connect8way();<a name="line.1274"></a>
-<span class="sourceLineNo">1275</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));<a name="line.1275"></a>
-<span class="sourceLineNo">1276</span>                            partialLakeData.zoom(stx, sty).connect8way();<a name="line.1276"></a>
-<span class="sourceLineNo">1277</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));<a name="line.1277"></a>
-<span class="sourceLineNo">1278</span>                        } else {<a name="line.1278"></a>
-<span class="sourceLineNo">1279</span>                            partialRiverData.zoom(stx, sty).connect8way().thin();<a name="line.1279"></a>
-<span class="sourceLineNo">1280</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));<a name="line.1280"></a>
-<span class="sourceLineNo">1281</span>                            partialLakeData.zoom(stx, sty).connect8way().thin();<a name="line.1281"></a>
-<span class="sourceLineNo">1282</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));<a name="line.1282"></a>
-<span class="sourceLineNo">1283</span>                        }<a name="line.1283"></a>
-<span class="sourceLineNo">1284</span>                    }<a name="line.1284"></a>
-<span class="sourceLineNo">1285</span>                }<a name="line.1285"></a>
-<span class="sourceLineNo">1286</span>            }<a name="line.1286"></a>
-<span class="sourceLineNo">1287</span>            */<a name="line.1287"></a>
-<span class="sourceLineNo">1288</span>        }<a name="line.1288"></a>
-<span class="sourceLineNo">1289</span>    }<a name="line.1289"></a>
-<span class="sourceLineNo">1290</span><a name="line.1290"></a>
-<span class="sourceLineNo">1291</span>    /**<a name="line.1291"></a>
-<span class="sourceLineNo">1292</span>     * A concrete implementation of {@link WorldMapGenerator} that distorts the map as it nears the poles, expanding the<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span>     * smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator.<a name="line.1293"></a>
-<span class="sourceLineNo">1294</span>     * This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch this does.<a name="line.1294"></a>
-<span class="sourceLineNo">1295</span>     * You might also want to produce an oval map that more-accurately represents the changes in the diameter of a<a name="line.1295"></a>
-<span class="sourceLineNo">1296</span>     * latitude line on a spherical world; this could be done by using one of the maps this class makes and removing a<a name="line.1296"></a>
-<span class="sourceLineNo">1297</span>     * portion of each non-equator row, arranging the removal so if the map is n units wide at the equator, the height<a name="line.1297"></a>
-<span class="sourceLineNo">1298</span>     * should be n divided by {@link Math#PI}, and progressively more cells are removed from rows as you move away from<a name="line.1298"></a>
-<span class="sourceLineNo">1299</span>     * the equator (down to empty space or 1 cell left at the poles).<a name="line.1299"></a>
-<span class="sourceLineNo">1300</span>     * &lt;a href="http://i.imgur.com/wth01QD.png" &gt;Example map, showing distortion&lt;/a&gt;<a name="line.1300"></a>
-<span class="sourceLineNo">1301</span>     */<a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>    public static class SphereMap extends WorldMapGenerator {<a name="line.1302"></a>
-<span class="sourceLineNo">1303</span>        protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;<a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>        private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span>                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1306"></a>
-<span class="sourceLineNo">1307</span><a name="line.1307"></a>
-<span class="sourceLineNo">1308</span>        public final Noise3D terrain, terrainRidged, heat, moisture, otherRidged, riverRidged;<a name="line.1308"></a>
-<span class="sourceLineNo">1309</span>        public final double[][] xPositions,<a name="line.1309"></a>
-<span class="sourceLineNo">1310</span>                yPositions,<a name="line.1310"></a>
-<span class="sourceLineNo">1311</span>                zPositions;<a name="line.1311"></a>
-<span class="sourceLineNo">1312</span><a name="line.1312"></a>
+<span class="sourceLineNo">1237</span><a name="line.1237"></a>
+<span class="sourceLineNo">1238</span>            for (int y = 0; y &lt; height; y++) {<a name="line.1238"></a>
+<span class="sourceLineNo">1239</span>                for (int x = 0; x &lt; width; x++) {<a name="line.1239"></a>
+<span class="sourceLineNo">1240</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.1240"></a>
+<span class="sourceLineNo">1241</span>                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.1241"></a>
+<span class="sourceLineNo">1242</span>                    if (fresh) {<a name="line.1242"></a>
+<span class="sourceLineNo">1243</span>                        qs = Math.min(qs, h);<a name="line.1243"></a>
+<span class="sourceLineNo">1244</span>                        qc = Math.max(qc, h);<a name="line.1244"></a>
+<span class="sourceLineNo">1245</span>                        ps = Math.min(ps, temp);<a name="line.1245"></a>
+<span class="sourceLineNo">1246</span>                        pc = Math.max(pc, temp);<a name="line.1246"></a>
+<span class="sourceLineNo">1247</span>                    }<a name="line.1247"></a>
+<span class="sourceLineNo">1248</span>                }<a name="line.1248"></a>
+<span class="sourceLineNo">1249</span>            }<a name="line.1249"></a>
+<span class="sourceLineNo">1250</span>            if(fresh)<a name="line.1250"></a>
+<span class="sourceLineNo">1251</span>            {<a name="line.1251"></a>
+<span class="sourceLineNo">1252</span>                minHeat = qs;<a name="line.1252"></a>
+<span class="sourceLineNo">1253</span>                maxHeat = qc;<a name="line.1253"></a>
+<span class="sourceLineNo">1254</span>                minWet = ps;<a name="line.1254"></a>
+<span class="sourceLineNo">1255</span>                maxWet = pc;<a name="line.1255"></a>
+<span class="sourceLineNo">1256</span>            }<a name="line.1256"></a>
+<span class="sourceLineNo">1257</span>            landData.refill(heightCodeData, 4, 999);<a name="line.1257"></a>
+<span class="sourceLineNo">1258</span>            /*<a name="line.1258"></a>
+<span class="sourceLineNo">1259</span>            if(generateRivers) {<a name="line.1259"></a>
+<span class="sourceLineNo">1260</span>                if (fresh) {<a name="line.1260"></a>
+<span class="sourceLineNo">1261</span>                    addRivers();<a name="line.1261"></a>
+<span class="sourceLineNo">1262</span>                    riverData.connect8way().thin().thin();<a name="line.1262"></a>
+<span class="sourceLineNo">1263</span>                    lakeData.connect8way().thin();<a name="line.1263"></a>
+<span class="sourceLineNo">1264</span>                    partialRiverData.remake(riverData);<a name="line.1264"></a>
+<span class="sourceLineNo">1265</span>                    partialLakeData.remake(lakeData);<a name="line.1265"></a>
+<span class="sourceLineNo">1266</span>                } else {<a name="line.1266"></a>
+<span class="sourceLineNo">1267</span>                    partialRiverData.remake(riverData);<a name="line.1267"></a>
+<span class="sourceLineNo">1268</span>                    partialLakeData.remake(lakeData);<a name="line.1268"></a>
+<span class="sourceLineNo">1269</span>                    int stx = (zoomStartX &gt;&gt; (zoom)) - (width &gt;&gt; 1),<a name="line.1269"></a>
+<span class="sourceLineNo">1270</span>                            sty = (zoomStartY &gt;&gt; (zoom)) - (height &gt;&gt; 1);<a name="line.1270"></a>
+<span class="sourceLineNo">1271</span>                    for (int i = 1; i &lt;= zoom; i++) {<a name="line.1271"></a>
+<span class="sourceLineNo">1272</span>//                        int stx = (startCacheX.get(i) - startCacheX.get(i - 1)) &lt;&lt; (i - 1),<a name="line.1272"></a>
+<span class="sourceLineNo">1273</span>//                                sty = (startCacheY.get(i) - startCacheY.get(i - 1)) &lt;&lt; (i - 1);<a name="line.1273"></a>
+<span class="sourceLineNo">1274</span>                        if ((i &amp; 3) == 3) {<a name="line.1274"></a>
+<span class="sourceLineNo">1275</span>                            partialRiverData.zoom(stx, sty).connect8way();<a name="line.1275"></a>
+<span class="sourceLineNo">1276</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));<a name="line.1276"></a>
+<span class="sourceLineNo">1277</span>                            partialLakeData.zoom(stx, sty).connect8way();<a name="line.1277"></a>
+<span class="sourceLineNo">1278</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));<a name="line.1278"></a>
+<span class="sourceLineNo">1279</span>                        } else {<a name="line.1279"></a>
+<span class="sourceLineNo">1280</span>                            partialRiverData.zoom(stx, sty).connect8way().thin();<a name="line.1280"></a>
+<span class="sourceLineNo">1281</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));<a name="line.1281"></a>
+<span class="sourceLineNo">1282</span>                            partialLakeData.zoom(stx, sty).connect8way().thin();<a name="line.1282"></a>
+<span class="sourceLineNo">1283</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));<a name="line.1283"></a>
+<span class="sourceLineNo">1284</span>                        }<a name="line.1284"></a>
+<span class="sourceLineNo">1285</span>                    }<a name="line.1285"></a>
+<span class="sourceLineNo">1286</span>                }<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span>            }<a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>            */<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span>        }<a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>    }<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span><a name="line.1291"></a>
+<span class="sourceLineNo">1292</span>    /**<a name="line.1292"></a>
+<span class="sourceLineNo">1293</span>     * A concrete implementation of {@link WorldMapGenerator} that distorts the map as it nears the poles, expanding the<a name="line.1293"></a>
+<span class="sourceLineNo">1294</span>     * smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator.<a name="line.1294"></a>
+<span class="sourceLineNo">1295</span>     * This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch this does.<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>     * You might also want to produce an oval map that more-accurately represents the changes in the diameter of a<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>     * latitude line on a spherical world; this could be done by using one of the maps this class makes and removing a<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>     * portion of each non-equator row, arranging the removal so if the map is n units wide at the equator, the height<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>     * should be n divided by {@link Math#PI}, and progressively more cells are removed from rows as you move away from<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>     * the equator (down to empty space or 1 cell left at the poles).<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>     * &lt;a href="http://i.imgur.com/wth01QD.png" &gt;Example map, showing distortion&lt;/a&gt;<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span>     */<a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>    public static class SphereMap extends WorldMapGenerator {<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span>        protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;<a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>        private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,<a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span><a name="line.1308"></a>
+<span class="sourceLineNo">1309</span>        public final Noise3D terrain, terrainRidged, heat, moisture, otherRidged, riverRidged;<a name="line.1309"></a>
+<span class="sourceLineNo">1310</span>        public final double[][] xPositions,<a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>                yPositions,<a name="line.1311"></a>
+<span class="sourceLineNo">1312</span>                zPositions;<a name="line.1312"></a>
 <span class="sourceLineNo">1313</span><a name="line.1313"></a>
-<span class="sourceLineNo">1314</span>        /**<a name="line.1314"></a>
-<span class="sourceLineNo">1315</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1315"></a>
-<span class="sourceLineNo">1316</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1316"></a>
-<span class="sourceLineNo">1317</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1317"></a>
-<span class="sourceLineNo">1318</span>         * Always makes a 256x256 map.<a name="line.1318"></a>
-<span class="sourceLineNo">1319</span>         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1319"></a>
-<span class="sourceLineNo">1320</span>         * If you were using {@link SphereMap#SphereMap(long, int, int, Noise3D, double)}, then this would be the<a name="line.1320"></a>
-<span class="sourceLineNo">1321</span>         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.<a name="line.1321"></a>
-<span class="sourceLineNo">1322</span>         */<a name="line.1322"></a>
-<span class="sourceLineNo">1323</span>        public SphereMap() {<a name="line.1323"></a>
-<span class="sourceLineNo">1324</span>            this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0);<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>        }<a name="line.1325"></a>
-<span class="sourceLineNo">1326</span><a name="line.1326"></a>
-<span class="sourceLineNo">1327</span>        /**<a name="line.1327"></a>
-<span class="sourceLineNo">1328</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1328"></a>
-<span class="sourceLineNo">1329</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1329"></a>
-<span class="sourceLineNo">1330</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1330"></a>
-<span class="sourceLineNo">1331</span>         * Takes only the width/height of the map. The initial seed is set to the same large long<a name="line.1331"></a>
-<span class="sourceLineNo">1332</span>         * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and<a name="line.1332"></a>
-<span class="sourceLineNo">1333</span>         * height of the map cannot be changed after the fact, but you can zoom in.<a name="line.1333"></a>
-<span class="sourceLineNo">1334</span>         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1334"></a>
-<span class="sourceLineNo">1335</span>         *<a name="line.1335"></a>
-<span class="sourceLineNo">1336</span>         * @param mapWidth  the width of the map(s) to generate; cannot be changed later<a name="line.1336"></a>
-<span class="sourceLineNo">1337</span>         * @param mapHeight the height of the map(s) to generate; cannot be changed later<a name="line.1337"></a>
-<span class="sourceLineNo">1338</span>         */<a name="line.1338"></a>
-<span class="sourceLineNo">1339</span>        public SphereMap(int mapWidth, int mapHeight) {<a name="line.1339"></a>
-<span class="sourceLineNo">1340</span>            this(0x1337BABE1337D00DL, mapWidth, mapHeight, SeededNoise.instance, 1.0);<a name="line.1340"></a>
-<span class="sourceLineNo">1341</span>        }<a name="line.1341"></a>
-<span class="sourceLineNo">1342</span><a name="line.1342"></a>
-<span class="sourceLineNo">1343</span>        /**<a name="line.1343"></a>
-<span class="sourceLineNo">1344</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1344"></a>
-<span class="sourceLineNo">1345</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1345"></a>
-<span class="sourceLineNo">1346</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1346"></a>
-<span class="sourceLineNo">1347</span>         * Takes an initial seed and the width/height of the map. The {@code initialSeed}<a name="line.1347"></a>
-<span class="sourceLineNo">1348</span>         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.<a name="line.1348"></a>
-<span class="sourceLineNo">1349</span>         * The width and height of the map cannot be changed after the fact, but you can zoom in.<a name="line.1349"></a>
-<span class="sourceLineNo">1350</span>         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1350"></a>
-<span class="sourceLineNo">1351</span>         *<a name="line.1351"></a>
-<span class="sourceLineNo">1352</span>         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1352"></a>
-<span class="sourceLineNo">1353</span>         * @param mapWidth    the width of the map(s) to generate; cannot be changed later<a name="line.1353"></a>
-<span class="sourceLineNo">1354</span>         * @param mapHeight   the height of the map(s) to generate; cannot be changed later<a name="line.1354"></a>
-<span class="sourceLineNo">1355</span>         */<a name="line.1355"></a>
-<span class="sourceLineNo">1356</span>        public SphereMap(long initialSeed, int mapWidth, int mapHeight) {<a name="line.1356"></a>
-<span class="sourceLineNo">1357</span>            this(initialSeed, mapWidth, mapHeight, SeededNoise.instance, 1.0);<a name="line.1357"></a>
-<span class="sourceLineNo">1358</span>        }<a name="line.1358"></a>
-<span class="sourceLineNo">1359</span><a name="line.1359"></a>
-<span class="sourceLineNo">1360</span>        /**<a name="line.1360"></a>
-<span class="sourceLineNo">1361</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1361"></a>
-<span class="sourceLineNo">1362</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1362"></a>
-<span class="sourceLineNo">1363</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1363"></a>
-<span class="sourceLineNo">1364</span>         * Takes an initial seed, the width/height of the map, and a noise generator (a<a name="line.1364"></a>
-<span class="sourceLineNo">1365</span>         * {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}<a name="line.1365"></a>
-<span class="sourceLineNo">1366</span>         * parameter may or may not be used, since you can specify the seed to use when you call<a name="line.1366"></a>
-<span class="sourceLineNo">1367</span>         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom<a name="line.1367"></a>
-<span class="sourceLineNo">1368</span>         * in. Currently only SeededNoise makes sense to use as the value for {@code noiseGenerator}, and the seed it's<a name="line.1368"></a>
-<span class="sourceLineNo">1369</span>         * constructed with doesn't matter because it will change the seed several times at different scales of noise<a name="line.1369"></a>
-<span class="sourceLineNo">1370</span>         * (it's fine to use the static {@link SeededNoise#instance} because it has no changing state between runs of<a name="line.1370"></a>
-<span class="sourceLineNo">1371</span>         * the program; it's effectively a constant). The detail level, which is the {@code octaveMultiplier} parameter<a name="line.1371"></a>
-<span class="sourceLineNo">1372</span>         * that can be passed to another constructor, is always 1.0 with this constructor.<a name="line.1372"></a>
-<span class="sourceLineNo">1373</span>         *<a name="line.1373"></a>
-<span class="sourceLineNo">1374</span>         * @param initialSeed      the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1374"></a>
-<span class="sourceLineNo">1375</span>         * @param mapWidth         the width of the map(s) to generate; cannot be changed later<a name="line.1375"></a>
-<span class="sourceLineNo">1376</span>         * @param mapHeight        the height of the map(s) to generate; cannot be changed later<a name="line.1376"></a>
-<span class="sourceLineNo">1377</span>         * @param noiseGenerator   an instance of a noise generator capable of 3D noise, almost always {@link SeededNoise}<a name="line.1377"></a>
-<span class="sourceLineNo">1378</span>         */<a name="line.1378"></a>
-<span class="sourceLineNo">1379</span>        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise3D noiseGenerator) {<a name="line.1379"></a>
-<span class="sourceLineNo">1380</span>            this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);<a name="line.1380"></a>
-<span class="sourceLineNo">1381</span>        }<a name="line.1381"></a>
-<span class="sourceLineNo">1382</span><a name="line.1382"></a>
-<span class="sourceLineNo">1383</span>        /**<a name="line.1383"></a>
-<span class="sourceLineNo">1384</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1384"></a>
-<span class="sourceLineNo">1385</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1385"></a>
-<span class="sourceLineNo">1386</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1386"></a>
-<span class="sourceLineNo">1387</span>         * Takes an initial seed, the width/height of the map, and parameters for noise<a name="line.1387"></a>
-<span class="sourceLineNo">1388</span>         * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a<a name="line.1388"></a>
-<span class="sourceLineNo">1389</span>         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers<a name="line.1389"></a>
-<span class="sourceLineNo">1390</span>         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,<a name="line.1390"></a>
-<span class="sourceLineNo">1391</span>         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map<a name="line.1391"></a>
-<span class="sourceLineNo">1392</span>         * cannot be changed after the fact, but you can zoom in. Currently only SeededNoise makes sense to use as the<a name="line.1392"></a>
-<span class="sourceLineNo">1393</span>         * value for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because it will change the<a name="line.1393"></a>
-<span class="sourceLineNo">1394</span>         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} because<a name="line.1394"></a>
-<span class="sourceLineNo">1395</span>         * it has no changing state between runs of the program; it's effectively a constant). The {@code octaveMultiplier}<a name="line.1395"></a>
-<span class="sourceLineNo">1396</span>         * parameter should probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more<a name="line.1396"></a>
-<span class="sourceLineNo">1397</span>         * time on generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for<a name="line.1397"></a>
-<span class="sourceLineNo">1398</span>         * maps that don't require zooming.<a name="line.1398"></a>
-<span class="sourceLineNo">1399</span>         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1399"></a>
-<span class="sourceLineNo">1400</span>         * @param mapWidth the width of the map(s) to generate; cannot be changed later<a name="line.1400"></a>
-<span class="sourceLineNo">1401</span>         * @param mapHeight the height of the map(s) to generate; cannot be changed later<a name="line.1401"></a>
-<span class="sourceLineNo">1402</span>         * @param noiseGenerator an instance of a noise generator capable of 3D noise, almost always {@link SeededNoise}<a name="line.1402"></a>
-<span class="sourceLineNo">1403</span>         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal<a name="line.1403"></a>
-<span class="sourceLineNo">1404</span>         */<a name="line.1404"></a>
-<span class="sourceLineNo">1405</span>        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise3D noiseGenerator, double octaveMultiplier) {<a name="line.1405"></a>
-<span class="sourceLineNo">1406</span>            super(initialSeed, mapWidth, mapHeight);<a name="line.1406"></a>
-<span class="sourceLineNo">1407</span>            xPositions = new double[width][height];<a name="line.1407"></a>
-<span class="sourceLineNo">1408</span>            yPositions = new double[width][height];<a name="line.1408"></a>
-<span class="sourceLineNo">1409</span>            zPositions = new double[width][height];<a name="line.1409"></a>
-<span class="sourceLineNo">1410</span>            terrain = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);<a name="line.1410"></a>
-<span class="sourceLineNo">1411</span>            terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);<a name="line.1411"></a>
-<span class="sourceLineNo">1412</span>            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);<a name="line.1412"></a>
-<span class="sourceLineNo">1413</span>            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);<a name="line.1413"></a>
-<span class="sourceLineNo">1414</span>            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);<a name="line.1414"></a>
-<span class="sourceLineNo">1415</span>            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);<a name="line.1415"></a>
-<span class="sourceLineNo">1416</span>        }<a name="line.1416"></a>
-<span class="sourceLineNo">1417</span>        protected int wrapY(final int y)  {<a name="line.1417"></a>
-<span class="sourceLineNo">1418</span>            return Math.max(0, Math.min(y, height - 1));<a name="line.1418"></a>
-<span class="sourceLineNo">1419</span>        }<a name="line.1419"></a>
-<span class="sourceLineNo">1420</span><a name="line.1420"></a>
-<span class="sourceLineNo">1421</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.1421"></a>
-<span class="sourceLineNo">1422</span>                                  double waterMod, double coolMod, long state)<a name="line.1422"></a>
-<span class="sourceLineNo">1423</span>        {<a name="line.1423"></a>
-<span class="sourceLineNo">1424</span>            boolean fresh = false;<a name="line.1424"></a>
-<span class="sourceLineNo">1425</span>            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)<a name="line.1425"></a>
-<span class="sourceLineNo">1426</span>            {<a name="line.1426"></a>
-<span class="sourceLineNo">1427</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.1427"></a>
-<span class="sourceLineNo">1428</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.1428"></a>
-<span class="sourceLineNo">1429</span>                minHeat0 = Double.POSITIVE_INFINITY;<a name="line.1429"></a>
-<span class="sourceLineNo">1430</span>                maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.1430"></a>
-<span class="sourceLineNo">1431</span>                minHeat1 = Double.POSITIVE_INFINITY;<a name="line.1431"></a>
-<span class="sourceLineNo">1432</span>                maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.1432"></a>
-<span class="sourceLineNo">1433</span>                minHeat = Double.POSITIVE_INFINITY;<a name="line.1433"></a>
-<span class="sourceLineNo">1434</span>                maxHeat = Double.NEGATIVE_INFINITY;<a name="line.1434"></a>
-<span class="sourceLineNo">1435</span>                minWet0 = Double.POSITIVE_INFINITY;<a name="line.1435"></a>
-<span class="sourceLineNo">1436</span>                maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1436"></a>
-<span class="sourceLineNo">1437</span>                minWet = Double.POSITIVE_INFINITY;<a name="line.1437"></a>
-<span class="sourceLineNo">1438</span>                maxWet = Double.NEGATIVE_INFINITY;<a name="line.1438"></a>
-<span class="sourceLineNo">1439</span>                cachedState = state;<a name="line.1439"></a>
-<span class="sourceLineNo">1440</span>                fresh = true;<a name="line.1440"></a>
-<span class="sourceLineNo">1441</span>            }<a name="line.1441"></a>
-<span class="sourceLineNo">1442</span>            rng.setState(state);<a name="line.1442"></a>
-<span class="sourceLineNo">1443</span>            int seedA = rng.nextInt(), seedB = rng.nextInt(), seedC = rng.nextInt(), t;<a name="line.1443"></a>
-<span class="sourceLineNo">1444</span><a name="line.1444"></a>
-<span class="sourceLineNo">1445</span>            waterModifier = (waterMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;<a name="line.1445"></a>
-<span class="sourceLineNo">1446</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1446"></a>
-<span class="sourceLineNo">1447</span><a name="line.1447"></a>
-<span class="sourceLineNo">1448</span>            double p,<a name="line.1448"></a>
-<span class="sourceLineNo">1449</span>                    ps, pc,<a name="line.1449"></a>
-<span class="sourceLineNo">1450</span>                    qs, qc,<a name="line.1450"></a>
-<span class="sourceLineNo">1451</span>                    h, temp,<a name="line.1451"></a>
-<span class="sourceLineNo">1452</span>                    i_w = 6.283185307179586 / width, i_h = (3.141592653589793) / (height+2.0),<a name="line.1452"></a>
-<span class="sourceLineNo">1453</span>                    xPos = startX, yPos, i_uw = usedWidth / (double)width, i_uh = usedHeight / (height+2.0);<a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>            final double[] trigTable = new double[width &lt;&lt; 1];<a name="line.1454"></a>
-<span class="sourceLineNo">1455</span>            for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.1455"></a>
-<span class="sourceLineNo">1456</span>                p = xPos * i_w;<a name="line.1456"></a>
-<span class="sourceLineNo">1457</span>                trigTable[x&lt;&lt;1]   = Math.sin(p);<a name="line.1457"></a>
-<span class="sourceLineNo">1458</span>                trigTable[x&lt;&lt;1|1] = Math.cos(p);<a name="line.1458"></a>
-<span class="sourceLineNo">1459</span>            }<a name="line.1459"></a>
-<span class="sourceLineNo">1460</span>            yPos = startY + i_uh;<a name="line.1460"></a>
-<span class="sourceLineNo">1461</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1461"></a>
-<span class="sourceLineNo">1462</span>                qs = -1.5707963267948966 + yPos * i_h;<a name="line.1462"></a>
-<span class="sourceLineNo">1463</span>                qc = Math.cos(qs);<a name="line.1463"></a>
-<span class="sourceLineNo">1464</span>                qs = Math.sin(qs);<a name="line.1464"></a>
-<span class="sourceLineNo">1465</span>                //qs = Math.sin(qs);<a name="line.1465"></a>
-<span class="sourceLineNo">1466</span>                for (int x = 0, xt = 0; x &lt; width; x++) {<a name="line.1466"></a>
-<span class="sourceLineNo">1467</span>                    ps = trigTable[xt++] * qc;//Math.sin(p);<a name="line.1467"></a>
-<span class="sourceLineNo">1468</span>                    pc = trigTable[xt++] * qc;//Math.cos(p);<a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>                    xPositions[x][y] = pc;<a name="line.1469"></a>
-<span class="sourceLineNo">1470</span>                    yPositions[x][y] = ps;<a name="line.1470"></a>
-<span class="sourceLineNo">1471</span>                    zPositions[x][y] = qs;<a name="line.1471"></a>
-<span class="sourceLineNo">1472</span>                    h = terrain.getNoiseWithSeed(pc +<a name="line.1472"></a>
-<span class="sourceLineNo">1473</span>                                    terrainRidged.getNoiseWithSeed(pc, ps, qs,seedA + seedB),<a name="line.1473"></a>
-<span class="sourceLineNo">1474</span>                            ps, qs, seedA);<a name="line.1474"></a>
-<span class="sourceLineNo">1475</span>                    h *= waterModifier;<a name="line.1475"></a>
-<span class="sourceLineNo">1476</span>                    heightData[x][y] = h;<a name="line.1476"></a>
-<span class="sourceLineNo">1477</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps<a name="line.1477"></a>
-<span class="sourceLineNo">1478</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)<a name="line.1478"></a>
-<span class="sourceLineNo">1479</span>                            , qs, seedB));<a name="line.1479"></a>
-<span class="sourceLineNo">1480</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs<a name="line.1480"></a>
-<span class="sourceLineNo">1481</span>                            + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)<a name="line.1481"></a>
-<span class="sourceLineNo">1482</span>                            , seedC));<a name="line.1482"></a>
-<span class="sourceLineNo">1483</span>                    freshwaterData[x][y] = (ps = Math.min(<a name="line.1483"></a>
-<span class="sourceLineNo">1484</span>                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),<a name="line.1484"></a>
-<span class="sourceLineNo">1485</span>                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;<a name="line.1485"></a>
-<span class="sourceLineNo">1486</span>                    minHeightActual = Math.min(minHeightActual, h);<a name="line.1486"></a>
-<span class="sourceLineNo">1487</span>                    maxHeightActual = Math.max(maxHeightActual, h);<a name="line.1487"></a>
-<span class="sourceLineNo">1488</span>                    if(fresh) {<a name="line.1488"></a>
-<span class="sourceLineNo">1489</span>                        minHeight = Math.min(minHeight, h);<a name="line.1489"></a>
-<span class="sourceLineNo">1490</span>                        maxHeight = Math.max(maxHeight, h);<a name="line.1490"></a>
-<span class="sourceLineNo">1491</span><a name="line.1491"></a>
-<span class="sourceLineNo">1492</span>                        minHeat0 = Math.min(minHeat0, p);<a name="line.1492"></a>
-<span class="sourceLineNo">1493</span>                        maxHeat0 = Math.max(maxHeat0, p);<a name="line.1493"></a>
-<span class="sourceLineNo">1494</span><a name="line.1494"></a>
-<span class="sourceLineNo">1495</span>                        minWet0 = Math.min(minWet0, temp);<a name="line.1495"></a>
-<span class="sourceLineNo">1496</span>                        maxWet0 = Math.max(maxWet0, temp);<a name="line.1496"></a>
-<span class="sourceLineNo">1497</span>                    }<a name="line.1497"></a>
-<span class="sourceLineNo">1498</span>                }<a name="line.1498"></a>
-<span class="sourceLineNo">1499</span>                minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.1499"></a>
-<span class="sourceLineNo">1500</span>                maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.1500"></a>
-<span class="sourceLineNo">1501</span><a name="line.1501"></a>
-<span class="sourceLineNo">1502</span>            }<a name="line.1502"></a>
-<span class="sourceLineNo">1503</span>            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),<a name="line.1503"></a>
-<span class="sourceLineNo">1504</span>                    heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.1504"></a>
-<span class="sourceLineNo">1505</span>                    wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.1505"></a>
-<span class="sourceLineNo">1506</span>                    hMod,<a name="line.1506"></a>
-<span class="sourceLineNo">1507</span>                    halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;<a name="line.1507"></a>
-<span class="sourceLineNo">1508</span>            double minHeightActual0 = minHeightActual;<a name="line.1508"></a>
-<span class="sourceLineNo">1509</span>            double maxHeightActual0 = maxHeightActual;<a name="line.1509"></a>
-<span class="sourceLineNo">1510</span>            yPos = startY + i_uh;<a name="line.1510"></a>
-<span class="sourceLineNo">1511</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1511"></a>
-<span class="sourceLineNo">1512</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.1512"></a>
-<span class="sourceLineNo">1513</span><a name="line.1513"></a>
-<span class="sourceLineNo">1514</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1514"></a>
-<span class="sourceLineNo">1515</span>                temp = Math.abs(yPos - halfHeight) * i_half;<a name="line.1515"></a>
-<span class="sourceLineNo">1516</span>                temp *= (2.4 - temp);<a name="line.1516"></a>
-<span class="sourceLineNo">1517</span>                temp = 2.2 - temp;<a name="line.1517"></a>
-<span class="sourceLineNo">1518</span>                for (int x = 0; x &lt; width; x++) {<a name="line.1518"></a>
-<span class="sourceLineNo">1519</span>                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);<a name="line.1519"></a>
-<span class="sourceLineNo">1520</span>                    minHeightActual0 = Math.min(minHeightActual0, h);<a name="line.1520"></a>
-<span class="sourceLineNo">1521</span>                    maxHeightActual0 = Math.max(maxHeightActual0, h);<a name="line.1521"></a>
-<span class="sourceLineNo">1522</span>                    heightCodeData[x][y] = (t = codeHeight(h));<a name="line.1522"></a>
-<span class="sourceLineNo">1523</span>                    hMod = 1.0;<a name="line.1523"></a>
-<span class="sourceLineNo">1524</span>                    switch (t) {<a name="line.1524"></a>
-<span class="sourceLineNo">1525</span>                        case 0:<a name="line.1525"></a>
-<span class="sourceLineNo">1526</span>                        case 1:<a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>                        case 2:<a name="line.1527"></a>
-<span class="sourceLineNo">1528</span>                        case 3:<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>                            h = 0.4;<a name="line.1529"></a>
-<span class="sourceLineNo">1530</span>                            hMod = 0.2;<a name="line.1530"></a>
-<span class="sourceLineNo">1531</span>                            break;<a name="line.1531"></a>
-<span class="sourceLineNo">1532</span>                        case 6:<a name="line.1532"></a>
-<span class="sourceLineNo">1533</span>                            h = -0.1 * (h - forestLower - 0.08);<a name="line.1533"></a>
-<span class="sourceLineNo">1534</span>                            break;<a name="line.1534"></a>
-<span class="sourceLineNo">1535</span>                        case 7:<a name="line.1535"></a>
-<span class="sourceLineNo">1536</span>                            h *= -0.25;<a name="line.1536"></a>
-<span class="sourceLineNo">1537</span>                            break;<a name="line.1537"></a>
-<span class="sourceLineNo">1538</span>                        case 8:<a name="line.1538"></a>
-<span class="sourceLineNo">1539</span>                            h *= -0.4;<a name="line.1539"></a>
-<span class="sourceLineNo">1540</span>                            break;<a name="line.1540"></a>
-<span class="sourceLineNo">1541</span>                        default:<a name="line.1541"></a>
-<span class="sourceLineNo">1542</span>                            h *= 0.05;<a name="line.1542"></a>
-<span class="sourceLineNo">1543</span>                    }<a name="line.1543"></a>
-<span class="sourceLineNo">1544</span>                    heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);<a name="line.1544"></a>
-<span class="sourceLineNo">1545</span>                    if (fresh) {<a name="line.1545"></a>
-<span class="sourceLineNo">1546</span>                        ps = Math.min(ps, h); //minHeat0<a name="line.1546"></a>
-<span class="sourceLineNo">1547</span>                        pc = Math.max(pc, h); //maxHeat0<a name="line.1547"></a>
-<span class="sourceLineNo">1548</span>                    }<a name="line.1548"></a>
-<span class="sourceLineNo">1549</span>                }<a name="line.1549"></a>
-<span class="sourceLineNo">1550</span>            }<a name="line.1550"></a>
-<span class="sourceLineNo">1551</span>            if(fresh)<a name="line.1551"></a>
-<span class="sourceLineNo">1552</span>            {<a name="line.1552"></a>
-<span class="sourceLineNo">1553</span>                minHeat1 = ps;<a name="line.1553"></a>
-<span class="sourceLineNo">1554</span>                maxHeat1 = pc;<a name="line.1554"></a>
-<span class="sourceLineNo">1555</span>            }<a name="line.1555"></a>
-<span class="sourceLineNo">1556</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.1556"></a>
-<span class="sourceLineNo">1557</span>            qs = Double.POSITIVE_INFINITY;<a name="line.1557"></a>
-<span class="sourceLineNo">1558</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.1558"></a>
-<span class="sourceLineNo">1559</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1559"></a>
-<span class="sourceLineNo">1560</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.1560"></a>
-<span class="sourceLineNo">1561</span><a name="line.1561"></a>
-<span class="sourceLineNo">1562</span><a name="line.1562"></a>
-<span class="sourceLineNo">1563</span>            for (int y = 0; y &lt; height; y++) {<a name="line.1563"></a>
-<span class="sourceLineNo">1564</span>                for (int x = 0; x &lt; width; x++) {<a name="line.1564"></a>
-<span class="sourceLineNo">1565</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.1565"></a>
-<span class="sourceLineNo">1566</span>                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.1566"></a>
-<span class="sourceLineNo">1567</span>                    if (fresh) {<a name="line.1567"></a>
-<span class="sourceLineNo">1568</span>                        qs = Math.min(qs, h);<a name="line.1568"></a>
-<span class="sourceLineNo">1569</span>                        qc = Math.max(qc, h);<a name="line.1569"></a>
-<span class="sourceLineNo">1570</span>                        ps = Math.min(ps, temp);<a name="line.1570"></a>
-<span class="sourceLineNo">1571</span>                        pc = Math.max(pc, temp);<a name="line.1571"></a>
-<span class="sourceLineNo">1572</span>                    }<a name="line.1572"></a>
-<span class="sourceLineNo">1573</span>                }<a name="line.1573"></a>
-<span class="sourceLineNo">1574</span>            }<a name="line.1574"></a>
-<span class="sourceLineNo">1575</span>            if(fresh)<a name="line.1575"></a>
-<span class="sourceLineNo">1576</span>            {<a name="line.1576"></a>
-<span class="sourceLineNo">1577</span>                minHeat = qs;<a name="line.1577"></a>
-<span class="sourceLineNo">1578</span>                maxHeat = qc;<a name="line.1578"></a>
-<span class="sourceLineNo">1579</span>                minWet = ps;<a name="line.1579"></a>
-<span class="sourceLineNo">1580</span>                maxWet = pc;<a name="line.1580"></a>
-<span class="sourceLineNo">1581</span>            }<a name="line.1581"></a>
-<span class="sourceLineNo">1582</span>            landData.refill(heightCodeData, 4, 999);<a name="line.1582"></a>
-<span class="sourceLineNo">1583</span>            /*<a name="line.1583"></a>
-<span class="sourceLineNo">1584</span>            if(generateRivers) {<a name="line.1584"></a>
-<span class="sourceLineNo">1585</span>                if (fresh) {<a name="line.1585"></a>
-<span class="sourceLineNo">1586</span>                    addRivers();<a name="line.1586"></a>
-<span class="sourceLineNo">1587</span>                    riverData.connect8way().thin().thin();<a name="line.1587"></a>
-<span class="sourceLineNo">1588</span>                    lakeData.connect8way().thin();<a name="line.1588"></a>
-<span class="sourceLineNo">1589</span>                    partialRiverData.remake(riverData);<a name="line.1589"></a>
-<span class="sourceLineNo">1590</span>                    partialLakeData.remake(lakeData);<a name="line.1590"></a>
-<span class="sourceLineNo">1591</span>                } else {<a name="line.1591"></a>
-<span class="sourceLineNo">1592</span>                    partialRiverData.remake(riverData);<a name="line.1592"></a>
-<span class="sourceLineNo">1593</span>                    partialLakeData.remake(lakeData);<a name="line.1593"></a>
-<span class="sourceLineNo">1594</span>                    int stx = Math.min(Math.max((zoomStartX &gt;&gt; zoom) - (width &gt;&gt; 2), 0), width),<a name="line.1594"></a>
-<span class="sourceLineNo">1595</span>                            sty = Math.min(Math.max((zoomStartY &gt;&gt; zoom) - (height &gt;&gt; 2), 0), height);<a name="line.1595"></a>
-<span class="sourceLineNo">1596</span>                    for (int i = 1; i &lt;= zoom; i++) {<a name="line.1596"></a>
-<span class="sourceLineNo">1597</span>                        int stx2 = (startCacheX.get(i) - startCacheX.get(i - 1)) &lt;&lt; (i - 1),<a name="line.1597"></a>
-<span class="sourceLineNo">1598</span>                                sty2 = (startCacheY.get(i) - startCacheY.get(i - 1)) &lt;&lt; (i - 1);<a name="line.1598"></a>
-<span class="sourceLineNo">1599</span>                        //(zoomStartX &gt;&gt; zoom) - (width &gt;&gt; 1 + zoom), (zoomStartY &gt;&gt; zoom) - (height &gt;&gt; 1 + zoom)<a name="line.1599"></a>
-<span class="sourceLineNo">1600</span><a name="line.1600"></a>
-<span class="sourceLineNo">1601</span>//                        Map is 200x100, GreasedRegions have that size too.<a name="line.1601"></a>
-<span class="sourceLineNo">1602</span>//                        Zoom 0 only allows 100,50 as the center, 0,0 as the corner<a name="line.1602"></a>
-<span class="sourceLineNo">1603</span>//                        Zoom 1 allows 100,50 to 300,150 as the center (x2 coordinates), 0,0 to 200,100 (refers to 200,100) as the corner<a name="line.1603"></a>
-<span class="sourceLineNo">1604</span>//                        Zoom 2 allows 100,50 to 700,350 as the center (x4 coordinates), 0,0 to 200,100 (refers to 600,300) as the corner<a name="line.1604"></a>
-<span class="sourceLineNo">1605</span><a name="line.1605"></a>
-<span class="sourceLineNo">1606</span><a name="line.1606"></a>
-<span class="sourceLineNo">1607</span>                        System.out.printf("zoomStartX: %d zoomStartY: %d, stx: %d sty: %d, stx2: %d, sty2: %d\n", zoomStartX, zoomStartY, stx, sty, stx2, sty2);<a name="line.1607"></a>
-<span class="sourceLineNo">1608</span>                        if ((i &amp; 3) == 3) {<a name="line.1608"></a>
-<span class="sourceLineNo">1609</span>                            partialRiverData.zoom(stx, sty).connect8way();<a name="line.1609"></a>
-<span class="sourceLineNo">1610</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));<a name="line.1610"></a>
-<span class="sourceLineNo">1611</span>                            partialLakeData.zoom(stx, sty).connect8way();<a name="line.1611"></a>
-<span class="sourceLineNo">1612</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));<a name="line.1612"></a>
-<span class="sourceLineNo">1613</span>                        } else {<a name="line.1613"></a>
-<span class="sourceLineNo">1614</span>                            partialRiverData.zoom(stx, sty).connect8way().thin();<a name="line.1614"></a>
-<span class="sourceLineNo">1615</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));<a name="line.1615"></a>
-<span class="sourceLineNo">1616</span>                            partialLakeData.zoom(stx, sty).connect8way().thin();<a name="line.1616"></a>
-<span class="sourceLineNo">1617</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));<a name="line.1617"></a>
-<span class="sourceLineNo">1618</span>                        }<a name="line.1618"></a>
-<span class="sourceLineNo">1619</span>                        //stx = (width &gt;&gt; 1) ;//Math.min(Math.max(, 0), width);<a name="line.1619"></a>
-<span class="sourceLineNo">1620</span>                        //sty = (height &gt;&gt; 1);//Math.min(Math.max(, 0), height);<a name="line.1620"></a>
-<span class="sourceLineNo">1621</span>                    }<a name="line.1621"></a>
-<span class="sourceLineNo">1622</span>                    System.out.println();<a name="line.1622"></a>
-<span class="sourceLineNo">1623</span>                }<a name="line.1623"></a>
-<span class="sourceLineNo">1624</span>            }<a name="line.1624"></a>
-<span class="sourceLineNo">1625</span>            */<a name="line.1625"></a>
-<span class="sourceLineNo">1626</span>        }<a name="line.1626"></a>
-<span class="sourceLineNo">1627</span>    }<a name="line.1627"></a>
-<span class="sourceLineNo">1628</span>}<a name="line.1628"></a>
+<span class="sourceLineNo">1314</span><a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>        /**<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1317"></a>
+<span class="sourceLineNo">1318</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1318"></a>
+<span class="sourceLineNo">1319</span>         * Always makes a 256x256 map.<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>         * If you were using {@link SphereMap#SphereMap(long, int, int, Noise3D, double)}, then this would be the<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>         */<a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>        public SphereMap() {<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>            this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0);<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>        }<a name="line.1326"></a>
+<span class="sourceLineNo">1327</span><a name="line.1327"></a>
+<span class="sourceLineNo">1328</span>        /**<a name="line.1328"></a>
+<span class="sourceLineNo">1329</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1329"></a>
+<span class="sourceLineNo">1330</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1330"></a>
+<span class="sourceLineNo">1331</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1331"></a>
+<span class="sourceLineNo">1332</span>         * Takes only the width/height of the map. The initial seed is set to the same large long<a name="line.1332"></a>
+<span class="sourceLineNo">1333</span>         * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and<a name="line.1333"></a>
+<span class="sourceLineNo">1334</span>         * height of the map cannot be changed after the fact, but you can zoom in.<a name="line.1334"></a>
+<span class="sourceLineNo">1335</span>         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1335"></a>
+<span class="sourceLineNo">1336</span>         *<a name="line.1336"></a>
+<span class="sourceLineNo">1337</span>         * @param mapWidth  the width of the map(s) to generate; cannot be changed later<a name="line.1337"></a>
+<span class="sourceLineNo">1338</span>         * @param mapHeight the height of the map(s) to generate; cannot be changed later<a name="line.1338"></a>
+<span class="sourceLineNo">1339</span>         */<a name="line.1339"></a>
+<span class="sourceLineNo">1340</span>        public SphereMap(int mapWidth, int mapHeight) {<a name="line.1340"></a>
+<span class="sourceLineNo">1341</span>            this(0x1337BABE1337D00DL, mapWidth, mapHeight, SeededNoise.instance, 1.0);<a name="line.1341"></a>
+<span class="sourceLineNo">1342</span>        }<a name="line.1342"></a>
+<span class="sourceLineNo">1343</span><a name="line.1343"></a>
+<span class="sourceLineNo">1344</span>        /**<a name="line.1344"></a>
+<span class="sourceLineNo">1345</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1345"></a>
+<span class="sourceLineNo">1346</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1346"></a>
+<span class="sourceLineNo">1347</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1347"></a>
+<span class="sourceLineNo">1348</span>         * Takes an initial seed and the width/height of the map. The {@code initialSeed}<a name="line.1348"></a>
+<span class="sourceLineNo">1349</span>         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.<a name="line.1349"></a>
+<span class="sourceLineNo">1350</span>         * The width and height of the map cannot be changed after the fact, but you can zoom in.<a name="line.1350"></a>
+<span class="sourceLineNo">1351</span>         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1351"></a>
+<span class="sourceLineNo">1352</span>         *<a name="line.1352"></a>
+<span class="sourceLineNo">1353</span>         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1353"></a>
+<span class="sourceLineNo">1354</span>         * @param mapWidth    the width of the map(s) to generate; cannot be changed later<a name="line.1354"></a>
+<span class="sourceLineNo">1355</span>         * @param mapHeight   the height of the map(s) to generate; cannot be changed later<a name="line.1355"></a>
+<span class="sourceLineNo">1356</span>         */<a name="line.1356"></a>
+<span class="sourceLineNo">1357</span>        public SphereMap(long initialSeed, int mapWidth, int mapHeight) {<a name="line.1357"></a>
+<span class="sourceLineNo">1358</span>            this(initialSeed, mapWidth, mapHeight, SeededNoise.instance, 1.0);<a name="line.1358"></a>
+<span class="sourceLineNo">1359</span>        }<a name="line.1359"></a>
+<span class="sourceLineNo">1360</span><a name="line.1360"></a>
+<span class="sourceLineNo">1361</span>        /**<a name="line.1361"></a>
+<span class="sourceLineNo">1362</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1362"></a>
+<span class="sourceLineNo">1363</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1363"></a>
+<span class="sourceLineNo">1364</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1364"></a>
+<span class="sourceLineNo">1365</span>         * Takes an initial seed, the width/height of the map, and a noise generator (a<a name="line.1365"></a>
+<span class="sourceLineNo">1366</span>         * {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}<a name="line.1366"></a>
+<span class="sourceLineNo">1367</span>         * parameter may or may not be used, since you can specify the seed to use when you call<a name="line.1367"></a>
+<span class="sourceLineNo">1368</span>         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom<a name="line.1368"></a>
+<span class="sourceLineNo">1369</span>         * in. Currently only SeededNoise makes sense to use as the value for {@code noiseGenerator}, and the seed it's<a name="line.1369"></a>
+<span class="sourceLineNo">1370</span>         * constructed with doesn't matter because it will change the seed several times at different scales of noise<a name="line.1370"></a>
+<span class="sourceLineNo">1371</span>         * (it's fine to use the static {@link SeededNoise#instance} because it has no changing state between runs of<a name="line.1371"></a>
+<span class="sourceLineNo">1372</span>         * the program; it's effectively a constant). The detail level, which is the {@code octaveMultiplier} parameter<a name="line.1372"></a>
+<span class="sourceLineNo">1373</span>         * that can be passed to another constructor, is always 1.0 with this constructor.<a name="line.1373"></a>
+<span class="sourceLineNo">1374</span>         *<a name="line.1374"></a>
+<span class="sourceLineNo">1375</span>         * @param initialSeed      the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1375"></a>
+<span class="sourceLineNo">1376</span>         * @param mapWidth         the width of the map(s) to generate; cannot be changed later<a name="line.1376"></a>
+<span class="sourceLineNo">1377</span>         * @param mapHeight        the height of the map(s) to generate; cannot be changed later<a name="line.1377"></a>
+<span class="sourceLineNo">1378</span>         * @param noiseGenerator   an instance of a noise generator capable of 3D noise, almost always {@link SeededNoise}<a name="line.1378"></a>
+<span class="sourceLineNo">1379</span>         */<a name="line.1379"></a>
+<span class="sourceLineNo">1380</span>        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise3D noiseGenerator) {<a name="line.1380"></a>
+<span class="sourceLineNo">1381</span>            this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);<a name="line.1381"></a>
+<span class="sourceLineNo">1382</span>        }<a name="line.1382"></a>
+<span class="sourceLineNo">1383</span><a name="line.1383"></a>
+<span class="sourceLineNo">1384</span>        /**<a name="line.1384"></a>
+<span class="sourceLineNo">1385</span>         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a<a name="line.1385"></a>
+<span class="sourceLineNo">1386</span>         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to<a name="line.1386"></a>
+<span class="sourceLineNo">1387</span>         * have significantly-exaggerated-in-size features while the equator is not distorted.<a name="line.1387"></a>
+<span class="sourceLineNo">1388</span>         * Takes an initial seed, the width/height of the map, and parameters for noise<a name="line.1388"></a>
+<span class="sourceLineNo">1389</span>         * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a<a name="line.1389"></a>
+<span class="sourceLineNo">1390</span>         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers<a name="line.1390"></a>
+<span class="sourceLineNo">1391</span>         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,<a name="line.1391"></a>
+<span class="sourceLineNo">1392</span>         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map<a name="line.1392"></a>
+<span class="sourceLineNo">1393</span>         * cannot be changed after the fact, but you can zoom in. Currently only SeededNoise makes sense to use as the<a name="line.1393"></a>
+<span class="sourceLineNo">1394</span>         * value for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because it will change the<a name="line.1394"></a>
+<span class="sourceLineNo">1395</span>         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} because<a name="line.1395"></a>
+<span class="sourceLineNo">1396</span>         * it has no changing state between runs of the program; it's effectively a constant). The {@code octaveMultiplier}<a name="line.1396"></a>
+<span class="sourceLineNo">1397</span>         * parameter should probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more<a name="line.1397"></a>
+<span class="sourceLineNo">1398</span>         * time on generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for<a name="line.1398"></a>
+<span class="sourceLineNo">1399</span>         * maps that don't require zooming.<a name="line.1399"></a>
+<span class="sourceLineNo">1400</span>         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1400"></a>
+<span class="sourceLineNo">1401</span>         * @param mapWidth the width of the map(s) to generate; cannot be changed later<a name="line.1401"></a>
+<span class="sourceLineNo">1402</span>         * @param mapHeight the height of the map(s) to generate; cannot be changed later<a name="line.1402"></a>
+<span class="sourceLineNo">1403</span>         * @param noiseGenerator an instance of a noise generator capable of 3D noise, almost always {@link SeededNoise}<a name="line.1403"></a>
+<span class="sourceLineNo">1404</span>         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal<a name="line.1404"></a>
+<span class="sourceLineNo">1405</span>         */<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>        public SphereMap(long initialSeed, int mapWidth, int mapHeight, final Noise3D noiseGenerator, double octaveMultiplier) {<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span>            super(initialSeed, mapWidth, mapHeight);<a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>            xPositions = new double[width][height];<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>            yPositions = new double[width][height];<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>            zPositions = new double[width][height];<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span>            terrain = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);<a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>            terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span>            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);<a name="line.1413"></a>
+<span class="sourceLineNo">1414</span>            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);<a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>        }<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span>        protected int wrapY(final int y)  {<a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>            return Math.max(0, Math.min(y, height - 1));<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>        }<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span><a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span>                                  double waterMod, double coolMod, long state)<a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>        {<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span>            boolean fresh = false;<a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>            {<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.1428"></a>
+<span class="sourceLineNo">1429</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>                minHeat0 = Double.POSITIVE_INFINITY;<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>                maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>                minHeat1 = Double.POSITIVE_INFINITY;<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>                maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>                minHeat = Double.POSITIVE_INFINITY;<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>                maxHeat = Double.NEGATIVE_INFINITY;<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>                minWet0 = Double.POSITIVE_INFINITY;<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span>                maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1437"></a>
+<span class="sourceLineNo">1438</span>                minWet = Double.POSITIVE_INFINITY;<a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>                maxWet = Double.NEGATIVE_INFINITY;<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>                cachedState = state;<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>                fresh = true;<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span>            }<a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>            rng.setState(state);<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>            int t;<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span><a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>            waterModifier = (waterMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span><a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>            double p,<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>                    ps, pc,<a name="line.1451"></a>
+<span class="sourceLineNo">1452</span>                    qs, qc,<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>                    h, temp,<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>                    i_w = 6.283185307179586 / width, i_h = (3.141592653589793) / (height+2.0),<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>                    xPos = startX, yPos, i_uw = usedWidth / (double)width, i_uh = usedHeight / (height+2.0);<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>            final double[] trigTable = new double[width &lt;&lt; 1];<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>            for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>                p = xPos * i_w;<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>                trigTable[x&lt;&lt;1]   = Math.sin(p);<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>                trigTable[x&lt;&lt;1|1] = Math.cos(p);<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>            }<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span>            yPos = startY + i_uh;<a name="line.1462"></a>
+<span class="sourceLineNo">1463</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>                qs = -1.5707963267948966 + yPos * i_h;<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>                qc = Math.cos(qs);<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>                qs = Math.sin(qs);<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>                //qs = Math.sin(qs);<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>                for (int x = 0, xt = 0; x &lt; width; x++) {<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>                    ps = trigTable[xt++] * qc;//Math.sin(p);<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>                    pc = trigTable[xt++] * qc;//Math.cos(p);<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>                    xPositions[x][y] = pc;<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>                    yPositions[x][y] = ps;<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>                    zPositions[x][y] = qs;<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>                    h = terrain.getNoiseWithSeed(pc +<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>                                    terrainRidged.getNoiseWithSeed(pc, ps, qs,seedA + seedB),<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>                            ps, qs, seedA);<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>                    h *= waterModifier;<a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>                    heightData[x][y] = h;<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)<a name="line.1480"></a>
+<span class="sourceLineNo">1481</span>                            , qs, seedB));<a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span>                            + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)<a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>                            , seedC));<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span>                    freshwaterData[x][y] = (ps = Math.min(<a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span>                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;<a name="line.1487"></a>
+<span class="sourceLineNo">1488</span>                    minHeightActual = Math.min(minHeightActual, h);<a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>                    maxHeightActual = Math.max(maxHeightActual, h);<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>                    if(fresh) {<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span>                        minHeight = Math.min(minHeight, h);<a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>                        maxHeight = Math.max(maxHeight, h);<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span><a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>                        minHeat0 = Math.min(minHeat0, p);<a name="line.1494"></a>
+<span class="sourceLineNo">1495</span>                        maxHeat0 = Math.max(maxHeat0, p);<a name="line.1495"></a>
+<span class="sourceLineNo">1496</span><a name="line.1496"></a>
+<span class="sourceLineNo">1497</span>                        minWet0 = Math.min(minWet0, temp);<a name="line.1497"></a>
+<span class="sourceLineNo">1498</span>                        maxWet0 = Math.max(maxWet0, temp);<a name="line.1498"></a>
+<span class="sourceLineNo">1499</span>                    }<a name="line.1499"></a>
+<span class="sourceLineNo">1500</span>                }<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>                minHeightActual = Math.min(minHeightActual, minHeight);<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>                maxHeightActual = Math.max(maxHeightActual, maxHeight);<a name="line.1502"></a>
+<span class="sourceLineNo">1503</span><a name="line.1503"></a>
+<span class="sourceLineNo">1504</span>            }<a name="line.1504"></a>
+<span class="sourceLineNo">1505</span>            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>                    heatDiff = 0.8 / (maxHeat0 - minHeat0),<a name="line.1506"></a>
+<span class="sourceLineNo">1507</span>                    wetDiff = 1.0 / (maxWet0 - minWet0),<a name="line.1507"></a>
+<span class="sourceLineNo">1508</span>                    hMod,<a name="line.1508"></a>
+<span class="sourceLineNo">1509</span>                    halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;<a name="line.1509"></a>
+<span class="sourceLineNo">1510</span>            double minHeightActual0 = minHeightActual;<a name="line.1510"></a>
+<span class="sourceLineNo">1511</span>            double maxHeightActual0 = maxHeightActual;<a name="line.1511"></a>
+<span class="sourceLineNo">1512</span>            yPos = startY + i_uh;<a name="line.1512"></a>
+<span class="sourceLineNo">1513</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1513"></a>
+<span class="sourceLineNo">1514</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.1514"></a>
+<span class="sourceLineNo">1515</span><a name="line.1515"></a>
+<span class="sourceLineNo">1516</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1516"></a>
+<span class="sourceLineNo">1517</span>                temp = Math.abs(yPos - halfHeight) * i_half;<a name="line.1517"></a>
+<span class="sourceLineNo">1518</span>                temp *= (2.4 - temp);<a name="line.1518"></a>
+<span class="sourceLineNo">1519</span>                temp = 2.2 - temp;<a name="line.1519"></a>
+<span class="sourceLineNo">1520</span>                for (int x = 0; x &lt; width; x++) {<a name="line.1520"></a>
+<span class="sourceLineNo">1521</span>                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);<a name="line.1521"></a>
+<span class="sourceLineNo">1522</span>                    minHeightActual0 = Math.min(minHeightActual0, h);<a name="line.1522"></a>
+<span class="sourceLineNo">1523</span>                    maxHeightActual0 = Math.max(maxHeightActual0, h);<a name="line.1523"></a>
+<span class="sourceLineNo">1524</span>                    heightCodeData[x][y] = (t = codeHeight(h));<a name="line.1524"></a>
+<span class="sourceLineNo">1525</span>                    hMod = 1.0;<a name="line.1525"></a>
+<span class="sourceLineNo">1526</span>                    switch (t) {<a name="line.1526"></a>
+<span class="sourceLineNo">1527</span>                        case 0:<a name="line.1527"></a>
+<span class="sourceLineNo">1528</span>                        case 1:<a name="line.1528"></a>
+<span class="sourceLineNo">1529</span>                        case 2:<a name="line.1529"></a>
+<span class="sourceLineNo">1530</span>                        case 3:<a name="line.1530"></a>
+<span class="sourceLineNo">1531</span>                            h = 0.4;<a name="line.1531"></a>
+<span class="sourceLineNo">1532</span>                            hMod = 0.2;<a name="line.1532"></a>
+<span class="sourceLineNo">1533</span>                            break;<a name="line.1533"></a>
+<span class="sourceLineNo">1534</span>                        case 6:<a name="line.1534"></a>
+<span class="sourceLineNo">1535</span>                            h = -0.1 * (h - forestLower - 0.08);<a name="line.1535"></a>
+<span class="sourceLineNo">1536</span>                            break;<a name="line.1536"></a>
+<span class="sourceLineNo">1537</span>                        case 7:<a name="line.1537"></a>
+<span class="sourceLineNo">1538</span>                            h *= -0.25;<a name="line.1538"></a>
+<span class="sourceLineNo">1539</span>                            break;<a name="line.1539"></a>
+<span class="sourceLineNo">1540</span>                        case 8:<a name="line.1540"></a>
+<span class="sourceLineNo">1541</span>                            h *= -0.4;<a name="line.1541"></a>
+<span class="sourceLineNo">1542</span>                            break;<a name="line.1542"></a>
+<span class="sourceLineNo">1543</span>                        default:<a name="line.1543"></a>
+<span class="sourceLineNo">1544</span>                            h *= 0.05;<a name="line.1544"></a>
+<span class="sourceLineNo">1545</span>                    }<a name="line.1545"></a>
+<span class="sourceLineNo">1546</span>                    heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);<a name="line.1546"></a>
+<span class="sourceLineNo">1547</span>                    if (fresh) {<a name="line.1547"></a>
+<span class="sourceLineNo">1548</span>                        ps = Math.min(ps, h); //minHeat0<a name="line.1548"></a>
+<span class="sourceLineNo">1549</span>                        pc = Math.max(pc, h); //maxHeat0<a name="line.1549"></a>
+<span class="sourceLineNo">1550</span>                    }<a name="line.1550"></a>
+<span class="sourceLineNo">1551</span>                }<a name="line.1551"></a>
+<span class="sourceLineNo">1552</span>            }<a name="line.1552"></a>
+<span class="sourceLineNo">1553</span>            if(fresh)<a name="line.1553"></a>
+<span class="sourceLineNo">1554</span>            {<a name="line.1554"></a>
+<span class="sourceLineNo">1555</span>                minHeat1 = ps;<a name="line.1555"></a>
+<span class="sourceLineNo">1556</span>                maxHeat1 = pc;<a name="line.1556"></a>
+<span class="sourceLineNo">1557</span>            }<a name="line.1557"></a>
+<span class="sourceLineNo">1558</span>            heatDiff = coolingModifier / (maxHeat1 - minHeat1);<a name="line.1558"></a>
+<span class="sourceLineNo">1559</span>            qs = Double.POSITIVE_INFINITY;<a name="line.1559"></a>
+<span class="sourceLineNo">1560</span>            qc = Double.NEGATIVE_INFINITY;<a name="line.1560"></a>
+<span class="sourceLineNo">1561</span>            ps = Double.POSITIVE_INFINITY;<a name="line.1561"></a>
+<span class="sourceLineNo">1562</span>            pc = Double.NEGATIVE_INFINITY;<a name="line.1562"></a>
+<span class="sourceLineNo">1563</span><a name="line.1563"></a>
+<span class="sourceLineNo">1564</span><a name="line.1564"></a>
+<span class="sourceLineNo">1565</span>            for (int y = 0; y &lt; height; y++) {<a name="line.1565"></a>
+<span class="sourceLineNo">1566</span>                for (int x = 0; x &lt; width; x++) {<a name="line.1566"></a>
+<span class="sourceLineNo">1567</span>                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));<a name="line.1567"></a>
+<span class="sourceLineNo">1568</span>                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);<a name="line.1568"></a>
+<span class="sourceLineNo">1569</span>                    if (fresh) {<a name="line.1569"></a>
+<span class="sourceLineNo">1570</span>                        qs = Math.min(qs, h);<a name="line.1570"></a>
+<span class="sourceLineNo">1571</span>                        qc = Math.max(qc, h);<a name="line.1571"></a>
+<span class="sourceLineNo">1572</span>                        ps = Math.min(ps, temp);<a name="line.1572"></a>
+<span class="sourceLineNo">1573</span>                        pc = Math.max(pc, temp);<a name="line.1573"></a>
+<span class="sourceLineNo">1574</span>                    }<a name="line.1574"></a>
+<span class="sourceLineNo">1575</span>                }<a name="line.1575"></a>
+<span class="sourceLineNo">1576</span>            }<a name="line.1576"></a>
+<span class="sourceLineNo">1577</span>            if(fresh)<a name="line.1577"></a>
+<span class="sourceLineNo">1578</span>            {<a name="line.1578"></a>
+<span class="sourceLineNo">1579</span>                minHeat = qs;<a name="line.1579"></a>
+<span class="sourceLineNo">1580</span>                maxHeat = qc;<a name="line.1580"></a>
+<span class="sourceLineNo">1581</span>                minWet = ps;<a name="line.1581"></a>
+<span class="sourceLineNo">1582</span>                maxWet = pc;<a name="line.1582"></a>
+<span class="sourceLineNo">1583</span>            }<a name="line.1583"></a>
+<span class="sourceLineNo">1584</span>            landData.refill(heightCodeData, 4, 999);<a name="line.1584"></a>
+<span class="sourceLineNo">1585</span>            /*<a name="line.1585"></a>
+<span class="sourceLineNo">1586</span>            if(generateRivers) {<a name="line.1586"></a>
+<span class="sourceLineNo">1587</span>                if (fresh) {<a name="line.1587"></a>
+<span class="sourceLineNo">1588</span>                    addRivers();<a name="line.1588"></a>
+<span class="sourceLineNo">1589</span>                    riverData.connect8way().thin().thin();<a name="line.1589"></a>
+<span class="sourceLineNo">1590</span>                    lakeData.connect8way().thin();<a name="line.1590"></a>
+<span class="sourceLineNo">1591</span>                    partialRiverData.remake(riverData);<a name="line.1591"></a>
+<span class="sourceLineNo">1592</span>                    partialLakeData.remake(lakeData);<a name="line.1592"></a>
+<span class="sourceLineNo">1593</span>                } else {<a name="line.1593"></a>
+<span class="sourceLineNo">1594</span>                    partialRiverData.remake(riverData);<a name="line.1594"></a>
+<span class="sourceLineNo">1595</span>                    partialLakeData.remake(lakeData);<a name="line.1595"></a>
+<span class="sourceLineNo">1596</span>                    int stx = Math.min(Math.max((zoomStartX &gt;&gt; zoom) - (width &gt;&gt; 2), 0), width),<a name="line.1596"></a>
+<span class="sourceLineNo">1597</span>                            sty = Math.min(Math.max((zoomStartY &gt;&gt; zoom) - (height &gt;&gt; 2), 0), height);<a name="line.1597"></a>
+<span class="sourceLineNo">1598</span>                    for (int i = 1; i &lt;= zoom; i++) {<a name="line.1598"></a>
+<span class="sourceLineNo">1599</span>                        int stx2 = (startCacheX.get(i) - startCacheX.get(i - 1)) &lt;&lt; (i - 1),<a name="line.1599"></a>
+<span class="sourceLineNo">1600</span>                                sty2 = (startCacheY.get(i) - startCacheY.get(i - 1)) &lt;&lt; (i - 1);<a name="line.1600"></a>
+<span class="sourceLineNo">1601</span>                        //(zoomStartX &gt;&gt; zoom) - (width &gt;&gt; 1 + zoom), (zoomStartY &gt;&gt; zoom) - (height &gt;&gt; 1 + zoom)<a name="line.1601"></a>
+<span class="sourceLineNo">1602</span><a name="line.1602"></a>
+<span class="sourceLineNo">1603</span>//                        Map is 200x100, GreasedRegions have that size too.<a name="line.1603"></a>
+<span class="sourceLineNo">1604</span>//                        Zoom 0 only allows 100,50 as the center, 0,0 as the corner<a name="line.1604"></a>
+<span class="sourceLineNo">1605</span>//                        Zoom 1 allows 100,50 to 300,150 as the center (x2 coordinates), 0,0 to 200,100 (refers to 200,100) as the corner<a name="line.1605"></a>
+<span class="sourceLineNo">1606</span>//                        Zoom 2 allows 100,50 to 700,350 as the center (x4 coordinates), 0,0 to 200,100 (refers to 600,300) as the corner<a name="line.1606"></a>
+<span class="sourceLineNo">1607</span><a name="line.1607"></a>
+<span class="sourceLineNo">1608</span><a name="line.1608"></a>
+<span class="sourceLineNo">1609</span>                        System.out.printf("zoomStartX: %d zoomStartY: %d, stx: %d sty: %d, stx2: %d, sty2: %d\n", zoomStartX, zoomStartY, stx, sty, stx2, sty2);<a name="line.1609"></a>
+<span class="sourceLineNo">1610</span>                        if ((i &amp; 3) == 3) {<a name="line.1610"></a>
+<span class="sourceLineNo">1611</span>                            partialRiverData.zoom(stx, sty).connect8way();<a name="line.1611"></a>
+<span class="sourceLineNo">1612</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));<a name="line.1612"></a>
+<span class="sourceLineNo">1613</span>                            partialLakeData.zoom(stx, sty).connect8way();<a name="line.1613"></a>
+<span class="sourceLineNo">1614</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));<a name="line.1614"></a>
+<span class="sourceLineNo">1615</span>                        } else {<a name="line.1615"></a>
+<span class="sourceLineNo">1616</span>                            partialRiverData.zoom(stx, sty).connect8way().thin();<a name="line.1616"></a>
+<span class="sourceLineNo">1617</span>                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));<a name="line.1617"></a>
+<span class="sourceLineNo">1618</span>                            partialLakeData.zoom(stx, sty).connect8way().thin();<a name="line.1618"></a>
+<span class="sourceLineNo">1619</span>                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));<a name="line.1619"></a>
+<span class="sourceLineNo">1620</span>                        }<a name="line.1620"></a>
+<span class="sourceLineNo">1621</span>                        //stx = (width &gt;&gt; 1) ;//Math.min(Math.max(, 0), width);<a name="line.1621"></a>
+<span class="sourceLineNo">1622</span>                        //sty = (height &gt;&gt; 1);//Math.min(Math.max(, 0), height);<a name="line.1622"></a>
+<span class="sourceLineNo">1623</span>                    }<a name="line.1623"></a>
+<span class="sourceLineNo">1624</span>                    System.out.println();<a name="line.1624"></a>
+<span class="sourceLineNo">1625</span>                }<a name="line.1625"></a>
+<span class="sourceLineNo">1626</span>            }<a name="line.1626"></a>
+<span class="sourceLineNo">1627</span>            */<a name="line.1627"></a>
+<span class="sourceLineNo">1628</span>        }<a name="line.1628"></a>
+<span class="sourceLineNo">1629</span>    }<a name="line.1629"></a>
+<span class="sourceLineNo">1630</span>}<a name="line.1630"></a>
 
 
 

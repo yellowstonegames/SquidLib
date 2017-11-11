@@ -83,7 +83,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final long seed) {
         final long
                 rs = ThrustRNG.determine(seed ^ (long) ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
@@ -114,7 +114,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         final long
                 rs = ThrustRNG.determine(seed ^ (long) ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
@@ -154,7 +154,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         final long
                 rs = ThrustRNG.determine(seed ^ (long) ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
@@ -211,7 +211,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {
         final long
                 rs = ThrustRNG.determine(seed ^ (long) ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),

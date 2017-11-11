@@ -44,7 +44,7 @@
 <span class="sourceLineNo">036</span>    }<a name="line.36"></a>
 <span class="sourceLineNo">037</span><a name="line.37"></a>
 <span class="sourceLineNo">038</span>    @Override<a name="line.38"></a>
-<span class="sourceLineNo">039</span>    public double getNoiseWithSeed(double x, int seed) {<a name="line.39"></a>
+<span class="sourceLineNo">039</span>    public double getNoiseWithSeed(double x, long seed) {<a name="line.39"></a>
 <span class="sourceLineNo">040</span>        long a = 0x632BE59BD9B4E019L,<a name="line.40"></a>
 <span class="sourceLineNo">041</span>                result = 0x9E3779B97F4A7C94L +<a name="line.41"></a>
 <span class="sourceLineNo">042</span>                        (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))<a name="line.42"></a>
@@ -62,7 +62,7 @@
 <span class="sourceLineNo">054</span>        return NumberTools.longBitsToDouble(((result * (a | 1L) ^ (result &gt;&gt;&gt; 27 | result &lt;&lt; 37)) &gt;&gt;&gt; 12) | 0x4000000000000000L) - 3.0;<a name="line.54"></a>
 <span class="sourceLineNo">055</span>    }<a name="line.55"></a>
 <span class="sourceLineNo">056</span>    @Override<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    public double getNoiseWithSeed(double x, double y, int seed) {<a name="line.57"></a>
+<span class="sourceLineNo">057</span>    public double getNoiseWithSeed(double x, double y, long seed) {<a name="line.57"></a>
 <span class="sourceLineNo">058</span>        long a = 0x632BE59BD9B4E019L,<a name="line.58"></a>
 <span class="sourceLineNo">059</span>                result = 0x9E3779B97F4A7C94L +<a name="line.59"></a>
 <span class="sourceLineNo">060</span>                        (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))<a name="line.60"></a>
@@ -82,7 +82,7 @@
 <span class="sourceLineNo">074</span>    }<a name="line.74"></a>
 <span class="sourceLineNo">075</span><a name="line.75"></a>
 <span class="sourceLineNo">076</span>    @Override<a name="line.76"></a>
-<span class="sourceLineNo">077</span>    public double getNoiseWithSeed(double x, double y, double z, int seed) {<a name="line.77"></a>
+<span class="sourceLineNo">077</span>    public double getNoiseWithSeed(double x, double y, double z, long seed) {<a name="line.77"></a>
 <span class="sourceLineNo">078</span>        long a = 0x632BE59BD9B4E019L,<a name="line.78"></a>
 <span class="sourceLineNo">079</span>                result = 0x9E3779B97F4A7C94L +<a name="line.79"></a>
 <span class="sourceLineNo">080</span>                        (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))<a name="line.80"></a>
@@ -103,7 +103,7 @@
 <span class="sourceLineNo">095</span>    }<a name="line.95"></a>
 <span class="sourceLineNo">096</span><a name="line.96"></a>
 <span class="sourceLineNo">097</span>    @Override<a name="line.97"></a>
-<span class="sourceLineNo">098</span>    public double getNoiseWithSeed(double x, double y, double z, double w, int seed) {<a name="line.98"></a>
+<span class="sourceLineNo">098</span>    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {<a name="line.98"></a>
 <span class="sourceLineNo">099</span>        long a = 0x632BE59BD9B4E019L,<a name="line.99"></a>
 <span class="sourceLineNo">100</span>                result = 0x9E3779B97F4A7C94L +<a name="line.100"></a>
 <span class="sourceLineNo">101</span>                        (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))<a name="line.101"></a>
@@ -128,7 +128,7 @@
 <span class="sourceLineNo">120</span>    }<a name="line.120"></a>
 <span class="sourceLineNo">121</span><a name="line.121"></a>
 <span class="sourceLineNo">122</span>    @Override<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, int seed) {<a name="line.123"></a>
+<span class="sourceLineNo">123</span>    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {<a name="line.123"></a>
 <span class="sourceLineNo">124</span>        long a = 0x632BE59BD9B4E019L,<a name="line.124"></a>
 <span class="sourceLineNo">125</span>                result = 0x9E3779B97F4A7C94L +<a name="line.125"></a>
 <span class="sourceLineNo">126</span>                        (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))<a name="line.126"></a>

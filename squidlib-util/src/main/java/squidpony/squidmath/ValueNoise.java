@@ -36,7 +36,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     }
 
     @Override
-    public double getNoiseWithSeed(double x, int seed) {
+    public double getNoiseWithSeed(double x, long seed) {
         long a = 0x632BE59BD9B4E019L,
                 result = 0x9E3779B97F4A7C94L +
                         (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))
@@ -54,7 +54,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
         return NumberTools.longBitsToDouble(((result * (a | 1L) ^ (result >>> 27 | result << 37)) >>> 12) | 0x4000000000000000L) - 3.0;
     }
     @Override
-    public double getNoiseWithSeed(double x, double y, int seed) {
+    public double getNoiseWithSeed(double x, double y, long seed) {
         long a = 0x632BE59BD9B4E019L,
                 result = 0x9E3779B97F4A7C94L +
                         (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))
@@ -74,7 +74,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     }
 
     @Override
-    public double getNoiseWithSeed(double x, double y, double z, int seed) {
+    public double getNoiseWithSeed(double x, double y, double z, long seed) {
         long a = 0x632BE59BD9B4E019L,
                 result = 0x9E3779B97F4A7C94L +
                         (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))
@@ -95,7 +95,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     }
 
     @Override
-    public double getNoiseWithSeed(double x, double y, double z, double w, int seed) {
+    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
         long a = 0x632BE59BD9B4E019L,
                 result = 0x9E3779B97F4A7C94L +
                         (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))
@@ -120,7 +120,7 @@ public class ValueNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D, 
     }
 
     @Override
-    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, int seed) {
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
         long a = 0x632BE59BD9B4E019L,
                 result = 0x9E3779B97F4A7C94L +
                         (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.doubleToMixedIntBits(x*0x11.9E3779B9p3))

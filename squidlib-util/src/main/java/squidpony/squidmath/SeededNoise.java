@@ -49,8 +49,8 @@ package squidpony.squidmath;
 
 /**
  * More advanced noise functions, in 2D, 3D, 4D, and 6D, with the last two as options for generating seamlessly-tiling
- * noise using {@link Noise#seamless2D(double[][], int, int, Noise.Noise4D)} and/or
- * {@link Noise#seamless3D(double[][][], int, int, Noise.Noise6D)}. All functions can take an int seed that should
+ * noise using {@link Noise#seamless2D(double[][], long, int, Noise.Noise4D)} and/or
+ * {@link Noise#seamless3D(double[][][], long, int, Noise.Noise6D)}. All functions can take an int seed that should
  * significantly change the pattern of noise produced. Incorporates code from Joise; the full library is available at
  * https://github.com/SudoPlayGames/Joise , and this class adds rather significant optimization in a few methods,
  * especially 6D noise. Joise is derived from the Accidental Noise Library, available in C++ at
@@ -59,13 +59,13 @@ package squidpony.squidmath;
  */
 public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
 
-    protected final int defaultSeed;
+    protected final long defaultSeed;
     public static final SeededNoise instance = new SeededNoise();
 
     public SeededNoise() {
-        defaultSeed = 0x1337BEEF;
+        defaultSeed = 0x1337BEEF2A22L;
     }
-    public SeededNoise(int seed)
+    public SeededNoise(long seed)
     {
         defaultSeed = seed;
     }
@@ -83,16 +83,16 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         return noise(x, y, z, w, u, v, defaultSeed);
     }
 
-    public double getNoiseWithSeed(final double x, final double y, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final long seed) {
         return noise(x, y, seed);
     }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         return noise(x, y, z, seed);
     }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         return noise(x, y, z, w, seed);
     }
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {
         return noise(x, y, z, w, u, v, seed);
     }
 
@@ -996,7 +996,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 + (seed ^ 0x632BE5AB * (y + x))) >>> 24;
     }
     */
-    public static int hash(final int x, final int y, final int seed) {
+    public static int hash(final int x, final int y, final long seed) {
         int a = 0x632BE5AB;
         return  (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1021,7 +1021,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 ^ y    + 0xE3 * (z + x   )) & 255;
     }
     */
-    public static int hash(final int x, final int y, final int z, final int seed) {
+    public static int hash(final int x, final int y, final int z, final long seed) {
         int a = 0x632BE5AB;
         return  (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1031,25 +1031,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     }
     
     /**
-     * Possibly useful outside SeededNoise. A customized 5-input hash that mixes around all inputs fairly well, and
-     * produces 8 bits.
-     * @param x an int to incorporate into the hash
-     * @param y an int to incorporate into the hash
-     * @param z an int to incorporate into the hash
-     * @param w an int to incorporate into the hash
-     * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-     */
-    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
-    public static int hashAlt(final int x, final int y, final int z, final int w, final int seed) {
-        return (
-                z    + 0xD3 * (seed + y)
-              ^ w    + 0xB5 * (x + z   )
-              ^ seed + 0xC1 * (y + w   )
-              ^ x    + 0x95 * (z + seed)
-              ^ y    + 0xA3 * (w + x   )) & 255;
-    }
-    /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
      * @param x an int to incorporate into the hash
      * @param y an int to incorporate into the hash
@@ -1058,7 +1039,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
-    public static int hash(final int x, final int y, final int z, final int w, final int seed) {
+    public static int hash(final int x, final int y, final int z, final int w, final long seed) {
         int a = 0x632BE5AB;
         return (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1066,29 +1047,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 + (a ^= 0x85157AF5 * y + z)
                 + (a ^= 0x85157AF5 * z + w)
                 + (a ^= 0x85157AF5 * w + seed)) * a >>> 24;
-    }
-    /**
-     * Possibly useful outside SeededNoise. A customized 5-input hash that mixes around all inputs fairly well, and
-     * produces 8 bits.
-     * @param x an int to incorporate into the hash
-     * @param y an int to incorporate into the hash
-     * @param z an int to incorporate into the hash
-     * @param w an int to incorporate into the hash
-     * @param u an int to incorporate into the hash
-     * @param v an int to incorporate into the hash
-     * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-     */
-    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
-    public static int hashAlt(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
-        return (
-                z    + 0x89 * (seed + x)
-              ^ w    + 0xC1 * (x + y)
-              ^ u    + 0x95 * (y + z)
-              ^ v    + 0xD3 * (z + w)
-              ^ seed + 0xA3 * (w + u)
-              ^ x    + 0xE3 * (u + v)
-              ^ y    + 0xB5 * (v + seed)) & 255;
     }
 
     /**
@@ -1102,7 +1060,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
      * @param seed an int to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
-    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final int seed) {
+    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final long seed) {
         int a = 0x632BE5AB;
         return (0x9E3779B9
                 + (a ^= 0x85157AF5 * seed + x)
@@ -1201,7 +1159,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             ;
     //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),
 
-    public static double noise(final double x, final double y, final int seed) {
+    public static double noise(final double x, final double y, final long seed) {
         final double s = (x + y) * F2;
         final double[] gradient2DLUT = SeededNoise.gradient2DLUT;
         final int i = fastFloor(x + s),
@@ -1252,7 +1210,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         return (70 * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
     }
 
-    public static double noise(final double x, final double y, final double z, final int seed) {
+    public static double noise(final double x, final double y, final double z, final long seed) {
         double n0, n1, n2, n3;
         final double[] gradient3DLUT = SeededNoise.gradient3DLUT;
         final double s = (x + y + z) * F3;
@@ -1365,7 +1323,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         return (32.0 * (n0 + n1 + n2 + n3)) * 1.25086885 + 0.0003194984;
     }
 
-    public static double noise(final double x, final double y, final double z, final double w, final int seed) {
+    public static double noise(final double x, final double y, final double z, final double w, final long seed) {
         double n = 0.0;
         final double s = (x + y + z + w) * F4;
         final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
@@ -1446,9 +1404,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     private static final double[] mShared = {0, 0, 0, 0, 0, 0}, cellDistShared = {0, 0, 0, 0, 0, 0};
     private static final int[] distOrderShared = {0, 0, 0, 0, 0, 0}, intLocShared = {0, 0, 0, 0, 0, 0};
 
-
     public static double noise(final double x, final double y, final double z,
-                               final double w, final double u, final double v, final int seed) {
+                               final double w, final double u, final double v, final long seed) {
         final double s = (x + y + z + w + u + v) * F6;
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),

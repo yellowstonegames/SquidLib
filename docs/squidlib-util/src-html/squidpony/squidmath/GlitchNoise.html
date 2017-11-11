@@ -27,7 +27,7 @@
 <span class="sourceLineNo">019</span>                        ^ LightRNG.determine((long)(x*0x0.953976F9p4 + x*0x0.8329C6DFp3 - x*0x0.9E3779B9p2)));<a name="line.19"></a>
 <span class="sourceLineNo">020</span>    }<a name="line.20"></a>
 <span class="sourceLineNo">021</span>    @Override<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    public double getNoiseWithSeed(final double x, final int seed) {<a name="line.22"></a>
+<span class="sourceLineNo">022</span>    public double getNoiseWithSeed(final double x, final long seed) {<a name="line.22"></a>
 <span class="sourceLineNo">023</span>        return NumberTools.bounce(<a name="line.23"></a>
 <span class="sourceLineNo">024</span>                LightRNG.determine((long)(x*0x0.9E3779B9p4 - x*0x0.8329C6DFp3 + x*0x0.953976F9p2) + (seed &amp; 0xA5A5A5A5))<a name="line.24"></a>
 <span class="sourceLineNo">025</span>                        ^ LightRNG.determine((long)(x*0x0.953976F9p4 + x*0x0.8329C6DFp3 - x*0x0.9E3779B9p2) + (seed &amp; 0x5A5A5A5A)));<a name="line.25"></a>
@@ -42,7 +42,7 @@
 <span class="sourceLineNo">034</span>                        ^ LightRNG.determine((long)(y*0x0.953976F9p4 - x*0x2.8329C6DFp2 + y*0x4.85157AF5p0)));<a name="line.34"></a>
 <span class="sourceLineNo">035</span>    }<a name="line.35"></a>
 <span class="sourceLineNo">036</span>    @Override<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    public double getNoiseWithSeed(final double x, final double y, final int seed) {<a name="line.37"></a>
+<span class="sourceLineNo">037</span>    public double getNoiseWithSeed(final double x, final double y, final long seed) {<a name="line.37"></a>
 <span class="sourceLineNo">038</span>        return NumberTools.bounce(<a name="line.38"></a>
 <span class="sourceLineNo">039</span>                LightRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 - x*0x0.953976F9p2) + (seed &amp; 0xA5A5A5A5))<a name="line.39"></a>
 <span class="sourceLineNo">040</span>                        ^ LightRNG.determine((long)(y*0x0.953976F9p4 + x*0x0.9E3779B9p3 - y*0x0.8329C6DFp2) + (seed &amp; 0x5A5A5A5A))<a name="line.40"></a>
@@ -60,7 +60,7 @@
 <span class="sourceLineNo">052</span>                        ^ LightRNG.determine((long)(z+0x0.85157AF5p4 - x*0x2.953976F9p1 - y*0x3.8329C6DFp0)));<a name="line.52"></a>
 <span class="sourceLineNo">053</span>    }<a name="line.53"></a>
 <span class="sourceLineNo">054</span>    @Override<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {<a name="line.55"></a>
+<span class="sourceLineNo">055</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {<a name="line.55"></a>
 <span class="sourceLineNo">056</span>        return NumberTools.bounce(<a name="line.56"></a>
 <span class="sourceLineNo">057</span>                LightRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2) + (seed &amp; 0x24924924))<a name="line.57"></a>
 <span class="sourceLineNo">058</span>                        ^ LightRNG.determine((long)(y*0x0.953976F9p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2) + (seed &amp; 0x49249249))<a name="line.58"></a>
@@ -79,7 +79,7 @@
 <span class="sourceLineNo">071</span>                ));<a name="line.71"></a>
 <span class="sourceLineNo">072</span>    }<a name="line.72"></a>
 <span class="sourceLineNo">073</span>    @Override<a name="line.73"></a>
-<span class="sourceLineNo">074</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {<a name="line.74"></a>
+<span class="sourceLineNo">074</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {<a name="line.74"></a>
 <span class="sourceLineNo">075</span>        return NumberTools.bounce(<a name="line.75"></a>
 <span class="sourceLineNo">076</span>                (LightRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + w*0x0.953976F9p2) + (seed &amp; 0x81818181))<a name="line.76"></a>
 <span class="sourceLineNo">077</span>                        ^ LightRNG.determine((long)(y*0x0.85157AF5p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2) + (seed &amp; 0x18181818))<a name="line.77"></a>
@@ -98,7 +98,7 @@
 <span class="sourceLineNo">090</span>                        ^ LightRNG.determine((long)(v*0x0.9E3779B9p4 + w*0x0.8329C6DFp3 + u*0x0.953976F9p2 + z*0x0.85157AF5p1))));<a name="line.90"></a>
 <span class="sourceLineNo">091</span>    }<a name="line.91"></a>
 <span class="sourceLineNo">092</span>    @Override<a name="line.92"></a>
-<span class="sourceLineNo">093</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {<a name="line.93"></a>
+<span class="sourceLineNo">093</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {<a name="line.93"></a>
 <span class="sourceLineNo">094</span>        return NumberTools.bounce(<a name="line.94"></a>
 <span class="sourceLineNo">095</span>                (LightRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2 + w*0x0.85157AF5p1) + (seed &amp; 0x24924924))<a name="line.95"></a>
 <span class="sourceLineNo">096</span>                        ^ LightRNG.determine((long)(y*0x0.712BE5ABp4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2 + u*0x0.953976F9p1) + (seed &amp; 0x49249249))<a name="line.96"></a>

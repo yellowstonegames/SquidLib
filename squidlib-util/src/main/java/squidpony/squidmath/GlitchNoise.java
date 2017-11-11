@@ -19,7 +19,7 @@ public class GlitchNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
                         ^ LightRNG.determine((long)(x*0x0.953976F9p4 + x*0x0.8329C6DFp3 - x*0x0.9E3779B9p2)));
     }
     @Override
-    public double getNoiseWithSeed(final double x, final int seed) {
+    public double getNoiseWithSeed(final double x, final long seed) {
         return NumberTools.bounce(
                 LightRNG.determine((long)(x*0x0.9E3779B9p4 - x*0x0.8329C6DFp3 + x*0x0.953976F9p2) + (seed & 0xA5A5A5A5))
                         ^ LightRNG.determine((long)(x*0x0.953976F9p4 + x*0x0.8329C6DFp3 - x*0x0.9E3779B9p2) + (seed & 0x5A5A5A5A)));
@@ -34,7 +34,7 @@ public class GlitchNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
                         ^ LightRNG.determine((long)(y*0x0.953976F9p4 - x*0x2.8329C6DFp2 + y*0x4.85157AF5p0)));
     }
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final long seed) {
         return NumberTools.bounce(
                 LightRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 - x*0x0.953976F9p2) + (seed & 0xA5A5A5A5))
                         ^ LightRNG.determine((long)(y*0x0.953976F9p4 + x*0x0.9E3779B9p3 - y*0x0.8329C6DFp2) + (seed & 0x5A5A5A5A))
@@ -52,7 +52,7 @@ public class GlitchNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
                         ^ LightRNG.determine((long)(z+0x0.85157AF5p4 - x*0x2.953976F9p1 - y*0x3.8329C6DFp0)));
     }
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         return NumberTools.bounce(
                 LightRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2) + (seed & 0x24924924))
                         ^ LightRNG.determine((long)(y*0x0.953976F9p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2) + (seed & 0x49249249))
@@ -71,7 +71,7 @@ public class GlitchNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
                 ));
     }
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         return NumberTools.bounce(
                 (LightRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + w*0x0.953976F9p2) + (seed & 0x81818181))
                         ^ LightRNG.determine((long)(y*0x0.85157AF5p4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2) + (seed & 0x18181818))
@@ -90,7 +90,7 @@ public class GlitchNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D,
                         ^ LightRNG.determine((long)(v*0x0.9E3779B9p4 + w*0x0.8329C6DFp3 + u*0x0.953976F9p2 + z*0x0.85157AF5p1))));
     }
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final int seed) {
+    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {
         return NumberTools.bounce(
                 (LightRNG.determine((long)(x*0x0.9E3779B9p4 + y*0x0.8329C6DFp3 + z*0x0.953976F9p2 + w*0x0.85157AF5p1) + (seed & 0x24924924))
                         ^ LightRNG.determine((long)(y*0x0.712BE5ABp4 + z*0x0.9E3779B9p3 + x*0x0.8329C6DFp2 + u*0x0.953976F9p1) + (seed & 0x49249249))

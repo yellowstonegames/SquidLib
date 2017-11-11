@@ -24,13 +24,13 @@
 <span class="sourceLineNo">016</span>@Beta<a name="line.16"></a>
 <span class="sourceLineNo">017</span>public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {<a name="line.17"></a>
 <span class="sourceLineNo">018</span><a name="line.18"></a>
-<span class="sourceLineNo">019</span>    public int seed;<a name="line.19"></a>
+<span class="sourceLineNo">019</span>    public long seed;<a name="line.19"></a>
 <span class="sourceLineNo">020</span>    public static final WhirlingNoise instance = new WhirlingNoise();<a name="line.20"></a>
 <span class="sourceLineNo">021</span>    public WhirlingNoise()<a name="line.21"></a>
 <span class="sourceLineNo">022</span>    {<a name="line.22"></a>
 <span class="sourceLineNo">023</span>        seed = 123456789;<a name="line.23"></a>
 <span class="sourceLineNo">024</span>    }<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    public WhirlingNoise(int seed)<a name="line.25"></a>
+<span class="sourceLineNo">025</span>    public WhirlingNoise(long seed)<a name="line.25"></a>
 <span class="sourceLineNo">026</span>    {<a name="line.26"></a>
 <span class="sourceLineNo">027</span>        this.seed = seed;<a name="line.27"></a>
 <span class="sourceLineNo">028</span>    }<a name="line.28"></a>
@@ -639,7 +639,7 @@
 <span class="sourceLineNo">631</span>            {-0.5569895f, -0.006145278f, -0.37386537f, -0.7415859f},<a name="line.631"></a>
 <span class="sourceLineNo">632</span>            {-0.17033575f, -0.846144f, 0.22243054f, -0.45337692f},<a name="line.632"></a>
 <span class="sourceLineNo">633</span>    };<a name="line.633"></a>
-<span class="sourceLineNo">634</span>//    public static void randomUnitVector4(int seed, final float[] vector)<a name="line.634"></a>
+<span class="sourceLineNo">634</span>//    public static void randomUnitVector4(long seed, final float[] vector)<a name="line.634"></a>
 <span class="sourceLineNo">635</span>//    {<a name="line.635"></a>
 <span class="sourceLineNo">636</span>//        double mag = 0.0;<a name="line.636"></a>
 <span class="sourceLineNo">637</span>//        float t;<a name="line.637"></a>
@@ -780,7 +780,7 @@
 <span class="sourceLineNo">772</span>     * @param seed ignored entirely.<a name="line.772"></a>
 <span class="sourceLineNo">773</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.773"></a>
 <span class="sourceLineNo">774</span>     */<a name="line.774"></a>
-<span class="sourceLineNo">775</span>    public double getNoiseWithSeed(final double x, final double y, final int seed) {<a name="line.775"></a>
+<span class="sourceLineNo">775</span>    public double getNoiseWithSeed(final double x, final double y, final long seed) {<a name="line.775"></a>
 <span class="sourceLineNo">776</span>        return noise(x, y, seed);<a name="line.776"></a>
 <span class="sourceLineNo">777</span>    }<a name="line.777"></a>
 <span class="sourceLineNo">778</span>    /**<a name="line.778"></a>
@@ -805,7 +805,7 @@
 <span class="sourceLineNo">797</span>     * @param seed ignored entirely.<a name="line.797"></a>
 <span class="sourceLineNo">798</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.798"></a>
 <span class="sourceLineNo">799</span>     */<a name="line.799"></a>
-<span class="sourceLineNo">800</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {<a name="line.800"></a>
+<span class="sourceLineNo">800</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {<a name="line.800"></a>
 <span class="sourceLineNo">801</span>        return noise(x, y, z, seed);<a name="line.801"></a>
 <span class="sourceLineNo">802</span>    }<a name="line.802"></a>
 <span class="sourceLineNo">803</span><a name="line.803"></a>
@@ -833,7 +833,7 @@
 <span class="sourceLineNo">825</span>     * @param seed ignored entirely.<a name="line.825"></a>
 <span class="sourceLineNo">826</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.826"></a>
 <span class="sourceLineNo">827</span>     */<a name="line.827"></a>
-<span class="sourceLineNo">828</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {<a name="line.828"></a>
+<span class="sourceLineNo">828</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {<a name="line.828"></a>
 <span class="sourceLineNo">829</span>        return noise(x, y, z, w, seed);<a name="line.829"></a>
 <span class="sourceLineNo">830</span>    }<a name="line.830"></a>
 <span class="sourceLineNo">831</span><a name="line.831"></a>
@@ -864,7 +864,7 @@
 <span class="sourceLineNo">856</span>     * @param yin Y input; works well if between 0.0 and 1.0, but anything is accepted<a name="line.856"></a>
 <span class="sourceLineNo">857</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.857"></a>
 <span class="sourceLineNo">858</span>     */<a name="line.858"></a>
-<span class="sourceLineNo">859</span>    public static double noise(final double xin, final double yin, final int seed) {<a name="line.859"></a>
+<span class="sourceLineNo">859</span>    public static double noise(final double xin, final double yin, final long seed) {<a name="line.859"></a>
 <span class="sourceLineNo">860</span>        //xin *= epi;<a name="line.860"></a>
 <span class="sourceLineNo">861</span>        //yin *= epi;<a name="line.861"></a>
 <span class="sourceLineNo">862</span>        double noise0, noise1, noise2; // from the three corners<a name="line.862"></a>
@@ -976,7 +976,7 @@
 <span class="sourceLineNo">968</span>     * @param zin Z input<a name="line.968"></a>
 <span class="sourceLineNo">969</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.969"></a>
 <span class="sourceLineNo">970</span>     */<a name="line.970"></a>
-<span class="sourceLineNo">971</span>    public static double noise(final double xin, final double yin, final double zin, final int seed){<a name="line.971"></a>
+<span class="sourceLineNo">971</span>    public static double noise(final double xin, final double yin, final double zin, final long seed){<a name="line.971"></a>
 <span class="sourceLineNo">972</span>        //xin *= epi;<a name="line.972"></a>
 <span class="sourceLineNo">973</span>        //yin *= epi;<a name="line.973"></a>
 <span class="sourceLineNo">974</span>        //zin *= epi;<a name="line.974"></a>
@@ -1164,7 +1164,7 @@
 <span class="sourceLineNo">1156</span>     * @param seed any int; will be used to completely alter the noise<a name="line.1156"></a>
 <span class="sourceLineNo">1157</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.1157"></a>
 <span class="sourceLineNo">1158</span>     */<a name="line.1158"></a>
-<span class="sourceLineNo">1159</span>    public static double noise(final double x, final double y, final double z, final double w, final int seed)<a name="line.1159"></a>
+<span class="sourceLineNo">1159</span>    public static double noise(final double x, final double y, final double z, final double w, final long seed)<a name="line.1159"></a>
 <span class="sourceLineNo">1160</span>    {<a name="line.1160"></a>
 <span class="sourceLineNo">1161</span>        // The skewing and unskewing factors are hairy again for the 4D case<a name="line.1161"></a>
 <span class="sourceLineNo">1162</span><a name="line.1162"></a>

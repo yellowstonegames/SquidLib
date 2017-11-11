@@ -91,7 +91,7 @@
 <span class="sourceLineNo">083</span>    }<a name="line.83"></a>
 <span class="sourceLineNo">084</span><a name="line.84"></a>
 <span class="sourceLineNo">085</span>    @Override<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    public double getNoiseWithSeed(final double x, final double y, final int seed) {<a name="line.86"></a>
+<span class="sourceLineNo">086</span>    public double getNoiseWithSeed(final double x, final double y, final long seed) {<a name="line.86"></a>
 <span class="sourceLineNo">087</span>        final long<a name="line.87"></a>
 <span class="sourceLineNo">088</span>                rs = ThrustRNG.determine(seed ^ (long) ~seed &lt;&lt; 32),<a name="line.88"></a>
 <span class="sourceLineNo">089</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.89"></a>
@@ -122,7 +122,7 @@
 <span class="sourceLineNo">114</span>    }<a name="line.114"></a>
 <span class="sourceLineNo">115</span><a name="line.115"></a>
 <span class="sourceLineNo">116</span>    @Override<a name="line.116"></a>
-<span class="sourceLineNo">117</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final int seed) {<a name="line.117"></a>
+<span class="sourceLineNo">117</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {<a name="line.117"></a>
 <span class="sourceLineNo">118</span>        final long<a name="line.118"></a>
 <span class="sourceLineNo">119</span>                rs = ThrustRNG.determine(seed ^ (long) ~seed &lt;&lt; 32),<a name="line.119"></a>
 <span class="sourceLineNo">120</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.120"></a>
@@ -162,7 +162,7 @@
 <span class="sourceLineNo">154</span>    }<a name="line.154"></a>
 <span class="sourceLineNo">155</span><a name="line.155"></a>
 <span class="sourceLineNo">156</span>    @Override<a name="line.156"></a>
-<span class="sourceLineNo">157</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final int seed) {<a name="line.157"></a>
+<span class="sourceLineNo">157</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {<a name="line.157"></a>
 <span class="sourceLineNo">158</span>        final long<a name="line.158"></a>
 <span class="sourceLineNo">159</span>                rs = ThrustRNG.determine(seed ^ (long) ~seed &lt;&lt; 32),<a name="line.159"></a>
 <span class="sourceLineNo">160</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.160"></a>
@@ -219,7 +219,7 @@
 <span class="sourceLineNo">211</span>    }<a name="line.211"></a>
 <span class="sourceLineNo">212</span><a name="line.212"></a>
 <span class="sourceLineNo">213</span>    @Override<a name="line.213"></a>
-<span class="sourceLineNo">214</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, int seed) {<a name="line.214"></a>
+<span class="sourceLineNo">214</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {<a name="line.214"></a>
 <span class="sourceLineNo">215</span>        final long<a name="line.215"></a>
 <span class="sourceLineNo">216</span>                rs = ThrustRNG.determine(seed ^ (long) ~seed &lt;&lt; 32),<a name="line.216"></a>
 <span class="sourceLineNo">217</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.217"></a>

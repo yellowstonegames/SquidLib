@@ -90,7 +90,7 @@
 <span class="sourceLineNo">082</span>    public static int doubleToMixedIntBits(final double value)<a name="line.82"></a>
 <span class="sourceLineNo">083</span>    {<a name="line.83"></a>
 <span class="sourceLineNo">084</span>        final long l = Double.doubleToLongBits(value);<a name="line.84"></a>
-<span class="sourceLineNo">085</span>        return (int)l ^ (int)(l &gt;&gt;&gt; 32);<a name="line.85"></a>
+<span class="sourceLineNo">085</span>        return (int)(l &amp; 0xFFFFFFFFL) ^ (int)(l &gt;&gt;&gt; 32);<a name="line.85"></a>
 <span class="sourceLineNo">086</span>    }<a name="line.86"></a>
 <span class="sourceLineNo">087</span><a name="line.87"></a>
 <span class="sourceLineNo">088</span>    /**<a name="line.88"></a>
