@@ -4237,14 +4237,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int x = 0; x < width; x++) {
                     if ((ic = counts[x * ySections + s]) > tmp) {
                         t = data[x * ySections + s];
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                         for (--ic; w != 0; ic--) {
                             if (ic == tmp) {
                                 vl[i] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                                 continue EACH_QUASI;
                             }
                             t ^= w;
-                            w = Long.lowestOneBit(t);
+                            w = NumberTools.lowestOneBit(t);
                         }
                     }
                 }
@@ -4315,7 +4315,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int s = 0; s < ySections; s++) {
             for (int x = 0; x < width; x++) {
                 if ((t = data[x * ySections + s]) != 0) {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         if (run++ == order[idx]) {
                             if (++idx >= limit) {
@@ -4334,7 +4334,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                             data[x * ySections + s] ^= w;
                         }
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4401,14 +4401,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int x = 0; x < width; x++) {
                     if ((ic = counts[x * ySections + s]) > tmp) {
                         t = data[x * ySections + s];
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                         for (--ic; w != 0; ic--) {
                             if (ic == tmp) {
                                 vl[i] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                                 continue EACH_QUASI;
                             }
                             t ^= w;
-                            w = Long.lowestOneBit(t);
+                            w = NumberTools.lowestOneBit(t);
                         }
                     }
                 }
@@ -4487,7 +4487,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int s = 0; s < ySections; s++) {
             for (int x = 0; x < width; x++) {
                 if ((t = data[x * ySections + s]) != 0) {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         if (run++ == order[idx]) {
                             if (++idx >= limit) {
@@ -4506,7 +4506,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                             data[x * ySections + s] ^= w;
                         }
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4565,7 +4565,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int x = 0; x < width; x++) {
                     if ((ct = counts[x * ySections + s]) > tmp) {
                         t = data[x * ySections + s];
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                         for (--ct; w != 0; ct--) {
                             if (ct == tmp) {
                                 data2[x * ySections + s] |= w;
@@ -4576,7 +4576,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                                 continue MAIN_LOOP;
                             }
                             t ^= w;
-                            w = Long.lowestOneBit(t);
+                            w = NumberTools.lowestOneBit(t);
                         }
                     }
                 }
@@ -4637,12 +4637,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int s = 0; s < ySections; s++) {
                 if((t = data[x * ySections + s]) != 0)
                 {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         if(idx >= len) return points;
                         points[idx++] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4661,11 +4661,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int s = 0; s < ySections; s++) {
                 if((t = data[x * ySections + s]) != 0)
                 {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         points[idx++] = Coord.pureEncode(x, (s << 6) | Long.numberOfTrailingZeros(w));
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4684,11 +4684,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int s = 0; s < ySections; s++) {
                 if((t = data[x * ySections + s]) != 0)
                 {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         points[idx++] =  ((s << 6) | Long.numberOfTrailingZeros(w)) * width + x;
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4707,11 +4707,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int s = 0; s < ySections; s++) {
                 if((t = data[x * ySections + s]) != 0)
                 {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         points.add(Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w)));
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4725,7 +4725,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         long w;
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
-                if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0) {
+                if ((w = NumberTools.lowestOneBit(data[x * ySections + s])) != 0) {
                     return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                 }
             }
@@ -4738,7 +4738,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         long w;
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
-                if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0) {
+                if ((w = NumberTools.lowestOneBit(data[x * ySections + s])) != 0) {
                     return ((s << 6) | Long.numberOfTrailingZeros(w)) * width + x;
                 }
             }
@@ -4762,12 +4762,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 if ((ct = counts[x * ySections + s]) > index) {
                     t = data[x * ySections + s];
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     for (--ct; w != 0; ct--) {
                         if (ct == index)
                             return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4789,12 +4789,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 if ((ct = counts[x * ySections + s]) > tmp) {
                     t = data[x * ySections + s];
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     for (--ct; w != 0; ct--) {
                         if (ct == tmp)
                             return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4818,12 +4818,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int s = 0; s < ySections; s++) {
                 if ((ct = counts[x * ySections + s]) > tmp) {
                     t = data[x * ySections + s];
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     for (--ct; w != 0; ct--) {
                         if (ct == tmp)
                             return ((s << 6) | Long.numberOfTrailingZeros(w)) * width + x;
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4845,12 +4845,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 if ((ct = counts[x * ySections + s]) > tmp) {
                     t = data[x * ySections + s];
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     for (--ct; w != 0; ct--) {
                         if (ct == tmp)
                             return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4873,12 +4873,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 if ((ct = counts[x * ySections + s]) > tmp) {
                     t = data[x * ySections + s];
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     for (--ct; w != 0; ct--) {
                         if (ct == tmp)
                             return ((s << 6) | Long.numberOfTrailingZeros(w)) * width + x;
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -4924,7 +4924,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     private static int nextPowerOfTwo(int n)
     {
         int highest = Integer.highestOneBit(n);
-        return  (highest == Integer.lowestOneBit(n)) ? highest : highest << 1;
+        return  (highest == NumberTools.lowestOneBit(n)) ? highest : highest << 1;
     }
 
     /**
@@ -5137,14 +5137,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 if((t = data[x * ySections + s]) != 0)
                 {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         if (run++ == order[idx]) {
                             points[idx++] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                             if (idx >= size) break ALL;
                         }
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -5170,7 +5170,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 if((t = data[x * ySections + s]) != 0)
                 {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         if (run++ == order[idx]) {
                             if(++idx >= size) break ALL;
@@ -5180,7 +5180,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                             data[x * ySections + s] &= ~(1L << Long.numberOfTrailingZeros(w));
                         }
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -5757,12 +5757,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
                 if ((t = data[x * ySections + s]) != 0) {
-                    w = Long.lowestOneBit(t);
+                    w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         if (other.contains(x, (s << 6) | Long.numberOfTrailingZeros(w)))
                             return true;
                         t ^= w;
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -5867,13 +5867,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 for (int s = 0; s < ySections; s++) {
                     if ((t = data[x * ySections + s]) != 0) {
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                         while (w != 0) {
                             best = Math.min(s << 6 | Long.numberOfTrailingZeros(w), best);
                             if(best == 0)
                                 return 0;
                             t ^= w;
-                            w = Long.lowestOneBit(t);
+                            w = NumberTools.lowestOneBit(t);
                         }
                     }
                 }
@@ -5886,13 +5886,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 for (int s = 0; s < ySections; s++) {
                     if ((t = data[x * ySections + s]) != 0) {
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                         while (w != 0) {
                             best = Math.max(s << 6 | Long.numberOfTrailingZeros(w), best);
                             if(best == height - 1)
                                 return best;
                             t ^= w;
-                            w = Long.lowestOneBit(t);
+                            w = NumberTools.lowestOneBit(t);
                         }
                     }
                 }
@@ -5987,7 +5987,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int x = 0; x < width; x++) {
                     if ((ct = counts[x * ySections + s]) > index) {
                         t = data[x * ySections + s];
-                        w = Long.lowestOneBit(t);
+                        w = NumberTools.lowestOneBit(t);
                         for (--ct; w != 0; ct--) {
                             if (ct == index)
                             {
@@ -5997,7 +5997,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                                     return null;
                             }
                             t ^= w;
-                            w = Long.lowestOneBit(t);
+                            w = NumberTools.lowestOneBit(t);
                         }
                     }
                 }
@@ -6007,7 +6007,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             /*
             for (int x = 0; x < width; x++) {
                 for (int s = 0; s < ySections; s++) {
-                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 && i++ >= index) {
+                    if ((w = NumberTools.lowestOneBit(data[x * ySections + s])) != 0 && i++ >= index) {
                         if(index++ < limit)
                             return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                         else

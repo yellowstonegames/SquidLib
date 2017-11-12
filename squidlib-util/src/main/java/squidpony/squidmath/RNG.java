@@ -1024,7 +1024,7 @@ public class RNG implements Serializable {
         if (bitCount == 32)
             return random.nextLong();
         boolean high = bitCount > 32;
-        int altered = (high ? 64 - bitCount : bitCount), lsb = Integer.lowestOneBit(altered);
+        int altered = (high ? 64 - bitCount : bitCount), lsb = NumberTools.lowestOneBit(altered);
         long data = random.nextLong();
         for (int i = lsb << 1; i <= 16; i <<= 1) {
             if ((altered & i) == 0)

@@ -261,4 +261,14 @@ public class NumberTools {
                 + intBitsToFloat(((start << 13 & 0x007FFFFF) ^ ~start >>> 19) | 0x3F000000)
                 - 3f);
     }
+    public static int lowestOneBit(int num)
+    {
+        return num & ~(num - 1);
+    }
+
+    public static long lowestOneBit(long num)
+    {
+        return num & ~(num - 1L);
+    }
+
 }
