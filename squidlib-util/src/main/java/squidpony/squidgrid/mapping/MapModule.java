@@ -4,6 +4,7 @@ import squidpony.ArrayTools;
 import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.NumberTools;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -256,7 +257,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
     static int categorize(int n)
     {
         int highest = Integer.highestOneBit(n);
-        return Math.max(4, (highest == Integer.lowestOneBit(n)) ? highest : highest << 1);
+        return Math.max(4, (highest == NumberTools.lowestOneBit(n)) ? highest : highest << 1);
     }
     private void initSides()
     {

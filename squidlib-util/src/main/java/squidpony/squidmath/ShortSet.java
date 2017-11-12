@@ -482,7 +482,7 @@ public class ShortSet implements Serializable{
     private static int nextPowerOfTwo(int n)
     {
         int highest = Integer.highestOneBit(n);
-        return  (highest == Integer.lowestOneBit(n)) ? highest : highest << 1;
+        return  (highest == NumberTools.lowestOneBit(n)) ? highest : highest << 1;
     }
 
     /** Returns an iterator for the keys in the set. Remove is supported. Note that the same iterator instance is returned each time
