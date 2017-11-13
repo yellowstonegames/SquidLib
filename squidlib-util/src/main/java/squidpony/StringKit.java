@@ -943,7 +943,52 @@ public class StringKit {
         if(c < '0' || c > '1')
             return 0;
         long data = hexCodes[c];
-        for (int i = start+1; i < end && i < 64; i++) {
+        for (int i = start+1; i < end && i < start+64; i++) {
+            if((c = cs.charAt(i)) < '0' || c > '1')
+                return 0;
+            data <<= 1;
+            data |= c - '0';
+        }
+        return data;
+    }
+    /**
+     * Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the int they represent,
+     * reading at most 32 characters and returning the result if valid or 0 otherwise. The first digit is considered
+     * the sign bit iff cs is 32 chars long.
+     * <br>
+     * Should be fairly close to Java 8's Integer.parseUnsignedInt method, which is a bizarre omission from earlier
+     * JDKs. This doesn't throw on invalid input, though, instead returning 0.
+     * @param cs a CharSequence, such as a String, containing only binary digits (nothing at the start)
+     * @return the int that cs represents
+     */
+    public static int intFromBin(CharSequence cs)
+    {
+        return intFromBin(cs, 0, cs.length());
+    }
+
+    /**
+     * Reads in a CharSequence containing only binary digits (only 0 and 1) and returns the int they represent,
+     * reading at most 32 characters and returning the result if valid or 0 otherwise. The first digit is considered
+     * the sign bit iff cs is 32 chars long.
+     * <br>
+     * Should be fairly close to Java 8's Integer.parseUnsignedInt method, which is a bizarre omission from earlier
+     * JDKs. This doesn't throw on invalid input, though, instead returning 0.
+     * @param cs a CharSequence, such as a String, containing only binary digits (nothing at the start)
+     * @param start the first character position in cs to read from
+     * @param end the last character position in cs to read from (this stops after 32 characters if end is too large)
+     * @return the int that cs represents
+     */
+    public static int intFromBin(CharSequence cs, final int start, final int end)
+    {
+        int len;
+        if(cs == null || start < 0 || end <=0 || end - start <= 0
+                || (len = cs.length()) - start <= 0 || end > len)
+            return 0;
+        char c = cs.charAt(start);
+        if(c < '0' || c > '1')
+            return 0;
+        int data = hexCodes[c];
+        for (int i = start+1; i < end && i < start+32; i++) {
             if((c = cs.charAt(i)) < '0' || c > '1')
                 return 0;
             data <<= 1;
