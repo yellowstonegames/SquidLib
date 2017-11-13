@@ -891,7 +891,10 @@ public class EverythingDemo extends ApplicationAdapter {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.highlight(pt.x, pt.y, (int) (170 * fovmap[pt.x][pt.y]));
         }
-        messages.put(width - 10 >> 1, 0, "Health: " + health, SColor.RED_PIGMENT);
+        messages.putBordersCaptioned(SColor.FLOAT_WHITE,
+                GDXMarkup.instance.colorString("Health: [Red Pigment][*]" + health
+                        + "[], Mana: [CW Azure][/]0[], Groove: [Psychedelic Purple][*][/]"
+                        + (int)(SeededNoise.noise(player.gridX * 0.01, player.gridY * 0.01, tm * 0.00015, 1999) * 4 + 5)));
         //if(pt != null)
         //    display.putString(0, 0, String.valueOf(monPathMap[pt.x][pt.y]));
     }
