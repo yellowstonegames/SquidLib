@@ -317,6 +317,20 @@ public class SquidPanel extends Group implements IPackedColorPanel {
             }
         }
     }
+    public void put(int xOffset, int yOffset, String string, float encodedColor) {
+        if(string == null || string.isEmpty())
+            return;
+        if (string.length() == 1) {
+            put(xOffset, yOffset, string.charAt(0), encodedColor);
+        }
+        else
+        {
+            for (int i = 0; i < string.length(); i++) {
+                put(xOffset + i, yOffset, string.charAt(i), encodedColor);
+            }
+        }
+    }
+
     public void put(int xOffset, int yOffset, String string, Color foreground, float colorMultiplier) {
         if (string.length() == 1) {
             put(xOffset, yOffset, string.charAt(0), foreground, colorMultiplier);
@@ -325,6 +339,18 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         {
             for (int i = 0; i < string.length(); i++) {
                 put(xOffset + i, yOffset, string.charAt(i), foreground, colorMultiplier);
+            }
+        }
+    }
+
+    public void put(int xOffset, int yOffset, String string, float encodedColor, float colorMultiplier) {
+        if (string.length() == 1) {
+            put(xOffset, yOffset, string.charAt(0), encodedColor, colorMultiplier);
+        }
+        else
+        {
+            for (int i = 0; i < string.length(); i++) {
+                put(xOffset + i, yOffset, string.charAt(i), encodedColor, colorMultiplier);
             }
         }
     }
@@ -450,9 +476,11 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     }
     /**
      * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
-     * Color, which will be run through any IColorCenter this has for filtering.
+     * Color, which will be run through any IColorCenter this has for filtering. If caption is non-null, then this puts
+     * that String starting at x=1, y=0.
      * @param color a libGDX Color to use for the borders
      * @param caption an optional caption that will be drawn at (1, 0). May be null.
+     * @see #putBordersCaptioned(Color, IColoredString) Another method that takes an IColoredString caption
      */
     public void putBorders(Color color, String caption)
     {
@@ -471,7 +499,17 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
      * color as a packed float.
      * @param encodedColor a packed float color to use for the borders, as from {@link Color#toFloatBits()}
-     * @param caption an optional cpation that will be drawn at (1, 0). May be null.
+     */
+    public void putBorders(float encodedColor)
+    {
+        putBorders(encodedColor, null);
+    }
+    /**
+     * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
+     * color as a packed float. If caption is non-null, then this puts that String starting at x=1, y=0.
+     * @param encodedColor a packed float color to use for the borders, as from {@link Color#toFloatBits()}
+     * @param caption an optional caption that will be drawn at (1, 0). May be null to have no caption.
+     * @see #putBordersCaptioned(float, IColoredString) Another method that takes an IColoredString caption
      */
     public void putBorders(float encodedColor, String caption)
     {
@@ -499,11 +537,63 @@ public class SquidPanel extends Group implements IPackedColorPanel {
             colors[i][0] = encodedColor;
             colors[i][gridHeight - 1] = encodedColor;
         }
-	    
-	if (caption != null) {
-	    put(1, 0, caption, SColor.colorFromFloat(encodedColor));
-	}
-		
+
+        if (caption != null) {
+            put(1, 0, caption, encodedColor);
+        }
+    }
+
+    /**
+     * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
+     * libGDX Color. If caption is non-null, then this puts that IColoredString starting at x=1, y=0.
+     * @param color a libGDX Color to use for the borders
+     * @param caption an optional caption as an IColoredString that will be drawn at (1, 0). May be null to have no
+     *                caption. Will be colored independently from the border lines.
+     */
+    public void putBordersCaptioned(Color color, IColoredString<Color> caption)
+    {
+        putBordersCaptioned(scc.filter(color).toFloatBits(), caption);
+    }
+
+    /**
+     * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
+     * color as a packed float. If caption is non-null, then this puts that IColoredString starting at x=1, y=0.
+     * @param encodedColor a packed float color to use for the borders, as from {@link Color#toFloatBits()}
+     * @param caption an optional caption as an IColoredString that will be drawn at (1, 0). May be null to have no
+     *                caption. Will be colored independently from the border lines.
+     */
+    public void putBordersCaptioned(float encodedColor, IColoredString<Color> caption)
+
+    {
+        contents[0][0] = '┌';
+        contents[gridWidth - 1][0] = '┐';
+        contents[0][gridHeight - 1] = '└';
+        contents[gridWidth - 1][gridHeight - 1] = '┘';
+        for (int i = 1; i < gridWidth - 1; i++) {
+            contents[i][0] = '─';
+            contents[i][gridHeight - 1] = '─';
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            contents[0][y] = '│';
+            contents[gridWidth - 1][y] = '│';
+            colors[0][y] = encodedColor;
+            colors[gridWidth - 1][y] = encodedColor;
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            for (int x = 1; x < gridWidth - 1; x++) {
+                contents[x][y] = ' ';
+                contents[x][y] = ' ';
+            }
+        }
+        for (int i = 0; i < gridWidth; i++) {
+            colors[i][0] = encodedColor;
+            colors[i][gridHeight - 1] = encodedColor;
+        }
+
+        if (caption != null) {
+            put(1, 0, caption);
+        }
+
     }
 
     /**
