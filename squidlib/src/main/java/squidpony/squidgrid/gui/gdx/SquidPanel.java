@@ -446,7 +446,17 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      */
     public void putBorders()
     {
-        putBorders(SColor.FLOAT_WHITE);
+        putBorders(SColor.FLOAT_WHITE, null);
+    }
+    /**
+     * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
+     * Color, which will be run through any IColorCenter this has for filtering.
+     * @param color a libGDX Color to use for the borders
+     * @param caption an optional caption that will be drawn at (1, 0). May be null.
+     */
+    public void putBorders(Color color, String caption)
+    {
+        putBorders(scc.filter(color).toFloatBits(), caption);
     }
     /**
      * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
@@ -455,15 +465,15 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      */
     public void putBorders(Color color)
     {
-        putBorders(scc.filter(color).toFloatBits());
+	putBorders(color, null);
     }
-
     /**
      * Changes the chars at the edge of the SquidPanel to be a border drawn with box drawing characters in the given
      * color as a packed float.
      * @param encodedColor a packed float color to use for the borders, as from {@link Color#toFloatBits()}
+     * @param caption an optional cpation that will be drawn at (1, 0). May be null.
      */
-    public void putBorders(float encodedColor)
+    public void putBorders(float encodedColor, String caption)
     {
         contents[0][0] = '┌';
         contents[gridWidth - 1][0] = '┐';
@@ -489,6 +499,11 @@ public class SquidPanel extends Group implements IPackedColorPanel {
             colors[i][0] = encodedColor;
             colors[i][gridHeight - 1] = encodedColor;
         }
+	    
+	if (caption != null) {
+	    put(1, 0, caption, SColor.colorFromFloat(encodedColor));
+	}
+		
     }
 
     /**
