@@ -1032,7 +1032,7 @@
 <span class="sourceLineNo">1024</span>        if (bitCount == 32)<a name="line.1024"></a>
 <span class="sourceLineNo">1025</span>            return random.nextLong();<a name="line.1025"></a>
 <span class="sourceLineNo">1026</span>        boolean high = bitCount &gt; 32;<a name="line.1026"></a>
-<span class="sourceLineNo">1027</span>        int altered = (high ? 64 - bitCount : bitCount), lsb = Integer.lowestOneBit(altered);<a name="line.1027"></a>
+<span class="sourceLineNo">1027</span>        int altered = (high ? 64 - bitCount : bitCount), lsb = NumberTools.lowestOneBit(altered);<a name="line.1027"></a>
 <span class="sourceLineNo">1028</span>        long data = random.nextLong();<a name="line.1028"></a>
 <span class="sourceLineNo">1029</span>        for (int i = lsb &lt;&lt; 1; i &lt;= 16; i &lt;&lt;= 1) {<a name="line.1029"></a>
 <span class="sourceLineNo">1030</span>            if ((altered &amp; i) == 0)<a name="line.1030"></a>

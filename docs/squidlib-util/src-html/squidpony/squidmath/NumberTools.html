@@ -548,7 +548,46 @@
 <span class="sourceLineNo">540</span>                + intBitsToFloat(((start &lt;&lt; 13 &amp; 0x007FFFFF) ^ ~start &gt;&gt;&gt; 19) | 0x3F000000)<a name="line.540"></a>
 <span class="sourceLineNo">541</span>                - 3f);<a name="line.541"></a>
 <span class="sourceLineNo">542</span>    }<a name="line.542"></a>
-<span class="sourceLineNo">543</span>}<a name="line.543"></a>
+<span class="sourceLineNo">543</span><a name="line.543"></a>
+<span class="sourceLineNo">544</span>    /**<a name="line.544"></a>
+<span class="sourceLineNo">545</span>     * Returns an int value with at most a single one-bit, in the position of the lowest-order ("rightmost") one-bit in<a name="line.545"></a>
+<span class="sourceLineNo">546</span>     * the specified int value. Returns zero if the specified value has no one-bits in its two's complement binary<a name="line.546"></a>
+<span class="sourceLineNo">547</span>     * representation, that is, if it is equal to zero.<a name="line.547"></a>
+<span class="sourceLineNo">548</span>     * &lt;br&gt;<a name="line.548"></a>
+<span class="sourceLineNo">549</span>     * Identical to {@link Integer#lowestOneBit(int)}, but super-sourced to act correctly on GWT. If you have GWT as a<a name="line.549"></a>
+<span class="sourceLineNo">550</span>     * target and do bit manipulation work, double-check everything! An int can be higher than {@link Integer#MAX_VALUE}<a name="line.550"></a>
+<span class="sourceLineNo">551</span>     * or lower than {@link Integer#MIN_VALUE} on GWT, without actually being a long (internally it's a double). This<a name="line.551"></a>
+<span class="sourceLineNo">552</span>     * is especially relevant for the overload of this method that takes and returns a long;<a name="line.552"></a>
+<span class="sourceLineNo">553</span>     * {@link Long#lowestOneBit(long)} does not provide correct results for certain inputs on GWT, such as<a name="line.553"></a>
+<span class="sourceLineNo">554</span>     * -17592186044416L, which it mysteriously returns 0L on, so you should use {@link #lowestOneBit(long)}.<a name="line.554"></a>
+<span class="sourceLineNo">555</span>     * @param num the value whose lowest one bit is to be computed<a name="line.555"></a>
+<span class="sourceLineNo">556</span>     * @return an int value with a single one-bit, in the position of the lowest-order one-bit in the specified value,<a name="line.556"></a>
+<span class="sourceLineNo">557</span>     *         or zero if the specified value is itself equal to zero.<a name="line.557"></a>
+<span class="sourceLineNo">558</span>     */<a name="line.558"></a>
+<span class="sourceLineNo">559</span>    public static int lowestOneBit(int num)<a name="line.559"></a>
+<span class="sourceLineNo">560</span>    {<a name="line.560"></a>
+<span class="sourceLineNo">561</span>        return num &amp; -num;<a name="line.561"></a>
+<span class="sourceLineNo">562</span>    }<a name="line.562"></a>
+<span class="sourceLineNo">563</span>    /**<a name="line.563"></a>
+<span class="sourceLineNo">564</span>     * Returns an long value with at most a single one-bit, in the position of the lowest-order ("rightmost") one-bit in<a name="line.564"></a>
+<span class="sourceLineNo">565</span>     * the specified long value. Returns zero if the specified value has no one-bits in its two's complement binary<a name="line.565"></a>
+<span class="sourceLineNo">566</span>     * representation, that is, if it is equal to zero.<a name="line.566"></a>
+<span class="sourceLineNo">567</span>     * &lt;br&gt;<a name="line.567"></a>
+<span class="sourceLineNo">568</span>     * Identical to {@link Long#lowestOneBit(long)}, but super-sourced to act correctly on GWT. If you have GWT as a<a name="line.568"></a>
+<span class="sourceLineNo">569</span>     * target and do bit manipulation work, double-check everything! An int can be higher than {@link Integer#MAX_VALUE}<a name="line.569"></a>
+<span class="sourceLineNo">570</span>     * or lower than {@link Integer#MIN_VALUE} on GWT, without actually being a long (internally it's a double). This<a name="line.570"></a>
+<span class="sourceLineNo">571</span>     * is especially relevant for this overload (for longs more so than for ints); {@link Long#lowestOneBit(long)} does<a name="line.571"></a>
+<span class="sourceLineNo">572</span>     * not provide correct results for certain inputs on GWT, such as -17592186044416L, which it mysteriously returns 0L<a name="line.572"></a>
+<span class="sourceLineNo">573</span>     * on, so you should use this method.<a name="line.573"></a>
+<span class="sourceLineNo">574</span>     * @param num the value whose lowest one bit is to be computed<a name="line.574"></a>
+<span class="sourceLineNo">575</span>     * @return a long value with a single one-bit, in the position of the lowest-order one-bit in the specified value,<a name="line.575"></a>
+<span class="sourceLineNo">576</span>     *         or zero if the specified value is itself equal to zero.<a name="line.576"></a>
+<span class="sourceLineNo">577</span>     */<a name="line.577"></a>
+<span class="sourceLineNo">578</span>    public static long lowestOneBit(long num)<a name="line.578"></a>
+<span class="sourceLineNo">579</span>    {<a name="line.579"></a>
+<span class="sourceLineNo">580</span>        return num &amp; -num;<a name="line.580"></a>
+<span class="sourceLineNo">581</span>    }<a name="line.581"></a>
+<span class="sourceLineNo">582</span>}<a name="line.582"></a>
 
 
 

@@ -4245,14 +4245,14 @@
 <span class="sourceLineNo">4237</span>                for (int x = 0; x &lt; width; x++) {<a name="line.4237"></a>
 <span class="sourceLineNo">4238</span>                    if ((ic = counts[x * ySections + s]) &gt; tmp) {<a name="line.4238"></a>
 <span class="sourceLineNo">4239</span>                        t = data[x * ySections + s];<a name="line.4239"></a>
-<span class="sourceLineNo">4240</span>                        w = Long.lowestOneBit(t);<a name="line.4240"></a>
+<span class="sourceLineNo">4240</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4240"></a>
 <span class="sourceLineNo">4241</span>                        for (--ic; w != 0; ic--) {<a name="line.4241"></a>
 <span class="sourceLineNo">4242</span>                            if (ic == tmp) {<a name="line.4242"></a>
 <span class="sourceLineNo">4243</span>                                vl[i] = Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.4243"></a>
 <span class="sourceLineNo">4244</span>                                continue EACH_QUASI;<a name="line.4244"></a>
 <span class="sourceLineNo">4245</span>                            }<a name="line.4245"></a>
 <span class="sourceLineNo">4246</span>                            t ^= w;<a name="line.4246"></a>
-<span class="sourceLineNo">4247</span>                            w = Long.lowestOneBit(t);<a name="line.4247"></a>
+<span class="sourceLineNo">4247</span>                            w = NumberTools.lowestOneBit(t);<a name="line.4247"></a>
 <span class="sourceLineNo">4248</span>                        }<a name="line.4248"></a>
 <span class="sourceLineNo">4249</span>                    }<a name="line.4249"></a>
 <span class="sourceLineNo">4250</span>                }<a name="line.4250"></a>
@@ -4323,7 +4323,7 @@
 <span class="sourceLineNo">4315</span>        for (int s = 0; s &lt; ySections; s++) {<a name="line.4315"></a>
 <span class="sourceLineNo">4316</span>            for (int x = 0; x &lt; width; x++) {<a name="line.4316"></a>
 <span class="sourceLineNo">4317</span>                if ((t = data[x * ySections + s]) != 0) {<a name="line.4317"></a>
-<span class="sourceLineNo">4318</span>                    w = Long.lowestOneBit(t);<a name="line.4318"></a>
+<span class="sourceLineNo">4318</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4318"></a>
 <span class="sourceLineNo">4319</span>                    while (w != 0) {<a name="line.4319"></a>
 <span class="sourceLineNo">4320</span>                        if (run++ == order[idx]) {<a name="line.4320"></a>
 <span class="sourceLineNo">4321</span>                            if (++idx &gt;= limit) {<a name="line.4321"></a>
@@ -4342,7 +4342,7 @@
 <span class="sourceLineNo">4334</span>                            data[x * ySections + s] ^= w;<a name="line.4334"></a>
 <span class="sourceLineNo">4335</span>                        }<a name="line.4335"></a>
 <span class="sourceLineNo">4336</span>                        t ^= w;<a name="line.4336"></a>
-<span class="sourceLineNo">4337</span>                        w = Long.lowestOneBit(t);<a name="line.4337"></a>
+<span class="sourceLineNo">4337</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4337"></a>
 <span class="sourceLineNo">4338</span>                    }<a name="line.4338"></a>
 <span class="sourceLineNo">4339</span>                }<a name="line.4339"></a>
 <span class="sourceLineNo">4340</span>            }<a name="line.4340"></a>
@@ -4409,14 +4409,14 @@
 <span class="sourceLineNo">4401</span>                for (int x = 0; x &lt; width; x++) {<a name="line.4401"></a>
 <span class="sourceLineNo">4402</span>                    if ((ic = counts[x * ySections + s]) &gt; tmp) {<a name="line.4402"></a>
 <span class="sourceLineNo">4403</span>                        t = data[x * ySections + s];<a name="line.4403"></a>
-<span class="sourceLineNo">4404</span>                        w = Long.lowestOneBit(t);<a name="line.4404"></a>
+<span class="sourceLineNo">4404</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4404"></a>
 <span class="sourceLineNo">4405</span>                        for (--ic; w != 0; ic--) {<a name="line.4405"></a>
 <span class="sourceLineNo">4406</span>                            if (ic == tmp) {<a name="line.4406"></a>
 <span class="sourceLineNo">4407</span>                                vl[i] = Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.4407"></a>
 <span class="sourceLineNo">4408</span>                                continue EACH_QUASI;<a name="line.4408"></a>
 <span class="sourceLineNo">4409</span>                            }<a name="line.4409"></a>
 <span class="sourceLineNo">4410</span>                            t ^= w;<a name="line.4410"></a>
-<span class="sourceLineNo">4411</span>                            w = Long.lowestOneBit(t);<a name="line.4411"></a>
+<span class="sourceLineNo">4411</span>                            w = NumberTools.lowestOneBit(t);<a name="line.4411"></a>
 <span class="sourceLineNo">4412</span>                        }<a name="line.4412"></a>
 <span class="sourceLineNo">4413</span>                    }<a name="line.4413"></a>
 <span class="sourceLineNo">4414</span>                }<a name="line.4414"></a>
@@ -4495,7 +4495,7 @@
 <span class="sourceLineNo">4487</span>        for (int s = 0; s &lt; ySections; s++) {<a name="line.4487"></a>
 <span class="sourceLineNo">4488</span>            for (int x = 0; x &lt; width; x++) {<a name="line.4488"></a>
 <span class="sourceLineNo">4489</span>                if ((t = data[x * ySections + s]) != 0) {<a name="line.4489"></a>
-<span class="sourceLineNo">4490</span>                    w = Long.lowestOneBit(t);<a name="line.4490"></a>
+<span class="sourceLineNo">4490</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4490"></a>
 <span class="sourceLineNo">4491</span>                    while (w != 0) {<a name="line.4491"></a>
 <span class="sourceLineNo">4492</span>                        if (run++ == order[idx]) {<a name="line.4492"></a>
 <span class="sourceLineNo">4493</span>                            if (++idx &gt;= limit) {<a name="line.4493"></a>
@@ -4514,7 +4514,7 @@
 <span class="sourceLineNo">4506</span>                            data[x * ySections + s] ^= w;<a name="line.4506"></a>
 <span class="sourceLineNo">4507</span>                        }<a name="line.4507"></a>
 <span class="sourceLineNo">4508</span>                        t ^= w;<a name="line.4508"></a>
-<span class="sourceLineNo">4509</span>                        w = Long.lowestOneBit(t);<a name="line.4509"></a>
+<span class="sourceLineNo">4509</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4509"></a>
 <span class="sourceLineNo">4510</span>                    }<a name="line.4510"></a>
 <span class="sourceLineNo">4511</span>                }<a name="line.4511"></a>
 <span class="sourceLineNo">4512</span>            }<a name="line.4512"></a>
@@ -4573,7 +4573,7 @@
 <span class="sourceLineNo">4565</span>                for (int x = 0; x &lt; width; x++) {<a name="line.4565"></a>
 <span class="sourceLineNo">4566</span>                    if ((ct = counts[x * ySections + s]) &gt; tmp) {<a name="line.4566"></a>
 <span class="sourceLineNo">4567</span>                        t = data[x * ySections + s];<a name="line.4567"></a>
-<span class="sourceLineNo">4568</span>                        w = Long.lowestOneBit(t);<a name="line.4568"></a>
+<span class="sourceLineNo">4568</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4568"></a>
 <span class="sourceLineNo">4569</span>                        for (--ct; w != 0; ct--) {<a name="line.4569"></a>
 <span class="sourceLineNo">4570</span>                            if (ct == tmp) {<a name="line.4570"></a>
 <span class="sourceLineNo">4571</span>                                data2[x * ySections + s] |= w;<a name="line.4571"></a>
@@ -4584,7 +4584,7 @@
 <span class="sourceLineNo">4576</span>                                continue MAIN_LOOP;<a name="line.4576"></a>
 <span class="sourceLineNo">4577</span>                            }<a name="line.4577"></a>
 <span class="sourceLineNo">4578</span>                            t ^= w;<a name="line.4578"></a>
-<span class="sourceLineNo">4579</span>                            w = Long.lowestOneBit(t);<a name="line.4579"></a>
+<span class="sourceLineNo">4579</span>                            w = NumberTools.lowestOneBit(t);<a name="line.4579"></a>
 <span class="sourceLineNo">4580</span>                        }<a name="line.4580"></a>
 <span class="sourceLineNo">4581</span>                    }<a name="line.4581"></a>
 <span class="sourceLineNo">4582</span>                }<a name="line.4582"></a>
@@ -4645,12 +4645,12 @@
 <span class="sourceLineNo">4637</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.4637"></a>
 <span class="sourceLineNo">4638</span>                if((t = data[x * ySections + s]) != 0)<a name="line.4638"></a>
 <span class="sourceLineNo">4639</span>                {<a name="line.4639"></a>
-<span class="sourceLineNo">4640</span>                    w = Long.lowestOneBit(t);<a name="line.4640"></a>
+<span class="sourceLineNo">4640</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4640"></a>
 <span class="sourceLineNo">4641</span>                    while (w != 0) {<a name="line.4641"></a>
 <span class="sourceLineNo">4642</span>                        if(idx &gt;= len) return points;<a name="line.4642"></a>
 <span class="sourceLineNo">4643</span>                        points[idx++] = Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.4643"></a>
 <span class="sourceLineNo">4644</span>                        t ^= w;<a name="line.4644"></a>
-<span class="sourceLineNo">4645</span>                        w = Long.lowestOneBit(t);<a name="line.4645"></a>
+<span class="sourceLineNo">4645</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4645"></a>
 <span class="sourceLineNo">4646</span>                    }<a name="line.4646"></a>
 <span class="sourceLineNo">4647</span>                }<a name="line.4647"></a>
 <span class="sourceLineNo">4648</span>            }<a name="line.4648"></a>
@@ -4669,11 +4669,11 @@
 <span class="sourceLineNo">4661</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.4661"></a>
 <span class="sourceLineNo">4662</span>                if((t = data[x * ySections + s]) != 0)<a name="line.4662"></a>
 <span class="sourceLineNo">4663</span>                {<a name="line.4663"></a>
-<span class="sourceLineNo">4664</span>                    w = Long.lowestOneBit(t);<a name="line.4664"></a>
+<span class="sourceLineNo">4664</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4664"></a>
 <span class="sourceLineNo">4665</span>                    while (w != 0) {<a name="line.4665"></a>
 <span class="sourceLineNo">4666</span>                        points[idx++] = Coord.pureEncode(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.4666"></a>
 <span class="sourceLineNo">4667</span>                        t ^= w;<a name="line.4667"></a>
-<span class="sourceLineNo">4668</span>                        w = Long.lowestOneBit(t);<a name="line.4668"></a>
+<span class="sourceLineNo">4668</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4668"></a>
 <span class="sourceLineNo">4669</span>                    }<a name="line.4669"></a>
 <span class="sourceLineNo">4670</span>                }<a name="line.4670"></a>
 <span class="sourceLineNo">4671</span>            }<a name="line.4671"></a>
@@ -4692,11 +4692,11 @@
 <span class="sourceLineNo">4684</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.4684"></a>
 <span class="sourceLineNo">4685</span>                if((t = data[x * ySections + s]) != 0)<a name="line.4685"></a>
 <span class="sourceLineNo">4686</span>                {<a name="line.4686"></a>
-<span class="sourceLineNo">4687</span>                    w = Long.lowestOneBit(t);<a name="line.4687"></a>
+<span class="sourceLineNo">4687</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4687"></a>
 <span class="sourceLineNo">4688</span>                    while (w != 0) {<a name="line.4688"></a>
 <span class="sourceLineNo">4689</span>                        points[idx++] =  ((s &lt;&lt; 6) | Long.numberOfTrailingZeros(w)) * width + x;<a name="line.4689"></a>
 <span class="sourceLineNo">4690</span>                        t ^= w;<a name="line.4690"></a>
-<span class="sourceLineNo">4691</span>                        w = Long.lowestOneBit(t);<a name="line.4691"></a>
+<span class="sourceLineNo">4691</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4691"></a>
 <span class="sourceLineNo">4692</span>                    }<a name="line.4692"></a>
 <span class="sourceLineNo">4693</span>                }<a name="line.4693"></a>
 <span class="sourceLineNo">4694</span>            }<a name="line.4694"></a>
@@ -4715,11 +4715,11 @@
 <span class="sourceLineNo">4707</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.4707"></a>
 <span class="sourceLineNo">4708</span>                if((t = data[x * ySections + s]) != 0)<a name="line.4708"></a>
 <span class="sourceLineNo">4709</span>                {<a name="line.4709"></a>
-<span class="sourceLineNo">4710</span>                    w = Long.lowestOneBit(t);<a name="line.4710"></a>
+<span class="sourceLineNo">4710</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4710"></a>
 <span class="sourceLineNo">4711</span>                    while (w != 0) {<a name="line.4711"></a>
 <span class="sourceLineNo">4712</span>                        points.add(Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w)));<a name="line.4712"></a>
 <span class="sourceLineNo">4713</span>                        t ^= w;<a name="line.4713"></a>
-<span class="sourceLineNo">4714</span>                        w = Long.lowestOneBit(t);<a name="line.4714"></a>
+<span class="sourceLineNo">4714</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4714"></a>
 <span class="sourceLineNo">4715</span>                    }<a name="line.4715"></a>
 <span class="sourceLineNo">4716</span>                }<a name="line.4716"></a>
 <span class="sourceLineNo">4717</span>            }<a name="line.4717"></a>
@@ -4733,7 +4733,7 @@
 <span class="sourceLineNo">4725</span>        long w;<a name="line.4725"></a>
 <span class="sourceLineNo">4726</span>        for (int x = 0; x &lt; width; x++) {<a name="line.4726"></a>
 <span class="sourceLineNo">4727</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.4727"></a>
-<span class="sourceLineNo">4728</span>                if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0) {<a name="line.4728"></a>
+<span class="sourceLineNo">4728</span>                if ((w = NumberTools.lowestOneBit(data[x * ySections + s])) != 0) {<a name="line.4728"></a>
 <span class="sourceLineNo">4729</span>                    return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.4729"></a>
 <span class="sourceLineNo">4730</span>                }<a name="line.4730"></a>
 <span class="sourceLineNo">4731</span>            }<a name="line.4731"></a>
@@ -4746,7 +4746,7 @@
 <span class="sourceLineNo">4738</span>        long w;<a name="line.4738"></a>
 <span class="sourceLineNo">4739</span>        for (int x = 0; x &lt; width; x++) {<a name="line.4739"></a>
 <span class="sourceLineNo">4740</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.4740"></a>
-<span class="sourceLineNo">4741</span>                if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0) {<a name="line.4741"></a>
+<span class="sourceLineNo">4741</span>                if ((w = NumberTools.lowestOneBit(data[x * ySections + s])) != 0) {<a name="line.4741"></a>
 <span class="sourceLineNo">4742</span>                    return ((s &lt;&lt; 6) | Long.numberOfTrailingZeros(w)) * width + x;<a name="line.4742"></a>
 <span class="sourceLineNo">4743</span>                }<a name="line.4743"></a>
 <span class="sourceLineNo">4744</span>            }<a name="line.4744"></a>
@@ -4770,12 +4770,12 @@
 <span class="sourceLineNo">4762</span>            for (int x = 0; x &lt; width; x++) {<a name="line.4762"></a>
 <span class="sourceLineNo">4763</span>                if ((ct = counts[x * ySections + s]) &gt; index) {<a name="line.4763"></a>
 <span class="sourceLineNo">4764</span>                    t = data[x * ySections + s];<a name="line.4764"></a>
-<span class="sourceLineNo">4765</span>                    w = Long.lowestOneBit(t);<a name="line.4765"></a>
+<span class="sourceLineNo">4765</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4765"></a>
 <span class="sourceLineNo">4766</span>                    for (--ct; w != 0; ct--) {<a name="line.4766"></a>
 <span class="sourceLineNo">4767</span>                        if (ct == index)<a name="line.4767"></a>
 <span class="sourceLineNo">4768</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.4768"></a>
 <span class="sourceLineNo">4769</span>                        t ^= w;<a name="line.4769"></a>
-<span class="sourceLineNo">4770</span>                        w = Long.lowestOneBit(t);<a name="line.4770"></a>
+<span class="sourceLineNo">4770</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4770"></a>
 <span class="sourceLineNo">4771</span>                    }<a name="line.4771"></a>
 <span class="sourceLineNo">4772</span>                }<a name="line.4772"></a>
 <span class="sourceLineNo">4773</span>            }<a name="line.4773"></a>
@@ -4797,12 +4797,12 @@
 <span class="sourceLineNo">4789</span>            for (int x = 0; x &lt; width; x++) {<a name="line.4789"></a>
 <span class="sourceLineNo">4790</span>                if ((ct = counts[x * ySections + s]) &gt; tmp) {<a name="line.4790"></a>
 <span class="sourceLineNo">4791</span>                    t = data[x * ySections + s];<a name="line.4791"></a>
-<span class="sourceLineNo">4792</span>                    w = Long.lowestOneBit(t);<a name="line.4792"></a>
+<span class="sourceLineNo">4792</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4792"></a>
 <span class="sourceLineNo">4793</span>                    for (--ct; w != 0; ct--) {<a name="line.4793"></a>
 <span class="sourceLineNo">4794</span>                        if (ct == tmp)<a name="line.4794"></a>
 <span class="sourceLineNo">4795</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.4795"></a>
 <span class="sourceLineNo">4796</span>                        t ^= w;<a name="line.4796"></a>
-<span class="sourceLineNo">4797</span>                        w = Long.lowestOneBit(t);<a name="line.4797"></a>
+<span class="sourceLineNo">4797</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4797"></a>
 <span class="sourceLineNo">4798</span>                    }<a name="line.4798"></a>
 <span class="sourceLineNo">4799</span>                }<a name="line.4799"></a>
 <span class="sourceLineNo">4800</span>            }<a name="line.4800"></a>
@@ -4826,12 +4826,12 @@
 <span class="sourceLineNo">4818</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.4818"></a>
 <span class="sourceLineNo">4819</span>                if ((ct = counts[x * ySections + s]) &gt; tmp) {<a name="line.4819"></a>
 <span class="sourceLineNo">4820</span>                    t = data[x * ySections + s];<a name="line.4820"></a>
-<span class="sourceLineNo">4821</span>                    w = Long.lowestOneBit(t);<a name="line.4821"></a>
+<span class="sourceLineNo">4821</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4821"></a>
 <span class="sourceLineNo">4822</span>                    for (--ct; w != 0; ct--) {<a name="line.4822"></a>
 <span class="sourceLineNo">4823</span>                        if (ct == tmp)<a name="line.4823"></a>
 <span class="sourceLineNo">4824</span>                            return ((s &lt;&lt; 6) | Long.numberOfTrailingZeros(w)) * width + x;<a name="line.4824"></a>
 <span class="sourceLineNo">4825</span>                        t ^= w;<a name="line.4825"></a>
-<span class="sourceLineNo">4826</span>                        w = Long.lowestOneBit(t);<a name="line.4826"></a>
+<span class="sourceLineNo">4826</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4826"></a>
 <span class="sourceLineNo">4827</span>                    }<a name="line.4827"></a>
 <span class="sourceLineNo">4828</span>                }<a name="line.4828"></a>
 <span class="sourceLineNo">4829</span>            }<a name="line.4829"></a>
@@ -4853,12 +4853,12 @@
 <span class="sourceLineNo">4845</span>            for (int x = 0; x &lt; width; x++) {<a name="line.4845"></a>
 <span class="sourceLineNo">4846</span>                if ((ct = counts[x * ySections + s]) &gt; tmp) {<a name="line.4846"></a>
 <span class="sourceLineNo">4847</span>                    t = data[x * ySections + s];<a name="line.4847"></a>
-<span class="sourceLineNo">4848</span>                    w = Long.lowestOneBit(t);<a name="line.4848"></a>
+<span class="sourceLineNo">4848</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4848"></a>
 <span class="sourceLineNo">4849</span>                    for (--ct; w != 0; ct--) {<a name="line.4849"></a>
 <span class="sourceLineNo">4850</span>                        if (ct == tmp)<a name="line.4850"></a>
 <span class="sourceLineNo">4851</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.4851"></a>
 <span class="sourceLineNo">4852</span>                        t ^= w;<a name="line.4852"></a>
-<span class="sourceLineNo">4853</span>                        w = Long.lowestOneBit(t);<a name="line.4853"></a>
+<span class="sourceLineNo">4853</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4853"></a>
 <span class="sourceLineNo">4854</span>                    }<a name="line.4854"></a>
 <span class="sourceLineNo">4855</span>                }<a name="line.4855"></a>
 <span class="sourceLineNo">4856</span>            }<a name="line.4856"></a>
@@ -4881,12 +4881,12 @@
 <span class="sourceLineNo">4873</span>            for (int x = 0; x &lt; width; x++) {<a name="line.4873"></a>
 <span class="sourceLineNo">4874</span>                if ((ct = counts[x * ySections + s]) &gt; tmp) {<a name="line.4874"></a>
 <span class="sourceLineNo">4875</span>                    t = data[x * ySections + s];<a name="line.4875"></a>
-<span class="sourceLineNo">4876</span>                    w = Long.lowestOneBit(t);<a name="line.4876"></a>
+<span class="sourceLineNo">4876</span>                    w = NumberTools.lowestOneBit(t);<a name="line.4876"></a>
 <span class="sourceLineNo">4877</span>                    for (--ct; w != 0; ct--) {<a name="line.4877"></a>
 <span class="sourceLineNo">4878</span>                        if (ct == tmp)<a name="line.4878"></a>
 <span class="sourceLineNo">4879</span>                            return ((s &lt;&lt; 6) | Long.numberOfTrailingZeros(w)) * width + x;<a name="line.4879"></a>
 <span class="sourceLineNo">4880</span>                        t ^= w;<a name="line.4880"></a>
-<span class="sourceLineNo">4881</span>                        w = Long.lowestOneBit(t);<a name="line.4881"></a>
+<span class="sourceLineNo">4881</span>                        w = NumberTools.lowestOneBit(t);<a name="line.4881"></a>
 <span class="sourceLineNo">4882</span>                    }<a name="line.4882"></a>
 <span class="sourceLineNo">4883</span>                }<a name="line.4883"></a>
 <span class="sourceLineNo">4884</span>            }<a name="line.4884"></a>
@@ -4932,7 +4932,7 @@
 <span class="sourceLineNo">4924</span>    private static int nextPowerOfTwo(int n)<a name="line.4924"></a>
 <span class="sourceLineNo">4925</span>    {<a name="line.4925"></a>
 <span class="sourceLineNo">4926</span>        int highest = Integer.highestOneBit(n);<a name="line.4926"></a>
-<span class="sourceLineNo">4927</span>        return  (highest == Integer.lowestOneBit(n)) ? highest : highest &lt;&lt; 1;<a name="line.4927"></a>
+<span class="sourceLineNo">4927</span>        return  (highest == NumberTools.lowestOneBit(n)) ? highest : highest &lt;&lt; 1;<a name="line.4927"></a>
 <span class="sourceLineNo">4928</span>    }<a name="line.4928"></a>
 <span class="sourceLineNo">4929</span><a name="line.4929"></a>
 <span class="sourceLineNo">4930</span>    /**<a name="line.4930"></a>
@@ -5145,14 +5145,14 @@
 <span class="sourceLineNo">5137</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5137"></a>
 <span class="sourceLineNo">5138</span>                if((t = data[x * ySections + s]) != 0)<a name="line.5138"></a>
 <span class="sourceLineNo">5139</span>                {<a name="line.5139"></a>
-<span class="sourceLineNo">5140</span>                    w = Long.lowestOneBit(t);<a name="line.5140"></a>
+<span class="sourceLineNo">5140</span>                    w = NumberTools.lowestOneBit(t);<a name="line.5140"></a>
 <span class="sourceLineNo">5141</span>                    while (w != 0) {<a name="line.5141"></a>
 <span class="sourceLineNo">5142</span>                        if (run++ == order[idx]) {<a name="line.5142"></a>
 <span class="sourceLineNo">5143</span>                            points[idx++] = Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.5143"></a>
 <span class="sourceLineNo">5144</span>                            if (idx &gt;= size) break ALL;<a name="line.5144"></a>
 <span class="sourceLineNo">5145</span>                        }<a name="line.5145"></a>
 <span class="sourceLineNo">5146</span>                        t ^= w;<a name="line.5146"></a>
-<span class="sourceLineNo">5147</span>                        w = Long.lowestOneBit(t);<a name="line.5147"></a>
+<span class="sourceLineNo">5147</span>                        w = NumberTools.lowestOneBit(t);<a name="line.5147"></a>
 <span class="sourceLineNo">5148</span>                    }<a name="line.5148"></a>
 <span class="sourceLineNo">5149</span>                }<a name="line.5149"></a>
 <span class="sourceLineNo">5150</span>            }<a name="line.5150"></a>
@@ -5178,7 +5178,7 @@
 <span class="sourceLineNo">5170</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5170"></a>
 <span class="sourceLineNo">5171</span>                if((t = data[x * ySections + s]) != 0)<a name="line.5171"></a>
 <span class="sourceLineNo">5172</span>                {<a name="line.5172"></a>
-<span class="sourceLineNo">5173</span>                    w = Long.lowestOneBit(t);<a name="line.5173"></a>
+<span class="sourceLineNo">5173</span>                    w = NumberTools.lowestOneBit(t);<a name="line.5173"></a>
 <span class="sourceLineNo">5174</span>                    while (w != 0) {<a name="line.5174"></a>
 <span class="sourceLineNo">5175</span>                        if (run++ == order[idx]) {<a name="line.5175"></a>
 <span class="sourceLineNo">5176</span>                            if(++idx &gt;= size) break ALL;<a name="line.5176"></a>
@@ -5188,7 +5188,7 @@
 <span class="sourceLineNo">5180</span>                            data[x * ySections + s] &amp;= ~(1L &lt;&lt; Long.numberOfTrailingZeros(w));<a name="line.5180"></a>
 <span class="sourceLineNo">5181</span>                        }<a name="line.5181"></a>
 <span class="sourceLineNo">5182</span>                        t ^= w;<a name="line.5182"></a>
-<span class="sourceLineNo">5183</span>                        w = Long.lowestOneBit(t);<a name="line.5183"></a>
+<span class="sourceLineNo">5183</span>                        w = NumberTools.lowestOneBit(t);<a name="line.5183"></a>
 <span class="sourceLineNo">5184</span>                    }<a name="line.5184"></a>
 <span class="sourceLineNo">5185</span>                }<a name="line.5185"></a>
 <span class="sourceLineNo">5186</span>            }<a name="line.5186"></a>
@@ -5765,12 +5765,12 @@
 <span class="sourceLineNo">5757</span>        for (int x = 0; x &lt; width; x++) {<a name="line.5757"></a>
 <span class="sourceLineNo">5758</span>            for (int s = 0; s &lt; ySections; s++) {<a name="line.5758"></a>
 <span class="sourceLineNo">5759</span>                if ((t = data[x * ySections + s]) != 0) {<a name="line.5759"></a>
-<span class="sourceLineNo">5760</span>                    w = Long.lowestOneBit(t);<a name="line.5760"></a>
+<span class="sourceLineNo">5760</span>                    w = NumberTools.lowestOneBit(t);<a name="line.5760"></a>
 <span class="sourceLineNo">5761</span>                    while (w != 0) {<a name="line.5761"></a>
 <span class="sourceLineNo">5762</span>                        if (other.contains(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w)))<a name="line.5762"></a>
 <span class="sourceLineNo">5763</span>                            return true;<a name="line.5763"></a>
 <span class="sourceLineNo">5764</span>                        t ^= w;<a name="line.5764"></a>
-<span class="sourceLineNo">5765</span>                        w = Long.lowestOneBit(t);<a name="line.5765"></a>
+<span class="sourceLineNo">5765</span>                        w = NumberTools.lowestOneBit(t);<a name="line.5765"></a>
 <span class="sourceLineNo">5766</span>                    }<a name="line.5766"></a>
 <span class="sourceLineNo">5767</span>                }<a name="line.5767"></a>
 <span class="sourceLineNo">5768</span>            }<a name="line.5768"></a>
@@ -5875,13 +5875,13 @@
 <span class="sourceLineNo">5867</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5867"></a>
 <span class="sourceLineNo">5868</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.5868"></a>
 <span class="sourceLineNo">5869</span>                    if ((t = data[x * ySections + s]) != 0) {<a name="line.5869"></a>
-<span class="sourceLineNo">5870</span>                        w = Long.lowestOneBit(t);<a name="line.5870"></a>
+<span class="sourceLineNo">5870</span>                        w = NumberTools.lowestOneBit(t);<a name="line.5870"></a>
 <span class="sourceLineNo">5871</span>                        while (w != 0) {<a name="line.5871"></a>
 <span class="sourceLineNo">5872</span>                            best = Math.min(s &lt;&lt; 6 | Long.numberOfTrailingZeros(w), best);<a name="line.5872"></a>
 <span class="sourceLineNo">5873</span>                            if(best == 0)<a name="line.5873"></a>
 <span class="sourceLineNo">5874</span>                                return 0;<a name="line.5874"></a>
 <span class="sourceLineNo">5875</span>                            t ^= w;<a name="line.5875"></a>
-<span class="sourceLineNo">5876</span>                            w = Long.lowestOneBit(t);<a name="line.5876"></a>
+<span class="sourceLineNo">5876</span>                            w = NumberTools.lowestOneBit(t);<a name="line.5876"></a>
 <span class="sourceLineNo">5877</span>                        }<a name="line.5877"></a>
 <span class="sourceLineNo">5878</span>                    }<a name="line.5878"></a>
 <span class="sourceLineNo">5879</span>                }<a name="line.5879"></a>
@@ -5894,13 +5894,13 @@
 <span class="sourceLineNo">5886</span>            for (int x = 0; x &lt; width; x++) {<a name="line.5886"></a>
 <span class="sourceLineNo">5887</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.5887"></a>
 <span class="sourceLineNo">5888</span>                    if ((t = data[x * ySections + s]) != 0) {<a name="line.5888"></a>
-<span class="sourceLineNo">5889</span>                        w = Long.lowestOneBit(t);<a name="line.5889"></a>
+<span class="sourceLineNo">5889</span>                        w = NumberTools.lowestOneBit(t);<a name="line.5889"></a>
 <span class="sourceLineNo">5890</span>                        while (w != 0) {<a name="line.5890"></a>
 <span class="sourceLineNo">5891</span>                            best = Math.max(s &lt;&lt; 6 | Long.numberOfTrailingZeros(w), best);<a name="line.5891"></a>
 <span class="sourceLineNo">5892</span>                            if(best == height - 1)<a name="line.5892"></a>
 <span class="sourceLineNo">5893</span>                                return best;<a name="line.5893"></a>
 <span class="sourceLineNo">5894</span>                            t ^= w;<a name="line.5894"></a>
-<span class="sourceLineNo">5895</span>                            w = Long.lowestOneBit(t);<a name="line.5895"></a>
+<span class="sourceLineNo">5895</span>                            w = NumberTools.lowestOneBit(t);<a name="line.5895"></a>
 <span class="sourceLineNo">5896</span>                        }<a name="line.5896"></a>
 <span class="sourceLineNo">5897</span>                    }<a name="line.5897"></a>
 <span class="sourceLineNo">5898</span>                }<a name="line.5898"></a>
@@ -5995,7 +5995,7 @@
 <span class="sourceLineNo">5987</span>                for (int x = 0; x &lt; width; x++) {<a name="line.5987"></a>
 <span class="sourceLineNo">5988</span>                    if ((ct = counts[x * ySections + s]) &gt; index) {<a name="line.5988"></a>
 <span class="sourceLineNo">5989</span>                        t = data[x * ySections + s];<a name="line.5989"></a>
-<span class="sourceLineNo">5990</span>                        w = Long.lowestOneBit(t);<a name="line.5990"></a>
+<span class="sourceLineNo">5990</span>                        w = NumberTools.lowestOneBit(t);<a name="line.5990"></a>
 <span class="sourceLineNo">5991</span>                        for (--ct; w != 0; ct--) {<a name="line.5991"></a>
 <span class="sourceLineNo">5992</span>                            if (ct == index)<a name="line.5992"></a>
 <span class="sourceLineNo">5993</span>                            {<a name="line.5993"></a>
@@ -6005,7 +6005,7 @@
 <span class="sourceLineNo">5997</span>                                    return null;<a name="line.5997"></a>
 <span class="sourceLineNo">5998</span>                            }<a name="line.5998"></a>
 <span class="sourceLineNo">5999</span>                            t ^= w;<a name="line.5999"></a>
-<span class="sourceLineNo">6000</span>                            w = Long.lowestOneBit(t);<a name="line.6000"></a>
+<span class="sourceLineNo">6000</span>                            w = NumberTools.lowestOneBit(t);<a name="line.6000"></a>
 <span class="sourceLineNo">6001</span>                        }<a name="line.6001"></a>
 <span class="sourceLineNo">6002</span>                    }<a name="line.6002"></a>
 <span class="sourceLineNo">6003</span>                }<a name="line.6003"></a>
@@ -6015,7 +6015,7 @@
 <span class="sourceLineNo">6007</span>            /*<a name="line.6007"></a>
 <span class="sourceLineNo">6008</span>            for (int x = 0; x &lt; width; x++) {<a name="line.6008"></a>
 <span class="sourceLineNo">6009</span>                for (int s = 0; s &lt; ySections; s++) {<a name="line.6009"></a>
-<span class="sourceLineNo">6010</span>                    if ((w = Long.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.6010"></a>
+<span class="sourceLineNo">6010</span>                    if ((w = NumberTools.lowestOneBit(data[x * ySections + s])) != 0 &amp;&amp; i++ &gt;= index) {<a name="line.6010"></a>
 <span class="sourceLineNo">6011</span>                        if(index++ &lt; limit)<a name="line.6011"></a>
 <span class="sourceLineNo">6012</span>                            return Coord.get(x, (s &lt;&lt; 6) | Long.numberOfTrailingZeros(w));<a name="line.6012"></a>
 <span class="sourceLineNo">6013</span>                        else<a name="line.6013"></a>

@@ -101,7 +101,7 @@ public class ColorTest extends ApplicationAdapter {
                 "Cyan", 0.03125f * 15.85f,
                 "Azure", 0.03125f * 17.1f,
                 "Blue", 0.03125f * 19f,
-                "Sapphire", 0.03125f * 21f,
+                "Sapphire", 0.03125f * 20.8f,
                 "Indigo", 0.03125f * 23f,
                 "Violet", 0.03125f * 24.2f,
                 "Purple", 0.03125f * 25.7f,
@@ -113,16 +113,16 @@ public class ColorTest extends ApplicationAdapter {
                 "Apricot", -0.05f,
                 "Gold", 0.05f,
                 "Yellow", 0.02f,
-                "Chartreuse", 0.025f,
-                "Lime", 0.075f,
-                "Honeydew", -0.14f,
+                "Chartreuse", -0.02f,
+                "Lime", 0.1f,
+                "Honeydew", -0.17f,
                 "Green", 0f,
                 "Jade", -0.13f,
                 "Seafoam", -0.05f,
                 "Cyan", 0.075f,
                 "Azure", -0.05f,
-                "Blue", 0f,
-                "Sapphire", 0.025f,
+                "Blue", 0.01f,
+                "Sapphire", -0.04f,
                 "Indigo", 0.09f,
                 "Violet", -0.01f,
                 "Purple", -0.05f,
@@ -134,16 +134,16 @@ public class ColorTest extends ApplicationAdapter {
                 "Apricot", 0.05f,
                 "Gold", -0.005f,
                 "Yellow", 0.06f,
-                "Chartreuse", 0.01f,
-                "Lime", 0.01f,
+                "Chartreuse", 0.02f,
+                "Lime", -0.06f,
                 "Honeydew", 0.04f,
-                "Green", -0.01f,
+                "Green", -0.025f,
                 "Jade", -0.04f,
                 "Seafoam", 0.03f,
                 "Cyan", -0.01f,
                 "Azure", -0.03f,
                 "Blue", -0.01f,
-                "Sapphire", -0.02f,
+                "Sapphire", -0.015f,
                 "Indigo", -0.05f,
                 "Violet", -0.02f,
                 "Purple", -0.01f,
@@ -156,40 +156,41 @@ public class ColorTest extends ApplicationAdapter {
             Color baseColor = scc.getHSV(hues.getOrDefault(nm, i * 0.03125f), 0.825f + satMods.getOrDefault(nm, 0f), 0.925f + valMods.getOrDefault(nm, 0f));
             System.out.println(template.replace("Name", "CW " + nm)
                     .replace("NAME", "CW_" + nm.toUpperCase())
-                    .replace("FEDCBA", baseColor.toString().substring(0, 6)));
+                    .replace("FEDCBA", baseColor.toString().substring(0, 6).toUpperCase()));
             System.out.println(template.replace("Name", "CW Faded " + nm)
                     .replace("NAME", "CW_FADED_" + nm.toUpperCase())
-                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.15f), 0.5f).toString().substring(0, 6)));
+                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.15f), 0.5f).toString().substring(0, 6).toUpperCase()));
             System.out.println(template.replace("Name", "CW Flush " + nm)
                     .replace("NAME", "CW_FLUSH_" + nm.toUpperCase())
-                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.05f), 0.5f).toString().substring(0, 6)));
+                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.05f), 0.5f).toString().substring(0, 6).toUpperCase()));
 
             System.out.println(template.replace("Name", "CW Light " + nm)
                     .replace("NAME", "CW_LIGHT_" + nm.toUpperCase())
-                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.4f), 0.1f).toString().substring(0, 6)));
+                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.4f), 0.1f).toString().substring(0, 6).toUpperCase()));
             System.out.println(template.replace("Name", "CW Pale " + nm)
                     .replace("NAME", "CW_PALE_" + nm.toUpperCase())
-                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.55f), 0.3f).toString().substring(0, 6)));
+                    .replace("FEDCBA", scc.desaturate(scc.light(baseColor, 0.55f), 0.3f).toString().substring(0, 6).toUpperCase()));
             System.out.println(template.replace("Name", "CW Bright " + nm)
                     .replace("NAME", "CW_BRIGHT_" + nm.toUpperCase())
-                    .replace("FEDCBA", scc.saturate(scc.light(baseColor, 0.35f), 0.5f).toString().substring(0, 6)));
+                    .replace("FEDCBA", scc.saturate(scc.light(baseColor, 0.35f), 0.5f).toString().substring(0, 6).toUpperCase()));
 
             System.out.println(template.replace("Name", "CW Dark " + nm)
                     .replace("NAME", "CW_DARK_" + nm.toUpperCase())
-                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.325f), 0.2f).toString().substring(0, 6)));
+                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.325f), 0.2f).toString().substring(0, 6).toUpperCase()));
             System.out.println(template.replace("Name", "CW Drab " + nm)
                     .replace("NAME", "CW_DRAB_" + nm.toUpperCase())
-                    .replace("FEDCBA", scc.desaturate(scc.dim(baseColor, 0.2f), 0.4f).toString().substring(0, 6)));
+                    .replace("FEDCBA", scc.desaturate(scc.dim(baseColor, 0.2f), 0.4f).toString().substring(0, 6).toUpperCase()));
             System.out.println(template.replace("Name", "CW Rich " + nm)
                     .replace("NAME", "CW_RICH_" + nm.toUpperCase())
-                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.2f), 0.5f).toString().substring(0, 6)));
+                    .replace("FEDCBA", scc.saturate(scc.dim(baseColor, 0.2f), 0.5f).toString().substring(0, 6).toUpperCase()));
         }
-
+        System.out.println();
 
         // This block, when uncommented, will read in color names and values from ColorData.txt and produce a formatted
         // block of partial Java source as ColorOutput.txt , to be put in SColor.java .
 //        String templateFull = "/**\n" +
-//            "* This color constant \"Name\" has RGB code 0xFEDCBA, hue `HUE, saturation `SAT, and value `VAL.\n" +
+//            "* This color constant \"Name\" has RGB code {@code 0xFEDCBA}, hue `HUE, saturation `SAT, and value `VAL.\n" +
+//            "* It can be represented as a packed float with the constant {@code `PACKEDF}.\n" +
 //            "* <pre>\n" +
 //            "* <font style='background-color: #FEDCBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
 //            "* <font style='background-color: #FEDCBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
@@ -213,6 +214,7 @@ public class ColorTest extends ApplicationAdapter {
 //                    .replace("`HUE", Float.toString(scc.getHue(c)))
 //                    .replace("`SAT", Float.toString(scc.getSaturation(c)))
 //                    .replace("`VAL", Float.toString(scc.getValue(c)))
+//                    .replace("`PACKED", Float.toHexString(c.toFloatBits()))
 //            );
 //        }
 //        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);

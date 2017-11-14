@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -294,41 +294,55 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i20" class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#lowestOneBit-int-">lowestOneBit</a></span>(int&nbsp;num)</code>
+<div class="block">Returns an int value with at most a single one-bit, in the position of the lowest-order ("rightmost") one-bit in
+ the specified int value.</div>
+</td>
+</tr>
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#lowestOneBit-long-">lowestOneBit</a></span>(long&nbsp;num)</code>
+<div class="block">Returns an long value with at most a single one-bit, in the position of the lowest-order ("rightmost") one-bit in
+ the specified long value.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomDouble-int-">randomDouble</a></span>(int&nbsp;seed)</code>
 <div class="block">Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
  once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomFloat-int-">randomFloat</a></span>(int&nbsp;seed)</code>
 <div class="block">Generates a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive) using the given int seed, passing
  it once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomFloatCurved-int-">randomFloatCurved</a></span>(int&nbsp;seed)</code>
 <div class="block">Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
  strong central bias (around 0.0).</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#randomSignedFloat-int-">randomSignedFloat</a></span>(int&nbsp;seed)</code>
 <div class="block">Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
  it once through the (very high-quality and rather fast) <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> algorithm, also called SplitMix64.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setExponent-double-int-">setExponent</a></span>(double&nbsp;value,
            int&nbsp;exponentBits)</code>
 <div class="block">Makes a modified version of value that uses the specified bits (up to 12) for its exponent and sign.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setSelectedByte-double-int-byte-">setSelectedByte</a></span>(double&nbsp;value,
                int&nbsp;whichByte,
@@ -337,7 +351,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  a double, then returns the double produced by the bit change.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#setSelectedByte-float-int-byte-">setSelectedByte</a></span>(float&nbsp;value,
                int&nbsp;whichByte,
@@ -346,14 +360,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  a float, then returns the float produced by the bit change.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#splitMix64-long-">splitMix64</a></span>(long&nbsp;state)</code>
 <div class="block">Get a pseudo-random long from this with <code>splitMix64(z += 0x9E3779B97F4A7C15L)</code>, where z is a long to use
  as state.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#sway-double-">sway</a></span>(double&nbsp;value)</code>
 <div class="block">Limited-use; takes any double and produces a double in the -1 to 1 range, with a graph of input to output that
@@ -361,7 +375,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#sway-float-">sway</a></span>(float&nbsp;value)</code>
 <div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with a graph of input to output that
@@ -369,7 +383,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#swayTight-double-">swayTight</a></span>(double&nbsp;value)</code>
 <div class="block">Limited-use; takes any double and produces a double in the 0.0 to 1.0 range, with a graph of input to output that
@@ -377,7 +391,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#swayTight-float-">swayTight</a></span>(float&nbsp;value)</code>
 <div class="block">Limited-use; takes any float and produces a float in the 0f to 1f range, with a graph of input to output that
@@ -385,14 +399,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  input is halfway between two integers, smoothly curving at any points between those extremes.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#zigzag-double-">zigzag</a></span>(double&nbsp;value)</code>
 <div class="block">Limited-use; takes any double and produces a double in the -1.0 to 1.0 range, with similar inputs producing
  close to a consistent rate of up and down through the range.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/NumberTools.html#zigzag-float-">zigzag</a></span>(float&nbsp;value)</code>
 <div class="block">Limited-use; takes any float and produces a float in the -1f to 1f range, with similar inputs producing
@@ -1126,7 +1140,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="formCurvedFloat-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>formCurvedFloat</h4>
 <pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.536">formCurvedFloat</a>(int&nbsp;start)</pre>
@@ -1139,6 +1153,58 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>start</code> - an int, usually random, such as one produced by any RandomnessSource</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f</dd>
+</dl>
+</li>
+</ul>
+<a name="lowestOneBit-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lowestOneBit</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.559">lowestOneBit</a>(int&nbsp;num)</pre>
+<div class="block">Returns an int value with at most a single one-bit, in the position of the lowest-order ("rightmost") one-bit in
+ the specified int value. Returns zero if the specified value has no one-bits in its two's complement binary
+ representation, that is, if it is equal to zero.
+ <br>
+ Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#lowestOneBit-int-" title="class or interface in java.lang"><code>Integer.lowestOneBit(int)</code></a>, but super-sourced to act correctly on GWT. If you have GWT as a
+ target and do bit manipulation work, double-check everything! An int can be higher than <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>
+ or lower than <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> on GWT, without actually being a long (internally it's a double). This
+ is especially relevant for the overload of this method that takes and returns a long;
+ <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true#lowestOneBit-long-" title="class or interface in java.lang"><code>Long.lowestOneBit(long)</code></a> does not provide correct results for certain inputs on GWT, such as
+ -17592186044416L, which it mysteriously returns 0L on, so you should use <a href="../../squidpony/squidmath/NumberTools.html#lowestOneBit-long-"><code>lowestOneBit(long)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>num</code> - the value whose lowest one bit is to be computed</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int value with a single one-bit, in the position of the lowest-order one-bit in the specified value,
+         or zero if the specified value is itself equal to zero.</dd>
+</dl>
+</li>
+</ul>
+<a name="lowestOneBit-long-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>lowestOneBit</h4>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/NumberTools.html#line.578">lowestOneBit</a>(long&nbsp;num)</pre>
+<div class="block">Returns an long value with at most a single one-bit, in the position of the lowest-order ("rightmost") one-bit in
+ the specified long value. Returns zero if the specified value has no one-bits in its two's complement binary
+ representation, that is, if it is equal to zero.
+ <br>
+ Identical to <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true#lowestOneBit-long-" title="class or interface in java.lang"><code>Long.lowestOneBit(long)</code></a>, but super-sourced to act correctly on GWT. If you have GWT as a
+ target and do bit manipulation work, double-check everything! An int can be higher than <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MAX_VALUE" title="class or interface in java.lang"><code>Integer.MAX_VALUE</code></a>
+ or lower than <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true#MIN_VALUE" title="class or interface in java.lang"><code>Integer.MIN_VALUE</code></a> on GWT, without actually being a long (internally it's a double). This
+ is especially relevant for this overload (for longs more so than for ints); <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true#lowestOneBit-long-" title="class or interface in java.lang"><code>Long.lowestOneBit(long)</code></a> does
+ not provide correct results for certain inputs on GWT, such as -17592186044416L, which it mysteriously returns 0L
+ on, so you should use this method.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>num</code> - the value whose lowest one bit is to be computed</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a long value with a single one-bit, in the position of the lowest-order one-bit in the specified value,
+         or zero if the specified value is itself equal to zero.</dd>
 </dl>
 </li>
 </ul>
