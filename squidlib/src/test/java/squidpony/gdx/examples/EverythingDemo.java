@@ -247,7 +247,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // and italic stored specially in (usually) unused parts of the font. Unlike one approach tried briefly, this
         // technique does not require any changes to the classes used, and works with an ordinary TextCellFactory and a
         // GDXMarkup to apply the bold and italic alterations.
-        textFactory = DefaultResources.getSlabFamily().width(cellWidth).height(cellHeight).initBySize();
+        textFactory = DefaultResources.getGoFamily().width(cellWidth).height(cellHeight).initBySize();
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
@@ -273,8 +273,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1.1f,cellHeight * 1.125f);
-        display.setTextSize(cellWidth * 1.1f, cellHeight  * 1.125f);
+        messages.setTextSize(cellWidth * 1f,cellHeight * 1.034f);
+        display.setTextSize(cellWidth * 1f, cellHeight  * 1.034f);
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
@@ -891,7 +891,10 @@ public class EverythingDemo extends ApplicationAdapter {
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
             display.highlight(pt.x, pt.y, (int) (170 * fovmap[pt.x][pt.y]));
         }
-        messages.put(width - 10 >> 1, 0, "Health: " + health, SColor.RED_PIGMENT);
+        messages.putBordersCaptioned(SColor.FLOAT_WHITE,
+                GDXMarkup.instance.colorString("Health: [Red Pigment][*]" + health
+                        + "[], Mana: [CW Azure][/]0[], Groove: [Psychedelic Purple][*][/]"
+                        + (int)(SeededNoise.noise(player.gridX * 0.01, player.gridY * 0.01, tm * 0.00015, 1999) * 4 + 5)));
         //if(pt != null)
         //    display.putString(0, 0, String.valueOf(monPathMap[pt.x][pt.y]));
     }
