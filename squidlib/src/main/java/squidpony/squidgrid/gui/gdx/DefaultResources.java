@@ -68,7 +68,7 @@ public class DefaultResources implements LifecycleListener {
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
             msdfDejaVu = null, msdfDejaVuItalic = null;
-    private TextFamily familyLean = null, familySlab = null;
+    private TextFamily familyLean = null, familySlab = null, familyGo = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
@@ -1482,6 +1482,46 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.familyLean != null)
             return instance.familyLean.copy();
+        return null;
+    }
+    /**
+     * Returns a TextFamily already configured to use a fixed-width font with good Unicode support and a traditional
+     * serif style, that should scale cleanly to many sizes and supports 4 styles (regular, bold, italic,
+     * and bold italic). Caches the result for later calls. The font used is Go Mono, a typeface released by the team
+     * behind the Go programming language as open-source (3-clause BSD, the same license as the Go language; the license
+     * is included with the assets). It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and
+     * Cyrillic, bu also the necessary box drawing characters (which line up even for italic text). There's more
+     * information about this font available where it was introduced,
+     * <a href="https://blog.golang.org/go-fonts">on the Go blog</a>.
+     * You may want to try using this Go font family and contrasting it with Iosevka with and without slab serifs, which
+     * are {@link #getSlabFamily()} and {@link #getLeanFamily()} respectively.
+     * <br>
+     * <br>
+     * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work, but it can also be used as a TextCellFactory.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/GoMono-Family-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/GoMono-Family-distance.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/GoMono-License.txt</li>
+     * </ul>
+     * @return the TextFamily object that can represent many sizes of the font GoMono.ttf with 4 styles
+     */
+    public static TextFamily getGoFamily()
+    {
+        initialize();
+        if(instance.familyGo == null)
+        {
+            try {
+                instance.familyGo = new TextFamily();
+                instance.familyGo.fontDistanceField("GoMono-Family-distance.fnt", "GoMono-Family-distance.png");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.familyGo != null)
+            return instance.familyGo.copy();
         return null;
     }
 
