@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -165,12 +165,30 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>static float[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColorsFloat-char:A:A-">generateDefaultBGColorsFloat</a></span>(char[][]&nbsp;map)</code>
+<div class="block">Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
+ usual meanings of the chars in map.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>static float[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColorsFloat-char:A:A-char-float-char-float-">generateDefaultBGColorsFloat</a></span>(char[][]&nbsp;map,
+                            char&nbsp;deepChar,
+                            float&nbsp;deepColor,
+                            char&nbsp;shallowChar,
+                            float&nbsp;shallowColor)</code>
+<div class="block">Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
+ usual meanings of the chars in map.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static com.badlogic.gdx.graphics.Color[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColors-char:A:A-">generateDefaultColors</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static com.badlogic.gdx.graphics.Color[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColors-char:A:A-char-com.badlogic.gdx.graphics.Color-char-com.badlogic.gdx.graphics.Color-">generateDefaultColors</a></span>(char[][]&nbsp;map,
                      char&nbsp;deepChar,
@@ -180,13 +198,29 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>static float[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColorsFloat-char:A:A-">generateDefaultColorsFloat</a></span>(char[][]&nbsp;map)</code>
+<div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>static float[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColorsFloat-char:A:A-char-float-char-float-">generateDefaultColorsFloat</a></span>(char[][]&nbsp;map,
+                          char&nbsp;deepChar,
+                          float&nbsp;deepColor,
+                          char&nbsp;shallowChar,
+                          float&nbsp;shallowColor)</code>
+<div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-">generateLightnessModifiers</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-">generateLightnessModifiers</a></span>(char[][]&nbsp;map,
                           double&nbsp;frame)</code>
@@ -194,7 +228,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-char-char-">generateLightnessModifiers</a></span>(char[][]&nbsp;map,
                           double&nbsp;frame,
@@ -249,13 +283,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultColors</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.21">generateDefaultColors</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.26">generateDefaultColors</a>(char[][]&nbsp;map)</pre>
 <div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
- This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the colors this
- returns will also change. Tiles containing nothing but a floor ('.') will be silver-gray. Walls are dark gray
- (this doesn't care if the walls are '#' marks or box-drawing lines), Doors ('+' and '/' in the map) will be rust
- brown. Both shallow and deep water (',' and '~') will be gray-blue. Traps ('^') will be shown in bright orange.
- Grass ('"') will be the expected green.</div>
+ <br>
+ This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>; if that field is changed then the colors this returns
+ will also change. Tiles containing nothing but a floor ('.') will be silver-gray; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[3]</code>. Walls are brownish-black, and can be '#' marks or box-drawing lines; this can
+ be changed by editing <code>SColor.LIMITED_PALETTE[2]</code>.Doors ('+' and '/' in the map) will be rust brown; this
+ can be changed by editing <code>SColor.LIMITED_PALETTE[4]</code>. Both shallow and deep water (',' and '~') will be
+ gray-blue; this can be changed by editing <code>SColor.LIMITED_PALETTE[5]</code>. Traps ('^') will be shown in bright
+ orange; this can be changed by editing <code>SColor.LIMITED_PALETTE[6]</code>. Grass ('"') will be the expected green;
+ this can be changed by editing <code>SColor.LIMITED_PALETTE[20]</code>. Anything else will use white; this can be
+ changed by editing <code>SColor.LIMITED_PALETTE[1]</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters</dd>
@@ -270,7 +309,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultColors</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.90">generateDefaultColors</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.99">generateDefaultColors</a>(char[][]&nbsp;map,
                                                                         char&nbsp;deepChar,
                                                                         com.badlogic.gdx.graphics.Color&nbsp;deepColor,
                                                                         char&nbsp;shallowChar,
@@ -279,13 +318,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  This overload also takes a char that corresponds to deep non-water lakes (which <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a>
  can produce) and a Color to use for that deep liquid, as well as a char for shallow lakes and a Color for that
  shallow liquid.
- This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the colors this
- returns will also change. Tiles containing nothing but a floor ('.') will be silver-gray. Walls are dark gray
- (this doesn't care if the walls are '#' marks or box-drawing lines), Doors ('+' and '/' in the map) will be rust
- brown. Both deep and shallow water (',' and '~') will be gray-blue. Traps ('^') will be shown in bright orange.
- Grass ('"') will be the expected green. Deep and shallow lakes of non-water will use the given Colors. If you
- are using SectionDungeonGenerator to produce normal water lakes, then you don't need this overload, and
- <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColors-char:A:A-"><code>generateDefaultColors(char[][])</code></a> will be fine.</div>
+ <br>
+ This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>; if that field is changed then the colors this returns
+ will also change. Tiles containing nothing but a floor ('.') will be silver-gray; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[3]</code>. Walls are brownish-black, and can be '#' marks or box-drawing lines; this can
+ be changed by editing <code>SColor.LIMITED_PALETTE[2]</code>.Doors ('+' and '/' in the map) will be rust brown; this
+ can be changed by editing <code>SColor.LIMITED_PALETTE[4]</code>. Both shallow and deep water (',' and '~') will be
+ gray-blue; this can be changed by editing <code>SColor.LIMITED_PALETTE[5]</code>. Traps ('^') will be shown in bright
+ orange; this can be changed by editing <code>SColor.LIMITED_PALETTE[6]</code>. Grass ('"') will be the expected green;
+ this can be changed by editing <code>SColor.LIMITED_PALETTE[20]</code>. Anything else will use white; this can be
+ changed by editing <code>SColor.LIMITED_PALETTE[1]</code>.  Deep and shallow lakes of non-water will use the given
+ Color parameters. If you are using SectionDungeonGenerator to produce normal water lakes, then you don't need
+ this overload, and <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColors-char:A:A-"><code>generateDefaultColors(char[][])</code></a> will be fine.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>map</code> - a char[][] containing foreground characters</dd>
@@ -298,13 +342,82 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="generateDefaultColorsFloat-char:A:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateDefaultColorsFloat</h4>
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.170">generateDefaultColorsFloat</a>(char[][]&nbsp;map)</pre>
+<div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
+ Each float represents a color in an efficient way; <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> primarily uses this kind of packed float
+ to represent colors, and <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> uses it internally.
+ <br>
+ This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>; if that field is changed then the colors this returns
+ will also change. Tiles containing nothing but a floor ('.') will be silver-gray; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[3]</code>. Walls are brownish-black, and can be '#' marks or box-drawing lines; this can
+ be changed by editing <code>SColor.LIMITED_PALETTE[2]</code>.Doors ('+' and '/' in the map) will be rust brown; this
+ can be changed by editing <code>SColor.LIMITED_PALETTE[4]</code>. Both shallow and deep water (',' and '~') will be
+ gray-blue; this can be changed by editing <code>SColor.LIMITED_PALETTE[5]</code>. Traps ('^') will be shown in bright
+ orange; this can be changed by editing <code>SColor.LIMITED_PALETTE[6]</code>. Grass ('"') will be the expected green;
+ this can be changed by editing <code>SColor.LIMITED_PALETTE[20]</code>. Anything else will use white; this can be
+ changed by editing <code>SColor.LIMITED_PALETTE[1]</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - a char[][] containing foreground characters</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D float array with the same size as map, containing packed floats that can be used for the corresponding chars</dd>
+</dl>
+</li>
+</ul>
+<a name="generateDefaultColorsFloat-char:A:A-char-float-char-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateDefaultColorsFloat</h4>
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.251">generateDefaultColorsFloat</a>(char[][]&nbsp;map,
+                                                   char&nbsp;deepChar,
+                                                   float&nbsp;deepColor,
+                                                   char&nbsp;shallowChar,
+                                                   float&nbsp;shallowColor)</pre>
+<div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
+ Each float represents a color in an efficient way; <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> primarily uses this kind of packed float
+ to represent colors, and <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> uses it internally. This overload also takes a char that corresponds
+ to deep non-water lakes (which <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a> can produce) and a
+ packed float color to use for that deep liquid, as well as a char for shallow lakes and another packed float
+ color for that shallow liquid.
+ <br>
+ This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>; if that field is changed then the colors this returns
+ will also change. Tiles containing nothing but a floor ('.') will be silver-gray; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[3]</code>. Walls are brownish-black, and can be '#' marks or box-drawing lines; this can
+ be changed by editing <code>SColor.LIMITED_PALETTE[2]</code>.Doors ('+' and '/' in the map) will be rust brown; this
+ can be changed by editing <code>SColor.LIMITED_PALETTE[4]</code>. Both shallow and deep water (',' and '~') will be
+ gray-blue; this can be changed by editing <code>SColor.LIMITED_PALETTE[5]</code>. Traps ('^') will be shown in bright
+ orange; this can be changed by editing <code>SColor.LIMITED_PALETTE[6]</code>. Grass ('"') will be the expected green;
+ this can be changed by editing <code>SColor.LIMITED_PALETTE[20]</code>. Anything else will use white; this can be
+ changed by editing <code>SColor.LIMITED_PALETTE[1]</code>.  Deep and shallow lakes of non-water will use the given
+ packed float color parameters. If you are using SectionDungeonGenerator to produce normal water lakes, then you
+ don't need this overload, and <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColorsFloat-char:A:A-"><code>generateDefaultColorsFloat(char[][])</code></a> will be fine.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - a char[][] containing foreground characters</dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a></dd>
+<dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a></dd>
+<dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D float array with the same size as map, containing packed floats that can be used for the corresponding chars</dd>
+</dl>
+</li>
+</ul>
 <a name="generateDefaultBGColors-char:A:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultBGColors</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.156">generateDefaultBGColors</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.324">generateDefaultBGColors</a>(char[][]&nbsp;map)</pre>
 <div class="block">Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the
  chars in map. This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the
  colors this returns will also change. Most backgrounds will be black. but deep water ('~') will be dark
@@ -326,7 +439,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultBGColors</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.233">generateDefaultBGColors</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.401">generateDefaultBGColors</a>(char[][]&nbsp;map,
                                                                           char&nbsp;deepChar,
                                                                           com.badlogic.gdx.graphics.Color&nbsp;deepColor,
                                                                           char&nbsp;shallowChar,
@@ -357,13 +470,80 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="generateDefaultBGColorsFloat-char:A:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateDefaultBGColorsFloat</h4>
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.476">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map)</pre>
+<div class="block">Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
+ usual meanings of the chars in map.
+ <br>
+ This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the
+ colors this returns will also change. Most backgrounds will be black; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[0]</code>. Deep water ('~') will be dark blue-green; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[24]</code>. Shallow water (',') will be a lighter blue-green; this can be changed by
+ editing <code>SColor.LIMITED_PALETTE[23]</code>. Grass ('"') will be dark green; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[21]</code>. Bridges (':') will be a medium-dark beige color; this can be changed by
+ editing <code>SColor.LIMITED_PALETTE[35]</code>. You can adjust the brightness of the backgrounds using
+ <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-"><code>generateLightnessModifiers(char[][])</code></a>, or if you want water and grass to ripple, you can use the overload
+ <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-char-char-"><code>generateLightnessModifiers(char[][], double, char, char)</code></a> with some rising frame or millisecond count.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - a char[][] containing foreground characters (this gets their background color)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D array of background Colors with the same size as map, that can be used for the corresponding chars</dd>
+</dl>
+</li>
+</ul>
+<a name="generateDefaultBGColorsFloat-char:A:A-char-float-char-float-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateDefaultBGColorsFloat</h4>
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.536">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map,
+                                                     char&nbsp;deepChar,
+                                                     float&nbsp;deepColor,
+                                                     char&nbsp;shallowChar,
+                                                     float&nbsp;shallowColor)</pre>
+<div class="block">Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
+ usual meanings of the chars in map. This overload also takes a char that corresponds to deep non-water lakes
+ (which <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a> can produce) and a packed float color to use
+ for that deep liquid,  as well as a char for shallow lakes and a packed float color for that shallow liquid.
+ <br>
+ This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the
+ colors this returns will also change. Most backgrounds will be black; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[0]</code>. Deep water ('~') will be dark blue-green; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[24]</code>. Shallow water (',') will be a lighter blue-green; this can be changed by
+ editing <code>SColor.LIMITED_PALETTE[23]</code>. Grass ('"') will be dark green; this can be changed by editing
+ <code>SColor.LIMITED_PALETTE[21]</code>. Bridges (':') will be a medium-dark beige color; this can be changed by
+ editing <code>SColor.LIMITED_PALETTE[35]</code>. Deep and shallow lakes of non-water will use the given packed float
+ color parameters. If you are using SectionDungeonGenerator to produce normal water lakes, then you don't need
+ this overload, and <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColorsFloat-char:A:A-"><code>generateDefaultBGColorsFloat(char[][])</code></a> will be fine. You can adjust the brightness of
+ the backgrounds using <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-"><code>generateLightnessModifiers(char[][])</code></a>, or if you want water, grass, and lakes to
+ ripple, you can use the overload <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-char-char-"><code>generateLightnessModifiers(char[][], double, char, char)</code></a> with some
+ rising frame or millisecond count.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - a char[][] containing foreground characters (this gets their background color)</dd>
+<dd><code>deepChar</code> - the char that represents deep parts of non-water lakes, from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a></dd>
+<dd><code>deepColor</code> - the packed float color to use for deep parts of non-water lakes</dd>
+<dd><code>shallowChar</code> - the char that represents shallow parts of non-water lakes, from <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/SectionDungeonGenerator.html?is-external=true" title="class or interface in squidpony.squidgrid.mapping"><code>SectionDungeonGenerator</code></a></dd>
+<dd><code>shallowColor</code> - the packed float color to use for shallow parts of non-water lakes</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D array of background packed float colors with the same size as map, that can be used for the corresponding chars</dd>
+</dl>
+</li>
+</ul>
 <a name="generateLightnessModifiers-char:A:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>generateLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.297">generateLightnessModifiers</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.580">generateLightnessModifiers</a>(char[][]&nbsp;map)</pre>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -379,7 +559,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>generateLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.360">generateLightnessModifiers</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.643">generateLightnessModifiers</a>(char[][]&nbsp;map,
                                                  double&nbsp;frame)</pre>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
  animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
@@ -401,7 +581,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>generateLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.426">generateLightnessModifiers</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.709">generateLightnessModifiers</a>(char[][]&nbsp;map,
                                                  double&nbsp;frame,
                                                  char&nbsp;deepLiquid,
                                                  char&nbsp;shallowLiquid)</pre>

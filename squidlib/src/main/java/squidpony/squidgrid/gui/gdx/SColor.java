@@ -27,7 +27,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Alice Blue" has RGB code {@code 0xF0F8FF}, hue 0.5777778, saturation 0.058823526, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fff1ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fff1ep126F}.
      * <pre>
      * <font style='background-color: #F0F8FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F0F8FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F0F8FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F0F8FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F0F8FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F0F8FF'>&nbsp;@&nbsp;</font><font style='background-color: #F0F8FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -41,7 +41,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Alizarin" has RGB code {@code 0xE32636}, hue 0.9858907, saturation 0.8325991, and value 0.8901961.
-     * It can be represented as a packed float with the constant {@code 0x0.6c4dc6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6c4dc6p125F}.
      * <pre>
      * <font style='background-color: #E32636; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E32636; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E32636; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E32636'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E32636'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E32636'>&nbsp;@&nbsp;</font><font style='background-color: #E32636; color: #888888'>&nbsp;@&nbsp;</font>
@@ -55,7 +55,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Aloewood" has RGB code {@code 0x6A432D}, hue 0.060109377, saturation 0.5754717, and value 0.41568628.
-     * It can be represented as a packed float with the constant {@code 0x0.5a86d4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5a86d4p125F}.
      * <pre>
      * <font style='background-color: #6A432D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6A432D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6A432D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6A432D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6A432D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6A432D'>&nbsp;@&nbsp;</font><font style='background-color: #6A432D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -69,7 +69,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Aloewood Brown" has RGB code {@code 0x5A6457}, hue 0.29487175, saturation 0.13, and value 0.39215687.
-     * It can be represented as a packed float with the constant {@code 0x0.aec8b4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.aec8b4p125F}.
      * <pre>
      * <font style='background-color: #5A6457; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5A6457; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5A6457; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5A6457'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5A6457'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5A6457'>&nbsp;@&nbsp;</font><font style='background-color: #5A6457; color: #888888'>&nbsp;@&nbsp;</font>
@@ -83,7 +83,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Amaranth" has RGB code {@code 0xE52B50}, hue 0.9668459, saturation 0.8122271, and value 0.8980392.
-     * It can be represented as a packed float with the constant {@code 0x0.a057cap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a057cap125F}.
      * <pre>
      * <font style='background-color: #E52B50; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E52B50; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E52B50; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E52B50'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E52B50'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E52B50'>&nbsp;@&nbsp;</font><font style='background-color: #E52B50; color: #888888'>&nbsp;@&nbsp;</font>
@@ -97,7 +97,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Amber" has RGB code {@code 0xFFBF00}, hue 0.12483662, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.017ffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.017ffep125F}.
      * <pre>
      * <font style='background-color: #FFBF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFBF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFBF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFBF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFBF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFBF00'>&nbsp;@&nbsp;</font><font style='background-color: #FFBF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -111,7 +111,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Amber Dye" has RGB code {@code 0xCA6924}, hue 0.06927705, saturation 0.8217822, and value 0.7921569.
-     * It can be represented as a packed float with the constant {@code 0x0.48d394p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.48d394p125F}.
      * <pre>
      * <font style='background-color: #CA6924; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CA6924; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CA6924; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CA6924'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CA6924'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CA6924'>&nbsp;@&nbsp;</font><font style='background-color: #CA6924; color: #888888'>&nbsp;@&nbsp;</font>
@@ -125,7 +125,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Amethyst" has RGB code {@code 0x9966CC}, hue 0.75000006, saturation 0.5, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x1.98cd32p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.98cd32p126F}.
      * <pre>
      * <font style='background-color: #9966CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9966CC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9966CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9966CC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9966CC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9966CC'>&nbsp;@&nbsp;</font><font style='background-color: #9966CC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -139,7 +139,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Amur Cork Tree" has RGB code {@code 0xF3C13A}, hue 0.12162161, saturation 0.7613169, and value 0.9529412.
-     * It can be represented as a packed float with the constant {@code 0x0.7583e6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7583e6p125F}.
      * <pre>
      * <font style='background-color: #F3C13A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F3C13A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F3C13A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F3C13A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F3C13A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F3C13A'>&nbsp;@&nbsp;</font><font style='background-color: #F3C13A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -153,7 +153,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Apricot" has RGB code {@code 0xFBCEB1}, hue 0.065315306, saturation 0.2948207, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x1.639df6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.639df6p126F}.
      * <pre>
      * <font style='background-color: #FBCEB1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FBCEB1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FBCEB1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FBCEB1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FBCEB1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FBCEB1'>&nbsp;@&nbsp;</font><font style='background-color: #FBCEB1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -167,7 +167,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Aqua" has RGB code {@code 0x00FFFF}, hue 0.5, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fffep126F}.
      * <pre>
      * <font style='background-color: #00FFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FFFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00FFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #00FFFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -181,7 +181,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Aquamarine" has RGB code {@code 0x7FFFD4}, hue 0.44401044, saturation 0.50196075, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.a9fefep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a9fefep126F}.
      * <pre>
      * <font style='background-color: #7FFFD4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7FFFD4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7FFFD4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7FFFD4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7FFFD4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7FFFD4'>&nbsp;@&nbsp;</font><font style='background-color: #7FFFD4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -195,7 +195,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Army Green" has RGB code {@code 0x4B5320}, hue 0.19281048, saturation 0.61445785, and value 0.3254902.
-     * It can be represented as a packed float with the constant {@code 0x0.40a696p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.40a696p125F}.
      * <pre>
      * <font style='background-color: #4B5320; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4B5320; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4B5320; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4B5320'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4B5320'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4B5320'>&nbsp;@&nbsp;</font><font style='background-color: #4B5320; color: #888888'>&nbsp;@&nbsp;</font>
@@ -209,7 +209,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Asparagus" has RGB code {@code 0x7BA05B}, hue 0.25603867, saturation 0.43125, and value 0.627451.
-     * It can be represented as a packed float with the constant {@code 0x0.b740f6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b740f6p125F}.
      * <pre>
      * <font style='background-color: #7BA05B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7BA05B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7BA05B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7BA05B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7BA05B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7BA05B'>&nbsp;@&nbsp;</font><font style='background-color: #7BA05B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -223,7 +223,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Atomic Tangerine" has RGB code {@code 0xFF9966}, hue 0.055555522, saturation 0.6, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.cd33fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cd33fep125F}.
      * <pre>
      * <font style='background-color: #FF9966; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF9966; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF9966; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF9966'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF9966'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF9966'>&nbsp;@&nbsp;</font><font style='background-color: #FF9966; color: #888888'>&nbsp;@&nbsp;</font>
@@ -237,7 +237,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Auburn" has RGB code {@code 0x6D351A}, hue 0.05421686, saturation 0.76146793, and value 0.42745098.
-     * It can be represented as a packed float with the constant {@code 0x0.346adap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.346adap125F}.
      * <pre>
      * <font style='background-color: #6D351A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6D351A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6D351A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6D351A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6D351A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6D351A'>&nbsp;@&nbsp;</font><font style='background-color: #6D351A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -251,7 +251,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Azul" has RGB code {@code 0x007FFF}, hue 0.5836602, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fefep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fefep126F}.
      * <pre>
      * <font style='background-color: #007FFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #007FFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #007FFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #007FFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #007FFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #007FFF'>&nbsp;@&nbsp;</font><font style='background-color: #007FFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -265,7 +265,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Azure" has RGB code {@code 0xF0FFFF}, hue 0.5, saturation 0.058823526, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ffffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ffffep126F}.
      * <pre>
      * <font style='background-color: #F0FFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F0FFFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F0FFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F0FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F0FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F0FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #F0FFFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -279,7 +279,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Baby Blue" has RGB code {@code 0xE0FFFF}, hue 0.5, saturation 0.12156862, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ffffcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ffffcp126F}.
      * <pre>
      * <font style='background-color: #E0FFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E0FFFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E0FFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E0FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E0FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E0FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #E0FFFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -293,7 +293,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Baiko Brown" has RGB code {@code 0x857C55}, hue 0.13541657, saturation 0.36090228, and value 0.52156866.
-     * It can be represented as a packed float with the constant {@code 0x0.aaf90ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.aaf90ap125F}.
      * <pre>
      * <font style='background-color: #857C55; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #857C55; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #857C55; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #857C55'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #857C55'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #857C55'>&nbsp;@&nbsp;</font><font style='background-color: #857C55; color: #888888'>&nbsp;@&nbsp;</font>
@@ -307,7 +307,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Beige" has RGB code {@code 0xF5F5DC}, hue 0.16666669, saturation 0.10204081, and value 0.9607843.
-     * It can be represented as a packed float with the constant {@code 0x1.b9ebeap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b9ebeap126F}.
      * <pre>
      * <font style='background-color: #F5F5DC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F5F5DC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F5F5DC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F5F5DC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F5F5DC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F5F5DC'>&nbsp;@&nbsp;</font><font style='background-color: #F5F5DC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -321,7 +321,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bellflower" has RGB code {@code 0x5D3F6A}, hue 0.78294563, saturation 0.4056604, and value 0.41568628.
-     * It can be represented as a packed float with the constant {@code 0x0.d47ebap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d47ebap125F}.
      * <pre>
      * <font style='background-color: #5D3F6A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5D3F6A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5D3F6A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5D3F6A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5D3F6A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5D3F6A'>&nbsp;@&nbsp;</font><font style='background-color: #5D3F6A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -335,7 +335,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Beni Dye" has RGB code {@code 0x913225}, hue 0.020061731, saturation 0.7448276, and value 0.5686275.
-     * It can be represented as a packed float with the constant {@code 0x0.4a6522p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4a6522p125F}.
      * <pre>
      * <font style='background-color: #913225; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #913225; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #913225; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #913225'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #913225'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #913225'>&nbsp;@&nbsp;</font><font style='background-color: #913225; color: #888888'>&nbsp;@&nbsp;</font>
@@ -349,7 +349,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Betel Nut Dye" has RGB code {@code 0x352925}, hue 0.041666687, saturation 0.30188677, and value 0.20784314.
-     * It can be represented as a packed float with the constant {@code 0x0.4a526ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4a526ap125F}.
      * <pre>
      * <font style='background-color: #352925; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #352925; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #352925; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #352925'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #352925'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #352925'>&nbsp;@&nbsp;</font><font style='background-color: #352925; color: #888888'>&nbsp;@&nbsp;</font>
@@ -363,7 +363,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Birch Brown" has RGB code {@code 0xB14A30}, hue 0.033591688, saturation 0.7288136, and value 0.69411767.
-     * It can be represented as a packed float with the constant {@code 0x0.609562p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.609562p125F}.
      * <pre>
      * <font style='background-color: #B14A30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B14A30; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B14A30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B14A30'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B14A30'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B14A30'>&nbsp;@&nbsp;</font><font style='background-color: #B14A30; color: #888888'>&nbsp;@&nbsp;</font>
@@ -377,7 +377,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bistre" has RGB code {@code 0x3D2B1F}, hue 0.06666672, saturation 0.4918033, and value 0.23921569.
-     * It can be represented as a packed float with the constant {@code 0x0.3e567ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3e567ap125F}.
      * <pre>
      * <font style='background-color: #3D2B1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3D2B1F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3D2B1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3D2B1F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3D2B1F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3D2B1F'>&nbsp;@&nbsp;</font><font style='background-color: #3D2B1F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -391,7 +391,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Black" has RGB code {@code 0x000000}, hue 0.0, saturation 0.0, and value 0.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0p0F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0p125F}.
      * <pre>
      * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #000000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -405,7 +405,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Black Chestnut Oak" has RGB code {@code 0x252321}, hue 0.08333337, saturation 0.108108096, and value 0.14509805.
-     * It can be represented as a packed float with the constant {@code 0x0.42464ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.42464ap125F}.
      * <pre>
      * <font style='background-color: #252321; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #252321; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #252321; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #252321'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #252321'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #252321'>&nbsp;@&nbsp;</font><font style='background-color: #252321; color: #888888'>&nbsp;@&nbsp;</font>
@@ -419,7 +419,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Black Dye" has RGB code {@code 0x171412}, hue 0.06666666, saturation 0.21739128, and value 0.09019608.
-     * It can be represented as a packed float with the constant {@code 0x0.24282ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.24282ep125F}.
      * <pre>
      * <font style='background-color: #171412; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #171412; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #171412; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #171412'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #171412'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #171412'>&nbsp;@&nbsp;</font><font style='background-color: #171412; color: #888888'>&nbsp;@&nbsp;</font>
@@ -433,7 +433,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Black Kite" has RGB code {@code 0x351E1C}, hue 0.013333321, saturation 0.4716981, and value 0.20784314.
-     * It can be represented as a packed float with the constant {@code 0x0.383c6ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.383c6ap125F}.
      * <pre>
      * <font style='background-color: #351E1C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #351E1C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #351E1C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #351E1C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #351E1C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #351E1C'>&nbsp;@&nbsp;</font><font style='background-color: #351E1C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -447,7 +447,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Blood" has RGB code {@code 0xCF3A24}, hue 0.021442473, saturation 0.826087, and value 0.8117647.
-     * It can be represented as a packed float with the constant {@code 0x0.48759ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.48759ep125F}.
      * <pre>
      * <font style='background-color: #CF3A24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CF3A24; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CF3A24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CF3A24'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CF3A24'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CF3A24'>&nbsp;@&nbsp;</font><font style='background-color: #CF3A24; color: #888888'>&nbsp;@&nbsp;</font>
@@ -461,7 +461,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Blood Red" has RGB code {@code 0xF35336}, hue 0.025573134, saturation 0.7777778, and value 0.9529412.
-     * It can be represented as a packed float with the constant {@code 0x0.6ca7e6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6ca7e6p125F}.
      * <pre>
      * <font style='background-color: #F35336; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F35336; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F35336; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F35336'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F35336'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F35336'>&nbsp;@&nbsp;</font><font style='background-color: #F35336; color: #888888'>&nbsp;@&nbsp;</font>
@@ -475,7 +475,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Blue" has RGB code {@code 0x0000FF}, hue 0.6666667, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fep126F}.
      * <pre>
      * <font style='background-color: #0000FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0000FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0000FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0000FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0000FF'>&nbsp;@&nbsp;</font><font style='background-color: #0000FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -489,7 +489,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Blue Black Crayfish" has RGB code {@code 0x62693B}, hue 0.192029, saturation 0.43809524, and value 0.4117647.
-     * It can be represented as a packed float with the constant {@code 0x0.76d2c4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.76d2c4p125F}.
      * <pre>
      * <font style='background-color: #62693B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #62693B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #62693B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #62693B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #62693B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #62693B'>&nbsp;@&nbsp;</font><font style='background-color: #62693B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -503,7 +503,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Blue Green" has RGB code {@code 0x00DDDD}, hue 0.5, saturation 1.0, and value 0.8666667.
-     * It can be represented as a packed float with the constant {@code 0x1.bbbap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bbbap126F}.
      * <pre>
      * <font style='background-color: #00DDDD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00DDDD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00DDDD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00DDDD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00DDDD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00DDDD'>&nbsp;@&nbsp;</font><font style='background-color: #00DDDD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -517,7 +517,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Blue Green Dye" has RGB code {@code 0x3A6960}, hue 0.4680851, saturation 0.44761905, and value 0.4117647.
-     * It can be represented as a packed float with the constant {@code 0x0.c0d274p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c0d274p125F}.
      * <pre>
      * <font style='background-color: #3A6960; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3A6960; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3A6960; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3A6960'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3A6960'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3A6960'>&nbsp;@&nbsp;</font><font style='background-color: #3A6960; color: #888888'>&nbsp;@&nbsp;</font>
@@ -531,7 +531,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Blue Violet" has RGB code {@code 0x8A2BE2}, hue 0.75318754, saturation 0.8097345, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x1.c45714p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c45714p126F}.
      * <pre>
      * <font style='background-color: #8A2BE2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8A2BE2; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8A2BE2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8A2BE2'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8A2BE2'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8A2BE2'>&nbsp;@&nbsp;</font><font style='background-color: #8A2BE2; color: #888888'>&nbsp;@&nbsp;</font>
@@ -545,7 +545,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Blue Violet Dye" has RGB code {@code 0x2B2028}, hue 0.8787879, saturation 0.25581393, and value 0.16862746.
-     * It can be represented as a packed float with the constant {@code 0x0.504056p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.504056p125F}.
      * <pre>
      * <font style='background-color: #2B2028; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2B2028; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2B2028; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2B2028'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2B2028'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2B2028'>&nbsp;@&nbsp;</font><font style='background-color: #2B2028; color: #888888'>&nbsp;@&nbsp;</font>
@@ -559,7 +559,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Boiled Red Bean Brown" has RGB code {@code 0x542D24}, hue 0.03125006, saturation 0.57142854, and value 0.32941177.
-     * It can be represented as a packed float with the constant {@code 0x0.485aa8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.485aa8p125F}.
      * <pre>
      * <font style='background-color: #542D24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #542D24; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #542D24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #542D24'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #542D24'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #542D24'>&nbsp;@&nbsp;</font><font style='background-color: #542D24; color: #888888'>&nbsp;@&nbsp;</font>
@@ -573,7 +573,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bondi Blue" has RGB code {@code 0x0095B6}, hue 0.5302199, saturation 1.0, and value 0.7137255.
-     * It can be represented as a packed float with the constant {@code 0x1.6d2ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6d2ap126F}.
      * <pre>
      * <font style='background-color: #0095B6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0095B6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0095B6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0095B6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0095B6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0095B6'>&nbsp;@&nbsp;</font><font style='background-color: #0095B6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -587,7 +587,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Brass" has RGB code {@code 0xB5A642}, hue 0.14492756, saturation 0.6353591, and value 0.70980394.
-     * It can be represented as a packed float with the constant {@code 0x0.854d6ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.854d6ap125F}.
      * <pre>
      * <font style='background-color: #B5A642; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B5A642; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B5A642; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B5A642'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B5A642'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B5A642'>&nbsp;@&nbsp;</font><font style='background-color: #B5A642; color: #888888'>&nbsp;@&nbsp;</font>
@@ -601,7 +601,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Brewed Mustard Brown" has RGB code {@code 0xE68364}, hue 0.039743602, saturation 0.5652174, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x0.c907ccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c907ccp125F}.
      * <pre>
      * <font style='background-color: #E68364; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E68364; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E68364; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E68364'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E68364'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E68364'>&nbsp;@&nbsp;</font><font style='background-color: #E68364; color: #888888'>&nbsp;@&nbsp;</font>
@@ -615,7 +615,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bright Gold Brown" has RGB code {@code 0xCB7E1F}, hue 0.09205425, saturation 0.84729064, and value 0.79607844.
-     * It can be represented as a packed float with the constant {@code 0x0.3efd96p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3efd96p125F}.
      * <pre>
      * <font style='background-color: #CB7E1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CB7E1F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CB7E1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CB7E1F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CB7E1F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CB7E1F'>&nbsp;@&nbsp;</font><font style='background-color: #CB7E1F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -629,7 +629,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bright Golden Yellow" has RGB code {@code 0xFFA400}, hue 0.107189596, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0149fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0149fep125F}.
      * <pre>
      * <font style='background-color: #FFA400; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFA400; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFA400; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFA400'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFA400'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFA400'>&nbsp;@&nbsp;</font><font style='background-color: #FFA400; color: #888888'>&nbsp;@&nbsp;</font>
@@ -643,7 +643,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bright Green" has RGB code {@code 0x66FF00}, hue 0.2666667, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01feccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01feccp125F}.
      * <pre>
      * <font style='background-color: #66FF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #66FF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #66FF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #66FF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #66FF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #66FF00'>&nbsp;@&nbsp;</font><font style='background-color: #66FF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -657,7 +657,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bright Pink" has RGB code {@code 0xFF0080}, hue 0.9163398, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.0001fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0001fep126F}.
      * <pre>
      * <font style='background-color: #FF0080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF0080; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF0080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF0080'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF0080'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF0080'>&nbsp;@&nbsp;</font><font style='background-color: #FF0080; color: #888888'>&nbsp;@&nbsp;</font>
@@ -671,7 +671,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bright Turquoise" has RGB code {@code 0x08E8DE}, hue 0.49255955, saturation 0.9655172, and value 0.9098039.
-     * It can be represented as a packed float with the constant {@code 0x1.bdd01p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bdd01p126F}.
      * <pre>
      * <font style='background-color: #08E8DE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #08E8DE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #08E8DE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #08E8DE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #08E8DE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #08E8DE'>&nbsp;@&nbsp;</font><font style='background-color: #08E8DE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -685,7 +685,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Brilliant Rose" has RGB code {@code 0xFF55A3}, hue 0.9235294, saturation 0.6666666, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.46abfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.46abfep126F}.
      * <pre>
      * <font style='background-color: #FF55A3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF55A3; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF55A3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF55A3'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF55A3'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF55A3'>&nbsp;@&nbsp;</font><font style='background-color: #FF55A3; color: #888888'>&nbsp;@&nbsp;</font>
@@ -699,7 +699,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Bronze" has RGB code {@code 0xCD7F32}, hue 0.08279568, saturation 0.75609756, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x0.64ff9ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.64ff9ap125F}.
      * <pre>
      * <font style='background-color: #CD7F32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CD7F32; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CD7F32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CD7F32'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CD7F32'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CD7F32'>&nbsp;@&nbsp;</font><font style='background-color: #CD7F32; color: #888888'>&nbsp;@&nbsp;</font>
@@ -713,7 +713,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Brown" has RGB code {@code 0x808000}, hue 0.16666663, saturation 1.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x0.0101p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0101p125F}.
      * <pre>
      * <font style='background-color: #808000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #808000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #808000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #808000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #808000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #808000'>&nbsp;@&nbsp;</font><font style='background-color: #808000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -727,7 +727,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Brown Rat Grey" has RGB code {@code 0x4B3C39}, hue 0.027777791, saturation 0.24000002, and value 0.29411766.
-     * It can be represented as a packed float with the constant {@code 0x0.727896p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.727896p125F}.
      * <pre>
      * <font style='background-color: #4B3C39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4B3C39; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4B3C39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4B3C39'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4B3C39'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4B3C39'>&nbsp;@&nbsp;</font><font style='background-color: #4B3C39; color: #888888'>&nbsp;@&nbsp;</font>
@@ -741,7 +741,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Browner" has RGB code {@code 0x964B00}, hue 0.08333331, saturation 1.0, and value 0.5882353.
-     * It can be represented as a packed float with the constant {@code 0x0.00972cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.00972cp125F}.
      * <pre>
      * <font style='background-color: #964B00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964B00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #964B00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #964B00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #964B00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #964B00'>&nbsp;@&nbsp;</font><font style='background-color: #964B00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -755,7 +755,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Brushwood Dyed" has RGB code {@code 0x8C5939}, hue 0.064257085, saturation 0.5928572, and value 0.54901963.
-     * It can be represented as a packed float with the constant {@code 0x0.72b318p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.72b318p125F}.
      * <pre>
      * <font style='background-color: #8C5939; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C5939; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8C5939; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8C5939'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8C5939'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8C5939'>&nbsp;@&nbsp;</font><font style='background-color: #8C5939; color: #888888'>&nbsp;@&nbsp;</font>
@@ -769,7 +769,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Buff" has RGB code {@code 0xF0DC82}, hue 0.13636369, saturation 0.4583333, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x1.05b9ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.05b9ep126F}.
      * <pre>
      * <font style='background-color: #F0DC82; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F0DC82; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F0DC82; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F0DC82'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F0DC82'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F0DC82'>&nbsp;@&nbsp;</font><font style='background-color: #F0DC82; color: #888888'>&nbsp;@&nbsp;</font>
@@ -783,7 +783,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Burgundy" has RGB code {@code 0x900020}, hue 0.962963, saturation 1.0, and value 0.5647059.
-     * It can be represented as a packed float with the constant {@code 0x0.40012p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.40012p125F}.
      * <pre>
      * <font style='background-color: #900020; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #900020; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #900020; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #900020'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #900020'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #900020'>&nbsp;@&nbsp;</font><font style='background-color: #900020; color: #888888'>&nbsp;@&nbsp;</font>
@@ -797,7 +797,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Burnt Bamboo" has RGB code {@code 0x4D3B3C}, hue 0.9907407, saturation 0.23376626, and value 0.3019608.
-     * It can be represented as a packed float with the constant {@code 0x0.78769ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.78769ap125F}.
      * <pre>
      * <font style='background-color: #4D3B3C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4D3B3C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4D3B3C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4D3B3C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4D3B3C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4D3B3C'>&nbsp;@&nbsp;</font><font style='background-color: #4D3B3C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -811,7 +811,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Burnt Orange" has RGB code {@code 0xCC5500}, hue 0.06944448, saturation 1.0, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x0.00ab98p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.00ab98p125F}.
      * <pre>
      * <font style='background-color: #CC5500; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CC5500; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CC5500; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CC5500'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CC5500'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CC5500'>&nbsp;@&nbsp;</font><font style='background-color: #CC5500; color: #888888'>&nbsp;@&nbsp;</font>
@@ -825,7 +825,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Burnt Sienna" has RGB code {@code 0xE97451}, hue 0.038377225, saturation 0.6523605, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x0.a2e9d2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a2e9d2p125F}.
      * <pre>
      * <font style='background-color: #E97451; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E97451; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E97451; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E97451'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E97451'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E97451'>&nbsp;@&nbsp;</font><font style='background-color: #E97451; color: #888888'>&nbsp;@&nbsp;</font>
@@ -839,7 +839,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Burnt Umber" has RGB code {@code 0x8A3324}, hue 0.024509788, saturation 0.73913044, and value 0.5411765.
-     * It can be represented as a packed float with the constant {@code 0x0.486714p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.486714p125F}.
      * <pre>
      * <font style='background-color: #8A3324; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8A3324; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8A3324; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8A3324'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8A3324'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8A3324'>&nbsp;@&nbsp;</font><font style='background-color: #8A3324; color: #888888'>&nbsp;@&nbsp;</font>
@@ -853,7 +853,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Camo Green" has RGB code {@code 0x78866B}, hue 0.2530864, saturation 0.20149258, and value 0.5254902.
-     * It can be represented as a packed float with the constant {@code 0x0.d70cfp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d70cfp125F}.
      * <pre>
      * <font style='background-color: #78866B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #78866B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #78866B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #78866B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #78866B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #78866B'>&nbsp;@&nbsp;</font><font style='background-color: #78866B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -867,7 +867,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cape Jasmine" has RGB code {@code 0xFFB95A}, hue 0.095959544, saturation 0.64705884, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.b573fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b573fep125F}.
      * <pre>
      * <font style='background-color: #FFB95A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFB95A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFB95A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFB95A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFB95A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFB95A'>&nbsp;@&nbsp;</font><font style='background-color: #FFB95A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -881,7 +881,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Caput Mortuum" has RGB code {@code 0x592720}, hue 0.020467818, saturation 0.6404494, and value 0.34901962.
-     * It can be represented as a packed float with the constant {@code 0x0.404eb2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.404eb2p125F}.
      * <pre>
      * <font style='background-color: #592720; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #592720; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #592720; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #592720'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #592720'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #592720'>&nbsp;@&nbsp;</font><font style='background-color: #592720; color: #888888'>&nbsp;@&nbsp;</font>
@@ -895,7 +895,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cardinal" has RGB code {@code 0xC41E3A}, hue 0.9718876, saturation 0.8469388, and value 0.76862746.
-     * It can be represented as a packed float with the constant {@code 0x0.743d88p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.743d88p125F}.
      * <pre>
      * <font style='background-color: #C41E3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C41E3A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C41E3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C41E3A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C41E3A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C41E3A'>&nbsp;@&nbsp;</font><font style='background-color: #C41E3A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -909,7 +909,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Carmine" has RGB code {@code 0x960018}, hue 0.97333336, saturation 1.0, and value 0.5882353.
-     * It can be represented as a packed float with the constant {@code 0x0.30012cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.30012cp125F}.
      * <pre>
      * <font style='background-color: #960018; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #960018; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #960018; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #960018'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #960018'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #960018'>&nbsp;@&nbsp;</font><font style='background-color: #960018; color: #888888'>&nbsp;@&nbsp;</font>
@@ -923,7 +923,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Carnation Pink" has RGB code {@code 0xFFA6C9}, hue 0.9344569, saturation 0.3490196, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.934dfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.934dfep126F}.
      * <pre>
      * <font style='background-color: #FFA6C9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFA6C9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFA6C9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFA6C9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFA6C9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFA6C9'>&nbsp;@&nbsp;</font><font style='background-color: #FFA6C9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -937,7 +937,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Carolina Blue" has RGB code {@code 0x99BADD}, hue 0.58578426, saturation 0.3076923, and value 0.8666667.
-     * It can be represented as a packed float with the constant {@code 0x1.bb7532p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bb7532p126F}.
      * <pre>
      * <font style='background-color: #99BADD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #99BADD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #99BADD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #99BADD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #99BADD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #99BADD'>&nbsp;@&nbsp;</font><font style='background-color: #99BADD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -951,7 +951,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Carrot Orange" has RGB code {@code 0xED9121}, hue 0.09150332, saturation 0.8607595, and value 0.92941177.
-     * It can be represented as a packed float with the constant {@code 0x0.4323dap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4323dap125F}.
      * <pre>
      * <font style='background-color: #ED9121; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ED9121; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ED9121; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ED9121'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ED9121'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ED9121'>&nbsp;@&nbsp;</font><font style='background-color: #ED9121; color: #888888'>&nbsp;@&nbsp;</font>
@@ -965,7 +965,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cattail" has RGB code {@code 0xB64925}, hue 0.041379273, saturation 0.79670334, and value 0.7137255.
-     * It can be represented as a packed float with the constant {@code 0x0.4a936cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4a936cp125F}.
      * <pre>
      * <font style='background-color: #B64925; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B64925; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B64925; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B64925'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B64925'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B64925'>&nbsp;@&nbsp;</font><font style='background-color: #B64925; color: #888888'>&nbsp;@&nbsp;</font>
@@ -979,7 +979,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Celadon" has RGB code {@code 0xACE1AF}, hue 0.3427673, saturation 0.23555554, and value 0.88235295.
-     * It can be represented as a packed float with the constant {@code 0x1.5fc358p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5fc358p126F}.
      * <pre>
      * <font style='background-color: #ACE1AF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ACE1AF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ACE1AF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ACE1AF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ACE1AF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ACE1AF'>&nbsp;@&nbsp;</font><font style='background-color: #ACE1AF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -993,7 +993,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Celadon Dye" has RGB code {@code 0x819C8B}, hue 0.39506173, saturation 0.17307691, and value 0.6117647.
-     * It can be represented as a packed float with the constant {@code 0x1.173902p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.173902p126F}.
      * <pre>
      * <font style='background-color: #819C8B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #819C8B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #819C8B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #819C8B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #819C8B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #819C8B'>&nbsp;@&nbsp;</font><font style='background-color: #819C8B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1007,7 +1007,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cerise" has RGB code {@code 0xDE3163}, hue 0.95183045, saturation 0.7792793, and value 0.87058824.
-     * It can be represented as a packed float with the constant {@code 0x0.c663bcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c663bcp125F}.
      * <pre>
      * <font style='background-color: #DE3163; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DE3163; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DE3163; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DE3163'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DE3163'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DE3163'>&nbsp;@&nbsp;</font><font style='background-color: #DE3163; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1021,7 +1021,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cerulean" has RGB code {@code 0x007BA7}, hue 0.5439123, saturation 1.0, and value 0.654902.
-     * It can be represented as a packed float with the constant {@code 0x1.4ef6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4ef6p126F}.
      * <pre>
      * <font style='background-color: #007BA7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #007BA7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #007BA7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #007BA7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #007BA7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #007BA7'>&nbsp;@&nbsp;</font><font style='background-color: #007BA7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1035,7 +1035,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cerulean Blue" has RGB code {@code 0x2A52BE}, hue 0.6216217, saturation 0.7789474, and value 0.74509805.
-     * It can be represented as a packed float with the constant {@code 0x1.7ca454p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7ca454p126F}.
      * <pre>
      * <font style='background-color: #2A52BE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2A52BE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2A52BE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2A52BE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2A52BE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2A52BE'>&nbsp;@&nbsp;</font><font style='background-color: #2A52BE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1049,7 +1049,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Chartreuse" has RGB code {@code 0xDFFF00}, hue 0.18758172, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01ffbep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01ffbep125F}.
      * <pre>
      * <font style='background-color: #DFFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DFFF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DFFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #DFFF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1063,7 +1063,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Chartreuse Green" has RGB code {@code 0x7FFF00}, hue 0.2503268, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01fefep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01fefep125F}.
      * <pre>
      * <font style='background-color: #7FFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7FFF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7FFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7FFF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7FFF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7FFF00'>&nbsp;@&nbsp;</font><font style='background-color: #7FFF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1077,7 +1077,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cherry Blossom" has RGB code {@code 0xFFB7C5}, hue 0.9675926, saturation 0.28235292, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.8b6ffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8b6ffep126F}.
      * <pre>
      * <font style='background-color: #FFB7C5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFB7C5; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFB7C5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFB7C5'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFB7C5'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFB7C5'>&nbsp;@&nbsp;</font><font style='background-color: #FFB7C5; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1091,7 +1091,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cherry Blossom Dye" has RGB code {@code 0xFCC9B9}, hue 0.039801, saturation 0.265873, and value 0.9882353.
-     * It can be represented as a packed float with the constant {@code 0x1.7393f8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7393f8p126F}.
      * <pre>
      * <font style='background-color: #FCC9B9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FCC9B9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FCC9B9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FCC9B9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FCC9B9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FCC9B9'>&nbsp;@&nbsp;</font><font style='background-color: #FCC9B9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1105,7 +1105,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cherry Blossom Mouse" has RGB code {@code 0xAC8181}, hue 0.0, saturation 0.24999999, and value 0.6745098.
-     * It can be represented as a packed float with the constant {@code 0x1.030358p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.030358p126F}.
      * <pre>
      * <font style='background-color: #AC8181; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AC8181; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AC8181; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AC8181'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AC8181'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AC8181'>&nbsp;@&nbsp;</font><font style='background-color: #AC8181; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1119,7 +1119,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Chestnut" has RGB code {@code 0xCD5C5C}, hue 0.0, saturation 0.5512195, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x0.b8b99ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b8b99ap125F}.
      * <pre>
      * <font style='background-color: #CD5C5C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CD5C5C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CD5C5C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CD5C5C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CD5C5C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CD5C5C'>&nbsp;@&nbsp;</font><font style='background-color: #CD5C5C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1133,7 +1133,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Chestnut Leather Brown" has RGB code {@code 0x60281E}, hue 0.025252521, saturation 0.6875, and value 0.3764706.
-     * It can be represented as a packed float with the constant {@code 0x0.3c50cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3c50cp125F}.
      * <pre>
      * <font style='background-color: #60281E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #60281E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #60281E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #60281E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #60281E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #60281E'>&nbsp;@&nbsp;</font><font style='background-color: #60281E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1147,7 +1147,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Chestnut Plum" has RGB code {@code 0x8B352D}, hue 0.014184415, saturation 0.67625904, and value 0.54509807.
-     * It can be represented as a packed float with the constant {@code 0x0.5a6b16p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5a6b16p125F}.
      * <pre>
      * <font style='background-color: #8B352D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8B352D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8B352D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8B352D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8B352D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8B352D'>&nbsp;@&nbsp;</font><font style='background-color: #8B352D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1161,7 +1161,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Chinese Tea Brown" has RGB code {@code 0xB35C44}, hue 0.036036015, saturation 0.6201117, and value 0.7019608.
-     * It can be represented as a packed float with the constant {@code 0x0.88b966p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.88b966p125F}.
      * <pre>
      * <font style='background-color: #B35C44; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B35C44; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B35C44; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B35C44'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B35C44'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B35C44'>&nbsp;@&nbsp;</font><font style='background-color: #B35C44; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1175,7 +1175,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Chinese Tea Yellow" has RGB code {@code 0xB7702D}, hue 0.080917835, saturation 0.75409836, and value 0.7176471.
-     * It can be represented as a packed float with the constant {@code 0x0.5ae16ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5ae16ep125F}.
      * <pre>
      * <font style='background-color: #B7702D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B7702D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B7702D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B7702D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B7702D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B7702D'>&nbsp;@&nbsp;</font><font style='background-color: #B7702D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1189,7 +1189,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Chocolate" has RGB code {@code 0x7B3F00}, hue 0.08536583, saturation 1.0, and value 0.48235294.
-     * It can be represented as a packed float with the constant {@code 0x0.007ef6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.007ef6p125F}.
      * <pre>
      * <font style='background-color: #7B3F00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7B3F00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7B3F00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7B3F00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7B3F00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7B3F00'>&nbsp;@&nbsp;</font><font style='background-color: #7B3F00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1203,7 +1203,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cinnabar" has RGB code {@code 0xE34234}, hue 0.013333321, saturation 0.7709251, and value 0.8901961.
-     * It can be represented as a packed float with the constant {@code 0x0.6885c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6885c6p125F}.
      * <pre>
      * <font style='background-color: #E34234; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E34234; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E34234; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E34234'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E34234'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E34234'>&nbsp;@&nbsp;</font><font style='background-color: #E34234; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1217,7 +1217,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cinnamon" has RGB code {@code 0xD2691E}, hue 0.06944442, saturation 0.85714287, and value 0.8235294.
-     * It can be represented as a packed float with the constant {@code 0x0.3cd3a4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3cd3a4p125F}.
      * <pre>
      * <font style='background-color: #D2691E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D2691E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D2691E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D2691E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D2691E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D2691E'>&nbsp;@&nbsp;</font><font style='background-color: #D2691E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1231,7 +1231,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Clove Brown" has RGB code {@code 0x8F583C}, hue 0.056224942, saturation 0.5804196, and value 0.56078434.
-     * It can be represented as a packed float with the constant {@code 0x0.78b11ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.78b11ep125F}.
      * <pre>
      * <font style='background-color: #8F583C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F583C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8F583C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8F583C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8F583C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8F583C'>&nbsp;@&nbsp;</font><font style='background-color: #8F583C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1245,7 +1245,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Clove Dyed" has RGB code {@code 0xC66B27}, hue 0.07127881, saturation 0.8030303, and value 0.7764706.
-     * It can be represented as a packed float with the constant {@code 0x0.4ed78cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4ed78cp125F}.
      * <pre>
      * <font style='background-color: #C66B27; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C66B27; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C66B27; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C66B27'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C66B27'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C66B27'>&nbsp;@&nbsp;</font><font style='background-color: #C66B27; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1259,7 +1259,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Coarse Wool" has RGB code {@code 0x181B26}, hue 0.6309525, saturation 0.36842108, and value 0.14901961.
-     * It can be represented as a packed float with the constant {@code 0x0.4c363p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4c363p125F}.
      * <pre>
      * <font style='background-color: #181B26; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #181B26; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #181B26; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #181B26'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #181B26'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #181B26'>&nbsp;@&nbsp;</font><font style='background-color: #181B26; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1273,7 +1273,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cobalt" has RGB code {@code 0x0047AB}, hue 0.5974659, saturation 1.0, and value 0.67058825.
-     * It can be represented as a packed float with the constant {@code 0x1.568ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.568ep126F}.
      * <pre>
      * <font style='background-color: #0047AB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0047AB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0047AB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0047AB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0047AB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0047AB'>&nbsp;@&nbsp;</font><font style='background-color: #0047AB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1287,7 +1287,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cochineal Red" has RGB code {@code 0x9D2933}, hue 0.9856322, saturation 0.7388535, and value 0.6156863.
-     * It can be represented as a packed float with the constant {@code 0x0.66533ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.66533ap125F}.
      * <pre>
      * <font style='background-color: #9D2933; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9D2933; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9D2933; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9D2933'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9D2933'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9D2933'>&nbsp;@&nbsp;</font><font style='background-color: #9D2933; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1301,7 +1301,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Columbia Blue" has RGB code {@code 0x9BDDFF}, hue 0.5566667, saturation 0.39215684, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ffbb36p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ffbb36p126F}.
      * <pre>
      * <font style='background-color: #9BDDFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9BDDFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9BDDFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9BDDFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9BDDFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9BDDFF'>&nbsp;@&nbsp;</font><font style='background-color: #9BDDFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1315,7 +1315,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Copper" has RGB code {@code 0xB87333}, hue 0.08020049, saturation 0.7228261, and value 0.72156864.
-     * It can be represented as a packed float with the constant {@code 0x0.66e77p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.66e77p125F}.
      * <pre>
      * <font style='background-color: #B87333; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B87333; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B87333; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B87333'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B87333'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B87333'>&nbsp;@&nbsp;</font><font style='background-color: #B87333; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1329,7 +1329,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Copper Rose" has RGB code {@code 0x996666}, hue 0.0, saturation 0.33333334, and value 0.6.
-     * It can be represented as a packed float with the constant {@code 0x0.cccd32p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cccd32p125F}.
      * <pre>
      * <font style='background-color: #996666; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #996666; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #996666; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #996666'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #996666'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #996666'>&nbsp;@&nbsp;</font><font style='background-color: #996666; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1343,7 +1343,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Coral" has RGB code {@code 0xFF7F50}, hue 0.044761896, saturation 0.6862745, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.a0fffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a0fffep125F}.
      * <pre>
      * <font style='background-color: #FF7F50; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF7F50; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF7F50; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF7F50'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF7F50'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF7F50'>&nbsp;@&nbsp;</font><font style='background-color: #FF7F50; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1357,7 +1357,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Coral Dye" has RGB code {@code 0xF8674F}, hue 0.023668587, saturation 0.6814516, and value 0.972549.
-     * It can be represented as a packed float with the constant {@code 0x0.9ecffp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9ecffp125F}.
      * <pre>
      * <font style='background-color: #F8674F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F8674F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F8674F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F8674F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F8674F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F8674F'>&nbsp;@&nbsp;</font><font style='background-color: #F8674F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1371,7 +1371,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Coral Red" has RGB code {@code 0xFF4040}, hue 0.0, saturation 0.7490196, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.8081fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8081fep125F}.
      * <pre>
      * <font style='background-color: #FF4040; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF4040; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF4040; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF4040'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF4040'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF4040'>&nbsp;@&nbsp;</font><font style='background-color: #FF4040; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1385,7 +1385,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Corn" has RGB code {@code 0xFBEC5D}, hue 0.15084392, saturation 0.62948203, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x0.bbd9f6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bbd9f6p125F}.
      * <pre>
      * <font style='background-color: #FBEC5D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FBEC5D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FBEC5D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FBEC5D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FBEC5D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FBEC5D'>&nbsp;@&nbsp;</font><font style='background-color: #FBEC5D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1399,7 +1399,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Corn Dye" has RGB code {@code 0xFAA945}, hue 0.09208101, saturation 0.72400004, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x0.8b53f4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8b53f4p125F}.
      * <pre>
      * <font style='background-color: #FAA945; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FAA945; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FAA945; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FAA945'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FAA945'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FAA945'>&nbsp;@&nbsp;</font><font style='background-color: #FAA945; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1413,7 +1413,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cornflower Blue" has RGB code {@code 0x6495ED}, hue 0.607056, saturation 0.5780591, and value 0.92941177.
-     * It can be represented as a packed float with the constant {@code 0x1.db2ac8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.db2ac8p126F}.
      * <pre>
      * <font style='background-color: #6495ED; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6495ED; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6495ED; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6495ED'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6495ED'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6495ED'>&nbsp;@&nbsp;</font><font style='background-color: #6495ED; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1427,7 +1427,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cosmic Latte" has RGB code {@code 0xFFF8E7}, hue 0.11805558, saturation 0.09411764, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.cff1fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cff1fep126F}.
      * <pre>
      * <font style='background-color: #FFF8E7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFF8E7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFF8E7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFF8E7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFF8E7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFF8E7'>&nbsp;@&nbsp;</font><font style='background-color: #FFF8E7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1441,7 +1441,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cream" has RGB code {@code 0xFFFDD0}, hue 0.15957451, saturation 0.18431371, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.a1fbfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a1fbfep126F}.
      * <pre>
      * <font style='background-color: #FFFDD0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFDD0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFFDD0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFFDD0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFFDD0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFFDD0'>&nbsp;@&nbsp;</font><font style='background-color: #FFFDD0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1455,7 +1455,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Crimson" has RGB code {@code 0xDC143C}, hue 0.96666664, saturation 0.90909094, and value 0.8627451.
-     * It can be represented as a packed float with the constant {@code 0x0.7829b8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7829b8p125F}.
      * <pre>
      * <font style='background-color: #DC143C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DC143C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DC143C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DC143C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DC143C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DC143C'>&nbsp;@&nbsp;</font><font style='background-color: #DC143C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1469,7 +1469,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cyan" has RGB code {@code 0x00FFFF}, hue 0.5, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fffep126F}.
      * <pre>
      * <font style='background-color: #00FFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FFFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00FFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00FFFF'>&nbsp;@&nbsp;</font><font style='background-color: #00FFFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1483,7 +1483,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cypress Bark" has RGB code {@code 0x752E23}, hue 0.022357762, saturation 0.70085466, and value 0.45882353.
-     * It can be represented as a packed float with the constant {@code 0x0.465ceap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.465ceap125F}.
      * <pre>
      * <font style='background-color: #752E23; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #752E23; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #752E23; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #752E23'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #752E23'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #752E23'>&nbsp;@&nbsp;</font><font style='background-color: #752E23; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1497,7 +1497,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Cypress Bark Red" has RGB code {@code 0x6F3028}, hue 0.018779337, saturation 0.6396396, and value 0.43529412.
-     * It can be represented as a packed float with the constant {@code 0x0.5060dep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5060dep125F}.
      * <pre>
      * <font style='background-color: #6F3028; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6F3028; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6F3028; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6F3028'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6F3028'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6F3028'>&nbsp;@&nbsp;</font><font style='background-color: #6F3028; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1511,7 +1511,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Blue" has RGB code {@code 0x0000C8}, hue 0.6666667, saturation 1.0, and value 0.78431374.
-     * It can be represented as a packed float with the constant {@code 0x1.9p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9p126F}.
      * <pre>
      * <font style='background-color: #0000C8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000C8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0000C8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0000C8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0000C8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0000C8'>&nbsp;@&nbsp;</font><font style='background-color: #0000C8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1525,7 +1525,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Blue Dye" has RGB code {@code 0x192236}, hue 0.6149425, saturation 0.537037, and value 0.21176471.
-     * It can be represented as a packed float with the constant {@code 0x0.6c4432p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6c4432p125F}.
      * <pre>
      * <font style='background-color: #192236; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #192236; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #192236; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #192236'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #192236'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #192236'>&nbsp;@&nbsp;</font><font style='background-color: #192236; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1539,7 +1539,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Blue Lapis Lazuli" has RGB code {@code 0x1B294B}, hue 0.6180556, saturation 0.64000005, and value 0.29411766.
-     * It can be represented as a packed float with the constant {@code 0x0.965236p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.965236p125F}.
      * <pre>
      * <font style='background-color: #1B294B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1B294B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1B294B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1B294B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1B294B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1B294B'>&nbsp;@&nbsp;</font><font style='background-color: #1B294B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1553,7 +1553,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Brown" has RGB code {@code 0x654321}, hue 0.08333337, saturation 0.6732673, and value 0.39607844.
-     * It can be represented as a packed float with the constant {@code 0x0.4286cap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4286cap125F}.
      * <pre>
      * <font style='background-color: #654321; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #654321; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #654321; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #654321'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #654321'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #654321'>&nbsp;@&nbsp;</font><font style='background-color: #654321; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1567,7 +1567,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Cerulean" has RGB code {@code 0x08457E}, hue 0.58050853, saturation 0.93650794, and value 0.49411765.
-     * It can be represented as a packed float with the constant {@code 0x0.fc8a1p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fc8a1p125F}.
      * <pre>
      * <font style='background-color: #08457E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #08457E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #08457E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #08457E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #08457E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #08457E'>&nbsp;@&nbsp;</font><font style='background-color: #08457E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1581,7 +1581,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Chestnut" has RGB code {@code 0x986960}, hue 0.026785672, saturation 0.36842108, and value 0.59607846.
-     * It can be represented as a packed float with the constant {@code 0x0.c0d33p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c0d33p125F}.
      * <pre>
      * <font style='background-color: #986960; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #986960; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #986960; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #986960'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #986960'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #986960'>&nbsp;@&nbsp;</font><font style='background-color: #986960; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1595,7 +1595,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Coral" has RGB code {@code 0xCD5B45}, hue 0.02696079, saturation 0.6634146, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x0.8ab79ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8ab79ap125F}.
      * <pre>
      * <font style='background-color: #CD5B45; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CD5B45; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CD5B45; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CD5B45'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CD5B45'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CD5B45'>&nbsp;@&nbsp;</font><font style='background-color: #CD5B45; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1609,7 +1609,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Goldenrod" has RGB code {@code 0xB8860B}, hue 0.11849707, saturation 0.9402174, and value 0.72156864.
-     * It can be represented as a packed float with the constant {@code 0x0.170d7p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.170d7p125F}.
      * <pre>
      * <font style='background-color: #B8860B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B8860B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B8860B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B8860B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B8860B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B8860B'>&nbsp;@&nbsp;</font><font style='background-color: #B8860B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1623,7 +1623,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Gray" has RGB code {@code 0x404040}, hue 0.0, saturation 0.0, and value 0.2509804.
-     * It can be represented as a packed float with the constant {@code 0x0.80808p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.80808p125F}.
      * <pre>
      * <font style='background-color: #404040; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #404040; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #404040; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #404040'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #404040'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #404040'>&nbsp;@&nbsp;</font><font style='background-color: #404040; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1637,7 +1637,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Green" has RGB code {@code 0x013220}, hue 0.43877554, saturation 0.98, and value 0.19607843.
-     * It can be represented as a packed float with the constant {@code 0x0.406402p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.406402p125F}.
      * <pre>
      * <font style='background-color: #013220; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #013220; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #013220; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #013220'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #013220'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #013220'>&nbsp;@&nbsp;</font><font style='background-color: #013220; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1651,7 +1651,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Indigo" has RGB code {@code 0x614E6E}, hue 0.76562506, saturation 0.29090908, and value 0.43137255.
-     * It can be represented as a packed float with the constant {@code 0x0.dc9cc2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.dc9cc2p125F}.
      * <pre>
      * <font style='background-color: #614E6E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #614E6E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #614E6E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #614E6E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #614E6E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #614E6E'>&nbsp;@&nbsp;</font><font style='background-color: #614E6E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1665,7 +1665,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Khaki" has RGB code {@code 0xBDB76B}, hue 0.15447152, saturation 0.43386245, and value 0.7411765.
-     * It can be represented as a packed float with the constant {@code 0x0.d76f7ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d76f7ap125F}.
      * <pre>
      * <font style='background-color: #BDB76B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BDB76B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BDB76B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BDB76B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BDB76B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BDB76B'>&nbsp;@&nbsp;</font><font style='background-color: #BDB76B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1679,7 +1679,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Pastel Green" has RGB code {@code 0x03C03C}, hue 0.3835979, saturation 0.984375, and value 0.7529412.
-     * It can be represented as a packed float with the constant {@code 0x0.798006p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.798006p125F}.
      * <pre>
      * <font style='background-color: #03C03C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #03C03C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #03C03C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #03C03C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #03C03C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #03C03C'>&nbsp;@&nbsp;</font><font style='background-color: #03C03C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1693,7 +1693,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Pink" has RGB code {@code 0xE75480}, hue 0.9501134, saturation 0.6363637, and value 0.90588236.
-     * It can be represented as a packed float with the constant {@code 0x1.00a9cep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.00a9cep126F}.
      * <pre>
      * <font style='background-color: #E75480; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E75480; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E75480; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E75480'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E75480'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E75480'>&nbsp;@&nbsp;</font><font style='background-color: #E75480; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1707,7 +1707,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Scarlet" has RGB code {@code 0x560319}, hue 0.9558233, saturation 0.96511626, and value 0.3372549.
-     * It can be represented as a packed float with the constant {@code 0x0.3206acp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3206acp125F}.
      * <pre>
      * <font style='background-color: #560319; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #560319; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #560319; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #560319'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #560319'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #560319'>&nbsp;@&nbsp;</font><font style='background-color: #560319; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1721,7 +1721,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Red" has RGB code {@code 0x800000}, hue 0.0, saturation 1.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x0.0001p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0001p125F}.
      * <pre>
      * <font style='background-color: #800000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #800000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #800000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #800000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #800000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #800000'>&nbsp;@&nbsp;</font><font style='background-color: #800000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1735,7 +1735,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Red Dye" has RGB code {@code 0x23191E}, hue 0.9166667, saturation 0.2857143, and value 0.13725491.
-     * It can be represented as a packed float with the constant {@code 0x0.3c3246p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3c3246p125F}.
      * <pre>
      * <font style='background-color: #23191E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #23191E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #23191E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #23191E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #23191E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #23191E'>&nbsp;@&nbsp;</font><font style='background-color: #23191E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1749,7 +1749,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Salmon" has RGB code {@code 0xE9967A}, hue 0.042042077, saturation 0.47639486, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x0.f52dd2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f52dd2p125F}.
      * <pre>
      * <font style='background-color: #E9967A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E9967A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E9967A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E9967A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E9967A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E9967A'>&nbsp;@&nbsp;</font><font style='background-color: #E9967A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1763,7 +1763,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Slate Gray" has RGB code {@code 0x2F4F4F}, hue 0.5, saturation 0.4050633, and value 0.30980393.
-     * It can be represented as a packed float with the constant {@code 0x0.9e9e5ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9e9e5ep125F}.
      * <pre>
      * <font style='background-color: #2F4F4F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2F4F4F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2F4F4F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2F4F4F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2F4F4F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2F4F4F'>&nbsp;@&nbsp;</font><font style='background-color: #2F4F4F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1777,7 +1777,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Spring Green" has RGB code {@code 0x177245}, hue 0.41758245, saturation 0.7982456, and value 0.44705883.
-     * It can be represented as a packed float with the constant {@code 0x0.8ae42ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8ae42ep125F}.
      * <pre>
      * <font style='background-color: #177245; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #177245; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #177245; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #177245'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #177245'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #177245'>&nbsp;@&nbsp;</font><font style='background-color: #177245; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1791,7 +1791,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Tan" has RGB code {@code 0x918151}, hue 0.12499994, saturation 0.4413793, and value 0.5686275.
-     * It can be represented as a packed float with the constant {@code 0x0.a30322p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a30322p125F}.
      * <pre>
      * <font style='background-color: #918151; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #918151; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #918151; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #918151'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #918151'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #918151'>&nbsp;@&nbsp;</font><font style='background-color: #918151; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1805,7 +1805,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Turquoise" has RGB code {@code 0x00CED1}, hue 0.50239235, saturation 1.0, and value 0.81960785.
-     * It can be represented as a packed float with the constant {@code 0x1.a39cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a39cp126F}.
      * <pre>
      * <font style='background-color: #00CED1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00CED1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00CED1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00CED1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00CED1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00CED1'>&nbsp;@&nbsp;</font><font style='background-color: #00CED1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1819,7 +1819,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dark Violet" has RGB code {@code 0x9400D3}, hue 0.78357035, saturation 1.0, and value 0.827451.
-     * It can be represented as a packed float with the constant {@code 0x1.a60128p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a60128p126F}.
      * <pre>
      * <font style='background-color: #9400D3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9400D3; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9400D3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9400D3'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9400D3'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9400D3'>&nbsp;@&nbsp;</font><font style='background-color: #9400D3; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1833,7 +1833,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dawn" has RGB code {@code 0xFA7B62}, hue 0.027412295, saturation 0.608, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x0.c4f7f4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c4f7f4p125F}.
      * <pre>
      * <font style='background-color: #FA7B62; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FA7B62; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FA7B62; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FA7B62'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FA7B62'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FA7B62'>&nbsp;@&nbsp;</font><font style='background-color: #FA7B62; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1847,7 +1847,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Daylily" has RGB code {@code 0xFF8936}, hue 0.06882256, saturation 0.7882353, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.6d13fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6d13fep125F}.
      * <pre>
      * <font style='background-color: #FF8936; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF8936; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF8936; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF8936'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF8936'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF8936'>&nbsp;@&nbsp;</font><font style='background-color: #FF8936; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1861,7 +1861,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dead Man's Fingers Seaweed" has RGB code {@code 0x524B2A}, hue 0.13749999, saturation 0.4878049, and value 0.32156864.
-     * It can be represented as a packed float with the constant {@code 0x0.5496a4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5496a4p125F}.
      * <pre>
      * <font style='background-color: #524B2A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #524B2A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #524B2A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #524B2A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #524B2A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #524B2A'>&nbsp;@&nbsp;</font><font style='background-color: #524B2A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1875,7 +1875,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Decaying Leaves" has RGB code {@code 0xD57835}, hue 0.069791615, saturation 0.75117373, and value 0.8352941.
-     * It can be represented as a packed float with the constant {@code 0x0.6af1aap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6af1aap125F}.
      * <pre>
      * <font style='background-color: #D57835; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D57835; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D57835; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D57835'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D57835'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D57835'>&nbsp;@&nbsp;</font><font style='background-color: #D57835; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1889,7 +1889,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Cerise" has RGB code {@code 0xDA3287}, hue 0.9156746, saturation 0.7706422, and value 0.85490197.
-     * It can be represented as a packed float with the constant {@code 0x1.0e65b4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0e65b4p126F}.
      * <pre>
      * <font style='background-color: #DA3287; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA3287; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DA3287; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DA3287'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DA3287'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DA3287'>&nbsp;@&nbsp;</font><font style='background-color: #DA3287; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1903,7 +1903,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Chestnut" has RGB code {@code 0xB94E48}, hue 0.008849561, saturation 0.6108108, and value 0.7254902.
-     * It can be represented as a packed float with the constant {@code 0x0.909d72p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.909d72p125F}.
      * <pre>
      * <font style='background-color: #B94E48; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B94E48; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B94E48; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B94E48'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B94E48'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B94E48'>&nbsp;@&nbsp;</font><font style='background-color: #B94E48; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1917,7 +1917,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Fuchsia" has RGB code {@code 0xC154C1}, hue 0.8333333, saturation 0.5647668, and value 0.75686276.
-     * It can be represented as a packed float with the constant {@code 0x1.82a982p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.82a982p126F}.
      * <pre>
      * <font style='background-color: #C154C1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C154C1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C154C1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C154C1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C154C1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C154C1'>&nbsp;@&nbsp;</font><font style='background-color: #C154C1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1931,7 +1931,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Lilac" has RGB code {@code 0x9955BB}, hue 0.77777785, saturation 0.54545456, and value 0.73333335.
-     * It can be represented as a packed float with the constant {@code 0x1.76ab32p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.76ab32p126F}.
      * <pre>
      * <font style='background-color: #9955BB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9955BB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9955BB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9955BB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9955BB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9955BB'>&nbsp;@&nbsp;</font><font style='background-color: #9955BB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1945,7 +1945,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Magenta" has RGB code {@code 0xCD00CC}, hue 0.8341463, saturation 1.0, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x1.98019ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.98019ap126F}.
      * <pre>
      * <font style='background-color: #CD00CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CD00CC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CD00CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CD00CC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CD00CC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CD00CC'>&nbsp;@&nbsp;</font><font style='background-color: #CD00CC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1959,7 +1959,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Peach" has RGB code {@code 0xFFCBA4}, hue 0.0714286, saturation 0.35686272, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.4997fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4997fep126F}.
      * <pre>
      * <font style='background-color: #FFCBA4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFCBA4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFCBA4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFCBA4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFCBA4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFCBA4'>&nbsp;@&nbsp;</font><font style='background-color: #FFCBA4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1973,7 +1973,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Pink" has RGB code {@code 0xFF1493}, hue 0.90992904, saturation 0.92156863, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.2629fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2629fep126F}.
      * <pre>
      * <font style='background-color: #FF1493; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF1493; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF1493; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF1493'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF1493'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF1493'>&nbsp;@&nbsp;</font><font style='background-color: #FF1493; color: #888888'>&nbsp;@&nbsp;</font>
@@ -1987,7 +1987,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Purple" has RGB code {@code 0x3A243B}, hue 0.826087, saturation 0.38983047, and value 0.23137255.
-     * It can be represented as a packed float with the constant {@code 0x0.764874p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.764874p125F}.
      * <pre>
      * <font style='background-color: #3A243B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3A243B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3A243B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3A243B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3A243B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3A243B'>&nbsp;@&nbsp;</font><font style='background-color: #3A243B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2001,7 +2001,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Deep Scarlet" has RGB code {@code 0x7B3B3A}, hue 0.0025641322, saturation 0.52845526, and value 0.48235294.
-     * It can be represented as a packed float with the constant {@code 0x0.7476f6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7476f6p125F}.
      * <pre>
      * <font style='background-color: #7B3B3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7B3B3A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7B3B3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7B3B3A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7B3B3A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7B3B3A'>&nbsp;@&nbsp;</font><font style='background-color: #7B3B3A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2015,7 +2015,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Denim" has RGB code {@code 0x1560BD}, hue 0.5922619, saturation 0.8888889, and value 0.7411765.
-     * It can be represented as a packed float with the constant {@code 0x1.7ac02ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7ac02ap126F}.
      * <pre>
      * <font style='background-color: #1560BD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1560BD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1560BD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1560BD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1560BD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1560BD'>&nbsp;@&nbsp;</font><font style='background-color: #1560BD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2029,7 +2029,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Disappearing Purple" has RGB code {@code 0x3F313A}, hue 0.89285713, saturation 0.22222221, and value 0.24705882.
-     * It can be represented as a packed float with the constant {@code 0x0.74627ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.74627ep125F}.
      * <pre>
      * <font style='background-color: #3F313A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3F313A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3F313A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3F313A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3F313A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3F313A'>&nbsp;@&nbsp;</font><font style='background-color: #3F313A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2043,7 +2043,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Distant River Brown" has RGB code {@code 0xCB6649}, hue 0.03717953, saturation 0.64039403, and value 0.79607844.
-     * It can be represented as a packed float with the constant {@code 0x0.92cd96p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.92cd96p125F}.
      * <pre>
      * <font style='background-color: #CB6649; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CB6649; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CB6649; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CB6649'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CB6649'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CB6649'>&nbsp;@&nbsp;</font><font style='background-color: #CB6649; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2057,7 +2057,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dodger Blue" has RGB code {@code 0x1E90FF}, hue 0.5822223, saturation 0.88235295, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ff203cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ff203cp126F}.
      * <pre>
      * <font style='background-color: #1E90FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1E90FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1E90FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1E90FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1E90FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1E90FF'>&nbsp;@&nbsp;</font><font style='background-color: #1E90FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2071,7 +2071,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dove Feather Grey" has RGB code {@code 0x755D5B}, hue 0.012820542, saturation 0.22222221, and value 0.45882353.
-     * It can be represented as a packed float with the constant {@code 0x0.b6baeap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b6baeap125F}.
      * <pre>
      * <font style='background-color: #755D5B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #755D5B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #755D5B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #755D5B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #755D5B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #755D5B'>&nbsp;@&nbsp;</font><font style='background-color: #755D5B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2085,7 +2085,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dried Weathered Bamboo" has RGB code {@code 0x7D4E2D}, hue 0.068750024, saturation 0.64, and value 0.49019608.
-     * It can be represented as a packed float with the constant {@code 0x0.5a9cfap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5a9cfap125F}.
      * <pre>
      * <font style='background-color: #7D4E2D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7D4E2D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7D4E2D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7D4E2D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7D4E2D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7D4E2D'>&nbsp;@&nbsp;</font><font style='background-color: #7D4E2D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2099,7 +2099,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Dull Blue" has RGB code {@code 0x4F4944}, hue 0.07575762, saturation 0.13924049, and value 0.30980393.
-     * It can be represented as a packed float with the constant {@code 0x0.88929ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.88929ep125F}.
      * <pre>
      * <font style='background-color: #4F4944; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4F4944; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4F4944; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4F4944'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4F4944'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4F4944'>&nbsp;@&nbsp;</font><font style='background-color: #4F4944; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2113,7 +2113,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Earthen Yellow" has RGB code {@code 0xBE7F51}, hue 0.0703364, saturation 0.5736842, and value 0.74509805.
-     * It can be represented as a packed float with the constant {@code 0x0.a2ff7cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a2ff7cp125F}.
      * <pre>
      * <font style='background-color: #BE7F51; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BE7F51; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BE7F51; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BE7F51'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BE7F51'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BE7F51'>&nbsp;@&nbsp;</font><font style='background-color: #BE7F51; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2127,7 +2127,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Earthen Yellow Red Brown" has RGB code {@code 0xFF4E20}, hue 0.03437966, saturation 0.8745098, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.409dfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.409dfep125F}.
      * <pre>
      * <font style='background-color: #FF4E20; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF4E20; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF4E20; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF4E20'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF4E20'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF4E20'>&nbsp;@&nbsp;</font><font style='background-color: #FF4E20; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2141,7 +2141,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ecru" has RGB code {@code 0xC2B280}, hue 0.12626266, saturation 0.34020615, and value 0.7607843.
-     * It can be represented as a packed float with the constant {@code 0x1.016584p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.016584p126F}.
      * <pre>
      * <font style='background-color: #C2B280; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C2B280; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C2B280; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C2B280'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C2B280'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C2B280'>&nbsp;@&nbsp;</font><font style='background-color: #C2B280; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2155,7 +2155,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Edo Brown" has RGB code {@code 0xA13D2D}, hue 0.022988498, saturation 0.7204969, and value 0.6313726.
-     * It can be represented as a packed float with the constant {@code 0x0.5a7b42p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5a7b42p125F}.
      * <pre>
      * <font style='background-color: #A13D2D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A13D2D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A13D2D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A13D2D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A13D2D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A13D2D'>&nbsp;@&nbsp;</font><font style='background-color: #A13D2D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2169,7 +2169,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Egg Dye" has RGB code {@code 0xFFA631}, hue 0.09466022, saturation 0.80784315, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.634dfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.634dfep125F}.
      * <pre>
      * <font style='background-color: #FFA631; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFA631; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFA631; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFA631'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFA631'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFA631'>&nbsp;@&nbsp;</font><font style='background-color: #FFA631; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2183,7 +2183,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Eggshell Paper" has RGB code {@code 0xECBE9F}, hue 0.06709957, saturation 0.32627118, and value 0.9254902.
-     * It can be represented as a packed float with the constant {@code 0x1.3f7dd8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3f7dd8p126F}.
      * <pre>
      * <font style='background-color: #ECBE9F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ECBE9F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ECBE9F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ECBE9F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ECBE9F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ECBE9F'>&nbsp;@&nbsp;</font><font style='background-color: #ECBE9F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2197,7 +2197,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Egyptian Blue" has RGB code {@code 0x1034A6}, hue 0.62666667, saturation 0.90361446, and value 0.6509804.
-     * It can be represented as a packed float with the constant {@code 0x1.4c682p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4c682p126F}.
      * <pre>
      * <font style='background-color: #1034A6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1034A6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1034A6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1034A6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1034A6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1034A6'>&nbsp;@&nbsp;</font><font style='background-color: #1034A6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2211,7 +2211,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Electric Blue" has RGB code {@code 0x7DF9FF}, hue 0.5076924, saturation 0.5098039, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fff2fap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fff2fap126F}.
      * <pre>
      * <font style='background-color: #7DF9FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7DF9FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7DF9FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7DF9FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7DF9FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7DF9FF'>&nbsp;@&nbsp;</font><font style='background-color: #7DF9FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2225,7 +2225,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Electric Green" has RGB code {@code 0x00FF00}, hue 0.3333333, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01fep125F}.
      * <pre>
      * <font style='background-color: #00FF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00FF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00FF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00FF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00FF00'>&nbsp;@&nbsp;</font><font style='background-color: #00FF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2239,7 +2239,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Electric Indigo" has RGB code {@code 0x6600FF}, hue 0.73333335, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fe00ccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fe00ccp126F}.
      * <pre>
      * <font style='background-color: #6600FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6600FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6600FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6600FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6600FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6600FF'>&nbsp;@&nbsp;</font><font style='background-color: #6600FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2253,7 +2253,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Electric Lime" has RGB code {@code 0xCCFF00}, hue 0.19999999, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01ff98p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01ff98p125F}.
      * <pre>
      * <font style='background-color: #CCFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CCFF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CCFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CCFF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CCFF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CCFF00'>&nbsp;@&nbsp;</font><font style='background-color: #CCFF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2267,7 +2267,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Electric Purple" has RGB code {@code 0xBF00FF}, hue 0.7915033, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fe017ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fe017ep126F}.
      * <pre>
      * <font style='background-color: #BF00FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BF00FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BF00FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BF00FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BF00FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BF00FF'>&nbsp;@&nbsp;</font><font style='background-color: #BF00FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2281,7 +2281,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Emerald" has RGB code {@code 0x50C878}, hue 0.38888884, saturation 0.59999996, and value 0.78431374.
-     * It can be represented as a packed float with the constant {@code 0x0.f190ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f190ap125F}.
      * <pre>
      * <font style='background-color: #50C878; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #50C878; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #50C878; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #50C878'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #50C878'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #50C878'>&nbsp;@&nbsp;</font><font style='background-color: #50C878; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2295,7 +2295,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Eggplant" has RGB code {@code 0x614051}, hue 0.9141414, saturation 0.34020615, and value 0.38039216.
-     * It can be represented as a packed float with the constant {@code 0x0.a280c2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a280c2p125F}.
      * <pre>
      * <font style='background-color: #614051; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #614051; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #614051; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #614051'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #614051'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #614051'>&nbsp;@&nbsp;</font><font style='background-color: #614051; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2309,7 +2309,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Faded Chinese Tea Brown" has RGB code {@code 0x60281E}, hue 0.025252521, saturation 0.6875, and value 0.3764706.
-     * It can be represented as a packed float with the constant {@code 0x0.3c50cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3c50cp125F}.
      * <pre>
      * <font style='background-color: #60281E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #60281E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #60281E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #60281E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #60281E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #60281E'>&nbsp;@&nbsp;</font><font style='background-color: #60281E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2323,7 +2323,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Faded Den No Rikyu's Tea" has RGB code {@code 0xB0927A}, hue 0.07407403, saturation 0.3068182, and value 0.6901961.
-     * It can be represented as a packed float with the constant {@code 0x0.f5256p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f5256p125F}.
      * <pre>
      * <font style='background-color: #B0927A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B0927A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B0927A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #B0927A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2337,7 +2337,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Fake Purple" has RGB code {@code 0x43242A}, hue 0.96774197, saturation 0.46268657, and value 0.2627451.
-     * It can be represented as a packed float with the constant {@code 0x0.544886p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.544886p125F}.
      * <pre>
      * <font style='background-color: #43242A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #43242A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #43242A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #43242A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #43242A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #43242A'>&nbsp;@&nbsp;</font><font style='background-color: #43242A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2351,7 +2351,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Falu Red" has RGB code {@code 0x801818}, hue 0.0, saturation 0.8125, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x0.3031p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3031p125F}.
      * <pre>
      * <font style='background-color: #801818; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #801818; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #801818; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #801818'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #801818'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #801818'>&nbsp;@&nbsp;</font><font style='background-color: #801818; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2365,7 +2365,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Fern Green" has RGB code {@code 0x4F7942}, hue 0.2939394, saturation 0.45454544, and value 0.4745098.
-     * It can be represented as a packed float with the constant {@code 0x0.84f29ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.84f29ep125F}.
      * <pre>
      * <font style='background-color: #4F7942; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4F7942; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4F7942; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4F7942'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4F7942'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4F7942'>&nbsp;@&nbsp;</font><font style='background-color: #4F7942; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2379,7 +2379,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Finch Brown" has RGB code {@code 0x957B38}, hue 0.12007171, saturation 0.6241611, and value 0.58431375.
-     * It can be represented as a packed float with the constant {@code 0x0.70f72ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.70f72ap125F}.
      * <pre>
      * <font style='background-color: #957B38; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #957B38; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #957B38; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #957B38'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #957B38'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #957B38'>&nbsp;@&nbsp;</font><font style='background-color: #957B38; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2393,7 +2393,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Firebrick" has RGB code {@code 0xB22222}, hue 0.0, saturation 0.8089888, and value 0.69803923.
-     * It can be represented as a packed float with the constant {@code 0x0.444564p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.444564p125F}.
      * <pre>
      * <font style='background-color: #B22222; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B22222; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B22222; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B22222'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B22222'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B22222'>&nbsp;@&nbsp;</font><font style='background-color: #B22222; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2407,7 +2407,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Flattery Brown" has RGB code {@code 0x6B4423}, hue 0.076388896, saturation 0.67289716, and value 0.41960785.
-     * It can be represented as a packed float with the constant {@code 0x0.4688d6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4688d6p125F}.
      * <pre>
      * <font style='background-color: #6B4423; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6B4423; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6B4423; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6B4423'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6B4423'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6B4423'>&nbsp;@&nbsp;</font><font style='background-color: #6B4423; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2421,7 +2421,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Flax" has RGB code {@code 0xEEDC82}, hue 0.1388889, saturation 0.4537815, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.05b9dcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.05b9dcp126F}.
      * <pre>
      * <font style='background-color: #EEDC82; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EEDC82; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EEDC82; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EEDC82'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EEDC82'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EEDC82'>&nbsp;@&nbsp;</font><font style='background-color: #EEDC82; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2435,7 +2435,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Flirtatious Indigo Tea" has RGB code {@code 0x473F2D}, hue 0.11538452, saturation 0.3661972, and value 0.2784314.
-     * It can be represented as a packed float with the constant {@code 0x0.5a7e8ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5a7e8ep125F}.
      * <pre>
      * <font style='background-color: #473F2D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #473F2D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #473F2D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #473F2D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #473F2D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #473F2D'>&nbsp;@&nbsp;</font><font style='background-color: #473F2D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2449,7 +2449,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Floral Leaf" has RGB code {@code 0xFFB94E}, hue 0.10075325, saturation 0.69411767, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.9d73fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9d73fep125F}.
      * <pre>
      * <font style='background-color: #FFB94E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFB94E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFB94E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFB94E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFB94E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFB94E'>&nbsp;@&nbsp;</font><font style='background-color: #FFB94E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2463,7 +2463,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Foreign Crimson" has RGB code {@code 0xC91F37}, hue 0.9764706, saturation 0.84577113, and value 0.7882353.
-     * It can be represented as a packed float with the constant {@code 0x0.6e3f92p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6e3f92p125F}.
      * <pre>
      * <font style='background-color: #C91F37; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C91F37; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C91F37; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C91F37'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C91F37'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C91F37'>&nbsp;@&nbsp;</font><font style='background-color: #C91F37; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2477,7 +2477,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Forest Green" has RGB code {@code 0x228B22}, hue 0.33333337, saturation 0.7553957, and value 0.54509807.
-     * It can be represented as a packed float with the constant {@code 0x0.451644p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.451644p125F}.
      * <pre>
      * <font style='background-color: #228B22; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #228B22; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #228B22; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #228B22'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #228B22'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #228B22'>&nbsp;@&nbsp;</font><font style='background-color: #228B22; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2491,7 +2491,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Fox" has RGB code {@code 0x985629}, hue 0.06756753, saturation 0.7302632, and value 0.59607846.
-     * It can be represented as a packed float with the constant {@code 0x0.52ad3p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.52ad3p125F}.
      * <pre>
      * <font style='background-color: #985629; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #985629; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #985629; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #985629'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #985629'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #985629'>&nbsp;@&nbsp;</font><font style='background-color: #985629; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2505,7 +2505,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Fragile Seaweed Brown" has RGB code {@code 0x2E372E}, hue 0.3333333, saturation 0.16363636, and value 0.21568628.
-     * It can be represented as a packed float with the constant {@code 0x0.5c6e5cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5c6e5cp125F}.
      * <pre>
      * <font style='background-color: #2E372E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2E372E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2E372E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2E372E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2E372E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2E372E'>&nbsp;@&nbsp;</font><font style='background-color: #2E372E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2519,7 +2519,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "French Rose" has RGB code {@code 0xF64A8A}, hue 0.93798447, saturation 0.6991869, and value 0.9647059.
-     * It can be represented as a packed float with the constant {@code 0x1.1495ecp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1495ecp126F}.
      * <pre>
      * <font style='background-color: #F64A8A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F64A8A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F64A8A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F64A8A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F64A8A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F64A8A'>&nbsp;@&nbsp;</font><font style='background-color: #F64A8A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2533,7 +2533,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Fresh Onion" has RGB code {@code 0x5B8930}, hue 0.252809, saturation 0.6496351, and value 0.5372549.
-     * It can be represented as a packed float with the constant {@code 0x0.6112b6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6112b6p125F}.
      * <pre>
      * <font style='background-color: #5B8930; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5B8930; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5B8930; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5B8930'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5B8930'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5B8930'>&nbsp;@&nbsp;</font><font style='background-color: #5B8930; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2547,7 +2547,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Fucshia Pink" has RGB code {@code 0xFF77FF}, hue 0.8333333, saturation 0.5333333, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.feeffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.feeffep126F}.
      * <pre>
      * <font style='background-color: #FF77FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF77FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF77FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #FF77FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2561,7 +2561,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Gamboge" has RGB code {@code 0xE49B0F}, hue 0.109546185, saturation 0.93421054, and value 0.89411765.
-     * It can be represented as a packed float with the constant {@code 0x0.1f37c8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1f37c8p125F}.
      * <pre>
      * <font style='background-color: #E49B0F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E49B0F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E49B0F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E49B0F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E49B0F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E49B0F'>&nbsp;@&nbsp;</font><font style='background-color: #E49B0F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2575,7 +2575,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Gamboge Dye" has RGB code {@code 0xFFB61E}, hue 0.11259264, saturation 0.88235295, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.3d6dfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3d6dfep125F}.
      * <pre>
      * <font style='background-color: #FFB61E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFB61E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFB61E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFB61E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFB61E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFB61E'>&nbsp;@&nbsp;</font><font style='background-color: #FFB61E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2589,7 +2589,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Glazed Persimmon" has RGB code {@code 0xD34E36}, hue 0.025477707, saturation 0.74407583, and value 0.827451.
-     * It can be represented as a packed float with the constant {@code 0x0.6c9da6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6c9da6p125F}.
      * <pre>
      * <font style='background-color: #D34E36; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D34E36; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D34E36; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D34E36'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D34E36'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D34E36'>&nbsp;@&nbsp;</font><font style='background-color: #D34E36; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2603,7 +2603,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Gold" has RGB code {@code 0xD4AF37}, hue 0.12738848, saturation 0.7405661, and value 0.83137256.
-     * It can be represented as a packed float with the constant {@code 0x0.6f5fa8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6f5fa8p125F}.
      * <pre>
      * <font style='background-color: #D4AF37; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D4AF37; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D4AF37; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D4AF37'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D4AF37'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D4AF37'>&nbsp;@&nbsp;</font><font style='background-color: #D4AF37; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2617,7 +2617,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Golden" has RGB code {@code 0xFFD700}, hue 0.1405229, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01affep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01affep125F}.
      * <pre>
      * <font style='background-color: #FFD700; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFD700; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFD700; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFD700'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFD700'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFD700'>&nbsp;@&nbsp;</font><font style='background-color: #FFD700; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2631,7 +2631,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Golden Brown" has RGB code {@code 0x996515}, hue 0.101010084, saturation 0.8627451, and value 0.6.
-     * It can be represented as a packed float with the constant {@code 0x0.2acb32p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2acb32p125F}.
      * <pre>
      * <font style='background-color: #996515; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #996515; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #996515; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #996515'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #996515'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #996515'>&nbsp;@&nbsp;</font><font style='background-color: #996515; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2645,7 +2645,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Golden Brown Dye" has RGB code {@code 0xC66B27}, hue 0.07127881, saturation 0.8030303, and value 0.7764706.
-     * It can be represented as a packed float with the constant {@code 0x0.4ed78cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4ed78cp125F}.
      * <pre>
      * <font style='background-color: #C66B27; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C66B27; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C66B27; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C66B27'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C66B27'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C66B27'>&nbsp;@&nbsp;</font><font style='background-color: #C66B27; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2659,7 +2659,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Golden Fallen Leaves" has RGB code {@code 0xE29C45}, hue 0.09235668, saturation 0.6946903, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x0.8b39c4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8b39c4p125F}.
      * <pre>
      * <font style='background-color: #E29C45; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E29C45; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E29C45; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E29C45'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E29C45'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E29C45'>&nbsp;@&nbsp;</font><font style='background-color: #E29C45; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2673,7 +2673,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Golden Oak" has RGB code {@code 0xBB8141}, hue 0.08743173, saturation 0.6524064, and value 0.73333335.
-     * It can be represented as a packed float with the constant {@code 0x0.830376p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.830376p125F}.
      * <pre>
      * <font style='background-color: #BB8141; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BB8141; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BB8141; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BB8141'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BB8141'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BB8141'>&nbsp;@&nbsp;</font><font style='background-color: #BB8141; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2687,7 +2687,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Golden Yellow" has RGB code {@code 0xFFDF00}, hue 0.14575166, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01bffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01bffep125F}.
      * <pre>
      * <font style='background-color: #FFDF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFDF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFDF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFDF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFDF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFDF00'>&nbsp;@&nbsp;</font><font style='background-color: #FFDF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2701,7 +2701,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Goldenrod" has RGB code {@code 0xDAA520}, hue 0.11917561, saturation 0.85321105, and value 0.85490197.
-     * It can be represented as a packed float with the constant {@code 0x0.414bb4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.414bb4p125F}.
      * <pre>
      * <font style='background-color: #DAA520; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DAA520; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DAA520; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DAA520'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DAA520'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DAA520'>&nbsp;@&nbsp;</font><font style='background-color: #DAA520; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2715,7 +2715,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Goryeo Storeroom" has RGB code {@code 0x203838}, hue 0.5, saturation 0.4285714, and value 0.21960784.
-     * It can be represented as a packed float with the constant {@code 0x0.70704p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.70704p125F}.
      * <pre>
      * <font style='background-color: #203838; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #203838; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #203838; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #203838'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #203838'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #203838'>&nbsp;@&nbsp;</font><font style='background-color: #203838; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2729,7 +2729,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Grape Mouse" has RGB code {@code 0x63424B}, hue 0.95454544, saturation 0.3333333, and value 0.3882353.
-     * It can be represented as a packed float with the constant {@code 0x0.9684c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9684c6p125F}.
      * <pre>
      * <font style='background-color: #63424B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #63424B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #63424B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #63424B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #63424B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #63424B'>&nbsp;@&nbsp;</font><font style='background-color: #63424B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2743,7 +2743,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Gray" has RGB code {@code 0x808080}, hue 0.0, saturation 0.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x1.0101p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0101p126F}.
      * <pre>
      * <font style='background-color: #808080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #808080; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #808080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #808080'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #808080'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #808080'>&nbsp;@&nbsp;</font><font style='background-color: #808080; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2757,7 +2757,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Gray Asparagus" has RGB code {@code 0x465945}, hue 0.325, saturation 0.22471908, and value 0.34901962.
-     * It can be represented as a packed float with the constant {@code 0x0.8ab28cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8ab28cp125F}.
      * <pre>
      * <font style='background-color: #465945; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #465945; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #465945; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #465945'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #465945'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #465945'>&nbsp;@&nbsp;</font><font style='background-color: #465945; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2771,7 +2771,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Green" has RGB code {@code 0x008000}, hue 0.33333337, saturation 1.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x0.01p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01p125F}.
      * <pre>
      * <font style='background-color: #008000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #008000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #008000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #008000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #008000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #008000'>&nbsp;@&nbsp;</font><font style='background-color: #008000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2785,7 +2785,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Greenfinch" has RGB code {@code 0xBDA928}, hue 0.14429528, saturation 0.7883598, and value 0.7411765.
-     * It can be represented as a packed float with the constant {@code 0x0.51537ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.51537ap125F}.
      * <pre>
      * <font style='background-color: #BDA928; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BDA928; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BDA928; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BDA928'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BDA928'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BDA928'>&nbsp;@&nbsp;</font><font style='background-color: #BDA928; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2799,7 +2799,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Green Bamboo" has RGB code {@code 0x006442}, hue 0.44333333, saturation 1.0, and value 0.39215687.
-     * It can be represented as a packed float with the constant {@code 0x0.84c8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.84c8p125F}.
      * <pre>
      * <font style='background-color: #006442; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #006442; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #006442; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #006442'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #006442'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #006442'>&nbsp;@&nbsp;</font><font style='background-color: #006442; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2813,7 +2813,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Green Tea Dye" has RGB code {@code 0x824B35}, hue 0.047619104, saturation 0.59230775, and value 0.50980395.
-     * It can be represented as a packed float with the constant {@code 0x0.6a9704p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6a9704p125F}.
      * <pre>
      * <font style='background-color: #824B35; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #824B35; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #824B35; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #824B35'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #824B35'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #824B35'>&nbsp;@&nbsp;</font><font style='background-color: #824B35; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2827,7 +2827,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Green Yellow" has RGB code {@code 0xADFF2F}, hue 0.23237175, saturation 0.8156863, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.5fff5ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5fff5ap125F}.
      * <pre>
      * <font style='background-color: #ADFF2F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ADFF2F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ADFF2F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ADFF2F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ADFF2F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ADFF2F'>&nbsp;@&nbsp;</font><font style='background-color: #ADFF2F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2841,7 +2841,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Greyish Dark Green" has RGB code {@code 0x656255}, hue 0.13541669, saturation 0.15841582, and value 0.39607844.
-     * It can be represented as a packed float with the constant {@code 0x0.aac4cap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.aac4cap125F}.
      * <pre>
      * <font style='background-color: #656255; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #656255; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #656255; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #656255'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #656255'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #656255'>&nbsp;@&nbsp;</font><font style='background-color: #656255; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2855,7 +2855,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Half Purple" has RGB code {@code 0x8D608C}, hue 0.837037, saturation 0.31914896, and value 0.5529412.
-     * It can be represented as a packed float with the constant {@code 0x1.18c11ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.18c11ap126F}.
      * <pre>
      * <font style='background-color: #8D608C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8D608C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8D608C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8D608C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8D608C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8D608C'>&nbsp;@&nbsp;</font><font style='background-color: #8D608C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2869,7 +2869,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Han Purple" has RGB code {@code 0x5218FA}, hue 0.7094395, saturation 0.904, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x1.f430a4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f430a4p126F}.
      * <pre>
      * <font style='background-color: #5218FA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5218FA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5218FA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5218FA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5218FA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5218FA'>&nbsp;@&nbsp;</font><font style='background-color: #5218FA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2883,7 +2883,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Harbor Rat" has RGB code {@code 0x757D75}, hue 0.3333333, saturation 0.063999996, and value 0.49019608.
-     * It can be represented as a packed float with the constant {@code 0x0.eafaeap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.eafaeap125F}.
      * <pre>
      * <font style='background-color: #757D75; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #757D75; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #757D75; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #757D75'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #757D75'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #757D75'>&nbsp;@&nbsp;</font><font style='background-color: #757D75; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2897,7 +2897,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Heliotrope" has RGB code {@code 0xDF73FF}, hue 0.79523814, saturation 0.5490196, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fee7bep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fee7bep126F}.
      * <pre>
      * <font style='background-color: #DF73FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DF73FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DF73FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DF73FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DF73FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DF73FF'>&nbsp;@&nbsp;</font><font style='background-color: #DF73FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2911,7 +2911,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Hollywood Cerise" has RGB code {@code 0xF400A1}, hue 0.8900273, saturation 1.0, and value 0.95686275.
-     * It can be represented as a packed float with the constant {@code 0x1.4201e8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4201e8p126F}.
      * <pre>
      * <font style='background-color: #F400A1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F400A1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F400A1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F400A1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F400A1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F400A1'>&nbsp;@&nbsp;</font><font style='background-color: #F400A1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2925,7 +2925,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Horsetail" has RGB code {@code 0x3D5D42}, hue 0.359375, saturation 0.34408602, and value 0.3647059.
-     * It can be represented as a packed float with the constant {@code 0x0.84ba7ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.84ba7ap125F}.
      * <pre>
      * <font style='background-color: #3D5D42; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3D5D42; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3D5D42; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3D5D42'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3D5D42'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3D5D42'>&nbsp;@&nbsp;</font><font style='background-color: #3D5D42; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2939,7 +2939,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Hot Magenta" has RGB code {@code 0xFF00CC}, hue 0.8666666, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.9801fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9801fep126F}.
      * <pre>
      * <font style='background-color: #FF00CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF00CC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF00CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF00CC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF00CC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF00CC'>&nbsp;@&nbsp;</font><font style='background-color: #FF00CC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2953,7 +2953,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Hot Pink" has RGB code {@code 0xFF69B4}, hue 0.9166666, saturation 0.58823526, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.68d3fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.68d3fep126F}.
      * <pre>
      * <font style='background-color: #FF69B4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF69B4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF69B4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF69B4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF69B4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF69B4'>&nbsp;@&nbsp;</font><font style='background-color: #FF69B4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2967,7 +2967,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ibis" has RGB code {@code 0x4C221B}, hue 0.023809493, saturation 0.6447369, and value 0.29803923.
-     * It can be represented as a packed float with the constant {@code 0x0.364498p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.364498p125F}.
      * <pre>
      * <font style='background-color: #4C221B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4C221B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4C221B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4C221B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4C221B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4C221B'>&nbsp;@&nbsp;</font><font style='background-color: #4C221B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2981,7 +2981,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ibis Wing" has RGB code {@code 0xF58F84}, hue 0.016224205, saturation 0.46122447, and value 0.9607843.
-     * It can be represented as a packed float with the constant {@code 0x1.091feap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.091feap126F}.
      * <pre>
      * <font style='background-color: #F58F84; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F58F84; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F58F84; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F58F84'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F58F84'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F58F84'>&nbsp;@&nbsp;</font><font style='background-color: #F58F84; color: #888888'>&nbsp;@&nbsp;</font>
@@ -2995,7 +2995,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Indigo" has RGB code {@code 0x4B0082}, hue 0.7628204, saturation 1.0, and value 0.50980395.
-     * It can be represented as a packed float with the constant {@code 0x1.040096p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.040096p126F}.
      * <pre>
      * <font style='background-color: #4B0082; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4B0082; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4B0082; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4B0082'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4B0082'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4B0082'>&nbsp;@&nbsp;</font><font style='background-color: #4B0082; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3009,7 +3009,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Indigo Dye" has RGB code {@code 0x00416A}, hue 0.56446534, saturation 1.0, and value 0.41568628.
-     * It can be represented as a packed float with the constant {@code 0x0.d482p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d482p125F}.
      * <pre>
      * <font style='background-color: #00416A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00416A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00416A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00416A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00416A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00416A'>&nbsp;@&nbsp;</font><font style='background-color: #00416A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3023,7 +3023,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Indigo Ink Brown" has RGB code {@code 0x393432}, hue 0.047619045, saturation 0.12280701, and value 0.22352941.
-     * It can be represented as a packed float with the constant {@code 0x0.646872p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.646872p125F}.
      * <pre>
      * <font style='background-color: #393432; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #393432; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #393432; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #393432'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #393432'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #393432'>&nbsp;@&nbsp;</font><font style='background-color: #393432; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3037,7 +3037,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Indigo White" has RGB code {@code 0xEBF6F7}, hue 0.5138889, saturation 0.048582993, and value 0.96862745.
-     * It can be represented as a packed float with the constant {@code 0x1.efedd6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.efedd6p126F}.
      * <pre>
      * <font style='background-color: #EBF6F7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EBF6F7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EBF6F7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EBF6F7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EBF6F7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EBF6F7'>&nbsp;@&nbsp;</font><font style='background-color: #EBF6F7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3051,7 +3051,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ink" has RGB code {@code 0x27221F}, hue 0.06250006, saturation 0.20512824, and value 0.15294118.
-     * It can be represented as a packed float with the constant {@code 0x0.3e444ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3e444ep125F}.
      * <pre>
      * <font style='background-color: #27221F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #27221F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #27221F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #27221F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #27221F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #27221F'>&nbsp;@&nbsp;</font><font style='background-color: #27221F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3065,7 +3065,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Insect Screen" has RGB code {@code 0x2D4436}, hue 0.3985507, saturation 0.33823532, and value 0.26666668.
-     * It can be represented as a packed float with the constant {@code 0x0.6c885ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6c885ap125F}.
      * <pre>
      * <font style='background-color: #2D4436; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2D4436; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2D4436; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2D4436'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2D4436'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2D4436'>&nbsp;@&nbsp;</font><font style='background-color: #2D4436; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3079,7 +3079,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Inside Of A Bottle" has RGB code {@code 0xC6C2B6}, hue 0.125, saturation 0.08080807, and value 0.7764706.
-     * It can be represented as a packed float with the constant {@code 0x1.6d858cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6d858cp126F}.
      * <pre>
      * <font style='background-color: #C6C2B6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C6C2B6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C6C2B6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C6C2B6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C6C2B6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C6C2B6'>&nbsp;@&nbsp;</font><font style='background-color: #C6C2B6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3093,7 +3093,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "International Klein Blue" has RGB code {@code 0x002FA7}, hue 0.6197605, saturation 1.0, and value 0.654902.
-     * It can be represented as a packed float with the constant {@code 0x1.4e5ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4e5ep126F}.
      * <pre>
      * <font style='background-color: #002FA7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #002FA7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #002FA7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #002FA7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #002FA7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #002FA7'>&nbsp;@&nbsp;</font><font style='background-color: #002FA7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3107,7 +3107,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "International Orange" has RGB code {@code 0xFF4F00}, hue 0.051634014, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.009ffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.009ffep125F}.
      * <pre>
      * <font style='background-color: #FF4F00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF4F00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF4F00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF4F00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF4F00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF4F00'>&nbsp;@&nbsp;</font><font style='background-color: #FF4F00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3121,7 +3121,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Iris" has RGB code {@code 0x763568}, hue 0.86923075, saturation 0.5508474, and value 0.4627451.
-     * It can be represented as a packed float with the constant {@code 0x0.d06aecp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d06aecp125F}.
      * <pre>
      * <font style='background-color: #763568; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #763568; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #763568; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #763568'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #763568'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #763568'>&nbsp;@&nbsp;</font><font style='background-color: #763568; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3135,7 +3135,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Iron" has RGB code {@code 0x2B3733}, hue 0.44444442, saturation 0.2181818, and value 0.21568628.
-     * It can be represented as a packed float with the constant {@code 0x0.666e56p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.666e56p125F}.
      * <pre>
      * <font style='background-color: #2B3733; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2B3733; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2B3733; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2B3733'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2B3733'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2B3733'>&nbsp;@&nbsp;</font><font style='background-color: #2B3733; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3149,7 +3149,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ironhead Flower" has RGB code {@code 0x344D56}, hue 0.5441177, saturation 0.39534885, and value 0.3372549.
-     * It can be represented as a packed float with the constant {@code 0x0.ac9a68p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ac9a68p125F}.
      * <pre>
      * <font style='background-color: #344D56; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #344D56; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #344D56; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #344D56'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #344D56'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #344D56'>&nbsp;@&nbsp;</font><font style='background-color: #344D56; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3163,7 +3163,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Iron Storage" has RGB code {@code 0x2B3736}, hue 0.4861111, saturation 0.2181818, and value 0.21568628.
-     * It can be represented as a packed float with the constant {@code 0x0.6c6e56p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6c6e56p125F}.
      * <pre>
      * <font style='background-color: #2B3736; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2B3736; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2B3736; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2B3736'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2B3736'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2B3736'>&nbsp;@&nbsp;</font><font style='background-color: #2B3736; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3177,7 +3177,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Islamic Green" has RGB code {@code 0x009000}, hue 0.33333337, saturation 1.0, and value 0.5647059.
-     * It can be represented as a packed float with the constant {@code 0x0.012p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.012p125F}.
      * <pre>
      * <font style='background-color: #009000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #009000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #009000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #009000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #009000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #009000'>&nbsp;@&nbsp;</font><font style='background-color: #009000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3191,7 +3191,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ivory" has RGB code {@code 0xFFFFF0}, hue 0.16666669, saturation 0.058823526, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.e1fffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e1fffep126F}.
      * <pre>
      * <font style='background-color: #FFFFF0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFF0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFFFF0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFFFF0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFFFF0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFFFF0'>&nbsp;@&nbsp;</font><font style='background-color: #FFFFF0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3205,7 +3205,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Iwai Brown" has RGB code {@code 0x5E5545}, hue 0.106666684, saturation 0.26595742, and value 0.36862746.
-     * It can be represented as a packed float with the constant {@code 0x0.8aaabcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8aaabcp125F}.
      * <pre>
      * <font style='background-color: #5E5545; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5E5545; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5E5545; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5E5545'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5E5545'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5E5545'>&nbsp;@&nbsp;</font><font style='background-color: #5E5545; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3219,7 +3219,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Jade" has RGB code {@code 0x00A86B}, hue 0.43948412, saturation 1.0, and value 0.65882355.
-     * It can be represented as a packed float with the constant {@code 0x0.d75p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d75p125F}.
      * <pre>
      * <font style='background-color: #00A86B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00A86B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00A86B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00A86B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00A86B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00A86B'>&nbsp;@&nbsp;</font><font style='background-color: #00A86B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3233,7 +3233,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Japanese Indigo" has RGB code {@code 0x264348}, hue 0.5245098, saturation 0.47222224, and value 0.28235295.
-     * It can be represented as a packed float with the constant {@code 0x0.90864cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.90864cp125F}.
      * <pre>
      * <font style='background-color: #264348; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #264348; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #264348; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #264348'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #264348'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #264348'>&nbsp;@&nbsp;</font><font style='background-color: #264348; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3247,7 +3247,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Japanese Iris" has RGB code {@code 0x7F5D3B}, hue 0.08333337, saturation 0.53543305, and value 0.49803922.
-     * It can be represented as a packed float with the constant {@code 0x0.76bafep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.76bafep125F}.
      * <pre>
      * <font style='background-color: #7F5D3B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F5D3B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7F5D3B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7F5D3B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7F5D3B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7F5D3B'>&nbsp;@&nbsp;</font><font style='background-color: #7F5D3B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3261,7 +3261,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Japanese Pale Blue" has RGB code {@code 0x8C9C76}, hue 0.2368421, saturation 0.24358977, and value 0.6117647.
-     * It can be represented as a packed float with the constant {@code 0x0.ed3918p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ed3918p125F}.
      * <pre>
      * <font style='background-color: #8C9C76; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C9C76; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8C9C76; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8C9C76'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8C9C76'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8C9C76'>&nbsp;@&nbsp;</font><font style='background-color: #8C9C76; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3275,7 +3275,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Japanese Triandra Grass" has RGB code {@code 0xE2B13C}, hue 0.11746985, saturation 0.7345133, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x0.7963c4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7963c4p125F}.
      * <pre>
      * <font style='background-color: #E2B13C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E2B13C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E2B13C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E2B13C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E2B13C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E2B13C'>&nbsp;@&nbsp;</font><font style='background-color: #E2B13C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3289,7 +3289,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Kelly Green" has RGB code {@code 0x4CBB17}, hue 0.27947164, saturation 0.87700534, and value 0.73333335.
-     * It can be represented as a packed float with the constant {@code 0x0.2f7698p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2f7698p125F}.
      * <pre>
      * <font style='background-color: #4CBB17; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4CBB17; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4CBB17; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4CBB17'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4CBB17'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4CBB17'>&nbsp;@&nbsp;</font><font style='background-color: #4CBB17; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3303,7 +3303,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Khaki" has RGB code {@code 0xC3B091}, hue 0.103333354, saturation 0.25641024, and value 0.7647059.
-     * It can be represented as a packed float with the constant {@code 0x1.236186p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.236186p126F}.
      * <pre>
      * <font style='background-color: #C3B091; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C3B091; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C3B091; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C3B091'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C3B091'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C3B091'>&nbsp;@&nbsp;</font><font style='background-color: #C3B091; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3317,7 +3317,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Kimono Storage" has RGB code {@code 0x3D4C51}, hue 0.5416667, saturation 0.2469136, and value 0.31764707.
-     * It can be represented as a packed float with the constant {@code 0x0.a2987ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a2987ap125F}.
      * <pre>
      * <font style='background-color: #3D4C51; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3D4C51; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3D4C51; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3D4C51'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3D4C51'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3D4C51'>&nbsp;@&nbsp;</font><font style='background-color: #3D4C51; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3331,7 +3331,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lapis Lazuli" has RGB code {@code 0x1F4788}, hue 0.60317457, saturation 0.77205884, and value 0.53333336.
-     * It can be represented as a packed float with the constant {@code 0x1.108e3ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.108e3ep126F}.
      * <pre>
      * <font style='background-color: #1F4788; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1F4788; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1F4788; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1F4788'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1F4788'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1F4788'>&nbsp;@&nbsp;</font><font style='background-color: #1F4788; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3345,7 +3345,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender Floral" has RGB code {@code 0xB57EDC}, hue 0.7641843, saturation 0.42727274, and value 0.8627451.
-     * It can be represented as a packed float with the constant {@code 0x1.b8fd6ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b8fd6ap126F}.
      * <pre>
      * <font style='background-color: #B57EDC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B57EDC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B57EDC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B57EDC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B57EDC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B57EDC'>&nbsp;@&nbsp;</font><font style='background-color: #B57EDC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3359,7 +3359,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender" has RGB code {@code 0xE6E6FA}, hue 0.6666667, saturation 0.08, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x1.f5cdccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f5cdccp126F}.
      * <pre>
      * <font style='background-color: #E6E6FA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E6E6FA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E6E6FA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E6E6FA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E6E6FA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E6E6FA'>&nbsp;@&nbsp;</font><font style='background-color: #E6E6FA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3373,7 +3373,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender Blue" has RGB code {@code 0xCCCCFF}, hue 0.6666667, saturation 0.19999999, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ff9998p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ff9998p126F}.
      * <pre>
      * <font style='background-color: #CCCCFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CCCCFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CCCCFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CCCCFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CCCCFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CCCCFF'>&nbsp;@&nbsp;</font><font style='background-color: #CCCCFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3387,7 +3387,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender Blush" has RGB code {@code 0xFFF0F5}, hue 0.9444444, saturation 0.058823526, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ebe1fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ebe1fep126F}.
      * <pre>
      * <font style='background-color: #FFF0F5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFF0F5; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFF0F5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFF0F5'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFF0F5'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFF0F5'>&nbsp;@&nbsp;</font><font style='background-color: #FFF0F5; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3401,7 +3401,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender Gray" has RGB code {@code 0xC4C3D0}, hue 0.6794872, saturation 0.062499996, and value 0.8156863.
-     * It can be represented as a packed float with the constant {@code 0x1.a18788p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a18788p126F}.
      * <pre>
      * <font style='background-color: #C4C3D0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C4C3D0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C4C3D0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C4C3D0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C4C3D0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C4C3D0'>&nbsp;@&nbsp;</font><font style='background-color: #C4C3D0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3415,7 +3415,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender Magenta" has RGB code {@code 0xEE82EE}, hue 0.8333333, saturation 0.4537815, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.dd05dcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.dd05dcp126F}.
      * <pre>
      * <font style='background-color: #EE82EE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EE82EE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EE82EE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EE82EE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EE82EE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EE82EE'>&nbsp;@&nbsp;</font><font style='background-color: #EE82EE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3429,7 +3429,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender Pink" has RGB code {@code 0xFBAED2}, hue 0.9220779, saturation 0.3067729, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x1.a55df6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a55df6p126F}.
      * <pre>
      * <font style='background-color: #FBAED2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FBAED2; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FBAED2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FBAED2'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FBAED2'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FBAED2'>&nbsp;@&nbsp;</font><font style='background-color: #FBAED2; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3443,7 +3443,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender Purple" has RGB code {@code 0x967BB6}, hue 0.7429378, saturation 0.32417583, and value 0.7137255.
-     * It can be represented as a packed float with the constant {@code 0x1.6cf72cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6cf72cp126F}.
      * <pre>
      * <font style='background-color: #967BB6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #967BB6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #967BB6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #967BB6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #967BB6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #967BB6'>&nbsp;@&nbsp;</font><font style='background-color: #967BB6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3457,7 +3457,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lavender Rose" has RGB code {@code 0xFBA0E3}, hue 0.87728935, saturation 0.36254978, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x1.c741f6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c741f6p126F}.
      * <pre>
      * <font style='background-color: #FBA0E3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FBA0E3; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FBA0E3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FBA0E3'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FBA0E3'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FBA0E3'>&nbsp;@&nbsp;</font><font style='background-color: #FBA0E3; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3471,7 +3471,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lawn Green" has RGB code {@code 0x7CFC00}, hue 0.2513227, saturation 1.0, and value 0.9882353.
-     * It can be represented as a packed float with the constant {@code 0x0.01f8f8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01f8f8p125F}.
      * <pre>
      * <font style='background-color: #7CFC00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7CFC00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7CFC00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7CFC00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7CFC00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7CFC00'>&nbsp;@&nbsp;</font><font style='background-color: #7CFC00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3485,7 +3485,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Legal Dye" has RGB code {@code 0x2E211B}, hue 0.052631557, saturation 0.4130435, and value 0.18039216.
-     * It can be represented as a packed float with the constant {@code 0x0.36425cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.36425cp125F}.
      * <pre>
      * <font style='background-color: #2E211B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2E211B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2E211B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2E211B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2E211B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2E211B'>&nbsp;@&nbsp;</font><font style='background-color: #2E211B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3499,7 +3499,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lemon" has RGB code {@code 0xFDE910}, hue 0.15260202, saturation 0.9367589, and value 0.99215686.
-     * It can be represented as a packed float with the constant {@code 0x0.21d3fap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.21d3fap125F}.
      * <pre>
      * <font style='background-color: #FDE910; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FDE910; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FDE910; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FDE910'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FDE910'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FDE910'>&nbsp;@&nbsp;</font><font style='background-color: #FDE910; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3513,7 +3513,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lemon Chiffon" has RGB code {@code 0xFFFACD}, hue 0.15000004, saturation 0.19607842, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.9bf5fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9bf5fep126F}.
      * <pre>
      * <font style='background-color: #FFFACD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFACD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFFACD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFFACD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFFACD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFFACD'>&nbsp;@&nbsp;</font><font style='background-color: #FFFACD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3527,7 +3527,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Blue" has RGB code {@code 0xADD8E6}, hue 0.5409357, saturation 0.24782607, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x1.cdb15ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cdb15ap126F}.
      * <pre>
      * <font style='background-color: #ADD8E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ADD8E6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ADD8E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ADD8E6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ADD8E6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ADD8E6'>&nbsp;@&nbsp;</font><font style='background-color: #ADD8E6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3541,7 +3541,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Blue Dye" has RGB code {@code 0x48929B}, hue 0.51807237, saturation 0.5354839, and value 0.60784316.
-     * It can be represented as a packed float with the constant {@code 0x1.37249p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.37249p126F}.
      * <pre>
      * <font style='background-color: #48929B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #48929B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #48929B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #48929B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #48929B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #48929B'>&nbsp;@&nbsp;</font><font style='background-color: #48929B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3555,7 +3555,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Blue Flower" has RGB code {@code 0x1D697C}, hue 0.5333334, saturation 0.766129, and value 0.4862745.
-     * It can be represented as a packed float with the constant {@code 0x0.f8d23ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f8d23ap125F}.
      * <pre>
      * <font style='background-color: #1D697C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1D697C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1D697C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1D697C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1D697C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1D697C'>&nbsp;@&nbsp;</font><font style='background-color: #1D697C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3569,7 +3569,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Blue Silk" has RGB code {@code 0x044F67}, hue 0.540404, saturation 0.9611651, and value 0.40392157.
-     * It can be represented as a packed float with the constant {@code 0x0.ce9e08p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ce9e08p125F}.
      * <pre>
      * <font style='background-color: #044F67; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #044F67; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #044F67; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #044F67'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #044F67'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #044F67'>&nbsp;@&nbsp;</font><font style='background-color: #044F67; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3583,7 +3583,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Gray" has RGB code {@code 0xC0C0C0}, hue 0.0, saturation 0.0, and value 0.7529412.
-     * It can be represented as a packed float with the constant {@code 0x1.81818p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.81818p126F}.
      * <pre>
      * <font style='background-color: #C0C0C0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C0C0C0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C0C0C0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C0C0C0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C0C0C0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C0C0C0'>&nbsp;@&nbsp;</font><font style='background-color: #C0C0C0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3597,7 +3597,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Khaki" has RGB code {@code 0xF0E68C}, hue 0.15000004, saturation 0.41666663, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x1.19cdep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.19cdep126F}.
      * <pre>
      * <font style='background-color: #F0E68C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F0E68C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F0E68C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F0E68C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F0E68C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F0E68C'>&nbsp;@&nbsp;</font><font style='background-color: #F0E68C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3611,7 +3611,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Lime" has RGB code {@code 0xBFFF00}, hue 0.20849675, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01ff7ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01ff7ep125F}.
      * <pre>
      * <font style='background-color: #BFFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFFF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BFFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #BFFF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3625,7 +3625,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Maroon" has RGB code {@code 0xB03060}, hue 0.9375, saturation 0.72727275, and value 0.6901961.
-     * It can be represented as a packed float with the constant {@code 0x0.c0616p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c0616p125F}.
      * <pre>
      * <font style='background-color: #B03060; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B03060; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B03060; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B03060'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B03060'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B03060'>&nbsp;@&nbsp;</font><font style='background-color: #B03060; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3639,7 +3639,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Pink" has RGB code {@code 0xFFB6C1}, hue 0.9748858, saturation 0.2862745, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.836dfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.836dfep126F}.
      * <pre>
      * <font style='background-color: #FFB6C1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFB6C1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFB6C1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFB6C1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFB6C1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFB6C1'>&nbsp;@&nbsp;</font><font style='background-color: #FFB6C1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3653,7 +3653,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Violet" has RGB code {@code 0xEE82EE}, hue 0.8333333, saturation 0.4537815, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.dd05dcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.dd05dcp126F}.
      * <pre>
      * <font style='background-color: #EE82EE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EE82EE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EE82EE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EE82EE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EE82EE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EE82EE'>&nbsp;@&nbsp;</font><font style='background-color: #EE82EE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3667,7 +3667,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Light Yellow Dye" has RGB code {@code 0xF7BB7D}, hue 0.08469951, saturation 0.49392712, and value 0.96862745.
-     * It can be represented as a packed float with the constant {@code 0x0.fb77eep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fb77eep125F}.
      * <pre>
      * <font style='background-color: #F7BB7D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F7BB7D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F7BB7D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F7BB7D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F7BB7D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F7BB7D'>&nbsp;@&nbsp;</font><font style='background-color: #F7BB7D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3681,7 +3681,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lilac" has RGB code {@code 0xC8A2C8}, hue 0.8333333, saturation 0.18999998, and value 0.78431374.
-     * It can be represented as a packed float with the constant {@code 0x1.91459p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.91459p126F}.
      * <pre>
      * <font style='background-color: #C8A2C8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C8A2C8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C8A2C8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C8A2C8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C8A2C8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C8A2C8'>&nbsp;@&nbsp;</font><font style='background-color: #C8A2C8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3695,7 +3695,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lime" has RGB code {@code 0x00FF00}, hue 0.3333333, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01fep125F}.
      * <pre>
      * <font style='background-color: #00FF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00FF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00FF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00FF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00FF00'>&nbsp;@&nbsp;</font><font style='background-color: #00FF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3709,7 +3709,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lime Green" has RGB code {@code 0x32CD32}, hue 0.33333337, saturation 0.75609756, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x0.659a64p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.659a64p125F}.
      * <pre>
      * <font style='background-color: #32CD32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #32CD32; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #32CD32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #32CD32'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #32CD32'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #32CD32'>&nbsp;@&nbsp;</font><font style='background-color: #32CD32; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3723,7 +3723,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Linen" has RGB code {@code 0xFAF0E6}, hue 0.08333337, saturation 0.08, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x1.cde1f4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cde1f4p126F}.
      * <pre>
      * <font style='background-color: #FAF0E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FAF0E6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FAF0E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FAF0E6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FAF0E6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FAF0E6'>&nbsp;@&nbsp;</font><font style='background-color: #FAF0E6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3737,7 +3737,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Long Spring" has RGB code {@code 0xB95754}, hue 0.004950464, saturation 0.54594594, and value 0.7254902.
-     * It can be represented as a packed float with the constant {@code 0x0.a8af72p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a8af72p125F}.
      * <pre>
      * <font style='background-color: #B95754; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B95754; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B95754; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B95754'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B95754'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B95754'>&nbsp;@&nbsp;</font><font style='background-color: #B95754; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3751,7 +3751,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Loquat Brown" has RGB code {@code 0xAB6134}, hue 0.06302518, saturation 0.69590646, and value 0.67058825.
-     * It can be represented as a packed float with the constant {@code 0x0.68c356p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.68c356p125F}.
      * <pre>
      * <font style='background-color: #AB6134; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB6134; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AB6134; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AB6134'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AB6134'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AB6134'>&nbsp;@&nbsp;</font><font style='background-color: #AB6134; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3765,7 +3765,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Lye" has RGB code {@code 0x7F6B5D}, hue 0.06862748, saturation 0.26771653, and value 0.49803922.
-     * It can be represented as a packed float with the constant {@code 0x0.bad6fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bad6fep125F}.
      * <pre>
      * <font style='background-color: #7F6B5D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F6B5D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7F6B5D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7F6B5D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7F6B5D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7F6B5D'>&nbsp;@&nbsp;</font><font style='background-color: #7F6B5D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3779,7 +3779,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Magenta Dye" has RGB code {@code 0xCA1F7B}, hue 0.9103314, saturation 0.84653467, and value 0.7921569.
-     * It can be represented as a packed float with the constant {@code 0x0.f63f94p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f63f94p125F}.
      * <pre>
      * <font style='background-color: #CA1F7B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CA1F7B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CA1F7B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CA1F7B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CA1F7B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CA1F7B'>&nbsp;@&nbsp;</font><font style='background-color: #CA1F7B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3793,7 +3793,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Magic Mint" has RGB code {@code 0xAAF0D1}, hue 0.4261905, saturation 0.29166666, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x1.a3e154p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a3e154p126F}.
      * <pre>
      * <font style='background-color: #AAF0D1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AAF0D1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AAF0D1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AAF0D1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AAF0D1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AAF0D1'>&nbsp;@&nbsp;</font><font style='background-color: #AAF0D1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3807,7 +3807,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Magnolia" has RGB code {@code 0xF8F4FF}, hue 0.72727275, saturation 0.043137252, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ffe9fp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ffe9fp126F}.
      * <pre>
      * <font style='background-color: #F8F4FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F8F4FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F8F4FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F8F4FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F8F4FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F8F4FF'>&nbsp;@&nbsp;</font><font style='background-color: #F8F4FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3821,7 +3821,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Malachite" has RGB code {@code 0x0BDA51}, hue 0.38969404, saturation 0.9495413, and value 0.85490197.
-     * It can be represented as a packed float with the constant {@code 0x0.a3b416p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a3b416p125F}.
      * <pre>
      * <font style='background-color: #0BDA51; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0BDA51; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0BDA51; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0BDA51'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0BDA51'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0BDA51'>&nbsp;@&nbsp;</font><font style='background-color: #0BDA51; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3835,7 +3835,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Maroon" has RGB code {@code 0x800000}, hue 0.0, saturation 1.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x0.0001p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0001p125F}.
      * <pre>
      * <font style='background-color: #800000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #800000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #800000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #800000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #800000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #800000'>&nbsp;@&nbsp;</font><font style='background-color: #800000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3849,7 +3849,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Magenta" has RGB code {@code 0xFF00FF}, hue 0.8333333, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fe01fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fe01fep126F}.
      * <pre>
      * <font style='background-color: #FF00FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF00FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF00FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF00FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF00FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF00FF'>&nbsp;@&nbsp;</font><font style='background-color: #FF00FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3863,7 +3863,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Maya Blue" has RGB code {@code 0x73C2FB}, hue 0.5698529, saturation 0.5418326, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x1.f784e6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f784e6p126F}.
      * <pre>
      * <font style='background-color: #73C2FB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73C2FB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #73C2FB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #73C2FB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #73C2FB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #73C2FB'>&nbsp;@&nbsp;</font><font style='background-color: #73C2FB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3877,7 +3877,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mauve" has RGB code {@code 0xE0B0FF}, hue 0.76793253, saturation 0.3098039, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ff61cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ff61cp126F}.
      * <pre>
      * <font style='background-color: #E0B0FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E0B0FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E0B0FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E0B0FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E0B0FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E0B0FF'>&nbsp;@&nbsp;</font><font style='background-color: #E0B0FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3891,7 +3891,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mauve Taupe" has RGB code {@code 0x915F6D}, hue 0.9533334, saturation 0.3448276, and value 0.5686275.
-     * It can be represented as a packed float with the constant {@code 0x0.dabf22p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.dabf22p125F}.
      * <pre>
      * <font style='background-color: #915F6D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #915F6D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #915F6D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #915F6D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #915F6D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #915F6D'>&nbsp;@&nbsp;</font><font style='background-color: #915F6D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3905,7 +3905,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Meat" has RGB code {@code 0xF9906F}, hue 0.039855063, saturation 0.55421686, and value 0.9764706.
-     * It can be represented as a packed float with the constant {@code 0x0.df21f2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.df21f2p125F}.
      * <pre>
      * <font style='background-color: #F9906F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F9906F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F9906F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F9906F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F9906F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F9906F'>&nbsp;@&nbsp;</font><font style='background-color: #F9906F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3919,7 +3919,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Medium Blue" has RGB code {@code 0x0000CD}, hue 0.6666667, saturation 1.0, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x1.9ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9ap126F}.
      * <pre>
      * <font style='background-color: #0000CD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000CD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0000CD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0000CD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0000CD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0000CD'>&nbsp;@&nbsp;</font><font style='background-color: #0000CD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3933,7 +3933,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Medium Carmine" has RGB code {@code 0xAF4035}, hue 0.015027285, saturation 0.6971429, and value 0.6862745.
-     * It can be represented as a packed float with the constant {@code 0x0.6a815ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6a815ep125F}.
      * <pre>
      * <font style='background-color: #AF4035; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AF4035; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AF4035; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AF4035'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AF4035'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AF4035'>&nbsp;@&nbsp;</font><font style='background-color: #AF4035; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3947,7 +3947,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Medium Crimson" has RGB code {@code 0xC93756}, hue 0.9646119, saturation 0.7263682, and value 0.7882353.
-     * It can be represented as a packed float with the constant {@code 0x0.ac6f92p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ac6f92p125F}.
      * <pre>
      * <font style='background-color: #C93756; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C93756; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C93756; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C93756'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C93756'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C93756'>&nbsp;@&nbsp;</font><font style='background-color: #C93756; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3961,7 +3961,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Medium Lavender Magenta" has RGB code {@code 0xCC99CC}, hue 0.8333333, saturation 0.24999999, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x1.993398p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.993398p126F}.
      * <pre>
      * <font style='background-color: #CC99CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CC99CC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CC99CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CC99CC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CC99CC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CC99CC'>&nbsp;@&nbsp;</font><font style='background-color: #CC99CC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3975,7 +3975,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Medium Purple" has RGB code {@code 0x9370DB}, hue 0.72118384, saturation 0.4885845, and value 0.85882354.
-     * It can be represented as a packed float with the constant {@code 0x1.b6e126p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b6e126p126F}.
      * <pre>
      * <font style='background-color: #9370DB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9370DB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9370DB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9370DB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9370DB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9370DB'>&nbsp;@&nbsp;</font><font style='background-color: #9370DB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -3989,7 +3989,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Medium Spring Green" has RGB code {@code 0x00FA9A}, hue 0.436, saturation 1.0, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x1.35f4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.35f4p126F}.
      * <pre>
      * <font style='background-color: #00FA9A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FA9A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00FA9A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00FA9A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00FA9A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00FA9A'>&nbsp;@&nbsp;</font><font style='background-color: #00FA9A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4003,7 +4003,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Midori" has RGB code {@code 0x2A606B}, hue 0.5282052, saturation 0.6074766, and value 0.41960785.
-     * It can be represented as a packed float with the constant {@code 0x0.d6c054p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d6c054p125F}.
      * <pre>
      * <font style='background-color: #2A606B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2A606B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2A606B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2A606B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2A606B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2A606B'>&nbsp;@&nbsp;</font><font style='background-color: #2A606B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4017,7 +4017,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Midnight Blue" has RGB code {@code 0x003366}, hue 0.5833333, saturation 1.0, and value 0.4.
-     * It can be represented as a packed float with the constant {@code 0x0.cc66p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cc66p125F}.
      * <pre>
      * <font style='background-color: #003366; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #003366; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #003366; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #003366'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #003366'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #003366'>&nbsp;@&nbsp;</font><font style='background-color: #003366; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4031,7 +4031,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mint Green" has RGB code {@code 0x98FF98}, hue 0.3333333, saturation 0.40392154, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.31ff3p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.31ff3p126F}.
      * <pre>
      * <font style='background-color: #98FF98; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #98FF98; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #98FF98; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #98FF98'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #98FF98'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #98FF98'>&nbsp;@&nbsp;</font><font style='background-color: #98FF98; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4045,7 +4045,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Misty Rose" has RGB code {@code 0xFFE4E1}, hue 0.01666671, saturation 0.11764705, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.c3c9fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c3c9fep126F}.
      * <pre>
      * <font style='background-color: #FFE4E1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFE4E1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFE4E1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFE4E1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFE4E1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFE4E1'>&nbsp;@&nbsp;</font><font style='background-color: #FFE4E1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4059,7 +4059,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Moss" has RGB code {@code 0x8B7D3A}, hue 0.13786012, saturation 0.58273387, and value 0.54509807.
-     * It can be represented as a packed float with the constant {@code 0x0.74fb16p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.74fb16p125F}.
      * <pre>
      * <font style='background-color: #8B7D3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8B7D3A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8B7D3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8B7D3A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8B7D3A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8B7D3A'>&nbsp;@&nbsp;</font><font style='background-color: #8B7D3A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4073,7 +4073,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Moss Green" has RGB code {@code 0xADDFAD}, hue 0.3333333, saturation 0.22421522, and value 0.8745098.
-     * It can be represented as a packed float with the constant {@code 0x1.5bbf5ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5bbf5ap126F}.
      * <pre>
      * <font style='background-color: #ADDFAD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ADDFAD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ADDFAD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ADDFAD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ADDFAD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ADDFAD'>&nbsp;@&nbsp;</font><font style='background-color: #ADDFAD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4087,7 +4087,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mountbatten Pink" has RGB code {@code 0x997A8D}, hue 0.89784944, saturation 0.20261441, and value 0.6.
-     * It can be represented as a packed float with the constant {@code 0x1.1af532p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1af532p126F}.
      * <pre>
      * <font style='background-color: #997A8D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #997A8D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #997A8D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #997A8D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #997A8D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #997A8D'>&nbsp;@&nbsp;</font><font style='background-color: #997A8D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4101,7 +4101,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mousy Indigo" has RGB code {@code 0x5C544E}, hue 0.0714286, saturation 0.1521739, and value 0.36078432.
-     * It can be represented as a packed float with the constant {@code 0x0.9ca8b8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9ca8b8p125F}.
      * <pre>
      * <font style='background-color: #5C544E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5C544E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5C544E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5C544E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5C544E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5C544E'>&nbsp;@&nbsp;</font><font style='background-color: #5C544E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4115,7 +4115,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mousy Wisteria" has RGB code {@code 0x766980}, hue 0.76086944, saturation 0.17968754, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x1.00d2ecp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.00d2ecp126F}.
      * <pre>
      * <font style='background-color: #766980; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #766980; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #766980; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #766980'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #766980'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #766980'>&nbsp;@&nbsp;</font><font style='background-color: #766980; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4129,7 +4129,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mulberry" has RGB code {@code 0x59292C}, hue 0.9895833, saturation 0.53932583, and value 0.34901962.
-     * It can be represented as a packed float with the constant {@code 0x0.5852b2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5852b2p125F}.
      * <pre>
      * <font style='background-color: #59292C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #59292C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #59292C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #59292C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #59292C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #59292C'>&nbsp;@&nbsp;</font><font style='background-color: #59292C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4143,7 +4143,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mulberry Dyed" has RGB code {@code 0xC57F2E}, hue 0.08940393, saturation 0.7664975, and value 0.77254903.
-     * It can be represented as a packed float with the constant {@code 0x0.5cff8ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5cff8ap125F}.
      * <pre>
      * <font style='background-color: #C57F2E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C57F2E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C57F2E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C57F2E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C57F2E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C57F2E'>&nbsp;@&nbsp;</font><font style='background-color: #C57F2E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4157,7 +4157,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Mustard" has RGB code {@code 0xFFDB58}, hue 0.1307385, saturation 0.654902, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.b1b7fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b1b7fep125F}.
      * <pre>
      * <font style='background-color: #FFDB58; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFDB58; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFDB58; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFDB58'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFDB58'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFDB58'>&nbsp;@&nbsp;</font><font style='background-color: #FFDB58; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4171,7 +4171,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Myrtle" has RGB code {@code 0x21421E}, hue 0.31944436, saturation 0.5454546, and value 0.25882354.
-     * It can be represented as a packed float with the constant {@code 0x0.3c8442p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3c8442p125F}.
      * <pre>
      * <font style='background-color: #21421E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #21421E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #21421E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #21421E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #21421E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #21421E'>&nbsp;@&nbsp;</font><font style='background-color: #21421E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4185,7 +4185,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Navajo White" has RGB code {@code 0xFFDEAD}, hue 0.09959352, saturation 0.3215686, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.5bbdfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5bbdfep126F}.
      * <pre>
      * <font style='background-color: #FFDEAD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFDEAD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFDEAD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFDEAD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFDEAD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFDEAD'>&nbsp;@&nbsp;</font><font style='background-color: #FFDEAD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4199,7 +4199,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Navy Blue" has RGB code {@code 0x000080}, hue 0.6666666, saturation 1.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x1.0p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0p126F}.
      * <pre>
      * <font style='background-color: #000080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000080; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #000080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000080'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #000080'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #000080'>&nbsp;@&nbsp;</font><font style='background-color: #000080; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4213,7 +4213,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Navy Blue Bellflower" has RGB code {@code 0x191F45}, hue 0.64393944, saturation 0.6376812, and value 0.27058825.
-     * It can be represented as a packed float with the constant {@code 0x0.8a3e32p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8a3e32p125F}.
      * <pre>
      * <font style='background-color: #191F45; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #191F45; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #191F45; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #191F45'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #191F45'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #191F45'>&nbsp;@&nbsp;</font><font style='background-color: #191F45; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4227,7 +4227,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Navy Blue Dye" has RGB code {@code 0x003171}, hue 0.5943952, saturation 1.0, and value 0.44313726.
-     * It can be represented as a packed float with the constant {@code 0x0.e262p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e262p125F}.
      * <pre>
      * <font style='background-color: #003171; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #003171; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #003171; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #003171'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #003171'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #003171'>&nbsp;@&nbsp;</font><font style='background-color: #003171; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4241,7 +4241,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "New Bridge" has RGB code {@code 0x006C7F}, hue 0.52493435, saturation 1.0, and value 0.49803922.
-     * It can be represented as a packed float with the constant {@code 0x0.fed8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fed8p125F}.
      * <pre>
      * <font style='background-color: #006C7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #006C7F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #006C7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #006C7F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #006C7F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #006C7F'>&nbsp;@&nbsp;</font><font style='background-color: #006C7F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4255,7 +4255,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Nightingale" has RGB code {@code 0x645530}, hue 0.11858976, saturation 0.52, and value 0.39215687.
-     * It can be represented as a packed float with the constant {@code 0x0.60aac8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.60aac8p125F}.
      * <pre>
      * <font style='background-color: #645530; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #645530; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #645530; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #645530'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #645530'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #645530'>&nbsp;@&nbsp;</font><font style='background-color: #645530; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4269,7 +4269,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Nightingale Brown" has RGB code {@code 0x5C4827}, hue 0.103773594, saturation 0.57608694, and value 0.36078432.
-     * It can be represented as a packed float with the constant {@code 0x0.4e90b8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4e90b8p125F}.
      * <pre>
      * <font style='background-color: #5C4827; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5C4827; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5C4827; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5C4827'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5C4827'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5C4827'>&nbsp;@&nbsp;</font><font style='background-color: #5C4827; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4283,7 +4283,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ocean Blue" has RGB code {@code 0x50B0B8}, hue 0.51282054, saturation 0.5652174, and value 0.72156864.
-     * It can be represented as a packed float with the constant {@code 0x1.7160ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7160ap126F}.
      * <pre>
      * <font style='background-color: #50B0B8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #50B0B8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #50B0B8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #50B0B8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #50B0B8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #50B0B8'>&nbsp;@&nbsp;</font><font style='background-color: #50B0B8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4297,7 +4297,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ochre" has RGB code {@code 0xCC7722}, hue 0.08333331, saturation 0.8333334, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x0.44ef98p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.44ef98p125F}.
      * <pre>
      * <font style='background-color: #CC7722; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CC7722; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CC7722; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CC7722'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CC7722'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CC7722'>&nbsp;@&nbsp;</font><font style='background-color: #CC7722; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4311,7 +4311,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Old Bamboo" has RGB code {@code 0x5E644F}, hue 0.21428567, saturation 0.20999998, and value 0.39215687.
-     * It can be represented as a packed float with the constant {@code 0x0.9ec8bcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9ec8bcp125F}.
      * <pre>
      * <font style='background-color: #5E644F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5E644F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5E644F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5E644F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5E644F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5E644F'>&nbsp;@&nbsp;</font><font style='background-color: #5E644F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4325,7 +4325,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Old Gold" has RGB code {@code 0xCFB53B}, hue 0.13738734, saturation 0.7149759, and value 0.8117647.
-     * It can be represented as a packed float with the constant {@code 0x0.776b9ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.776b9ep125F}.
      * <pre>
      * <font style='background-color: #CFB53B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CFB53B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CFB53B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CFB53B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CFB53B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CFB53B'>&nbsp;@&nbsp;</font><font style='background-color: #CFB53B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4339,7 +4339,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Old Lace" has RGB code {@code 0xFDF5E6}, hue 0.108695686, saturation 0.090909086, and value 0.99215686.
-     * It can be represented as a packed float with the constant {@code 0x1.cdebfap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cdebfap126F}.
      * <pre>
      * <font style='background-color: #FDF5E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FDF5E6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FDF5E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FDF5E6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FDF5E6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FDF5E6'>&nbsp;@&nbsp;</font><font style='background-color: #FDF5E6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4353,7 +4353,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Old Lavender" has RGB code {@code 0x796878}, hue 0.84313726, saturation 0.14049585, and value 0.4745098.
-     * It can be represented as a packed float with the constant {@code 0x0.f0d0f2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f0d0f2p125F}.
      * <pre>
      * <font style='background-color: #796878; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #796878; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #796878; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #796878'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #796878'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #796878'>&nbsp;@&nbsp;</font><font style='background-color: #796878; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4367,7 +4367,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Old Rose" has RGB code {@code 0xC08081}, hue 0.9973958, saturation 0.3333333, and value 0.7529412.
-     * It can be represented as a packed float with the constant {@code 0x1.03018p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.03018p126F}.
      * <pre>
      * <font style='background-color: #C08081; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C08081; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C08081; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C08081'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C08081'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C08081'>&nbsp;@&nbsp;</font><font style='background-color: #C08081; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4381,7 +4381,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Olive" has RGB code {@code 0x808000}, hue 0.16666663, saturation 1.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x0.0101p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0101p125F}.
      * <pre>
      * <font style='background-color: #808000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #808000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #808000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #808000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #808000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #808000'>&nbsp;@&nbsp;</font><font style='background-color: #808000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4395,7 +4395,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Olive Drab" has RGB code {@code 0x6B8E23}, hue 0.2211839, saturation 0.75352114, and value 0.5568628.
-     * It can be represented as a packed float with the constant {@code 0x0.471cd6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.471cd6p125F}.
      * <pre>
      * <font style='background-color: #6B8E23; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6B8E23; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6B8E23; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6B8E23'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6B8E23'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6B8E23'>&nbsp;@&nbsp;</font><font style='background-color: #6B8E23; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4409,7 +4409,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Olivine" has RGB code {@code 0x9AB973}, hue 0.24047625, saturation 0.3783784, and value 0.7254902.
-     * It can be represented as a packed float with the constant {@code 0x0.e77334p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e77334p125F}.
      * <pre>
      * <font style='background-color: #9AB973; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9AB973; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9AB973; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9AB973'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9AB973'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9AB973'>&nbsp;@&nbsp;</font><font style='background-color: #9AB973; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4423,7 +4423,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Onando" has RGB code {@code 0x364141}, hue 0.5, saturation 0.1692308, and value 0.25490198.
-     * It can be represented as a packed float with the constant {@code 0x0.82826cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.82826cp125F}.
      * <pre>
      * <font style='background-color: #364141; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #364141; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #364141; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #364141'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #364141'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #364141'>&nbsp;@&nbsp;</font><font style='background-color: #364141; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4437,7 +4437,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "One Kin Dye" has RGB code {@code 0xF08F90}, hue 0.9982818, saturation 0.40416664, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x1.211fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.211fep126F}.
      * <pre>
      * <font style='background-color: #F08F90; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F08F90; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F08F90; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F08F90'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F08F90'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F08F90'>&nbsp;@&nbsp;</font><font style='background-color: #F08F90; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4451,7 +4451,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Opposite Flower" has RGB code {@code 0x4D646C}, hue 0.5430108, saturation 0.28703701, and value 0.42352942.
-     * It can be represented as a packed float with the constant {@code 0x0.d8c89ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d8c89ap125F}.
      * <pre>
      * <font style='background-color: #4D646C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4D646C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4D646C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4D646C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4D646C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4D646C'>&nbsp;@&nbsp;</font><font style='background-color: #4D646C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4465,7 +4465,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Orange" has RGB code {@code 0xFFC800}, hue 0.130719, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0191fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0191fep125F}.
      * <pre>
      * <font style='background-color: #FFC800; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFC800; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFC800; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFC800'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFC800'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFC800'>&nbsp;@&nbsp;</font><font style='background-color: #FFC800; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4479,7 +4479,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Orange Peel" has RGB code {@code 0xFFA000}, hue 0.10457522, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0141fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0141fep125F}.
      * <pre>
      * <font style='background-color: #FFA000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFA000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFA000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFA000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFA000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFA000'>&nbsp;@&nbsp;</font><font style='background-color: #FFA000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4493,7 +4493,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Orange Red" has RGB code {@code 0xFF4500}, hue 0.045098066, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.008bfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.008bfep125F}.
      * <pre>
      * <font style='background-color: #FF4500; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF4500; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF4500; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF4500'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF4500'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF4500'>&nbsp;@&nbsp;</font><font style='background-color: #FF4500; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4507,7 +4507,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Orangutan" has RGB code {@code 0xDC3023}, hue 0.011711657, saturation 0.8409091, and value 0.8627451.
-     * It can be represented as a packed float with the constant {@code 0x0.4661b8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4661b8p125F}.
      * <pre>
      * <font style='background-color: #DC3023; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DC3023; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DC3023; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DC3023'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DC3023'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DC3023'>&nbsp;@&nbsp;</font><font style='background-color: #DC3023; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4521,7 +4521,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Orchid" has RGB code {@code 0xDA70D6}, hue 0.8396226, saturation 0.48623854, and value 0.85490197.
-     * It can be represented as a packed float with the constant {@code 0x1.ace1b4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ace1b4p126F}.
      * <pre>
      * <font style='background-color: #DA70D6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA70D6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DA70D6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DA70D6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DA70D6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DA70D6'>&nbsp;@&nbsp;</font><font style='background-color: #DA70D6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4535,7 +4535,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Overdyed Red Brown" has RGB code {@code 0xE35C38}, hue 0.035087705, saturation 0.753304, and value 0.8901961.
-     * It can be represented as a packed float with the constant {@code 0x0.70b9c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.70b9c6p125F}.
      * <pre>
      * <font style='background-color: #E35C38; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E35C38; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E35C38; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E35C38'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E35C38'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E35C38'>&nbsp;@&nbsp;</font><font style='background-color: #E35C38; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4549,7 +4549,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Blue" has RGB code {@code 0xAFEEEE}, hue 0.5, saturation 0.26470587, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.dddd5ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.dddd5ep126F}.
      * <pre>
      * <font style='background-color: #AFEEEE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AFEEEE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AFEEEE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AFEEEE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AFEEEE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AFEEEE'>&nbsp;@&nbsp;</font><font style='background-color: #AFEEEE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4563,7 +4563,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Brown" has RGB code {@code 0x987654}, hue 0.08333331, saturation 0.4473684, and value 0.59607846.
-     * It can be represented as a packed float with the constant {@code 0x0.a8ed3p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a8ed3p125F}.
      * <pre>
      * <font style='background-color: #987654; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #987654; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #987654; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #987654'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #987654'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #987654'>&nbsp;@&nbsp;</font><font style='background-color: #987654; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4577,7 +4577,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Carmine" has RGB code {@code 0xAF4035}, hue 0.015027285, saturation 0.6971429, and value 0.6862745.
-     * It can be represented as a packed float with the constant {@code 0x0.6a815ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6a815ep125F}.
      * <pre>
      * <font style='background-color: #AF4035; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AF4035; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AF4035; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AF4035'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AF4035'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AF4035'>&nbsp;@&nbsp;</font><font style='background-color: #AF4035; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4591,7 +4591,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Chestnut" has RGB code {@code 0xDDADAF}, hue 0.9930555, saturation 0.21719456, and value 0.8666667.
-     * It can be represented as a packed float with the constant {@code 0x1.5f5bbap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5f5bbap126F}.
      * <pre>
      * <font style='background-color: #DDADAF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DDADAF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DDADAF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DDADAF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DDADAF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DDADAF'>&nbsp;@&nbsp;</font><font style='background-color: #DDADAF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4605,7 +4605,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Cornflower Blue" has RGB code {@code 0xABCDEF}, hue 0.5833333, saturation 0.2845188, and value 0.9372549.
-     * It can be represented as a packed float with the constant {@code 0x1.df9b56p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.df9b56p126F}.
      * <pre>
      * <font style='background-color: #ABCDEF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABCDEF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ABCDEF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ABCDEF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ABCDEF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ABCDEF'>&nbsp;@&nbsp;</font><font style='background-color: #ABCDEF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4619,7 +4619,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Crimson" has RGB code {@code 0xF2666C}, hue 0.9928571, saturation 0.5785124, and value 0.9490196.
-     * It can be represented as a packed float with the constant {@code 0x0.d8cde4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d8cde4p125F}.
      * <pre>
      * <font style='background-color: #F2666C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F2666C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F2666C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F2666C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F2666C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F2666C'>&nbsp;@&nbsp;</font><font style='background-color: #F2666C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4633,7 +4633,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Fallen Leaves" has RGB code {@code 0xAA8736}, hue 0.11637926, saturation 0.68235296, and value 0.6666667.
-     * It can be represented as a packed float with the constant {@code 0x0.6d0f54p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6d0f54p125F}.
      * <pre>
      * <font style='background-color: #AA8736; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AA8736; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AA8736; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AA8736'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AA8736'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AA8736'>&nbsp;@&nbsp;</font><font style='background-color: #AA8736; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4647,7 +4647,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Green Onion" has RGB code {@code 0x749F8D}, hue 0.43023258, saturation 0.27044028, and value 0.62352943.
-     * It can be represented as a packed float with the constant {@code 0x1.1b3ee8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1b3ee8p126F}.
      * <pre>
      * <font style='background-color: #749F8D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #749F8D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #749F8D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #749F8D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #749F8D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #749F8D'>&nbsp;@&nbsp;</font><font style='background-color: #749F8D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4661,7 +4661,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Incense" has RGB code {@code 0xFFA565}, hue 0.069264114, saturation 0.60392153, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.cb4bfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cb4bfep125F}.
      * <pre>
      * <font style='background-color: #FFA565; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFA565; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFA565; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFA565'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFA565'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFA565'>&nbsp;@&nbsp;</font><font style='background-color: #FFA565; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4675,7 +4675,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Magenta" has RGB code {@code 0xF984E5}, hue 0.8618233, saturation 0.46987948, and value 0.9764706.
-     * It can be represented as a packed float with the constant {@code 0x1.cb09f2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cb09f2p126F}.
      * <pre>
      * <font style='background-color: #F984E5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F984E5; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F984E5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F984E5'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F984E5'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F984E5'>&nbsp;@&nbsp;</font><font style='background-color: #F984E5; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4689,7 +4689,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Oak" has RGB code {@code 0xBBA46D}, hue 0.117521346, saturation 0.41711232, and value 0.73333335.
-     * It can be represented as a packed float with the constant {@code 0x0.db4976p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.db4976p125F}.
      * <pre>
      * <font style='background-color: #BBA46D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BBA46D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BBA46D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BBA46D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BBA46D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BBA46D'>&nbsp;@&nbsp;</font><font style='background-color: #BBA46D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4703,7 +4703,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Persimmon" has RGB code {@code 0xFCA474}, hue 0.058823526, saturation 0.5396825, and value 0.9882353.
-     * It can be represented as a packed float with the constant {@code 0x0.e949f8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e949f8p125F}.
      * <pre>
      * <font style='background-color: #FCA474; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FCA474; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FCA474; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FCA474'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FCA474'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FCA474'>&nbsp;@&nbsp;</font><font style='background-color: #FCA474; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4717,7 +4717,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Pink" has RGB code {@code 0xFADADD}, hue 0.984375, saturation 0.12799999, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x1.bbb5f4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bbb5f4p126F}.
      * <pre>
      * <font style='background-color: #FADADD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FADADD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FADADD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FADADD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FADADD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FADADD'>&nbsp;@&nbsp;</font><font style='background-color: #FADADD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4731,7 +4731,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Red Violet" has RGB code {@code 0xDB7093}, hue 0.94548285, saturation 0.4885845, and value 0.85882354.
-     * It can be represented as a packed float with the constant {@code 0x1.26e1b6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.26e1b6p126F}.
      * <pre>
      * <font style='background-color: #DB7093; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DB7093; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DB7093; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DB7093'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DB7093'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DB7093'>&nbsp;@&nbsp;</font><font style='background-color: #DB7093; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4745,7 +4745,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pale Young Green Onion" has RGB code {@code 0x8DB255}, hue 0.232975, saturation 0.5224719, and value 0.69803923.
-     * It can be represented as a packed float with the constant {@code 0x0.ab651ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ab651ap125F}.
      * <pre>
      * <font style='background-color: #8DB255; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8DB255; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8DB255; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8DB255'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8DB255'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8DB255'>&nbsp;@&nbsp;</font><font style='background-color: #8DB255; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4759,7 +4759,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Papaya Whip" has RGB code {@code 0xFFEFD5}, hue 0.10317463, saturation 0.16470587, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.abdffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.abdffep126F}.
      * <pre>
      * <font style='background-color: #FFEFD5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFEFD5; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFEFD5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFEFD5'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFEFD5'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFEFD5'>&nbsp;@&nbsp;</font><font style='background-color: #FFEFD5; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4773,7 +4773,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pastel Green" has RGB code {@code 0x77DD77}, hue 0.3333333, saturation 0.46153846, and value 0.8666667.
-     * It can be represented as a packed float with the constant {@code 0x0.efbaeep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.efbaeep125F}.
      * <pre>
      * <font style='background-color: #77DD77; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #77DD77; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #77DD77; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #77DD77'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #77DD77'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #77DD77'>&nbsp;@&nbsp;</font><font style='background-color: #77DD77; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4787,7 +4787,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pastel Pink" has RGB code {@code 0xFFD1DC}, hue 0.96014494, saturation 0.18039215, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.b9a3fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b9a3fep126F}.
      * <pre>
      * <font style='background-color: #FFD1DC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFD1DC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFD1DC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFD1DC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFD1DC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFD1DC'>&nbsp;@&nbsp;</font><font style='background-color: #FFD1DC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4801,7 +4801,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Patina" has RGB code {@code 0x407A52}, hue 0.38505745, saturation 0.4754098, and value 0.47843137.
-     * It can be represented as a packed float with the constant {@code 0x0.a4f48p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a4f48p125F}.
      * <pre>
      * <font style='background-color: #407A52; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #407A52; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #407A52; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #407A52'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #407A52'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #407A52'>&nbsp;@&nbsp;</font><font style='background-color: #407A52; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4815,7 +4815,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Patrinia Flower" has RGB code {@code 0xD9B611}, hue 0.13750005, saturation 0.921659, and value 0.8509804.
-     * It can be represented as a packed float with the constant {@code 0x0.236db2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.236db2p125F}.
      * <pre>
      * <font style='background-color: #D9B611; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D9B611; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D9B611; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D9B611'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D9B611'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D9B611'>&nbsp;@&nbsp;</font><font style='background-color: #D9B611; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4829,7 +4829,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Peach" has RGB code {@code 0xFFE5B4}, hue 0.108888924, saturation 0.29411763, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.69cbfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.69cbfep126F}.
      * <pre>
      * <font style='background-color: #FFE5B4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFE5B4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFE5B4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFE5B4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFE5B4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFE5B4'>&nbsp;@&nbsp;</font><font style='background-color: #FFE5B4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4843,7 +4843,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Peach Dye" has RGB code {@code 0xF47983}, hue 0.9864498, saturation 0.50409836, and value 0.95686275.
-     * It can be represented as a packed float with the constant {@code 0x1.06f3e8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.06f3e8p126F}.
      * <pre>
      * <font style='background-color: #F47983; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F47983; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F47983; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F47983'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F47983'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F47983'>&nbsp;@&nbsp;</font><font style='background-color: #F47983; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4857,7 +4857,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Peach Orange" has RGB code {@code 0xFFCC99}, hue 0.08333337, saturation 0.39999998, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.3399fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3399fep126F}.
      * <pre>
      * <font style='background-color: #FFCC99; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFCC99; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFCC99; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFCC99'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFCC99'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFCC99'>&nbsp;@&nbsp;</font><font style='background-color: #FFCC99; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4871,7 +4871,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Peach Yellow" has RGB code {@code 0xFADFAD}, hue 0.10822511, saturation 0.30799997, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x1.5bbff4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5bbff4p126F}.
      * <pre>
      * <font style='background-color: #FADFAD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FADFAD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FADFAD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FADFAD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FADFAD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FADFAD'>&nbsp;@&nbsp;</font><font style='background-color: #FADFAD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4885,7 +4885,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pear" has RGB code {@code 0xD1E231}, hue 0.18267429, saturation 0.78318584, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x0.63c5a2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.63c5a2p125F}.
      * <pre>
      * <font style='background-color: #D1E231; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D1E231; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D1E231; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D1E231'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D1E231'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D1E231'>&nbsp;@&nbsp;</font><font style='background-color: #D1E231; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4899,7 +4899,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Periwinkle" has RGB code {@code 0xCCCCFF}, hue 0.6666667, saturation 0.19999999, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ff9998p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ff9998p126F}.
      * <pre>
      * <font style='background-color: #CCCCFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CCCCFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CCCCFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CCCCFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CCCCFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CCCCFF'>&nbsp;@&nbsp;</font><font style='background-color: #CCCCFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4913,7 +4913,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Persian Blue" has RGB code {@code 0x1C39BB}, hue 0.6362684, saturation 0.8502674, and value 0.73333335.
-     * It can be represented as a packed float with the constant {@code 0x1.767238p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.767238p126F}.
      * <pre>
      * <font style='background-color: #1C39BB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1C39BB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1C39BB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1C39BB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1C39BB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1C39BB'>&nbsp;@&nbsp;</font><font style='background-color: #1C39BB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4927,7 +4927,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Persian Green" has RGB code {@code 0x00A693}, hue 0.4809237, saturation 1.0, and value 0.6509804.
-     * It can be represented as a packed float with the constant {@code 0x1.274cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.274cp126F}.
      * <pre>
      * <font style='background-color: #00A693; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00A693; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00A693; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00A693'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00A693'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00A693'>&nbsp;@&nbsp;</font><font style='background-color: #00A693; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4941,7 +4941,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Persian Indigo" has RGB code {@code 0x32127A}, hue 0.7179488, saturation 0.852459, and value 0.47843137.
-     * It can be represented as a packed float with the constant {@code 0x0.f42464p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f42464p125F}.
      * <pre>
      * <font style='background-color: #32127A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #32127A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #32127A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #32127A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #32127A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #32127A'>&nbsp;@&nbsp;</font><font style='background-color: #32127A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4955,7 +4955,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Persian Red" has RGB code {@code 0xCC3333}, hue 0.0, saturation 0.75, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x0.666798p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.666798p125F}.
      * <pre>
      * <font style='background-color: #CC3333; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CC3333; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CC3333; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CC3333'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CC3333'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CC3333'>&nbsp;@&nbsp;</font><font style='background-color: #CC3333; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4969,7 +4969,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Persian Pink" has RGB code {@code 0xF77FBE}, hue 0.9125, saturation 0.48582995, and value 0.96862745.
-     * It can be represented as a packed float with the constant {@code 0x1.7cffeep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7cffeep126F}.
      * <pre>
      * <font style='background-color: #F77FBE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F77FBE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F77FBE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F77FBE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F77FBE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F77FBE'>&nbsp;@&nbsp;</font><font style='background-color: #F77FBE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4983,7 +4983,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Persian Rose" has RGB code {@code 0xFE28A2}, hue 0.9049844, saturation 0.8425197, and value 0.99607843.
-     * It can be represented as a packed float with the constant {@code 0x1.4451fcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4451fcp126F}.
      * <pre>
      * <font style='background-color: #FE28A2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FE28A2; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FE28A2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FE28A2'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FE28A2'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FE28A2'>&nbsp;@&nbsp;</font><font style='background-color: #FE28A2; color: #888888'>&nbsp;@&nbsp;</font>
@@ -4997,7 +4997,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Persimmon" has RGB code {@code 0xEC5800}, hue 0.06214696, saturation 1.0, and value 0.9254902.
-     * It can be represented as a packed float with the constant {@code 0x0.00b1d8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.00b1d8p125F}.
      * <pre>
      * <font style='background-color: #EC5800; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EC5800; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EC5800; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EC5800'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EC5800'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EC5800'>&nbsp;@&nbsp;</font><font style='background-color: #EC5800; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5011,7 +5011,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Persimmon Juice" has RGB code {@code 0x934337}, hue 0.021739185, saturation 0.6258504, and value 0.5764706.
-     * It can be represented as a packed float with the constant {@code 0x0.6e8726p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6e8726p125F}.
      * <pre>
      * <font style='background-color: #934337; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #934337; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #934337; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #934337'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #934337'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #934337'>&nbsp;@&nbsp;</font><font style='background-color: #934337; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5025,7 +5025,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pigment Blue" has RGB code {@code 0x333399}, hue 0.6666666, saturation 0.6666667, and value 0.6.
-     * It can be represented as a packed float with the constant {@code 0x1.326666p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.326666p126F}.
      * <pre>
      * <font style='background-color: #333399; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #333399; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #333399; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #333399'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #333399'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #333399'>&nbsp;@&nbsp;</font><font style='background-color: #333399; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5039,7 +5039,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pine Green" has RGB code {@code 0x01796F}, hue 0.4861111, saturation 0.9917355, and value 0.4745098.
-     * It can be represented as a packed float with the constant {@code 0x0.def202p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.def202p125F}.
      * <pre>
      * <font style='background-color: #01796F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #01796F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #01796F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #01796F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #01796F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #01796F'>&nbsp;@&nbsp;</font><font style='background-color: #01796F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5053,7 +5053,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pine Needle" has RGB code {@code 0x454D32}, hue 0.21604943, saturation 0.35064936, and value 0.3019608.
-     * It can be represented as a packed float with the constant {@code 0x0.649a8ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.649a8ap125F}.
      * <pre>
      * <font style='background-color: #454D32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #454D32; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #454D32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #454D32'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #454D32'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #454D32'>&nbsp;@&nbsp;</font><font style='background-color: #454D32; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5067,7 +5067,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pink" has RGB code {@code 0xFFAFAF}, hue 0.0, saturation 0.31372547, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.5f5ffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5f5ffep126F}.
      * <pre>
      * <font style='background-color: #FFAFAF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFAFAF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFAFAF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFAFAF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFAFAF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFAFAF'>&nbsp;@&nbsp;</font><font style='background-color: #FFAFAF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5081,7 +5081,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pink Orange" has RGB code {@code 0xFF9966}, hue 0.055555522, saturation 0.6, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.cd33fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cd33fep125F}.
      * <pre>
      * <font style='background-color: #FF9966; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF9966; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF9966; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF9966'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF9966'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF9966'>&nbsp;@&nbsp;</font><font style='background-color: #FF9966; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5095,7 +5095,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Plain Mosue" has RGB code {@code 0x6E5F57}, hue 0.05797106, saturation 0.20909089, and value 0.43137255.
-     * It can be represented as a packed float with the constant {@code 0x0.aebedcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.aebedcp125F}.
      * <pre>
      * <font style='background-color: #6E5F57; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6E5F57; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6E5F57; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6E5F57'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6E5F57'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6E5F57'>&nbsp;@&nbsp;</font><font style='background-color: #6E5F57; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5109,7 +5109,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Platinum" has RGB code {@code 0xE5E4E2}, hue 0.111111104, saturation 0.013100436, and value 0.8980392.
-     * It can be represented as a packed float with the constant {@code 0x1.c5c9cap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c5c9cap126F}.
      * <pre>
      * <font style='background-color: #E5E4E2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E5E4E2; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E5E4E2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E5E4E2'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E5E4E2'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E5E4E2'>&nbsp;@&nbsp;</font><font style='background-color: #E5E4E2; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5123,7 +5123,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Plum" has RGB code {@code 0xCC99CC}, hue 0.8333333, saturation 0.24999999, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x1.993398p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.993398p126F}.
      * <pre>
      * <font style='background-color: #CC99CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CC99CC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CC99CC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CC99CC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CC99CC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CC99CC'>&nbsp;@&nbsp;</font><font style='background-color: #CC99CC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5137,7 +5137,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Plum Blossom Mouse" has RGB code {@code 0x97645A}, hue 0.027322412, saturation 0.40397352, and value 0.5921569.
-     * It can be represented as a packed float with the constant {@code 0x0.b4c92ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b4c92ep125F}.
      * <pre>
      * <font style='background-color: #97645A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #97645A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #97645A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #97645A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #97645A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #97645A'>&nbsp;@&nbsp;</font><font style='background-color: #97645A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5151,7 +5151,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Plum Dyed" has RGB code {@code 0xFA9258}, hue 0.059670806, saturation 0.64799994, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x0.b125f4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b125f4p125F}.
      * <pre>
      * <font style='background-color: #FA9258; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FA9258; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FA9258; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FA9258'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FA9258'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FA9258'>&nbsp;@&nbsp;</font><font style='background-color: #FA9258; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5165,7 +5165,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Plum Purple" has RGB code {@code 0x8F4155}, hue 0.95726496, saturation 0.54545456, and value 0.56078434.
-     * It can be represented as a packed float with the constant {@code 0x0.aa831ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.aa831ep125F}.
      * <pre>
      * <font style='background-color: #8F4155; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F4155; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8F4155; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8F4155'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8F4155'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8F4155'>&nbsp;@&nbsp;</font><font style='background-color: #8F4155; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5179,7 +5179,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Polished Brown" has RGB code {@code 0x9F5233}, hue 0.047839463, saturation 0.6792453, and value 0.62352943.
-     * It can be represented as a packed float with the constant {@code 0x0.66a53ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.66a53ep125F}.
      * <pre>
      * <font style='background-color: #9F5233; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9F5233; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9F5233; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9F5233'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9F5233'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9F5233'>&nbsp;@&nbsp;</font><font style='background-color: #9F5233; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5193,7 +5193,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Powder Blue" has RGB code {@code 0xB0E0E6}, hue 0.5185185, saturation 0.23478259, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x1.cdc16p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cdc16p126F}.
      * <pre>
      * <font style='background-color: #B0E0E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B0E0E6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B0E0E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B0E0E6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B0E0E6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B0E0E6'>&nbsp;@&nbsp;</font><font style='background-color: #B0E0E6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5207,7 +5207,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Prussian Blue" has RGB code {@code 0x003153}, hue 0.5682732, saturation 1.0, and value 0.3254902.
-     * It can be represented as a packed float with the constant {@code 0x0.a662p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a662p125F}.
      * <pre>
      * <font style='background-color: #003153; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #003153; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #003153; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #003153'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #003153'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #003153'>&nbsp;@&nbsp;</font><font style='background-color: #003153; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5221,7 +5221,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Psychedelic Purple" has RGB code {@code 0xDD00FF}, hue 0.81111115, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fe01bap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fe01bap126F}.
      * <pre>
      * <font style='background-color: #DD00FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DD00FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DD00FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DD00FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DD00FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DD00FF'>&nbsp;@&nbsp;</font><font style='background-color: #DD00FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5235,7 +5235,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Puce" has RGB code {@code 0xCC8899}, hue 0.9583333, saturation 0.3333333, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x1.331198p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.331198p126F}.
      * <pre>
      * <font style='background-color: #CC8899; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CC8899; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CC8899; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CC8899'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CC8899'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CC8899'>&nbsp;@&nbsp;</font><font style='background-color: #CC8899; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5249,7 +5249,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pumpkin" has RGB code {@code 0xFF7518}, hue 0.06709957, saturation 0.90588236, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.30ebfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.30ebfep125F}.
      * <pre>
      * <font style='background-color: #FF7518; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF7518; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF7518; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF7518'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF7518'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF7518'>&nbsp;@&nbsp;</font><font style='background-color: #FF7518; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5263,7 +5263,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pure Crimson" has RGB code {@code 0xC3272B}, hue 0.9957265, saturation 0.8, and value 0.7647059.
-     * It can be represented as a packed float with the constant {@code 0x0.564f86p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.564f86p125F}.
      * <pre>
      * <font style='background-color: #C3272B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C3272B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C3272B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C3272B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C3272B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C3272B'>&nbsp;@&nbsp;</font><font style='background-color: #C3272B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5277,7 +5277,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Pure Dark Gray" has RGB code {@code 0x3F4041}, hue 0.58333325, saturation 0.030769285, and value 0.25490198.
-     * It can be represented as a packed float with the constant {@code 0x0.82807ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.82807ep125F}.
      * <pre>
      * <font style='background-color: #3F4041; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3F4041; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3F4041; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3F4041'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3F4041'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3F4041'>&nbsp;@&nbsp;</font><font style='background-color: #3F4041; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5291,7 +5291,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Purple" has RGB code {@code 0x800080}, hue 0.8333334, saturation 1.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x1.0001p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0001p126F}.
      * <pre>
      * <font style='background-color: #800080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #800080; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #800080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #800080'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #800080'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #800080'>&nbsp;@&nbsp;</font><font style='background-color: #800080; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5305,7 +5305,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Purple Dye" has RGB code {@code 0x4F284B}, hue 0.8504274, saturation 0.49367088, and value 0.30980393.
-     * It can be represented as a packed float with the constant {@code 0x0.96509ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.96509ep125F}.
      * <pre>
      * <font style='background-color: #4F284B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4F284B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4F284B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4F284B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4F284B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4F284B'>&nbsp;@&nbsp;</font><font style='background-color: #4F284B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5319,7 +5319,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Purple Kite" has RGB code {@code 0x512C31}, hue 0.9774775, saturation 0.45679012, and value 0.31764707.
-     * It can be represented as a packed float with the constant {@code 0x0.6258a2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6258a2p125F}.
      * <pre>
      * <font style='background-color: #512C31; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #512C31; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #512C31; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #512C31'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #512C31'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #512C31'>&nbsp;@&nbsp;</font><font style='background-color: #512C31; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5333,7 +5333,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Purple Taupe" has RGB code {@code 0x50404D}, hue 0.8645833, saturation 0.19999999, and value 0.3137255.
-     * It can be represented as a packed float with the constant {@code 0x0.9a80ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9a80ap125F}.
      * <pre>
      * <font style='background-color: #50404D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #50404D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #50404D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #50404D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #50404D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #50404D'>&nbsp;@&nbsp;</font><font style='background-color: #50404D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5347,7 +5347,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rabbit Ear Iris" has RGB code {@code 0x491E3C}, hue 0.8837209, saturation 0.5890411, and value 0.28627452.
-     * It can be represented as a packed float with the constant {@code 0x0.783c92p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.783c92p125F}.
      * <pre>
      * <font style='background-color: #491E3C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #491E3C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #491E3C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #491E3C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #491E3C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #491E3C'>&nbsp;@&nbsp;</font><font style='background-color: #491E3C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5361,7 +5361,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rapeblossom Brown" has RGB code {@code 0xE3B130}, hue 0.120111704, saturation 0.78854626, and value 0.8901961.
-     * It can be represented as a packed float with the constant {@code 0x0.6163c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6163c6p125F}.
      * <pre>
      * <font style='background-color: #E3B130; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3B130; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E3B130; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E3B130'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E3B130'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E3B130'>&nbsp;@&nbsp;</font><font style='background-color: #E3B130; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5375,7 +5375,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rapeseed Oil" has RGB code {@code 0xA17917}, hue 0.11835748, saturation 0.85714287, and value 0.6313726.
-     * It can be represented as a packed float with the constant {@code 0x0.2ef342p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2ef342p125F}.
      * <pre>
      * <font style='background-color: #A17917; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A17917; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A17917; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A17917'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A17917'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A17917'>&nbsp;@&nbsp;</font><font style='background-color: #A17917; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5389,7 +5389,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Raw Umber" has RGB code {@code 0x734A12}, hue 0.09621996, saturation 0.84347826, and value 0.4509804.
-     * It can be represented as a packed float with the constant {@code 0x0.2494e6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2494e6p125F}.
      * <pre>
      * <font style='background-color: #734A12; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #734A12; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #734A12; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #734A12'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #734A12'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #734A12'>&nbsp;@&nbsp;</font><font style='background-color: #734A12; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5403,7 +5403,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Razzamatazz" has RGB code {@code 0xE30B5C}, hue 0.9375, saturation 0.95154184, and value 0.8901961.
-     * It can be represented as a packed float with the constant {@code 0x0.b817c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b817c6p125F}.
      * <pre>
      * <font style='background-color: #E30B5C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E30B5C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E30B5C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E30B5C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E30B5C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E30B5C'>&nbsp;@&nbsp;</font><font style='background-color: #E30B5C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5417,7 +5417,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red" has RGB code {@code 0xFF0000}, hue 0.0, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0001fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0001fep125F}.
      * <pre>
      * <font style='background-color: #FF0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF0000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF0000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF0000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF0000'>&nbsp;@&nbsp;</font><font style='background-color: #FF0000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5431,7 +5431,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Bean" has RGB code {@code 0x672422}, hue 0.0048309565, saturation 0.66990286, and value 0.40392157.
-     * It can be represented as a packed float with the constant {@code 0x0.4448cep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4448cep125F}.
      * <pre>
      * <font style='background-color: #672422; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #672422; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #672422; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #672422'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #672422'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #672422'>&nbsp;@&nbsp;</font><font style='background-color: #672422; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5445,7 +5445,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Birch" has RGB code {@code 0x9D2B22}, hue 0.01219511, saturation 0.7834395, and value 0.6156863.
-     * It can be represented as a packed float with the constant {@code 0x0.44573ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.44573ap125F}.
      * <pre>
      * <font style='background-color: #9D2B22; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9D2B22; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9D2B22; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9D2B22'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9D2B22'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9D2B22'>&nbsp;@&nbsp;</font><font style='background-color: #9D2B22; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5459,7 +5459,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Incense" has RGB code {@code 0xF07F5E}, hue 0.037671268, saturation 0.6083333, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x0.bcffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bcffep125F}.
      * <pre>
      * <font style='background-color: #F07F5E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F07F5E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F07F5E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F07F5E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F07F5E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F07F5E'>&nbsp;@&nbsp;</font><font style='background-color: #F07F5E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5473,7 +5473,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Dye Turmeric" has RGB code {@code 0xFB8136}, hue 0.06345183, saturation 0.78486055, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x0.6d03f6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6d03f6p125F}.
      * <pre>
      * <font style='background-color: #FB8136; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FB8136; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FB8136; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FB8136'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FB8136'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FB8136'>&nbsp;@&nbsp;</font><font style='background-color: #FB8136; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5487,7 +5487,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Kite" has RGB code {@code 0x913228}, hue 0.015873015, saturation 0.72413796, and value 0.5686275.
-     * It can be represented as a packed float with the constant {@code 0x0.506522p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.506522p125F}.
      * <pre>
      * <font style='background-color: #913228; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #913228; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #913228; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #913228'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #913228'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #913228'>&nbsp;@&nbsp;</font><font style='background-color: #913228; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5501,7 +5501,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Ochre" has RGB code {@code 0x9F5233}, hue 0.047839463, saturation 0.6792453, and value 0.62352943.
-     * It can be represented as a packed float with the constant {@code 0x0.66a53ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.66a53ep125F}.
      * <pre>
      * <font style='background-color: #9F5233; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9F5233; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9F5233; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9F5233'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9F5233'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9F5233'>&nbsp;@&nbsp;</font><font style='background-color: #9F5233; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5515,7 +5515,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Pigment" has RGB code {@code 0xED1C24}, hue 0.9936204, saturation 0.88185656, and value 0.92941177.
-     * It can be represented as a packed float with the constant {@code 0x0.4839dap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4839dap125F}.
      * <pre>
      * <font style='background-color: #ED1C24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ED1C24; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ED1C24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ED1C24'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ED1C24'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ED1C24'>&nbsp;@&nbsp;</font><font style='background-color: #ED1C24; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5529,7 +5529,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Plum" has RGB code {@code 0xDB5A6B}, hue 0.9780362, saturation 0.5890411, and value 0.85882354.
-     * It can be represented as a packed float with the constant {@code 0x0.d6b5b6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d6b5b6p125F}.
      * <pre>
      * <font style='background-color: #DB5A6B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DB5A6B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DB5A6B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DB5A6B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DB5A6B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DB5A6B'>&nbsp;@&nbsp;</font><font style='background-color: #DB5A6B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5543,7 +5543,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Violet" has RGB code {@code 0xC71585}, hue 0.8951311, saturation 0.89447236, and value 0.78039217.
-     * It can be represented as a packed float with the constant {@code 0x1.0a2b8ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0a2b8ep126F}.
      * <pre>
      * <font style='background-color: #C71585; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C71585; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C71585; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C71585'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C71585'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C71585'>&nbsp;@&nbsp;</font><font style='background-color: #C71585; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5557,7 +5557,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Red Wisteria" has RGB code {@code 0xBB7796}, hue 0.92401963, saturation 0.36363637, and value 0.73333335.
-     * It can be represented as a packed float with the constant {@code 0x1.2cef76p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2cef76p126F}.
      * <pre>
      * <font style='background-color: #BB7796; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BB7796; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BB7796; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BB7796'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BB7796'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BB7796'>&nbsp;@&nbsp;</font><font style='background-color: #BB7796; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5571,7 +5571,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rich Carmine" has RGB code {@code 0xD70040}, hue 0.9503876, saturation 1.0, and value 0.84313726.
-     * It can be represented as a packed float with the constant {@code 0x0.8001aep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8001aep125F}.
      * <pre>
      * <font style='background-color: #D70040; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D70040; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D70040; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D70040'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D70040'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D70040'>&nbsp;@&nbsp;</font><font style='background-color: #D70040; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5585,7 +5585,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rich Gardenia" has RGB code {@code 0xF57F4F}, hue 0.0481928, saturation 0.677551, and value 0.9607843.
-     * It can be represented as a packed float with the constant {@code 0x0.9effeap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9effeap125F}.
      * <pre>
      * <font style='background-color: #F57F4F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F57F4F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F57F4F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F57F4F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F57F4F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F57F4F'>&nbsp;@&nbsp;</font><font style='background-color: #F57F4F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5599,7 +5599,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rinsed Out Red" has RGB code {@code 0xFF7952}, hue 0.037572205, saturation 0.6784314, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.a4f3fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a4f3fep125F}.
      * <pre>
      * <font style='background-color: #FF7952; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF7952; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF7952; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF7952'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF7952'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF7952'>&nbsp;@&nbsp;</font><font style='background-color: #FF7952; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5613,7 +5613,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rikan Brown" has RGB code {@code 0x534A32}, hue 0.121212065, saturation 0.39759037, and value 0.3254902.
-     * It can be represented as a packed float with the constant {@code 0x0.6494a6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6494a6p125F}.
      * <pre>
      * <font style='background-color: #534A32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #534A32; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #534A32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #534A32'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #534A32'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #534A32'>&nbsp;@&nbsp;</font><font style='background-color: #534A32; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5627,7 +5627,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Robin Egg Blue" has RGB code {@code 0x00CCCC}, hue 0.5, saturation 1.0, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x1.9998p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9998p126F}.
      * <pre>
      * <font style='background-color: #00CCCC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00CCCC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00CCCC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00CCCC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00CCCC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00CCCC'>&nbsp;@&nbsp;</font><font style='background-color: #00CCCC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5641,7 +5641,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rose" has RGB code {@code 0xFF007F}, hue 0.91699344, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.fe01fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fe01fep125F}.
      * <pre>
      * <font style='background-color: #FF007F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF007F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF007F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF007F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF007F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF007F'>&nbsp;@&nbsp;</font><font style='background-color: #FF007F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5655,7 +5655,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rose Madder" has RGB code {@code 0xE32636}, hue 0.9858907, saturation 0.8325991, and value 0.8901961.
-     * It can be represented as a packed float with the constant {@code 0x0.6c4dc6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6c4dc6p125F}.
      * <pre>
      * <font style='background-color: #E32636; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E32636; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E32636; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E32636'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E32636'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E32636'>&nbsp;@&nbsp;</font><font style='background-color: #E32636; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5669,7 +5669,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rose Taupe" has RGB code {@code 0x905D5D}, hue 0.0, saturation 0.3541667, and value 0.5647059.
-     * It can be represented as a packed float with the constant {@code 0x0.babb2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.babb2p125F}.
      * <pre>
      * <font style='background-color: #905D5D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #905D5D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #905D5D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #905D5D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #905D5D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #905D5D'>&nbsp;@&nbsp;</font><font style='background-color: #905D5D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5683,7 +5683,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Royal Blue" has RGB code {@code 0x4169E1}, hue 0.62500006, saturation 0.71111107, and value 0.88235295.
-     * It can be represented as a packed float with the constant {@code 0x1.c2d282p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c2d282p126F}.
      * <pre>
      * <font style='background-color: #4169E1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4169E1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4169E1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4169E1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4169E1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4169E1'>&nbsp;@&nbsp;</font><font style='background-color: #4169E1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5697,7 +5697,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Royal Purple" has RGB code {@code 0x6B3FA0}, hue 0.74226797, saturation 0.60625005, and value 0.627451.
-     * It can be represented as a packed float with the constant {@code 0x1.407ed6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.407ed6p126F}.
      * <pre>
      * <font style='background-color: #6B3FA0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6B3FA0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6B3FA0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6B3FA0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6B3FA0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6B3FA0'>&nbsp;@&nbsp;</font><font style='background-color: #6B3FA0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5711,7 +5711,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ruby" has RGB code {@code 0xE0115F}, hue 0.93719804, saturation 0.92410713, and value 0.8784314.
-     * It can be represented as a packed float with the constant {@code 0x0.be23cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.be23cp125F}.
      * <pre>
      * <font style='background-color: #E0115F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E0115F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E0115F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E0115F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E0115F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E0115F'>&nbsp;@&nbsp;</font><font style='background-color: #E0115F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5725,7 +5725,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Russet" has RGB code {@code 0x80461B}, hue 0.070957065, saturation 0.7890625, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x0.368dp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.368dp125F}.
      * <pre>
      * <font style='background-color: #80461B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #80461B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #80461B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #80461B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #80461B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #80461B'>&nbsp;@&nbsp;</font><font style='background-color: #80461B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5739,7 +5739,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rust" has RGB code {@code 0xB7410E}, hue 0.05029583, saturation 0.92349726, and value 0.7176471.
-     * It can be represented as a packed float with the constant {@code 0x0.1c836ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1c836ep125F}.
      * <pre>
      * <font style='background-color: #B7410E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B7410E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B7410E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B7410E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B7410E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B7410E'>&nbsp;@&nbsp;</font><font style='background-color: #B7410E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5753,7 +5753,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rusted Light Blue" has RGB code {@code 0x6A7F7A}, hue 0.46031743, saturation 0.16535433, and value 0.49803922.
-     * It can be represented as a packed float with the constant {@code 0x0.f4fed4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f4fed4p125F}.
      * <pre>
      * <font style='background-color: #6A7F7A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6A7F7A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6A7F7A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6A7F7A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6A7F7A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6A7F7A'>&nbsp;@&nbsp;</font><font style='background-color: #6A7F7A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5767,7 +5767,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rusty Celadon" has RGB code {@code 0x898A74}, hue 0.1742425, saturation 0.15942033, and value 0.5411765.
-     * It can be represented as a packed float with the constant {@code 0x0.e91512p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e91512p125F}.
      * <pre>
      * <font style='background-color: #898A74; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #898A74; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #898A74; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #898A74'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #898A74'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #898A74'>&nbsp;@&nbsp;</font><font style='background-color: #898A74; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5781,7 +5781,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rusty Storage" has RGB code {@code 0x455859}, hue 0.50833327, saturation 0.22471908, and value 0.34901962.
-     * It can be represented as a packed float with the constant {@code 0x0.b2b08ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b2b08ap125F}.
      * <pre>
      * <font style='background-color: #455859; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #455859; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #455859; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #455859'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #455859'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #455859'>&nbsp;@&nbsp;</font><font style='background-color: #455859; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5795,7 +5795,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Rusty Storeroom" has RGB code {@code 0x3A403B}, hue 0.3611111, saturation 0.093750045, and value 0.2509804.
-     * It can be represented as a packed float with the constant {@code 0x0.768074p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.768074p125F}.
      * <pre>
      * <font style='background-color: #3A403B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3A403B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3A403B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3A403B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3A403B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3A403B'>&nbsp;@&nbsp;</font><font style='background-color: #3A403B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5809,7 +5809,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Safety Orange" has RGB code {@code 0xFF6600}, hue 0.06666666, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.00cdfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.00cdfep125F}.
      * <pre>
      * <font style='background-color: #FF6600; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF6600; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF6600; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF6600'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF6600'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF6600'>&nbsp;@&nbsp;</font><font style='background-color: #FF6600; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5823,7 +5823,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Safflower" has RGB code {@code 0x5A4F74}, hue 0.71621627, saturation 0.3189655, and value 0.45490196.
-     * It can be represented as a packed float with the constant {@code 0x0.e89eb4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e89eb4p125F}.
      * <pre>
      * <font style='background-color: #5A4F74; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5A4F74; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5A4F74; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5A4F74'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5A4F74'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5A4F74'>&nbsp;@&nbsp;</font><font style='background-color: #5A4F74; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5837,7 +5837,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Saffron" has RGB code {@code 0xF4C430}, hue 0.12585038, saturation 0.8032787, and value 0.95686275.
-     * It can be represented as a packed float with the constant {@code 0x0.6189e8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6189e8p125F}.
      * <pre>
      * <font style='background-color: #F4C430; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F4C430; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F4C430; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F4C430'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F4C430'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F4C430'>&nbsp;@&nbsp;</font><font style='background-color: #F4C430; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5851,7 +5851,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Salmon" has RGB code {@code 0xFF8C69}, hue 0.03888893, saturation 0.58823526, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.d319fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d319fep125F}.
      * <pre>
      * <font style='background-color: #FF8C69; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF8C69; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF8C69; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF8C69'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF8C69'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF8C69'>&nbsp;@&nbsp;</font><font style='background-color: #FF8C69; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5865,7 +5865,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sandy Brown" has RGB code {@code 0xF4A460}, hue 0.07657659, saturation 0.6065573, and value 0.95686275.
-     * It can be represented as a packed float with the constant {@code 0x0.c149e8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c149e8p125F}.
      * <pre>
      * <font style='background-color: #F4A460; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F4A460; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F4A460; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F4A460'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F4A460'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F4A460'>&nbsp;@&nbsp;</font><font style='background-color: #F4A460; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5879,7 +5879,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sangria" has RGB code {@code 0x92000A}, hue 0.9885845, saturation 1.0, and value 0.57254905.
-     * It can be represented as a packed float with the constant {@code 0x0.140124p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.140124p125F}.
      * <pre>
      * <font style='background-color: #92000A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #92000A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #92000A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #92000A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #92000A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #92000A'>&nbsp;@&nbsp;</font><font style='background-color: #92000A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5893,7 +5893,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sapphire" has RGB code {@code 0x082567}, hue 0.61578953, saturation 0.9223301, and value 0.40392157.
-     * It can be represented as a packed float with the constant {@code 0x0.ce4a1p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ce4a1p125F}.
      * <pre>
      * <font style='background-color: #082567; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #082567; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #082567; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #082567'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #082567'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #082567'>&nbsp;@&nbsp;</font><font style='background-color: #082567; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5907,7 +5907,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sappanwood" has RGB code {@code 0x7E2639}, hue 0.9640151, saturation 0.69841266, and value 0.49411765.
-     * It can be represented as a packed float with the constant {@code 0x0.724cfcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.724cfcp125F}.
      * <pre>
      * <font style='background-color: #7E2639; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7E2639; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7E2639; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7E2639'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7E2639'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7E2639'>&nbsp;@&nbsp;</font><font style='background-color: #7E2639; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5921,7 +5921,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sappanwood Incense" has RGB code {@code 0xA24F46}, hue 0.016304314, saturation 0.56790125, and value 0.63529414.
-     * It can be represented as a packed float with the constant {@code 0x0.8c9f44p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8c9f44p125F}.
      * <pre>
      * <font style='background-color: #A24F46; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A24F46; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A24F46; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A24F46'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A24F46'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A24F46'>&nbsp;@&nbsp;</font><font style='background-color: #A24F46; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5935,7 +5935,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sawtooth Oak" has RGB code {@code 0xEC956C}, hue 0.053385437, saturation 0.5423728, and value 0.9254902.
-     * It can be represented as a packed float with the constant {@code 0x0.d92bd8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d92bd8p125F}.
      * <pre>
      * <font style='background-color: #EC956C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EC956C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EC956C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EC956C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EC956C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EC956C'>&nbsp;@&nbsp;</font><font style='background-color: #EC956C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5949,7 +5949,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Scarlet" has RGB code {@code 0xFF2400}, hue 0.02352941, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0049fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0049fep125F}.
      * <pre>
      * <font style='background-color: #FF2400; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF2400; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF2400; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF2400'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF2400'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF2400'>&nbsp;@&nbsp;</font><font style='background-color: #FF2400; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5963,7 +5963,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "School Bus Yellow" has RGB code {@code 0xFFD800}, hue 0.14117652, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01b1fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01b1fep125F}.
      * <pre>
      * <font style='background-color: #FFD800; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFD800; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFD800; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFD800'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFD800'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFD800'>&nbsp;@&nbsp;</font><font style='background-color: #FFD800; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5977,7 +5977,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Scortched Brown" has RGB code {@code 0x351F19}, hue 0.03571427, saturation 0.5283019, and value 0.20784314.
-     * It can be represented as a packed float with the constant {@code 0x0.323e6ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.323e6ap125F}.
      * <pre>
      * <font style='background-color: #351F19; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #351F19; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #351F19; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #351F19; color: #888888'>&nbsp;@&nbsp;</font>
@@ -5991,7 +5991,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sea Green" has RGB code {@code 0x2E8B57}, hue 0.40681005, saturation 0.66906476, and value 0.54509807.
-     * It can be represented as a packed float with the constant {@code 0x0.af165cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.af165cp125F}.
      * <pre>
      * <font style='background-color: #2E8B57; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2E8B57; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2E8B57; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2E8B57'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2E8B57'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2E8B57'>&nbsp;@&nbsp;</font><font style='background-color: #2E8B57; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6005,7 +6005,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Seashell" has RGB code {@code 0xFFF5EE}, hue 0.06862748, saturation 0.06666666, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ddebfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ddebfep126F}.
      * <pre>
      * <font style='background-color: #FFF5EE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFF5EE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFF5EE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFF5EE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFF5EE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFF5EE'>&nbsp;@&nbsp;</font><font style='background-color: #FFF5EE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6019,7 +6019,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Selective Yellow" has RGB code {@code 0xFFBA00}, hue 0.12156862, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0175fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0175fep125F}.
      * <pre>
      * <font style='background-color: #FFBA00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFBA00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFBA00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFBA00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFBA00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFBA00'>&nbsp;@&nbsp;</font><font style='background-color: #FFBA00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6033,7 +6033,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sen No Riyu's Tea" has RGB code {@code 0x826B58}, hue 0.075396836, saturation 0.32307693, and value 0.50980395.
-     * It can be represented as a packed float with the constant {@code 0x0.b0d704p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b0d704p125F}.
      * <pre>
      * <font style='background-color: #826B58; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #826B58; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #826B58; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #826B58; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6047,7 +6047,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sepia" has RGB code {@code 0x704214}, hue 0.08333331, saturation 0.8214286, and value 0.4392157.
-     * It can be represented as a packed float with the constant {@code 0x0.2884ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2884ep125F}.
      * <pre>
      * <font style='background-color: #704214; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #704214; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #704214; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #704214'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #704214'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #704214'>&nbsp;@&nbsp;</font><font style='background-color: #704214; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6061,7 +6061,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Shamrock Green" has RGB code {@code 0x009E60}, hue 0.43459916, saturation 1.0, and value 0.61960787.
-     * It can be represented as a packed float with the constant {@code 0x0.c13cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c13cp125F}.
      * <pre>
      * <font style='background-color: #009E60; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #009E60; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #009E60; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #009E60'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #009E60'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #009E60'>&nbsp;@&nbsp;</font><font style='background-color: #009E60; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6075,7 +6075,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Shocking Pink" has RGB code {@code 0xFC0FC0}, hue 0.8755274, saturation 0.9404762, and value 0.9882353.
-     * It can be represented as a packed float with the constant {@code 0x1.801ff8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.801ff8p126F}.
      * <pre>
      * <font style='background-color: #FC0FC0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FC0FC0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FC0FC0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FC0FC0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FC0FC0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FC0FC0'>&nbsp;@&nbsp;</font><font style='background-color: #FC0FC0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6089,7 +6089,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Shrimp Brown" has RGB code {@code 0x5E2824}, hue 0.011494279, saturation 0.61702126, and value 0.36862746.
-     * It can be represented as a packed float with the constant {@code 0x0.4850bcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4850bcp125F}.
      * <pre>
      * <font style='background-color: #5E2824; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5E2824; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5E2824; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5E2824'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5E2824'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5E2824'>&nbsp;@&nbsp;</font><font style='background-color: #5E2824; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6103,7 +6103,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Silk Crepe Brown" has RGB code {@code 0x354E4B}, hue 0.48000002, saturation 0.32051283, and value 0.30588236.
-     * It can be represented as a packed float with the constant {@code 0x0.969c6ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.969c6ap125F}.
      * <pre>
      * <font style='background-color: #354E4B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #354E4B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #354E4B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #354E4B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #354E4B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #354E4B'>&nbsp;@&nbsp;</font><font style='background-color: #354E4B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6117,7 +6117,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Silver" has RGB code {@code 0xC0C0C0}, hue 0.0, saturation 0.0, and value 0.7529412.
-     * It can be represented as a packed float with the constant {@code 0x1.81818p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.81818p126F}.
      * <pre>
      * <font style='background-color: #C0C0C0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C0C0C0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C0C0C0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C0C0C0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C0C0C0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C0C0C0'>&nbsp;@&nbsp;</font><font style='background-color: #C0C0C0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6131,7 +6131,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Silver Grey" has RGB code {@code 0x97867C}, hue 0.061728418, saturation 0.17880797, and value 0.5921569.
-     * It can be represented as a packed float with the constant {@code 0x0.f90d2ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f90d2ep125F}.
      * <pre>
      * <font style='background-color: #97867C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #97867C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #97867C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #97867C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #97867C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #97867C'>&nbsp;@&nbsp;</font><font style='background-color: #97867C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6145,7 +6145,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Silvered Red" has RGB code {@code 0xBC2D29}, hue 0.0045351386, saturation 0.7819149, and value 0.7372549.
-     * It can be represented as a packed float with the constant {@code 0x0.525b78p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.525b78p125F}.
      * <pre>
      * <font style='background-color: #BC2D29; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BC2D29; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BC2D29; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BC2D29'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BC2D29'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BC2D29'>&nbsp;@&nbsp;</font><font style='background-color: #BC2D29; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6159,7 +6159,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Simmered Seawead" has RGB code {@code 0x4C3D30}, hue 0.077380896, saturation 0.36842108, and value 0.29803923.
-     * It can be represented as a packed float with the constant {@code 0x0.607a98p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.607a98p125F}.
      * <pre>
      * <font style='background-color: #4C3D30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4C3D30; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4C3D30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4C3D30'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4C3D30'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4C3D30'>&nbsp;@&nbsp;</font><font style='background-color: #4C3D30; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6173,7 +6173,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Siskin Sprout Yellow" has RGB code {@code 0x7A942E}, hue 0.20915031, saturation 0.6891892, and value 0.5803922.
-     * It can be represented as a packed float with the constant {@code 0x0.5d28f4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5d28f4p125F}.
      * <pre>
      * <font style='background-color: #7A942E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7A942E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7A942E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7A942E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7A942E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7A942E'>&nbsp;@&nbsp;</font><font style='background-color: #7A942E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6187,7 +6187,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sky" has RGB code {@code 0x4D8FAC}, hue 0.5508772, saturation 0.5523256, and value 0.6745098.
-     * It can be represented as a packed float with the constant {@code 0x1.591e9ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.591e9ap126F}.
      * <pre>
      * <font style='background-color: #4D8FAC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4D8FAC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4D8FAC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4D8FAC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4D8FAC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4D8FAC'>&nbsp;@&nbsp;</font><font style='background-color: #4D8FAC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6201,7 +6201,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sky Blue" has RGB code {@code 0x87CEEB}, hue 0.54833335, saturation 0.4255319, and value 0.92156863.
-     * It can be represented as a packed float with the constant {@code 0x1.d79d0ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d79d0ep126F}.
      * <pre>
      * <font style='background-color: #87CEEB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #87CEEB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #87CEEB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #87CEEB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #87CEEB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #87CEEB'>&nbsp;@&nbsp;</font><font style='background-color: #87CEEB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6215,7 +6215,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Slate Gray" has RGB code {@code 0x708090}, hue 0.5833333, saturation 0.22222225, and value 0.5647059.
-     * It can be represented as a packed float with the constant {@code 0x1.2100ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2100ep126F}.
      * <pre>
      * <font style='background-color: #708090; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #708090; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #708090; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #708090'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #708090'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #708090'>&nbsp;@&nbsp;</font><font style='background-color: #708090; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6229,7 +6229,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Smalt" has RGB code {@code 0x003399}, hue 0.61111116, saturation 1.0, and value 0.6.
-     * It can be represented as a packed float with the constant {@code 0x1.3266p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3266p126F}.
      * <pre>
      * <font style='background-color: #003399; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #003399; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #003399; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #003399'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #003399'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #003399'>&nbsp;@&nbsp;</font><font style='background-color: #003399; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6243,7 +6243,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sooty Bamboo" has RGB code {@code 0x593A27}, hue 0.06333333, saturation 0.56179774, and value 0.34901962.
-     * It can be represented as a packed float with the constant {@code 0x0.4e74b2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4e74b2p125F}.
      * <pre>
      * <font style='background-color: #593A27; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #593A27; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #593A27; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #593A27'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #593A27'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #593A27'>&nbsp;@&nbsp;</font><font style='background-color: #593A27; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6257,7 +6257,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sooty Willow Bamboo" has RGB code {@code 0x4D4B3A}, hue 0.14912283, saturation 0.24675328, and value 0.3019608.
-     * It can be represented as a packed float with the constant {@code 0x0.74969ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.74969ap125F}.
      * <pre>
      * <font style='background-color: #4D4B3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4D4B3A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4D4B3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4D4B3A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4D4B3A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4D4B3A'>&nbsp;@&nbsp;</font><font style='background-color: #4D4B3A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6271,7 +6271,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sparrow Brown" has RGB code {@code 0x8C4736}, hue 0.032945752, saturation 0.61428577, and value 0.54901963.
-     * It can be represented as a packed float with the constant {@code 0x0.6c8f18p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6c8f18p125F}.
      * <pre>
      * <font style='background-color: #8C4736; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C4736; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8C4736; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8C4736'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8C4736'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8C4736'>&nbsp;@&nbsp;</font><font style='background-color: #8C4736; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6285,7 +6285,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Spring Bud" has RGB code {@code 0xA7FC00}, hue 0.22288364, saturation 1.0, and value 0.9882353.
-     * It can be represented as a packed float with the constant {@code 0x0.01f94ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01f94ep125F}.
      * <pre>
      * <font style='background-color: #A7FC00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A7FC00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A7FC00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A7FC00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A7FC00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A7FC00'>&nbsp;@&nbsp;</font><font style='background-color: #A7FC00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6299,7 +6299,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Spring Green" has RGB code {@code 0x00FF7F}, hue 0.41633987, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.fffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fffep125F}.
      * <pre>
      * <font style='background-color: #00FF7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FF7F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #00FF7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #00FF7F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #00FF7F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #00FF7F'>&nbsp;@&nbsp;</font><font style='background-color: #00FF7F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6313,7 +6313,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Stained Red" has RGB code {@code 0x78779B}, hue 0.6712963, saturation 0.2322581, and value 0.60784316.
-     * It can be represented as a packed float with the constant {@code 0x1.36eefp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.36eefp126F}.
      * <pre>
      * <font style='background-color: #78779B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #78779B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #78779B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #78779B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #78779B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #78779B'>&nbsp;@&nbsp;</font><font style='background-color: #78779B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6327,7 +6327,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Steamed Chestnut" has RGB code {@code 0xD3B17D}, hue 0.10077518, saturation 0.40758294, and value 0.827451.
-     * It can be represented as a packed float with the constant {@code 0x0.fb63a6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fb63a6p125F}.
      * <pre>
      * <font style='background-color: #D3B17D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D3B17D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D3B17D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D3B17D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D3B17D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D3B17D'>&nbsp;@&nbsp;</font><font style='background-color: #D3B17D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6341,7 +6341,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Steel Blue" has RGB code {@code 0x4682B4}, hue 0.57575756, saturation 0.6111111, and value 0.7058824.
-     * It can be represented as a packed float with the constant {@code 0x1.69048cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.69048cp126F}.
      * <pre>
      * <font style='background-color: #4682B4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4682B4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4682B4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4682B4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4682B4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4682B4'>&nbsp;@&nbsp;</font><font style='background-color: #4682B4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6355,7 +6355,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Storeroom Brown" has RGB code {@code 0x3D4035}, hue 0.21212125, saturation 0.17187504, and value 0.2509804.
-     * It can be represented as a packed float with the constant {@code 0x0.6a807ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6a807ap125F}.
      * <pre>
      * <font style='background-color: #3D4035; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3D4035; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3D4035; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3D4035'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3D4035'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3D4035'>&nbsp;@&nbsp;</font><font style='background-color: #3D4035; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6369,7 +6369,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Stylish Persimnmon" has RGB code {@code 0xFFA26B}, hue 0.061936975, saturation 0.5803921, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.d745fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d745fep125F}.
      * <pre>
      * <font style='background-color: #FFA26B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFA26B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFA26B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFA26B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFA26B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFA26B'>&nbsp;@&nbsp;</font><font style='background-color: #FFA26B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6383,7 +6383,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sumac" has RGB code {@code 0x592B1F}, hue 0.034482718, saturation 0.6516854, and value 0.34901962.
-     * It can be represented as a packed float with the constant {@code 0x0.3e56b2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3e56b2p125F}.
      * <pre>
      * <font style='background-color: #592B1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #592B1F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #592B1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #592B1F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #592B1F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #592B1F'>&nbsp;@&nbsp;</font><font style='background-color: #592B1F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6397,7 +6397,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Sumac Dyed" has RGB code {@code 0xE08A1E}, hue 0.09278351, saturation 0.86607146, and value 0.8784314.
-     * It can be represented as a packed float with the constant {@code 0x0.3d15cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3d15cp125F}.
      * <pre>
      * <font style='background-color: #E08A1E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E08A1E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E08A1E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E08A1E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E08A1E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E08A1E'>&nbsp;@&nbsp;</font><font style='background-color: #E08A1E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6411,7 +6411,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tan" has RGB code {@code 0xD2B48C}, hue 0.09523809, saturation 0.3333333, and value 0.8235294.
-     * It can be represented as a packed float with the constant {@code 0x1.1969a4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1969a4p126F}.
      * <pre>
      * <font style='background-color: #D2B48C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D2B48C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D2B48C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D2B48C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D2B48C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D2B48C'>&nbsp;@&nbsp;</font><font style='background-color: #D2B48C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6425,7 +6425,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tangerine" has RGB code {@code 0xF28500}, hue 0.091597795, saturation 1.0, and value 0.9490196.
-     * It can be represented as a packed float with the constant {@code 0x0.010be4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.010be4p125F}.
      * <pre>
      * <font style='background-color: #F28500; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F28500; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F28500; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F28500'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F28500'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F28500'>&nbsp;@&nbsp;</font><font style='background-color: #F28500; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6439,7 +6439,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tangerine Yellow" has RGB code {@code 0xFFCC00}, hue 0.13333338, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0199fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0199fep125F}.
      * <pre>
      * <font style='background-color: #FFCC00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFCC00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFCC00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFCC00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFCC00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFCC00'>&nbsp;@&nbsp;</font><font style='background-color: #FFCC00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6453,7 +6453,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tatarian Aster" has RGB code {@code 0x976E9A}, hue 0.82196975, saturation 0.2857143, and value 0.6039216.
-     * It can be represented as a packed float with the constant {@code 0x1.34dd2ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.34dd2ep126F}.
      * <pre>
      * <font style='background-color: #976E9A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #976E9A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #976E9A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #976E9A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #976E9A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #976E9A'>&nbsp;@&nbsp;</font><font style='background-color: #976E9A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6467,7 +6467,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Taupe" has RGB code {@code 0x483C32}, hue 0.07575756, saturation 0.30555558, and value 0.28235295.
-     * It can be represented as a packed float with the constant {@code 0x0.64789p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.64789p125F}.
      * <pre>
      * <font style='background-color: #483C32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #483C32; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #483C32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #483C32'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #483C32'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #483C32'>&nbsp;@&nbsp;</font><font style='background-color: #483C32; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6481,7 +6481,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tawny" has RGB code {@code 0xCD5700}, hue 0.07073176, saturation 1.0, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x0.00af9ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.00af9ap125F}.
      * <pre>
      * <font style='background-color: #CD5700; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CD5700; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CD5700; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CD5700'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CD5700'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CD5700'>&nbsp;@&nbsp;</font><font style='background-color: #CD5700; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6495,7 +6495,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tead Garden Contemplation" has RGB code {@code 0x665343}, hue 0.07619047, saturation 0.34313723, and value 0.4.
-     * It can be represented as a packed float with the constant {@code 0x0.86a6ccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.86a6ccp125F}.
      * <pre>
      * <font style='background-color: #665343; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #665343; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #665343; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #665343'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #665343'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #665343'>&nbsp;@&nbsp;</font><font style='background-color: #665343; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6509,7 +6509,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tea Green" has RGB code {@code 0xD0F0C0}, hue 0.27777773, saturation 0.19999999, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x1.81e1ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.81e1ap126F}.
      * <pre>
      * <font style='background-color: #D0F0C0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D0F0C0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D0F0C0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D0F0C0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D0F0C0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D0F0C0'>&nbsp;@&nbsp;</font><font style='background-color: #D0F0C0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6523,7 +6523,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tea Orange" has RGB code {@code 0xF88379}, hue 0.013123393, saturation 0.51209676, and value 0.972549.
-     * It can be represented as a packed float with the constant {@code 0x0.f307fp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f307fp125F}.
      * <pre>
      * <font style='background-color: #F88379; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F88379; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F88379; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F88379'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F88379'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F88379'>&nbsp;@&nbsp;</font><font style='background-color: #F88379; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6537,7 +6537,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tea Rose" has RGB code {@code 0xF4C2C2}, hue 0.0, saturation 0.20491803, and value 0.95686275.
-     * It can be represented as a packed float with the constant {@code 0x1.8585e8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8585e8p126F}.
      * <pre>
      * <font style='background-color: #F4C2C2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F4C2C2; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F4C2C2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F4C2C2'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F4C2C2'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F4C2C2'>&nbsp;@&nbsp;</font><font style='background-color: #F4C2C2; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6551,7 +6551,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Teal" has RGB code {@code 0x008080}, hue 0.5, saturation 1.0, and value 0.5019608.
-     * It can be represented as a packed float with the constant {@code 0x1.01p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01p126F}.
      * <pre>
      * <font style='background-color: #008080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #008080; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #008080; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #008080'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #008080'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #008080'>&nbsp;@&nbsp;</font><font style='background-color: #008080; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6565,7 +6565,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Terra Cotta" has RGB code {@code 0xE2725B}, hue 0.028395057, saturation 0.5973452, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x0.b6e5c4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b6e5c4p125F}.
      * <pre>
      * <font style='background-color: #E2725B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E2725B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E2725B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E2725B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E2725B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E2725B'>&nbsp;@&nbsp;</font><font style='background-color: #E2725B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6579,7 +6579,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Thin Violet" has RGB code {@code 0xA87CA0}, hue 0.8636363, saturation 0.26190478, and value 0.65882355.
-     * It can be represented as a packed float with the constant {@code 0x1.40f95p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.40f95p126F}.
      * <pre>
      * <font style='background-color: #A87CA0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A87CA0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A87CA0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A87CA0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A87CA0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A87CA0'>&nbsp;@&nbsp;</font><font style='background-color: #A87CA0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6593,7 +6593,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Thistle" has RGB code {@code 0xD8BFD8}, hue 0.8333333, saturation 0.11574073, and value 0.84705883.
-     * It can be represented as a packed float with the constant {@code 0x1.b17fbp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b17fbp126F}.
      * <pre>
      * <font style='background-color: #D8BFD8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D8BFD8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D8BFD8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D8BFD8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D8BFD8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D8BFD8'>&nbsp;@&nbsp;</font><font style='background-color: #D8BFD8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6607,7 +6607,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Thousand Herb" has RGB code {@code 0x317589}, hue 0.5378788, saturation 0.64233583, and value 0.5372549.
-     * It can be represented as a packed float with the constant {@code 0x1.12ea62p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.12ea62p126F}.
      * <pre>
      * <font style='background-color: #317589; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #317589; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #317589; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #317589'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #317589'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #317589'>&nbsp;@&nbsp;</font><font style='background-color: #317589; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6621,7 +6621,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Thousand Year Old Brown" has RGB code {@code 0x3B3429}, hue 0.10185188, saturation 0.30508474, and value 0.23137255.
-     * It can be represented as a packed float with the constant {@code 0x0.526876p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.526876p125F}.
      * <pre>
      * <font style='background-color: #3B3429; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B3429; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3B3429; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3B3429'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3B3429'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3B3429'>&nbsp;@&nbsp;</font><font style='background-color: #3B3429; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6635,7 +6635,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Thousand Year Old Green" has RGB code {@code 0x374231}, hue 0.27450985, saturation 0.25757578, and value 0.25882354.
-     * It can be represented as a packed float with the constant {@code 0x0.62846ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.62846ep125F}.
      * <pre>
      * <font style='background-color: #374231; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #374231; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #374231; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #374231'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #374231'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #374231'>&nbsp;@&nbsp;</font><font style='background-color: #374231; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6649,7 +6649,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Thrice Dyed Crimson" has RGB code {@code 0xF7665A}, hue 0.012738824, saturation 0.63562757, and value 0.96862745.
-     * It can be represented as a packed float with the constant {@code 0x0.b4cdeep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b4cdeep125F}.
      * <pre>
      * <font style='background-color: #F7665A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F7665A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F7665A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F7665A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F7665A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F7665A'>&nbsp;@&nbsp;</font><font style='background-color: #F7665A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6663,7 +6663,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tomato" has RGB code {@code 0xFF6347}, hue 0.025362313, saturation 0.7215686, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.8ec7fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8ec7fep125F}.
      * <pre>
      * <font style='background-color: #FF6347; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF6347; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FF6347; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF6347'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF6347'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF6347'>&nbsp;@&nbsp;</font><font style='background-color: #FF6347; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6677,7 +6677,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tree Peony" has RGB code {@code 0xA4345D}, hue 0.93898815, saturation 0.68292683, and value 0.6431373.
-     * It can be represented as a packed float with the constant {@code 0x0.ba6948p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ba6948p125F}.
      * <pre>
      * <font style='background-color: #A4345D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A4345D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A4345D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A4345D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A4345D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A4345D'>&nbsp;@&nbsp;</font><font style='background-color: #A4345D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6691,7 +6691,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "True Pink" has RGB code {@code 0xFFC0CB}, hue 0.97089946, saturation 0.24705881, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.9781fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9781fep126F}.
      * <pre>
      * <font style='background-color: #FFC0CB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFC0CB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFC0CB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFC0CB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFC0CB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFC0CB'>&nbsp;@&nbsp;</font><font style='background-color: #FFC0CB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6705,7 +6705,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "True Red" has RGB code {@code 0x8F1D21}, hue 0.99415207, saturation 0.7972028, and value 0.56078434.
-     * It can be represented as a packed float with the constant {@code 0x0.423b1ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.423b1ep125F}.
      * <pre>
      * <font style='background-color: #8F1D21; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F1D21; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8F1D21; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8F1D21'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8F1D21'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8F1D21'>&nbsp;@&nbsp;</font><font style='background-color: #8F1D21; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6719,7 +6719,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Turmeric" has RGB code {@code 0xE69B3A}, hue 0.09399223, saturation 0.7478261, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x0.7537ccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7537ccp125F}.
      * <pre>
      * <font style='background-color: #E69B3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E69B3A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E69B3A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E69B3A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E69B3A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E69B3A'>&nbsp;@&nbsp;</font><font style='background-color: #E69B3A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6733,7 +6733,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Turquoise" has RGB code {@code 0x30D5C8}, hue 0.48686868, saturation 0.7746479, and value 0.8352941.
-     * It can be represented as a packed float with the constant {@code 0x1.91aa6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.91aa6p126F}.
      * <pre>
      * <font style='background-color: #30D5C8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #30D5C8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #30D5C8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #30D5C8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #30D5C8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #30D5C8'>&nbsp;@&nbsp;</font><font style='background-color: #30D5C8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6747,7 +6747,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Tyrian Purple" has RGB code {@code 0x66023C}, hue 0.9033333, saturation 0.98039216, and value 0.4.
-     * It can be represented as a packed float with the constant {@code 0x0.7804ccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7804ccp125F}.
      * <pre>
      * <font style='background-color: #66023C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #66023C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #66023C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #66023C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #66023C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #66023C'>&nbsp;@&nbsp;</font><font style='background-color: #66023C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6761,7 +6761,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ultramarine" has RGB code {@code 0x120A8F}, hue 0.67669165, saturation 0.9300699, and value 0.56078434.
-     * It can be represented as a packed float with the constant {@code 0x1.1e1424p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1e1424p126F}.
      * <pre>
      * <font style='background-color: #120A8F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #120A8F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #120A8F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #120A8F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #120A8F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #120A8F'>&nbsp;@&nbsp;</font><font style='background-color: #120A8F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6775,7 +6775,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Ultramarine Dye" has RGB code {@code 0x5D8CAE}, hue 0.5699589, saturation 0.46551725, and value 0.68235296.
-     * It can be represented as a packed float with the constant {@code 0x1.5d18bap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5d18bap126F}.
      * <pre>
      * <font style='background-color: #5D8CAE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5D8CAE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5D8CAE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5D8CAE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5D8CAE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5D8CAE'>&nbsp;@&nbsp;</font><font style='background-color: #5D8CAE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6789,7 +6789,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Unbleached Silk" has RGB code {@code 0xFFDDCA}, hue 0.05974847, saturation 0.20784312, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.95bbfep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.95bbfep126F}.
      * <pre>
      * <font style='background-color: #FFDDCA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFDDCA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFDDCA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFDDCA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFDDCA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFDDCA'>&nbsp;@&nbsp;</font><font style='background-color: #FFDDCA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6803,7 +6803,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Undried Wall" has RGB code {@code 0x785E49}, hue 0.074468076, saturation 0.39166665, and value 0.47058824.
-     * It can be represented as a packed float with the constant {@code 0x0.92bcfp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.92bcfp125F}.
      * <pre>
      * <font style='background-color: #785E49; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #785E49; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #785E49; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #785E49'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #785E49'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #785E49'>&nbsp;@&nbsp;</font><font style='background-color: #785E49; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6817,7 +6817,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Vanishing Red Mouse" has RGB code {@code 0x44312E}, hue 0.022727251, saturation 0.32352942, and value 0.26666668.
-     * It can be represented as a packed float with the constant {@code 0x0.5c6288p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5c6288p125F}.
      * <pre>
      * <font style='background-color: #44312E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #44312E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #44312E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #44312E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #44312E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #44312E'>&nbsp;@&nbsp;</font><font style='background-color: #44312E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6831,7 +6831,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Vegas Gold" has RGB code {@code 0xC5B358}, hue 0.13914376, saturation 0.5532995, and value 0.77254903.
-     * It can be represented as a packed float with the constant {@code 0x0.b1678ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b1678ap125F}.
      * <pre>
      * <font style='background-color: #C5B358; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C5B358; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C5B358; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C5B358'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C5B358'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C5B358'>&nbsp;@&nbsp;</font><font style='background-color: #C5B358; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6845,7 +6845,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Velvet" has RGB code {@code 0x224634}, hue 0.4166667, saturation 0.5142857, and value 0.27450982.
-     * It can be represented as a packed float with the constant {@code 0x0.688c44p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.688c44p125F}.
      * <pre>
      * <font style='background-color: #224634; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #224634; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #224634; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #224634'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #224634'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #224634'>&nbsp;@&nbsp;</font><font style='background-color: #224634; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6859,7 +6859,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Vermillion" has RGB code {@code 0xE34234}, hue 0.013333321, saturation 0.7709251, and value 0.8901961.
-     * It can be represented as a packed float with the constant {@code 0x0.6885c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6885c6p125F}.
      * <pre>
      * <font style='background-color: #E34234; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E34234; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E34234; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E34234'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E34234'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E34234'>&nbsp;@&nbsp;</font><font style='background-color: #E34234; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6873,7 +6873,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Vine Grape" has RGB code {@code 0x6D2B50}, hue 0.90656567, saturation 0.6055046, and value 0.42745098.
-     * It can be represented as a packed float with the constant {@code 0x0.a056dap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a056dap125F}.
      * <pre>
      * <font style='background-color: #6D2B50; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6D2B50; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6D2B50; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6D2B50'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6D2B50'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6D2B50'>&nbsp;@&nbsp;</font><font style='background-color: #6D2B50; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6887,7 +6887,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Violet" has RGB code {@code 0x8B00FF}, hue 0.7575164, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fe0116p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fe0116p126F}.
      * <pre>
      * <font style='background-color: #8B00FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8B00FF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8B00FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8B00FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8B00FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8B00FF'>&nbsp;@&nbsp;</font><font style='background-color: #8B00FF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6901,7 +6901,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Violet Dye" has RGB code {@code 0x5B3256}, hue 0.85365856, saturation 0.45054945, and value 0.35686275.
-     * It can be represented as a packed float with the constant {@code 0x0.ac64b6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ac64b6p125F}.
      * <pre>
      * <font style='background-color: #5B3256; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5B3256; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5B3256; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5B3256'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5B3256'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5B3256'>&nbsp;@&nbsp;</font><font style='background-color: #5B3256; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6915,7 +6915,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Viridian" has RGB code {@code 0x40826D}, hue 0.4469697, saturation 0.5076923, and value 0.50980395.
-     * It can be represented as a packed float with the constant {@code 0x0.db048p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.db048p125F}.
      * <pre>
      * <font style='background-color: #40826D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #40826D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #40826D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #40826D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #40826D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #40826D'>&nbsp;@&nbsp;</font><font style='background-color: #40826D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6929,7 +6929,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Walnut" has RGB code {@code 0x9F7462}, hue 0.04918033, saturation 0.3836478, and value 0.62352943.
-     * It can be represented as a packed float with the constant {@code 0x0.c4e93ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c4e93ep125F}.
      * <pre>
      * <font style='background-color: #9F7462; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9F7462; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9F7462; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9F7462'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9F7462'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9F7462'>&nbsp;@&nbsp;</font><font style='background-color: #9F7462; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6943,7 +6943,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Washed Out Crimson" has RGB code {@code 0xFFB3A7}, hue 0.02272731, saturation 0.34509802, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.4f67fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4f67fep126F}.
      * <pre>
      * <font style='background-color: #FFB3A7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFB3A7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFB3A7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFB3A7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFB3A7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFB3A7'>&nbsp;@&nbsp;</font><font style='background-color: #FFB3A7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6957,7 +6957,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Washed Out Persimmon" has RGB code {@code 0xEC8254}, hue 0.050438643, saturation 0.64406776, and value 0.9254902.
-     * It can be represented as a packed float with the constant {@code 0x0.a905d8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a905d8p125F}.
      * <pre>
      * <font style='background-color: #EC8254; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EC8254; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EC8254; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EC8254'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EC8254'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EC8254'>&nbsp;@&nbsp;</font><font style='background-color: #EC8254; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6971,7 +6971,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Water" has RGB code {@code 0x86ABA5}, hue 0.472973, saturation 0.21637425, and value 0.67058825.
-     * It can be represented as a packed float with the constant {@code 0x1.4b570cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4b570cp126F}.
      * <pre>
      * <font style='background-color: #86ABA5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #86ABA5; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #86ABA5; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #86ABA5'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #86ABA5'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #86ABA5'>&nbsp;@&nbsp;</font><font style='background-color: #86ABA5; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6985,7 +6985,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Water Persimmon" has RGB code {@code 0xB56C60}, hue 0.02352941, saturation 0.46961325, and value 0.70980394.
-     * It can be represented as a packed float with the constant {@code 0x0.c0d96ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c0d96ap125F}.
      * <pre>
      * <font style='background-color: #B56C60; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B56C60; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B56C60; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B56C60'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B56C60'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B56C60'>&nbsp;@&nbsp;</font><font style='background-color: #B56C60; color: #888888'>&nbsp;@&nbsp;</font>
@@ -6999,7 +6999,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Wheat" has RGB code {@code 0xF5DEB3}, hue 0.108585894, saturation 0.26938775, and value 0.9607843.
-     * It can be represented as a packed float with the constant {@code 0x1.67bdeap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.67bdeap126F}.
      * <pre>
      * <font style='background-color: #F5DEB3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F5DEB3; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F5DEB3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F5DEB3'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F5DEB3'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F5DEB3'>&nbsp;@&nbsp;</font><font style='background-color: #F5DEB3; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7013,7 +7013,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "White" has RGB code {@code 0xFFFFFF}, hue 0.0, saturation 0.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fffffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fffffep126F}.
      * <pre>
      * <font style='background-color: #FFFFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFFFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #FFFFFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7027,7 +7027,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "white Mouse" has RGB code {@code 0xB9A193}, hue 0.061403513, saturation 0.20540538, and value 0.7254902.
-     * It can be represented as a packed float with the constant {@code 0x1.274372p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.274372p126F}.
      * <pre>
      * <font style='background-color: #B9A193; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B9A193; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B9A193; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B9A193'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B9A193'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B9A193'>&nbsp;@&nbsp;</font><font style='background-color: #B9A193; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7041,7 +7041,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "White Oak" has RGB code {@code 0xCE9F6F}, hue 0.084210515, saturation 0.46116504, and value 0.80784315.
-     * It can be represented as a packed float with the constant {@code 0x0.df3f9cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.df3f9cp125F}.
      * <pre>
      * <font style='background-color: #CE9F6F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CE9F6F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CE9F6F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CE9F6F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CE9F6F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CE9F6F'>&nbsp;@&nbsp;</font><font style='background-color: #CE9F6F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7055,7 +7055,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "White Tea Dye" has RGB code {@code 0xC48E69}, hue 0.067765534, saturation 0.46428573, and value 0.76862746.
-     * It can be represented as a packed float with the constant {@code 0x0.d31d88p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d31d88p125F}.
      * <pre>
      * <font style='background-color: #C48E69; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C48E69; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C48E69; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C48E69'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C48E69'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C48E69'>&nbsp;@&nbsp;</font><font style='background-color: #C48E69; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7069,7 +7069,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Whitish Green" has RGB code {@code 0xA5BA93}, hue 0.2564103, saturation 0.2096774, and value 0.7294118.
-     * It can be represented as a packed float with the constant {@code 0x1.27754ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.27754ap126F}.
      * <pre>
      * <font style='background-color: #A5BA93; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A5BA93; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A5BA93; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A5BA93'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A5BA93'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A5BA93'>&nbsp;@&nbsp;</font><font style='background-color: #A5BA93; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7083,7 +7083,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Willow Dye" has RGB code {@code 0x8C9E5E}, hue 0.21354175, saturation 0.4050633, and value 0.61960787.
-     * It can be represented as a packed float with the constant {@code 0x0.bd3d18p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bd3d18p125F}.
      * <pre>
      * <font style='background-color: #8C9E5E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C9E5E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8C9E5E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8C9E5E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8C9E5E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8C9E5E'>&nbsp;@&nbsp;</font><font style='background-color: #8C9E5E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7097,7 +7097,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Willow Grey" has RGB code {@code 0x817B69}, hue 0.125, saturation 0.18604656, and value 0.5058824.
-     * It can be represented as a packed float with the constant {@code 0x0.d2f702p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d2f702p125F}.
      * <pre>
      * <font style='background-color: #817B69; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #817B69; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #817B69; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #817B69'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #817B69'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #817B69'>&nbsp;@&nbsp;</font><font style='background-color: #817B69; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7111,7 +7111,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Willow Tea" has RGB code {@code 0x9C8A4D}, hue 0.12869197, saturation 0.50641024, and value 0.6117647.
-     * It can be represented as a packed float with the constant {@code 0x0.9b1538p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9b1538p125F}.
      * <pre>
      * <font style='background-color: #9C8A4D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9C8A4D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9C8A4D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9C8A4D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9C8A4D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9C8A4D'>&nbsp;@&nbsp;</font><font style='background-color: #9C8A4D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7125,7 +7125,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Wilted Lawn Clippings" has RGB code {@code 0xAB4C3D}, hue 0.022727251, saturation 0.6432749, and value 0.67058825.
-     * It can be represented as a packed float with the constant {@code 0x0.7a9956p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7a9956p125F}.
      * <pre>
      * <font style='background-color: #AB4C3D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB4C3D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AB4C3D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AB4C3D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AB4C3D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AB4C3D'>&nbsp;@&nbsp;</font><font style='background-color: #AB4C3D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7139,7 +7139,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Willow Leaves Underside" has RGB code {@code 0xBCB58C}, hue 0.1423611, saturation 0.25531912, and value 0.7372549.
-     * It can be represented as a packed float with the constant {@code 0x1.196b78p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.196b78p126F}.
      * <pre>
      * <font style='background-color: #BCB58C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BCB58C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BCB58C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BCB58C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BCB58C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BCB58C'>&nbsp;@&nbsp;</font><font style='background-color: #BCB58C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7153,7 +7153,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Wisteria" has RGB code {@code 0xC9A0DC}, hue 0.7805556, saturation 0.27272725, and value 0.8627451.
-     * It can be represented as a packed float with the constant {@code 0x1.b94192p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b94192p126F}.
      * <pre>
      * <font style='background-color: #C9A0DC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C9A0DC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C9A0DC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C9A0DC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C9A0DC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C9A0DC'>&nbsp;@&nbsp;</font><font style='background-color: #C9A0DC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7167,7 +7167,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Wisteria Dye" has RGB code {@code 0x89729E}, hue 0.75378793, saturation 0.27848104, and value 0.61960787.
-     * It can be represented as a packed float with the constant {@code 0x1.3ce512p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3ce512p126F}.
      * <pre>
      * <font style='background-color: #89729E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #89729E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #89729E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #89729E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #89729E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #89729E'>&nbsp;@&nbsp;</font><font style='background-color: #89729E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7181,7 +7181,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Wisteria Purple" has RGB code {@code 0x875F9A}, hue 0.77966094, saturation 0.3831169, and value 0.6039216.
-     * It can be represented as a packed float with the constant {@code 0x1.34bf0ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.34bf0ep126F}.
      * <pre>
      * <font style='background-color: #875F9A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #875F9A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #875F9A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #875F9A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #875F9A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #875F9A'>&nbsp;@&nbsp;</font><font style='background-color: #875F9A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7195,7 +7195,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Yellow" has RGB code {@code 0xFFFF00}, hue 0.16666669, saturation 1.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x0.01fffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.01fffep125F}.
      * <pre>
      * <font style='background-color: #FFFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFF00; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFFF00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFFF00'>&nbsp;@&nbsp;</font><font style='background-color: #FFFF00; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7209,7 +7209,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Yellow Green" has RGB code {@code 0x9ACD32}, hue 0.2215054, saturation 0.75609756, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x0.659b34p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.659b34p125F}.
      * <pre>
      * <font style='background-color: #9ACD32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9ACD32; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9ACD32; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9ACD32'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9ACD32'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9ACD32'>&nbsp;@&nbsp;</font><font style='background-color: #9ACD32; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7223,7 +7223,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Yellow Sea Pine Brown" has RGB code {@code 0x896C39}, hue 0.10625005, saturation 0.58394164, and value 0.5372549.
-     * It can be represented as a packed float with the constant {@code 0x0.72d912p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.72d912p125F}.
      * <pre>
      * <font style='background-color: #896C39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #896C39; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #896C39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #896C39'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #896C39'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #896C39'>&nbsp;@&nbsp;</font><font style='background-color: #896C39; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7237,7 +7237,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Young Bamboo" has RGB code {@code 0x6B9362}, hue 0.30272114, saturation 0.33333334, and value 0.5764706.
-     * It can be represented as a packed float with the constant {@code 0x0.c526d6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c526d6p125F}.
      * <pre>
      * <font style='background-color: #6B9362; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6B9362; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6B9362; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6B9362'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6B9362'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6B9362'>&nbsp;@&nbsp;</font><font style='background-color: #6B9362; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7251,7 +7251,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "Zinnwaldite" has RGB code {@code 0xEBC2AF}, hue 0.052777827, saturation 0.25531912, and value 0.92156863.
-     * It can be represented as a packed float with the constant {@code 0x1.5f85d6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5f85d6p126F}.
      * <pre>
      * <font style='background-color: #EBC2AF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EBC2AF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EBC2AF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EBC2AF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EBC2AF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EBC2AF'>&nbsp;@&nbsp;</font><font style='background-color: #EBC2AF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7265,7 +7265,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Midnight" has RGB code {@code 0x140C1C}, hue 0.75000006, saturation 0.57142854, and value 0.10980392.
-     * It can be represented as a packed float with the constant {@code 0x0.381828p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.381828p125F}.
      * <pre>
      * <font style='background-color: #140C1C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #140C1C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #140C1C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #140C1C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #140C1C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #140C1C'>&nbsp;@&nbsp;</font><font style='background-color: #140C1C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7279,7 +7279,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Dark Leather" has RGB code {@code 0x442434}, hue 0.9166667, saturation 0.47058824, and value 0.26666668.
-     * It can be represented as a packed float with the constant {@code 0x0.684888p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.684888p125F}.
      * <pre>
      * <font style='background-color: #442434; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #442434; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #442434; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #442434'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #442434'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #442434'>&nbsp;@&nbsp;</font><font style='background-color: #442434; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7293,7 +7293,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Deep Ocean" has RGB code {@code 0x30346D}, hue 0.6557377, saturation 0.559633, and value 0.42745098.
-     * It can be represented as a packed float with the constant {@code 0x0.da686p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.da686p125F}.
      * <pre>
      * <font style='background-color: #30346D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #30346D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #30346D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #30346D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #30346D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #30346D'>&nbsp;@&nbsp;</font><font style='background-color: #30346D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7307,7 +7307,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Lead" has RGB code {@code 0x4E4A4F}, hue 0.8, saturation 0.06329113, and value 0.30980393.
-     * It can be represented as a packed float with the constant {@code 0x0.9e949cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9e949cp125F}.
      * <pre>
      * <font style='background-color: #4E4A4F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4E4A4F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4E4A4F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4E4A4F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4E4A4F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4E4A4F'>&nbsp;@&nbsp;</font><font style='background-color: #4E4A4F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7321,7 +7321,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Earth" has RGB code {@code 0x854C30}, hue 0.054902017, saturation 0.6390978, and value 0.52156866.
-     * It can be represented as a packed float with the constant {@code 0x0.60990ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.60990ap125F}.
      * <pre>
      * <font style='background-color: #854C30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #854C30; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #854C30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #854C30'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #854C30'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #854C30'>&nbsp;@&nbsp;</font><font style='background-color: #854C30; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7335,7 +7335,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Forest" has RGB code {@code 0x346524}, hue 0.29230767, saturation 0.6435643, and value 0.39607844.
-     * It can be represented as a packed float with the constant {@code 0x0.48ca68p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.48ca68p125F}.
      * <pre>
      * <font style='background-color: #346524; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #346524; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #346524; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #346524'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #346524'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #346524'>&nbsp;@&nbsp;</font><font style='background-color: #346524; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7349,7 +7349,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Lobster" has RGB code {@code 0xD04648}, hue 0.9975845, saturation 0.6634615, and value 0.8156863.
-     * It can be represented as a packed float with the constant {@code 0x0.908dap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.908dap125F}.
      * <pre>
      * <font style='background-color: #D04648; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D04648; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D04648; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D04648'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D04648'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D04648'>&nbsp;@&nbsp;</font><font style='background-color: #D04648; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7363,7 +7363,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Drab" has RGB code {@code 0x757161}, hue 0.13333333, saturation 0.17094016, and value 0.45882353.
-     * It can be represented as a packed float with the constant {@code 0x0.c2e2eap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c2e2eap125F}.
      * <pre>
      * <font style='background-color: #757161; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #757161; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #757161; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #757161'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #757161'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #757161'>&nbsp;@&nbsp;</font><font style='background-color: #757161; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7377,7 +7377,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Cadet Blue" has RGB code {@code 0x597DCE}, hue 0.61538464, saturation 0.56796116, and value 0.80784315.
-     * It can be represented as a packed float with the constant {@code 0x1.9cfab2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9cfab2p126F}.
      * <pre>
      * <font style='background-color: #597DCE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #597DCE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #597DCE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #597DCE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #597DCE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #597DCE'>&nbsp;@&nbsp;</font><font style='background-color: #597DCE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7391,7 +7391,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Tawny Brown" has RGB code {@code 0xD27D2C}, hue 0.08132529, saturation 0.7904762, and value 0.8235294.
-     * It can be represented as a packed float with the constant {@code 0x0.58fba4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.58fba4p125F}.
      * <pre>
      * <font style='background-color: #D27D2C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D27D2C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D27D2C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D27D2C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D27D2C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D27D2C'>&nbsp;@&nbsp;</font><font style='background-color: #D27D2C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7405,7 +7405,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Iron" has RGB code {@code 0x8595A1}, hue 0.5714286, saturation 0.17391303, and value 0.6313726.
-     * It can be represented as a packed float with the constant {@code 0x1.432b0ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.432b0ap126F}.
      * <pre>
      * <font style='background-color: #8595A1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8595A1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8595A1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8595A1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8595A1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8595A1'>&nbsp;@&nbsp;</font><font style='background-color: #8595A1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7419,7 +7419,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Pea Soup" has RGB code {@code 0x6DAA2C}, hue 0.2473545, saturation 0.7411765, and value 0.6666667.
-     * It can be represented as a packed float with the constant {@code 0x0.5954dap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5954dap125F}.
      * <pre>
      * <font style='background-color: #6DAA2C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6DAA2C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6DAA2C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6DAA2C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6DAA2C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6DAA2C'>&nbsp;@&nbsp;</font><font style='background-color: #6DAA2C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7433,7 +7433,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Putty" has RGB code {@code 0xD2AA99}, hue 0.04970765, saturation 0.27142856, and value 0.8235294.
-     * It can be represented as a packed float with the constant {@code 0x1.3355a4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3355a4p126F}.
      * <pre>
      * <font style='background-color: #D2AA99; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D2AA99; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D2AA99; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D2AA99'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D2AA99'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D2AA99'>&nbsp;@&nbsp;</font><font style='background-color: #D2AA99; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7447,7 +7447,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Turquoise" has RGB code {@code 0x6DC2CA}, hue 0.51433694, saturation 0.46039605, and value 0.7921569.
-     * It can be represented as a packed float with the constant {@code 0x1.9584dap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9584dap126F}.
      * <pre>
      * <font style='background-color: #6DC2CA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6DC2CA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6DC2CA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6DC2CA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6DC2CA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6DC2CA'>&nbsp;@&nbsp;</font><font style='background-color: #6DC2CA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7461,7 +7461,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Mustard" has RGB code {@code 0xDAD45E}, hue 0.15860218, saturation 0.56880736, and value 0.85490197.
-     * It can be represented as a packed float with the constant {@code 0x0.bda9b4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bda9b4p125F}.
      * <pre>
      * <font style='background-color: #DAD45E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DAD45E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DAD45E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DAD45E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DAD45E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DAD45E'>&nbsp;@&nbsp;</font><font style='background-color: #DAD45E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7475,7 +7475,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Eggshell" has RGB code {@code 0xDEEED6}, hue 0.27777773, saturation 0.10084033, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.adddbcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.adddbcp126F}.
      * <pre>
      * <font style='background-color: #DEEED6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DEEED6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DEEED6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DEEED6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DEEED6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DEEED6'>&nbsp;@&nbsp;</font><font style='background-color: #DEEED6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7489,7 +7489,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Black" has RGB code {@code 0x000000}, hue 0.0, saturation 0.0, and value 0.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0p0F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0p125F}.
      * <pre>
      * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #000000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7503,7 +7503,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Ink" has RGB code {@code 0x222034}, hue 0.6833334, saturation 0.38461536, and value 0.20392157.
-     * It can be represented as a packed float with the constant {@code 0x0.684044p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.684044p125F}.
      * <pre>
      * <font style='background-color: #222034; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #222034; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #222034; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #222034'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #222034'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #222034'>&nbsp;@&nbsp;</font><font style='background-color: #222034; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7517,7 +7517,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Seal Brown" has RGB code {@code 0x45283C}, hue 0.8850575, saturation 0.42028987, and value 0.27058825.
-     * It can be represented as a packed float with the constant {@code 0x0.78508ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.78508ap125F}.
      * <pre>
      * <font style='background-color: #45283C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #45283C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #45283C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #45283C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #45283C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #45283C'>&nbsp;@&nbsp;</font><font style='background-color: #45283C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7531,7 +7531,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Chestnut" has RGB code {@code 0x663931}, hue 0.025157213, saturation 0.51960784, and value 0.4.
-     * It can be represented as a packed float with the constant {@code 0x0.6272ccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6272ccp125F}.
      * <pre>
      * <font style='background-color: #663931; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #663931; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #663931; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #663931'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #663931'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #663931'>&nbsp;@&nbsp;</font><font style='background-color: #663931; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7545,7 +7545,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Cappuccino" has RGB code {@code 0x8F563B}, hue 0.053571463, saturation 0.58741266, and value 0.56078434.
-     * It can be represented as a packed float with the constant {@code 0x0.76ad1ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.76ad1ep125F}.
      * <pre>
      * <font style='background-color: #8F563B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F563B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8F563B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8F563B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8F563B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8F563B'>&nbsp;@&nbsp;</font><font style='background-color: #8F563B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7559,7 +7559,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Pumpkin" has RGB code {@code 0xDF7126}, hue 0.06756753, saturation 0.8295964, and value 0.8745098.
-     * It can be represented as a packed float with the constant {@code 0x0.4ce3bep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4ce3bep125F}.
      * <pre>
      * <font style='background-color: #DF7126; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DF7126; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DF7126; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DF7126'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DF7126'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DF7126'>&nbsp;@&nbsp;</font><font style='background-color: #DF7126; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7573,7 +7573,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Fawn" has RGB code {@code 0xD9A066}, hue 0.08405805, saturation 0.5299539, and value 0.8509804.
-     * It can be represented as a packed float with the constant {@code 0x0.cd41b2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cd41b2p125F}.
      * <pre>
      * <font style='background-color: #D9A066; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D9A066; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D9A066; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D9A066'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D9A066'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D9A066'>&nbsp;@&nbsp;</font><font style='background-color: #D9A066; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7587,7 +7587,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Nude" has RGB code {@code 0xEEC39A}, hue 0.08134925, saturation 0.35294116, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.3587dcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3587dcp126F}.
      * <pre>
      * <font style='background-color: #EEC39A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EEC39A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EEC39A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EEC39A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EEC39A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EEC39A'>&nbsp;@&nbsp;</font><font style='background-color: #EEC39A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7601,7 +7601,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Daffodil" has RGB code {@code 0xFBF236}, hue 0.15905249, saturation 0.78486055, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x0.6de5f6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6de5f6p125F}.
      * <pre>
      * <font style='background-color: #FBF236; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FBF236; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FBF236; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FBF236'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FBF236'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FBF236'>&nbsp;@&nbsp;</font><font style='background-color: #FBF236; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7615,7 +7615,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Key Lime" has RGB code {@code 0x99E550}, hue 0.25167787, saturation 0.65065503, and value 0.8980392.
-     * It can be represented as a packed float with the constant {@code 0x0.a1cb32p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a1cb32p125F}.
      * <pre>
      * <font style='background-color: #99E550; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #99E550; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #99E550; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #99E550'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #99E550'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #99E550'>&nbsp;@&nbsp;</font><font style='background-color: #99E550; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7629,7 +7629,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Shamrock" has RGB code {@code 0x6ABE30}, hue 0.2652583, saturation 0.74736845, and value 0.74509805.
-     * It can be represented as a packed float with the constant {@code 0x0.617cd4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.617cd4p125F}.
      * <pre>
      * <font style='background-color: #6ABE30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6ABE30; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6ABE30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6ABE30'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6ABE30'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6ABE30'>&nbsp;@&nbsp;</font><font style='background-color: #6ABE30; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7643,7 +7643,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Jungle" has RGB code {@code 0x37946E}, hue 0.43189967, saturation 0.6283784, and value 0.5803922.
-     * It can be represented as a packed float with the constant {@code 0x0.dd286ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.dd286ep125F}.
      * <pre>
      * <font style='background-color: #37946E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #37946E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #37946E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #37946E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #37946E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #37946E'>&nbsp;@&nbsp;</font><font style='background-color: #37946E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7657,7 +7657,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Olive" has RGB code {@code 0x4B692F}, hue 0.25287348, saturation 0.5523809, and value 0.4117647.
-     * It can be represented as a packed float with the constant {@code 0x0.5ed296p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5ed296p125F}.
      * <pre>
      * <font style='background-color: #4B692F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4B692F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4B692F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4B692F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4B692F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4B692F'>&nbsp;@&nbsp;</font><font style='background-color: #4B692F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7671,7 +7671,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Mud" has RGB code {@code 0x524B24}, hue 0.14130431, saturation 0.5609756, and value 0.32156864.
-     * It can be represented as a packed float with the constant {@code 0x0.4896a4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4896a4p125F}.
      * <pre>
      * <font style='background-color: #524B24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #524B24; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #524B24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #524B24'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #524B24'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #524B24'>&nbsp;@&nbsp;</font><font style='background-color: #524B24; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7685,7 +7685,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Shadow" has RGB code {@code 0x323C39}, hue 0.45, saturation 0.16666666, and value 0.23529412.
-     * It can be represented as a packed float with the constant {@code 0x0.727864p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.727864p125F}.
      * <pre>
      * <font style='background-color: #323C39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #323C39; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #323C39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #323C39'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #323C39'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #323C39'>&nbsp;@&nbsp;</font><font style='background-color: #323C39; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7699,7 +7699,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Cobalt" has RGB code {@code 0x3F3F74}, hue 0.6666667, saturation 0.45689654, and value 0.45490196.
-     * It can be represented as a packed float with the constant {@code 0x0.e87e7ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e87e7ep125F}.
      * <pre>
      * <font style='background-color: #3F3F74; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3F3F74; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3F3F74; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3F3F74'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3F3F74'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3F3F74'>&nbsp;@&nbsp;</font><font style='background-color: #3F3F74; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7713,7 +7713,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Cerulean" has RGB code {@code 0x306082}, hue 0.5691057, saturation 0.63076925, and value 0.50980395.
-     * It can be represented as a packed float with the constant {@code 0x1.04c06p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.04c06p126F}.
      * <pre>
      * <font style='background-color: #306082; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #306082; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #306082; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #306082'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #306082'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #306082'>&nbsp;@&nbsp;</font><font style='background-color: #306082; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7727,7 +7727,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Denim" has RGB code {@code 0x5B6EE1}, hue 0.64303476, saturation 0.59555554, and value 0.88235295.
-     * It can be represented as a packed float with the constant {@code 0x1.c2dcb6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c2dcb6p126F}.
      * <pre>
      * <font style='background-color: #5B6EE1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5B6EE1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5B6EE1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5B6EE1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5B6EE1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5B6EE1'>&nbsp;@&nbsp;</font><font style='background-color: #5B6EE1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7741,7 +7741,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Sky Blue" has RGB code {@code 0x639BFF}, hue 0.6068376, saturation 0.61176467, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.ff36c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ff36c6p126F}.
      * <pre>
      * <font style='background-color: #639BFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #639BFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #639BFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #639BFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #639BFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #639BFF'>&nbsp;@&nbsp;</font><font style='background-color: #639BFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7755,7 +7755,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Seafoam" has RGB code {@code 0x5FCDE4}, hue 0.52882206, saturation 0.5833334, and value 0.89411765.
-     * It can be represented as a packed float with the constant {@code 0x1.c99abep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c99abep126F}.
      * <pre>
      * <font style='background-color: #5FCDE4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5FCDE4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5FCDE4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5FCDE4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5FCDE4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5FCDE4'>&nbsp;@&nbsp;</font><font style='background-color: #5FCDE4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7769,7 +7769,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Platinum" has RGB code {@code 0xCBDBFC}, hue 0.6122449, saturation 0.19444443, and value 0.9882353.
-     * It can be represented as a packed float with the constant {@code 0x1.f9b796p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f9b796p126F}.
      * <pre>
      * <font style='background-color: #CBDBFC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CBDBFC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CBDBFC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CBDBFC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CBDBFC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CBDBFC'>&nbsp;@&nbsp;</font><font style='background-color: #CBDBFC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7783,7 +7783,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB White" has RGB code {@code 0xFFFFFF}, hue 0.0, saturation 0.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fffffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fffffep126F}.
      * <pre>
      * <font style='background-color: #FFFFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFFFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #FFFFFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7797,7 +7797,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Storm Cloud" has RGB code {@code 0x9BADB7}, hue 0.5595239, saturation 0.15300545, and value 0.7176471.
-     * It can be represented as a packed float with the constant {@code 0x1.6f5b36p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6f5b36p126F}.
      * <pre>
      * <font style='background-color: #9BADB7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9BADB7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9BADB7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9BADB7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9BADB7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9BADB7'>&nbsp;@&nbsp;</font><font style='background-color: #9BADB7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7811,7 +7811,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Elephant" has RGB code {@code 0x847E87}, hue 0.77777785, saturation 0.066666715, and value 0.5294118.
-     * It can be represented as a packed float with the constant {@code 0x1.0efd08p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0efd08p126F}.
      * <pre>
      * <font style='background-color: #847E87; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #847E87; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #847E87; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #847E87'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #847E87'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #847E87'>&nbsp;@&nbsp;</font><font style='background-color: #847E87; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7825,7 +7825,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Graphite" has RGB code {@code 0x696A6A}, hue 0.5, saturation 0.0094339615, and value 0.41568628.
-     * It can be represented as a packed float with the constant {@code 0x0.d4d4d2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d4d4d2p125F}.
      * <pre>
      * <font style='background-color: #696A6A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #696A6A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #696A6A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #696A6A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #696A6A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #696A6A'>&nbsp;@&nbsp;</font><font style='background-color: #696A6A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7839,7 +7839,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Soot" has RGB code {@code 0x595652}, hue 0.09523809, saturation 0.07865168, and value 0.34901962.
-     * It can be represented as a packed float with the constant {@code 0x0.a4acb2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a4acb2p125F}.
      * <pre>
      * <font style='background-color: #595652; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #595652; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #595652; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #595652'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #595652'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #595652'>&nbsp;@&nbsp;</font><font style='background-color: #595652; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7853,7 +7853,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Eggplant" has RGB code {@code 0x76428A}, hue 0.78703696, saturation 0.5217391, and value 0.5411765.
-     * It can be represented as a packed float with the constant {@code 0x1.1484ecp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1484ecp126F}.
      * <pre>
      * <font style='background-color: #76428A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #76428A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #76428A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #76428A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #76428A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #76428A'>&nbsp;@&nbsp;</font><font style='background-color: #76428A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7867,7 +7867,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Blood" has RGB code {@code 0xAC3232}, hue 0.0, saturation 0.70930237, and value 0.6745098.
-     * It can be represented as a packed float with the constant {@code 0x0.646558p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.646558p125F}.
      * <pre>
      * <font style='background-color: #AC3232; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AC3232; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AC3232; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AC3232'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AC3232'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AC3232'>&nbsp;@&nbsp;</font><font style='background-color: #AC3232; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7881,7 +7881,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Coral" has RGB code {@code 0xD95763}, hue 0.9846154, saturation 0.5990783, and value 0.8509804.
-     * It can be represented as a packed float with the constant {@code 0x0.c6afb2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c6afb2p125F}.
      * <pre>
      * <font style='background-color: #D95763; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D95763; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D95763; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D95763'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D95763'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D95763'>&nbsp;@&nbsp;</font><font style='background-color: #D95763; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7895,7 +7895,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Lavender" has RGB code {@code 0xD77BBA}, hue 0.8858696, saturation 0.427907, and value 0.84313726.
-     * It can be represented as a packed float with the constant {@code 0x1.74f7aep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.74f7aep126F}.
      * <pre>
      * <font style='background-color: #D77BBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D77BBA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D77BBA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D77BBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D77BBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D77BBA'>&nbsp;@&nbsp;</font><font style='background-color: #D77BBA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7909,7 +7909,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Army Green" has RGB code {@code 0x8F974A}, hue 0.18398273, saturation 0.50993377, and value 0.5921569.
-     * It can be represented as a packed float with the constant {@code 0x0.952f1ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.952f1ep125F}.
      * <pre>
      * <font style='background-color: #8F974A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F974A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8F974A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8F974A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8F974A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8F974A'>&nbsp;@&nbsp;</font><font style='background-color: #8F974A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7923,7 +7923,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "DB Compost" has RGB code {@code 0x8A6F30}, hue 0.116666675, saturation 0.65217394, and value 0.5411765.
-     * It can be represented as a packed float with the constant {@code 0x0.60df14p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.60df14p125F}.
      * <pre>
      * <font style='background-color: #8A6F30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8A6F30; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8A6F30; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8A6F30'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8A6F30'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8A6F30'>&nbsp;@&nbsp;</font><font style='background-color: #8A6F30; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7937,7 +7937,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Red" has RGB code {@code 0xEE2A2A}, hue 0.0, saturation 0.8235294, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x0.5455dcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5455dcp125F}.
      * <pre>
      * <font style='background-color: #EE2A2A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EE2A2A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EE2A2A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EE2A2A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EE2A2A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EE2A2A'>&nbsp;@&nbsp;</font><font style='background-color: #EE2A2A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7951,7 +7951,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Red" has RGB code {@code 0xB76363}, hue 0.0, saturation 0.45901638, and value 0.7176471.
-     * It can be represented as a packed float with the constant {@code 0x0.c6c76ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c6c76ep125F}.
      * <pre>
      * <font style='background-color: #B76363; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B76363; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B76363; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B76363'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B76363'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B76363'>&nbsp;@&nbsp;</font><font style='background-color: #B76363; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7965,7 +7965,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Red" has RGB code {@code 0xE21414}, hue 0.0, saturation 0.91150445, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x0.2829c4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2829c4p125F}.
      * <pre>
      * <font style='background-color: #E21414; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E21414; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E21414; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E21414'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E21414'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E21414'>&nbsp;@&nbsp;</font><font style='background-color: #E21414; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7979,7 +7979,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Red" has RGB code {@code 0xED8383}, hue 0.0, saturation 0.44725737, and value 0.92941177.
-     * It can be represented as a packed float with the constant {@code 0x1.0707dap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0707dap126F}.
      * <pre>
      * <font style='background-color: #ED8383; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ED8383; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ED8383; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ED8383'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ED8383'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ED8383'>&nbsp;@&nbsp;</font><font style='background-color: #ED8383; color: #888888'>&nbsp;@&nbsp;</font>
@@ -7993,7 +7993,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Red" has RGB code {@code 0xE6A7A7}, hue 0.0, saturation 0.27391303, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x1.4f4fccp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4f4fccp126F}.
      * <pre>
      * <font style='background-color: #E6A7A7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E6A7A7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E6A7A7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E6A7A7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E6A7A7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E6A7A7'>&nbsp;@&nbsp;</font><font style='background-color: #E6A7A7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8007,7 +8007,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Red" has RGB code {@code 0xF43B3B}, hue 0.0, saturation 0.7581967, and value 0.95686275.
-     * It can be represented as a packed float with the constant {@code 0x0.7677e8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7677e8p125F}.
      * <pre>
      * <font style='background-color: #F43B3B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F43B3B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F43B3B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F43B3B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F43B3B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F43B3B'>&nbsp;@&nbsp;</font><font style='background-color: #F43B3B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8021,7 +8021,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Red" has RGB code {@code 0xA11616}, hue 0.0, saturation 0.863354, and value 0.6313726.
-     * It can be represented as a packed float with the constant {@code 0x0.2c2d42p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2c2d42p125F}.
      * <pre>
      * <font style='background-color: #A11616; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A11616; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A11616; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A11616'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A11616'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A11616'>&nbsp;@&nbsp;</font><font style='background-color: #A11616; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8035,7 +8035,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Red" has RGB code {@code 0x923535}, hue 0.0, saturation 0.6369863, and value 0.57254905.
-     * It can be represented as a packed float with the constant {@code 0x0.6a6b24p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6a6b24p125F}.
      * <pre>
      * <font style='background-color: #923535; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #923535; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #923535; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #923535'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #923535'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #923535'>&nbsp;@&nbsp;</font><font style='background-color: #923535; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8049,7 +8049,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Red" has RGB code {@code 0xBE1111}, hue 0.0, saturation 0.91052634, and value 0.74509805.
-     * It can be represented as a packed float with the constant {@code 0x0.22237cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.22237cp125F}.
      * <pre>
      * <font style='background-color: #BE1111; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BE1111; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BE1111; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BE1111'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BE1111'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BE1111'>&nbsp;@&nbsp;</font><font style='background-color: #BE1111; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8063,7 +8063,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Orange" has RGB code {@code 0xF17C24}, hue 0.07154477, saturation 0.8506224, and value 0.94509804.
-     * It can be represented as a packed float with the constant {@code 0x0.48f9e2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.48f9e2p125F}.
      * <pre>
      * <font style='background-color: #F17C24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F17C24; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F17C24; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F17C24'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F17C24'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F17C24'>&nbsp;@&nbsp;</font><font style='background-color: #F17C24; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8077,7 +8077,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Orange" has RGB code {@code 0xCC9B75}, hue 0.07279688, saturation 0.4264706, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x0.eb3798p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.eb3798p125F}.
      * <pre>
      * <font style='background-color: #CC9B75; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CC9B75; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CC9B75; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CC9B75'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CC9B75'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CC9B75'>&nbsp;@&nbsp;</font><font style='background-color: #CC9B75; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8091,7 +8091,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Orange" has RGB code {@code 0xE56D11}, hue 0.07232708, saturation 0.9257642, and value 0.8980392.
-     * It can be represented as a packed float with the constant {@code 0x0.22dbcap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.22dbcap125F}.
      * <pre>
      * <font style='background-color: #E56D11; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E56D11; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E56D11; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E56D11'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E56D11'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E56D11'>&nbsp;@&nbsp;</font><font style='background-color: #E56D11; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8105,7 +8105,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Orange" has RGB code {@code 0xF2B383}, hue 0.07207209, saturation 0.45867765, and value 0.9490196.
-     * It can be represented as a packed float with the constant {@code 0x1.0767e4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0767e4p126F}.
      * <pre>
      * <font style='background-color: #F2B383; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F2B383; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F2B383; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F2B383'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F2B383'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F2B383'>&nbsp;@&nbsp;</font><font style='background-color: #F2B383; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8119,7 +8119,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Orange" has RGB code {@code 0xEDC8AC}, hue 0.07179487, saturation 0.2742616, and value 0.92941177.
-     * It can be represented as a packed float with the constant {@code 0x1.5991dap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5991dap126F}.
      * <pre>
      * <font style='background-color: #EDC8AC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EDC8AC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EDC8AC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EDC8AC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EDC8AC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EDC8AC'>&nbsp;@&nbsp;</font><font style='background-color: #EDC8AC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8133,7 +8133,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Orange" has RGB code {@code 0xF68A39}, hue 0.07142854, saturation 0.7682927, and value 0.9647059.
-     * It can be represented as a packed float with the constant {@code 0x0.7315ecp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7315ecp125F}.
      * <pre>
      * <font style='background-color: #F68A39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F68A39; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F68A39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F68A39'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F68A39'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F68A39'>&nbsp;@&nbsp;</font><font style='background-color: #F68A39; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8147,7 +8147,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Orange" has RGB code {@code 0xA35113}, hue 0.071759224, saturation 0.8834356, and value 0.6392157.
-     * It can be represented as a packed float with the constant {@code 0x0.26a346p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.26a346p125F}.
      * <pre>
      * <font style='background-color: #A35113; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A35113; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A35113; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A35113'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A35113'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A35113'>&nbsp;@&nbsp;</font><font style='background-color: #A35113; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8161,7 +8161,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Orange" has RGB code {@code 0xA46B40}, hue 0.07166672, saturation 0.6097561, and value 0.6431373.
-     * It can be represented as a packed float with the constant {@code 0x0.80d748p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.80d748p125F}.
      * <pre>
      * <font style='background-color: #A46B40; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A46B40; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A46B40; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A46B40'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A46B40'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A46B40'>&nbsp;@&nbsp;</font><font style='background-color: #A46B40; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8175,7 +8175,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Orange" has RGB code {@code 0xC15B0F}, hue 0.07116103, saturation 0.9222798, and value 0.75686276.
-     * It can be represented as a packed float with the constant {@code 0x0.1eb782p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1eb782p125F}.
      * <pre>
      * <font style='background-color: #C15B0F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C15B0F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C15B0F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C15B0F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C15B0F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C15B0F'>&nbsp;@&nbsp;</font><font style='background-color: #C15B0F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8189,7 +8189,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Brown" has RGB code {@code 0xCD8B51}, hue 0.077957034, saturation 0.60487807, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x0.a3179ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a3179ap125F}.
      * <pre>
      * <font style='background-color: #CD8B51; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CD8B51; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CD8B51; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CD8B51'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CD8B51'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CD8B51'>&nbsp;@&nbsp;</font><font style='background-color: #CD8B51; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8203,7 +8203,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Brown" has RGB code {@code 0xBFA38A}, hue 0.07861638, saturation 0.2774869, and value 0.7490196.
-     * It can be represented as a packed float with the constant {@code 0x1.15477ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.15477ep126F}.
      * <pre>
      * <font style='background-color: #BFA38A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFA38A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BFA38A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BFA38A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BFA38A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BFA38A'>&nbsp;@&nbsp;</font><font style='background-color: #BFA38A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8217,7 +8217,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Brown" has RGB code {@code 0xC36F26}, hue 0.07749468, saturation 0.8051282, and value 0.7647059.
-     * It can be represented as a packed float with the constant {@code 0x0.4cdf86p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4cdf86p125F}.
      * <pre>
      * <font style='background-color: #C36F26; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C36F26; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C36F26; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C36F26'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C36F26'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C36F26'>&nbsp;@&nbsp;</font><font style='background-color: #C36F26; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8231,7 +8231,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Brown" has RGB code {@code 0xDEBA9B}, hue 0.07711446, saturation 0.30180177, and value 0.87058824.
-     * It can be represented as a packed float with the constant {@code 0x1.3775bcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3775bcp126F}.
      * <pre>
      * <font style='background-color: #DEBA9B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DEBA9B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DEBA9B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DEBA9B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DEBA9B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DEBA9B'>&nbsp;@&nbsp;</font><font style='background-color: #DEBA9B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8245,7 +8245,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Brown" has RGB code {@code 0xE2CDBB}, hue 0.07692307, saturation 0.17256635, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x1.779bc4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.779bc4p126F}.
      * <pre>
      * <font style='background-color: #E2CDBB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E2CDBB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E2CDBB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E2CDBB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E2CDBB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E2CDBB'>&nbsp;@&nbsp;</font><font style='background-color: #E2CDBB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8259,7 +8259,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Brown" has RGB code {@code 0xDF8F47}, hue 0.078947365, saturation 0.6816143, and value 0.8745098.
-     * It can be represented as a packed float with the constant {@code 0x0.8f1fbep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8f1fbep125F}.
      * <pre>
      * <font style='background-color: #DF8F47; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DF8F47; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DF8F47; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DF8F47'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DF8F47'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DF8F47'>&nbsp;@&nbsp;</font><font style='background-color: #DF8F47; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8273,7 +8273,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Brown" has RGB code {@code 0x8A582B}, hue 0.078947425, saturation 0.6884058, and value 0.5411765.
-     * It can be represented as a packed float with the constant {@code 0x0.56b114p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.56b114p125F}.
      * <pre>
      * <font style='background-color: #8A582B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8A582B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8A582B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8A582B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8A582B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8A582B'>&nbsp;@&nbsp;</font><font style='background-color: #8A582B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8287,7 +8287,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Brown" has RGB code {@code 0x937358}, hue 0.07627118, saturation 0.40136054, and value 0.5764706.
-     * It can be represented as a packed float with the constant {@code 0x0.b0e726p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b0e726p125F}.
      * <pre>
      * <font style='background-color: #937358; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #937358; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #937358; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #937358'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #937358'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #937358'>&nbsp;@&nbsp;</font><font style='background-color: #937358; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8301,7 +8301,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Brown" has RGB code {@code 0xA45D20}, hue 0.07702017, saturation 0.80487806, and value 0.6431373.
-     * It can be represented as a packed float with the constant {@code 0x0.40bb48p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.40bb48p125F}.
      * <pre>
      * <font style='background-color: #A45D20; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A45D20; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A45D20; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A45D20'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A45D20'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A45D20'>&nbsp;@&nbsp;</font><font style='background-color: #A45D20; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8315,7 +8315,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Apricot" has RGB code {@code 0xF9AA38}, hue 0.098445594, saturation 0.7751004, and value 0.9764706.
-     * It can be represented as a packed float with the constant {@code 0x0.7155f2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7155f2p125F}.
      * <pre>
      * <font style='background-color: #F9AA38; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F9AA38; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F9AA38; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F9AA38'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F9AA38'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F9AA38'>&nbsp;@&nbsp;</font><font style='background-color: #F9AA38; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8329,7 +8329,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Apricot" has RGB code {@code 0xDDBC8B}, hue 0.09959352, saturation 0.3710407, and value 0.8666667.
-     * It can be represented as a packed float with the constant {@code 0x1.1779bap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1779bap126F}.
      * <pre>
      * <font style='background-color: #DDBC8B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DDBC8B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DDBC8B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DDBC8B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DDBC8B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DDBC8B'>&nbsp;@&nbsp;</font><font style='background-color: #DDBC8B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8343,7 +8343,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Apricot" has RGB code {@code 0xED971B}, hue 0.09841275, saturation 0.886076, and value 0.92941177.
-     * It can be represented as a packed float with the constant {@code 0x0.372fdap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.372fdap125F}.
      * <pre>
      * <font style='background-color: #ED971B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ED971B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ED971B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ED971B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ED971B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ED971B'>&nbsp;@&nbsp;</font><font style='background-color: #ED971B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8357,7 +8357,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Apricot" has RGB code {@code 0xF8CD90}, hue 0.097756445, saturation 0.41935483, and value 0.972549.
-     * It can be represented as a packed float with the constant {@code 0x1.219bfp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.219bfp126F}.
      * <pre>
      * <font style='background-color: #F8CD90; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F8CD90; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F8CD90; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F8CD90'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F8CD90'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F8CD90'>&nbsp;@&nbsp;</font><font style='background-color: #F8CD90; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8371,7 +8371,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Apricot" has RGB code {@code 0xF4DBB7}, hue 0.09836066, saturation 0.24999999, and value 0.95686275.
-     * It can be represented as a packed float with the constant {@code 0x1.6fb7e8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6fb7e8p126F}.
      * <pre>
      * <font style='background-color: #F4DBB7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F4DBB7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F4DBB7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F4DBB7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F4DBB7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F4DBB7'>&nbsp;@&nbsp;</font><font style='background-color: #F4DBB7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8385,7 +8385,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Apricot" has RGB code {@code 0xFCAE3F}, hue 0.09788358, saturation 0.75, and value 0.9882353.
-     * It can be represented as a packed float with the constant {@code 0x0.7f5df8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7f5df8p125F}.
      * <pre>
      * <font style='background-color: #FCAE3F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FCAE3F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FCAE3F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FCAE3F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FCAE3F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FCAE3F'>&nbsp;@&nbsp;</font><font style='background-color: #FCAE3F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8399,7 +8399,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Apricot" has RGB code {@code 0xA8701D}, hue 0.099520326, saturation 0.82738096, and value 0.65882355.
-     * It can be represented as a packed float with the constant {@code 0x0.3ae15p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3ae15p125F}.
      * <pre>
      * <font style='background-color: #A8701D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A8701D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A8701D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A8701D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A8701D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A8701D'>&nbsp;@&nbsp;</font><font style='background-color: #A8701D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8413,7 +8413,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Apricot" has RGB code {@code 0xB18B55}, hue 0.09782606, saturation 0.519774, and value 0.69411767.
-     * It can be represented as a packed float with the constant {@code 0x0.ab1762p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ab1762p125F}.
      * <pre>
      * <font style='background-color: #B18B55; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B18B55; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B18B55; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B18B55'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B18B55'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B18B55'>&nbsp;@&nbsp;</font><font style='background-color: #B18B55; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8427,7 +8427,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Apricot" has RGB code {@code 0xC77F17}, hue 0.098484814, saturation 0.8844221, and value 0.78039217.
-     * It can be represented as a packed float with the constant {@code 0x0.2eff8ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2eff8ep125F}.
      * <pre>
      * <font style='background-color: #C77F17; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C77F17; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C77F17; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C77F17'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C77F17'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C77F17'>&nbsp;@&nbsp;</font><font style='background-color: #C77F17; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8441,7 +8441,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Gold" has RGB code {@code 0xEBCB1D}, hue 0.1407767, saturation 0.87659574, and value 0.92156863.
-     * It can be represented as a packed float with the constant {@code 0x0.3b97d6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3b97d6p125F}.
      * <pre>
      * <font style='background-color: #EBCB1D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EBCB1D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EBCB1D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EBCB1D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EBCB1D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EBCB1D'>&nbsp;@&nbsp;</font><font style='background-color: #EBCB1D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8455,7 +8455,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Gold" has RGB code {@code 0xDCCF85}, hue 0.1417625, saturation 0.39545453, and value 0.8627451.
-     * It can be represented as a packed float with the constant {@code 0x1.0b9fb8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0b9fb8p126F}.
      * <pre>
      * <font style='background-color: #DCCF85; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DCCF85; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DCCF85; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DCCF85'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DCCF85'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DCCF85'>&nbsp;@&nbsp;</font><font style='background-color: #DCCF85; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8469,7 +8469,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Gold" has RGB code {@code 0xE0BF0D}, hue 0.14060032, saturation 0.94196427, and value 0.8784314.
-     * It can be represented as a packed float with the constant {@code 0x0.1b7fcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1b7fcp125F}.
      * <pre>
      * <font style='background-color: #E0BF0D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E0BF0D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E0BF0D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E0BF0D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E0BF0D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E0BF0D'>&nbsp;@&nbsp;</font><font style='background-color: #E0BF0D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8483,7 +8483,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Gold" has RGB code {@code 0xF1E081}, hue 0.14136904, saturation 0.46473026, and value 0.94509804.
-     * It can be represented as a packed float with the constant {@code 0x1.03c1e2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.03c1e2p126F}.
      * <pre>
      * <font style='background-color: #F1E081; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F1E081; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F1E081; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F1E081'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F1E081'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F1E081'>&nbsp;@&nbsp;</font><font style='background-color: #F1E081; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8497,7 +8497,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Gold" has RGB code {@code 0xF1E7B0}, hue 0.14102566, saturation 0.26970953, and value 0.94509804.
-     * It can be represented as a packed float with the constant {@code 0x1.61cfe2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.61cfe2p126F}.
      * <pre>
      * <font style='background-color: #F1E7B0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F1E7B0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F1E7B0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F1E7B0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F1E7B0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F1E7B0'>&nbsp;@&nbsp;</font><font style='background-color: #F1E7B0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8511,7 +8511,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Gold" has RGB code {@code 0xF2D636}, hue 0.14184391, saturation 0.7768595, and value 0.9490196.
-     * It can be represented as a packed float with the constant {@code 0x0.6dade4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6dade4p125F}.
      * <pre>
      * <font style='background-color: #F2D636; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F2D636; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F2D636; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F2D636'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F2D636'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F2D636'>&nbsp;@&nbsp;</font><font style='background-color: #F2D636; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8525,7 +8525,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Gold" has RGB code {@code 0x9F880F}, hue 0.14004624, saturation 0.9056604, and value 0.62352943.
-     * It can be represented as a packed float with the constant {@code 0x0.1f113ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1f113ep125F}.
      * <pre>
      * <font style='background-color: #9F880F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9F880F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9F880F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9F880F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9F880F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9F880F'>&nbsp;@&nbsp;</font><font style='background-color: #9F880F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8539,7 +8539,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Gold" has RGB code {@code 0xAFA04C}, hue 0.14141417, saturation 0.5657143, and value 0.6862745.
-     * It can be represented as a packed float with the constant {@code 0x0.99415ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.99415ep125F}.
      * <pre>
      * <font style='background-color: #AFA04C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AFA04C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AFA04C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AFA04C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AFA04C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AFA04C'>&nbsp;@&nbsp;</font><font style='background-color: #AFA04C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8553,7 +8553,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Gold" has RGB code {@code 0xBCA20B}, hue 0.1421845, saturation 0.94148934, and value 0.7372549.
-     * It can be represented as a packed float with the constant {@code 0x0.174578p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.174578p125F}.
      * <pre>
      * <font style='background-color: #BCA20B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BCA20B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BCA20B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BCA20B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BCA20B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BCA20B'>&nbsp;@&nbsp;</font><font style='background-color: #BCA20B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8567,7 +8567,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Yellow" has RGB code {@code 0xFBFA27}, hue 0.1658805, saturation 0.84462154, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x0.4ff5f6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.4ff5f6p125F}.
      * <pre>
      * <font style='background-color: #FBFA27; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FBFA27; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FBFA27; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FBFA27'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FBFA27'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FBFA27'>&nbsp;@&nbsp;</font><font style='background-color: #FBFA27; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8581,7 +8581,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Yellow" has RGB code {@code 0xF2F197}, hue 0.16483516, saturation 0.37603304, and value 0.9490196.
-     * It can be represented as a packed float with the constant {@code 0x1.2fe3e4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2fe3e4p126F}.
      * <pre>
      * <font style='background-color: #F2F197; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F2F197; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F2F197; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F2F197'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F2F197'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F2F197'>&nbsp;@&nbsp;</font><font style='background-color: #F2F197; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8595,7 +8595,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Yellow" has RGB code {@code 0xEEEE13}, hue 0.16666669, saturation 0.9201681, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x0.27dddcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.27dddcp125F}.
      * <pre>
      * <font style='background-color: #EEEE13; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EEEE13; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EEEE13; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EEEE13'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EEEE13'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EEEE13'>&nbsp;@&nbsp;</font><font style='background-color: #EEEE13; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8609,7 +8609,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Yellow" has RGB code {@code 0xFCFB88}, hue 0.16522992, saturation 0.46031743, and value 0.9882353.
-     * It can be represented as a packed float with the constant {@code 0x1.11f7f8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.11f7f8p126F}.
      * <pre>
      * <font style='background-color: #FCFB88; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FCFB88; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FCFB88; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FCFB88'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FCFB88'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FCFB88'>&nbsp;@&nbsp;</font><font style='background-color: #FCFB88; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8623,7 +8623,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Yellow" has RGB code {@code 0xFBFAB8}, hue 0.16417915, saturation 0.26693225, and value 0.9843137.
-     * It can be represented as a packed float with the constant {@code 0x1.71f5f6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.71f5f6p126F}.
      * <pre>
      * <font style='background-color: #FBFAB8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FBFAB8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FBFAB8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FBFAB8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FBFAB8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FBFAB8'>&nbsp;@&nbsp;</font><font style='background-color: #FBFAB8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8637,7 +8637,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Yellow" has RGB code {@code 0xFDFC39}, hue 0.16581637, saturation 0.77470356, and value 0.99215686.
-     * It can be represented as a packed float with the constant {@code 0x0.73f9fap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.73f9fap125F}.
      * <pre>
      * <font style='background-color: #FDFC39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FDFC39; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FDFC39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FDFC39'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FDFC39'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FDFC39'>&nbsp;@&nbsp;</font><font style='background-color: #FDFC39; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8651,7 +8651,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Yellow" has RGB code {@code 0xAAA914}, hue 0.16555554, saturation 0.88235295, and value 0.6666667.
-     * It can be represented as a packed float with the constant {@code 0x0.295354p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.295354p125F}.
      * <pre>
      * <font style='background-color: #AAA914; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AAA914; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AAA914; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AAA914'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AAA914'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AAA914'>&nbsp;@&nbsp;</font><font style='background-color: #AAA914; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8665,7 +8665,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Yellow" has RGB code {@code 0xC1C05B}, hue 0.16503268, saturation 0.5284974, and value 0.75686276.
-     * It can be represented as a packed float with the constant {@code 0x0.b78182p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b78182p125F}.
      * <pre>
      * <font style='background-color: #C1C05B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C1C05B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C1C05B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C1C05B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C1C05B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C1C05B'>&nbsp;@&nbsp;</font><font style='background-color: #C1C05B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8679,7 +8679,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Yellow" has RGB code {@code 0xC9C80F}, hue 0.16577059, saturation 0.92537314, and value 0.7882353.
-     * It can be represented as a packed float with the constant {@code 0x0.1f9192p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1f9192p125F}.
      * <pre>
      * <font style='background-color: #C9C80F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C9C80F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C9C80F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C9C80F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C9C80F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C9C80F'>&nbsp;@&nbsp;</font><font style='background-color: #C9C80F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8693,7 +8693,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Chartreuse" has RGB code {@code 0xC7F12F}, hue 0.20274907, saturation 0.80497926, and value 0.94509804.
-     * It can be represented as a packed float with the constant {@code 0x0.5fe38ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5fe38ep125F}.
      * <pre>
      * <font style='background-color: #C7F12F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C7F12F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C7F12F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C7F12F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C7F12F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C7F12F'>&nbsp;@&nbsp;</font><font style='background-color: #C7F12F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8707,7 +8707,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Chartreuse" has RGB code {@code 0xD4E693}, hue 0.20281118, saturation 0.36086953, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x1.27cda8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.27cda8p126F}.
      * <pre>
      * <font style='background-color: #D4E693; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D4E693; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D4E693; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D4E693'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D4E693'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D4E693'>&nbsp;@&nbsp;</font><font style='background-color: #D4E693; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8721,7 +8721,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Chartreuse" has RGB code {@code 0xB8E516}, hue 0.20289856, saturation 0.9039301, and value 0.8980392.
-     * It can be represented as a packed float with the constant {@code 0x0.2dcb7p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2dcb7p125F}.
      * <pre>
      * <font style='background-color: #B8E516; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B8E516; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B8E516; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B8E516'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B8E516'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B8E516'>&nbsp;@&nbsp;</font><font style='background-color: #B8E516; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8735,7 +8735,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Chartreuse" has RGB code {@code 0xDFF58C}, hue 0.20158726, saturation 0.4285714, and value 0.9607843.
-     * It can be represented as a packed float with the constant {@code 0x1.19ebbep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.19ebbep126F}.
      * <pre>
      * <font style='background-color: #DFF58C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DFF58C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DFF58C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DFF58C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DFF58C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DFF58C'>&nbsp;@&nbsp;</font><font style='background-color: #DFF58C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8749,7 +8749,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Chartreuse" has RGB code {@code 0xE8F5B8}, hue 0.20218581, saturation 0.24897958, and value 0.9607843.
-     * It can be represented as a packed float with the constant {@code 0x1.71ebdp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.71ebdp126F}.
      * <pre>
      * <font style='background-color: #E8F5B8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E8F5B8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E8F5B8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E8F5B8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E8F5B8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E8F5B8'>&nbsp;@&nbsp;</font><font style='background-color: #E8F5B8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8763,7 +8763,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Chartreuse" has RGB code {@code 0xCEF63C}, hue 0.20250905, saturation 0.75609756, and value 0.9647059.
-     * It can be represented as a packed float with the constant {@code 0x0.79ed9cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.79ed9cp125F}.
      * <pre>
      * <font style='background-color: #CEF63C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CEF63C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CEF63C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CEF63C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CEF63C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CEF63C'>&nbsp;@&nbsp;</font><font style='background-color: #CEF63C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8777,7 +8777,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Chartreuse" has RGB code {@code 0x85A318}, hue 0.20263791, saturation 0.85276073, and value 0.6392157.
-     * It can be represented as a packed float with the constant {@code 0x0.31470ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.31470ap125F}.
      * <pre>
      * <font style='background-color: #85A318; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #85A318; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #85A318; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #85A318'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #85A318'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #85A318'>&nbsp;@&nbsp;</font><font style='background-color: #85A318; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8791,7 +8791,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Chartreuse" has RGB code {@code 0xA2B658}, hue 0.2021277, saturation 0.5164835, and value 0.7137255.
-     * It can be represented as a packed float with the constant {@code 0x0.b16d44p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b16d44p125F}.
      * <pre>
      * <font style='background-color: #A2B658; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A2B658; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A2B658; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A2B658'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A2B658'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A2B658'>&nbsp;@&nbsp;</font><font style='background-color: #A2B658; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8805,7 +8805,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Chartreuse" has RGB code {@code 0x9BC112}, hue 0.20285714, saturation 0.9067358, and value 0.75686276.
-     * It can be represented as a packed float with the constant {@code 0x0.258336p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.258336p125F}.
      * <pre>
      * <font style='background-color: #9BC112; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9BC112; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9BC112; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9BC112'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9BC112'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9BC112'>&nbsp;@&nbsp;</font><font style='background-color: #9BC112; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8819,7 +8819,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Lime" has RGB code {@code 0x9DDD11}, hue 0.21895427, saturation 0.9230769, and value 0.8666667.
-     * It can be represented as a packed float with the constant {@code 0x0.23bb3ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.23bb3ap125F}.
      * <pre>
      * <font style='background-color: #9DDD11; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9DDD11; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9DDD11; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9DDD11'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9DDD11'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9DDD11'>&nbsp;@&nbsp;</font><font style='background-color: #9DDD11; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8833,7 +8833,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Lime" has RGB code {@code 0xB5D079}, hue 0.21839082, saturation 0.41826925, and value 0.8156863.
-     * It can be represented as a packed float with the constant {@code 0x0.f3a16ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f3a16ap125F}.
      * <pre>
      * <font style='background-color: #B5D079; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B5D079; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B5D079; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B5D079'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B5D079'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B5D079'>&nbsp;@&nbsp;</font><font style='background-color: #B5D079; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8847,7 +8847,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Lime" has RGB code {@code 0x93D208}, hue 0.21864682, saturation 0.96190476, and value 0.8235294.
-     * It can be represented as a packed float with the constant {@code 0x0.11a526p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.11a526p125F}.
      * <pre>
      * <font style='background-color: #93D208; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #93D208; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #93D208; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #93D208'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #93D208'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #93D208'>&nbsp;@&nbsp;</font><font style='background-color: #93D208; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8861,7 +8861,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Lime" has RGB code {@code 0xC6E97A}, hue 0.21921915, saturation 0.47639486, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x0.f5d38cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f5d38cp125F}.
      * <pre>
      * <font style='background-color: #C6E97A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C6E97A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C6E97A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C6E97A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C6E97A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C6E97A'>&nbsp;@&nbsp;</font><font style='background-color: #C6E97A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8875,7 +8875,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Lime" has RGB code {@code 0xD6EBAA}, hue 0.2205128, saturation 0.27659574, and value 0.92156863.
-     * It can be represented as a packed float with the constant {@code 0x1.55d7acp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.55d7acp126F}.
      * <pre>
      * <font style='background-color: #D6EBAA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D6EBAA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D6EBAA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D6EBAA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D6EBAA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D6EBAA'>&nbsp;@&nbsp;</font><font style='background-color: #D6EBAA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8889,7 +8889,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Lime" has RGB code {@code 0xB1E932}, hue 0.21766853, saturation 0.7854077, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x0.65d362p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.65d362p125F}.
      * <pre>
      * <font style='background-color: #B1E932; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B1E932; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B1E932; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B1E932'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B1E932'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B1E932'>&nbsp;@&nbsp;</font><font style='background-color: #B1E932; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8903,7 +8903,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Lime" has RGB code {@code 0x699508}, hue 0.21867621, saturation 0.94630873, and value 0.58431375.
-     * It can be represented as a packed float with the constant {@code 0x0.112ad2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.112ad2p125F}.
      * <pre>
      * <font style='background-color: #699508; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #699508; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #699508; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #699508'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #699508'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #699508'>&nbsp;@&nbsp;</font><font style='background-color: #699508; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8917,7 +8917,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Lime" has RGB code {@code 0x85A441}, hue 0.2188552, saturation 0.6036585, and value 0.6431373.
-     * It can be represented as a packed float with the constant {@code 0x0.83490ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.83490ap125F}.
      * <pre>
      * <font style='background-color: #85A441; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #85A441; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #85A441; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #85A441'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #85A441'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #85A441'>&nbsp;@&nbsp;</font><font style='background-color: #85A441; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8931,7 +8931,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Lime" has RGB code {@code 0x7CB106}, hue 0.21832359, saturation 0.9661017, and value 0.69411767.
-     * It can be represented as a packed float with the constant {@code 0x0.0d62f8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0d62f8p125F}.
      * <pre>
      * <font style='background-color: #7CB106; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7CB106; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7CB106; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7CB106'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7CB106'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7CB106'>&nbsp;@&nbsp;</font><font style='background-color: #7CB106; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8945,7 +8945,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Honeydew" has RGB code {@code 0xA5F655}, hue 0.2505176, saturation 0.6544716, and value 0.9647059.
-     * It can be represented as a packed float with the constant {@code 0x0.abed4ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.abed4ap125F}.
      * <pre>
      * <font style='background-color: #A5F655; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A5F655; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A5F655; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A5F655'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A5F655'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A5F655'>&nbsp;@&nbsp;</font><font style='background-color: #A5F655; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8959,7 +8959,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Honeydew" has RGB code {@code 0xC4E6A1}, hue 0.24879223, saturation 0.29999998, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x1.43cd88p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.43cd88p126F}.
      * <pre>
      * <font style='background-color: #C4E6A1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C4E6A1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C4E6A1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C4E6A1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C4E6A1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C4E6A1'>&nbsp;@&nbsp;</font><font style='background-color: #C4E6A1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8973,7 +8973,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Honeydew" has RGB code {@code 0x89EA28}, hue 0.24999994, saturation 0.82905984, and value 0.91764706.
-     * It can be represented as a packed float with the constant {@code 0x0.51d512p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.51d512p125F}.
      * <pre>
      * <font style='background-color: #89EA28; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #89EA28; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #89EA28; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #89EA28'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #89EA28'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #89EA28'>&nbsp;@&nbsp;</font><font style='background-color: #89EA28; color: #888888'>&nbsp;@&nbsp;</font>
@@ -8987,7 +8987,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Honeydew" has RGB code {@code 0xCCF8A0}, hue 0.24999994, saturation 0.3548387, and value 0.972549.
-     * It can be represented as a packed float with the constant {@code 0x1.41f198p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.41f198p126F}.
      * <pre>
      * <font style='background-color: #CCF8A0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CCF8A0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #CCF8A0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #CCF8A0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #CCF8A0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #CCF8A0'>&nbsp;@&nbsp;</font><font style='background-color: #CCF8A0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9001,7 +9001,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Honeydew" has RGB code {@code 0xDCF6C3}, hue 0.25163394, saturation 0.20731705, and value 0.9647059.
-     * It can be represented as a packed float with the constant {@code 0x1.87edb8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.87edb8p126F}.
      * <pre>
      * <font style='background-color: #DCF6C3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DCF6C3; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DCF6C3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DCF6C3'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DCF6C3'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DCF6C3'>&nbsp;@&nbsp;</font><font style='background-color: #DCF6C3; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9015,7 +9015,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Honeydew" has RGB code {@code 0xA1FA48}, hue 0.24999994, saturation 0.71199995, and value 0.98039216.
-     * It can be represented as a packed float with the constant {@code 0x0.91f542p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.91f542p125F}.
      * <pre>
      * <font style='background-color: #A1FA48; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A1FA48; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A1FA48; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A1FA48'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A1FA48'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A1FA48'>&nbsp;@&nbsp;</font><font style='background-color: #A1FA48; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9029,7 +9029,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Honeydew" has RGB code {@code 0x69A62D}, hue 0.2506888, saturation 0.7289157, and value 0.6509804.
-     * It can be represented as a packed float with the constant {@code 0x0.5b4cd2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5b4cd2p125F}.
      * <pre>
      * <font style='background-color: #69A62D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #69A62D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #69A62D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #69A62D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #69A62D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #69A62D'>&nbsp;@&nbsp;</font><font style='background-color: #69A62D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9043,7 +9043,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Honeydew" has RGB code {@code 0x90B76A}, hue 0.2510823, saturation 0.42076504, and value 0.7176471.
-     * It can be represented as a packed float with the constant {@code 0x0.d56f2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d56f2p125F}.
      * <pre>
      * <font style='background-color: #90B76A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #90B76A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #90B76A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #90B76A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #90B76A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #90B76A'>&nbsp;@&nbsp;</font><font style='background-color: #90B76A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9057,7 +9057,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Honeydew" has RGB code {@code 0x73C522}, hue 0.2505113, saturation 0.8274112, and value 0.77254903.
-     * It can be represented as a packed float with the constant {@code 0x0.458ae6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.458ae6p125F}.
      * <pre>
      * <font style='background-color: #73C522; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73C522; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #73C522; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #73C522'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #73C522'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #73C522'>&nbsp;@&nbsp;</font><font style='background-color: #73C522; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9071,7 +9071,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Green" has RGB code {@code 0x3EE628}, hue 0.31403518, saturation 0.82608694, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x0.51cc7cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.51cc7cp125F}.
      * <pre>
      * <font style='background-color: #3EE628; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3EE628; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3EE628; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3EE628'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3EE628'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3EE628'>&nbsp;@&nbsp;</font><font style='background-color: #3EE628; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9085,7 +9085,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Green" has RGB code {@code 0x84CC7A}, hue 0.3130082, saturation 0.4019608, and value 0.8.
-     * It can be represented as a packed float with the constant {@code 0x0.f59908p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f59908p125F}.
      * <pre>
      * <font style='background-color: #84CC7A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #84CC7A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #84CC7A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #84CC7A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #84CC7A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #84CC7A'>&nbsp;@&nbsp;</font><font style='background-color: #84CC7A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9099,7 +9099,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Green" has RGB code {@code 0x2ADB13}, hue 0.3141666, saturation 0.91324204, and value 0.85882354.
-     * It can be represented as a packed float with the constant {@code 0x0.27b654p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.27b654p125F}.
      * <pre>
      * <font style='background-color: #2ADB13; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2ADB13; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #2ADB13; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #2ADB13'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #2ADB13'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #2ADB13'>&nbsp;@&nbsp;</font><font style='background-color: #2ADB13; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9113,7 +9113,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Green" has RGB code {@code 0x91EC85}, hue 0.3139158, saturation 0.43644065, and value 0.9254902.
-     * It can be represented as a packed float with the constant {@code 0x1.0bd922p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0bd922p126F}.
      * <pre>
      * <font style='background-color: #91EC85; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #91EC85; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #91EC85; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #91EC85'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #91EC85'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #91EC85'>&nbsp;@&nbsp;</font><font style='background-color: #91EC85; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9127,7 +9127,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Green" has RGB code {@code 0xB5EBAE}, hue 0.3142076, saturation 0.25957444, and value 0.92156863.
-     * It can be represented as a packed float with the constant {@code 0x1.5dd76ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.5dd76ap126F}.
      * <pre>
      * <font style='background-color: #B5EBAE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B5EBAE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B5EBAE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B5EBAE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B5EBAE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B5EBAE'>&nbsp;@&nbsp;</font><font style='background-color: #B5EBAE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9141,7 +9141,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Green" has RGB code {@code 0x4FEF39}, hue 0.31318688, saturation 0.7615063, and value 0.9372549.
-     * It can be represented as a packed float with the constant {@code 0x0.73de9ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.73de9ep125F}.
      * <pre>
      * <font style='background-color: #4FEF39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4FEF39; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4FEF39; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4FEF39'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4FEF39'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4FEF39'>&nbsp;@&nbsp;</font><font style='background-color: #4FEF39; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9155,7 +9155,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Green" has RGB code {@code 0x259B15}, hue 0.3134328, saturation 0.86451614, and value 0.60784316.
-     * It can be represented as a packed float with the constant {@code 0x0.2b364ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2b364ap125F}.
      * <pre>
      * <font style='background-color: #259B15; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #259B15; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #259B15; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #259B15'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #259B15'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #259B15'>&nbsp;@&nbsp;</font><font style='background-color: #259B15; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9169,7 +9169,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Green" has RGB code {@code 0x50A145}, hue 0.31340587, saturation 0.57142854, and value 0.6313726.
-     * It can be represented as a packed float with the constant {@code 0x0.8b42ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.8b42ap125F}.
      * <pre>
      * <font style='background-color: #50A145; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #50A145; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #50A145; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #50A145'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #50A145'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #50A145'>&nbsp;@&nbsp;</font><font style='background-color: #50A145; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9183,7 +9183,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Green" has RGB code {@code 0x23B810}, hue 0.31448412, saturation 0.9130435, and value 0.72156864.
-     * It can be represented as a packed float with the constant {@code 0x0.217046p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.217046p125F}.
      * <pre>
      * <font style='background-color: #23B810; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #23B810; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #23B810; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #23B810'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #23B810'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #23B810'>&nbsp;@&nbsp;</font><font style='background-color: #23B810; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9197,7 +9197,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Jade" has RGB code {@code 0x45E269}, hue 0.3715499, saturation 0.6946903, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x0.d3c48ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d3c48ap125F}.
      * <pre>
      * <font style='background-color: #45E269; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #45E269; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #45E269; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #45E269'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #45E269'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #45E269'>&nbsp;@&nbsp;</font><font style='background-color: #45E269; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9211,7 +9211,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Jade" has RGB code {@code 0x8ACD99}, hue 0.37064677, saturation 0.32682925, and value 0.8039216.
-     * It can be represented as a packed float with the constant {@code 0x1.339b14p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.339b14p126F}.
      * <pre>
      * <font style='background-color: #8ACD99; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8ACD99; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8ACD99; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8ACD99'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8ACD99'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8ACD99'>&nbsp;@&nbsp;</font><font style='background-color: #8ACD99; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9225,7 +9225,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Jade" has RGB code {@code 0x21D74B}, hue 0.37179488, saturation 0.84651166, and value 0.84313726.
-     * It can be represented as a packed float with the constant {@code 0x0.97ae42p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.97ae42p125F}.
      * <pre>
      * <font style='background-color: #21D74B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #21D74B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #21D74B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #21D74B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #21D74B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #21D74B'>&nbsp;@&nbsp;</font><font style='background-color: #21D74B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9239,7 +9239,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Jade" has RGB code {@code 0x95EAA9}, hue 0.372549, saturation 0.36324784, and value 0.91764706.
-     * It can be represented as a packed float with the constant {@code 0x1.53d52ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.53d52ap126F}.
      * <pre>
      * <font style='background-color: #95EAA9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #95EAA9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #95EAA9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #95EAA9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #95EAA9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #95EAA9'>&nbsp;@&nbsp;</font><font style='background-color: #95EAA9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9253,7 +9253,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Jade" has RGB code {@code 0xB8EAC4}, hue 0.37333333, saturation 0.2136752, and value 0.91764706.
-     * It can be represented as a packed float with the constant {@code 0x1.89d57p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.89d57p126F}.
      * <pre>
      * <font style='background-color: #B8EAC4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B8EAC4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B8EAC4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B8EAC4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B8EAC4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B8EAC4'>&nbsp;@&nbsp;</font><font style='background-color: #B8EAC4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9267,7 +9267,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Jade" has RGB code {@code 0x43EC6B}, hue 0.3727811, saturation 0.7161017, and value 0.9254902.
-     * It can be represented as a packed float with the constant {@code 0x0.d7d886p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d7d886p125F}.
      * <pre>
      * <font style='background-color: #43EC6B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #43EC6B; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #43EC6B; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #43EC6B'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #43EC6B'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #43EC6B'>&nbsp;@&nbsp;</font><font style='background-color: #43EC6B; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9281,7 +9281,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Jade" has RGB code {@code 0x249940}, hue 0.37321937, saturation 0.7647059, and value 0.6.
-     * It can be represented as a packed float with the constant {@code 0x0.813248p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.813248p125F}.
      * <pre>
      * <font style='background-color: #249940; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #249940; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #249940; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #249940'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #249940'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #249940'>&nbsp;@&nbsp;</font><font style='background-color: #249940; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9295,7 +9295,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Jade" has RGB code {@code 0x56A267}, hue 0.37061405, saturation 0.4691358, and value 0.63529414.
-     * It can be represented as a packed float with the constant {@code 0x0.cf44acp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cf44acp125F}.
      * <pre>
      * <font style='background-color: #56A267; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #56A267; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #56A267; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #56A267'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #56A267'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #56A267'>&nbsp;@&nbsp;</font><font style='background-color: #56A267; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9309,7 +9309,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Jade" has RGB code {@code 0x1BB53F}, hue 0.37229437, saturation 0.85082877, and value 0.70980394.
-     * It can be represented as a packed float with the constant {@code 0x0.7f6a36p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7f6a36p125F}.
      * <pre>
      * <font style='background-color: #1BB53F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1BB53F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1BB53F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1BB53F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1BB53F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1BB53F'>&nbsp;@&nbsp;</font><font style='background-color: #1BB53F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9323,7 +9323,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Seafoam" has RGB code {@code 0x37F4B0}, hue 0.44003528, saturation 0.7745902, and value 0.95686275.
-     * It can be represented as a packed float with the constant {@code 0x1.61e86ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.61e86ep126F}.
      * <pre>
      * <font style='background-color: #37F4B0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #37F4B0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #37F4B0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #37F4B0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #37F4B0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #37F4B0'>&nbsp;@&nbsp;</font><font style='background-color: #37F4B0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9337,7 +9337,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Seafoam" has RGB code {@code 0x8ADABD}, hue 0.43958336, saturation 0.36697245, and value 0.85490197.
-     * It can be represented as a packed float with the constant {@code 0x1.7bb514p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7bb514p126F}.
      * <pre>
      * <font style='background-color: #8ADABD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8ADABD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8ADABD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8ADABD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8ADABD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8ADABD'>&nbsp;@&nbsp;</font><font style='background-color: #8ADABD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9351,7 +9351,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Seafoam" has RGB code {@code 0x1AE89E}, hue 0.44012946, saturation 0.88793105, and value 0.9098039.
-     * It can be represented as a packed float with the constant {@code 0x1.3dd034p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3dd034p126F}.
      * <pre>
      * <font style='background-color: #1AE89E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1AE89E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1AE89E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1AE89E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1AE89E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1AE89E'>&nbsp;@&nbsp;</font><font style='background-color: #1AE89E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9365,7 +9365,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Seafoam" has RGB code {@code 0x8FF6D1}, hue 0.44012946, saturation 0.41869918, and value 0.9647059.
-     * It can be represented as a packed float with the constant {@code 0x1.a3ed1ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a3ed1ep126F}.
      * <pre>
      * <font style='background-color: #8FF6D1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8FF6D1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8FF6D1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8FF6D1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8FF6D1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8FF6D1'>&nbsp;@&nbsp;</font><font style='background-color: #8FF6D1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9379,7 +9379,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Seafoam" has RGB code {@code 0xB6F3DD}, hue 0.43989068, saturation 0.25102878, and value 0.9529412.
-     * It can be represented as a packed float with the constant {@code 0x1.bbe76cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bbe76cp126F}.
      * <pre>
      * <font style='background-color: #B6F3DD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B6F3DD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B6F3DD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B6F3DD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B6F3DD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B6F3DD'>&nbsp;@&nbsp;</font><font style='background-color: #B6F3DD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9393,7 +9393,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Seafoam" has RGB code {@code 0x3FF8B6}, hue 0.44054055, saturation 0.74596775, and value 0.972549.
-     * It can be represented as a packed float with the constant {@code 0x1.6df07ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6df07ep126F}.
      * <pre>
      * <font style='background-color: #3FF8B6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3FF8B6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3FF8B6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3FF8B6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3FF8B6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3FF8B6'>&nbsp;@&nbsp;</font><font style='background-color: #3FF8B6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9407,7 +9407,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Seafoam" has RGB code {@code 0x1DA574}, hue 0.439951, saturation 0.8242424, and value 0.64705884.
-     * It can be represented as a packed float with the constant {@code 0x0.e94a3ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e94a3ap125F}.
      * <pre>
      * <font style='background-color: #1DA574; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1DA574; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1DA574; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1DA574'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1DA574'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1DA574'>&nbsp;@&nbsp;</font><font style='background-color: #1DA574; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9421,7 +9421,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Seafoam" has RGB code {@code 0x54AF8E}, hue 0.43956047, saturation 0.52, and value 0.6862745.
-     * It can be represented as a packed float with the constant {@code 0x1.1d5ea8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1d5ea8p126F}.
      * <pre>
      * <font style='background-color: #54AF8E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #54AF8E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #54AF8E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #54AF8E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #54AF8E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #54AF8E'>&nbsp;@&nbsp;</font><font style='background-color: #54AF8E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9435,7 +9435,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Seafoam" has RGB code {@code 0x16C385}, hue 0.44026977, saturation 0.8871795, and value 0.7647059.
-     * It can be represented as a packed float with the constant {@code 0x1.0b862cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0b862cp126F}.
      * <pre>
      * <font style='background-color: #16C385; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #16C385; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #16C385; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #16C385'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #16C385'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #16C385'>&nbsp;@&nbsp;</font><font style='background-color: #16C385; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9449,7 +9449,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Cyan" has RGB code {@code 0x17E9E3}, hue 0.49523813, saturation 0.90128756, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x1.c7d22ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c7d22ep126F}.
      * <pre>
      * <font style='background-color: #17E9E3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #17E9E3; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #17E9E3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #17E9E3'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #17E9E3'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #17E9E3'>&nbsp;@&nbsp;</font><font style='background-color: #17E9E3; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9463,7 +9463,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Cyan" has RGB code {@code 0x78D2D0}, hue 0.4962963, saturation 0.42857143, and value 0.8235294.
-     * It can be represented as a packed float with the constant {@code 0x1.a1a4fp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a1a4fp126F}.
      * <pre>
      * <font style='background-color: #78D2D0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #78D2D0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #78D2D0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #78D2D0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #78D2D0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #78D2D0'>&nbsp;@&nbsp;</font><font style='background-color: #78D2D0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9477,7 +9477,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Cyan" has RGB code {@code 0x0ADED8}, hue 0.495283, saturation 0.954955, and value 0.87058824.
-     * It can be represented as a packed float with the constant {@code 0x1.b1bc14p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b1bc14p126F}.
      * <pre>
      * <font style='background-color: #0ADED8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0ADED8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0ADED8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0ADED8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0ADED8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0ADED8'>&nbsp;@&nbsp;</font><font style='background-color: #0ADED8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9491,7 +9491,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Cyan" has RGB code {@code 0x7DEFEC}, hue 0.49561405, saturation 0.47698745, and value 0.9372549.
-     * It can be represented as a packed float with the constant {@code 0x1.d9defap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d9defap126F}.
      * <pre>
      * <font style='background-color: #7DEFEC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7DEFEC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7DEFEC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7DEFEC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7DEFEC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7DEFEC'>&nbsp;@&nbsp;</font><font style='background-color: #7DEFEC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9505,7 +9505,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Cyan" has RGB code {@code 0xABEEEC}, hue 0.49502486, saturation 0.2815126, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.d9dd56p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d9dd56p126F}.
      * <pre>
      * <font style='background-color: #ABEEEC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABEEEC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ABEEEC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ABEEEC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #ABEEEC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #ABEEEC'>&nbsp;@&nbsp;</font><font style='background-color: #ABEEEC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9519,7 +9519,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Cyan" has RGB code {@code 0x34F1EC}, hue 0.4955908, saturation 0.7842324, and value 0.94509804.
-     * It can be represented as a packed float with the constant {@code 0x1.d9e268p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d9e268p126F}.
      * <pre>
      * <font style='background-color: #34F1EC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #34F1EC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #34F1EC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #34F1EC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #34F1EC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #34F1EC'>&nbsp;@&nbsp;</font><font style='background-color: #34F1EC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9533,7 +9533,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Cyan" has RGB code {@code 0x0D9D99}, hue 0.4953704, saturation 0.91719747, and value 0.6156863.
-     * It can be represented as a packed float with the constant {@code 0x1.333a1ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.333a1ap126F}.
      * <pre>
      * <font style='background-color: #0D9D99; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0D9D99; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0D9D99; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0D9D99'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0D9D99'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0D9D99'>&nbsp;@&nbsp;</font><font style='background-color: #0D9D99; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9547,7 +9547,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Cyan" has RGB code {@code 0x41A7A4}, hue 0.49509805, saturation 0.61077845, and value 0.654902.
-     * It can be represented as a packed float with the constant {@code 0x1.494e82p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.494e82p126F}.
      * <pre>
      * <font style='background-color: #41A7A4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #41A7A4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #41A7A4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #41A7A4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #41A7A4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #41A7A4'>&nbsp;@&nbsp;</font><font style='background-color: #41A7A4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9561,7 +9561,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Cyan" has RGB code {@code 0x09BAB6}, hue 0.49623352, saturation 0.9516129, and value 0.7294118.
-     * It can be represented as a packed float with the constant {@code 0x1.6d7412p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6d7412p126F}.
      * <pre>
      * <font style='background-color: #09BAB6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #09BAB6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #09BAB6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #09BAB6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #09BAB6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #09BAB6'>&nbsp;@&nbsp;</font><font style='background-color: #09BAB6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9575,7 +9575,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Azure" has RGB code {@code 0x33C0E4}, hue 0.53389835, saturation 0.7763158, and value 0.89411765.
-     * It can be represented as a packed float with the constant {@code 0x1.c98066p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c98066p126F}.
      * <pre>
      * <font style='background-color: #33C0E4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #33C0E4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #33C0E4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #33C0E4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #33C0E4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #33C0E4'>&nbsp;@&nbsp;</font><font style='background-color: #33C0E4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9589,7 +9589,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Azure" has RGB code {@code 0x7CB9C8}, hue 0.53289473, saturation 0.38, and value 0.78431374.
-     * It can be represented as a packed float with the constant {@code 0x1.9172f8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.9172f8p126F}.
      * <pre>
      * <font style='background-color: #7CB9C8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7CB9C8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7CB9C8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7CB9C8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7CB9C8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7CB9C8'>&nbsp;@&nbsp;</font><font style='background-color: #7CB9C8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9603,7 +9603,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Azure" has RGB code {@code 0x18B2D9}, hue 0.5336788, saturation 0.88940096, and value 0.8509804.
-     * It can be represented as a packed float with the constant {@code 0x1.b3643p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b3643p126F}.
      * <pre>
      * <font style='background-color: #18B2D9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #18B2D9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #18B2D9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #18B2D9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #18B2D9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #18B2D9'>&nbsp;@&nbsp;</font><font style='background-color: #18B2D9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9617,7 +9617,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Azure" has RGB code {@code 0x8BD8EB}, hue 0.5329861, saturation 0.40851063, and value 0.92156863.
-     * It can be represented as a packed float with the constant {@code 0x1.d7b116p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d7b116p126F}.
      * <pre>
      * <font style='background-color: #8BD8EB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8BD8EB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8BD8EB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8BD8EB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8BD8EB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8BD8EB'>&nbsp;@&nbsp;</font><font style='background-color: #8BD8EB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9631,7 +9631,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Azure" has RGB code {@code 0xB2DFEA}, hue 0.53273803, saturation 0.23931623, and value 0.91764706.
-     * It can be represented as a packed float with the constant {@code 0x1.d5bf64p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d5bf64p126F}.
      * <pre>
      * <font style='background-color: #B2DFEA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B2DFEA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B2DFEA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B2DFEA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B2DFEA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B2DFEA'>&nbsp;@&nbsp;</font><font style='background-color: #B2DFEA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9645,7 +9645,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Azure" has RGB code {@code 0x3DCAEE}, hue 0.53389835, saturation 0.7436975, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.dd947ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.dd947ap126F}.
      * <pre>
      * <font style='background-color: #3DCAEE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3DCAEE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3DCAEE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3DCAEE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3DCAEE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3DCAEE'>&nbsp;@&nbsp;</font><font style='background-color: #3DCAEE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9659,7 +9659,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Azure" has RGB code {@code 0x1B819A}, hue 0.5328084, saturation 0.8246753, and value 0.6039216.
-     * It can be represented as a packed float with the constant {@code 0x1.350236p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.350236p126F}.
      * <pre>
      * <font style='background-color: #1B819A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1B819A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1B819A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1B819A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1B819A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1B819A'>&nbsp;@&nbsp;</font><font style='background-color: #1B819A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9673,7 +9673,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Azure" has RGB code {@code 0x498D9F}, hue 0.53488386, saturation 0.5408805, and value 0.62352943.
-     * It can be represented as a packed float with the constant {@code 0x1.3f1a92p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3f1a92p126F}.
      * <pre>
      * <font style='background-color: #498D9F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #498D9F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #498D9F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #498D9F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #498D9F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #498D9F'>&nbsp;@&nbsp;</font><font style='background-color: #498D9F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9687,7 +9687,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Azure" has RGB code {@code 0x1596B6}, hue 0.53312635, saturation 0.8846154, and value 0.7137255.
-     * It can be represented as a packed float with the constant {@code 0x1.6d2c2ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.6d2c2ap126F}.
      * <pre>
      * <font style='background-color: #1596B6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1596B6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1596B6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1596B6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1596B6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1596B6'>&nbsp;@&nbsp;</font><font style='background-color: #1596B6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9701,7 +9701,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Blue" has RGB code {@code 0x267CE9}, hue 0.59316236, saturation 0.8369099, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x1.d2f84cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d2f84cp126F}.
      * <pre>
      * <font style='background-color: #267CE9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #267CE9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #267CE9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #267CE9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #267CE9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #267CE9'>&nbsp;@&nbsp;</font><font style='background-color: #267CE9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9715,7 +9715,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Blue" has RGB code {@code 0x658AB9}, hue 0.59325397, saturation 0.45405406, and value 0.7254902.
-     * It can be represented as a packed float with the constant {@code 0x1.7314cap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7314cap126F}.
      * <pre>
      * <font style='background-color: #658AB9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #658AB9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #658AB9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #658AB9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #658AB9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #658AB9'>&nbsp;@&nbsp;</font><font style='background-color: #658AB9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9729,7 +9729,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Blue" has RGB code {@code 0x136CDE}, hue 0.59359604, saturation 0.9144144, and value 0.87058824.
-     * It can be represented as a packed float with the constant {@code 0x1.bcd826p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bcd826p126F}.
      * <pre>
      * <font style='background-color: #136CDE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #136CDE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #136CDE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #136CDE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #136CDE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #136CDE'>&nbsp;@&nbsp;</font><font style='background-color: #136CDE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9743,7 +9743,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Blue" has RGB code {@code 0x81B0EB}, hue 0.5927673, saturation 0.4510638, and value 0.92156863.
-     * It can be represented as a packed float with the constant {@code 0x1.d76102p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d76102p126F}.
      * <pre>
      * <font style='background-color: #81B0EB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #81B0EB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #81B0EB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #81B0EB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #81B0EB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #81B0EB'>&nbsp;@&nbsp;</font><font style='background-color: #81B0EB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9757,7 +9757,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Blue" has RGB code {@code 0xA7C3E6}, hue 0.59259254, saturation 0.27391303, and value 0.9019608.
-     * It can be represented as a packed float with the constant {@code 0x1.cd874ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cd874ep126F}.
      * <pre>
      * <font style='background-color: #A7C3E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A7C3E6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A7C3E6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A7C3E6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A7C3E6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A7C3E6'>&nbsp;@&nbsp;</font><font style='background-color: #A7C3E6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9771,7 +9771,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Blue" has RGB code {@code 0x398AF1}, hue 0.5932971, saturation 0.7634855, and value 0.94509804.
-     * It can be represented as a packed float with the constant {@code 0x1.e31472p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e31472p126F}.
      * <pre>
      * <font style='background-color: #398AF1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #398AF1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #398AF1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #398AF1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #398AF1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #398AF1'>&nbsp;@&nbsp;</font><font style='background-color: #398AF1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9785,7 +9785,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Blue" has RGB code {@code 0x15519D}, hue 0.5931374, saturation 0.86624205, and value 0.6156863.
-     * It can be represented as a packed float with the constant {@code 0x1.3aa22ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3aa22ap126F}.
      * <pre>
      * <font style='background-color: #15519D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #15519D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #15519D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #15519D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #15519D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #15519D'>&nbsp;@&nbsp;</font><font style='background-color: #15519D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9799,7 +9799,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Blue" has RGB code {@code 0x355E93}, hue 0.59397155, saturation 0.6394558, and value 0.5764706.
-     * It can be represented as a packed float with the constant {@code 0x1.26bc6ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.26bc6ap126F}.
      * <pre>
      * <font style='background-color: #355E93; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #355E93; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #355E93; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #355E93'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #355E93'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #355E93'>&nbsp;@&nbsp;</font><font style='background-color: #355E93; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9813,7 +9813,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Blue" has RGB code {@code 0x0F5ABB}, hue 0.59399235, saturation 0.9197861, and value 0.73333335.
-     * It can be represented as a packed float with the constant {@code 0x1.76b41ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.76b41ep126F}.
      * <pre>
      * <font style='background-color: #0F5ABB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F5ABB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #0F5ABB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #0F5ABB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #0F5ABB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #0F5ABB'>&nbsp;@&nbsp;</font><font style='background-color: #0F5ABB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9827,7 +9827,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Sapphire" has RGB code {@code 0x3244E8}, hue 0.6501832, saturation 0.7844828, and value 0.9098039.
-     * It can be represented as a packed float with the constant {@code 0x1.d08864p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d08864p126F}.
      * <pre>
      * <font style='background-color: #3244E8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3244E8; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3244E8; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3244E8'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3244E8'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3244E8'>&nbsp;@&nbsp;</font><font style='background-color: #3244E8; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9841,7 +9841,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Sapphire" has RGB code {@code 0x5E65AC}, hue 0.65170944, saturation 0.45348838, and value 0.6745098.
-     * It can be represented as a packed float with the constant {@code 0x1.58cabcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.58cabcp126F}.
      * <pre>
      * <font style='background-color: #5E65AC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5E65AC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5E65AC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5E65AC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5E65AC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5E65AC'>&nbsp;@&nbsp;</font><font style='background-color: #5E65AC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9855,7 +9855,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Sapphire" has RGB code {@code 0x172BDD}, hue 0.6498316, saturation 0.8959276, and value 0.8666667.
-     * It can be represented as a packed float with the constant {@code 0x1.ba562ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ba562ep126F}.
      * <pre>
      * <font style='background-color: #172BDD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #172BDD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #172BDD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #172BDD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #172BDD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #172BDD'>&nbsp;@&nbsp;</font><font style='background-color: #172BDD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9869,7 +9869,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Sapphire" has RGB code {@code 0x8690E9}, hue 0.6498316, saturation 0.42489266, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x1.d3210cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d3210cp126F}.
      * <pre>
      * <font style='background-color: #8690E9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8690E9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8690E9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8690E9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8690E9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8690E9'>&nbsp;@&nbsp;</font><font style='background-color: #8690E9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9883,7 +9883,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Sapphire" has RGB code {@code 0xA7ADE1}, hue 0.6494253, saturation 0.25777775, and value 0.88235295.
-     * It can be represented as a packed float with the constant {@code 0x1.c35b4ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c35b4ep126F}.
      * <pre>
      * <font style='background-color: #A7ADE1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A7ADE1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #A7ADE1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #A7ADE1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #A7ADE1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #A7ADE1'>&nbsp;@&nbsp;</font><font style='background-color: #A7ADE1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9897,7 +9897,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Sapphire" has RGB code {@code 0x3D4DF0}, hue 0.65176916, saturation 0.74583334, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x1.e09a7ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e09a7ap126F}.
      * <pre>
      * <font style='background-color: #3D4DF0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3D4DF0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3D4DF0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3D4DF0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3D4DF0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3D4DF0'>&nbsp;@&nbsp;</font><font style='background-color: #3D4DF0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9911,7 +9911,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Sapphire" has RGB code {@code 0x1A289D}, hue 0.6488551, saturation 0.83439493, and value 0.6156863.
-     * It can be represented as a packed float with the constant {@code 0x1.3a5034p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3a5034p126F}.
      * <pre>
      * <font style='background-color: #1A289D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1A289D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1A289D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1A289D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1A289D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1A289D'>&nbsp;@&nbsp;</font><font style='background-color: #1A289D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9925,7 +9925,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Sapphire" has RGB code {@code 0x323A8A}, hue 0.6515152, saturation 0.6376812, and value 0.5411765.
-     * It can be represented as a packed float with the constant {@code 0x1.147464p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.147464p126F}.
      * <pre>
      * <font style='background-color: #323A8A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #323A8A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #323A8A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #323A8A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #323A8A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #323A8A'>&nbsp;@&nbsp;</font><font style='background-color: #323A8A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9939,7 +9939,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Sapphire" has RGB code {@code 0x1424BA}, hue 0.65060246, saturation 0.8924731, and value 0.7294118.
-     * It can be represented as a packed float with the constant {@code 0x1.744828p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.744828p126F}.
      * <pre>
      * <font style='background-color: #1424BA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1424BA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1424BA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1424BA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1424BA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1424BA'>&nbsp;@&nbsp;</font><font style='background-color: #1424BA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9953,7 +9953,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Indigo" has RGB code {@code 0x5313DF}, hue 0.7189543, saturation 0.9147982, and value 0.8745098.
-     * It can be represented as a packed float with the constant {@code 0x1.be26a6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.be26a6p126F}.
      * <pre>
      * <font style='background-color: #5313DF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5313DF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5313DF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5313DF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5313DF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5313DF'>&nbsp;@&nbsp;</font><font style='background-color: #5313DF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9967,7 +9967,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Indigo" has RGB code {@code 0x63489F}, hue 0.71839076, saturation 0.5471698, and value 0.62352943.
-     * It can be represented as a packed float with the constant {@code 0x1.3e90c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3e90c6p126F}.
      * <pre>
      * <font style='background-color: #63489F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #63489F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #63489F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #63489F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #63489F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #63489F'>&nbsp;@&nbsp;</font><font style='background-color: #63489F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9981,7 +9981,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Indigo" has RGB code {@code 0x4909D4}, hue 0.7192119, saturation 0.9575472, and value 0.83137256.
-     * It can be represented as a packed float with the constant {@code 0x1.a81292p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a81292p126F}.
      * <pre>
      * <font style='background-color: #4909D4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4909D4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #4909D4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #4909D4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #4909D4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #4909D4'>&nbsp;@&nbsp;</font><font style='background-color: #4909D4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -9995,7 +9995,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Indigo" has RGB code {@code 0x9774E2}, hue 0.719697, saturation 0.48672566, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x1.c4e92ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c4e92ep126F}.
      * <pre>
      * <font style='background-color: #9774E2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9774E2; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9774E2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9774E2'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9774E2'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9774E2'>&nbsp;@&nbsp;</font><font style='background-color: #9774E2; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10009,7 +10009,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Indigo" has RGB code {@code 0xAF9BDB}, hue 0.71875006, saturation 0.29223743, and value 0.85882354.
-     * It can be represented as a packed float with the constant {@code 0x1.b7375ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b7375ep126F}.
      * <pre>
      * <font style='background-color: #AF9BDB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AF9BDB; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AF9BDB; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AF9BDB'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AF9BDB'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AF9BDB'>&nbsp;@&nbsp;</font><font style='background-color: #AF9BDB; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10023,7 +10023,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Indigo" has RGB code {@code 0x6C33EA}, hue 0.7185792, saturation 0.7820513, and value 0.91764706.
-     * It can be represented as a packed float with the constant {@code 0x1.d466d8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d466d8p126F}.
      * <pre>
      * <font style='background-color: #6C33EA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6C33EA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6C33EA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6C33EA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6C33EA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6C33EA'>&nbsp;@&nbsp;</font><font style='background-color: #6C33EA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10037,7 +10037,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Indigo" has RGB code {@code 0x360997}, hue 0.7194835, saturation 0.9403974, and value 0.5921569.
-     * It can be represented as a packed float with the constant {@code 0x1.2e126cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2e126cp126F}.
      * <pre>
      * <font style='background-color: #360997; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #360997; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #360997; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #360997'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #360997'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #360997'>&nbsp;@&nbsp;</font><font style='background-color: #360997; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10051,7 +10051,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Indigo" has RGB code {@code 0x3B1D7E}, hue 0.7182131, saturation 0.7698413, and value 0.49411765.
-     * It can be represented as a packed float with the constant {@code 0x0.fc3a76p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fc3a76p125F}.
      * <pre>
      * <font style='background-color: #3B1D7E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B1D7E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3B1D7E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3B1D7E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3B1D7E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3B1D7E'>&nbsp;@&nbsp;</font><font style='background-color: #3B1D7E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10065,7 +10065,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Indigo" has RGB code {@code 0x3D07B3}, hue 0.7189922, saturation 0.96089387, and value 0.7019608.
-     * It can be represented as a packed float with the constant {@code 0x1.660e7ap-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.660e7ap126F}.
      * <pre>
      * <font style='background-color: #3D07B3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3D07B3; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3D07B3; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3D07B3'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3D07B3'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3D07B3'>&nbsp;@&nbsp;</font><font style='background-color: #3D07B3; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10079,7 +10079,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Violet" has RGB code {@code 0x902BE7}, hue 0.7562056, saturation 0.81385285, and value 0.90588236.
-     * It can be represented as a packed float with the constant {@code 0x1.ce572p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ce572p126F}.
      * <pre>
      * <font style='background-color: #902BE7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #902BE7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #902BE7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #902BE7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #902BE7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #902BE7'>&nbsp;@&nbsp;</font><font style='background-color: #902BE7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10093,7 +10093,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Violet" has RGB code {@code 0x8C61B1}, hue 0.7562499, saturation 0.4519774, and value 0.69411767.
-     * It can be represented as a packed float with the constant {@code 0x1.62c318p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.62c318p126F}.
      * <pre>
      * <font style='background-color: #8C61B1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C61B1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8C61B1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8C61B1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8C61B1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8C61B1'>&nbsp;@&nbsp;</font><font style='background-color: #8C61B1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10107,7 +10107,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Violet" has RGB code {@code 0x7F14DC}, hue 0.7558334, saturation 0.90909094, and value 0.8627451.
-     * It can be represented as a packed float with the constant {@code 0x1.b828fep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.b828fep126F}.
      * <pre>
      * <font style='background-color: #7F14DC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F14DC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7F14DC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7F14DC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7F14DC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7F14DC'>&nbsp;@&nbsp;</font><font style='background-color: #7F14DC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10121,7 +10121,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Violet" has RGB code {@code 0xBA83E9}, hue 0.756536, saturation 0.43776822, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x1.d30774p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d30774p126F}.
      * <pre>
      * <font style='background-color: #BA83E9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BA83E9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BA83E9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BA83E9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BA83E9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BA83E9'>&nbsp;@&nbsp;</font><font style='background-color: #BA83E9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10135,7 +10135,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Violet" has RGB code {@code 0xC6A7E2}, hue 0.75423735, saturation 0.26106194, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x1.c54f8cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c54f8cp126F}.
      * <pre>
      * <font style='background-color: #C6A7E2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C6A7E2; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C6A7E2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C6A7E2'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C6A7E2'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C6A7E2'>&nbsp;@&nbsp;</font><font style='background-color: #C6A7E2; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10149,7 +10149,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Violet" has RGB code {@code 0x9C3AF0}, hue 0.7564102, saturation 0.7583333, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x1.e07538p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e07538p126F}.
      * <pre>
      * <font style='background-color: #9C3AF0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9C3AF0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9C3AF0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9C3AF0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9C3AF0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9C3AF0'>&nbsp;@&nbsp;</font><font style='background-color: #9C3AF0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10163,7 +10163,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Violet" has RGB code {@code 0x5E179C}, hue 0.755639, saturation 0.8525641, and value 0.6117647.
-     * It can be represented as a packed float with the constant {@code 0x1.382ebcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.382ebcp126F}.
      * <pre>
      * <font style='background-color: #5E179C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5E179C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5E179C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5E179C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5E179C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5E179C'>&nbsp;@&nbsp;</font><font style='background-color: #5E179C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10177,7 +10177,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Violet" has RGB code {@code 0x63328D}, hue 0.7564103, saturation 0.6453901, and value 0.5529412.
-     * It can be represented as a packed float with the constant {@code 0x1.1a64c6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.1a64c6p126F}.
      * <pre>
      * <font style='background-color: #63328D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #63328D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #63328D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #63328D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #63328D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #63328D'>&nbsp;@&nbsp;</font><font style='background-color: #63328D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10191,7 +10191,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Violet" has RGB code {@code 0x6B11B9}, hue 0.7559523, saturation 0.9081081, and value 0.7254902.
-     * It can be represented as a packed float with the constant {@code 0x1.7222d6p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7222d6p126F}.
      * <pre>
      * <font style='background-color: #6B11B9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6B11B9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #6B11B9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #6B11B9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #6B11B9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #6B11B9'>&nbsp;@&nbsp;</font><font style='background-color: #6B11B9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10205,7 +10205,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Purple" has RGB code {@code 0xC934E9}, hue 0.80386734, saturation 0.77682406, and value 0.9137255.
-     * It can be represented as a packed float with the constant {@code 0x1.d26992p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d26992p126F}.
      * <pre>
      * <font style='background-color: #C934E9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C934E9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #C934E9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #C934E9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #C934E9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #C934E9'>&nbsp;@&nbsp;</font><font style='background-color: #C934E9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10219,7 +10219,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Purple" has RGB code {@code 0xAE6EBC}, hue 0.80341876, saturation 0.41489363, and value 0.7372549.
-     * It can be represented as a packed float with the constant {@code 0x1.78dd5cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.78dd5cp126F}.
      * <pre>
      * <font style='background-color: #AE6EBC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AE6EBC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #AE6EBC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #AE6EBC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #AE6EBC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #AE6EBC'>&nbsp;@&nbsp;</font><font style='background-color: #AE6EBC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10233,7 +10233,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Purple" has RGB code {@code 0xBB18DE}, hue 0.8038721, saturation 0.8918919, and value 0.87058824.
-     * It can be represented as a packed float with the constant {@code 0x1.bc3176p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bc3176p126F}.
      * <pre>
      * <font style='background-color: #BB18DE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BB18DE; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BB18DE; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BB18DE'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BB18DE'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BB18DE'>&nbsp;@&nbsp;</font><font style='background-color: #BB18DE; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10247,7 +10247,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Purple" has RGB code {@code 0xDA89EC}, hue 0.8030304, saturation 0.4194915, and value 0.9254902.
-     * It can be represented as a packed float with the constant {@code 0x1.d913b4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.d913b4p126F}.
      * <pre>
      * <font style='background-color: #DA89EC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA89EC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DA89EC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DA89EC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DA89EC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DA89EC'>&nbsp;@&nbsp;</font><font style='background-color: #DA89EC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10261,7 +10261,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Purple" has RGB code {@code 0xDCADE7}, hue 0.8017242, saturation 0.25108224, and value 0.90588236.
-     * It can be represented as a packed float with the constant {@code 0x1.cf5bb8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.cf5bb8p126F}.
      * <pre>
      * <font style='background-color: #DCADE7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DCADE7; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DCADE7; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DCADE7'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DCADE7'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DCADE7'>&nbsp;@&nbsp;</font><font style='background-color: #DCADE7; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10275,7 +10275,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Purple" has RGB code {@code 0xD13DF1}, hue 0.8037036, saturation 0.746888, and value 0.94509804.
-     * It can be represented as a packed float with the constant {@code 0x1.e27ba2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e27ba2p126F}.
      * <pre>
      * <font style='background-color: #D13DF1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D13DF1; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D13DF1; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D13DF1'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D13DF1'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D13DF1'>&nbsp;@&nbsp;</font><font style='background-color: #D13DF1; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10289,7 +10289,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Purple" has RGB code {@code 0x871C9D}, hue 0.80490947, saturation 0.82165605, and value 0.6156863.
-     * It can be represented as a packed float with the constant {@code 0x1.3a390ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3a390ep126F}.
      * <pre>
      * <font style='background-color: #871C9D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #871C9D; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #871C9D; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #871C9D'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #871C9D'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #871C9D'>&nbsp;@&nbsp;</font><font style='background-color: #871C9D; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10303,7 +10303,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Purple" has RGB code {@code 0x863F95}, hue 0.8042636, saturation 0.5771813, and value 0.58431375.
-     * It can be represented as a packed float with the constant {@code 0x1.2a7f0cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.2a7f0cp126F}.
      * <pre>
      * <font style='background-color: #863F95; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #863F95; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #863F95; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #863F95'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #863F95'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #863F95'>&nbsp;@&nbsp;</font><font style='background-color: #863F95; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10317,7 +10317,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Purple" has RGB code {@code 0x9E15BA}, hue 0.80505043, saturation 0.88709676, and value 0.7294118.
-     * It can be represented as a packed float with the constant {@code 0x1.742b3cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.742b3cp126F}.
      * <pre>
      * <font style='background-color: #9E15BA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9E15BA; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9E15BA; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9E15BA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9E15BA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9E15BA'>&nbsp;@&nbsp;</font><font style='background-color: #9E15BA; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10331,7 +10331,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Magenta" has RGB code {@code 0xE71FBC}, hue 0.8691667, saturation 0.86580086, and value 0.90588236.
-     * It can be represented as a packed float with the constant {@code 0x1.783fcep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.783fcep126F}.
      * <pre>
      * <font style='background-color: #E71FBC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E71FBC; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E71FBC; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E71FBC'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E71FBC'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E71FBC'>&nbsp;@&nbsp;</font><font style='background-color: #E71FBC; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10345,7 +10345,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Magenta" has RGB code {@code 0xB761A4}, hue 0.8701551, saturation 0.46994537, and value 0.7176471.
-     * It can be represented as a packed float with the constant {@code 0x1.48c36ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.48c36ep126F}.
      * <pre>
      * <font style='background-color: #B761A4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B761A4; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B761A4; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B761A4'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B761A4'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B761A4'>&nbsp;@&nbsp;</font><font style='background-color: #B761A4; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10359,7 +10359,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Magenta" has RGB code {@code 0xDC0EB0}, hue 0.868932, saturation 0.93636364, and value 0.8627451.
-     * It can be represented as a packed float with the constant {@code 0x1.601db8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.601db8p126F}.
      * <pre>
      * <font style='background-color: #DC0EB0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DC0EB0; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DC0EB0; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DC0EB0'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DC0EB0'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DC0EB0'>&nbsp;@&nbsp;</font><font style='background-color: #DC0EB0; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10373,7 +10373,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Magenta" has RGB code {@code 0xEA7ED2}, hue 0.8703703, saturation 0.46153846, and value 0.91764706.
-     * It can be represented as a packed float with the constant {@code 0x1.a4fdd4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a4fdd4p126F}.
      * <pre>
      * <font style='background-color: #EA7ED2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EA7ED2; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EA7ED2; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EA7ED2'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EA7ED2'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EA7ED2'>&nbsp;@&nbsp;</font><font style='background-color: #EA7ED2; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10387,7 +10387,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Magenta" has RGB code {@code 0xE4A5D6}, hue 0.8703703, saturation 0.27631578, and value 0.89411765.
-     * It can be represented as a packed float with the constant {@code 0x1.ad4bc8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.ad4bc8p126F}.
      * <pre>
      * <font style='background-color: #E4A5D6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E4A5D6; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E4A5D6; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E4A5D6'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E4A5D6'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E4A5D6'>&nbsp;@&nbsp;</font><font style='background-color: #E4A5D6; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10401,7 +10401,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Magenta" has RGB code {@code 0xF036C9}, hue 0.86827964, saturation 0.77500004, and value 0.9411765.
-     * It can be represented as a packed float with the constant {@code 0x1.926dep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.926dep126F}.
      * <pre>
      * <font style='background-color: #F036C9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F036C9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #F036C9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #F036C9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #F036C9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #F036C9'>&nbsp;@&nbsp;</font><font style='background-color: #F036C9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10415,7 +10415,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Magenta" has RGB code {@code 0x9C117E}, hue 0.8693046, saturation 0.89102566, and value 0.6117647.
-     * It can be represented as a packed float with the constant {@code 0x0.fc2338p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fc2338p125F}.
      * <pre>
      * <font style='background-color: #9C117E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9C117E; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9C117E; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9C117E'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9C117E'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9C117E'>&nbsp;@&nbsp;</font><font style='background-color: #9C117E; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10429,7 +10429,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Magenta" has RGB code {@code 0x91307C}, hue 0.8694158, saturation 0.6689656, and value 0.5686275.
-     * It can be represented as a packed float with the constant {@code 0x0.f86122p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.f86122p125F}.
      * <pre>
      * <font style='background-color: #91307C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #91307C; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #91307C; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #91307C'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #91307C'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #91307C'>&nbsp;@&nbsp;</font><font style='background-color: #91307C; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10443,7 +10443,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Magenta" has RGB code {@code 0xB90D94}, hue 0.8691861, saturation 0.92972976, and value 0.7254902.
-     * It can be represented as a packed float with the constant {@code 0x1.281b72p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.281b72p126F}.
      * <pre>
      * <font style='background-color: #B90D94; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B90D94; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B90D94; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B90D94'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B90D94'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B90D94'>&nbsp;@&nbsp;</font><font style='background-color: #B90D94; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10457,7 +10457,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rose" has RGB code {@code 0xE41A71}, hue 0.92821777, saturation 0.88596493, and value 0.89411765.
-     * It can be represented as a packed float with the constant {@code 0x0.e235c8p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.e235c8p125F}.
      * <pre>
      * <font style='background-color: #E41A71; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E41A71; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E41A71; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E41A71'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E41A71'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E41A71'>&nbsp;@&nbsp;</font><font style='background-color: #E41A71; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10471,7 +10471,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Faded Rose" has RGB code {@code 0xB05A7F}, hue 0.9282946, saturation 0.48863637, and value 0.6901961.
-     * It can be represented as a packed float with the constant {@code 0x0.feb56p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.feb56p125F}.
      * <pre>
      * <font style='background-color: #B05A7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B05A7F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B05A7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B05A7F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B05A7F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B05A7F'>&nbsp;@&nbsp;</font><font style='background-color: #B05A7F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10485,7 +10485,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Flush Rose" has RGB code {@code 0xD90D64}, hue 0.9289215, saturation 0.94009215, and value 0.8509804.
-     * It can be represented as a packed float with the constant {@code 0x0.c81bb2p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.c81bb2p125F}.
      * <pre>
      * <font style='background-color: #D90D64; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D90D64; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #D90D64; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #D90D64'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #D90D64'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #D90D64'>&nbsp;@&nbsp;</font><font style='background-color: #D90D64; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10499,7 +10499,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Rose" has RGB code {@code 0xE87AA9}, hue 0.9287879, saturation 0.47413793, and value 0.9098039.
-     * It can be represented as a packed float with the constant {@code 0x1.52f5dp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.52f5dp126F}.
      * <pre>
      * <font style='background-color: #E87AA9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E87AA9; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E87AA9; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E87AA9'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E87AA9'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E87AA9'>&nbsp;@&nbsp;</font><font style='background-color: #E87AA9; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10513,7 +10513,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Pale Rose" has RGB code {@code 0xE2A2BD}, hue 0.9296875, saturation 0.2831858, and value 0.8862745.
-     * It can be represented as a packed float with the constant {@code 0x1.7b45c4p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7b45c4p126F}.
      * <pre>
      * <font style='background-color: #E2A2BD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E2A2BD; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #E2A2BD; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #E2A2BD'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #E2A2BD'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #E2A2BD'>&nbsp;@&nbsp;</font><font style='background-color: #E2A2BD; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10527,7 +10527,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Bright Rose" has RGB code {@code 0xEE3585}, hue 0.927928, saturation 0.77731097, and value 0.93333334.
-     * It can be represented as a packed float with the constant {@code 0x1.0a6bdcp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0a6bdcp126F}.
      * <pre>
      * <font style='background-color: #EE3585; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EE3585; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #EE3585; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #EE3585'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #EE3585'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #EE3585'>&nbsp;@&nbsp;</font><font style='background-color: #EE3585; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10541,7 +10541,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Rose" has RGB code {@code 0x9A0D4A}, hue 0.927896, saturation 0.91558444, and value 0.6039216.
-     * It can be represented as a packed float with the constant {@code 0x0.941b34p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.941b34p125F}.
      * <pre>
      * <font style='background-color: #9A0D4A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9A0D4A; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9A0D4A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9A0D4A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9A0D4A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9A0D4A'>&nbsp;@&nbsp;</font><font style='background-color: #9A0D4A; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10555,7 +10555,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Drab Rose" has RGB code {@code 0x8C2B55}, hue 0.92783505, saturation 0.6928572, and value 0.54901963.
-     * It can be represented as a packed float with the constant {@code 0x0.aa5718p-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.aa5718p125F}.
      * <pre>
      * <font style='background-color: #8C2B55; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C2B55; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #8C2B55; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #8C2B55'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #8C2B55'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #8C2B55'>&nbsp;@&nbsp;</font><font style='background-color: #8C2B55; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10569,7 +10569,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Rich Rose" has RGB code {@code 0xB60B54}, hue 0.92884994, saturation 0.9395605, and value 0.7137255.
-     * It can be represented as a packed float with the constant {@code 0x0.a8176cp-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.a8176cp125F}.
      * <pre>
      * <font style='background-color: #B60B54; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B60B54; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #B60B54; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B60B54'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B60B54'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B60B54'>&nbsp;@&nbsp;</font><font style='background-color: #B60B54; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10583,7 +10583,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Black" has RGB code {@code 0x000000}, hue 0.0, saturation 0.0, and value 0.0.
-     * It can be represented as a packed float with the constant {@code 0x0.0p0F}.
+     * It can be represented as a packed float with the constant {@code -0x1.0p125F}.
      * <pre>
      * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;@&nbsp;</font><font style='background-color: #000000; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10597,7 +10597,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Almost Black" has RGB code {@code 0x1F1F1F}, hue 0.0, saturation 0.0, and value 0.12156863.
-     * It can be represented as a packed float with the constant {@code 0x0.3e3e3ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3e3e3ep125F}.
      * <pre>
      * <font style='background-color: #1F1F1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1F1F1F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #1F1F1F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #1F1F1F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #1F1F1F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #1F1F1F'>&nbsp;@&nbsp;</font><font style='background-color: #1F1F1F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10611,7 +10611,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Gray Black" has RGB code {@code 0x3F3F3F}, hue 0.0, saturation 0.0, and value 0.24705882.
-     * It can be represented as a packed float with the constant {@code 0x0.7e7e7ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7e7e7ep125F}.
      * <pre>
      * <font style='background-color: #3F3F3F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3F3F3F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #3F3F3F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #3F3F3F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #3F3F3F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #3F3F3F'>&nbsp;@&nbsp;</font><font style='background-color: #3F3F3F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10625,7 +10625,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Dark Gray" has RGB code {@code 0x5F5F5F}, hue 0.0, saturation 0.0, and value 0.37254903.
-     * It can be represented as a packed float with the constant {@code 0x0.bebebep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bebebep125F}.
      * <pre>
      * <font style='background-color: #5F5F5F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5F5F5F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #5F5F5F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #5F5F5F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #5F5F5F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #5F5F5F'>&nbsp;@&nbsp;</font><font style='background-color: #5F5F5F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10639,7 +10639,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Gray" has RGB code {@code 0x7F7F7F}, hue 0.0, saturation 0.0, and value 0.49803922.
-     * It can be represented as a packed float with the constant {@code 0x0.fefefep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fefefep125F}.
      * <pre>
      * <font style='background-color: #7F7F7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F7F7F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #7F7F7F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #7F7F7F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #7F7F7F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #7F7F7F'>&nbsp;@&nbsp;</font><font style='background-color: #7F7F7F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10653,7 +10653,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Light Gray" has RGB code {@code 0x9F9F9F}, hue 0.0, saturation 0.0, and value 0.62352943.
-     * It can be represented as a packed float with the constant {@code 0x1.3f3f3ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.3f3f3ep126F}.
      * <pre>
      * <font style='background-color: #9F9F9F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9F9F9F; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #9F9F9F; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #9F9F9F'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #9F9F9F'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #9F9F9F'>&nbsp;@&nbsp;</font><font style='background-color: #9F9F9F; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10667,7 +10667,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Gray White" has RGB code {@code 0xBFBFBF}, hue 0.0, saturation 0.0, and value 0.7490196.
-     * It can be represented as a packed float with the constant {@code 0x1.7f7f7ep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.7f7f7ep126F}.
      * <pre>
      * <font style='background-color: #BFBFBF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFBFBF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #BFBFBF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #BFBFBF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #BFBFBF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #BFBFBF'>&nbsp;@&nbsp;</font><font style='background-color: #BFBFBF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10681,7 +10681,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW Almost White" has RGB code {@code 0xDFDFDF}, hue 0.0, saturation 0.0, and value 0.8745098.
-     * It can be represented as a packed float with the constant {@code 0x1.bfbfbep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.bfbfbep126F}.
      * <pre>
      * <font style='background-color: #DFDFDF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DFDFDF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #DFDFDF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #DFDFDF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #DFDFDF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #DFDFDF'>&nbsp;@&nbsp;</font><font style='background-color: #DFDFDF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10695,7 +10695,7 @@ public class SColor extends Color {
 
     /**
      * This color constant "CW White" has RGB code {@code 0xFFFFFF}, hue 0.0, saturation 0.0, and value 1.0.
-     * It can be represented as a packed float with the constant {@code 0x1.fffffep-126F}.
+     * It can be represented as a packed float with the constant {@code -0x1.fffffep126F}.
      * <pre>
      * <font style='background-color: #FFFFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFFF; color: #000000'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #FFFFFF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FFFFFF'>&nbsp;@&nbsp;</font><font style='background-color: #FFFFFF; color: #888888'>&nbsp;@&nbsp;</font>
@@ -10706,6 +10706,7 @@ public class SColor extends Color {
      * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
      */
     public static final SColor CW_WHITE = new SColor(0xFFFFFF, "CW White");
+
 
 
     /**
@@ -11412,9 +11413,9 @@ public class SColor extends Color {
             MEDIUM_LAVENDER_MAGENTA, MEDIUM_PURPLE, MEDIUM_SPRING_GREEN, MIDORI, MIDNIGHT_BLUE, MINT_GREEN,
             MISTY_ROSE, MOSS, MOSS_GREEN, MOUNTBATTEN_PINK, MOUSY_INDIGO, MOUSY_WISTERIA, MULBERRY, MULBERRY_DYED,
             MUSTARD, MYRTLE, NAVAJO_WHITE, NAVY_BLUE, NAVY_BLUE_BELLFLOWER, NAVY_BLUE_DYE, NEW_BRIDGE, NIGHTINGALE,
-            NIGHTINGALE_BROWN, OCHRE, OLD_BAMBOO, OLD_GOLD, OLD_LACE, OLD_LAVENDER, OLD_ROSE, OLIVE, OLIVE_DRAB,
-            OLIVINE, ONANDO, ONE_KIN_DYE, OPPOSITE_FLOWER, ORANGE, ORANGE_PEEL, ORANGE_RED, ORANGUTAN, ORCHID,
-            OVERDYED_RED_BROWN, PALE_BLUE, PALE_BROWN, PALE_CARMINE, PALE_CHESTNUT, PALE_CORNFLOWER_BLUE,
+            NIGHTINGALE_BROWN, OCEAN_BLUE, OCHRE, OLD_BAMBOO, OLD_GOLD, OLD_LACE, OLD_LAVENDER, OLD_ROSE, OLIVE,
+            OLIVE_DRAB, OLIVINE, ONANDO, ONE_KIN_DYE, OPPOSITE_FLOWER, ORANGE, ORANGE_PEEL, ORANGE_RED, ORANGUTAN,
+            ORCHID, OVERDYED_RED_BROWN, PALE_BLUE, PALE_BROWN, PALE_CARMINE, PALE_CHESTNUT, PALE_CORNFLOWER_BLUE,
             PALE_CRIMSON, PALE_FALLEN_LEAVES, PALE_GREEN_ONION, PALE_INCENSE, PALE_MAGENTA, PALE_OAK, PALE_PERSIMMON,
             PALE_PINK, PALE_RED_VIOLET, PALE_YOUNG_GREEN_ONION, PAPAYA_WHIP, PASTEL_GREEN, PASTEL_PINK, PATINA,
             PATRINIA_FLOWER, PEACH, PEACH_DYE, PEACH_ORANGE, PEACH_YELLOW, PEAR, PERIWINKLE, PERSIAN_BLUE,
@@ -11527,8 +11528,8 @@ public class SColor extends Color {
      * </ul>
      */
     public static final SColor[] LIMITED_PALETTE = {
-            // 0             1      2            3      4            5                     6
-            PURE_DARK_GRAY, CREAM, TAUPE, SILVER_GREY, RUST, PALE_CORNFLOWER_BLUE, INTERNATIONAL_ORANGE,
+            // 0             1      2                        3      4            5                     6
+            PURE_DARK_GRAY, CREAM, DOVE_FEATHER_GREY, SILVER_GREY, RUST, PALE_CORNFLOWER_BLUE, INTERNATIONAL_ORANGE,
             // 7     8             9
             WHITE, LIGHT_GRAY, DARK_GRAY,
             // 10           11   12
