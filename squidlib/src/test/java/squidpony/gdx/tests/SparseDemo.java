@@ -118,10 +118,14 @@ public class SparseDemo extends ApplicationAdapter {
     // but also allows Colors instead for most methods that take a packed float. Some cases, like very briefly-used
     // colors that are some mix of two other colors, are much better to create as packed floats from other packed
     // floats, usually using SColor.lerpFloatColors(), which avoids creating any objects. It's ideal to avoid creating
-    // new objects (such as Colors) frequently for only brief usage,because this can cause temporary garbage objects to
+    // new objects (such as Colors) frequently for only brief usage, because this can cause temporary garbage objects to
     // build up and slow down the program while they get cleaned up (garbage collection, which is slower on Android).
-    private static final float WHITE_FLOAT = SColor.FLOAT_WHITE,
-            GRAY_FLOAT = SColor.floatGetI(0x44, 0x44, 0x44);
+    // Recent versions of SquidLib include the packed float literal in the JavaDocs for any SColor, along with previews
+    // of that SColor as a background and foreground when used with other colors, plus more info like the hue,
+    // saturation, and value of the color. Here we just use the packed floats directly from the SColor docs, but we also
+    // mention what color it is in a line comment, which is a good habit so you can see a preview if needed.
+    private static final float FLOAT_LIGHTING = -0x1.cff1fep126F, // same result as SColor.COSMIC_LATTE.toFloatBits()
+            GRAY_FLOAT = -0x1.7e7e7ep125F; // same result as SColor.CW_GRAY_BLACK.toFloatBits()
 
     @Override
     public void create () {
@@ -278,9 +282,9 @@ public class SparseDemo extends ApplicationAdapter {
         playerToCursor.partialScan(13, blockage);
 
         //The next three lines set the background color for anything we don't draw on, but also create 2D arrays of the
-        //same size as decoDungeon that store simple indexes into a common list of colors, using the colors that looks
-        //up as the colors for the cell with the same x and y. By changing an item in SColor.LIMITED_PALETTE, we also
-        //change the colors assigned by default to walls.
+        //same size as decoDungeon that store the colors for the foregrounds and backgrounds of each cell as packed
+        //floats (a format SparseLayers can use throughout its API), using the colors for the cell with the same x and
+        //y. By changing an item in SColor.LIMITED_PALETTE, we also change the color assigned by MapUtility to floors.
         bgColor = SColor.DARK_SLATE_GRAY;
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
         colors = MapUtility.generateDefaultColorsFloat(decoDungeon);
@@ -522,19 +526,22 @@ public class SparseDemo extends ApplicationAdapter {
                     // as the time does, and also depends on the x,y position of the cell being lit. We use
                     // SColor.lerpFloatColors() to take two floats that encode colors without using an object,
                     // and mix them according to a third float between 0f and 1f. The two colors are the background
-                    // color of the cell, and pure white, while the third number is where the mess is. First it
-                    // gets a number using the visibility of the cell and the SeededNoise result, which will be
-                    // between 0f and 512f, then effectively divides that by 512 using a strange-at-first
-                    // hexadecimal float literal, 0x1p-9f. That is essentially the same as writing 0.001953125f,
-                    // (float)Math.pow(2.0, -9.0), or (1f / 512f), but is possibly faster than the last two if the
-                    // compiler can't optimize float division effectively, and is a good tool to have because these
-                    // hexadecimal float or double literals always represent numbers accurately. To contrast,
-                    // 0.3 - 0.2 is not equal to 0.1 with doubles, because tenths are inaccurate with floats and
-                    // doubles, and hex literals won't have the option to write an inaccurate float or double.
-                    float bg = SColor.lerpFloatColors(bgColors[i][j], WHITE_FLOAT,(196f + (
-                            180f * (float)(visible[i][j] * (1.0 + 0.2 * SeededNoise.noise(i * 0.2, j * 0.2, tm, 10000)))))
-                            * 0x1p-9f); // as above, "* 0x1p-9f" is roughly equivalent to "/ 512.0"
-                    display.put(i, j, lineDungeon[i][j], colors[i][j], bg);
+                    // color of the cell, then very light yellow, while the third number is where the mess is. First it
+                    // gets a number using the visibility of the cell and the SeededNoise result. The higher the
+                    // visibility, the brighter the cell will be, and a small adjustment to that brightness is applied
+                    // with the noise result for the player's x position, y position, and the current time.
+                    // SeededNoise.noise() produces a double between -1.0 and 1.0, so the adjustments this makes to it
+                    // yield a number between 0.75 and 1.25. Multiplying that with the visibility, then multiplying by
+                    // 200 and adding 200 produces a number with a max that varies from 350 to 450 and a minimum of 0
+                    // (when visibility is 0). Since this number will always be between 0f and 512f, but we want a
+                    // number between 0 and 1 to provide the amount for the lighting color to affect the background
+                    // color, we effectively divide by 512 using multiplication by a rarely-seen hexadecimal float
+                    // literal, 0x1p-9f.
+                    display.put(i, j, lineDungeon[i][j], colors[i][j],
+                            SColor.lerpFloatColors(bgColors[i][j], FLOAT_LIGHTING,(200f + (
+                                    200f * (float)(visible[i][j] * (1.0 + 0.25 * SeededNoise.noise(i * 0.3, j * 0.3, tm, 1)))))
+                                    * 0x1p-9f) // as above, "* 0x1p-9f" is roughly equivalent to "/ 512.0"
+                    );
                 } else if(seen.contains(i, j))
                     display.put(i, j, lineDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], GRAY_FLOAT, 0.3f));
             }
@@ -542,8 +549,8 @@ public class SparseDemo extends ApplicationAdapter {
         Coord pt;
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
-            // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.put(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], WHITE_FLOAT, 0.75f));
+            // use a brighter light to trace the path to the cursor, mixing the background color with mostly white.
+            display.put(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], SColor.FLOAT_WHITE, 0.85f));
         }
         languageDisplay.clear(0);
         languageDisplay.fillBackground(languageDisplay.defaultPackedBackground);
