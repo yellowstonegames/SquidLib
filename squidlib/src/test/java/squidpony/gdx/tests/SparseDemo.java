@@ -283,20 +283,8 @@ public class SparseDemo extends ApplicationAdapter {
         //change the colors assigned by default to walls.
         bgColor = SColor.DARK_SLATE_GRAY;
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
-        Color[][] temp = MapUtility.generateDefaultColors(decoDungeon);
-        colors = new float[bigWidth][bigHeight];
-        for (int i = 0; i < bigWidth; i++) {
-            for (int j = 0; j < bigHeight; j++) {
-                colors[i][j] = temp[i][j].toFloatBits();
-            }
-        }
-        temp = MapUtility.generateDefaultBGColors(decoDungeon);
-        bgColors = new float[bigWidth][bigHeight];
-        for (int i = 0; i < bigWidth; i++) {
-            for (int j = 0; j < bigHeight; j++) {
-                bgColors[i][j] = temp[i][j].toFloatBits();
-            }
-        }
+        colors = MapUtility.generateDefaultColorsFloat(decoDungeon);
+        bgColors = MapUtility.generateDefaultBGColorsFloat(decoDungeon);
 
         //places the player as an '@' at his position in orange.
         pg = display.glyph('@', SColor.SAFETY_ORANGE.toFloatBits(), player.x, player.y);

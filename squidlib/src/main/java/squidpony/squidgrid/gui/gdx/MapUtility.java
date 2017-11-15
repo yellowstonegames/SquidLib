@@ -9,17 +9,21 @@ import squidpony.squidmath.PerlinNoise;
 public class MapUtility {
     /**
      * Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
-     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the colors this
-     * returns will also change. Tiles containing nothing but a floor ('.') will be silver-gray. Walls are dark gray
-     * (this doesn't care if the walls are '#' marks or box-drawing lines), Doors ('+' and '/' in the map) will be rust
-     * brown. Both shallow and deep water (',' and '~') will be gray-blue. Traps ('^') will be shown in bright orange.
-     * Grass ('"') will be the expected green.
+     * <br>
+     * This takes its values from {@link SColor#LIMITED_PALETTE}; if that field is changed then the colors this returns
+     * will also change. Tiles containing nothing but a floor ('.') will be silver-gray; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[3]}. Walls are brownish-black, and can be '#' marks or box-drawing lines; this can
+     * be changed by editing {@code SColor.LIMITED_PALETTE[2]}.Doors ('+' and '/' in the map) will be rust brown; this
+     * can be changed by editing {@code SColor.LIMITED_PALETTE[4]}. Both shallow and deep water (',' and '~') will be
+     * gray-blue; this can be changed by editing {@code SColor.LIMITED_PALETTE[5]}. Traps ('^') will be shown in bright
+     * orange; this can be changed by editing {@code SColor.LIMITED_PALETTE[6]}. Grass ('"') will be the expected green;
+     * this can be changed by editing {@code SColor.LIMITED_PALETTE[20]}. Anything else will use white; this can be
+     * changed by editing {@code SColor.LIMITED_PALETTE[1]}.
      *
      * @param map a char[][] containing foreground characters
      * @return a 2D array of Colors with the same size as map, that can be used for the corresponding chars
      */
     public static Color[][] generateDefaultColors(char[][] map) {
-
         int width = map.length;
         int height = map[0].length;
         Color[][] portion = new Color[width][height];
@@ -72,13 +76,18 @@ public class MapUtility {
      * This overload also takes a char that corresponds to deep non-water lakes (which {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
      * can produce) and a Color to use for that deep liquid, as well as a char for shallow lakes and a Color for that
      * shallow liquid.
-     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the colors this
-     * returns will also change. Tiles containing nothing but a floor ('.') will be silver-gray. Walls are dark gray
-     * (this doesn't care if the walls are '#' marks or box-drawing lines), Doors ('+' and '/' in the map) will be rust
-     * brown. Both deep and shallow water (',' and '~') will be gray-blue. Traps ('^') will be shown in bright orange.
-     * Grass ('"') will be the expected green. Deep and shallow lakes of non-water will use the given Colors. If you
-     * are using SectionDungeonGenerator to produce normal water lakes, then you don't need this overload, and
-     * {@link #generateDefaultColors(char[][])} will be fine.
+     * <br>
+     * This takes its values from {@link SColor#LIMITED_PALETTE}; if that field is changed then the colors this returns
+     * will also change. Tiles containing nothing but a floor ('.') will be silver-gray; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[3]}. Walls are brownish-black, and can be '#' marks or box-drawing lines; this can
+     * be changed by editing {@code SColor.LIMITED_PALETTE[2]}.Doors ('+' and '/' in the map) will be rust brown; this
+     * can be changed by editing {@code SColor.LIMITED_PALETTE[4]}. Both shallow and deep water (',' and '~') will be
+     * gray-blue; this can be changed by editing {@code SColor.LIMITED_PALETTE[5]}. Traps ('^') will be shown in bright
+     * orange; this can be changed by editing {@code SColor.LIMITED_PALETTE[6]}. Grass ('"') will be the expected green;
+     * this can be changed by editing {@code SColor.LIMITED_PALETTE[20]}. Anything else will use white; this can be
+     * changed by editing {@code SColor.LIMITED_PALETTE[1]}.  Deep and shallow lakes of non-water will use the given
+     * Color parameters. If you are using SectionDungeonGenerator to produce normal water lakes, then you don't need
+     * this overload, and {@link #generateDefaultColors(char[][])} will be fine.
      *
      * @param map a char[][] containing foreground characters
      * @param deepChar the char that represents deep parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
@@ -135,6 +144,165 @@ public class MapUtility {
                         else if (map[i][j] == shallowChar)
                             portion[i][j] = shallowColor;
                         else portion[i][j] = SColor.LIMITED_PALETTE[1];
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
+     * Each float represents a color in an efficient way; {@link SparseLayers} primarily uses this kind of packed float
+     * to represent colors, and {@link SquidPanel} uses it internally.
+     * <br>
+     * This takes its values from {@link SColor#LIMITED_PALETTE}; if that field is changed then the colors this returns
+     * will also change. Tiles containing nothing but a floor ('.') will be silver-gray; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[3]}. Walls are brownish-black, and can be '#' marks or box-drawing lines; this can
+     * be changed by editing {@code SColor.LIMITED_PALETTE[2]}.Doors ('+' and '/' in the map) will be rust brown; this
+     * can be changed by editing {@code SColor.LIMITED_PALETTE[4]}. Both shallow and deep water (',' and '~') will be
+     * gray-blue; this can be changed by editing {@code SColor.LIMITED_PALETTE[5]}. Traps ('^') will be shown in bright
+     * orange; this can be changed by editing {@code SColor.LIMITED_PALETTE[6]}. Grass ('"') will be the expected green;
+     * this can be changed by editing {@code SColor.LIMITED_PALETTE[20]}. Anything else will use white; this can be
+     * changed by editing {@code SColor.LIMITED_PALETTE[1]}.
+     *
+     * @param map a char[][] containing foreground characters
+     * @return a 2D float array with the same size as map, containing packed floats that can be used for the corresponding chars
+     */
+    public static float[][] generateDefaultColorsFloat(char[][] map) {
+        int width = map.length;
+        int height = map[0].length;
+        float[][] portion = new float[width][height];
+        float wall = SColor.LIMITED_PALETTE[2].toFloatBits(),
+                ground = SColor.LIMITED_PALETTE[3].toFloatBits(),
+                door = SColor.LIMITED_PALETTE[4].toFloatBits(),
+                water = SColor.LIMITED_PALETTE[5].toFloatBits(),
+                grass = SColor.LIMITED_PALETTE[20].toFloatBits(),
+                trap = SColor.LIMITED_PALETTE[6].toFloatBits(),
+                other = SColor.LIMITED_PALETTE[1].toFloatBits();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = wall;
+                        break;
+                    case '.':
+                    case ':':
+                        portion[i][j] = ground;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = door;
+                        break;
+                    case ',':
+                    case '~':
+                        portion[i][j] = water;
+                        break;
+                    case '"':
+                        portion[i][j] = grass;
+                        break;
+                    case '^':
+                        portion[i][j] = trap;
+                        break;
+                    default:
+                        portion[i][j] = other;
+                }
+            }
+        }
+        return portion;
+    }
+    /**
+     * Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
+     * Each float represents a color in an efficient way; {@link SparseLayers} primarily uses this kind of packed float
+     * to represent colors, and {@link SquidPanel} uses it internally. This overload also takes a char that corresponds
+     * to deep non-water lakes (which {@link squidpony.squidgrid.mapping.SectionDungeonGenerator} can produce) and a
+     * packed float color to use for that deep liquid, as well as a char for shallow lakes and another packed float
+     * color for that shallow liquid.
+     * <br>
+     * This takes its values from {@link SColor#LIMITED_PALETTE}; if that field is changed then the colors this returns
+     * will also change. Tiles containing nothing but a floor ('.') will be silver-gray; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[3]}. Walls are brownish-black, and can be '#' marks or box-drawing lines; this can
+     * be changed by editing {@code SColor.LIMITED_PALETTE[2]}.Doors ('+' and '/' in the map) will be rust brown; this
+     * can be changed by editing {@code SColor.LIMITED_PALETTE[4]}. Both shallow and deep water (',' and '~') will be
+     * gray-blue; this can be changed by editing {@code SColor.LIMITED_PALETTE[5]}. Traps ('^') will be shown in bright
+     * orange; this can be changed by editing {@code SColor.LIMITED_PALETTE[6]}. Grass ('"') will be the expected green;
+     * this can be changed by editing {@code SColor.LIMITED_PALETTE[20]}. Anything else will use white; this can be
+     * changed by editing {@code SColor.LIMITED_PALETTE[1]}.  Deep and shallow lakes of non-water will use the given
+     * packed float color parameters. If you are using SectionDungeonGenerator to produce normal water lakes, then you
+     * don't need this overload, and {@link #generateDefaultColorsFloat(char[][])} will be fine.
+     *
+     * @param map a char[][] containing foreground characters
+     * @param deepChar the char that represents deep parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
+     * @param deepColor the packed float color to use for deep parts of non-water lakes
+     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
+     * @param shallowColor  the packed float color to use for shallow parts of non-water lakes
+     * @return a 2D float array with the same size as map, containing packed floats that can be used for the corresponding chars
+     */
+    public static float[][] generateDefaultColorsFloat(char[][] map, char deepChar, float deepColor,
+                                                  char shallowChar, float shallowColor) {
+
+        int width = map.length;
+        int height = map[0].length;
+        float[][] portion = new float[width][height];
+        float wall = SColor.LIMITED_PALETTE[2].toFloatBits(),
+                ground = SColor.LIMITED_PALETTE[3].toFloatBits(),
+                door = SColor.LIMITED_PALETTE[4].toFloatBits(),
+                water = SColor.LIMITED_PALETTE[5].toFloatBits(),
+                grass = SColor.LIMITED_PALETTE[20].toFloatBits(),
+                trap = SColor.LIMITED_PALETTE[6].toFloatBits(),
+                other = SColor.LIMITED_PALETTE[1].toFloatBits();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        portion[i][j] = wall;
+                        break;
+                    case '.':
+                    case ':':
+                        portion[i][j] = ground;
+                        break;
+                    case '+':
+                    case '/':
+                        portion[i][j] = door;
+                        break;
+                    case ',':
+                    case '~':
+                        portion[i][j] = water;
+                        break;
+                    case '"':
+                        portion[i][j] = grass;
+                        break;
+                    case '^':
+                        portion[i][j] = trap;
+                        break;
+                    default:
+                        if (map[i][j] == deepChar)
+                            portion[i][j] = deepColor;
+                        else if (map[i][j] == shallowChar)
+                            portion[i][j] = shallowColor;
+                        else portion[i][j] = other;
                 }
             }
         }
@@ -231,7 +399,7 @@ public class MapUtility {
      * @return a 2D array of background Colors with the same size as map, that can be used for the corresponding chars
      */
     public static Color[][] generateDefaultBGColors(char[][] map, char deepChar, Color deepColor,
-                                                   char shallowChar, Color shallowColor) {
+                                                    char shallowChar, Color shallowColor) {
 
         int width = map.length;
         int height = map[0].length;
@@ -282,6 +450,121 @@ public class MapUtility {
                         else if (map[i][j] == shallowChar)
                             portion[i][j] = shallowColor;
                         else portion[i][j] = SColor.LIMITED_PALETTE[0];
+                }
+            }
+        }
+        return portion;
+    }
+
+    /**
+     * Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
+     * usual meanings of the chars in map.
+     * <br>
+     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the
+     * colors this returns will also change. Most backgrounds will be black; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[0]}. Deep water ('~') will be dark blue-green; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[24]}. Shallow water (',') will be a lighter blue-green; this can be changed by
+     * editing {@code SColor.LIMITED_PALETTE[23]}. Grass ('"') will be dark green; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[21]}. Bridges (':') will be a medium-dark beige color; this can be changed by
+     * editing {@code SColor.LIMITED_PALETTE[35]}. You can adjust the brightness of the backgrounds using
+     * {@link #generateLightnessModifiers(char[][])}, or if you want water and grass to ripple, you can use the overload
+     * {@link #generateLightnessModifiers(char[][], double, char, char)} with some rising frame or millisecond count.
+     *
+     * @param map a char[][] containing foreground characters (this gets their background color)
+     * @return a 2D array of background Colors with the same size as map, that can be used for the corresponding chars
+     */
+    public static float[][] generateDefaultBGColorsFloat(char[][] map) {
+
+        int width = map.length;
+        int height = map[0].length;
+        float[][] portion = new float[width][height];
+        float   bridge = SColor.LIMITED_PALETTE[35].toFloatBits(),
+                shallow_water = SColor.LIMITED_PALETTE[23].toFloatBits(),
+                deep_water = SColor.LIMITED_PALETTE[24].toFloatBits(),
+                grass = SColor.LIMITED_PALETTE[21].toFloatBits(),
+                other = SColor.LIMITED_PALETTE[0].toFloatBits();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case ':':
+                        portion[i][j] = bridge;
+                        break;
+                    case ',':
+                        portion[i][j] = shallow_water;
+                        break;
+                    case '~':
+                        portion[i][j] = deep_water;
+                        break;
+                    case '"':
+                        portion[i][j] = grass;
+                        break;
+                    default:
+                        portion[i][j] = other;
+                }
+            }
+        }
+        return portion;
+    }
+
+
+    /**
+     * Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
+     * usual meanings of the chars in map. This overload also takes a char that corresponds to deep non-water lakes
+     * (which {@link squidpony.squidgrid.mapping.SectionDungeonGenerator} can produce) and a packed float color to use
+     * for that deep liquid,  as well as a char for shallow lakes and a packed float color for that shallow liquid.
+     * <br>
+     * This takes its values from {@link SColor#LIMITED_PALETTE}, and if that field is changed then the
+     * colors this returns will also change. Most backgrounds will be black; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[0]}. Deep water ('~') will be dark blue-green; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[24]}. Shallow water (',') will be a lighter blue-green; this can be changed by
+     * editing {@code SColor.LIMITED_PALETTE[23]}. Grass ('"') will be dark green; this can be changed by editing
+     * {@code SColor.LIMITED_PALETTE[21]}. Bridges (':') will be a medium-dark beige color; this can be changed by
+     * editing {@code SColor.LIMITED_PALETTE[35]}. Deep and shallow lakes of non-water will use the given packed float
+     * color parameters. If you are using SectionDungeonGenerator to produce normal water lakes, then you don't need
+     * this overload, and {@link #generateDefaultBGColorsFloat(char[][])} will be fine. You can adjust the brightness of
+     * the backgrounds using {@link #generateLightnessModifiers(char[][])}, or if you want water, grass, and lakes to
+     * ripple, you can use the overload {@link #generateLightnessModifiers(char[][], double, char, char)} with some
+     * rising frame or millisecond count.
+     *
+     * @param map a char[][] containing foreground characters (this gets their background color)
+     * @param deepChar the char that represents deep parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
+     * @param deepColor the packed float color to use for deep parts of non-water lakes
+     * @param shallowChar the char that represents shallow parts of non-water lakes, from {@link squidpony.squidgrid.mapping.SectionDungeonGenerator}
+     * @param shallowColor  the packed float color to use for shallow parts of non-water lakes
+     * @return a 2D array of background packed float colors with the same size as map, that can be used for the corresponding chars
+     */
+    public static float[][] generateDefaultBGColorsFloat(char[][] map, char deepChar, float deepColor,
+                                                    char shallowChar, float shallowColor) {
+
+        int width = map.length;
+        int height = map[0].length;
+        float[][] portion = new float[width][height];
+        float   bridge = SColor.LIMITED_PALETTE[35].toFloatBits(),
+                shallow_water = SColor.LIMITED_PALETTE[23].toFloatBits(),
+                deep_water = SColor.LIMITED_PALETTE[24].toFloatBits(),
+                grass = SColor.LIMITED_PALETTE[21].toFloatBits(),
+                other = SColor.LIMITED_PALETTE[0].toFloatBits();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case ':':
+                        portion[i][j] = bridge;
+                        break;
+                    case ',':
+                        portion[i][j] = shallow_water;
+                        break;
+                    case '~':
+                        portion[i][j] = deep_water;
+                        break;
+                    case '"':
+                        portion[i][j] = grass;
+                        break;
+                    default:
+                        if (map[i][j] == deepChar)
+                            portion[i][j] = deepColor;
+                        else if (map[i][j] == shallowChar)
+                            portion[i][j] = shallowColor;
+                        else portion[i][j] = other;
                 }
             }
         }
