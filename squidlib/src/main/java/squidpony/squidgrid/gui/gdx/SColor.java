@@ -11527,8 +11527,8 @@ public class SColor extends Color {
      * </ul>
      */
     public static final SColor[] LIMITED_PALETTE = {
-            // 0                 1       2                 3      4            5                     6
-            PURE_DARK_GRAY, CREAM, FLATTERY_BROWN, SILVER_GREY, RUST, PALE_CORNFLOWER_BLUE, INTERNATIONAL_ORANGE,
+            // 0             1      2            3      4            5                     6
+            PURE_DARK_GRAY, CREAM, TAUPE, SILVER_GREY, RUST, PALE_CORNFLOWER_BLUE, INTERNATIONAL_ORANGE,
             // 7     8             9
             WHITE, LIGHT_GRAY, DARK_GRAY,
             // 10           11   12
