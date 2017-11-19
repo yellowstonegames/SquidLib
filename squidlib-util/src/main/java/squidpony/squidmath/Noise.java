@@ -555,6 +555,10 @@ public class Noise {
             this(basis, 2.0, 2.0);
         }
 
+        public Scaled2D(Noise2D basis, double scale) {
+            this(basis, scale, scale);
+        }
+
         public Scaled2D(Noise2D basis, final double scaleX, final double scaleY) {
             this.basis = basis;
             this.scaleX = scaleX;
@@ -581,6 +585,10 @@ public class Noise {
 
         public Scaled3D(Noise3D basis) {
             this(basis, 2.0, 2.0, 2.0);
+        }
+
+        public Scaled3D(Noise3D basis, double scale) {
+            this(basis, scale, scale, scale);
         }
 
         public Scaled3D(Noise3D basis, final double scaleX, final double scaleY, final double scaleZ) {
@@ -612,6 +620,10 @@ public class Noise {
             this(basis, 2.0, 2.0, 2.0, 2.0);
         }
 
+        public Scaled4D(Noise4D basis, double scale) {
+            this(basis, scale, scale, scale, scale);
+        }
+
         public Scaled4D(Noise4D basis, final double scaleX, final double scaleY, final double scaleZ, final double scaleW) {
             this.basis = basis;
             this.scaleX = scaleX;
@@ -640,6 +652,10 @@ public class Noise {
 
         public Scaled6D(Noise6D basis) {
             this(basis, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
+        }
+
+        public Scaled6D(Noise6D basis, double scale) {
+            this(basis, scale, scale, scale, scale, scale, scale);
         }
 
         public Scaled6D(Noise6D basis, final double scaleX, final double scaleY, final double scaleZ,

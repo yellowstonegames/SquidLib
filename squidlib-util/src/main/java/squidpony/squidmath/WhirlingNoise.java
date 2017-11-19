@@ -33,17 +33,23 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         return t >= 0 ? (int) t : (int) t - 1;
     }
     public static int determine256(long state) {
+        //return (int)(state * 0x106689D45497FDB5L >>> 56);
+        //return (int)((state = ((state *= 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * (state | 0xE5L)) - (state >>> 22)) >>> 24;
         return (int)((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22)) >>> 24;
+
         //return (int)(state >>> 56);
         //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 1L) >>> 56);
     }
     public static int determine32(long state) {
+        //return (int)(state * 0x106689D45497FDB5L >>> 59);
+        //return (int)((state = ((state *= 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * (state | 0xE5L)) - (state >>> 22)) >>> 27;
         return (int)((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22)) >>> 27;
         //return (int)(state >>> 59);
         //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 1L) >>> 59);
     }
     public static long determine(long state)
     {
+        //return (state = ((state *= 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * (state | 0xE5L)) - (state >>> 22);
         return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
     }
     /*

@@ -157,8 +157,8 @@ public class SparseDemo extends ApplicationAdapter {
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
         // set the background colors directly as floats with the SparseDisplay.backgrounds field, and it can be handy
         // to hold onto the current color we want to fill that with in the defaultPackedBackground field.
-        //SparseLayers has fillBackground() and fillArea() methods for coloring all or part of the backgrounds.
-        languageDisplay.defaultPackedBackground = SColor.COSMIC_LATTE.toFloatBits();
+        // SparseLayers has fillBackground() and fillArea() methods for coloring all or part of the backgrounds.
+        languageDisplay.defaultPackedBackground = FLOAT_LIGHTING; // happens to be the same color used for lighting
 
         //This uses the seeded RNG we made earlier to build a procedural dungeon using a method that takes rectangular
         //sections of pre-drawn dungeon and drops them into place in a tiling pattern. It makes good winding dungeons

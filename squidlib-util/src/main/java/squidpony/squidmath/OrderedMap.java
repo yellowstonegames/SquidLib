@@ -2801,4 +2801,58 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         } else
             return null;
     }
+
+    /**
+     * Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types
+     * inferred from the types of k0 and v0, and considers all remaining parameters key-value pairs, casting the Objects
+     * at positions 0, 2, 4... etc. to K and the objects at positions 1, 3, 5... etc. to V. If rest has an odd-number
+     * length, then it discards the last item. If any pair of items in rest cannot be cast to the correct type of K or
+     * V, then this inserts nothing for that pair. This is similar to the makeOM method in the Maker class, but does not
+     * allow setting the load factor (since that extra parameter can muddle how javac figures out which generic types
+     * the map should use), nor does it log debug information if a cast fails. The result should be the same otherwise.
+     * <br>
+     * This is named makeMap to indicate that it expects key and value parameters, unlike a Set or List. This convention
+     * may be extended to other data structures that also have static methods for instantiation.
+     * @param k0 the first key; used to infer the types of other keys if generic parameters aren't specified.
+     * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.
+     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements
+     * @param <K> the type of keys in the returned OrderedMap; if not specified, will be inferred from k0
+     * @param <V> the type of values in the returned OrderedMap; if not specified, will be inferred from v0
+     * @return a freshly-made OrderedMap with K keys and V values, using k0, v0, and the contents of rest to fill it
+     */
+    @SuppressWarnings("unchecked")
+    public static <K, V> OrderedMap<K, V> makeMap(K k0, V v0, Object... rest)
+    {
+        if(rest == null || rest.length == 0)
+        {
+            OrderedMap<K, V> om = new OrderedMap<>(2);
+            om.put(k0, v0);
+            return om;
+        }
+        OrderedMap<K, V> om = new OrderedMap<>(1 + (rest.length >> 1));
+        om.put(k0, v0);
+
+        for (int i = 0; i < rest.length - 1; i+=2) {
+            try {
+                om.put((K) rest[i], (V) rest[i + 1]);
+            }catch (ClassCastException ignored) {
+            }
+        }
+        return om;
+    }
+
+    /**
+     * Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty
+     * OrderedMap with String keys and Coord values, you could use {@code Maker.<String, Coord>makeOM()}. Using
+     * the new keyword is probably just as easy in this case; this method is provided for completeness relative to
+     * makeMap() with 2 or more parameters.
+     * @param <K> the type of keys in the returned OrderedMap; cannot be inferred and must be specified
+     * @param <V> the type of values in the returned OrderedMap; cannot be inferred and must be specified
+     * @return an empty OrderedMap with the given key and value types.
+     */
+    public static <K, V> OrderedMap<K, V> makeMap()
+    {
+        return new OrderedMap<>();
+    }
+
 }
