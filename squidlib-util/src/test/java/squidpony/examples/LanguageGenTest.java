@@ -14,7 +14,7 @@ import java.util.HashMap;
  * Created by Tommy Ettinger on 11/29/2015.
  */
 public class LanguageGenTest {
-    public static boolean PRINTING = false;
+    public static boolean PRINTING = true;
     @Test
     public void testOutput() {
         if(!PRINTING) return;
@@ -431,6 +431,7 @@ public class LanguageGenTest {
                 FakeLanguageGen.ALIEN_O,
                 FakeLanguageGen.ALIEN_U,
         };
+        String marked = "What the [?]heck?[?] Check that out will ya? It's probably nothing, but - OH [?]NO, THIS IS BAD!";
         String[] oz = new String[]{
                 "Uncle Uncles Carbuncle Carbuncles Live Lives Lived Living Liver Livers Livery Liveries",
                 "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a ",
@@ -459,6 +460,7 @@ public class LanguageGenTest {
 //            System.out.println("princesses : " + cipher.lookup("princesses"));
             //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
+            System.out.println(cipher.cipherMarkup(marked));
             for (String s : oz) {
                 oz2[ctr] = cipher.cipher(s);
                 System.out.println(oz2[ctr++]);
