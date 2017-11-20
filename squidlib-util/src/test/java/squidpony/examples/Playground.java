@@ -55,6 +55,8 @@ public class Playground {
         return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
     }
 
+    public static float swayOld(float a) { a = Math.abs(Math.abs(a - 1f) % 2f - 1f); return a * a * a * (a * (a * 6f - 15f) + 10f); }
+
     private int state = 0;
     private int mul = 0xF7910000;
     private float nextFloat(final int salt)
@@ -83,6 +85,17 @@ public class Playground {
         */
     }
     private void go() {
+        for (float i = -3f; i <= 3f; i+=0.125f) {
+            System.out.printf("% 3.10f  % 3.10f\n", NumberTools.swayTight(i), swayOld(i));
+        }
+        System.out.print("  swayOld(Float.POSITIVE_INFINITY) :  " + swayOld(Float.POSITIVE_INFINITY));
+        System.out.print(", swayOld(Float.NEGATIVE_INFINITY) :  " + swayOld(Float.NEGATIVE_INFINITY));
+        System.out.print(", swayOld(Float.MIN_VALUE)         :  " + swayOld(Float.MIN_VALUE));
+        System.out.print(", swayOld(Float.MAX_VALUE)         :  " + swayOld(Float.MAX_VALUE));
+        System.out.print(", swayOld(Float.MIN_NORMAL)        :  " + swayOld(Float.MIN_NORMAL));
+        System.out.print(", swayOld(Float.NaN)               :  " + swayOld(Float.NaN));
+
+
 //        TabbyNoise tabby = TabbyNoise.instance;
 //        double v;
 //        for(double x : new double[]{0.0, -1.0, 1.0, -10.0, 10.0, -100.0, 100.0, -1000.0, 1000.0, -10000.0, 10000.0}){
@@ -100,34 +113,34 @@ public class Playground {
 //        }
 
 
-        int n;
-        ShortSet s = new ShortSet(1 << 16);
-        IntDoubleOrderedMap intMap = new IntDoubleOrderedMap(1 << 20);
-        SaltyQRNG qrng = new SaltyQRNG(0x9E3795);
-        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X\n",  qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-        for (int i = 0; i < (1 << 16); i++) {
-            s.add((short) (qrng.nextFloat() * (1 << 16)));
-        }
-        System.out.println("\n" + s.size + "/" + (1 << 16));
-        s.clear(1 << 16);
-        qrng.setState(0);
-        for (int i = 0; i < (1 << 16); i++) {
-            s.add(qrng.nextShort());
-        }
-        System.out.println("\n" + s.size + "/" + (1 << 16));
-        qrng.setState(0);
-        for (int i = 0; i < 1 << 20; i++) {
-            intMap.put(n = qrng.nextInt(), 1.0);
-            intMap.put(n, 2.0);
-        }
-        System.out.println("\n" + intMap.size() + "/" + (1 << 20));
+//        int n;
+//        ShortSet s = new ShortSet(1 << 16);
+//        IntDoubleOrderedMap intMap = new IntDoubleOrderedMap(1 << 20);
+//        SaltyQRNG qrng = new SaltyQRNG(0x9E3795);
+//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X\n",  qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
+//        for (int i = 0; i < (1 << 16); i++) {
+//            s.add((short) (qrng.nextFloat() * (1 << 16)));
+//        }
+//        System.out.println("\n" + s.size + "/" + (1 << 16));
+//        s.clear(1 << 16);
+//        qrng.setState(0);
+//        for (int i = 0; i < (1 << 16); i++) {
+//            s.add(qrng.nextShort());
+//        }
+//        System.out.println("\n" + s.size + "/" + (1 << 16));
+//        qrng.setState(0);
+//        for (int i = 0; i < 1 << 20; i++) {
+//            intMap.put(n = qrng.nextInt(), 1.0);
+//            intMap.put(n, 2.0);
+//        }
+//        System.out.println("\n" + intMap.size() + "/" + (1 << 20));
 
     }
 

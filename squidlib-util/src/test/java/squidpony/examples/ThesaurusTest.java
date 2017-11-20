@@ -23,7 +23,7 @@ public class ThesaurusTest {
                     thesaurus2.process("Calm`adj` Org`noun`\n"+
                             "Fancy`adj` Fr`gen` Empire`noun`\n"+
                             "Ar`jp`gen` Militia`noun`\n"+
-                            "Sinister`noun` Blade`noun`\n"+
+                            "Lethal`noun` Blade`noun`\n"+
                             "Sole`adj` Empire`noun`\n"+
                             "Bandit`nouns`\n"+
                             "Forest`adj` Org`noun` of Sw`gr`gen`\n"+

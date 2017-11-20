@@ -1924,7 +1924,7 @@ public class FakeLanguageGen implements Serializable {
 
     /**
      * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
-     * an alien species. This alien language emphasizes hard sounds and prefers the vowels 'i' and 'o', sometimes with
+     * an alien species. This alien language emphasizes hard sounds and prefers the vowels 'e' and 'a', sometimes with
      * two of the same vowel, like 'ee', but never with two different vowels in one syllable, like with 'ea'.
      * This language is meant to use click sounds, if pronunciation is given, where 'q' modifies a consonant to form a
      * click, such as 'tq'. This is like how 'h' modifies letters in English to make 'th' different from 't' or 'h'.
@@ -1969,7 +1969,7 @@ public class FakeLanguageGen implements Serializable {
     /**
      * Fantasy/sci-fi language that could be spoken by some very-non-human culture that would typically be fitting for
      * an alien species. This alien language emphasizes "liquid" sounds such as 'l', 'r', and mixes with those and other
-     * consonants, and prefers the vowels 'e' and a', never with two of the same vowel, like 'ee', nor with two
+     * consonants, and prefers the vowels 'i' and 'o', never with two of the same vowel, like 'ee', nor with two
      * different vowels in one syllable, like with 'ea'; it uses accent marks heavily and could be a tonal language.
      * It sometimes splits vowels with a single apostrophe, and rarely has large consonant clusters.
      * <br>
