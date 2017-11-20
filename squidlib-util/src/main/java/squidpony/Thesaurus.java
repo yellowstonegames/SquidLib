@@ -204,11 +204,26 @@ public class Thesaurus implements Serializable{
      *     <li>"so`gen`": Imitation Somali</li>
      *     <li>"en`gen`": Imitation English (not very good on its own)</li>
      *     <li>"ar`gen`": Imitation Arabic (better); doesn't have accents and should be more readable</li>
-     *     <li>"ar`acc`gen`": Imitation Arabic (worse); has special accents and uses two Greek letters as well</li>
+     *     <li>"nr`gen`": Imitation Old Norse (using simpler and easier-to-pronounce spelling)</li>
+     *     <li>"nr`acc`gen`": Imitation Old Norse (using the uncommon letters used in modern Icelandic)</li>
      *     <li>"hi`gen`": Imitation Hindi (romanized and with accents removed)</li>
+     *     <li>"kr`gen`": Imitation Korean (romanized)</li>
+     *     <li>"na`gen`": Imitation Nahuatl (spelled like how Spanish loanwords from Nahuatl are spelled)</li>
+     *     <li>"mn`gen`": Imitation Mongolian (the form of the language from medieval times, romanized)</li>
+     *     <li>"in`gen`": Imitation Inuktitut (romanized)</li>
+     *     <li>"si`gen`": "Simplish" (simplified imitation English, without special word endings like "-ight")</li>
      *     <li>"fn`gen`": Fantasy Names; styled after the possibly-Europe-like names common in fantasy books</li>
      *     <li>"fn`acc`gen`": Fancy Fantasy Names; the same as "fn`gen`", but with lots of accented chars</li>
      *     <li>"lc`gen`": Lovecraft; styled after the names of creatures from H.P. Lovecraft's Cthulhu Mythos</li>
+     *     <li>"el`gen`": Elf, modeled after J.R.R. Tolkien's languages for elves</li>
+     *     <li>"gb`gen`": Goblin, fantasy language of sneaky species</li>
+     *     <li>"if`gen`": Infernal, fantasy language of clever and subtle fiends</li>
+     *     <li>"dm`gen`": Demonic, fantasy language of brutish fiends</li>
+     *     <li>"al`a`gen`": Alien A, fantasy language with very unusual consonants</li>
+     *     <li>"al`e`gen`": Alien E, fantasy language with click sounds but no "lip sounds"</li>
+     *     <li>"al`i`gen`": Alien I, fantasy language with many tones and "liquid sounds"</li>
+     *     <li>"al`o`gen`": Alien O, fantasy language with long words and lengthy vowel clusters</li>
+     *     <li>"al`u`gen`": Alien U, fantasy language with many accented consonants and different suffixes</li>
      *     <li>"ru`so`gen`": Mix of imitation Russian (75%) and Somali (25%)</li>
      *     <li>"gr`hi`gen`": Mix of imitation Greek (50%) and Hindi (accents removed, 50%)</li>
      *     <li>"sw`fr`gen`": Mix of imitation Swahili (70%) and French (30%)</li>
@@ -460,23 +475,35 @@ public class Thesaurus implements Serializable{
             "magical`adj`",
             makeList("arcane", "enchanted", "sorcerous", "ensorcelled", "magical", "mystical"),
             "holy`adj`",
-            makeList("auspicious", "divine", "holy", "sacred", "prophetic", "blessed", "godly"),
+            makeList("auspicious", "divine", "holy", "sacred", "prophetic", "blessed", "godly", "virtuous"),
+            "priest`noun`",
+            makeList("priest", "bishop", "chaplain", "cleric", "cardinal", "preacher"),
+            "priest`nouns`",
+            makeList("priests", "bishops", "chaplains", "clergy", "cardinals", "preachers"),
             "unholy`adj`",
             makeList("bewitched", "occult", "unholy", "macabre", "accursed", "profane", "vile"),
+            "witch`noun`",
+            makeList("witch", "warlock", "necromancer", "cultist", "occultist", "defiler"),
+            "witch`nouns`",
+            makeList("witches", "warlocks", "necromancers", "cultists", "occultists", "defilers"),
             "forest`adj`",
             makeList("natural", "primal", "verdant", "lush", "fertile", "bountiful"),
             "forest`noun`",
             makeList("nature", "forest", "greenery", "jungle", "woodland", "grove", "copse"),
+            "shaman`noun`",
+            makeList("shaman", "druid", "warden", "animist"),
+            "shaman`nouns`",
+            makeList("shamans", "druids", "wardens", "animists"),
             "fancy`adj`",
             makeList("grand", "glorious", "magnificent", "magnanimous", "majestic", "great", "powerful"),
             "evil`adj`",
-            makeList("heinous", "scurrilous", "terrible", "horrible", "debased", "wicked", "evil", "malevolent", "nefarious", "vile"),
+            makeList("heinous", "scurrilous", "terrible", "horrible", "debased", "wicked", "evil", "malevolent", "nefarious", "vile", "cruel"),
             "good`adj`",
-            makeList("righteous", "moral", "good", "pure", "compassionate", "flawless", "perfect"),
-            "sinister`adj`",
-            makeList("shadowy", "silent", "lethal", "deadly", "fatal", "venomous", "cutthroat", "murderous", "bloodstained", "stalking"),
-            "sinister`noun`",
-            makeList("shadow", "silence", "assassin", "ninja", "venom", "poison", "snake", "murder", "blood", "razor", "tiger"),
+            makeList("righteous", "moral", "good", "pure", "compassionate", "flawless", "perfect", "kind"),
+            "lethal`adj`",
+            makeList("silent", "lethal", "deadly", "fatal", "venomous", "cutthroat", "murderous", "bloodstained", "stalking", "poisonous"),
+            "lethal`noun`",
+            makeList("silence", "killer", "assassin", "ninja", "venom", "poison", "snake", "murder", "blood", "razor", "tiger", "slayer"),
             "blade`noun`", // really any melee weapon
             makeList("blade", "knife", "sword", "axe", "stiletto", "katana", "scimitar", "hatchet", "spear", "glaive", "halberd",
                     "hammer", "maul", "flail", "mace", "sickle", "scythe", "whip", "lance", "nunchaku", "saber", "cutlass", "trident"),
@@ -512,9 +539,9 @@ public class Thesaurus implements Serializable{
             "sole`adj`",
             makeList("sole", "true", "singular", "total", "ultimate", "final", "last"),
             "light`adj`",
-            makeList("bright", "glowing", "solar", "stellar", "lunar", "radiant", "luminous", "shimmering"),
+            makeList("bright", "glowing", "solar", "stellar", "lunar", "radiant", "luminous", "shimmering", "gleaming"),
             "light`noun`",
-            makeList("light", "glow", "sun", "star", "moon", "radiance", "dawn", "torch"),
+            makeList("light", "glow", "sun", "star", "moon", "radiance", "dawn", "torch", "shimmer", "gleam"),
             "light`nouns`",
             makeList("lights", "glimmers", "suns", "stars", "moons", "torches"),
             "smart`adj`",
@@ -530,7 +557,15 @@ public class Thesaurus implements Serializable{
             "guard`nouns`",
             makeList("protectors", "guardians", "wardens", "defenders", "guards", "shields", "sentinels", "watchmen", "knights"),
             "rage`noun`",
-            makeList("rage", "fury", "anger", "wrath", "frenzy", "vengeance")
+            makeList("rage", "fury", "anger", "wrath", "frenzy", "vengeance"),
+            "ominous`adj`",
+            makeList("ominous", "foreboding", "fateful", "baleful", "portentous"),
+            "many`adj`",
+            makeList("many", "myriad", "thousandfold", "infinite", "countless", "unlimited"),
+            "impossible`adj`",
+            makeList("impossible", "forbidden", "incomprehensible", "mind-shattering", "unearthly", "abominable"),
+            "gaze`noun`",
+            makeList("eye", "gaze", "stare", "observation", "purveyance")
             );
 
     public static final OrderedMap<String, FakeLanguageGen> languages = makeOM(
@@ -554,15 +589,13 @@ public class Thesaurus implements Serializable{
             FakeLanguageGen.FANTASY_NAME,
             "fn`acc`gen`",
             FakeLanguageGen.FANCY_FANTASY_NAME,
-            "ar`acc`gen`",
-            FakeLanguageGen.ARABIC_ROMANIZED.addAccents(0.15, 0.0),
             "ar`gen`",
             FakeLanguageGen.ARABIC_ROMANIZED,
             "hi`gen`",
             FakeLanguageGen.HINDI_ROMANIZED,
             "in`gen`",
             FakeLanguageGen.INUKTITUT,
-            "nr`gen`acc`",
+            "nr`acc`gen`",
             FakeLanguageGen.NORSE,
             "nr`gen`",
             FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
@@ -570,6 +603,10 @@ public class Thesaurus implements Serializable{
             FakeLanguageGen.NAHUATL,
             "mn`gen`",
             FakeLanguageGen.MONGOLIAN,
+            "kr`gen`",
+            FakeLanguageGen.KOREAN_ROMANIZED,
+            "si`gen`",
+            FakeLanguageGen.SIMPLISH,
             "el`gen`",
             FakeLanguageGen.ELF,
             "gb`gen`",
@@ -578,6 +615,16 @@ public class Thesaurus implements Serializable{
             FakeLanguageGen.INFERNAL,
             "dm`gen`",
             FakeLanguageGen.DEMONIC,
+            "al`a`gen`",
+            FakeLanguageGen.ALIEN_A,
+            "al`e`gen`",
+            FakeLanguageGen.ALIEN_E,
+            "al`i`gen`",
+            FakeLanguageGen.ALIEN_I,
+            "al`o`gen`",
+            FakeLanguageGen.ALIEN_O,
+            "al`u`gen`",
+            FakeLanguageGen.ALIEN_U,
             "ru`so`gen`",
             FakeLanguageGen.mixAll(FakeLanguageGen.RUSSIAN_ROMANIZED, 3, FakeLanguageGen.SOMALI, 2),
             "gr`hi`gen`",
