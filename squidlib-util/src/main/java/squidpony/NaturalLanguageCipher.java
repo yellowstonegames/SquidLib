@@ -108,10 +108,11 @@ public class NaturalLanguageCipher implements Serializable{
 
     private static final long serialVersionUID = 1287835632461186341L;
     /**
-     * The FakeLanguageGen this will use to construct words; normally one of the static fields in FakeLanguageGen or a
-     * FakeLanguageGen produced by using the mix() method of one of them. Manually constructing FakeLanguageGen objects
-     * isn't especially easy, and if you decide to do that it's recommended you look at SquidLib's source to see how the
-     * existing calls to constructors work.
+     * The FakeLanguageGen this will use to construct words; normally one of the static fields in FakeLanguageGen, a
+     * FakeLanguageGen produced by using the {@link FakeLanguageGen#mixAll(Object...)} method of two or more of them, or
+     * a random FakeLanguageGen produced by {@link FakeLanguageGen#randomLanguage(long)}. Manually constructing
+     * FakeLanguageGen objects isn't easy, and if you decide to do that it's recommended you look at SquidLib's source
+     * to see how the existing calls to constructors work.
      */
     public FakeLanguageGen language;
     private SemiRandom rs;
@@ -281,7 +282,8 @@ se$->z
      * are in the source language. Can be used as a complete vocabulary when passed to decipher.
      */
     reverse;
-    private static final Pattern wordMatch = Pattern.compile("(\\pL+)|(\\pL[\\pL-]*\\pL)");
+    private static final Pattern wordPattern = Pattern.compile("(\\pL+)|(\\pL[\\pL-]*\\pL)");
+    private static final Matcher wordMatcher = wordPattern.matcher();
 
     /**
      * The degree of vocabulary to cache to speed up future searches at the expense of memory usage.
@@ -803,15 +805,14 @@ se$->z
     }
 
     /**
-     * Given a String, StringBuilder, or other CharSequence that should contain words in the source language, this
-     * translates each word to the fake language, using existing translations if previous calls to cipher() or lookup()
-     * had translated that word.
-     * @param text a CharSequence, such as a String, that contains words in the source language
+     * Given a String that should contain words in the source language, this translates each word to the fake language,
+     * using existing translations if previous calls to cipher() or lookup() had translated that word.
+     * @param text a String that contains words in the source language
      * @return a String of the translated text.
      */
     public String cipher(String text)
     {
-        Replacer rep = wordMatch.replacer(new CipherSubstitution());
+        Replacer rep = wordPattern.replacer(new CipherSubstitution());
         return rep.replace(text.replace('-', '\u2013'));
     }
 
@@ -861,11 +862,11 @@ se$->z
      * (then use mismatchTranslation() ). You don't need to use one of these methods if you just pass the whole of the
      * reverse field as a vocabulary, which will translate every word. If making your own vocabulary without the learn
      * methods, the keys need to be lower-case because while regex Patterns can be case-insensitive, Map lookups cannot.
-     * @param text a text in the fake language
+     * @param text a text in the fake language, as a CharSequence such as a String or StringBuilder
      * @param vocabulary a Map of Strings in the fake language to Strings in the source language
-     * @return a deciphered version of text that has any words as keys in vocabulary translated to the source language
+     * @return a String of deciphered text that has any words as keys in vocabulary translated to the source language
      */
-    public String decipher(String text, final Map<String, String> vocabulary)
+    public String decipher(CharSequence text, final Map<String, String> vocabulary)
     {
         Pattern pat;
         Replacer rep;
@@ -960,4 +961,49 @@ se$->z
         else if(cacheLevel <= 0) this.cacheLevel = 0;
         else this.cacheLevel = cacheLevel;
     }
+
+    protected Matcher markupMatcher = Pattern.compile("\\[\\?\\](.*?)(?:\\[\\?\\]|$)").matcher();
+
+    private class BulkCipherSubstitution implements Substitution
+    {
+        @Override
+        public void appendSubstitution(MatchResult match, TextBuffer dest) {
+            if(match instanceof Matcher)
+            {
+                wordMatcher.setTarget((Matcher)match, 1);
+            }
+            else
+            {
+                wordMatcher.setTarget(match.targetChars(), match.start(1) + match.targetStart(), match.length(1));
+            }
+            while (wordMatcher.find())
+            {
+                wordMatcher.getGroup(MatchResult.PREFIX, dest);
+                dest.append(lookup(wordMatcher.group()));
+                wordMatcher.setTarget(wordMatcher, MatchResult.SUFFIX);
+            }
+            wordMatcher.getGroup(MatchResult.TARGET, dest);
+        }
+    }
+
+    /**
+     * Given a String, StringBuilder, or other CharSequence that should contain words in the source language (almost
+     * always English, since this only knows English prefixes and suffixes), this finds sections of the text that
+     * start and end with {@code [?]} and {@code [?]}, translates each word between those start/end markers to the fake
+     * language, using existing translations if previous calls to cipher() or lookup() had translated that word, and
+     * removes the {@code [?]} markup afterwards. This is meant for cases where only some words should be translated,
+     * such as (for example) translating "What the [?]heck?[?]" to "What the grug?" or something like it if the language
+     * is {@link FakeLanguageGen#GOBLIN}, or "What the xu'oz?" if the language is {@link FakeLanguageGen#DEMONIC}.
+     * @param text a CharSequence, such as a String, that contains words in the source language and {@code [?]} markup
+     * @return a String of the translated text with markup-surrounded sections translated and markup removed
+     */
+    public String cipherMarkup(CharSequence text)
+    {
+        BulkCipherSubstitution cipherSub = new BulkCipherSubstitution();
+        markupMatcher.setTarget(text);
+        Replacer.StringBuilderBuffer sb = Replacer.wrap(new StringBuilder(text.length() * 5 >>> 2));
+        Replacer.replace(markupMatcher, cipherSub, sb);
+        return sb.toString();
+    }
+
 }
