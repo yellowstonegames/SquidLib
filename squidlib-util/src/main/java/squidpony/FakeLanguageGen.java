@@ -2099,6 +2099,113 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen ALIEN_U = alien_u().register();
 
+    private static FakeLanguageGen dragon(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "e", "e", "i", "i", "o", "o", "u",
+                        "a", "a", "a", "e", "e", "i", "i", "o", "o", "u",
+                        "a", "a", "a", "e", "e", "i", "i", "o", "o", "u",
+                        "a", "a", "a", "e", "e", "i", "i", "o", "o", "u",
+                        "a", "a", "a", "a", "a", "a", "e", "i", "o",
+                        "ai", "ai", "aa", "ae", "au", "ea", "ea", "ea",
+                        "ia", "ia", "ie", "io", "io", "oa", "ou"
+                },
+                new String[]{
+                        "aa", "aa", "aa", "ai", "ae", "ae", "ae", "au", "au",
+                        "ea", "ea", "eo", "eo",
+                        "ii", "ii", "ia", "ia", "ia", "ia", "ie", "ie", "ie", "io", "io", "io",
+                        "oa", "ou", "ou", "ou", "ou"
+                },
+                new String[]{
+                        "ch", "d", "f", "g", "h", "k", "l", "m", "n", "p", "r", "t", "th", "v", "w", "y", "z",
+                        "ch", "d", "f", "g", "h", "k", "l", "m", "n", "p", "r", "t", "th", "v", "w", "y", "z",
+                        "d", "f", "g", "h", "k", "l", "m", "n", "r", "t", "th", "v", "z",
+                        "d", "f", "g", "h", "k", "l", "n", "r", "t", "th", "v", "z",
+                        "d", "f", "g", "h", "l", "k", "l", "n", "r", "t", "th", "v", "z",
+                        "d", "g", "h", "k", "l", "n", "r", "t", "th", "v", "z",
+                        "d", "g", "h", "k", "l", "n", "r", "t", "th", "v", "z",
+                        "d", "g", "k", "l", "r", "t",
+                        "d", "g", "k", "l", "r", "t",
+                        "d", "g", "k", "l", "r", "t",
+                        "k", "k", "t", "t", "v",
+                        "k", "k", "t", "t", "th",
+                        "k", "k", "t", "t", "ch",
+                        "dr", "fr", "gr", "hr", "kr", "tr", "thr",
+                        "dr", "fr", "gr", "hr", "kr", "tr", "thr",
+                        "dr", "fr", "gr", "hr", "kr", "tr", "thr",
+                        "dr", "gr", "hr", "kr", "tr", "thr", "dr", "gr", "kr", "tr",
+                        "dr", "gr", "hr", "kr", "tr", "thr", "dr", "gr", "kr", "tr",
+                },
+                new String[]{
+                        "rch", "rd", "rg", "rk", "rm", "rn", "rp", "rt", "rth", "rv", "rw", "rz",
+                        "rch", "rd", "rg", "rk", "rm", "rn", "rp", "rt", "rth", "rv", "rw", "rz",
+                        "rdr", "rgr", "rkr", "rtr", "rthr",
+                        "lk", "lt", "lv", "lz",
+                        "ng", "nk", "ng", "nk", "ng", "nk", "ng", "nk", "nt", "nth", "nt", "nth", "nt", "nth", "nd",
+                        "ngr", "nkr", "ntr", "nthr",
+                        "dh", "gh", "lh", "mh", "nh", "rh",
+                        "dch", "dg", "dk", "dth", "dv", "dz",
+                        "kch", "kg", "kd", "kth", "kv", "kz",
+                        "gch", "gd", "gk", "gth", "gv", "gz",
+                        "tch", "tg", "tk", "ty", "tv", "tz",
+                        "zm", "zn", "zk", "zv", "zt", "zg", "zd",
+
+                        "ch", "d", "f", "g", "h", "k", "l", "m", "n", "p", "r", "t", "th", "v", "w", "y", "z",
+                        "ch", "d", "f", "g", "h", "k", "l", "m", "n", "p", "r", "t", "th", "v", "w", "y", "z",
+                        "d", "f", "g", "h", "k", "l", "m", "n", "r", "t", "th", "v", "z",
+                        "d", "f", "g", "h", "k", "l", "n", "r", "t", "th", "v", "z",
+                        "d", "f", "g", "h", "k", "l", "n", "r", "t", "th", "v",
+                        "d", "g", "k", "l", "n", "r", "t", "th", "v",
+                        "d", "g", "k", "l", "n", "r", "t", "th", "v",
+                        "d", "g", "k", "l", "r", "t",
+                        "d", "g", "k", "l", "r", "t",
+                        "d", "g", "k", "l", "r", "t",
+                        "k", "k", "t", "t", "r",
+                        "k", "k", "t", "t", "r",
+                        "k", "k", "t", "t", "r",
+                        "dr", "fr", "gr", "hr", "kr", "tr", "thr",
+                        "dr", "fr", "gr", "hr", "kr", "tr", "thr",
+                        "dr", "fr", "gr", "hr", "kr", "tr", "thr",
+                        "dr", "gr", "hr", "kr", "tr", "thr", "dr", "gr", "kr", "tr",
+                        "dr", "gr", "hr", "kr", "tr", "thr", "dr", "gr", "kr", "tr",
+
+                },
+                new String[]{
+                        "z", "z", "z", "t", "t", "t", "n", "r", "k", "th"
+                },
+                new String[]{"iamat", "at", "ut", "ok", "iok", "ioz", "ez", "ion", "ioth", "aaz", "iel"},
+                new String[]{}, new int[]{2, 3, 4, 5}, new double[]{2, 7, 10, 3}, 0.14, 0.04, 0.0, 0.11, genericSanityChecks, true);
+    }
+
+    /**
+     * Fantasy language that tries to sound like the speech of a powerful and pompous dragon, using long, complex words
+     * and a mix of hard consonants like "t" and "k", "liquid" consonants like "l" and "r", and sometimes vowel groups
+     * like "ie" and "aa". It frequently uses consonant clusters involving "r". It uses no accented characters.
+     * <br>
+     * Vokegodzaaz kigrofreth ariatarkioth etrokagik deantoznik hragriemitaaz gianehaadaz...
+     */
+    public static final FakeLanguageGen DRAGON = dragon().register();
+
+    /**
+     * Fantasy language based closely on {@link #DRAGON}, but with much shorter words normally and closing syllables
+     * that may sound "rushed" or "crude", though it has the same general frequency of most consonants and vowels.
+     * This means it still uses lots of "t", "k", and "r", can group two vowels sometimes, and when there's a consonant
+     * in the middle of a word, it is often accompanied by an "r" on one or both sides. If used with
+     * {@link NaturalLanguageCipher}, this will look very similar to DRAGON, because the syllable lengths aren't
+     * determined by this object but by the text being ciphered. Still, the ends of words are often different. It is
+     * called KOBOLD because, even though the original kobold myth was that of a goblin-like spirit that haunted cobalt
+     * mines, the modern RPG treatment of kobolds frequently describes them as worshippers of dragons or in some way
+     * created by dragons, but generally they're a sort of failure to live up to a dragon's high expectations. The feel
+     * of this language is meant to be something like a dragon's speech, but much less "fancy" and rather curt.
+     * <br>
+     * Thritriz, laazak gruz kokak thon lut...
+     */
+    public static final FakeLanguageGen KOBOLD = new FakeLanguageGen(
+            DRAGON.openingVowels, DRAGON.midVowels, DRAGON.openingConsonants, DRAGON.midConsonants, DRAGON.closingConsonants,
+            new String[]{"ik", "ak", "ek", "at", "it", "ik", "ak", "ek", "at", "it", "ik", "ak", "ek", "at", "it", "et", "ut", "ark", "irk", "erk"},
+            DRAGON.vowelSplitters, new int[]{1, 2, 3}, new double[]{5, 11, 1},
+            0.1, 0.0, 0.0, 0.22, genericSanityChecks, true);
+
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
      * nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric
