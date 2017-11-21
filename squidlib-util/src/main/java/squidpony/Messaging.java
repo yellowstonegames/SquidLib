@@ -390,6 +390,11 @@ public class Messaging {
                     return "ies";
             }
         }
+
+        public String directText(String term) {
+            return term;
+        }
+
     }
 
     public static class Group
@@ -639,13 +644,13 @@ public class Messaging {
             userPattern = Pattern.compile("({at_sign}\\\\@)|({caret_sign}\\\\\\^)|({dollar_sign}\\\\\\$)|({tilde_sign}\\\\~)|" +
             "({$$$}\\$\\$\\$)|({$$}\\$\\$)|({$}\\$)|({sss}@sss\\b)|({ss}@ss\\b)|({s}@s\\b)|({usi}@usi\\b)|({fves}@fves\\b)|" +
             "({name_s}@name_s\\b)|({Name_s}@Name_s\\b)|({name}@name\\b)|({Name}@Name\\b)|({i}@i\\b)|({I}@I\\b)|({me}@me\\b)|({Me}@Me\\b)|" +
-            "({myself}@myself\\b)|({Myself}@Myself\\b)|({my}@my\\b)|({My}@My\\b)|({mine}@mine\\b)|({Mine}@Mine\\b)|" +
-            "(?:@({Other}\\p{Lu}\\w*)\\b)|(?:@({other}\\p{Ll}\\w*)\\b)|({=name}@)"),
+            "({myself}@myself\\b)|({Myself}@Myself\\b)|({my}@my\\b)|({My}@My\\b)|({mine}@mine\\b)|({Mine}@Mine\\b)|({direct}@direct\\b)|" +
+            "({Direct}@Direct\\b)|(?:@({Other}\\p{Lu}\\w*)\\b)|(?:@({other}\\p{Ll}\\w*)\\b)|({=name}@)"),
             targetPattern = Pattern.compile("({at_sign}\\\\@)|({caret_sign}\\\\\\^)|({dollar_sign}\\\\\\$)|({tilde_sign}\\\\~)|" +
                     "({$$$}\\^\\$\\$\\$)|({$$}\\^\\$\\$)|({$}\\^\\$)|({sss}\\^sss\\b)|({ss}\\^ss\\b)|({s}\\^s\\b)|({usi}\\^usi\\b)|({fves}\\^fves\\b)|" +
                     "({name_s}\\^name_s\\b)|({Name_s}\\^Name_s\\b)|({name}\\^name\\b)|({Name}\\^Name\\b)|({i}\\^i\\b)|({I}\\^I\\b)|({me}\\^me\\b)|({Me}\\^Me\\b)|" +
-                    "({myself}\\^myself\\b)|({Myself}\\^Myself\\b)|({my}\\^my\\b)|({My}\\^My\\b)|({mine}\\^mine\\b)|({Mine}\\^Mine\\b)|" +
-                    "(?:\\^({Other}\\p{Lu}\\w*)\\b)|(?:\\^({other}\\p{Ll}\\w*)\\b)|({=name}\\^)");
+                    "({myself}\\^myself\\b)|({Myself}\\^Myself\\b)|({my}\\^my\\b)|({My}\\^My\\b)|({mine}\\^mine\\b)|({Mine}\\^Mine\\b)|({direct}^direct\\b)|" +
+                    "({Direct}^Direct\\b)|(?:\\^({Other}\\p{Lu}\\w*)\\b)|(?:\\^({other}\\p{Ll}\\w*)\\b)|({=name}\\^)");
 
     private static final HashMap<String, String[]> irregular = new HashMap<>(64);
 
@@ -679,6 +684,7 @@ public class Messaging {
         learnIrregularWord("haven_t", "haven't", "haven't", "haven't", "haven't", "hasn't", "haven't");
         learnIrregularWord("do", "do", "do", "do", "do", "does", "do");
         learnIrregularWord("don_t", "don't", "don't", "don't", "don't", "doesn't", "don't");
+        learnIrregularWord("this", "this", "these", "this", "these", "this", "these");
     }
 
     protected static class BeingSubstitution implements Substitution {
@@ -881,6 +887,14 @@ public class Messaging {
                     appendCapitalized(others[trait.ordinal()], dest);
                 else
                     match.getGroup(0, dest);
+            }
+            else if(match.isCaptured("direct"))
+            {
+                dest.append(trait.directText(term));
+            }
+            else if(match.isCaptured("Direct"))
+            {
+                appendCapitalized(trait.directText(term), dest);
             }
             else
                 match.getGroup(0, dest);

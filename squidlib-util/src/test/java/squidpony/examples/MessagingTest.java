@@ -1,5 +1,8 @@
 package squidpony.examples;
+import squidpony.FakeLanguageGen;
 import squidpony.Messaging;
+import squidpony.ProceduralMessaging;
+
 import static squidpony.Messaging.NounTrait.*;
 
 /**
@@ -51,6 +54,14 @@ public class MessagingTest {
         System.out.println(Messaging.transform(message, "Captain Spectacular", SPECIAL_CASE_GENDER));
         System.out.println(Messaging.transform(message, "Captain Spectacular", GROUP));
 
+        ProceduralMessaging pm = new ProceduralMessaging(123456789L, FakeLanguageGen.DEMONIC);
+        ProceduralMessaging.AssociatedName meanie = new ProceduralMessaging.AssociatedName("Meanie", true, null, "The Eternal Monster`noun`", "That Which Broods In Shadow`noun`", "The Black Fire`noun` of [?]Prussia[?]");
+        for (int i = 0; i < 16; i++) {
+            System.out.println(
+                    pm.transform("@Direct, ~, bring forth @name_s terrible rage`noun` against ^this wretch^ss!",
+                            meanie, "Some Knights Or Something", Messaging.NounTrait.GROUP)
+            );
+        }
 
     }
 }
