@@ -234,6 +234,18 @@ public class LanguageGenTest {
                     new String[]{".", ".", "?", "?", "!", "...", "..."}, 0.2));
         }
         rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.DRAGON;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 6, 12, new String[]{",", ",", ",", ";", ";", " -"},
+                    new String[]{".", ".", "!", "?", "...", "...", "..."}, 0.21));
+        }
+        rng.setState(0xf00df00L);
+        flg = FakeLanguageGen.KOBOLD;
+        for (int i = 0; i < 40; i++) {
+            System.out.println(flg.sentence(rng, 4, 8, new String[]{",", ",", ",", ";"},
+                    new String[]{".", ".", "!", "?", "!", ".", "..."}, 0.09));
+        }
+        rng.setState(0xf00df00L);
         flg = FakeLanguageGen.ALIEN_A;
         for (int i = 0; i < 40; i++) {
             System.out.println(flg.sentence(rng, 5, 10, new String[]{",", ",", ";", " -"},
@@ -425,6 +437,8 @@ public class LanguageGenTest {
                 FakeLanguageGen.ELF,
                 FakeLanguageGen.DEMONIC,
                 FakeLanguageGen.INFERNAL,
+                FakeLanguageGen.DRAGON,
+                FakeLanguageGen.KOBOLD,
                 FakeLanguageGen.ALIEN_A,
                 FakeLanguageGen.ALIEN_E,
                 FakeLanguageGen.ALIEN_I,
