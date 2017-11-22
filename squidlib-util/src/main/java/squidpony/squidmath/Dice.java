@@ -24,7 +24,7 @@ public class Dice implements Serializable {
 
     private static final long serialVersionUID = -488902743486431146L;
 
-    private static final Matcher mat = Pattern.compile("(?:(-?\\d+)\\s*(?:([:><])\\s*(\\d+))?\\s*(?:([d:!])\\s*(\\d+))?)|([+/*-])").matcher();
+    private static final Matcher mat = Pattern.compile("\\s*(?:(?:(-?\\d+)?\\s*(?:([:><])\\s*(\\d+))?\\s*(?:([d:!])\\s*(\\d+))?)|([+/*-]))\\s*").matcher();
     private RNG rng;
     private transient IntVLA temp = new IntVLA(20);
     /**
