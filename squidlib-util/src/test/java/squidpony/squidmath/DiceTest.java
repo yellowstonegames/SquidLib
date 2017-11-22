@@ -35,7 +35,14 @@ public class DiceTest
         System.out.println(d.roll("10:100:200")); // 142
         System.out.println(d.roll("3<10!100")); // 44
         System.out.println(d.roll("0:-15:15")); // -3
-
+        System.out.println(d.roll("d20")); // 9
+        System.out.println(d.roll("!20")); // 10
+        System.out.println(d.roll("!20")); // 13 // checking if state changes
+        System.out.println(d.roll("42")); // 42
+        System.out.println(d.roll("42d")); // 42
+        System.out.println(d.roll("42!")); // 42
+        System.out.println(d.roll("d")); // 0
+        System.out.println(d.roll("!")); // 0
     }
     @Test
     public void testDiceResults()
@@ -63,6 +70,14 @@ public class DiceTest
         Assert.assertEquals(d.roll("10:100:200"), 142);
         Assert.assertEquals(d.roll("3<10!100"), 44);
         Assert.assertEquals(d.roll("0:-15:15"), -3);
+        Assert.assertEquals(d.roll("d20"), 9);
+        Assert.assertEquals(d.roll("!20"), 10);
+        Assert.assertEquals(d.roll("!20"), 13);
+        Assert.assertEquals(d.roll("42"), 42);
+        Assert.assertEquals(d.roll("42d"), 42);
+        Assert.assertEquals(d.roll("42!"), 42);
+        Assert.assertEquals(d.roll("d"), 0);
+        Assert.assertEquals(d.roll("!"), 0);
 
     }
 }
