@@ -92,10 +92,12 @@ import java.util.ArrayList;
  */
 public class FlowingCaveGenerator implements IDungeonGenerator {
     public DungeonBoneGen gen;
-    public int width;
-    public int height;
+    public final int width;
+    public final int height;
     public TilesetType type;
     public RNG rng;
+    public final int[][] environment;
+    private boolean remakeEnvironment = true;
     protected CellularAutomaton ca;
 
     /**
@@ -118,6 +120,7 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
         rng = new RNG();
         gen = new DungeonBoneGen(rng);
         ca = new CellularAutomaton(this.width, this.height);
+        environment = new int[this.width][this.height];
     }
 
     /**
@@ -134,6 +137,7 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
         this.rng = rng == null ? new RNG() : rng;
         gen = new DungeonBoneGen(this.rng);
         ca = new CellularAutomaton(this.width, this.height);
+        environment = new int[this.width][this.height];
     }
 
     /**
@@ -155,13 +159,14 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
      * @return a 2D char array for the cave system
      */
     public char[][] generate(TilesetType type) {
+        remakeEnvironment = true;
         gen.generate(type, width, height);
         ca.remake(gen.region);
         gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);
         gen.region.and(ca.runBasicSmoothing()).deteriorate(rng, 0.9);
         ca.current.remake(gen.region.deteriorate(rng, 0.9));
         gen.region.or(ca.runBasicSmoothing());
-        gen.region.remake(gen.region.removeEdges().largestPart());
+        gen.region = gen.region.removeEdges().largestPart();
         return gen.region.intoChars(gen.getDungeon(), '.', '#');
     }
 
@@ -178,6 +183,7 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
      * @return a 2D char array for the cave system
      */
     public char[][] generate(TilesetType type, double roomChance) {
+        remakeEnvironment = true;
         gen.generate(type, width, height);
         ArrayList<GreasedRegion> rooms = gen.region.copy().retract8way().flood8way(gen.region, 1).split();
         ca.remake(gen.region);
@@ -193,7 +199,8 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
         }
         gen.region.remake(gen.region.removeEdges());
         gen.region.insertSeveral(DungeonUtility.ensurePath(gen.region.intoChars(gen.getDungeon(), '.', '#'), rng, '.', '#'));
-        return gen.region.largestPart().intoChars(gen.getDungeon(), '.', '#');
+        gen.region = gen.region.largestPart();
+        return gen.region.intoChars(gen.getDungeon(), '.', '#');
     }
 
     /**
@@ -206,5 +213,24 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
     @Override
     public char[][] getDungeon() {
         return gen.getDungeon();
+    }
+
+    /**
+     * Gets an environment map as a 2D int array that {@link SectionDungeonGenerator} can use along with the normal
+     * 2D char array dungeon map to add dungeon features. This marks cells as either {@link MixedGenerator#UNTOUCHED}
+     * (equal to 0), {@link MixedGenerator#CAVE_FLOOR} (equal to 3), or {@link MixedGenerator#CAVE_WALL} (equal to 4).
+     * If the environment has not yet been retrieved since generate() was last called, this assigns the environment map
+     * to match the dungeon map; otherwise it uses the cached environment map.
+     * @return a 2D int array that can be used as an environment map with SectionDungeonGenerator.
+     */
+    public int[][] getEnvironment()
+    {
+        if(remakeEnvironment)
+        {
+            gen.region.writeIntsInto(environment, MixedGenerator.CAVE_FLOOR);
+            gen.workingRegion.remake(gen.region).fringe8way().writeIntsInto(environment, MixedGenerator.CAVE_WALL);
+            remakeEnvironment = false;
+        }
+        return environment;
     }
 }

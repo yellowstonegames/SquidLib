@@ -24,8 +24,13 @@ public class DungeonBoneGen {
      * in its data as "on" cells and walls as "off" cells. This can be useful for inter-operating with code that expects
      * a GreasedRegion, which can be for various reasons.
      */
-    public GreasedRegion region = new GreasedRegion(wide, high);
-    private GreasedRegion workingRegion = new GreasedRegion(wide, high);
+    public GreasedRegion region = new GreasedRegion(1, 1);
+    /**
+     * Not recommended for general usage; a GreasedRegion that is frequently modified by this generator and is kept
+     * in a field so this and potentially other classes can avoid allocating new GreasedRegions with
+     * {@link GreasedRegion#remake(GreasedRegion)} or the various refill methods in GreasedRegion.
+     */
+    public transient GreasedRegion workingRegion = new GreasedRegion(1, 1);
 
     /**
      * Gets the current RNG.
