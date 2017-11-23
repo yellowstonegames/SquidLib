@@ -1429,6 +1429,13 @@ public class StringKit {
     }
 
     /**
+     * Constant storing the 16 hexadecimal digits, as char values, in order.
+     */
+    public static final char[] hexDigits = {
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+    };
+
+    /**
      * A constant containing only chars that are reasonably likely to be supported by broad fonts and thus display-able.
      * This assumes the font supports Latin, Greek, and Cyrillic alphabets, with good support for extended Latin (at
      * least for European languages) but not required to be complete enough to support the very large Vietnamese set of
