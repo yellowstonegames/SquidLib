@@ -1,5 +1,7 @@
-package squidpony;
+package squidpony.examples;
 
+import squidpony.LZSPlus;
+import squidpony.StringKit;
 import squidpony.squidmath.ThrustRNG;
 
 /**
