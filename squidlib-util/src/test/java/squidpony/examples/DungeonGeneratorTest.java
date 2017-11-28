@@ -134,7 +134,6 @@ public class DungeonGeneratorTest {
         rng.setState(2252637788195L);
         SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
         sdg.addDoors(12, false);
-        //sdg.addWater(SectionDungeonGenerator.CAVE, 13);
         sdg.addBoulders(SectionDungeonGenerator.ALL, 13);
         sdg.addWater(SectionDungeonGenerator.CAVE, 9);
         sdg.addMaze(15);
@@ -305,12 +304,11 @@ public class DungeonGeneratorTest {
 
         rng.setState(2252637788195L);
         FlowingCaveGenerator flow = new FlowingCaveGenerator(width, height, TilesetType.DEFAULT_DUNGEON, rng);
-
-        dungeonGenerator.addDoors(0, false);
+        dungeonGenerator.addWater(10);
+        dungeonGenerator.addGrass(12);
         dungeonGenerator.clearEffects();
-        dungeonGenerator.generate(flow.generate(TilesetType.DEFAULT_DUNGEON, 0.6));
+        dungeon = dungeonGenerator.generate(flow.generate(TilesetType.DEFAULT_DUNGEON));
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
-        dungeon = dungeonGenerator.getDungeon();
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 

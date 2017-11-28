@@ -767,17 +767,20 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			return result;
 		}
 
-		/** Some tests */
+		/* Some tests */
+		/*
 		public static void main(String[] args) {
-			final IColoredString<Object> salutCestHgames = IColoredString.Impl.create();
-			salutCestHgames.append("Salut", new Object());
-			salutCestHgames.append(" ", new Object());
-			salutCestHgames.append("c'est", new Object());
-			salutCestHgames.append(" ", new Object());
-			salutCestHgames.append("hgames", new Object());
-			for (int i = 0; i < salutCestHgames.length(); i++)
-				System.out.println(salutCestHgames.charAt(i));
+			final IColoredString<Object> rockNRoll = IColoredString.Impl.create();
+			rockNRoll.append("Rock", new Object());
+			rockNRoll.append(" ", new Object());
+			rockNRoll.append("'n", new Object());
+			rockNRoll.append(" ", new Object());
+			rockNRoll.append("Roll", new Object());
+			for (int i = 0; i < rockNRoll.length(); i++)
+				System.out.println(rockNRoll.charAt(i));
+			System.out.println(rockNRoll.present());
 		}
+		*/
 	}
 
 	/**

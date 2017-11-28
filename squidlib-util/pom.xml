@@ -33,6 +33,7 @@
                     <target>${jdk.version}</target>
                     <excludes>
                         <exclude>**/emu/**</exclude>
+                        <exclude>**/etc/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>

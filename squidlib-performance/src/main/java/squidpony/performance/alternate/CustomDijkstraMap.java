@@ -2881,6 +2881,7 @@ public class CustomDijkstraMap implements Serializable {
     }
 
 
+    /*
     public static void main(String[] args) {
         squidpony.squidgrid.mapping.DungeonGenerator dungeonGen =
                 new squidpony.squidgrid.mapping.DungeonGenerator(40, 40, new RNG(0x1337BEEFDEAL));
@@ -2916,4 +2917,5 @@ public class CustomDijkstraMap implements Serializable {
         //    }
         //}
     }
+    */
 }
