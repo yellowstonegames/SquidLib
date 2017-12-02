@@ -247,7 +247,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // and italic stored specially in (usually) unused parts of the font. Unlike one approach tried briefly, this
         // technique does not require any changes to the classes used, and works with an ordinary TextCellFactory and a
         // GDXMarkup to apply the bold and italic alterations.
-        textFactory = DefaultResources.getGoFamily().width(cellWidth).height(cellHeight).initBySize();
+        textFactory = DefaultResources.getSlabFamily().width(cellWidth).height(cellHeight).initBySize();
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
         // SquidColorCenters.
         display = new SquidLayers(width, height, cellWidth, cellHeight,
@@ -273,8 +273,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1f,cellHeight * 1.034f);
-        display.setTextSize(cellWidth * 1f, cellHeight  * 1.034f);
+        messages.setTextSize(cellWidth * 1.1f,cellHeight * 1.1f); //cellWidth * 1f, cellHeight  * 1.034f
+        display.setTextSize(cellWidth * 1.1f,cellHeight * 1.1f); //cellWidth * 1f, cellHeight  * 1.034f
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
         //subCell.setTextSize(8 * INTERNAL_ZOOM, 16 * INTERNAL_ZOOM);
@@ -288,11 +288,12 @@ public class EverythingDemo extends ApplicationAdapter {
         display.setPosition(0, 0);
         viewport.setScreenY((int)messages.getHeight());
         //subCell.setPosition(0, messages.getHeight());
-
+//                "Use numpad or vi-keys ([CW Bright Red]h[CW Bright Apricot]j[CW Bright Yellow]k[CW Bright Lime]l" +
+//                        "[CW Bright Jade]y[CW Bright Azure]u[CW Bright Sapphire]b[CW Flush Purple]n[]) to move. Use " +
         // Here we try to bring attention to the important keys by using a mixed-color String (IColoredString).
         IColoredString<Color> text = GDXMarkup.instance.colorString(
-                "Use numpad or vi-keys ([CW Bright Red]h[CW Bright Apricot]j[CW Bright Yellow]k[CW Bright Lime]l" +
-                        "[CW Bright Jade]y[CW Bright Azure]u[CW Bright Sapphire]b[CW Flush Purple]n[]) to move. Use " +
+                "Use numpad or vi-keys ([@0.0 0.8 1]h[@0.1 0.8 1]j[@0.17 0.8 1]k[@0.21 0.8 1]l" +
+                        "[@0.37 0.8 1]y[@0.53 0.8 1]u[@0.65 0.8 1]b[@0.81 0.8 1]n[]) to move. Use " +
                         "[CW Pale Indigo]?[] for help, [CW Faded Brown]f[] to filter colors, [CW Gray White]q[] to quit. " +
                         "Click the [/]top[/] or [/]bottom[/] border of [*]this [/]box[] to scroll.");
         /*IColoredString.Impl.create("Use numpad or vi-keys (", Color.WHITE);

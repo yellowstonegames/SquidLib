@@ -11976,7 +11976,7 @@ public class SColor extends Color {
      * @return a float in packed ABGR8888 format
      */
     public static float charsToFloat(final char[] data) {
-        return NumberTools.intBitsToFloat(
+        return NumberTools.intBitsToFloat(0xFEFFFFFF &
                 Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));
     }
 
@@ -11993,7 +11993,7 @@ public class SColor extends Color {
      * @return a float in packed ABGR8888 format
      */
     public static float charsToFloat(final char[] data, final int offset) {
-        return NumberTools.intBitsToFloat(0xFE000000 &
+        return NumberTools.intBitsToFloat(0xFEFFFFFF &
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset + 8))));
     }
 
@@ -12011,7 +12011,7 @@ public class SColor extends Color {
      */
 
     public static float charsToFloat(final CharSequence data, final int offset) {
-        return NumberTools.intBitsToFloat(0xFE000000 &
+        return NumberTools.intBitsToFloat(0xFEFFFFFF &
                 Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length(), offset + 8))));
     }
 

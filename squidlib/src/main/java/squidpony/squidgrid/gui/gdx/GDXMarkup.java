@@ -25,7 +25,11 @@ import squidpony.panel.IMarkup;
  * defined in the documentation for every {@link SColor}, and some libGDX Color values as well; this looks like
  * {@code [Inside Of A Bottle]Gray text[]} to produce the words "Gray text" with the color
  * {@link SColor#INSIDE_OF_A_BOTTLE} (note that the docs for that SColor say what the precise name is, and case needs to
- * match; you can also look up the {@link SColor#name} field). You can use {@code [[} to escape an opening bracket, and
+ * match; you can also look up the {@link SColor#name} field). Another option for colors is to use hue, saturation,
+ * value, and optionally opacity as 3 or 4 floats, in that order; this looks like {@code [@ 0 0.7 0.96]} (hue,
+ * saturation, and value, with opacity implicitly 1) or {@code [@ 0 0.7 0.96 0.8]} (0.8 opacity is a bit translucent).
+ * The HSV markup option is an addition to libGDX's syntax; any number of spaces/tabs can be used between HSV components
+ * and the space between @ and the first component is optional. You can use {@code [[} to escape an opening bracket, and
  * {@code []} to reset formatting. As an addition to GDX color markup, if using a TextFamily you can toggle the font
  * style as bold with {@code [*]} and as italic with {@code [/]}. If bold is on when this encounters another bold tag,
  * it will turn bold off; the same is true for italic. These formatting styles can overlap and do not need to be nested
@@ -59,7 +63,7 @@ public class GDXMarkup implements IMarkup<Color>{
         return "[]";
     }
 
-    private final Matcher markupMatcher = Pattern.compile("({=p}[^\\[]+)|(?:\\[({=e}\\[))|(?:\\[#({=h}[0-9A-Fa-f]{6,8})\\])|(?:\\[({=b}\\*)\\])|(?:\\[({=i}/)\\])|(?:\\[({=u},)\\])|(?:\\[({=n}[^\\]]+?)\\])|(?:\\[({=r}\\]))").matcher();
+    private final Matcher markupMatcher = Pattern.compile("({=p}[^\\[]+)|(?:\\[({=e}\\[))|(?:\\[#({=h}[0-9A-Fa-f]{6,8})\\])|(?:\\[@\\s*({=q}({=qh}[0-9]*\\.?[0-9]+)\\s+({=qs}[0-9]*\\.?[0-9]+)\\s+({=qv}[0-9]*\\.?[0-9]+)(?:\\s+({=qo}[0-9]*\\.?[0-9]+))?)\\])|(?:\\[({=b}\\*)\\])|(?:\\[({=i}/)\\])|(?:\\[({=u},)\\])|(?:\\[({=n}[^\\]]+?)\\])|(?:\\[({=r}\\]))").matcher();
     private static final char BOLD = '\u4000', ITALIC = '\u8000', REGULAR = '\0';
     private final StringBuilder sb = new StringBuilder(128);
 
@@ -86,16 +90,16 @@ public class GDXMarkup implements IMarkup<Color>{
                 }
                 cs.append(sb.toString(), current);
             }
-            else if(markupMatcher.getGroup("e", sb))
+            else if(markupMatcher.isCaptured("e"))
             {
                 cs.append((char) ('[' | mod), current);
             }
-            else if(markupMatcher.getGroup("r", sb))
+            else if(markupMatcher.isCaptured("r"))
             {
                 current = Color.WHITE;
                 mod = REGULAR;
             }
-            else if(markupMatcher.getGroup("u", sb))
+            else if(markupMatcher.isCaptured("u"))
             {
                 mod = REGULAR;
             }
@@ -107,11 +111,24 @@ public class GDXMarkup implements IMarkup<Color>{
             {
                 current = Colors.get(sb.toString());
             }
-            else if(markupMatcher.getGroup("b", sb))
+            else if(markupMatcher.isCaptured("q"))
+            {
+                current = markupMatcher.isCaptured("qo")
+                        ? DefaultResources.getSCC().getHSV(
+                                Float.parseFloat(markupMatcher.group("qh")),
+                                Float.parseFloat(markupMatcher.group("qs")),
+                                Float.parseFloat(markupMatcher.group("qv")),
+                                Float.parseFloat(markupMatcher.group("qo")))
+                        :  DefaultResources.getSCC().getHSV(
+                        Float.parseFloat(markupMatcher.group("qh")),
+                        Float.parseFloat(markupMatcher.group("qs")),
+                        Float.parseFloat(markupMatcher.group("qv")));
+            }
+            else if(markupMatcher.isCaptured("b"))
             {
                 mod ^= BOLD;
             }
-            else if(markupMatcher.getGroup("i", sb))
+            else if(markupMatcher.isCaptured("i"))
             {
                 mod ^= ITALIC;
             }
@@ -148,7 +165,7 @@ public class GDXMarkup implements IMarkup<Color>{
                 }
                 fsb.append(sb);
             }
-            else if(markupMatcher.getGroup("e", sb))
+            else if(markupMatcher.isCaptured("e"))
             {
                 fsb.append((char) ('[' | mod));
             }
@@ -156,19 +173,15 @@ public class GDXMarkup implements IMarkup<Color>{
             {
                 mod = REGULAR;
             }
-            else if(markupMatcher.getGroup("h", sb))
+            else if(markupMatcher.isCaptured("h") || markupMatcher.isCaptured("n") || markupMatcher.isCaptured("q"))
             {
                 markupMatcher.getGroup(0, fsb);
             }
-            else if(markupMatcher.getGroup("n", sb))
-            {
-                markupMatcher.getGroup(0, fsb);
-            }
-            else if(markupMatcher.getGroup("b", sb))
+            else if(markupMatcher.isCaptured("b"))
             {
                 mod ^= BOLD;
             }
-            else if(markupMatcher.getGroup("i", sb))
+            else if(markupMatcher.isCaptured("i"))
             {
                 mod ^= ITALIC;
             }
@@ -176,6 +189,33 @@ public class GDXMarkup implements IMarkup<Color>{
 
         }
         return fsb;
+    }
+
+    /**
+     * Directly styles one char value, toggling its bold state if {@code bold} is true, and toggling its italic state if
+     * {@code italic} is true. When either or both of bold or italic are enabled in a char, that char will be at some
+     * unrelated section of Unicode, and the char will be hard to identify unless you call {@link #unstyleChar(char)} on
+     * it or render it with a TextFamily (which will render bold and italic chars as the correct glyph and style).
+     * @param basis the char to potentially make bold or italic; can be bold or italic already
+     * @param bold if true, the bold-ness of basis will be toggled; if false, does not change bold data
+     * @param italic if true, the italic-ness of basis will be toggled; if false, does not change italic data
+     * @return a char that will look like basis when rendered appropriately but with bold and italic settings applied
+     */
+    public char styleChar(char basis, boolean bold, boolean italic)
+    {
+        return (char) (basis ^ (bold ? '\u4000' : '\0') ^ (italic ? '\u8000' : '\0'));
+    }
+
+    /**
+     * If given a char that has added style information for bold/italic modes (colors aren't stored in char data), this
+     * removes the bold/italic data and makes the char what it will be rendered as in a normal font (not a special
+     * TextFamily, which renders later sections of Unicode as bold and/or italic).
+     * @param styled a char that should have any bold or italic data set to normal (non-bold, non-italic)
+     * @return a char that will not be bold or italic
+     */
+    public char unstyleChar(char styled)
+    {
+        return (char) (styled & '\u3fff');
     }
 
     /*

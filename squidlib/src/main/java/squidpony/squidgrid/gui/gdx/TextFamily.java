@@ -79,11 +79,13 @@ public class TextFamily extends TextCellFactory {
     public TextFamily defaultFamilyLeanDistance()
     {
         fontDistanceField("Iosevka-Family-distance.fnt", "Iosevka-Family-distance.png");
+        setSmoothingMultiplier(2.1f);
         return this;
     }
     public TextFamily defaultFamilySlabDistance()
     {
         fontDistanceField("Iosevka-Slab-Family-distance.fnt", "Iosevka-Slab-Family-distance.png");
+        setSmoothingMultiplier(2.1f);
         return this;
     }
 
