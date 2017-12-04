@@ -959,6 +959,11 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         return h;
     }
 
+    public long hash64()
+    {
+        return 31L * size + CrossHash.hash64(key);
+    }
+
     /**
      * Returns the maximum number of entries that can be filled before rehashing.
      *

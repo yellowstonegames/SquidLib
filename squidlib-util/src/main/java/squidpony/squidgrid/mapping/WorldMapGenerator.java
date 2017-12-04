@@ -1301,7 +1301,7 @@ public abstract class WorldMapGenerator {
      * <a href="http://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
      */
     public static class SphereMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -1408,10 +1408,10 @@ public abstract class WorldMapGenerator {
             xPositions = new double[width][height];
             yPositions = new double[width][height];
             zPositions = new double[width][height];
-            terrain = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+            terrain = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq, 0.55);
             terrainRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);
-            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
-            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
+            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
+            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
             riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }

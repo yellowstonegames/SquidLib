@@ -1,8 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
-import squidpony.squidmath.*;
-
-import static squidpony.squidmath.ThrustAltRNG.determine;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.WhirlingNoise;
 
 /**
  * Created by Tommy Ettinger on 6/12/2017.
@@ -69,9 +68,13 @@ public class ColorNoise extends WhirlingNoise {
         // unskewed coords
         float y2 = y0 - 1f + 2f * G2f;
         // Work out the hashed gradient indices of the three simplex corners
-        int gi0 = (int)(determine(seed + i + determine(j)) >>> 16);
-        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) >>> 16);
-        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) >>> 16);
+//        int gi0 = (int)(determine(seed + i + determine(j)) >>> 16);
+//        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1)) >>> 16);
+//        int gi2 = (int)(determine(seed + i + 1 + determine(j + 1)) >>> 16);
+        int gi0 = (int)(hashAll(i, j, seed) & 0xFFFFFFL);
+        int gi1 = (int)(hashAll(i + i1, j + j1, seed) & 0xFFFFFFL);
+        int gi2 = (int)(hashAll(i + 1, j + 1, seed) & 0xFFFFFFL);
+
         float red, green, blue, t0, t1, t2;
         // Calculate the contribution from the three corners
         t0 = 0.75f - x0 * x0 - y0 * y0;
@@ -253,10 +256,10 @@ public class ColorNoise extends WhirlingNoise {
         float y3 = y0 - 0.5f;
         float z3 = z0 - 0.5f;
         // Work out the hashed gradient indices of the four simplex corners
-        int gi0 = (int)(determine(seed + i + determine(j + determine(k))));
-        int gi1 = (int)(determine(seed + i + i1 + determine(j + j1 + determine(k + k1))));
-        int gi2 = (int)(determine(seed + i + i2 + determine(j + j2 + determine(k + k2))));
-        int gi3 = (int)(determine(seed + i + 1 + determine(j + 1 + determine(k + 1))));
+        int gi0 = (int)(hashAll(i, j , k, seed) & 0xFFFFFFFFL);
+        int gi1 = (int)(hashAll(i + i1, j + j1 , k + k1, seed) & 0xFFFFFFFFL);
+        int gi2 = (int)(hashAll(i + i2, j + j2 , k + k2, seed) & 0xFFFFFFFFL);
+        int gi3 = (int)(hashAll(i + 1, j + 1 , k + 1, seed) & 0xFFFFFFFFL);
         float red, green, blue, t0, t1, t2, t3;
         // Calculate the contribution from the four corners
         t0 = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;

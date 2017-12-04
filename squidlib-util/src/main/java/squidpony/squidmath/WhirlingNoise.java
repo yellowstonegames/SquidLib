@@ -35,28 +35,93 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     public static int determine256(long state) {
         //return (int)(state * 0x106689D45497FDB5L >>> 56);
         //return (int)((state = ((state *= 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * (state | 0xE5L)) - (state >>> 22)) >>> 24;
-        return (int)((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22)) >>> 24;
+        return (int)(((state *= 0x352E9CF570932BDDL) ^ (state >>> 25)) * (state | 0xA529L) >>> 56);
 
         //return (int)(state >>> 56);
-        //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 1L) >>> 56);
+        //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 0xA529L) >>> 56);
     }
     public static int determine32(long state) {
         //return (int)(state * 0x106689D45497FDB5L >>> 59);
         //return (int)((state = ((state *= 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * (state | 0xE5L)) - (state >>> 22)) >>> 27;
-        return (int)((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22)) >>> 27;
+        return (int)(((state *= 0x352E9CF570932BDDL) ^ (state >>> 25)) * (state | 0xA529L) >>> 59);
         //return (int)(state >>> 59);
-        //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 1L) >>> 59);
+        //return (int) (((state *= 0x6A5D39EAE126579FL) ^ (state >>> 25)) * (state | 0xA529L) >>> 59);
+    }
+    public static long hashAll(final long x, final long y, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((x ^ state) | 0xA529L)) ^ (state >>> 22)));
+    }
+    public static long hashAll(final long x, final long y, final long z, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
+    }
+    public static long hashAll(final long x, final long y, final long z, final long w, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (w ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
+    }
+    public static int hash256(final long x, final long y, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
+                ((y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((x ^ state) | 0xA529L))) >>> 56);
+    }
+    public static int hash256(final long x, final long y, final long z, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 56);
+    }
+    public static int hash256(final long x, final long y, final long z, final long w, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (w ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)))) >>> 56);
+    }
+    public static int hash32(final long x, final long y, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)))) >>> 59);
+    }
+    public static int hash32(final long x, final long y, final long z, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y - z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z - x) | 0xA529L)) ^ (state >>> 22)) ^
+                ((z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x - y) | 0xA529L))) >>> 59);
+    }
+    public static int hash32(final long x, final long y, final long z, final long w, long state)
+    {
+        state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = (z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                ((w ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 59);
     }
     public static long determine(long state)
     {
         //return (state = ((state *= 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * (state | 0xE5L)) - (state >>> 22);
-        return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
+        //return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
+        return (state = ((state *= 0x352E9CF570932BDDL) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
+
     }
     /*
     public static long determine(long state)
     {
         state *= 0x6D2E9CF570932BD7L;
-        state = (state ^ (state >>> 25)) * (state | 1L);
+        state = (state ^ (state >>> 25)) * (state | 0xA529L);
         return state ^ (state >>> 21);
     }
     */
@@ -914,9 +979,12 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi1 = (hash >>>= 4) & 15;
         int gi2 = (hash >>> 4) & 15;
         */
-        int gi0 = determine256(seed + i + determine(j));
-        int gi1 = determine256(seed + i + i1 + determine(j + j1));
-        int gi2 = determine256(seed + i + 1 + determine(j + 1));
+//        int gi0 = determine256(seed + i + determine(j));
+//        int gi1 = determine256(seed + i + i1 + determine(j + j1));
+//        int gi2 = determine256(seed + i + 1 + determine(j + 1));
+        int gi0 = hash256(i, j, seed);
+        int gi1 = hash256(i + i1, j + j1, seed);
+        int gi2 = hash256(i + 1, j + 1, seed);
 
         // Calculate the contribution from the three corners
         double t0 = 0.75 - x0 * x0 - y0 * y0;
@@ -1079,10 +1147,15 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
-        int gi0 = determine32(seed + i + determine(j + determine(k)));
-        int gi1 = determine32(seed + i + i1 + determine(j + j1 + determine(k + k1)));
-        int gi2 = determine32(seed + i + i2 + determine(j + j2 + determine(k + k2)));
-        int gi3 = determine32(seed + i + 1 + determine(j + 1 + determine(k + 1)));
+//        int gi0 = determine32(seed + i + determine(j + determine(k)));
+//        int gi1 = determine32(seed + i + i1 + determine(j + j1 + determine(k + k1)));
+//        int gi2 = determine32(seed + i + i2 + determine(j + j2 + determine(k + k2)));
+//        int gi3 = determine32(seed + i + 1 + determine(j + 1 + determine(k + 1)));
+
+        int gi0 = hash32(i, j, k, seed);
+        int gi1 = hash32(i + i1, j + j1, k + k1, seed);
+        int gi2 = hash32(i + i2, j + j2, k + k2, seed);
+        int gi3 = hash32(i + 1, j + 1, k + 1, seed);
 
         /*
         int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),
@@ -1248,11 +1321,11 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         double z4 = z0 - 1.0 + 4.0 * G4;
         double w4 = w0 - 1.0 + 4.0 * G4;
 
-        int gi0 = determine256(seed + i + determine(j + determine(k + determine(l))));
-        int gi1 = determine256(seed + i + i1 + determine(j + j1 + determine(k + k1 + determine(l + l1))));
-        int gi2 = determine256(seed + i + i2 + determine(j + j2 + determine(k + k2 + determine(l + l2))));
-        int gi3 = determine256(seed + i + i3 + determine(j + j3 + determine(k + k3 + determine(l + l3))));
-        int gi4 = determine256(seed + i + 1 + determine(j + 1 + determine(k + 1 + determine(l + 1))));
+        int gi0 = hash256(i, j, k, l, seed);
+        int gi1 = hash256(i + i1, j + j1, k + k1, l + l1, seed);
+        int gi2 = hash256(i + i2, j + j2, k + k2, l + l2, seed);
+        int gi3 = hash256(i + i3, j + j3, k + k3, l + l3, seed);
+        int gi4 = hash256(i + 1, j + 1, k + 1, l + 1, seed);
 
         // Noise contributions from the five corners are n0 to n4
 
@@ -1341,9 +1414,12 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         // unskewed coords
         float y2 = y0 - 1f + 2f * G2f;
         // Work out the hashed gradient indices of the three simplex corners
-        int gi0 = determine256(i + determine(j));
-        int gi1 = determine256(i + i1 + determine(j + j1));
-        int gi2 = determine256(i + 1 + determine(j + 1));
+//        int gi0 = determine256(i + determine(j));
+//        int gi1 = determine256(i + i1 + determine(j + j1));
+//        int gi2 = determine256(i + 1 + determine(j + 1));
+        int gi0 = hash256(i, j, 1337);
+        int gi1 = hash256(i + i1, j + j1, 1337);
+        int gi2 = hash256(i + 1, j + 1, 1337);
 
         // Calculate the contribution from the three corners
         float t0 = 0.75f - x0 * x0 - y0 * y0;
@@ -1492,10 +1568,14 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
         int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
         */
-        int gi0 = determine32(i + determine(j + determine(k)));
-        int gi1 = determine32(i + i1 + determine(j + j1 + determine(k + k1)));
-        int gi2 = determine32(i + i2 + determine(j + j2 + determine(k + k2)));
-        int gi3 = determine32(i + 1 + determine(j + 1 + determine(k + 1)));
+//        int gi0 = determine32(i + determine(j + determine(k)));
+//        int gi1 = determine32(i + i1 + determine(j + j1 + determine(k + k1)));
+//        int gi2 = determine32(i + i2 + determine(j + j2 + determine(k + k2)));
+//        int gi3 = determine32(i + 1 + determine(j + 1 + determine(k + 1)));
+        int gi0 = hash32(i, j, k, 1337);
+        int gi1 = hash32(i + i1, j + j1, k + k1, 1337);
+        int gi2 = hash32(i + i2, j + j2, k + k2, 1337);
+        int gi3 = hash32(i + 1, j + 1, k + 1, 1337);
 
 //        int gi0 = determineBounded(i + determine(j + determine(k)), 92);
 //        int gi1 = determineBounded(i + i1 + determine(j + j1 + determine(k + k1)), 92);

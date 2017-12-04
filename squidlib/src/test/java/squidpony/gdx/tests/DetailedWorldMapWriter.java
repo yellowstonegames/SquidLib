@@ -40,9 +40,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         River                  = 12,
         Ocean                  = 13;
 
-    private static final int width = 314 * 4, height = 400;
+    //private static final int width = 314 * 4, height = 400;
 
-    //private static final int width = 512, height = 512;
+    private static final int width = 512, height = 512;
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
@@ -292,8 +292,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         view = new StretchViewport(width * cellWidth, height * cellHeight);
         //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
-        path = "out/worlds/Sphere " + date + "/";
-        //path = "out/worlds/Tiling " + date + "/";
+        //path = "out/worlds/Sphere " + date + "/";
+        path = "out/worlds/Tiling " + date + "/";
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
         pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGB888);
@@ -301,8 +301,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pt = new Texture(pm);
         rng = new StatefulRNG(CrossHash.hash64(date));
         seed = rng.getState();
-        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
-        //world = new WorldMapGenerator.TilingMap(seed, width, height, new Noise.Scaled4D(WhirlingNoise.instance, 1.25), 0.8);
+        ///world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
+        world = new WorldMapGenerator.TilingMap(seed, width, height, new Noise.Scaled4D(WhirlingNoise.instance, 1.25), 0.8);
         //world = new WorldMapGenerator.SphereMap(seed, width, height, new Noise.Turbulent3D(WhirlingNoise.instance, TabbyNoise.instance, 2, 1.4), 0.85);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;

@@ -2206,6 +2206,11 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             h += value[n] == null ? 0 : value[n].hashCode();
         return h;
     }
+
+    public long hash64()
+    {
+        return 31L * (31L * CrossHash.hash64(key) + CrossHash.hash64(value)) + size;
+    }
     /**
      * Returns the maximum number of entries that can be filled before rehashing.
      *

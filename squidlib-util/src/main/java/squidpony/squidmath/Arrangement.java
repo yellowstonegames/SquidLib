@@ -2194,6 +2194,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             h += value[n];
         return h;
     }
+    public long hash64()
+    {
+        return 31L * CrossHash.hash64(key) + size;
+    }
+
     /**
      * Returns the maximum number of entries that can be filled before rehashing.
      *
