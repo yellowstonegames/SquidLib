@@ -1202,7 +1202,7 @@ public class RNGBenchmark {
     {
         RNG rng = new RNG(new MersenneTwister(iseed));
         for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.next(32);
+            iseed += rng.nextInt();
         }
         return iseed;
     }

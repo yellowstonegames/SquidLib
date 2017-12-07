@@ -591,7 +591,7 @@ public class RNG implements Serializable {
      * Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy.
      * GWT-compatible since GWT 2.8.0, which is the default if you use libGDX 1.9.5 or higher.
      * <br>
-     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+     * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
      *
      * @param elements an array of T; will not be modified
      * @param <T>      can be any non-primitive type.
@@ -611,11 +611,10 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Shuffles an array in place using the Fisher-Yates algorithm.
+     * Shuffles an array in-place using the Fisher-Yates algorithm.
      * If you don't want the array modified, use {@link #shuffle(Object[], Object[])}.
-     * Unlike {@link #shuffle(Object[])}, this is GWT-compatible.
      * <br>
-     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+     * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
      *
      * @param elements an array of T; <b>will</b> be modified
      * @param <T>      can be any non-primitive type.
@@ -640,7 +639,7 @@ public class RNG implements Serializable {
      * possible, create a new array with the same length as elements and pass it in as dest; the returned value can be
      * assigned to whatever you want and will have the same items as the newly-formed array.
      * <br>
-     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+     * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
      *
      * @param elements an array of T; will not be modified
      * @param <T>      can be any non-primitive type.
@@ -658,7 +657,8 @@ public class RNG implements Serializable {
 
     /**
      * Shuffles a {@link Collection} of T using the Fisher-Yates algorithm and returns an ArrayList of T.
-     *
+     * <br>
+     * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
      * @param elements a Collection of T; will not be modified
      * @param <T>      can be any non-primitive type.
      * @return a shuffled ArrayList containing the whole of elements in pseudo-random order.
@@ -671,7 +671,8 @@ public class RNG implements Serializable {
      * Shuffles a {@link Collection} of T using the Fisher-Yates algorithm. The result
      * is allocated if {@code buf} is null or if {@code buf} isn't empty,
      * otherwise {@code elements} is poured into {@code buf}.
-     *
+     * <br>
+     * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
      * @param elements a Collection of T; will not be modified
      * @param <T>      can be any non-primitive type.
      * @return a shuffled ArrayList containing the whole of elements in pseudo-random order.
@@ -690,6 +691,26 @@ public class RNG implements Serializable {
         }
         return al;
     }
+    /**
+     * Shuffles a Collection of T items in-place using the Fisher-Yates algorithm.
+     * This only shuffles List data structures; the {@link OrderedSet#shuffle(RNG)} and {@link OrderedMap#shuffle(RNG)}
+     * methods, among others in SquidLib's data structures, can be used to shuffle those types.
+     * If you don't want the array modified, use {@link #shuffle(Collection)}, which returns a List as well.
+     * <br>
+     * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
+     *
+     * @param elements a Collection of T; <b>will</b> be modified
+     * @param <T>      can be any non-primitive type.
+     * @return elements after shuffling it in-place
+     */
+    public <T> List<T> shuffleInPlace(List<T> elements) {
+        final int n = elements.size();
+        for (int i = 0; i < n - 1; i++) {
+            Collections.swap(elements, i + nextInt(n - i), i);
+        }
+        return elements;
+    }
+
 
     /**
      * Generates a random permutation of the range from 0 (inclusive) to length (exclusive).
@@ -824,10 +845,10 @@ public class RNG implements Serializable {
     }
 
     /**
-     * This returns a maximum of 0.9999999999999999 because that is the largest
-     * Double value that is less than 1.0
+     * Gets a random double between 0.0 inclusive and 1.0 exclusive.
+     * This returns a maximum of 0.9999999999999999 because that is the largest double value that is less than 1.0 .
      *
-     * @return a value between 0 (inclusive) and 0.9999999999999999 (inclusive)
+     * @return a double between 0.0 (inclusive) and 0.9999999999999999 (inclusive)
      */
     public double nextDouble() {
         return (random.nextLong() & 0x1fffffffffffffL) * 0x1p-53;
@@ -836,27 +857,46 @@ public class RNG implements Serializable {
     }
 
     /**
-     * This returns a random double between 0.0 (inclusive) and max (exclusive).
+     * This returns a random double between 0.0 (inclusive) and outer (exclusive). The value for outer can be positive
+     * or negative. Because of how math on doubles works, there are at most 2 to the 53 values this can return for any
+     * given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.
      *
-     * @return a value between 0 (inclusive) and max (exclusive)
+     * @param outer the outer exclusive bound as a double; can be negative or positive
+     * @return a double between 0.0 (inclusive) and outer (exclusive)
      */
-    public double nextDouble(double max) {
-        return nextDouble() * max;
+    public double nextDouble(final double outer) {
+        return (random.nextLong() & 0x1fffffffffffffL) * 0x1p-53 * outer;
     }
 
     /**
-     * This returns a maximum of 0.99999994 because that is the largest Float
-     * value that is less than 1.0f
+     * Gets a random float between 0.0f inclusive and 1.0f exclusive.
+     * This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .
      *
-     * @return a value between 0 (inclusive) and 0.99999994 (inclusive)
+     * @return a float between 0f (inclusive) and 0.99999994f (inclusive)
      */
     public float nextFloat() {
-        return next(24) * 0x1p-24f;
+        return random.next(24) * 0x1p-24f;
+    }
+    /**
+     * This returns a random float between 0.0f (inclusive) and outer (exclusive). The value for outer can be positive
+     * or negative. Because of how math on floats works, there are at most 2 to the 24 values this can return for any
+     * given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.
+     *
+     * @param outer the outer exclusive bound as a float; can be negative or positive
+     * @return a float between 0f (inclusive) and outer (exclusive)
+     */
+    public float nextFloat(final float outer) {
+        return random.next(24) * 0x1p-24f * outer;
     }
 
     /**
      * Get a random bit of state, interpreted as true or false with approximately equal likelihood.
-     *
+     * This may have better behavior than {@code rng.next(1)}, depending on the RandomnessSource implementation; the
+     * default LightRNG will behave fine, as will ThrustRNG and ThrustAltRNG (these all use similar algorithms), but the
+     * normally-high-quality XoRoRNG will produce very predictable output with {@code rng.next(1)} and very good output
+     * with {@code rng.nextBoolean()}. This is a known and considered flaw of Xoroshiro128+, the algorithm used by
+     * XoRoRNG, and a large number of generators have lower quality on the least-significant bit than the most-
+     * significant bit, where this method only checks the most-significant bit.
      * @return a random boolean.
      */
     public boolean nextBoolean() {
@@ -966,7 +1006,7 @@ public class RNG implements Serializable {
      * @return a 32-bit random int.
      */
     public int nextInt() {
-        return next(32);
+        return random.next(32);
     }
 
     /**
@@ -1038,7 +1078,8 @@ public class RNG implements Serializable {
     /**
      * Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit
      * 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.
-     *
+     * <br>
+     * Not exactly general-use; meant for generating data for GreasedRegion.
      * @return a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits
      */
     public long randomInterleave() {
@@ -1065,6 +1106,140 @@ public class RNG implements Serializable {
         ib &= 0x5555555555555555L;
         return (bits | (ib << 1));
     }
+
+    /**
+     * Gets the minimum random long between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias toward zero, but all possible values are between 0, inclusive,
+     * and bound, exclusive.
+     * @param bound the outer exclusive bound
+     * @param trials how many numbers to generate and get the minimum of
+     * @return the minimum generated long between 0 and bound out of the specified amount of trials
+     */
+    public long minLongOf(final long bound, final int trials)
+    {
+        long value = nextLong(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.min(value, nextLong(bound));
+        }
+        return value;
+    }
+    /**
+     * Gets the maximum random long between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias away from zero, but all possible values are between 0,
+     * inclusive, and bound, exclusive.
+     * @param bound the outer exclusive bound
+     * @param trials how many numbers to generate and get the maximum of
+     * @return the maximum generated long between 0 and bound out of the specified amount of trials
+     */
+    public long maxLongOf(final long bound, final int trials)
+    {
+        long value = nextLong(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.max(value, nextLong(bound));
+        }
+        return value;
+    }
+
+    /**
+     * Gets the minimum random int between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias toward zero, but all possible values are between 0, inclusive,
+     * and bound, exclusive.
+     * @param bound the outer exclusive bound
+     * @param trials how many numbers to generate and get the minimum of
+     * @return the minimum generated int between 0 and bound out of the specified amount of trials
+     */
+    public int minIntOf(final int bound, final int trials)
+    {
+        int value = nextIntHasty(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.min(value, nextIntHasty(bound));
+        }
+        return value;
+    }
+    /**
+     * Gets the maximum random int between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias away from zero, but all possible values are between 0,
+     * inclusive, and bound, exclusive.
+     * @param bound the outer exclusive bound
+     * @param trials how many numbers to generate and get the maximum of
+     * @return the maximum generated int between 0 and bound out of the specified amount of trials
+     */
+    public int maxIntOf(final int bound, final int trials)
+    {
+        int value = nextIntHasty(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.max(value, nextIntHasty(bound));
+        }
+        return value;
+    }
+
+    /**
+     * Gets the minimum random double between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias toward zero, but all possible values are between 0, inclusive,
+     * and bound, exclusive.
+     * @param bound the outer exclusive bound
+     * @param trials how many numbers to generate and get the minimum of
+     * @return the minimum generated double between 0 and bound out of the specified amount of trials
+     */
+    public double minDoubleOf(final double bound, final int trials)
+    {
+        double value = nextDouble(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.min(value, nextDouble(bound));
+        }
+        return value;
+    }
+
+    /**
+     * Gets the maximum random double between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias away from zero, but all possible values are between 0,
+     * inclusive, and bound, exclusive.
+     * @param bound the outer exclusive bound
+     * @param trials how many numbers to generate and get the maximum of
+     * @return the maximum generated double between 0 and bound out of the specified amount of trials
+     */
+    public double maxDoubleOf(final double bound, final int trials)
+    {
+        double value = nextDouble(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.max(value, nextDouble(bound));
+        }
+        return value;
+    }
+    /**
+     * Gets the minimum random float between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias toward zero, but all possible values are between 0, inclusive,
+     * and bound, exclusive.
+     * @param bound the outer exclusive bound
+     * @param trials how many numbers to generate and get the minimum of
+     * @return the minimum generated float between 0 and bound out of the specified amount of trials
+     */
+    public float minFloatOf(final float bound, final int trials)
+    {
+        float value = nextFloat(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.min(value, nextFloat(bound));
+        }
+        return value;
+    }
+
+    /**
+     * Gets the maximum random float between 0 and {@code bound} generated out of {@code trials} generated numbers.
+     * Useful for when numbers should have a strong bias away from zero, but all possible values are between 0,
+     * inclusive, and bound, exclusive.
+     * @param bound the outer exclusive bound
+     * @param trials how many numbers to generate and get the maximum of
+     * @return the maximum generated float between 0 and bound out of the specified amount of trials
+     */
+    public float maxFloatOf(final float bound, final int trials)
+    {
+        float value = nextFloat(bound);
+        for (int i = 1; i < trials; i++) {
+            value = Math.max(value, nextFloat(bound));
+        }
+        return value;
+    }
+
 
     @Override
     public String toString() {
