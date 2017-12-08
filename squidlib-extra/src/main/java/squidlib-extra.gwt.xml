@@ -20,6 +20,8 @@
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedMap" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.EnumOrderedMap" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.OrderedSet" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.EnumOrderedSet" />
+    <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.UnorderedSet" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.Arrangement" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.K2" />
     <extend-configuration-property name="gdx.reflect.include" value="squidpony.squidmath.K2V1" />

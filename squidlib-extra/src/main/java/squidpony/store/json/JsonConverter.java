@@ -76,6 +76,8 @@ public class JsonConverter extends Json {
         json.addClassTag("#OMap", OrderedMap.class);
         json.addClassTag("#EOMp", EnumOrderedMap.class);
         json.addClassTag("#OSet", OrderedSet.class);
+        json.addClassTag("#UOSt", UnorderedSet.class);
+        json.addClassTag("#EOSt", EnumOrderedSet.class);
         json.addClassTag("#Aran", Arrangement.class);
         json.addClassTag("#K2", K2.class);
         json.addClassTag("#K2V1", K2V1.class);
@@ -89,6 +91,7 @@ public class JsonConverter extends Json {
         json.addClassTag("#Ligh", LightRNG.class);
         json.addClassTag("#LonP", LongPeriodRNG.class);
         json.addClassTag("#Thrs", ThrustRNG.class);
+        json.addClassTag("#ThrA", ThrustAltRNG.class);
         json.addClassTag("#XoRo", XoRoRNG.class);
         json.addClassTag("#XorR", XorRNG.class);
         json.addClassTag("#Strm", CrossHash.Storm.class);
@@ -293,6 +296,51 @@ public class JsonConverter extends Json {
                     if(v == INVALID)
                         return new EnumOrderedMap();
                     return Maker.makeEOM(k, v, r);
+                } catch (ReflectionException e) {
+                    return null;
+                }
+                //return new OrderedMap(json.readValue(OrderedSet.class, jsonData.get("k")),
+                //        json.readValue(ArrayList.class, jsonData.get("v")), jsonData.getFloat("f"));
+            }
+        });
+        json.setSerializer(EnumOrderedSet.class, new Serializer<EnumOrderedSet>() {
+            @Override
+            public void write(Json json, EnumOrderedSet object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeObjectStart();
+                if(!object.isEmpty()) {
+                    json.writeValue("c", object.first().getClass().getName());
+                    json.writeValue("i", object.first(), null);
+                    int sz = object.size();
+                    Object[] r = new Object[sz - 1];
+                    for (int i = 1, p = 0; i < sz; i++) {
+                        r[p++] = object.getAt(i);
+                    }
+                    json.writeValue("r", r, Object[].class, Object.class);
+                }
+                else
+                    json.writeValue("c", "default");
+                json.writeObjectEnd();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public EnumOrderedSet read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                String c = json.readValue("c", String.class, "", jsonData);
+                if("default".equals(c))
+                    return new EnumOrderedSet();
+                try {
+                    Class<? extends Enum<?>> cl = ClassReflection.forName(c);
+                    if(!ClassReflection.isEnum(cl))
+                        return null;
+                    Enum<?> i = json.readValue("i", cl, jsonData);
+                    Object[] r = json.readValue("r", Object[].class, jsonData);
+                    return Maker.makeEOS(i, (Enum<?>[]) r);
                 } catch (ReflectionException e) {
                     return null;
                 }

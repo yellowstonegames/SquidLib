@@ -70,6 +70,52 @@ public class Converters {
     public static <K> StringConvert<OrderedSet<K>> convertOrderedSet(final Class<K> type) {
         return convertOrderedSet((StringConvert<K>) StringConvert.get(type.getSimpleName()));
     }
+    public static <K> StringConvert<UnorderedSet<K>> convertUnorderedSet(final StringConvert<K> convert) {
+        CharSequence[] types = StringConvert.asArray("UnorderedSet", convert.name);
+        StringConvert found = StringConvert.lookup(types);
+        if (found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+
+        return new StringConvert<UnorderedSet<K>>(types) {
+            @Override
+            public String stringify(UnorderedSet<K> item) {
+                StringBuilder sb = new StringBuilder(100);
+                int i = 0;
+                for (K k : item) {
+                    if (item == k)
+                        return "";
+                    ObText.appendQuoted(sb, convert.stringify(k));
+                    if (++i < item.size())
+                        sb.append(' ');
+                }
+                return sb.toString();
+            }
+
+            @Override
+            public UnorderedSet<K> restore(String text) {
+                ObText.ContentMatcher m = makeMatcher(text);
+                UnorderedSet<K> d;
+                if(convert.isArray)
+                    d = new UnorderedSet<>(CrossHash.generalHasher);
+                else
+                    d = new UnorderedSet<>();
+                while (m.find()) {
+                    if (m.hasMatch()) {
+                        d.add(convert.restore(m.getMatch()));
+                    }
+                }
+                return d;
+            }
+        };
+    }
+
+    public static <K> StringConvert<UnorderedSet<K>> convertUnorderedSet(final CharSequence type) {
+        return convertUnorderedSet((StringConvert<K>) StringConvert.get(type));
+    }
+
+    public static <K> StringConvert<UnorderedSet<K>> convertUnorderedSet(final Class<K> type) {
+        return convertUnorderedSet((StringConvert<K>) StringConvert.get(type.getSimpleName()));
+    }
 
     public static <K, V> StringConvert<OrderedMap<K, V>> convertOrderedMap(final StringConvert<K> convertK, final StringConvert<V> convertV) {
         CharSequence[] types = StringConvert.asArray("OrderedMap", convertK.name, convertV.name);

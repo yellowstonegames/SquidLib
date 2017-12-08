@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import java.util.Objects;
-
 /**
  * A simple alternative to EnumMap that has a zero-argument constructor (which makes serialization easier) but is a
  * little less efficient. However, it supports more features by inheriting from {@link OrderedMap}, such as retrieval of
@@ -9,33 +7,20 @@ import java.util.Objects;
  * instead of always using enum declaration order (order can be shuffled with {@link #shuffle(RNG)} or reordered with
  * {@link #reorder(int...)}), and a little more. The implementation is nearly trivial due to how OrderedMap allows
  * customization of hashing strategy with its IHasher option, and this class always uses a specific custom IHasher to
- * hash Enum values by their ordinal.
+ * hash Enum values by their ordinal. This IHasher is shared with {@link EnumOrderedMap}.
  * <br>
  * Created by Tommy Ettinger on 10/21/2017.
  */
 public class EnumOrderedMap<K extends Enum<?>, V> extends OrderedMap<K, V> {
-    public static class EnumHasher implements CrossHash.IHasher
-    {
-        @Override
-        public int hash(Object data) {
-            return (data instanceof Enum) ? ((Enum)data).ordinal() : -1;
-        }
-
-        @Override
-        public boolean areEqual(Object left, Object right) {
-            return Objects.equals(left, right);
-        }
-    }
-    public static final EnumHasher eh = new EnumHasher();
     public EnumOrderedMap()
     {
-        super(16, 0.9375f, eh);
+        super(16, 0.9375f, HashCommon.enumHasher);
     }
     public EnumOrderedMap(Class<K> enumClass) {
-        super(enumClass.getEnumConstants().length, 0.9375f, eh);
+        super(enumClass.getEnumConstants().length, 0.9375f, HashCommon.enumHasher);
     }
     public EnumOrderedMap(K enumObject) {
-        super(enumObject.getClass().getEnumConstants().length, 0.9375f, eh);
+        super(enumObject.getClass().getEnumConstants().length, 0.9375f, HashCommon.enumHasher);
     }
 
     @Override

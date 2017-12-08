@@ -1,11 +1,26 @@
 package squidpony.squidmath;
 
+import java.util.Objects;
+
 /**
  * Code used internally for hashing OrderedMap, OrderedSet, IntDoubleOrderedMap, Arrangement, and so on.
  * Has some methods and constants that may be useful in other kinds of code.
  * Created by Tommy Ettinger on 7/28/2017.
  */
 public class HashCommon {
+    public static class EnumHasher implements CrossHash.IHasher
+    {
+        @Override
+        public int hash(Object data) {
+            return (data instanceof Enum) ? ((Enum)data).ordinal() : -1;
+        }
+
+        @Override
+        public boolean areEqual(Object left, Object right) {
+            return Objects.equals(left, right);
+        }
+    }
+    public static final EnumHasher enumHasher = new EnumHasher();
 
     private HashCommon() {
     }

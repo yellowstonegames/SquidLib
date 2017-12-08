@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import squidpony.squidgrid.Direction;
+import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.SpillWorldMap;
 import squidpony.squidmath.*;
 
@@ -25,6 +26,7 @@ public class SquidStorageTest extends ApplicationAdapter {
                 Direction.UP_RIGHT, "Maine",
                 Direction.UP_LEFT, "Washington",
                 Direction.DOWN, "Texas");
+        public EnumOrderedSet<Radius> radii = Maker.makeEOS(Radius.DIAMOND, Radius.CIRCLE, Radius.SQUARE);
         public TestClass()
         {
         }
@@ -39,7 +41,7 @@ public class SquidStorageTest extends ApplicationAdapter {
 
         @Override
         public String toString() {
-            return em.toString() + " vs. " + om.toString();
+            return em.toString() + " vs. " + om.toString() + "; EnumOrderedSet should be Diamond, Circle, Square, and it is: " + radii.toString();
         }
     }
     @Override

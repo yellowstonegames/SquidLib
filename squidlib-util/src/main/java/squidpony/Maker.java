@@ -198,7 +198,7 @@ public class Maker {
     }
 
     /**
-     * Makes a OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have
+     * Makes an OrderedSet (OS) of T given an array or vararg of T elements. Duplicate items in elements will have
      * all but one item discarded, using the later item in elements.
      * @param elements an array or vararg of T
      * @param <T> just about any non-primitive type
@@ -209,6 +209,48 @@ public class Maker {
         if(elements == null) return null;
         return new OrderedSet<>(elements);
     }
+    /**
+     * Makes an UnorderedSet (UOS) of T given an array or vararg of T elements. Duplicate items in elements will have
+     * all but one item discarded, using the later item in elements; order will not be kept.
+     * @param elements an array or vararg of T
+     * @param <T> just about any non-primitive type
+     * @return a newly-allocated UnorderedSet containing all of the non-duplicate items in elements, in order
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> UnorderedSet<T> makeUOS(T... elements) {
+        if(elements == null) return null;
+        return new UnorderedSet<>(elements);
+    }
+    /**
+     * Makes a EnumOrderedSet (OS) of the enum type T given at least one T element followed by an array or vararg of any
+     * number of additional T elements. Duplicate items in elements will have all but one item discarded, using the
+     * later item in elements. The order given here will be kept in the result, like in OrderedSet, and
+     * you can use {@link EnumOrderedSet#getAt(int)} to get a T value at a given index, like you would with a List.
+     * @param initial the first item to insert into the EnumOrderedSet; if initial is null, the method returns null
+     * @param elements an array or vararg of T; allowed to be empty
+     * @param <T> an enum type
+     * @return a newly-allocated OrderedSet containing all of the non-duplicate items in elements, in order
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Enum<?>> EnumOrderedSet<T> makeEOS(T initial, T... elements)
+    {
+        if(initial == null) return null;
+        EnumOrderedSet<T> eos = new EnumOrderedSet<>(initial);
+        eos.add(initial);
+        if(elements != null)
+            eos.addAll(elements);
+        return eos;
+    }
+
+    /**
+     * Makes an empty EnumOrderedSet (EOS); needs item type to be specified in order to work. For an empty
+     * EnumOrderedSet with Radius items, you could use {@code Maker.<Radius>makeEOS()}. Using the new keyword is
+     * probably just as easy in this case; this method is provided for completeness relative to makeEOS() with 1 or more
+     * parameters.
+     * @param <T> the type of Enum keys in the returned EnumOrderedSet; cannot be inferred and must be specified
+     * @return an empty EnumOrderedSet with the given item type
+     */
+    public static <T extends Enum<T>> EnumOrderedSet<T> makeEOS() { return new EnumOrderedSet<>(); }
 
     /**
      * Makes a Arrangement (Arrange) of T given an array or vararg of T elements. Duplicate items in elements will have
@@ -313,7 +355,9 @@ public class Maker {
      * remaining parameters key-value pairs, casting the Objects at positions 0, 2, 4... etc. to K and the objects at
      * positions 1, 3, 5... etc. to V. If rest has an odd-number length, then it discards the last item. If any pair of
      * items in rest cannot be cast to the correct type of K or V, then this inserts nothing for that pair and logs
-     * information on the problematic pair to the static Maker.issueLog field.
+     * information on the problematic pair to the static Maker.issueLog field. The order given here will be kept in the
+     * result, unlike in the JDK's EnumMap class, and you can use {@link EnumOrderedMap#keyAt(int)} or
+     * {@link EnumOrderedMap#getAt(int)} to get a key or value at a given index, like you would with a List.
      *
      * @param k0 the first key, which must be an Enum; used to infer the types of other keys if generic parameters aren't specified.
      * @param v0 the first value; used to infer the types of other values if generic parameters aren't specified.

@@ -2721,10 +2721,10 @@ public class FakeLanguageGen implements Serializable {
 
         return new FakeLanguageGen(
                 processParts(parts0, missingSounds, forbidden, rng, 0.0, p0s),
-                new String[]{"y", "y"},
+                new String[]{},
                 processParts(openCons, missingSounds, forbidden, rng, 0.0, 4096),
-                processParts(midCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) / 2.25, 4096),
-                processParts(closeCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) / 3.5, 4096),
+                processParts(midCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) * 0.4444, 4096),
+                processParts(closeCons, missingSounds, forbidden, rng, (rng.nextDouble() * 3 - 0.75) * 0.2857, 4096),
                 new String[]{},
                 new String[]{}, lengths, chances, vowelHeavy, vowelHeavy * 1.8, 0.0, 0.0, genericSanityChecks, true).summarize("0#" + seed + "@1");
     }
@@ -3656,7 +3656,7 @@ public class FakeLanguageGen implements Serializable {
                 syllableEndFrequency, sanityChecks, clean, modifiers);
     }
 
-    static String[] copyStrings(String[] start) {
+    private static String[] copyStrings(String[] start) {
         String[] next = new String[start.length];
         System.arraycopy(start, 0, next, 0, start.length);
         return next;
