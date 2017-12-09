@@ -105,7 +105,10 @@ public class GDXMarkup implements IMarkup<Color>{
             }
             else if(markupMatcher.getGroup("h", sb))
             {
-                current.set(StringKit.intFromHex(sb));
+                if(sb.length() == 6)
+                    current = DefaultResources.getSCC().get(StringKit.intFromHex(sb) << 8 | 0xFF);
+                else
+                    current = DefaultResources.getSCC().get(StringKit.intFromHex(sb));
             }
             else if(markupMatcher.getGroup("n", sb))
             {

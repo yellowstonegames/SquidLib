@@ -294,7 +294,7 @@ public class EverythingDemo extends ApplicationAdapter {
         IColoredString<Color> text = GDXMarkup.instance.colorString(
                 "Use numpad or vi-keys ([@0.0 0.8 1]h[@0.1 0.8 1]j[@0.17 0.8 1]k[@0.21 0.8 1]l" +
                         "[@0.37 0.8 1]y[@0.53 0.8 1]u[@0.65 0.8 1]b[@0.81 0.8 1]n[]) to move. Use " +
-                        "[CW Pale Indigo]?[] for help, [CW Faded Brown]f[] to filter colors, [CW Gray White]q[] to quit. " +
+                        "[CW Pale Indigo]?[] for help, [#BFA38A]f[] to filter colors, [CW Gray White]q[] to quit. " + //CW Faded Brown
                         "Click the [/]top[/] or [/]bottom[/] border of [*]this [/]box[] to scroll.");
         /*IColoredString.Impl.create("Use numpad or vi-keys (", Color.WHITE);
         text.append('h', SColor.CW_BRIGHT_RED);
