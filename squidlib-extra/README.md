@@ -256,7 +256,7 @@ Current Features:
     - You should use [the stable version of SquidSetup](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-b9) if you want to use
       the latest stable SquidLib, since it has squidlib 3.0.0-b9 (as well as squidlib-util and regexodus) all configured as default.
       There's a SquidLib demo as an example that defaults to being selected. You should probably select libGDX version 1.9.6 if you use the
-      stable version, and currently also the snapshot (1.9.7 was briefly tried, but immediate bugs ended the attempt).
+      stable version, or 1.9.8 if you use the snapshot (1.9.8 includes important fixes to bugs from 1.9.7).
     - Some ways of setting up a project won't include assets, so if you use the DefaultResources class in the display
       module (recommended for several things, like distance field fonts), you need to get the assets you want separately.
       They're in the assets/ folder of this GitHub repo, or you can get all the assets in a .zip file from SquidLib's
@@ -329,7 +329,7 @@ Optional Serialization Support
 compile 'com.squidpony:squidlib-extra:3.0.0-b9'
 ```
 
-If you want the latest version of SquidLib, which uses libGDX 1.9.6 and GWT 2.8.0 (if you use GWT), you can use JitPack
+If you want the latest version of SquidLib, which uses libGDX 1.9.8 and GWT 2.8.0 (if you use GWT), you can use JitPack
 to build the latest commit on-demand. It needs an additional repository, which is this for Maven:
 
 ```

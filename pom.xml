@@ -65,7 +65,7 @@
         <cobertura.version>2.7</cobertura.version>
         <jdk.version>1.7</jdk.version>
         <!-- As in build.gradle-->
-        <gdx.version>1.9.6</gdx.version>
+        <gdx.version>1.9.8</gdx.version>
         <junit.version>4.11</junit.version>
         <regexodus.version>0.1.9</regexodus.version>
     </properties>

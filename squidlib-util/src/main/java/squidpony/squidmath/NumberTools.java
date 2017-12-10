@@ -387,89 +387,65 @@ public class NumberTools {
     }
 
     /**
-     * Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given int seed, passing it
-     * once through the (very high-quality and rather fast) {@link LightRNG} algorithm, also called SplitMix64. This
-     * produces a pair of random ints, which this produces a double from using the equivalent of
-     * {@link #longBitsToDouble(long)} or something functionally equivalent on GWT.
+     * Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given long seed, passing
+     * it once through the (high-quality and very fast) {@link ThrustAltRNG} algorithm.
      * <br>
-     * Consider calling this with {@code NumberTools.randomDouble(++seed)} for an optimal period of 2 to the 32 when
-     * repeatedly called, but {@code NumberTools.randomDouble(seed += ODD_INT)} will also work just fine if ODD_INT is
-     * any odd-number integer, positive or negative.
-     * @param seed any int to be used as a seed
+     * Consider calling this with {@code NumberTools.randomDouble(++seed)} for an optimal period of 2 to the 64 when
+     * repeatedly called, but {@code NumberTools.randomDouble(seed += ODD_LONG)} will also work just fine if ODD_LONG is
+     * any odd-number long, positive or negative.
+     * @param seed any long to be used as a seed
      * @return a pseudo-random double from 0.0 (inclusive) to 1.0 (exclusive)
      */
-    public static double randomDouble(int seed)
+    public static double randomDouble(long seed)
     {
-        long state = seed * 0x9E3779B97F4A7C15L;
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return Double.longBitsToDouble(((state ^ (state >>> 31)) >>> 12) | 0x3ff0000000000000L) - 1.0;
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
     /**
-     * Generates a pseudo-random float between 0.0f (inclusive) and 1.0f (exclusive) using the given int seed, passing
-     * it once through the (very high-quality and rather fast) {@link LightRNG} algorithm, also called SplitMix64. This
-     * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something
-     * functionally equivalent on GWT.
+     * Generates a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given long seed, passing it
+     * once through the (high-quality and very fast) {@link ThrustAltRNG} algorithm.
      * <br>
-     * Consider calling this with {@code NumberTools.randomFloat(++seed)} for an optimal period of 2 to the 32 when
-     * repeatedly called, but {@code NumberTools.randomFloat(seed += ODD_INT)} will also work just fine if ODD_INT is
-     * any odd-number integer, positive or negative.
-     * @param seed any int to be used as a seed
+     * Consider calling this with {@code NumberTools.randomFloat(++seed)} for an optimal period of 2 to the 64 when
+     * repeatedly called, but {@code NumberTools.randomFloat(seed += ODD_LONG)} will also work just fine if ODD_LONG is
+     * any odd-number long, positive or negative.
+     * @param seed any long to be used as a seed
      * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)
      */
-    public static float randomFloat(int seed)
+    public static float randomFloat(long seed)
     {
-        long state = seed * 0x9E3779B97F4A7C15L;
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return Float.intBitsToFloat((int)(state >>> 41) | 0x3f800000) - 1f;
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0xFFFFFF) * 0x1p-24f;
     }
     /**
-     * Generates a pseudo-random float between -1.0f (exclusive) and 1.0f (exclusive) using the given int seed, passing
-     * it once through the (very high-quality and rather fast) {@link LightRNG} algorithm, also called SplitMix64. This
-     * produces a random int, which this produces a float from using {@link #intBitsToFloat(int)} (long)} or something
-     * functionally equivalent on GWT. The sign bit of the result is determined by data that is not used by the float
-     * otherwise, and keeps the results almost linear in distribution between -1.0 and 1.0, exclusive for both (0 shows
-     * up twice as often as any single other result, but this shouldn't affect the odds very strongly; it's about a 1 in
-     * 8 million chance of exactly 0 occurring vs. a 1 in 16 million of any other specific float this can produce).
+     * Generates a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given long seed, passing
+     * it once through the (high-quality and very fast) {@link ThrustAltRNG} algorithm. This can be useful as a
+     * multiplier that has approximately equal likelihood of changing or leaving the sign of its multiplicand, and won't
+     * make the result larger (more significant) but will usually make it closer to 0.
      * <br>
-     * Consider calling this with {@code NumberTools.randomSignedFloat(++seed)} for an optimal period of 2 to the 32
-     * when repeatedly called, but {@code NumberTools.randomSignedFloat(seed += ODD_INT)} will also work just fine if
-     * ODD_INT is any odd-number integer, positive or negative.
-     * @param seed any int to be used as a seed
+     * Consider calling this with {@code NumberTools.randomDouble(++seed)} for an optimal period of 2 to the 64 when
+     * repeatedly called, but {@code NumberTools.randomDouble(seed += ODD_LONG)} will also work just fine if ODD_LONG is
+     * any odd-number long, positive or negative.
+     * @param seed any long to be used as a seed
      * @return a pseudo-random float from -1.0f (exclusive) to 1.0f (exclusive)
      */
-    public static float randomSignedFloat(int seed)
+    public static float randomSignedFloat(long seed)
     {
-        long state = seed * 0x9E3779B97F4A7C15L;
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return (Float.intBitsToFloat((int)(state >>> 40) | 0x3f800000) - 1f) * (state >> 63 | 1L);
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) >> 39) * 0x1p-24f;
     }
 
     /**
      * Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
-     * strong central bias (around 0.0). Uses the given int seed, passing it once through the (very high-quality and
-     * rather fast) {@link LightRNG} algorithm, also called SplitMix64. This produces a pair of random ints, which this
-     * uses to generate a pair of floats between 0.0 (inclusive)and 1.0 (exclusive) using the equivalent of
-     * {@link #intBitsToFloat(int)} or something functionally equivalent on GWT, multiplies the floats, and sets the
-     * sign pseudo-randomly based on an unused bit from earlier.
+     * strong central bias (around 0.0). Uses the given long seed, passing it once through the (high-quality and very
+     * fast) {@link ThrustAltRNG} algorithm. This produces a pseudo-random long, which this simply passes to
+     * {@link #formCurvedFloat(long)}, since it is already well-suited to generating a curved distribution.
      * <br>
-     * Consider calling this with {@code NumberTools.randomFloatCurved(++seed)} for an optimal period of 2 to the 32
-     * when repeatedly called, but {@code NumberTools.randomFloatCurved(seed += ODD_INT)} will also work just fine if
-     * ODD_INT is any odd-number integer, positive or negative.
+     * Consider calling this with {@code NumberTools.randomFloatCurved(++seed)} for an optimal period of 2 to the 64
+     * when repeatedly called, but {@code NumberTools.randomFloatCurved(seed += ODD_LONG)} will also work just fine if
+     * ODD_LONG is any odd-number long, positive or negative.
      * @param seed any int to be used as a seed
      * @return a pseudo-random double from -1.0 (exclusive) to 1.0 (exclusive), distributed on a curve centered on 0.0
      */
-    public static float randomFloatCurved(int seed)
+    public static float randomFloatCurved(long seed)
     {
-        long state = seed * 0x9E3779B97F4A7C15L;
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        state ^= (state >>> 31);
-        return (Float.intBitsToFloat((int)(state & 0x7FFFFF) | 0x3f800000) - 1f)
-                * (Float.intBitsToFloat((int)(state >>> 40) | 0x3f800000) - 1f)
-                * (state >> 63 | 1L);
+        return formCurvedFloat(((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)));
     }
 
     /**

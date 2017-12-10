@@ -193,43 +193,26 @@ public class NumberTools {
         return state ^ (state >>> 31);
     }
 
-    public static double randomDouble(int seed)
+    public static double randomDouble(long seed)
     {
-        long state = seed * 0x9E3779B97F4A7C15L;
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        state ^= (state >>> 31);
-        wia.set(0, (int)(state & 0xFFFFFFFF));
-        wia.set(1, (int)(state >>> 44) | 0x3ff00000);
-        return wda.get(0) - 1.0;
-    }
-    public static float randomFloat(int seed)
-    {
-        long state = seed * 0x9E3779B97F4A7C15L;
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        wia.set(0, (int)(state >>> 41) | 0x3f800000);
-        return (wfa.get(0) - 1f);
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
 
-    public static float randomSignedFloat(int seed)
+    public static float randomFloat(long seed)
     {
-        long state = seed * 0x9E3779B97F4A7C15L;
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        wia.set(0, (int)(state >>> 40) | 0x3f800000);
-        return (wfa.get(0) - 1f) * (state >> 63 | 1L);
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0xFFFFFF) * 0x1p-24f;
     }
-    public static float randomFloatCurved(int seed)
+
+    public static float randomSignedFloat(long seed)
     {
-        long state = seed * 0x9E3779B97F4A7C15L;
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        state ^= (state >>> 31);
-        wia.set(0, (int)(state & 0x7FFFFF) | 0x3f800000);
-        wia.set(1, (int)(state >>> 40) | 0x3f800000);
-        return (wfa.get(0) - 1f) * (wfa.get(1) - 1f) * (state >> 63 | 1L);
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) >> 39) * 0x1p-24f;
     }
+
+    public static float randomFloatCurved(long seed)
+    {
+        return formCurvedFloat(((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)));
+    }
+
     public static float formFloat(final int seed)
     {
         wia.set(0, (seed & 0x7FFFFF) | 0x3f800000);

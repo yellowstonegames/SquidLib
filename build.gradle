@@ -50,7 +50,7 @@ sourceSets {
 // define 'gdxVersion' if not defined yet. This allows
 // a project depending on SquidLib (like: your game) to define
 // 'gdxVersion' itself, and yet be able to build SquidLib standalone too.
-def gdxVersion = System.getenv("gdxVersion") ?: "1.9.6" // As in pom.xml
+def gdxVersion = System.getenv("gdxVersion") ?: "1.9.8" // As in pom.xml
 project.sourceCompatibility = 1.7
 // project.sourceCompatibility = '1.6'  // For android. Commented because not honored (diamonds) :-(
 
