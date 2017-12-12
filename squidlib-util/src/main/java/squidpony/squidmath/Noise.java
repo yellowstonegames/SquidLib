@@ -5,6 +5,134 @@ package squidpony.squidmath;
  */
 public class Noise {
     public static final SeededNoise alternate = new SeededNoise(0xFEEDCAFE);
+    /**
+     * Like {@link Math#floor}, but returns a long.
+     * Doesn't consider weird doubles like INFINITY and NaN.
+     *
+     * @param t the double to find the floor for
+     * @return the floor of t, as a long
+     */
+    public static long longFloor(double t) {
+        return t >= 0 ? (long) t : (long) t - 1;
+    }
+    /**
+     * Like {@link Math#floor(double)}, but takes a float and returns a long.
+     * Doesn't consider weird floats like INFINITY and NaN.
+     *
+     * @param t the double to find the floor for
+     * @return the floor of t, as a long
+     */
+    public static long longFloor(float t) {
+        return t >= 0 ? (long) t : (long) t - 1;
+    }
+    /**
+     * Like {@link Math#floor(double)} , but returns an int.
+     * Doesn't consider weird doubles like INFINITY and NaN.
+     * @param t the float to find the floor for
+     * @return the floor of t, as an int
+     */
+    public static int fastFloor(double t) {
+        return t >= 0 ? (int) t : (int) t - 1;
+    }
+    /**
+     * Like {@link Math#floor(double)}, but takes a float and returns an int.
+     * Doesn't consider weird floats like INFINITY and NaN.
+     * @param t the float to find the floor for
+     * @return the floor of t, as an int
+     */
+    public static int fastFloor(float t) {
+        return t >= 0 ? (int) t : (int) t - 1;
+    }
+    /**
+     * Like {@link Math#ceil(double)}, but returns an int.
+     * Doesn't consider weird doubles like INFINITY and NaN.
+     * @param t the float to find the ceiling for
+     * @return the ceiling of t, as an int
+     */
+    public static int fastCeil(double t) {
+        return t >= 0 ? -(int) -t + 1: -(int)-t;
+    }
+    /**
+     * Like {@link Math#ceil(double)}, but takes a float and returns an int.
+     * Doesn't consider weird floats like INFINITY and NaN.
+     * @param t the float to find the ceiling for
+     * @return the ceiling of t, as an int
+     */
+    public static int fastCeil(float t) {
+        return t >= 0 ? -(int) -t + 1: -(int)-t;
+    }
+
+    /**
+     * Cubic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively. Somewhat faster than
+     * quintic interpolation (querp), but slower (and smoother) than {@link  #lerp(double, double, double)}.
+     * @param start a valid double
+     * @param end a valid double
+     * @param a a double between 0 and 1 inclusive
+     * @return a double between start and end inclusive
+     */
+    public static double cerp(final double start, final double end, double a) {
+        return (1.0 - (a *= a * (3.0 - 2.0 * a))) * start + a * end;
+    }
+
+    /**
+     * Cubic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively. Somewhat faster than
+     * quintic interpolation (querp), but slower (and smoother) than {@link #lerp(double, double, double)}.
+     * @param start a valid float
+     * @param end a valid float
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between start and end inclusive
+     */
+    public static float cerp(final float start, final float end, float a) {
+        return (1f - (a *= a * (3f - 2f * a))) * start + a * end;
+    }
+    /*
+     * Quintic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
+     * @param start a valid double, as in, not infinite or NaN
+     * @param end a valid double, as in, not infinite or NaN
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    public static double querp(final double start, final double end, double a){
+        return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
+    }
+    /*
+     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
+     * @param start a valid float, as in, not infinite or NaN
+     * @param end a valid float, as in, not infinite or NaN
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    public static float querp(final float start, final float end, float a){
+        return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
+    }
+
+
+    /**
+     * Linear-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
+     * @param start a valid double, as in, not infinite or NaN
+     * @param end a valid double, as in, not infinite or NaN
+     * @param a a double between 0 and 1 inclusive
+     * @return a double between x and y inclusive
+     */
+    public static double lerp(final double start, final double end, final double a) {
+        return (1.0 - a) * start + a * end;
+    }
+
+    /**
+     * Linear-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
+     * @param start a valid float, as in, not infinite or NaN
+     * @param end a valid float, as in, not infinite or NaN
+     * @param a a float between 0 and 1 inclusive
+     * @return a float between x and y inclusive
+     */
+    public static float lerp(final float start, final float end, final float a) {
+        return (1f - a) * start + a * end;
+    }
+
 
     public interface Noise1D {
         double getNoise(double x);

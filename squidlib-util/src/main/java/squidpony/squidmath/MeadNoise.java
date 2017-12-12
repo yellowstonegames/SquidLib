@@ -49,6 +49,10 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import static squidpony.squidmath.Noise.fastFloor;
+import static squidpony.squidmath.Noise.longFloor;
+import static squidpony.squidmath.Noise.querp;
+
 /**
  * Experiments with noise functions.
  * <br>
@@ -1158,27 +1162,6 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
 //                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
 //    }
 
-
-
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
-     * @param t the float to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static int fastFloor(float t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
-
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
-     * @param t the float to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static long longFloor(double t) {
-        return t >= 0 ? (long) t : (long) t - 1L;
-    }
-
-
     protected static final float F2 = 0.36602540378443864676372317075294f,
             G2 = 0.21132486540518711774542560974902f,
             F3 = 1f / 3f,
@@ -1213,28 +1196,6 @@ public class MeadNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, N
             PHI_F = 1.618033988749895,
             I_PHI_F = 0.6180339887498949,
             HALF_PI_F = 1.5707963267948966;
-    /*
-     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
-     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
-     * @param start a valid float
-     * @param end a valid float
-     * @param a a float between 0 and 1 inclusive
-     * @return a float between x and y inclusive
-     */
-    public static float querp(final float start, final float end, float a){
-        return (1f - (a *= a * a * (a * (a * 6f - 15f) + 10f))) * start + a * end;
-    }
-    /*
-     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
-     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
-     * @param start a valid float
-     * @param end a valid float
-     * @param a a float between 0 and 1 inclusive
-     * @return a float between x and y inclusive
-     */
-    public static double querp(final double start, final double end, double a){
-        return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
-    }
 
     public static double noise(double x, double y, long seed) {
 //        final float

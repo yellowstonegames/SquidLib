@@ -47,6 +47,8 @@
  */
 package squidpony.squidmath;
 
+import static squidpony.squidmath.Noise.fastFloor;
+
 /**
  * More advanced noise functions, in 2D, 3D, 4D, and 6D, with the last two as options for generating seamlessly-tiling
  * noise using {@link Noise#seamless2D(double[][], long, int, Noise.Noise4D)} and/or
@@ -1125,15 +1127,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 //    }
 
 
-
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
-     * @param t the float to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static int fastFloor(double t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
 
 
     protected static final double F2 = 0.36602540378443864676372317075294,

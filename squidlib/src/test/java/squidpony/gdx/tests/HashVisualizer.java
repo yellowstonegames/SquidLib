@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 64, rngMode = 34, noiseMode = 0;
+    private int hashMode = 64, rngMode = 34, noiseMode = 70;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -141,6 +141,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
     private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
+    private final Noise.Noise2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
 
     private final long
             seedX0 = thrust.nextLong(), seedX1 = thrust.nextLong(), seedX2 = thrust.nextLong(), seedX3 = thrust.nextLong(),
@@ -435,12 +436,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 out = ((mx + my + (mx * my)) >>> 4 & 0x1ff); //((Integer.bitCount(gx) + Integer.bitCount(gy) & 63) << 3) ^
         return ((out & 0x100) != 0) ? ~out & 0xff : out & 0xff;
     }
-    public static int fastFloor(double t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
-    public static int fastFloor(float t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
 
     public static double trigNoise(final double x, final double y, final int seed)
     {
@@ -607,9 +602,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 my = y + z * 0.89f * ay + x * 0.57f * ay,
                 mz = z + x * 0.89f * az + y * 0.57f * az;
         final long
-                xf = SeededNoise.fastFloor(mx),
-                yf = SeededNoise.fastFloor(my),
-                zf = SeededNoise.fastFloor(mz);
+                xf = Noise.fastFloor(mx),
+                yf = Noise.fastFloor(my),
+                zf = Noise.fastFloor(mz);
         return NumberTools.bounce(5f + 2.4f *
                 (
                           querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
@@ -3346,11 +3341,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }*/
                         break;
                     case 71:
-                        Gdx.graphics.setTitle("Mason 2D Arc Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Mason 2D Alt Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(
-                                        MasonNoise.noiseArc(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
+                                        masonLayered2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
                                                 123456) * 0.5 + 0.5);
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }

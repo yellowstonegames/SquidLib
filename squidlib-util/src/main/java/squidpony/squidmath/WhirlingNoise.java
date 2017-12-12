@@ -2,6 +2,8 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import static squidpony.squidmath.Noise.fastFloor;
+
 /**
  * Another experimental noise class. Extends PerlinNoise and should have similar quality, but can be faster and has less
  * periodic results. This is still considered experimental because the exact output may change in future versions, along
@@ -25,12 +27,6 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     public WhirlingNoise(long seed)
     {
         this.seed = seed;
-    }
-    protected static int fastFloor(double t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
-    protected static int fastFloor(float t) {
-        return t >= 0 ? (int) t : (int) t - 1;
     }
     public static int determine256(long state) {
         //return (int)(state * 0x106689D45497FDB5L >>> 56);

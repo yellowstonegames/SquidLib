@@ -99,7 +99,7 @@ public class CosmicNumbering implements Serializable {
 //        long floor, seed = 1234567;
 //        double diff, conn, result = 0.0;
 //        for (int i = 0; i < len; i++) {
-//            diff = (conn = connections[i]) - (floor = fastFloor(conn));
+//            diff = (conn = connections[i]) - (floor = longFloor(conn));
 //            seed += 10000;
 //            result += querp(
 //                    NumberTools.formCurvedFloat(NumberTools.splitMix64(floor * seed + 100 * (i + 1))),
@@ -118,7 +118,7 @@ public class CosmicNumbering implements Serializable {
     public final double getDoubleBase() {
         for (int i = 0; i < len; i++) {
             long seed = seeds[i];
-            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = fastFloor(connections[i])) * seed) + seed;
+            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(connections[i])) * seed) + seed;
         }
         long working;
         for (int i = 0; i < upper; i++) {
@@ -142,7 +142,7 @@ public class CosmicNumbering implements Serializable {
 //        long floor;
 //        double diff, conn, result = 0.0;//, total = 1.0;
 //        for (int i = 0; i < len; i++) {
-//            diff = (conn = connections[i]) - (floor = fastFloor(conn));
+//            diff = (conn = connections[i]) - (floor = longFloor(conn));
 //            //  & 0xfffffffffffffL
 //            result +=
 //                    NumberTools.bounce((NumberTools.longBitsToDouble((floor * 0x9E3779B97F4A7C15L >>> 12) | 0x4000000000000000L) - 3.0)
@@ -171,7 +171,7 @@ public class CosmicNumbering implements Serializable {
 //        final int len = connections.length;
 //        long floor;
 //        for (int i = 0; i < len; i++) {
-//            diff = connections[i] - (floor = fastFloor(connections[i]));
+//            diff = connections[i] - (floor = longFloor(connections[i]));
 //            v += randomDouble(floor) * (1.0 - diff) + randomDouble(floor + 1L) * diff;
 //        }
 //        return v / len;
@@ -193,7 +193,7 @@ public class CosmicNumbering implements Serializable {
      * @param t the double to find the floor for
      * @return the floor of t, as a long
      */
-    public static long fastFloor(double t) {
+    public static long longFloor(double t) {
         return t >= 0 ? (long) t : (long) t - 1;
     }
 

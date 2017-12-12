@@ -2,6 +2,9 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import static squidpony.squidmath.Noise.fastFloor;
+import static squidpony.squidmath.Noise.querp;
+
 /**
  * A different kind of noise that has spotted and striped areas, like a tabby cat.
  * Highly experimental and expected to change; currently has significant linear artifacts, though they do wiggle.
@@ -25,25 +28,6 @@ public class TabbyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         randU = gauss(seedU = ThrustRNG.determine(seedW + 0xCABC279692B5CC83L)) + 0.625;
         randV = gauss(seedV = ThrustRNG.determine(seedU + 0xCBBC279692B5CC83L)) + 0.625;
 
-    }
-    /*
-     * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
-     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
-     * @param start a valid float
-     * @param end a valid float
-     * @param a a float between 0 and 1 inclusive
-     * @return a float between x and y inclusive
-     */
-    public static double querp(final double start, final double end, double a){
-        return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
-    }
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird doubles like INFINITY and NaN.
-     * @param t the double to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static long fastFloor(double t) {
-        return t >= 0 ? (long) t : (long) t - 1;
     }
 //    public static double gauss(final long state) {
 //        final long s1 = state + 0x9E3779B97F4A7C15L,

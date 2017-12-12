@@ -15,6 +15,8 @@
  */
 package squidpony.squidmath;
 
+import static squidpony.squidmath.Noise.fastCeil;
+
 /**
  * Wavelet Noise, a kind of multi-dimensional noise that is technically unrelated to classic Perlin or Simplex Noise,
  * developed by Pixar to solve some difficult issues of 2D textures being displayed in 3D scenes. A good source for the
@@ -122,25 +124,6 @@ public class WaveletNoise implements Noise.Noise1D, Noise.Noise2D, Noise.Noise3D
     public void setScale(final float scale) {
         m_Scale = scale;
     }
-
-
-
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
-     * @param t the float to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static int fastFloor(float t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
-
-    /**
-     * Like {@link Math#ceil(double)}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
-     * @param t the float to find the ceiling for
-     * @return the ceiling of t, as an int
-     */
-    private static int fastCeil(float t) {
-        return t >= 0 ? -(int) -t + 1: -(int)-t;    }
 
     /**
      * The basis for all getNoise methods in this class; takes x, y, and z coordinates as floats, plus a seed that will

@@ -47,6 +47,9 @@
  */
 package squidpony.squidmath;
 
+import static squidpony.squidmath.Noise.fastFloor;
+import static squidpony.squidmath.Noise.longFloor;
+
 /**
  * Noise functions that try to conceal undesirable patterns, in 2D, 3D, 4D, and 6D, using 32-bit int math wherever
  * possible and only yielding floats or doubles if requested. All functions can take an long seed that should
@@ -983,27 +986,6 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
                 + (a ^= 0x85157AF5 * v + seed)) * a >>> 24;
     }
 
-
-
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird floats like INFINITY and NaN.
-     * @param t the float to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static int fastFloor(float t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
-
-    /**
-     * Like {@link Math#floor}, but returns an int. Doesn't consider weird doubles like INFINITY and NaN.
-     * @param t the double to find the floor for
-     * @return the floor of t, as an int
-     */
-    public static int fastFloor(double t) {
-        return t >= 0 ? (int) t : (int) t - 1;
-    }
-
-
     protected static final int BOUND = 0xffffff,
             F2 = 6140887, G2 = 3545443,
             F3 = 5592405, G3 = 2796203,
@@ -1042,8 +1024,8 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         return noise((float)x, (float)y, seed);
     }
 
-    public static double noiseArc(final double x, final double y, final long seed) {
-        return noiseArc((float)x, (float)y, seed);
+    public static double noiseAlt(final double x, final double y, final long seed) {
+        return noiseAlt((float)x, (float)y, seed);
     }
 
     public static float randomize(long state, final long jump)
@@ -1080,12 +1062,6 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         */
     }
     /**
-     * Quintic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve
-     * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
-     */
-    private static float querp( final float x ) { return x * x * x * (x * (x * 6f - 15f) + 10f); }
-    /**
      * Pair of Cubic (Hermite) Flat Interpolations; for x from 0 to 1, returns results from 0 to 0 on an S-curve, with
      * crests and valleys no more than 0.097f above or below 0.
      * @param x a float from 0 to 1
@@ -1100,28 +1076,6 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
      */
     private static float carp2(final float x) { return x - x * (x * (x - 1) + (1 - x) * (1 - x)); }
 
-    /**
-     * Simple Cubic (Hermite) Interpolation; for x from 0 to 1, returns results from 0 to 1 on an S-curve, with more
-     * distinct curving but less smooth of a "takeoff and landing" as it reaches endpoints, relative to
-     * {@link #querp(float)}. In practice, this looks more like a middle ground between linear interpolation and querp.
-     * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in somewhat to 0 or 1 at those endpoints on a curve
-     */
-    private static float cerp(final float x) {
-        return x * x * (3f - 2f * x);
-    }
-
-    /**
-     * Slightly faster verson of {@link #querp(float)} for quintic hermite interpolation, but this doesn't distribute
-     * as evenly as proper quintic interpolation, and may offset the average value when used for noise.
-     * @param x a float from 0 to 1
-     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve
-     */
-    private static float querp2(final float x)
-    {
-        final float x3 = x*x*x;
-        return ( 7f + ( x3 - 7f ) * x ) * x3;
-    }
 
     private static float arclerp(final float x)
     {
@@ -1144,47 +1098,32 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 
 
     private static final long xJump = 0x9E3779BE3779B9L, yJump = 0xBFDAE4FFDAE4F7L, zJump = 0xF35692B35692B5L;
-    public static float noise(final float x, final float y, final long seed) {
-        //final float xy = x * 2.2731f - y, yx = y * 2.3417f - x;
-        /*final float ra = randomize(seed, xJump),
-                angle = (ra + 2.3f) * Math.signum(ra),
-                xx = x * angle + y * angle * -0.3157f,
-                yy = y * angle + x * angle * -0.3157f;
-        */final int
-                xx0 = fastFloor(x), yy0 = fastFloor(y),
-                //xy0 = fastFloor(xy), yx0 = fastFloor(yx),
-                rxx0 = randomInt(xx0, xJump + seed), ryy0 = randomInt(yy0, yJump + seed),
-                rxx1 = randomInt(xx0 + 1, xJump + seed), ryy1 = randomInt(yy0 + 1, yJump + seed);
-        //rxy0 = randomInt(xy0, xJump), ryx0 = randomInt(yx0, yJump),
-        //rxy1 = randomInt(xy0 + 1, xJump), ryx1 = randomInt(yx0 + 1, yJump);
-        final float dx = querp(x - xx0), dy = querp(y - yy0),
-                //dxy = querp(xy - xy0), dyx = querp(yx - yx0),
-                rx0y0 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + BirdRNG.splitMix32(yy0))),
-                rx0y1 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + BirdRNG.splitMix32(yy0 + 1))),
-                rx1y0 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + 1 + BirdRNG.splitMix32(yy0))),
-                rx1y1 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + 1 + BirdRNG.splitMix32(yy0 + 1)));
-        return interpolate(interpolate(rx0y0, rx1y0, dx), interpolate(rx0y1, rx1y1, dx), dy) * 2f - 1f;
+    public static float noise(final float xPos, final float yPos, final long seed) {
+        float x = xPos * (NumberTools.randomFloatCurved(seed - 1) + 1f) + yPos * (NumberTools.randomSignedFloat(seed & 0xA5A5A5A5A5A5A5A5L)),
+                y = yPos * (NumberTools.randomFloatCurved(seed - 2) + 1f) + xPos * (NumberTools.randomSignedFloat(seed & 0x5A5A5A5A5A5A5A5AL));
+        final long
+                xx0 = longFloor(x),
+                yy0 = longFloor(y),
+                ry0 = ThrustAltRNG.determine(yy0 + seed), ry1 = ThrustAltRNG.determine(yy0 + 1 + seed);
+        final float
+                dx = carp2(x - xx0), dy = carp2(y - yy0),
+                rx0y0 = ThrustAltRNG.determineFloat(xx0 + ry0),
+                rx0y1 = ThrustAltRNG.determineFloat(xx0 + ry1),
+                rx1y0 = ThrustAltRNG.determineFloat(xx0 + 1 + ry0),
+                rx1y1 = ThrustAltRNG.determineFloat(xx0 + 1 + ry1);
+        return Noise.lerp(Noise.lerp(rx0y0, rx1y0, dx), Noise.lerp(rx0y1, rx1y1, dx), dy) * 2f - 1f;
     }
-    public static float noiseArc(final float x, final float y, final long seed) {
-        //final float xy = x * 2.2731f - y, yx = y * 2.3417f - x;
-        /*final float ra = randomize(seed, xJump),
-                angle = (ra + 2.3f) * Math.signum(ra),
-                xx = x * angle + y * angle * -0.3157f,
-                yy = y * angle + x * angle * -0.3157f;
-        */final int
-                xx0 = fastFloor(x), yy0 = fastFloor(y);
-                //xy0 = fastFloor(xy), yx0 = fastFloor(yx),
-                //rxx0 = randomInt(xx0, xJump + seed), ryy0 = randomInt(yy0, yJump + seed),
-                //rxx1 = randomInt(xx0 + 1, xJump + seed), ryy1 = randomInt(yy0 + 1, yJump + seed);
-        //rxy0 = randomInt(xy0, xJump), ryx0 = randomInt(yx0, yJump),
-        //rxy1 = randomInt(xy0 + 1, xJump), ryx1 = randomInt(yx0 + 1, yJump);
-        final float dx = arclerp(x - xx0), dy = arclerp(y - yy0),
-                //dxy = querp(xy - xy0), dyx = querp(yx - yx0),
-                rx0y0 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + BirdRNG.splitMix32(yy0))),
-                rx0y1 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + BirdRNG.splitMix32(yy0 + 1))),
-                rx1y0 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + 1 + BirdRNG.splitMix32(yy0))),
-                rx1y1 = NumberTools.randomFloat(BirdRNG.splitMix32(xx0 + 1 + BirdRNG.splitMix32(yy0 + 1)));
-        return interpolate(interpolate(rx0y0, rx1y0, dx), interpolate(rx0y1, rx1y1, dx), dy) * 2f - 1f;
+    public static float noiseAlt(final float x, final float y, final long seed) {
+        final long
+                xx0 = longFloor(x), yy0 = longFloor(y),
+                ry0 = ThrustAltRNG.determine(yy0 + seed), ry1 = ThrustAltRNG.determine(yy0 + 1 + seed);
+        final float
+                dx = carp2(x - xx0), dy = carp2(y - yy0),
+                rx0y0 = ThrustAltRNG.determineFloat(xx0 + ry0),
+                rx0y1 = ThrustAltRNG.determineFloat(xx0 + ry1),
+                rx1y0 = ThrustAltRNG.determineFloat(xx0 + 1 + ry0),
+                rx1y1 = ThrustAltRNG.determineFloat(xx0 + 1 + ry1);
+        return Noise.cerp(Noise.cerp(rx0y0, rx1y0, dx), Noise.cerp(rx0y1, rx1y1, dx), dy) * 2f - 1f;
     }
 
     private static final IntVLA columns = new IntVLA(128), // x

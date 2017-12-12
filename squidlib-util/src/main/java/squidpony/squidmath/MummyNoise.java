@@ -2,6 +2,8 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import static squidpony.squidmath.Noise.cerp;
+
 /**
  * A different kind of noise that has spotted and striped areas, like a tabby cat.
  * Highly experimental and expected to change; currently has significant linear artifacts, though they do wiggle.
@@ -44,24 +46,6 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     {
         state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
         return state ^ state >>> 28;
-    }
-
-    /**
-     * Cubic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
-     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively. Somewhat faster than
-     * quintic interpolation (querp), but slower (and smoother) than {@link  #lerp(double, double, double)}.
-     * @param start a valid double
-     * @param end a valid double
-     * @param a a double between 0 and 1 inclusive
-     * @return a double between start and end inclusive
-     */
-    private static double cerp(final double start, final double end, double a) {
-        return (1.0 - (a *= a * (3.0 - 2.0 * a))) * start + a * end;
-    }
-
-    // actually lerp
-    private static double lerp(final double start, final double end, double a) {
-        return (1.0 - a) * start + a * end;
     }
 
     //    public static double gauss(final long state) {
