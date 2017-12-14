@@ -19,51 +19,52 @@ import java.util.concurrent.TimeUnit;
  */
 public class FOVCacheBenchmark {
 
-    public static final int DIMENSION = 60;
+    public static final int DIMENSION = 180;
+    public static DungeonGenerator dungeonGen = new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
+    public static char[][] map = dungeonGen.generate();
+    public static double[][] res = DungeonUtility.generateResistances(map);
 
     @State(Scope.Benchmark)
-    public static class StateHolder {
-        public DungeonGenerator dungeonGen =
-                new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
-        public char[][] map = dungeonGen.generate();
-        public double[][] res = DungeonUtility.generateResistances(map);
-
+    public static class CachedState {
         public FOVCache cache;
-        public FOV fov = new FOV(FOV.SHADOW);
-
         @Setup(Level.Trial)
         public void setup() {
-            dungeonGen = new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
-            map = dungeonGen.generate();
-            res = DungeonUtility.generateResistances(map);
-
             cache = new FOVCache(map, 30, 50, Radius.SQUARE, 8);
             cache.awaitCache();
         }
-        @TearDown
+        @TearDown(Level.Trial)
         public void tearDown(){
             if(cache != null)
                 cache.destroy();
         }
 
     }
+    @State(Scope.Benchmark)
+    public static class FreshState {
+        public FOV fov;
 
-    public void doCachedFOV()
-    {
-        //double total = 0.0;
-        //double[][] calculated;
-        //System.out.println("FOVCache: " + total);
+        @Setup(Level.Trial)
+        public void setup() {
+            fov = new FOV(FOV.SHADOW);
+        }
+
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public long measureCachedFOV(StateHolder state) throws InterruptedException {
-        long count = 0L;
+    public double measureCachedFOV(CachedState state) throws InterruptedException {
+        double count = 0L;
+        double[][] result;
         for (int i = 1; i < DIMENSION - 1; i++) {
             for (int j = 1; j < DIMENSION - 1; j++) {
-                if (state.map[i][j] != '#') {
-                    count += state.cache.calculateFOV(state.res, i, j, 16).length;
+                if (map[i][j] != '#') {
+                    result = state.cache.calculateFOV(res, i, j, 16);
+                    for (int k = 1; k < DIMENSION - 1; k++) {
+                        for (int l = 1; l < DIMENSION - 1; l++) {
+                            count += result[k][l];
+                        }
+                    }
                 }
             }
         }
@@ -80,12 +81,18 @@ public class FOVCacheBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public long measureFOV(StateHolder state) throws InterruptedException {
-        long count = 0L;
+    public double measureFOV(FreshState state) throws InterruptedException {
+        double count = 0L;
+        double[][] result;
         for (int i = 1; i < DIMENSION - 1; i++) {
             for (int j = 1; j < DIMENSION - 1; j++) {
-                if (state.map[i][j] != '#') {
-                    count += state.fov.calculateFOV(state.res, i, j, 16).length;
+                if (map[i][j] != '#') {
+                    result = state.fov.calculateFOV(res, i, j, 16);
+                    for (int k = 1; k < DIMENSION - 1; k++) {
+                        for (int l = 1; l < DIMENSION - 1; l++) {
+                            count += result[k][l];
+                        }
+                    }
                 }
             }
         }
