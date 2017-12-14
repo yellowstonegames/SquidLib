@@ -597,22 +597,22 @@ public class FOVCache extends FOV {
         return queryPacked(losCache[viewerX + viewerY  * width], targetX, targetY);
     }
 
-    private long arrayMemoryUsage(int length, long bytesPerItem)
+    public static long arrayMemoryUsage(int length, long bytesPerItem)
     {
-        return (((bytesPerItem * length + 12 - 1) / 8) + 1) * 8L;
+        return (((bytesPerItem * length + 12 - 1) >> 3) + 1) << 3;
     }
     @SuppressWarnings("unused")
-	private long arrayMemoryUsage2D(int xSize, int ySize, long bytesPerItem)
+	public static long arrayMemoryUsage2D(int xSize, int ySize, long bytesPerItem)
     {
-        return arrayMemoryUsage(xSize, (((bytesPerItem * ySize + 12 - 1) / 8) + 1) * 8L);
+        return arrayMemoryUsage(xSize, (((bytesPerItem * ySize + 12 - 1) >> 3) + 1) << 3);
     }
-    private int arrayMemoryUsageJagged(short[][] arr)
+    public static int arrayMemoryUsageJagged(short[][] arr)
     {
         int ctr = 0;
         for (int i = 0; i < arr.length; i++) {
             ctr += arrayMemoryUsage(arr[i].length, 2);
         }
-        return (((ctr + 12 - 1) / 8) + 1) * 8;
+        return (((ctr + 12 - 1) >> 3) + 1) << 3;
     }
     public long approximateMemoryUsage()
     {
@@ -620,8 +620,8 @@ public class FOVCache extends FOV {
         for (int i = 0; i < cache.length; i++) {
             ctr += arrayMemoryUsageJagged(cache[i]);
         }
-        ctr = (((ctr + 12L - 1L) / 8L) + 1L) * 8L;
-        ctr += (((arrayMemoryUsageJagged(losCache) + 12L - 1L) / 8L) + 1L) * 8L;
+        ctr = (((ctr + 12L - 1L) >> 3) + 1L) << 3;
+        ctr += (((arrayMemoryUsageJagged(losCache) + 12L - 1L) >> 3) + 1L) << 3;
         return ctr;
     }
 
@@ -1183,10 +1183,10 @@ public class FOVCache extends FOV {
                 p_x = hilbertX[perimeter[i] & 0xffff];
                 p_y = hilbertY[perimeter[i] & 0xffff];
 
-                if(cache[p_x + p_y * width] == ALL_WALLS)
+                if(p_y >= height || p_x >= width || cache[p_x + p_y * width] == ALL_WALLS)
                     continue;
 
-                if (distance(p_x - viewerX, p_y - viewerY) / 2 > l)
+                if (distance(p_x - viewerX, p_y - viewerY) >> 1 > l)
                     continue;
                 if (queryPackedHilbert(cache[p_x + p_y * width][maxRadius - l], myHilbert))
                     packing.add(perimeter[i]);
@@ -1261,6 +1261,15 @@ public class FOVCache extends FOV {
     {
         if(qualityThread != null || qualityComplete)
             return;
+        if(!complete) {
+            cacheAllPerformance();
+            try {
+                performanceThread.join();
+            } catch (InterruptedException e) {
+                return;
+            }
+        }
+
         qualityThread = new Thread(new QualityUnit());
         qualityThread.start();
     }
@@ -1274,12 +1283,12 @@ public class FOVCache extends FOV {
      */
     public boolean awaitCache()
     {
-        if(qualityThread == null && !qualityComplete)
+        if(performanceThread == null || !complete || (qualityThread == null && !qualityComplete))
             cacheAll();
         if(qualityComplete) return true;
         try {
             qualityThread.join();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             return false;
         }
         return qualityComplete;
@@ -1875,6 +1884,7 @@ public class FOVCache extends FOV {
                     final List<Future<Long>> invoke = executor.invokeAll(losUnits.get(p));
                     for (Future<Long> future : invoke) {
                         future.get();
+                        future.cancel(false);
                         //long t = future.get();
                         //threadTime += t;
                         //System.out.println(t);
@@ -1883,13 +1893,13 @@ public class FOVCache extends FOV {
                     e.printStackTrace();
                 }
                 losUnits.remove(p);
-                System.gc();
             }
             for (int p = 23; p >= 0; p--) {
                 try {
                     final List<Future<Long>> invoke = executor.invokeAll(fovUnits.get(p));
                     for (Future<Long> future : invoke) {
                         future.get();
+                        future.cancel(false);
                         //long t = future.get();
                         //threadTime += t;
                         //System.out.println(t);
@@ -1898,7 +1908,6 @@ public class FOVCache extends FOV {
                     e.printStackTrace();
                 }
                 fovUnits.remove(p);
-                System.gc();
             }
             //totalTime = System.currentTimeMillis() - totalTime;
             //System.out.println("Total real time elapsed: " + totalTime);
@@ -1940,15 +1949,6 @@ public class FOVCache extends FOV {
         @Override
         public void run() {
             //long totalTime = System.currentTimeMillis(), threadTime = 0L;
-            if(!complete) {
-                cacheAllPerformance();
-                try {
-                    performanceThread.join();
-                } catch (InterruptedException e) {
-                    return;
-                }
-            }
-
             ArrayList<ArrayList<SymmetryUnit>> symUnits = new ArrayList<>(4);
             for (int p = 0; p < 4; p++) {
                 symUnits.add(new ArrayList<SymmetryUnit>(mapLimit / 3));
@@ -1963,6 +1963,7 @@ public class FOVCache extends FOV {
                     for (Future<Long> future : invoke) {
                         //threadTime +=
                         future.get();
+                        future.cancel(false);
                         //System.out.println(t);
                     }
                 } catch (InterruptedException | ExecutionException e) {
@@ -2050,6 +2051,7 @@ public class FOVCache extends FOV {
                 for (Future<Long> future : invoke) {
                     //threadTime +=
                     future.get();
+                    future.cancel(false);
                     //System.out.println(t);
                 }
             } catch (InterruptedException | ExecutionException e) {
@@ -2060,6 +2062,7 @@ public class FOVCache extends FOV {
                 for (Future<Long> future : invoke) {
                     //threadTime +=
                     future.get();
+                    future.cancel(false);
                     //System.out.println(t);
                 }
             } catch (InterruptedException | ExecutionException e) {
@@ -2070,6 +2073,7 @@ public class FOVCache extends FOV {
                 for (Future<Long> future : invoke) {
                     //threadTime +=
                     future.get();
+                    future.cancel(false);
                     //System.out.println(t);
                 }
             } catch (InterruptedException | ExecutionException e) {
