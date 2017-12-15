@@ -42,5 +42,22 @@ public class ProbabilityTableTest {
         }
         System.out.println();
         System.out.println(carpenterCounts);
+        System.out.println('\n');
+        carpenterCounts = new OrderedMap<>(
+                new String[]{"splinter", "twig", "branch", "plank", "table", "shelf", "chair"},
+                new Integer[]{0, 0, 0, 0, 0, 0, 0});
+        carpenter.remove("shelf", 4);
+        carpenter.remove("chair");
+        for (int l = 0; l < 10; l++) {
+            for (int i = 0; i < 20; i++) {
+                current = carpenter.random();
+                carpenterCounts.put(current, carpenterCounts.get(current) + 1);
+                System.out.print(current);
+                System.out.print(' ');
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println(carpenterCounts);
     }
 }

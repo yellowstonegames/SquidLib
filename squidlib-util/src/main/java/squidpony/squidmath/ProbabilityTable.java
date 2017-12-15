@@ -151,6 +151,83 @@ public class ProbabilityTable<T> implements Serializable {
     }
 
     /**
+     * Removes the possibility of generating the given T item, except by nested ProbabilityTable results.
+     * Returns true iff the item was removed.
+     * @param item the item to make less likely or impossible
+     * @return true if the probability changed or false if nothing changed
+     */
+    public boolean remove(T item)
+    {
+        return remove(item, weight(item));
+    }
+
+    /**
+     * Reduces the likelihood of generating the given T item by the given weight, which can reduce the chance below 0
+     * and thus remove the item entirely. Does not affect nested ProbabilityTables. The value for weight must be greater
+     * than 0, otherwise this simply returns false without doing anything. Returns true iff the probabilities changed.
+     * @param item the item to make less likely or impossible
+     * @param weight how much to reduce the item's weight by, as a positive non-zero int (greater values here subtract
+     *               more from the item's weight)
+     * @return true if the probability changed or false if nothing changed
+     */
+    public boolean remove(T item, int weight)
+    {
+        if(weight <= 0)
+            return false;
+        int idx = table.getInt(item);
+        if(idx < 0)
+            return false;
+        int o = weights.get(idx);
+        weights.incr(idx, -weight);
+        int w = weights.get(idx);
+        if(w <= 0)
+        {
+            table.removeAt(idx);
+            weights.removeIndex(idx);
+        }
+        w = Math.min(o, o - w);
+        total -= w;
+        normalTotal -= w;
+        return true;
+    }
+
+    /**
+     * Given an Iterable of T item keys to remove, this tries to remove each item in items, though it can't affect items
+     * in nested ProbabilityTables, and returns true if any probabilities were changed.
+     * @param items an Iterable of T items that will all be removed from the normal (non-nested) items in this
+     * @return true if the probabilities changed, or false otherwise
+     */
+    public boolean removeAll(Iterable<T> items)
+    {
+        boolean changed = false;
+        for(T t : items)
+        {
+            changed |= remove(t);
+        }
+        return changed;
+    }
+
+    /**
+     * Given an OrderedMap of T item keys and Integer weight values, reduces the weights in this ProbabilityTable for
+     * all T keys by their corresponding weights, removing them if the weight becomes 0 or less. You may want to use
+     * {@link OrderedMap#makeMap(Object, Object, Object...)} to produce the parameter, unless you already have one.
+     * Returns true iff the probabilities changed.
+     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item that should be
+     *                        reduced in weight or removed and a value will be that item's weight
+     * @return true if the probabilities changed or false otherwise
+     */
+    public boolean removeAll(OrderedMap<T, Integer> itemsAndWeights)
+    {
+        if(itemsAndWeights == null) return false;
+        boolean changed = false;
+        int sz = itemsAndWeights.size;
+        for (int i = 0; i < sz; i++) {
+            changed |= remove(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));
+        }
+        return changed;
+    }
+
+    /**
      * Adds the given probability table as a possible set of results for this table.
      * The table parameter should not be the same object as this ProbabilityTable, nor should it contain cycles
      * that could reference this object from inside the values of table. This could cause serious issues that would
