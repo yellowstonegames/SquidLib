@@ -133,6 +133,24 @@ public class ProbabilityTable<T> implements Serializable {
     }
 
     /**
+     * Given an OrderedMap of T element keys and Integer weight values, adds all T keys with their corresponding weights
+     * into this ProbabilityTable. You may want to use {@link OrderedMap#makeMap(Object, Object, Object...)} to produce
+     * the parameter, unless you already have one.
+     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item this can retrieve
+     *                        and a value will be its weight
+     * @return this for chaining
+     */
+    public ProbabilityTable<T> addAll(OrderedMap<T, Integer> itemsAndWeights)
+    {
+        if(itemsAndWeights == null) return this;
+        int sz = itemsAndWeights.size;
+        for (int i = 0; i < sz; i++) {
+            add(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));
+        }
+        return this;
+    }
+
+    /**
      * Adds the given probability table as a possible set of results for this table.
      * The table parameter should not be the same object as this ProbabilityTable, nor should it contain cycles
      * that could reference this object from inside the values of table. This could cause serious issues that would
@@ -152,6 +170,33 @@ public class ProbabilityTable<T> implements Serializable {
         weights.add(Math.max(0, weight));
         extraTable.add(table);
         total += Math.max(0, weight);
+        return this;
+    }
+
+    /**
+     * Given an OrderedMap of ProbabilityTable keys and Integer weight values, adds all keys as nested tables with their
+     * corresponding weights into this ProbabilityTable. All ProbabilityTable keys should have the same T type as this
+     * ProbabilityTable. You may want to use {@link OrderedMap#makeMap(Object, Object, Object...)} to produce the
+     * parameter, unless you already have one.
+     *
+     * The same rules apply to this as apply to {@link #add(ProbabilityTable, int)}; that is, no key in itemsAndWeights
+     * can be the same object as this ProbabilityTable, nor should any key contain cycles that could reference this
+     * object from inside the values of a key. This could cause serious issues that would eventually terminate in a
+     * StackOverflowError if the cycles randomly repeated for too long. Only the first case is checked for (if the
+     * contents of this and a key are equivalent, it ignores that key; this also
+     * happens if a key is empty or null).
+
+     * @param itemsAndWeights an OrderedMap of T keys to Integer values, where a key will be an item this can retrieve
+     *                        and a value will be its weight
+     * @return this for chaining
+     */
+    public ProbabilityTable<T> addAllNested(OrderedMap<ProbabilityTable<T>, Integer> itemsAndWeights)
+    {
+        if(itemsAndWeights == null) return this;
+        int sz = itemsAndWeights.size;
+        for (int i = 0; i < sz; i++) {
+            add(itemsAndWeights.keyAt(i), itemsAndWeights.getAt(i));
+        }
         return this;
     }
 
@@ -237,6 +282,24 @@ public class ProbabilityTable<T> implements Serializable {
     public RNG getRandom()
     {
         return rng;
+    }
+
+    /**
+     * Copies this ProbabilityTable so nothing in the copy is shared with the original, except for the T items (which
+     * might not be possible to copy). The RNG is also copied.
+     * @return a copy of this ProbabilityTable; no references should be shared except for T items
+     */
+    public ProbabilityTable<T> copy()
+    {
+        ProbabilityTable<T> n = new ProbabilityTable<>(rng.copy());
+        n.weights.addAll(weights);
+        n.table.putAll(table);
+        for (int i = 0; i < extraTable.size(); i++) {
+            n.extraTable.add(extraTable.get(i).copy());
+        }
+        n.total = total;
+        n.normalTotal = normalTotal;
+        return n;
     }
 
     @Override

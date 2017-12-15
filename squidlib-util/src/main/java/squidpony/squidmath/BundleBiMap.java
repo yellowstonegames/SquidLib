@@ -182,15 +182,14 @@ public class BundleBiMap<E, S>
         int len = elements.size;
         elements.putAll(e);
         for (int i = len; i < elements.size; i++) {
-            mm.add(new IntVLA(4));
+            mm.add(new IntVLA(e.length));
         }
 
         elements.putAll(e);
         int[][] bundle = new int[][]{elements.getArray(e)};
         if(!bm.put(bundle, s))
             return false;
-        len = e.length;
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < e.length; i++) {
             mm.get(bundle[0][i]).add(bm.size()-1);
         }
         return true;
@@ -210,14 +209,13 @@ public class BundleBiMap<E, S>
         int len = elements.size;
         elements.putAll(e);
         for (int i = len; i < elements.size; i++) {
-            mm.add(new IntVLA(4));
+            mm.add(new IntVLA(e.length));
         }
 
         int[][] bundle = new int[][]{elements.getArray(e), variation};
         if(!bm.put(bundle, s))
             return false;
-        len = e.length;
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < e.length; i++) {
             mm.get(bundle[0][i]).add(bm.size()-1);
         }
         return true;
@@ -235,7 +233,7 @@ public class BundleBiMap<E, S>
         int len = elements.size;
         elements.putAll(e);
         for (int i = len; i < elements.size; i++) {
-            mm.add(new IntVLA(4));
+            mm.add(new IntVLA(e.size()));
         }
         int[][] bundle = new int[][]{elements.getArray(e)};
         if(!bm.put(bundle, s))
@@ -261,7 +259,7 @@ public class BundleBiMap<E, S>
         int len = elements.size;
         elements.putAll(e);
         for (int i = len; i < elements.size; i++) {
-            mm.add(new IntVLA(4));
+            mm.add(new IntVLA(e.size()));
         }
         int[][] bundle = new int[][]{elements.getArray(e), variation};
         if(!bm.put(bundle, s))
