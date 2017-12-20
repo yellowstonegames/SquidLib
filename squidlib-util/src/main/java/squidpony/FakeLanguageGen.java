@@ -3910,7 +3910,7 @@ public class FakeLanguageGen implements Serializable {
         public final Alteration[] alterations;
 
         public Modifier() {
-            this("[tţťțṭ]?[sśŝşšș]+h?", "th");
+            alterations = new Alteration[0];
         }
 
         public Modifier(String pattern, String replacement) {
@@ -3928,12 +3928,12 @@ public class FakeLanguageGen implements Serializable {
         public StringBuilder modify(RNG rng, StringBuilder sb) {
             Matcher m;
             Replacer.StringBuilderBuffer tb, working = Replacer.wrap(sb);
-            String tmp;
+            StringBuilder tmp;
             boolean found;
             Alteration alt;
             for (int a = 0; a < alterations.length; a++) {
                 alt = alterations[a];
-                tmp = working.toString();
+                tmp = working.sb;
                 tb = Replacer.wrap(new StringBuilder(tmp.length()));
                 m = alt.replacer.getPattern().matcher(tmp);
 
@@ -3957,7 +3957,7 @@ public class FakeLanguageGen implements Serializable {
                     working = tb;
                 }
             }
-            return working.toStringBuilder();
+            return working.sb;
         }
 
         /**

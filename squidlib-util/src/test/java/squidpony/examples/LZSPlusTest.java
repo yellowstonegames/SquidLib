@@ -23,9 +23,6 @@ public class LZSPlusTest {
                 "those great whirlwinds arose, mighty enough to crush any building in its path. It ",
                 "was reached by a trap door in the middle of the floor, from which a ladder led ",
                 "down into the small, dark hole.",
-//                FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 7, 16),
-//                FakeLanguageGen.GREEK_AUTHENTIC.sentence(rng, 7, 16),
-//                FakeLanguageGen.INFERNAL.sentence(rng,7, 16),
         }, compressed = new String[ozzes.length];
         String oz = StringKit.join("", ozzes), allCompressed;
         //long[] keys = Garbler.makeKeyArray(7, "There's no place like home...");

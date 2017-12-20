@@ -2806,6 +2806,34 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         } else
             return null;
     }
+    /**
+     * Given alternating key and value arguments in pairs, puts each key-value pair into this OrderedMap as if by
+     * calling {@link #put(Object, Object)} repeatedly for each pair. This mimics the parameter syntax used for
+     * {@link #makeMap(Object, Object, Object...)}, and can be used to retain that style of insertion after an
+     * OrderedMap has been instantiated.
+     * @param k0 the first key to add
+     * @param v0 the first value to add
+     * @param rest an array or vararg of keys and values in pairs; should contain alternating K, V, K, V... elements
+     * @return this, after adding all viable key-value pairs given
+     */
+    @SuppressWarnings("unchecked")
+    public OrderedMap<K, V> putPairs(K k0, V v0, Object... rest)
+    {
+        if(rest == null || rest.length == 0)
+        {
+            put(k0, v0);
+            return this;
+        }
+        put(k0, v0);
+
+        for (int i = 0; i < rest.length - 1; i+=2) {
+            try {
+                put((K) rest[i], (V) rest[i + 1]);
+            }catch (ClassCastException ignored) {
+            }
+        }
+        return this;
+    }
 
     /**
      * Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types

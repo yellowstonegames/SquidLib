@@ -19,7 +19,8 @@ public class Thesaurus implements Serializable{
     private static final long serialVersionUID = 3387639905758074640L;
     protected static final Pattern wordMatch = Pattern.compile("([\\pL`]+)"),
             similarFinder = Pattern.compile(".*?\\b(\\w\\w\\w\\w).*?{\\@1}.*$", "ui");
-    public OrderedMap<String, GapShuffler<String>> mappings;
+    public OrderedMap<CharSequence, GapShuffler<String>> mappings;
+    public ArrayList<FakeLanguageGen.Alteration> alterations = new ArrayList<>(4);
     protected StatefulRNG rng;
     public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
     public transient String latestGenerated = "Nationia";
@@ -28,7 +29,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus()
     {
-        mappings = new OrderedMap<>(256);
+        mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
         rng = new StatefulRNG();
     }
 
@@ -38,7 +39,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(RNG rng)
     {
-        mappings = new OrderedMap<>(256);
+        mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
         this.rng = new StatefulRNG(rng.nextLong());
     }
 
@@ -48,7 +49,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(long shuffleSeed)
     {
-        mappings = new OrderedMap<>(256);
+        mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
         this.rng = new StatefulRNG(shuffleSeed);
     }
 
@@ -59,7 +60,7 @@ public class Thesaurus implements Serializable{
      */
     public Thesaurus(String shuffleSeed)
     {
-        mappings = new OrderedMap<>(256);
+        mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
         this.rng = new StatefulRNG(shuffleSeed);
     }
 
@@ -88,6 +89,12 @@ public class Thesaurus implements Serializable{
             mappings.put(syn, shuffler);
         }
         rng.setState(prevState);
+        return this;
+    }
+
+    public Thesaurus addReplacement(CharSequence before, String after)
+    {
+        mappings.put(before, new GapShuffler<String>(after));
         return this;
     }
 
@@ -250,18 +257,55 @@ public class Thesaurus implements Serializable{
     public Thesaurus addFakeWords()
     {
         long state = rng.getState();
-        for(Map.Entry<String, FakeLanguageGen> kv : languages.entrySet())
+        for(Map.Entry<CharSequence, FakeLanguageGen> kv : languages.entrySet())
         {
             ArrayList<String> words = new ArrayList<>(16);
             for (int i = 0; i < 16; i++) {
                 words.add(kv.getValue().word(rng, false, rng.between(2, 4)));
             }
-            addCategory(kv.getKey().replace("gen", "pre"), words);
+            addCategory(StringKit.replace(kv.getKey(), "gen", "pre"), words);
         }
         rng.setState(state);
         return this;
     }
 
+    private StringBuilder modify(CharSequence text)
+    {
+        Matcher m;
+        StringBuilder sb = new StringBuilder(text);
+        Replacer.StringBuilderBuffer tb, working = Replacer.wrap(sb);
+        StringBuilder tmp;
+        boolean found;
+        FakeLanguageGen.Alteration alt;
+        for (int a = 0; a < alterations.size(); a++) {
+            alt = alterations.get(a);
+            tmp = working.sb;
+            tb = Replacer.wrap(new StringBuilder(tmp.length()));
+            m = alt.replacer.getPattern().matcher(tmp);
+
+            found = false;
+            while (true) {
+                if (rng.nextDouble() < alt.chance) {
+                    if (!Replacer.replaceStep(m, alt.replacer.getSubstitution(), tb))
+                        break;
+                    found = true;
+                } else {
+                    if (!m.find())
+                        break;
+                    found = true;
+                    m.getGroup(MatchResult.PREFIX, tb);
+                    m.getGroup(MatchResult.MATCH, tb);
+                    m.setTarget(m, MatchResult.SUFFIX);
+                }
+            }
+            if (found) {
+                m.getGroup(MatchResult.TARGET, tb);
+                working = tb;
+            }
+        }
+        return working.sb;
+
+    }
     /**
      * Given a String, StringBuilder, or other CharSequence that should contain words this knows synonyms for, this
      * replaces each occurrence of such a known word with one of its synonyms, leaving unknown words untouched. Words
@@ -275,7 +319,10 @@ public class Thesaurus implements Serializable{
     public String process(CharSequence text)
     {
         Replacer rep = wordMatch.replacer(new SynonymSubstitution());
-        return rep.replace(text);
+        if(alterations.isEmpty())
+            return rep.replace(text);
+        else
+            return modify(rep.replace(text)).toString();
     }
 
     public String lookup(String word)
@@ -305,17 +352,67 @@ public class Thesaurus implements Serializable{
                 return languages.get(word2).word(rng, true, rng.between(2, 4));
             }
             return languages.get(word2).word(rng, false, rng.between(2, 4));
-
         }
         return word;
     }
 
     private class SynonymSubstitution implements Substitution
     {
+        private StringBuilder temp = new StringBuilder(64);
         @Override
         public void appendSubstitution(MatchResult match, TextBuffer dest) {
-            dest.append(lookup(match.group(0)));
+            //dest.append(lookup(match.group(0)));
+            temp.setLength(0);
+            match.getGroup(0, temp);
+            writeLookup(dest, temp);
         }
+    }
+
+    private void writeLookup(TextBuffer dest, StringBuilder word) {
+        if(word.length() <= 0)
+            return;
+        if(mappings.containsKey(word))
+        {
+            String nx = mappings.get(word).next();
+            if(nx.isEmpty())
+                return;
+            if(word.length() > 1 && Category.Lu.contains(word.charAt(1)))
+            {
+                dest.append(nx.toUpperCase());
+                return;
+            }
+            if(Category.Lu.contains(word.charAt(0)))
+            {
+                dest.append(Character.toUpperCase(nx.charAt(0)));
+                dest.append(nx.substring(1, nx.length()));
+                return;
+            }
+            dest.append(nx);
+            return;
+        }
+        else if(languages.containsKey(word))
+        {
+            if(word.length() > 1 && Category.Lu.contains(word.charAt(1)))
+            {
+                dest.append(languages.get(word).word(rng, false, rng.between(2, 4)).toUpperCase());
+            }
+            else if(Category.Lu.contains(word.charAt(0)))
+            {
+                dest.append(languages.get(word).word(rng, true, rng.between(2, 4)));
+            }
+            else
+            {
+                dest.append(languages.get(word).word(rng, false, rng.between(2, 4)));
+            }
+            return;
+        }
+        if(dest instanceof Replacer.StringBuilderBuffer)
+        {
+            ((Replacer.StringBuilderBuffer)dest).sb.append(word);
+        }
+        else
+            dest.append(word.toString());
+
     }
 
     private class RandomLanguageSubstitution implements Substitution
@@ -616,7 +713,9 @@ public class Thesaurus implements Serializable{
             makeList("heroines", "champions", "saviors", "crusaders", "knights", "maidens")
             );
 
-    public static final OrderedMap<String, FakeLanguageGen> languages = makeOM(
+    public static final OrderedMap<CharSequence, FakeLanguageGen> languages = new OrderedMap<CharSequence, FakeLanguageGen>(
+            100, Hashers.caseInsensitiveStringHasher
+    ).putPairs(
             "lc`gen`",
             FakeLanguageGen.LOVECRAFT,
             "jp`gen`",
@@ -765,4 +864,27 @@ public class Thesaurus implements Serializable{
                     FakeLanguageGen.INUKTITUT, 2
             )
     );
+
+    /**
+     * Thesaurus preset that changes all text to sound like this speaker: "Desaurus preset dat changez all text to sound
+     * like dis speakah." You may be familiar with a certain sci-fi game that has orks that sound like this.
+     */
+    public static Thesaurus ORK = new Thesaurus("WAAAAAGH!");
+    static {
+        ORK.alterations.add(new FakeLanguageGen.Alteration("\\bth", "d"));
+        ORK.alterations.add(new FakeLanguageGen.Alteration("th", "dd"));
+        ORK.alterations.add(new FakeLanguageGen.Alteration("er\\b", "ah"));
+        ORK.alterations.add(new FakeLanguageGen.Alteration("es\\b", "ez"));
+        ORK.addReplacement("the", "da")
+                .addReplacement("their", "deyr")
+                .addReplacement("yes", "ya")
+                .addReplacement("your", "youse")
+                .addReplacement("yours", "youses")
+                .addReplacement("going", "gon'")
+                .addReplacement("and", "an'")
+                .addReplacement("to", "*snort*")
+                .addReplacement("rhythm", "riddim")
+                .addReplacement("get", "git")
+                .addReplacement("good", "gud");
+    }
 }

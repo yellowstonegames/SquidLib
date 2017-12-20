@@ -1518,4 +1518,13 @@ public class StringKit {
     public static final String LETTERS = LETTERS_UPPER + LETTERS_LOWER;
     public static final String LETTERS_AND_NUMBERS = LETTERS + DIGITS;
 
+    public static String replace(CharSequence text, String before, String after) {
+        if(text instanceof String)
+        {
+            return ((String)text).replace(before, after);
+        }
+        String t = text.toString();
+        return t.replace(before, after);
+    }
+
 }

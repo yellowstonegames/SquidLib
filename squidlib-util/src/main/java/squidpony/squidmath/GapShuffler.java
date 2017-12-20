@@ -24,6 +24,15 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
     private int[][] indexSections;
     private GapShuffler() {}
 
+    public GapShuffler(T single)
+    {
+        rng = new RNG();
+        elements = new ArrayList<>(1);
+        elements.add(single);
+        size = 1;
+        index = 0;
+        indexSections = new int[][]{{0}};
+    }
     /**
      * Constructor that takes any Collection of T, shuffles it with an unseeded RNG, and can then iterate infinitely
      * through mostly-random shuffles of the given collection. These shuffles are spaced so that a single element should
@@ -218,6 +227,10 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      * @return the next element in the infinite sequence
      */
     public T next() {
+        if(size == 1)
+        {
+            return elements.get(0);
+        }
         if(index >= size)
         {
             index = 0;
