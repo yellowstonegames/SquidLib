@@ -45,72 +45,72 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     }
     public static long hashAll(final long x, final long y, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((x ^ state) | 0xA529L)) ^ (state >>> 22)));
+        //state *= 0x352E9CF570932BDDL;
+        return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((x ^ state) | 0xA529L)) ^ (state >>> 22)));
     }
     public static long hashAll(final long x, final long y, final long z, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
+        //state *= 0x352E9CF570932BDDL;
+        return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
     }
     public static long hashAll(final long x, final long y, final long z, final long w, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (w ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
+        //state *= 0x352E9CF570932BDDL;
+        return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
     }
     public static int hash256(final long x, final long y, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
-                ((y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((x ^ state) | 0xA529L))) >>> 56);
+        //state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
+                (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((x ^ state) | 0xA529L))) >>> 56);
     }
     public static int hash256(final long x, final long y, final long z, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
-                ((z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 56);
+        //state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 56);
     }
     public static int hash256(final long x, final long y, final long z, final long w, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (w ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)))) >>> 56);
+        //state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)))) >>> 56);
     }
     public static int hash32(final long x, final long y, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)))) >>> 59);
+        //state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)))) >>> 59);
     }
     public static int hash32(final long x, final long y, final long z, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y - z) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z - x) | 0xA529L)) ^ (state >>> 22)) ^
-                ((z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x - y) | 0xA529L))) >>> 59);
+        //state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y - z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z - x) | 0xA529L)) ^ (state >>> 22)) ^
+                (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ x - y) | 0xA529L))) >>> 59);
     }
     public static int hash32(final long x, final long y, final long z, final long w, long state)
     {
-        state *= 0x352E9CF570932BDDL;
-        return (int) ((((state = (x ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (y ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
-                ((state = (z ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
-                ((w ^ (state += 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 59);
+        //state *= 0x352E9CF570932BDDL;
+        return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 59);
     }
     public static long determine(long state)
     {
         //return (state = ((state *= 0x6C8E9CD570932BD5L) ^ (state >>> 25)) * (state | 0xE5L)) - (state >>> 22);
         //return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
-        return (state = ((state *= 0x352E9CF570932BDDL) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
+        return (state = (state ^ ((state *= 0x6C8E9CD570932BD5L) >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
 
     }
     /*

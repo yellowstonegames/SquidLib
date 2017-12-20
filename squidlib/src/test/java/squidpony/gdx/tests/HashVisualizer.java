@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 64, rngMode = 34, noiseMode = 70;
+    private int hashMode = 64, rngMode = 34, noiseMode = 0;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -2409,7 +2409,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("Perlin 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2420,7 +2420,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Perlin 2D Noise, 3 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 2D Noise, 3 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2434,7 +2434,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Perlin 3D Noise, 3 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 3D Noise, 3 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2627,7 +2627,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
 
                     case 13:
-                        Gdx.graphics.setTitle("Whirling Alt Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Alt 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
@@ -2656,7 +2656,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         (WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)) * 2.34f +
                                         (WhirlingNoise.noiseAlt(xx * 0.25, yy * 0.25)) * 1.19f)
                                  */
-                                bright = prepare(layered2D.getNoise(xx * 0.0625, yy * 0.0625)
+                                bright = prepare(WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
                                 );
 
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
