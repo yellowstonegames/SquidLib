@@ -40,7 +40,7 @@ import java.io.Serializable;
  * @author Sebastiano Vigna
  * @author Tommy Ettinger
  */
-public class LightRNG implements RandomnessSource, StatefulRandomness, Serializable
+public final class LightRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable
 {
 	/** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
@@ -233,6 +233,7 @@ public class LightRNG implements RandomnessSource, StatefulRandomness, Serializa
      * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most recent generated number
      * @return the random long generated after skipping advance numbers
      */
+    @Override
     public long skip(long advance) {
         long z = (state += 0x9E3779B97F4A7C15L * advance);
         z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;

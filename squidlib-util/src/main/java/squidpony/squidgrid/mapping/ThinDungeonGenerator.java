@@ -17,6 +17,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
      * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.
      */
     public ThinDungeonGenerator() {
+        super();
     }
 
     /**

@@ -21,7 +21,7 @@ public class FOVCacheTest {
         int height = 30;
         int maxRadius = 15;
         for (long r = 0, seed = 0xcabL; r < 6; r++, seed ^= seed << 2) {
-            StatefulRNG rng = new StatefulRNG(new LightRNG(seed));
+            StatefulRNG rng = new StatefulRNG(seed);
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
             dungeonGenerator.addDoors(15, true);
             dungeonGenerator.addWater(25);

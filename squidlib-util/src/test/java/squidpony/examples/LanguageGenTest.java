@@ -459,7 +459,6 @@ public class LanguageGenTest {
                 "those great whirlwinds arose, mighty enough to crush any building in its path. It ",
                 "was reached by a trap door in the middle of the floor, from which a ladder led ",
                 "down into the small, dark hole.",
-
         }, oz2 = new String[oz.length];
         System.out.println("ORIGINAL:");
         for(String o : oz)

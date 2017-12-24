@@ -176,7 +176,7 @@ public class OldDijkstraMap implements Serializable {
      * initialize() method before using this class.
      */
     public OldDijkstraMap() {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         path = new ArrayList<>();
 
         goals = new IntDoubleOrderedMap();

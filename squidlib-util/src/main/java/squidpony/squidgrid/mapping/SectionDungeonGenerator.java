@@ -201,7 +201,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
 
 
     /**
-     * Make a SectionDungeonGenerator with a LightRNG using a random seed, height 40, and width 40.
+     * Make a SectionDungeonGenerator with a ThrustAltRNG using a random seed, height 40, and width 40.
      */
     public SectionDungeonGenerator()
     {
@@ -226,7 +226,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
      */
     public SectionDungeonGenerator(int width, int height)
     {
-    	this(width, height, new RNG(new LightRNG()));
+    	this(width, height, new StatefulRNG());
     }
 
     /**

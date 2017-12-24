@@ -133,7 +133,7 @@ public class DijkstraMap {
      * initialize() method before using this class.
      */
     public DijkstraMap() {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         path = new ArrayList<>();
 
         goals = new LinkedHashMap<>();
@@ -163,7 +163,7 @@ public class DijkstraMap {
      * @param level
      */
     public DijkstraMap(final double[][] level) {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         path = new ArrayList<>();
 
         goals = new LinkedHashMap<>();
@@ -180,7 +180,7 @@ public class DijkstraMap {
      * @param measurement
      */
     public DijkstraMap(final double[][] level, Measurement measurement) {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         this.measurement = measurement;
         path = new ArrayList<>();
 
@@ -200,7 +200,7 @@ public class DijkstraMap {
      * @param level
      */
     public DijkstraMap(final char[][] level) {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         path = new ArrayList<>();
 
         goals = new LinkedHashMap<>();
@@ -240,7 +240,7 @@ public class DijkstraMap {
      * @param level
      */
     public DijkstraMap(final char[][] level, char alternateWall) {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         path = new ArrayList<>();
 
         goals = new LinkedHashMap<>();
@@ -260,7 +260,7 @@ public class DijkstraMap {
      * @param measurement
      */
     public DijkstraMap(final char[][] level, Measurement measurement) {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         path = new ArrayList<>();
         this.measurement = measurement;
 
@@ -3293,7 +3293,7 @@ public class DijkstraMap {
      */
     public ArrayList<Coord> findPathPreScanned(Coord target) {
         if (!initialized || goals == null || goals.isEmpty()) return null;
-        RNG rng2 = new StatefulRNG(new LightRNG(0xf00d));
+        RNG rng2 = new StatefulRNG(0xf00d);
         path.clear();
         Coord currentPos = target;
         while (true) {

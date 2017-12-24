@@ -5,6 +5,8 @@ import squidpony.ArrayTools;
 import java.io.Serializable;
 import java.util.*;
 
+import static squidpony.squidmath.NumberTools.intBitsToFloat;
+
 /**
  * A wrapper class for working with random number generators in a more friendly way.
  * <p>
@@ -16,23 +18,25 @@ import java.util.*;
  * an RNG with all sorts of RandomnessSource implementations, and choosing them
  * is usually not a big concern because the default works very well.
  * <br>
- * But if you do want advice on what RandomnessSource to use... {@link LightRNG}
+ * But if you do want advice on what RandomnessSource to use... {@link ThrustAltRNG}
  * is the default, and is very fast, but relative to many of the others it has a
  * significantly shorter period (the amount of random  numbers it will go through
  * before repeating the sequence), at {@code pow(2, 64)} as opposed to
  * {@link XoRoRNG}'s {@code pow(2, 128) - 1}, . {@link LapRNG} is about twice as
  * fast as LightRNG, but that's all it's good at; it fails quality tests almost
  * all around, though it can fool a human observer, and has a period that's only
- * barely better than LightRNG at {@code pow(2, 65)}. LightRNG also allows the
+ * barely better than LightRNG at {@code pow(2, 65)}. ThrustAltRNG also allows the
  * current RNG state to be retrieved and altered with {@code getState()} and
  * {@code setState()}, and the subclass of RNG, {@link StatefulRNG}, usually uses
- * LightRNG to handle random number generation when the state may need to be
- * saved and reloaded. For most cases, you should decide between LightRNG, XoRoRNG,
- * and LapRNG based on your priorities. LightRNG is the best if you want good
- * speed, good quality of randomness, and expect to either generate less than
+ * ThrustAltRNG to handle random number generation when the state may need to be
+ * saved and reloaded. For most cases, you should decide between ThrustAltRNG, LightRNG,
+ * XoRoRNG, and LapRNG based on your priorities. ThrustAltRNG is the best if you want
+ * high speed, very good quality of randomness, and expect to either generate less than
  * 18446744073709551616 numbers or don't care if patterns appear after you generate
  * that many numbers, or if you need an RNG that can skip backwards or jump forwards
- * without incurring speed penalties. XoRoRNG is best if you want good speed and
+ * without incurring speed penalties. LightRNG provides similar qualities to ThrustAltRNG,
+ * but isn't as fast; it was the default before so you may want to keep compatibility with
+ * earlier versions by specifying LightRNG. XoRoRNG is best if you want good speed and
  * quality but need to generate more than 18446744073709551616 numbers, though less
  * than 340282366920938463463374607431768211456 numbers. LapRNG is best if you only
  * care about getting random numbers quickly, and don't expect their quality to be
@@ -87,55 +91,50 @@ public class RNG implements Serializable {
 	protected boolean haveNextNextGaussian = false;
 	protected Random ran = null;
 
-    private static final long serialVersionUID = 2352426757973945149L;
+    private static final long serialVersionUID = 2352426757973945105L;
 
 
     /**
-     * Default constructor; uses SplitMix64, which is of high quality, but low period (which rarely matters for games),
-     * and has good speed, tiny state size, and excellent 64-bit number generation.
+     * Default constructor; uses {@link ThrustAltRNG}, which is of high quality, but low period (which rarely matters
+     * for games), and has excellent speed, tiny state size, and natively generates 64-bit numbers.
      * <br>
-     * Compatibility note: previous versions of SquidLib used Mersenne Twister by default. Due to the incompatibility
-     * of the threads used by this Mersenne Twister implementation with GWT and HTML5 applications, the randomness
-     * algorithm has been changed to a faster, more compatible algorithm, though it does suffer from a much lower
-     * period. If you need drastically larger periods than 2^64, you can pass a LongPeriodRNG (or MersenneTwister on
-     * targets other than HTML) object to the constructor that takes a RandomnessSource. If you don't know what the
-     * period of a PRNG is, you probably don't need to worry about it; it's mainly relevant to heavily multi-threaded
-     * applications anyway. The addition of LongPeriodRNG on March 21, 2016 should help to take the part of a fast,
-     * large-period RNG, which MersenneTwister is unable to act as on GWT. The default may change again some time after
-     * May 1, 2016, now that we have XoRoRNG, which is approximately as fast as LightRNG and has a substantially better
-     * period (pow(2, 128) - 1). It may change instead to the newer ThrustRNG, which is extremely similar to LightRNG
-     * except that it has slightly better statistical quality (both excellent) and is a fair amount faster (its period
-     * remains at pow(2, 64)).
+     * Previous versions of SquidLib used different implementations, including {@link MersenneTwister} and for a long
+     * time {@link LightRNG}. You can still use one of these by instantiating one of those classes and passing it to
+     * {@link #RNG(RandomnessSource)}, which may be the best way to ensure the same results across versions.
      */
     public RNG() {
-        this(new LightRNG());
+        this(new ThrustAltRNG());
     }
 
     /**
-     * Seeded constructor; uses LightRNG, which is of high quality, but low period (which rarely matters for games),
-     * and has good speed, tiny state size, and excellent 64-bit number generation.
+     * Default constructor; uses {@link ThrustAltRNG}, which is of high quality, but low period (which rarely matters
+     * for games), and has excellent speed, tiny state size, and natively generates 64-bit numbers. The seed can be
+     * any long, including 0.
+     * @param seed any long
      */
     public RNG(long seed) {
-        this(new LightRNG(seed));
+        this(new ThrustAltRNG(seed));
     }
 
     /**
      * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
-     * seed for LightRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
-     * tiny state size, and excellent 64-bit number generation.
+     * seed for {@link ThrustAltRNG}, which is of high quality, but low period (which rarely matters for games), and has
+     * excellent speed, tiny state size, and natively generates 64-bit numbers.
      */
     public RNG(CharSequence seedString) {
-        this(new LightRNG(CrossHash.hash(seedString)));
+        this(new ThrustAltRNG(CrossHash.hash(seedString)));
     }
 
     /**
-     * Uses the provided source of randomness for all calculations. This
-     * constructor should be used if an alternate RandomnessSource other than LightRNG is desirable.
+     * Uses the provided source of randomness for all calculations. This constructor should be used if an alternate
+     * RandomnessSource other than ThrustAltRNG is desirable, such as to keep compatibility with earlier SquidLib
+     * versions that defaulted to LightRNG.
+     * <br>
      * If the parameter is null, this is equivalent to using {@link #RNG()} as the constructor.
-     * @param random the source of pseudo-randomness, such as a MersenneTwister or SobolQRNG object
+     * @param random the source of pseudo-randomness, such as a LightRNG or LongPeriodRNG object
      */
     public RNG(RandomnessSource random) {
-        this.random = (random == null) ? new LightRNG() : random;
+        this.random = (random == null) ? new ThrustAltRNG() : random;
     }
 
     /**
@@ -150,10 +149,10 @@ public class RNG implements Serializable {
 
         /**
          * Creates a new random number generator. This constructor uses
-         * a LightRNG with a random seed.
+         * a ThrustAltRNG with a random seed.
          */
         public CustomRandom() {
-            randomnessSource = new LightRNG();
+            randomnessSource = new ThrustAltRNG();
         }
 
         /**
@@ -484,107 +483,17 @@ public class RNG implements Serializable {
         };
     }
 
-    /**
-     * Use that to get random cells in a rectangular map.
-     *
-     * @param width  The map's width (bounds the x-coordinate in returned coords).
-     * @param height The map's height (bounds the y-coordinate in returned coords).
-     * @param size   The number of elements in the returned iterable or anything
-     *               negative for no bound (in which case the iterator is infinite, it's
-     *               up to you to bound your iteration).
-     * @return An iterable that returns random cells in the rectangle (0,0)
-     * (inclusive) .. (width, height) (exclusive).
-     */
-    public Iterable<Coord> getRandomCellsIterable(final int width, final int height, final int size) {
-        return new Iterable<Coord>() {
-            @Override
-            public Iterator<Coord> iterator() {
-                return new Iterator<Coord>() {
-
-                    /**
-                     * The number of elements returned so far
-                     */
-                    int returned = 0;
-
-                    @Override
-                    public boolean hasNext() {
-                        return size < 0 || returned < size;
-                    }
-
-                    @Override
-                    public Coord next() {
-                        if (!hasNext())
-                            throw new NoSuchElementException();
-                        returned++;
-                        return nextCoord(width, height);
-                    }
-
-                    @Override
-                    public void remove() {
-                        throw new UnsupportedOperationException();
-                    }
-                };
-            }
-        };
-    }
 
     /**
-     * Gets an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height) exclusive, in a
-     * random order, with the array containing {@code width * height} items.
-     *
-     * @param startX the inclusive starting x position
-     * @param startY the inclusive starting y position
-     * @param width  the width of the space to place Coords in, extending from startX
-     * @param height the height of the space to place Coords in, extending from startY
-     * @return an array containing {@code width * height} Coord items in random order, inside the given bounds
+     * Mutates the array arr by switching the contents at pos1 and pos2.
+     * @param arr an array of T; must not be null
+     * @param pos1 an index into arr; must be at least 0 and no greater than arr.length
+     * @param pos2 an index into arr; must be at least 0 and no greater than arr.length
      */
-    public Coord[] getRandomUniqueCells(final int startX, final int startY, final int width, final int height) {
-        if (width <= 0 || height <= 0)
-            return new Coord[0];
-        return getRandomUniqueCells(startX, startY, width, height, new Coord[width * height]);
-    }
-
-    /**
-     * Gets an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height) exclusive, in a
-     * random order, with the array containing {@code Math.min(width * height, size)} items. If size is less than width
-     * times height, then not all Coords in the space will be used.
-     *
-     * @param startX the inclusive starting x position
-     * @param startY the inclusive starting y position
-     * @param width  the width of the space to place Coords in, extending from startX
-     * @param height the height of the space to place Coords in, extending from startY
-     * @param size   the size of the array to return; only matters if it is smaller than {@code width * height}
-     * @return an array containing {@code Math.min(width * height, size)} Coord items in random order, inside the given bounds
-     */
-    public Coord[] getRandomUniqueCells(final int startX, final int startY, final int width, final int height,
-                                        final int size) {
-        if (width <= 0 || height <= 0 || size <= 0)
-            return new Coord[0];
-        return getRandomUniqueCells(startX, startY, width, height, new Coord[Math.min(width * height, size)]);
-    }
-
-    /**
-     * Assigns to dest an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height)
-     * exclusive, in a random order, with dest after this is called containing the lesser of {@code width * height} or
-     * {@code dest.length} items. This will not allocate a new array for dest, but will create a temporary int array for
-     * handling the shuffle.
-     *
-     * @param startX the inclusive starting x position
-     * @param startY the inclusive starting y position
-     * @param width  the width of the space to place Coords in, extending from startX
-     * @param height the height of the space to place Coords in, extending from startY
-     * @param dest   a Coord array that will be modified to contain randomly-ordered Coords, but will not be resized
-     * @return dest, now with up to its first {@code width * height} items assigned to random Coords inside the given bounds
-     */
-    public Coord[] getRandomUniqueCells(final int startX, final int startY, final int width, final int height,
-                                        final Coord[] dest) {
-        if (width <= 0 || height <= 0 || dest == null || dest.length <= 0)
-            return dest;
-        int[] o = randomOrdering(width * height);
-        for (int i = 0; i < o.length && i < dest.length; i++) {
-            dest[i] = Coord.get(startX + o[i] % width, startY + o[i] / width);
-        }
-        return dest;
+    private static <T> void swap(T[] arr, int pos1, int pos2) {
+        final T tmp = arr[pos1];
+        arr[pos1] = arr[pos2];
+        arr[pos2] = tmp;
     }
 
     /**
@@ -598,14 +507,10 @@ public class RNG implements Serializable {
      * @return a shuffled copy of elements
      */
     public <T> T[] shuffle(final T[] elements) {
-        final int n = elements.length;
-        final T[] array = Arrays.copyOf(elements, n);
-        for (int i = 0; i < n - 1; i++) {
-            int r = i + nextIntHasty(n - i);
-            T t = array[r];
-            if (r != i)
-                array[r] = array[i];
-            array[i] = t;
+        final int size = elements.length;
+        final T[] array = Arrays.copyOf(elements, size);
+        for (int i = size; i > 1; i--) {
+            swap(array, i - 1, nextIntHasty(i));
         }
         return array;
     }
@@ -621,13 +526,9 @@ public class RNG implements Serializable {
      * @return elements after shuffling it in-place
      */
     public <T> T[] shuffleInPlace(T[] elements) {
-        final int n = elements.length;
-        for (int i = 0; i < n - 1; i++) {
-            int r = i + nextIntHasty(n - i);
-            T t = elements[r];
-            if (r != i)
-                elements[r] = elements[i];
-            elements[i] = t;
+        final int size = elements.length;
+        for (int i = size; i > 1; i--) {
+            swap(elements, i - 1, nextIntHasty(i));
         }
         return elements;
     }
@@ -685,16 +586,15 @@ public class RNG implements Serializable {
             al = buf;
             al.addAll(elements);
         }
-        int n = al.size();
-        for (int i = 0; i < n - 1; i++) {
-            Collections.swap(al, i + nextInt(n - i), i);
+        final int n = al.size();
+        for (int i = n; i > 1; i--) {
+            Collections.swap(al, nextInt(i), i - 1);
         }
         return al;
     }
     /**
      * Shuffles a Collection of T items in-place using the Fisher-Yates algorithm.
-     * This only shuffles List data structures; the {@link OrderedSet#shuffle(RNG)} and {@link OrderedMap#shuffle(RNG)}
-     * methods, among others in SquidLib's data structures, can be used to shuffle those types.
+     * This only shuffles List data structures.
      * If you don't want the array modified, use {@link #shuffle(Collection)}, which returns a List as well.
      * <br>
      * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
@@ -705,8 +605,8 @@ public class RNG implements Serializable {
      */
     public <T> List<T> shuffleInPlace(List<T> elements) {
         final int n = elements.size();
-        for (int i = 0; i < n - 1; i++) {
-            Collections.swap(elements, i + nextInt(n - i), i);
+        for (int i = n; i > 1; i--) {
+            Collections.swap(elements, nextInt(i), i - 1);
         }
         return elements;
     }
@@ -741,42 +641,13 @@ public class RNG implements Serializable {
         for (int i = 0; i < n; i++) {
             dest[i] = i;
         }
-        for (int i = 0; i < n - 1; i++) {
-            int r = i + nextIntHasty(n - i),
+        for (int i = n; i > 1; i--) {
+            final int r = nextIntHasty(i),
                     t = dest[r];
-            if (r != i)
-                dest[r] = dest[i];
+            dest[r] = dest[i];
             dest[i] = t;
         }
         return dest;
-    }
-
-    /**
-     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
-     * it can, and then returns output. Will only use a given position in the given data at most once; does this by
-     * generating random indices for data's elements, but only as much as needed, assigning the copied section to output
-     * and not modifying data.
-     * <br>
-     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
-     * copying or creating a new generic array (a problem on GWT).
-     *
-     * @param data   an array of T; will not be modified.
-     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
-     * @param <T>    can be any non-primitive type.
-     * @return an array of T that has length equal to output's length and may contain unchanged elements (null if output
-     * was empty) if data is shorter than output
-     */
-    public <T> T[] randomPortion(T[] data, T[] output) {
-        int length = data.length;
-        int n = Math.min(length, output.length);
-        int[] mapping = ArrayTools.range(n);
-        for (int i = 0; i < n; i++) {
-            int r = nextIntHasty(length);
-            output[i] = data[mapping[r]];
-            mapping[r] = mapping[--length];
-        }
-
-        return output;
     }
 
     /**
@@ -806,25 +677,45 @@ public class RNG implements Serializable {
             return new int[0];
 
         int n = end - start;
-        int[] data = new int[n];
+        final int[] data = new int[n];
 
         for (int e = start, i = 0; e < end; e++) {
             data[i++] = e;
         }
 
         for (int i = 0; i < n - 1; i++) {
-            int r = i + nextInt(n - i), t = data[r];
-            if (r != i)
-                data[r] = data[i];
+            final int r = i + nextInt(n - i), t = data[r];
+            data[r] = data[i];
             data[i] = t;
         }
-        int[] array = new int[Math.min(count, n)];
+        final int[] array = new int[Math.min(count, n)];
         System.arraycopy(data, 0, array, 0, Math.min(count, n));
         return array;
     }
 
     /**
-     * @return a value from the gaussian distribution
+     * Generates a random float with a curved distribution that centers on 0 (where it has a bias) and can (rarely)
+     * approach -1f and 1f, but not go beyond those bounds. This is similar to {@link #nextGaussian()} in that it uses
+     * a curved distribution, but it is not the same. The distribution for the values is similar to Irwin-Hall, and is
+     * frequently near 0 but not too-rarely near -1f or 1f. It cannot produce values greater than or equal to 1f, or
+     * less than -1f, but it can produce -1f.
+     * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f
+     */
+    public float nextCurvedFloat() {
+        final long start = random.nextLong();
+        return   (intBitsToFloat((int)start >>> 9 | 0x3F000000)
+                + intBitsToFloat((int) (start >>> 41) | 0x3F000000)
+                + intBitsToFloat(((int)(start ^ ~start >>> 20) & 0x007FFFFF) | 0x3F000000)
+                + intBitsToFloat(((int) (~start ^ start >>> 30) & 0x007FFFFF) | 0x3F000000)
+                - 3f);
+    }
+
+    /**
+     * Gets a pseudo-random double from the Gaussian distribution, which will usually be between -1.0 and 1.0 but is not
+     * always in that range. If you do want values to always be between -1 and 1 and a float is OK, consider using
+     * {@link #nextCurvedFloat()}, which is a different distribution that is less sharply-curved towards 0 and
+     * terminates at -1 and 1.
+     * @return a value from the Gaussian distribution
      */
     public double nextGaussian() {
         if (haveNextNextGaussian) {
@@ -892,7 +783,7 @@ public class RNG implements Serializable {
     /**
      * Get a random bit of state, interpreted as true or false with approximately equal likelihood.
      * This may have better behavior than {@code rng.next(1)}, depending on the RandomnessSource implementation; the
-     * default LightRNG will behave fine, as will ThrustRNG and ThrustAltRNG (these all use similar algorithms), but the
+     * default ThrustAltRNG will behave fine, as will ThrustRNG and LightRNG (these all use similar algorithms), but the
      * normally-high-quality XoRoRNG will produce very predictable output with {@code rng.next(1)} and very good output
      * with {@code rng.nextBoolean()}. This is a known and considered flaw of Xoroshiro128+, the algorithm used by
      * XoRoRNG, and a large number of generators have lower quality on the least-significant bit than the most-
@@ -947,16 +838,15 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
+     * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
+     * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
      * Uses an aggressively optimized technique that has some bias, but mostly for values of
      * bound over 1 billion. This method is considered "hasty" since it should be faster than
-     * nextInt() but gives up some statistical quality to do so. It also has undefined behavior
-     * if bound is negative, though it will probably produce a negative number (just how
-     * negative is an open question).
+     * {@link #nextInt(int)} but gives up some statistical quality to do so.
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
-     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative
+     * @param bound the outer bound (exclusive), can be negative or positive
      * @return the found number
      */
     public int nextIntHasty(final int bound) {
@@ -978,26 +868,6 @@ public class RNG implements Serializable {
         for (int i = 0; i < bytes.length; )
             for (long r = random.nextLong(), n = Math.min(bytes.length - i, 8); n-- > 0; r >>>= 8)
                 bytes[i++] = (byte) r;
-    }
-    /**
-     * Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)
-     * and height (exclusive). This makes one call to randomLong to generate (more than) 31 random bits for
-     * each axis, and should be very fast. Remember that Coord values are cached in a pool that starts able to
-     * hold up to 255 x and 255 y for positive values, and the pool should be grown with the static method
-     * Coord.expandPool() in order to efficiently use larger Coord values. If width and height are very large,
-     * greater than 100,000 for either, this particular method may show bias toward certain positions due to
-     * the "hasty" technique used to reduce the random numbers to the given size, but because most maps in
-     * tile-based games are relatively small, this technique should be fine.
-     * <br>
-     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
-     *
-     * @param width  the upper bound (exclusive) for x coordinates
-     * @param height the upper bound (exclusive) for y coordinates
-     * @return a random Coord between (0,0) inclusive and (width,height) exclusive
-     */
-    public Coord nextCoord(int width, int height) {
-        final long n = random.nextLong();
-        return Coord.get((int) ((width * (n >>> 33)) >> 31), (int) ((height * (n & 0x7FFFFFFFL)) >> 31));
     }
 
     /**
@@ -1258,6 +1128,159 @@ public class RNG implements Serializable {
 
     @Override
     public int hashCode() {
-        return random.hashCode();
+        return 31 * random.hashCode();
     }
+
+    /**
+     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+     * it can, and then returns output. Will only use a given position in the given data at most once; does this by
+     * generating random indices for data's elements, but only as much as needed, assigning the copied section to output
+     * and not modifying data.
+     * <br>
+     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
+     * copying or creating a new generic array (a problem on GWT).
+     *
+     * @param data   an array of T; will not be modified.
+     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
+     * @param <T>    can be any non-primitive type.
+     * @return an array of T that has length equal to output's length and may contain unchanged elements (null if output
+     * was empty) if data is shorter than output
+     */
+    public <T> T[] randomPortion(T[] data, T[] output) {
+        int length = data.length;
+        int n = Math.min(length, output.length);
+        int[] mapping = ArrayTools.range(n);
+        for (int i = 0; i < n; i++) {
+            int r = nextIntHasty(length);
+            output[i] = data[mapping[r]];
+            mapping[r] = mapping[--length];
+        }
+
+        return output;
+    }
+
+    /**
+     * Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)
+     * and height (exclusive). This makes one call to randomLong to generate (more than) 31 random bits for
+     * each axis, and should be very fast. Remember that Coord values are cached in a pool that starts able to
+     * hold up to 255 x and 255 y for positive values, and the pool should be grown with the static method
+     * Coord.expandPool() in order to efficiently use larger Coord values. If width and height are very large,
+     * greater than 100,000 for either, this particular method may show bias toward certain positions due to
+     * the "hasty" technique used to reduce the random numbers to the given size, but because most maps in
+     * tile-based games are relatively small, this technique should be fine.
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
+     *
+     * @param width  the upper bound (exclusive) for x coordinates
+     * @param height the upper bound (exclusive) for y coordinates
+     * @return a random Coord between (0,0) inclusive and (width,height) exclusive
+     */
+    public Coord nextCoord(int width, int height) {
+        final long n = random.nextLong();
+        return Coord.get((int) ((width * (n >>> 33)) >> 31), (int) ((height * (n & 0x7FFFFFFFL)) >> 31));
+    }
+
+    /**
+     * Use that to get random cells in a rectangular map.
+     *
+     * @param width  The map's width (bounds the x-coordinate in returned coords).
+     * @param height The map's height (bounds the y-coordinate in returned coords).
+     * @param size   The number of elements in the returned iterable or anything
+     *               negative for no bound (in which case the iterator is infinite, it's
+     *               up to you to bound your iteration).
+     * @return An iterable that returns random cells in the rectangle (0,0)
+     * (inclusive) .. (width, height) (exclusive).
+     */
+    public Iterable<Coord> getRandomCellsIterable(final int width, final int height, final int size) {
+        return new Iterable<Coord>() {
+            @Override
+            public Iterator<Coord> iterator() {
+                return new Iterator<Coord>() {
+
+                    /**
+                     * The number of elements returned so far
+                     */
+                    int returned = 0;
+
+                    @Override
+                    public boolean hasNext() {
+                        return size < 0 || returned < size;
+                    }
+
+                    @Override
+                    public Coord next() {
+                        if (!hasNext())
+                            throw new NoSuchElementException();
+                        returned++;
+                        return nextCoord(width, height);
+                    }
+
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Gets an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height) exclusive, in a
+     * random order, with the array containing {@code width * height} items.
+     *
+     * @param startX the inclusive starting x position
+     * @param startY the inclusive starting y position
+     * @param width  the width of the space to place Coords in, extending from startX
+     * @param height the height of the space to place Coords in, extending from startY
+     * @return an array containing {@code width * height} Coord items in random order, inside the given bounds
+     */
+    public Coord[] getRandomUniqueCells(final int startX, final int startY, final int width, final int height) {
+        if (width <= 0 || height <= 0)
+            return new Coord[0];
+        return getRandomUniqueCells(startX, startY, width, height, new Coord[width * height]);
+    }
+
+    /**
+     * Gets an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height) exclusive, in a
+     * random order, with the array containing {@code Math.min(width * height, size)} items. If size is less than width
+     * times height, then not all Coords in the space will be used.
+     *
+     * @param startX the inclusive starting x position
+     * @param startY the inclusive starting y position
+     * @param width  the width of the space to place Coords in, extending from startX
+     * @param height the height of the space to place Coords in, extending from startY
+     * @param size   the size of the array to return; only matters if it is smaller than {@code width * height}
+     * @return an array containing {@code Math.min(width * height, size)} Coord items in random order, inside the given bounds
+     */
+    public Coord[] getRandomUniqueCells(final int startX, final int startY, final int width, final int height,
+                                        final int size) {
+        if (width <= 0 || height <= 0 || size <= 0)
+            return new Coord[0];
+        return getRandomUniqueCells(startX, startY, width, height, new Coord[Math.min(width * height, size)]);
+    }
+
+    /**
+     * Assigns to dest an array of unique Coords, from (startX,startY) inclusive to (startX+width,startY+height)
+     * exclusive, in a random order, with dest after this is called containing the lesser of {@code width * height} or
+     * {@code dest.length} items. This will not allocate a new array for dest, but will create a temporary int array for
+     * handling the shuffle.
+     *
+     * @param startX the inclusive starting x position
+     * @param startY the inclusive starting y position
+     * @param width  the width of the space to place Coords in, extending from startX
+     * @param height the height of the space to place Coords in, extending from startY
+     * @param dest   a Coord array that will be modified to contain randomly-ordered Coords, but will not be resized
+     * @return dest, now with up to its first {@code width * height} items assigned to random Coords inside the given bounds
+     */
+    public Coord[] getRandomUniqueCells(final int startX, final int startY, final int width, final int height,
+                                        final Coord[] dest) {
+        if (width <= 0 || height <= 0 || dest == null || dest.length <= 0)
+            return dest;
+        int[] o = randomOrdering(width * height);
+        for (int i = 0; i < o.length && i < dest.length; i++) {
+            dest[i] = Coord.get(startX + o[i] % width, startY + o[i] / width);
+        }
+        return dest;
+    }
+
 }

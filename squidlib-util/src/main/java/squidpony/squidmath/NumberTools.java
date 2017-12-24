@@ -479,9 +479,9 @@ public class NumberTools {
      */
     public static float formCurvedFloat(final long start) {
         return   (intBitsToFloat((int)start >>> 9 | 0x3F000000)
-                + intBitsToFloat(((int)~start & 0x007FFFFF) | 0x3F000000)
                 + intBitsToFloat((int) (start >>> 41) | 0x3F000000)
-                + intBitsToFloat(((int) (~start >>> 32) & 0x007FFFFF) | 0x3F000000)
+                + intBitsToFloat(((int)(start ^ ~start >>> 20) & 0x007FFFFF) | 0x3F000000)
+                + intBitsToFloat(((int) (~start ^ start >>> 30) & 0x007FFFFF) | 0x3F000000)
                 - 3f);
     }
 

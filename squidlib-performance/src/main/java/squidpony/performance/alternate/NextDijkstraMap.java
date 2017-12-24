@@ -193,7 +193,7 @@ public class NextDijkstraMap implements Serializable {
      * initialize() method before using this class.
      */
     public NextDijkstraMap() {
-        rng = new RNG(new LightRNG());
+        rng = new RNG();
         path = new ArrayList<>();
     }
 

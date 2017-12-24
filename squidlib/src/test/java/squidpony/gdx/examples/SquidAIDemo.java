@@ -29,7 +29,6 @@ public class SquidAIDemo extends ApplicationAdapter {
 
     private Phase phase = Phase.ATTACK_ANIM;
     private RNG rng;
-    private LightRNG lrng;
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
@@ -67,8 +66,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         display.setAnimationDuration(0.35f);
         stage = new Stage(new ScreenViewport(), batch);
 
-        lrng = new LightRNG(0x1337BEEF);
-        rng = new RNG(lrng);
+        rng = new RNG(0x1337BEEF);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
 //        dungeonGen.addWater(10);

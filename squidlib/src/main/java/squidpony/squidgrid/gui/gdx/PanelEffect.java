@@ -553,7 +553,7 @@ public abstract class PanelEffect extends TemporalAction{
             Coord c;
             float f, color;
             int idx, seed = System.identityHashCode(this), clen = choices.length;
-            final long tick = LightRNG.determine((System.currentTimeMillis() >>> 7) * seed);
+            final long tick = ThrustAltRNG.determine((System.currentTimeMillis() >>> 7) * seed);
             for (int i = 0; i < len; i++) {
                 c = affected.get(i);
                 if(lightMap[c.x][c.y] <= 0.0)// || 0.6 * (lightMap[c.x][c.y] + percent) < 0.25)
@@ -567,7 +567,7 @@ public abstract class PanelEffect extends TemporalAction{
                     color = SColor.lerpFloatColors(colors[colors.length-1], NumberTools.setSelectedByte(colors[colors.length-1], 3, (byte)0), (Math.min(0.99f, f) * colors.length) % 1f);
                 else
                     color = SColor.lerpFloatColors(colors[idx], colors[idx+1], (f * colors.length) % 1f);
-                target.put(c.x, c.y, choices[(int) ((clen * (LightRNG.determine(tick + i) & 0x7FFFFFFFL)) >> 31)], color);
+                target.put(c.x, c.y, choices[ThrustAltRNG.determineBounded(tick + i, clen)], color);
             }
         }
 

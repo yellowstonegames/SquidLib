@@ -777,7 +777,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
      * the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more efficient than an RNG when
      * you're making a lot of calls on it.
-     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustRNG do
+     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustAltRNG do
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
@@ -802,7 +802,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * (without extra allocations) if this.width == width and this.height == height, and typically assigning
      * approximately half of the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more
      * efficient than an RNG when you're making a lot of calls on it.
-     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustRNG do
+     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustAltRNG do
      * @param width the width of the desired GreasedRegion
      * @param height the height of the desired GreasedRegion
      * @return this for chaining
@@ -833,9 +833,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Constructor for a random GreasedRegion of the given width and height.
-     * GreasedRegions are mutable, so you can add to this with insert() or insertSeveral(), among others.
-     * @param random a RandomnessSource (such as LightRNG or ThrustRNG) that this will use to generate its contents
+     * Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
+     * the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more efficient than an RNG when
+     * you're making a lot of calls on it, so you may prefer {@link #GreasedRegion(RandomnessSource, int, int)}.
+     * @param random an RNG that this will use to generate its contents
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
@@ -847,7 +848,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Reassigns this GreasedRegion by filling it with random values from random, reusing the current data storage
      * (without extra allocations) if this.width == width and this.height == height, and typically assigning
      * approximately half of the cells in this to "on" and the rest to off.
-     * @param random an RNG that should have a good nextLong() method; the default (LightRNG internally) should be fine
+     * @param random an RNG that should have a good nextLong() method; the default (ThrustAltRNG internally) should be fine
      * @param width the width of the desired GreasedRegion
      * @param height the height of the desired GreasedRegion
      * @return this for chaining
@@ -863,7 +864,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * the number of calls this makes). As such, this sacrifices the precision of the fraction to obtain significantly
      * better speed than generating one random number per cell, although the precision is probably good enough (fraction
      * is effectively rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0).
-     * @param random an RNG that should have a good approximateBits() method; the default (LightRNG internally) should be fine
+     * @param random an RNG that should have a good approximateBits() method; the default (ThrustAltRNG internally) should be fine
      * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1/64.0 (0.015625) between steps
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
@@ -893,7 +894,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * makes). As such, this sacrifices the precision of the fraction to obtain significantly better speed than
      * generating one random number per cell, although the precision is probably good enough (fraction is effectively
      * rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0).
-     * @param random an RNG that should have a good approximateBits() method; the default (LightRNG internally) should be fine
+     * @param random an RNG that should have a good approximateBits() method; the default (ThrustAltRNG internally) should be fine
      * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1/64.0 (0.015625) between steps
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion

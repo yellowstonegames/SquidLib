@@ -36,7 +36,7 @@ public class TuringPattern {
         if(substance == null) return null;
         long seed = 65537;
         for (int i = 0; i < substance.length; i++) {
-            substance[i] = (LightRNG.determine(++seed) >> 11) * fraction;
+            substance[i] = (ThrustAltRNG.determine(++seed) >> 11) * fraction;
         }
         return substance;
     }
@@ -60,7 +60,7 @@ public class TuringPattern {
     public static double[] initializeInto(double[] substance, int seed){
         if(substance == null) return null;
         for (int i = 0; i < substance.length; i++) {
-            substance[i] = (LightRNG.determine(++seed) >> 11) * fraction;
+            substance[i] = (ThrustAltRNG.determine(++seed) >> 11) * fraction;
         }
         return substance;
     }

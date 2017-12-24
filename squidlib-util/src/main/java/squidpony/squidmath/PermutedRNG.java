@@ -46,7 +46,7 @@ import java.io.Serializable;
  * @author Tommy Ettinger
  * @see PintRNG PintRNG is similar to this algorithm but uses only 32-bit math, where possible.
  */
-public class PermutedRNG implements RandomnessSource, StatefulRandomness, Serializable
+public class PermutedRNG implements RandomnessSource, StatefulRandomness, SkippingRandomness, Serializable
 {
 	/** 2 raised to the 53, - 1. */
     private static final long DOUBLE_MASK = ( 1L << 53 ) - 1;
@@ -258,6 +258,7 @@ public class PermutedRNG implements RandomnessSource, StatefulRandomness, Serial
      * @param advance Number of future generations to skip past. Can be negative to backtrack.
      * @return the number that would be generated after generating advance random numbers.
      */
+    @Override
     public long skip(final long advance)
     {
         // The method used here is based on Brown, "Random Number Generation

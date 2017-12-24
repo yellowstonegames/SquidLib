@@ -12,7 +12,6 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.HashMap;
@@ -21,7 +20,6 @@ public class ImageDemo extends ApplicationAdapter {
     SpriteBatch batch;
 
     private RNG rng;
-    private LightRNG lrng;
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] bareDungeon, lineDungeon;
@@ -44,8 +42,7 @@ public class ImageDemo extends ApplicationAdapter {
         display.setAnimationDuration(0.03f);
         stage = new Stage(new ScreenViewport(), batch);
 
-        lrng = new LightRNG(0x1337BEEF);
-        rng = new RNG(lrng);
+        rng = new RNG(0x1337BEEF);
 
         dungeonGen = new DungeonGenerator(width, height, rng);
         dungeonGen.addWater(10);

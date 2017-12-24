@@ -81,9 +81,9 @@ public class Spill {
      */
     public StatefulRNG rng;
     /**
-     * The StatefulRandomness, usually a LightRNG, that this uses. Can have its state read and set.
+     * The StatefulRandomness, usually a ThrustAltRNG, that this uses. Can have its state read and set.
      */
-    public StatefulRandomness lrng;
+    public StatefulRandomness sr;
 
     private boolean initialized = false;
     /**
@@ -91,8 +91,8 @@ public class Spill {
      * initialize() method before using this class.
      */
     public Spill() {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+        sr = new ThrustAltRNG();
+        rng = new StatefulRNG(sr);
 
         fresh = new OrderedSet<>();
     }
@@ -104,22 +104,22 @@ public class Spill {
      * If you use this constructor, you must call an  initialize() method before using this class.
      */
     public Spill(RNG random) {
-        lrng = new LightRNG(random.nextLong());
-        rng = new StatefulRNG(lrng);
+        sr = new ThrustAltRNG(random.nextLong());
+        rng = new StatefulRNG(sr);
 
         fresh = new OrderedSet<>();
     }
 
     /**
-     * Construct a Spill without a level to actually scan. This constructor allows you to specify a RandomnessSource
-     * in the form of a LightRNG, which will be referenced in this class (if the state of random changes because this
+     * Construct a Spill without a level to actually scan. This constructor allows you to specify a StatefulRandomness
+     * such as ThrustAltRNG, which will be referenced in this class (if the state of random changes because this
      * object needed a random number, the state change will be reflected in the code that passed random to here).
      *
      * If you use this constructor, you must call an  initialize() method before using this class.
      */
     public Spill(StatefulRandomness random) {
-        lrng = random;
-        rng = new StatefulRNG(lrng);
+        sr = random;
+        rng = new StatefulRNG(sr);
 
         fresh = new OrderedSet<>();
     }
@@ -129,8 +129,8 @@ public class Spill {
      * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls
      */
     public Spill(final boolean[][] level) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+        sr = new ThrustAltRNG();
+        rng = new StatefulRNG(sr);
 
         initialize(level);
     }
@@ -140,8 +140,8 @@ public class Spill {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final boolean[][] level, Measurement measurement) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+        sr = new ThrustAltRNG();
+        rng = new StatefulRNG(sr);
 
         this.measurement = measurement;
 
@@ -157,8 +157,8 @@ public class Spill {
      * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
      */
     public Spill(final char[][] level) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+        sr = new ThrustAltRNG();
+        rng = new StatefulRNG(sr);
 
         initialize(level);
     }
@@ -172,8 +172,8 @@ public class Spill {
      * @param alternateWall the char that will be interpreted as a wall in {@code level}
      */
     public Spill(final char[][] level, char alternateWall) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+        sr = new ThrustAltRNG();
+        rng = new StatefulRNG(sr);
 
         initialize(level, alternateWall);
     }
@@ -188,8 +188,8 @@ public class Spill {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement) {
-        lrng = new LightRNG();
-        rng = new StatefulRNG(lrng);
+        sr = new ThrustAltRNG();
+        rng = new StatefulRNG(sr);
         this.measurement = measurement;
 
         initialize(level);
@@ -208,8 +208,8 @@ public class Spill {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement, RNG random) {
-        lrng = new LightRNG(random.nextLong());
-        rng = new StatefulRNG(lrng);
+        sr = new ThrustAltRNG(random.nextLong());
+        rng = new StatefulRNG(sr);
         this.measurement = measurement;
 
         initialize(level);
@@ -227,8 +227,8 @@ public class Spill {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement, StatefulRandomness random) {
-        lrng = random;
-        rng = new StatefulRNG(lrng);
+        sr = random;
+        rng = new StatefulRNG(sr);
         this.measurement = measurement;
 
         initialize(level);

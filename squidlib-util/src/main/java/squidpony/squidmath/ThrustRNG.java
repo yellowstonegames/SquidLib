@@ -3,6 +3,8 @@ package squidpony.squidmath;
 import squidpony.StringKit;
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
+
 /**
  * A hybrid of the type of algorithm LightRNG uses with some of the specific steps of a linear congruential generator.
  * This RandomnessSource has no failures or even anomalies when tested with PractRand (even LightRNG has anomalies),
@@ -45,7 +47,8 @@ import squidpony.annotation.Beta;
  * Created by Tommy Ettinger on 8/3/2017.
  */
 @Beta
-public final class ThrustRNG implements StatefulRandomness {
+public final class ThrustRNG implements StatefulRandomness, SkippingRandomness, Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * Can be any long value.
      */
@@ -123,6 +126,7 @@ public final class ThrustRNG implements StatefulRandomness {
      * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number
      * @return the random long generated after skipping forward or backwards by {@code advance} numbers
      */
+    @Override
     public final long skip(long advance) {
         long z = (state += 0x9E3779B97F4A7C15L * advance);
         z = (z ^ z >>> 26) * 0x2545F4914F6CDD1DL;

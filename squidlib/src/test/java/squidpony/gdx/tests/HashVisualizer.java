@@ -69,8 +69,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
-    private int hashMode = 64, rngMode = 34, noiseMode = 0;
+    private int testType = 5;
+    private int hashMode = 64, rngMode = 38, noiseMode = 0;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -639,6 +639,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     {
         return n * 0.5f + 0.5f;
     }
+
+    public static long vortex(long state, final long stream) {
+        return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (stream * 0x9E3779B97F4A7BB5L | 1L)) ^ (state >>> 28);
+    }
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -894,7 +899,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 5:
                                 mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 46;
+                                rngMode %= 48;
                                 break;
                             case 0:
                                 hashMode++;
@@ -2480,25 +2485,25 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                         */
-                    case 78: // case 4:
-                        Gdx.graphics.setTitle("Merlin Noise 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 4:
+                        Gdx.graphics.setTitle("ColorNoise 2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = MerlinNoise.noise3D(x, y, ctr, 3);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                display.put(x, y,
+                                        ColorNoise.colorNoise(x * 0.0625f + 20f + ctr * 0.05f, y * 0.0625f + 30f + ctr * 0.05f, 1234));
                             }
                         }
                         break;
-                    case 79: //case 5:
-                        Gdx.graphics.setTitle("Merlin Noise Alt 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 5:
+                        Gdx.graphics.setTitle("ColorNoise 3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = MerlinNoise.noise3D_alt(x, y, ctr, 3);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                display.put(x, y,
+                                        ColorNoise.colorNoise(x * 0.05f + 20f, y * 0.05f + 30f, ctr * 0.05f, 1234));
                             }
                         }
                         break;
-                    case 6:
+                        case 6:
                         Gdx.graphics.setTitle("Merlin Noise Alt 3D Emphasized, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -3462,24 +3467,25 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 4: //case 78:
-                        Gdx.graphics.setTitle("ColorNoise 2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 78:
+                        Gdx.graphics.setTitle("Merlin Noise 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                                ColorNoise.colorNoise(x * 0.0625f + 20f + ctr * 0.05f, y * 0.0625f + 30f + ctr * 0.05f, 1234));
+                                iBright = MerlinNoise.noise3D(x, y, ctr, 3);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
-                    case 5: //case 79:
-                        Gdx.graphics.setTitle("ColorNoise 3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 79:
+                        Gdx.graphics.setTitle("Merlin Noise Alt 3D, x3 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        ColorNoise.colorNoise(x * 0.05f + 20f, y * 0.05f + 30f, ctr * 0.05f, 1234));
+                                iBright = MerlinNoise.noise3D_alt(x, y, ctr, 3);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
+
                     case 80:
                         Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         s0 = MathUtils.sinDeg(ctr * 0.625f + 11f) * 0.015f;
@@ -4203,7 +4209,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGet(ThrustAltRNG.determine(extra + y) >>> 32 | 255));
                             }
                         }
-                        Gdx.graphics.setTitle("ThrustAltRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("ThrustAltRNG color (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 45:
                         code = ThrustAltRNG.determine(ctr);
@@ -4214,7 +4220,26 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("ThrustAltRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("ThrustAltRNG gray (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 46:
+                        for (int x = 0; x < width; x++) {
+                            extra = vortex(x, ctr);
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGet(vortex(y, extra) >>> 32 | 255));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Vortex color (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 47:
+                        for (int x = 0; x < width; x++) {
+                            extra = vortex(x, ctr);
+                            for (int y = 0; y < height; y++) {
+                                iBright = (int)(vortex(y, extra) >>> 56);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Vortex gray (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                 }
             }

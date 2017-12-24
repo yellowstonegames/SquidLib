@@ -3,13 +3,7 @@ package squidpony.squidgrid.mapping;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.PoissonDisk;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -173,7 +167,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      */
     public DungeonGenerator(int width, int height)
     {
-    	this(width, height, new RNG(new LightRNG()));
+    	this(width, height, new RNG());
     }
 
     /**

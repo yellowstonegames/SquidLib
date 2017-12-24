@@ -134,7 +134,8 @@ public class EverythingDemo extends ApplicationAdapter {
 
     @Override
     public void create() {
-        // gotta have a random number generator. We seed a LightRNG with any long we want, then pass that to an RNG.
+        // gotta have a random number generator. We give a seed to StatefulRNG, which will ensure the dungeon is the
+        // same every time.
         rng = new StatefulRNG(0xBADBEEFB0BBL);
 
         // for demo purposes, we allow changing the SquidColorCenter and the filter effect associated with it.

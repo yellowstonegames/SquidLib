@@ -4,12 +4,7 @@ import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.Spill;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
-
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.*;
 
 import java.util.*;
 
@@ -40,9 +35,9 @@ public class CloudAOE implements AOE {
 
     public CloudAOE(Coord center, int volume, Radius radiusType)
     {
-        LightRNG l = new LightRNG();
-        seed = l.getState();
-        spill = new Spill(new RNG(l));
+        ThrustAltRNG tar = new ThrustAltRNG();
+        seed = tar.getState();
+        spill = new Spill(new RNG(tar));
         this.center = center;
         this.volume = volume;
         expanding = false;
@@ -65,9 +60,9 @@ public class CloudAOE implements AOE {
 
     public CloudAOE(Coord center, int volume, Radius radiusType, int minRange, int maxRange)
     {
-        LightRNG l = new LightRNG();
-        seed = l.getState();
-        spill = new Spill(new RNG(l));
+        ThrustAltRNG tar = new ThrustAltRNG();
+        seed = tar.getState();
+        spill = new Spill(new RNG(tar));
         this.center = center;
         this.volume = volume;
         expanding = false;
@@ -92,7 +87,7 @@ public class CloudAOE implements AOE {
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed)
     {
         seed = rngSeed;
-        spill = new Spill(new RNG(new LightRNG(rngSeed)));
+        spill = new Spill(new RNG(rngSeed));
         this.center = center;
         this.volume = volume;
         expanding = false;
@@ -115,7 +110,7 @@ public class CloudAOE implements AOE {
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed, int minRange, int maxRange)
     {
         seed = rngSeed;
-        spill = new Spill(new RNG(new LightRNG(rngSeed)));
+        spill = new Spill(new RNG(rngSeed));
         this.center = center;
         this.volume = volume;
         expanding = false;
@@ -233,7 +228,7 @@ public class CloudAOE implements AOE {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(seed);
+            sp.sr.setState(seed);
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
@@ -255,7 +250,7 @@ public class CloudAOE implements AOE {
 
             t = ts[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(seed);
+            sp.sr.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -378,7 +373,7 @@ public class CloudAOE implements AOE {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(seed);
+            sp.sr.setState(seed);
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
@@ -402,7 +397,7 @@ public class CloudAOE implements AOE {
 
             t = pts[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(seed);
+            sp.sr.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -451,7 +446,7 @@ public class CloudAOE implements AOE {
 
             t = lts[i - pts.length];
             sp = new Spill(dungeon, spill.measurement);
-            sp.lrng.setState(seed);
+            sp.sr.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -645,7 +640,7 @@ public class CloudAOE implements AOE {
         if(!expanding)
         {
             spill.reset();
-            spill.lrng.setState(seed);
+            spill.sr.setState(seed);
         }
         return r;
     }

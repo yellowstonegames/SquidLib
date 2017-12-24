@@ -48,7 +48,7 @@ public class ShortSet implements Serializable{
     private int stashCapacity;
     private int pushIterations;
     private int mask;
-    private static LightRNG rng;
+    private static long rngState;
 
     private ShortSetIterator iterator1, iterator2;
 
@@ -71,7 +71,8 @@ public class ShortSet implements Serializable{
         if (initialCapacity > 1 << 30) throw new IllegalArgumentException("initialCapacity is too large: " + initialCapacity);
         capacity = nextPowerOfTwo(initialCapacity);
 
-        rng = new LightRNG();
+        rngState = (long) ((Math.random() - 0.5) * 0x10000000000000L)
+                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L);
 
         if (loadFactor <= 0) throw new IllegalArgumentException("loadFactor must be > 0: " + loadFactor);
         this.loadFactor = loadFactor;
@@ -217,7 +218,7 @@ public class ShortSet implements Serializable{
         int i = 0, pushIterations = this.pushIterations;
         do {
             // Replace the key and value for one of the hashes.
-            switch (rng.nextInt(2)) {
+            switch (ThrustAltRNG.determineBounded(++rngState, 3)) {
                 case 0:
                     evictedKey = key1;
                     keyTable[index1] = insertKey;

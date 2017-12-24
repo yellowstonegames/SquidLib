@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import org.junit.Test;
+import squidpony.StringKit;
 import squidpony.squidmath.*;
 
 import static org.junit.Assert.assertTrue;
@@ -48,6 +49,12 @@ public class RNGFeatureTest {
                 total += c * 0x1p-5;
             }
             if(PRINTING) System.out.println("\n" + total + "\n");
+        }
+    }
+    @Test
+    public void testHasty() {
+        for (int i = 0; i < 100; i++) {
+            System.out.println(StringKit.hex(rng.nextIntHasty(0x80000000)));
         }
     }
 }

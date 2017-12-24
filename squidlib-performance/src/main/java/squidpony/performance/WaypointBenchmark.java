@@ -46,7 +46,6 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.concurrent.TimeUnit;
@@ -55,9 +54,9 @@ public class WaypointBenchmark {
 
     public static final int DIMENSION = 60, PATH_LENGTH = (DIMENSION - 2) * (DIMENSION - 2);
     public static DungeonGenerator dungeonGen =
-            new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+            new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
     public static SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION,
-            new StatefulRNG(new LightRNG(0x1337BEEFDEAL)));
+            new StatefulRNG(0x1337BEEFDEAL));
 
     public static final char[][] map;
     public static final short[] floors;

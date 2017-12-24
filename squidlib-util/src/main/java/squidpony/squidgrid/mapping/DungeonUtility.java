@@ -27,7 +27,7 @@ public class DungeonUtility {
     }
 
     public DungeonUtility(RNG rng) {
-        this.rng = new StatefulRNG(new LightRNG(rng.nextLong()));
+        this.rng = new StatefulRNG(rng.nextLong());
     }
 
     /**

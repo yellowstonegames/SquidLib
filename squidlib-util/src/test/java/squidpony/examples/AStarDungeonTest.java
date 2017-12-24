@@ -2,10 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.AStarSearch;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.Collections;
 import java.util.Queue;
@@ -16,7 +13,7 @@ import java.util.Queue;
 public class AStarDungeonTest {
     public static void main(String[] args) {
         for (AStarSearch.SearchType st : AStarSearch.SearchType.values()) {
-            LightRNG lrng = new LightRNG(0x57a8deadbeef0ffaL);
+            ThrustAltRNG lrng = new ThrustAltRNG(0x57a8deadbeef0ffaL);
             RNG rng = new RNG(lrng);
             DungeonGenerator dg = new DungeonGenerator(40, 40, rng);
             char[][] dun = dg.generate();

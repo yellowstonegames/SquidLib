@@ -3,7 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.IFilter;
-import squidpony.squidmath.LightRNG;
+import squidpony.squidmath.ThrustAltRNG;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -412,16 +412,17 @@ public class Filters {
      * blue components of any color it is told to alter. Good for a "glitchy screen" effect.
      */
     public static class WiggleFilter extends Filter<Color> {
-        LightRNG rng;
+        long rngState;
         public WiggleFilter()
         {
-            rng = new LightRNG();
+            rngState = (long) ((Math.random() - 0.5) * 0x10000000000000L)
+                    ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L);
         }
         @Override
         public Color alter(float r, float g, float b, float a) {
-            return new Color(r - 0.1f + rng.nextFloat() * 0.2f,
-                    g - 0.1f + rng.nextFloat() * 0.2f,
-                    b - 0.1f + rng.nextFloat() * 0.2f,
+            return new Color(r - 0.1f + ThrustAltRNG.determineFloat(++rngState) * 0.2f,
+                    g - 0.1f + ThrustAltRNG.determineFloat(++rngState) * 0.2f,
+                    b - 0.1f + ThrustAltRNG.determineFloat(++rngState) * 0.2f,
                     a);
         }
     }
@@ -433,7 +434,7 @@ public class Filters {
      * {@link SColor#ACHROMATIC_SERIES}. This can also be used to enforce usage of a limited color palette such as
      * one of DawnBringer's popular pixel art palettes, {@link SColor#DAWNBRINGER_16} and
      * {@link SColor#DAWNBRINGER_32}. Beyond 32 colors, the palettes {@link SColor#VARIED_PALETTE} with 56 colors
-     * and {@link SColor#COLOR_WHEEL_PALETTE} with 189 colors can be used.
+     * and {@link SColor#COLOR_WHEEL_PALETTE} with 198 colors can be used.
      *
      * Preview using BLUE_GREEN_SERIES foreground, ACHROMATIC_SERIES background: http://i.imgur.com/2HdZpC9.png
      */

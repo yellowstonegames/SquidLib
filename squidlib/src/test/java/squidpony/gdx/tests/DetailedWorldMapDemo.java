@@ -299,10 +299,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                     NumberTools.bounce((high + moist) * (4.1 + high - hot)) * 0.5 + 0.5; // * (7.5 + moist * 1.9 - hot * 0.9)
             }
         }
-        long seedA = LightRNG.determine(seed),
-                seedB = LightRNG.determine(seed + seedA),
-                seedC = LightRNG.determine(seed + seedA + seedB);
-        counter = LightRNG.determine(seed + seedA + seedB + seedC) >>> 48;
+        long seedA = ThrustAltRNG.determine(seed),
+                seedB = ThrustAltRNG.determine(seed + seedA),
+                seedC = ThrustAltRNG.determine(seed + seedA + seedB);
+        counter = ThrustAltRNG.determine(seed + seedA + seedB + seedC) >>> 48;
         //Noise.seamless3D(cloudData, seedC, 3);
     }
 
