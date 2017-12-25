@@ -175,10 +175,7 @@ public class NLFSR implements StatefulRandomness, Serializable {
      */
     @Override
     public void setState(final long seed) {
-        if(seed <= 0 || seed > 134217727)
-            state = 134217727;
-        else
-            state = (int) seed;
+         state = (int) ((seed & 0x7FFFFFFFFFFFFFFFL) % 134217727) + 1;
     }
 
     @Override

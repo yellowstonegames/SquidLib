@@ -53,12 +53,10 @@ import java.util.Arrays;
  * not the best to use because of known statistical problems and low speed, but its period
  * is absurdly high, {@code pow(2, 19937) - 1}. {@link LongPeriodRNG} has significantly
  * better speed and statistical quality, and also has a large period, {@code pow(2, 1024) - 1}.
- * {@link BeardRNG} could have a period as high as {@code pow(2, 4096)}, but there are no
- * guarantees on its period, though statistically it tests well. {@link IsaacRNG} is slower, but
- * offers impeccable quality, and from its webpage, "Cycles are guaranteed to be at least
- * {@code pow(2, 40)} values long, and they are {@code pow(2, 8295)} values long on average."
- * IsaacRNG should be your choice if security is a concern, LongPeriodRNG if quality and speed
- * are important (BeardRNG may be good to evaluate as well), and MersenneTwister should be used
+ * {@link IsaacRNG} is slower, but offers impeccable quality, and from its webpage, "Cycles
+ * are guaranteed to be at least {@code pow(2, 40)} values long, and they are
+ * {@code pow(2, 8295)} values long on average." IsaacRNG should be your choice if security is a
+ * concern, LongPeriodRNG if quality and speed are important, and MersenneTwister should be used
  * if period is the only criterion to judge an RNG on. There may be a CMWC generator added at
  * some point, which would have potentially a greater period than the Mersenne Twister.
  * <br>

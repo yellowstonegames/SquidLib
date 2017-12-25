@@ -19,7 +19,7 @@ public class LOSComparisonTest {
     {
         for(int l : new int[]{1, 3, 4, 5, 6, 7, 8, 9}) {
             //seed is, in base 36, the number SQUIDLIB
-            StatefulRNG rng = new StatefulRNG(new SlapRNG(2252637788195L));
+            StatefulRNG rng = new StatefulRNG(2252637788195L);
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
 
             char[][] dungeon = dungeonGenerator.generate(TilesetType.OPEN_AREAS);
@@ -60,7 +60,7 @@ public class LOSComparisonTest {
         }
         for(int l : new int[]{1, 3, 4, 5, 6, 7, 8, 9}) {
             //seed is, in base 36, the number SQUIDLIB
-            StatefulRNG rng = new StatefulRNG(new SlapRNG(2252637788195L));
+            StatefulRNG rng = new StatefulRNG(2252637788195L);
             DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
 
             char[][] dungeon = dungeonGenerator.generate(TilesetType.OPEN_AREAS);

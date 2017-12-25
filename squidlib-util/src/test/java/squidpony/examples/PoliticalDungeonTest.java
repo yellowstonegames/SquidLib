@@ -14,7 +14,7 @@ import squidpony.squidmath.*;
  */
 public class PoliticalDungeonTest {
     public static void main(String[] args) {
-        RNG rng = new RNG(new BeardRNG("Stake a claim to your land in THE DUNGEON!"));
+        RNG rng = new RNG(new LongPeriodRNG("Stake a claim to your land in THE DUNGEON!"));
         DungeonGenerator dg = new DungeonGenerator(200, 100, rng);
         char[][] dun = dg.generate(TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS);
         GreasedRegion gr = new GreasedRegion(dun, '.');

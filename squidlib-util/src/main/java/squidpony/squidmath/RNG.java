@@ -43,29 +43,26 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * scrutinized; it can generate 36893488147419103232 numbers before the entire cycle
  * repeats, but patterns can easily appear before that.
  * <br>
- * There are many more RandomnessSource implementations! If XoRoRNG's tremendous
+ * There are many more RandomnessSource implementations! If XoRoRNG's large
  * period is not enough, then we also supply {@link LongPeriodRNG}, which has a
- * period of {@code pow(2, 1024) - 1}, and {@link BeardRNG}, which has an unknown
- * exact period but is likely to be very large, since it has 4 times as much state
- * as LongPeriodRNG and so could have at most a period of {@code pow(2, 4096)}.
- * You might want significantly less predictable random results, which
- * {@link IsaacRNG} can provide, along with a large period. The quality of
- * {@link PermutedRNG} is also good, usually, and it has a sound basis in PCG-Random,
- * an involved library with many variants on its RNGs. There may be reasons why
- * you would want a random number generator that uses 32-bit math instead of the
- * more common 64-bit math, but using a 32-bit int on desktop and Android won't act
- * the same as that same 32-bit int on GWT. Since GWT is stuck with JavaScript's
- * annoying implementation of ints with doubles, overflow (which is needed for an
+ * tremendous period of {@code pow(2, 1024) - 1}. You might want significantly less
+ * predictable random results, which  {@link IsaacRNG} can provide, along with a
+ * large period. The quality of {@link PermutedRNG} is also good, usually, and it
+ * has a sound basis in PCG-Random, an involved library with many variants on its
+ * RNGs.
+ * There may be reasons why you would want a random number generator that uses 32-bit
+ * math instead of the more common 64-bit math, but using a 32-bit int on desktop and
+ * Android won't act the same as that same 32-bit int on GWT. Since GWT is stuck with
+ * JavaScript's implementation of ints with doubles, overflow (which is needed for an
  * RNG) doesn't work at all with ints, but does with GWT's implementation of longs.
  * 32-bit math generators were a major part of SquidLib's development at one point
  * before the discrepancies between desktop and GWT were discovered; they include
  * {@link Light32RNG} (same algorithm as LightRNG, shrunk down to use ints),
- * {@link BardRNG} (a huge-period RNG like BeardRNG), {@link Isaac32RNG} (32-bit
- * variant on IsaacRNG), {@link PintRNG} (based on PermutedRNG, using PCG-Random),
- * and {@link FlapRNG} (like Lap, only good for speed). Now, any code that targets
- * non-GWT platforms is free to use them, though they are often slower when they
- * need to generate longs (which is often), but they should not be used in code
- * that targets GWT.
+ * {@link Isaac32RNG} (32-bit variant on IsaacRNG), {@link PintRNG} (based on
+ * PermutedRNG, using PCG-Random), and {@link FlapRNG} (like Lap, only good for
+ * speed). Now, any code that targets non-GWT platforms is free to use them, though
+ * they are often slower when they need to generate longs (which is often), but they
+ * should not be used in code that targets GWT.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
  * @author smelC

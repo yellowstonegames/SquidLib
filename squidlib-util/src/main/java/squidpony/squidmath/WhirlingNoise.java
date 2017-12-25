@@ -789,14 +789,6 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     }
 
     /*
-    // makes the noise appear muddled and murky; probably not ideal
-    protected static float dotterize(final float x, final float y, final int i, final int j)
-    {
-        return ZapRNG.randomSignedFloat(i * 0x9E3779B97F4A7C15L, j * 0xC6BC279692B5C483L) * x + ZapRNG.randomSignedFloat(j * 0x8E3779B97F4A7C15L, i * 0x632AE59B69B3C209L) * y;
-    }
-    */
-
-    /*
     public static double interpolate(double t, double low, double high)
     {
         //debug

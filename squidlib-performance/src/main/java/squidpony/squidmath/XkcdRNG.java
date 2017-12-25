@@ -13,7 +13,7 @@ import java.io.Serializable;
  * Primarily useful for benchmarking, when you want to test the absolute minimum work a RandomnessSource can do as a
  * control group in a larger benchmark.
  */
-public class XkcdRNG implements RandomnessSource, Serializable {
+public final class XkcdRNG implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 4L;
     /**
      * Constructs an XkcdRNG with the default state (0 bits) and corresponding qualities of randomness (period of 1).

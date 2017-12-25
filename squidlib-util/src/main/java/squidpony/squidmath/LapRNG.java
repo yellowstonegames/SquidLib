@@ -18,7 +18,6 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 5/25/2017.
  * @see FlapRNG FlapRNG is similar to LapRNG but is implemented using int math; LapRNG should usually be preferred
- * @see ZapRNG ZapRNG is based on LapRNG, and is somewhat slower but has better quality with the same period
  */
 @Beta
 public class LapRNG implements RandomnessSource, Serializable {
