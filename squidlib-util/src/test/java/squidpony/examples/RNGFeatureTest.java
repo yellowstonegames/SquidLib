@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import org.junit.Assert;
 import org.junit.Test;
 import squidpony.StringKit;
 import squidpony.squidmath.*;
@@ -56,5 +57,19 @@ public class RNGFeatureTest {
         for (int i = 0; i < 100; i++) {
             System.out.println(StringKit.hex(rng.nextIntHasty(0x80000000)));
         }
+    }
+    @Test
+    public void testOrdering() {
+        tar.setState(111L);
+        int[] ord1 = rng.randomOrdering(20);
+        tar.setState(111L);
+
+        int[] ord2 = new int[20];
+        rng.randomOrdering(20, ord2);
+        if (PRINTING) {
+            System.out.println(StringKit.join(", ", ord1));
+            System.out.println(StringKit.join(", ", ord2));
+        }
+        Assert.assertArrayEquals(ord1, ord2);
     }
 }

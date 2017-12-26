@@ -14,7 +14,7 @@ import java.util.HashMap;
  * Created by Tommy Ettinger on 11/29/2015.
  */
 public class LanguageGenTest {
-    public static boolean PRINTING = true;
+    public static boolean PRINTING = false;
     @Test
     public void testOutput() {
         if(!PRINTING) return;

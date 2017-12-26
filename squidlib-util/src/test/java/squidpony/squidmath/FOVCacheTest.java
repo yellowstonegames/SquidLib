@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
  * Created by Tommy Ettinger on 10/8/2015.
  */
 public class FOVCacheTest {
-    public static final boolean PRINTING = true;
+    public static final boolean PRINTING = false;
     @Test
     public void testCache()
     {

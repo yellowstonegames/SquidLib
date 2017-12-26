@@ -13,7 +13,8 @@ import static squidpony.squidmath.CoordPacker.*;
 
 /**
  * A combined FOV calculator, partial LOS calculator, FOV/LOS compressor, and tool to store/query/extract compressed
- * FOV/LOS data. It operates on one level map at a time and stores FOV maps for all cells in a memory-efficient way,
+ * FOV/LOS data; it is less generally-useful than it sounds, and using {@link FOV} is usually easier and faster.
+ * This class operates on one level map at a time and stores FOV maps for all cells in a memory-efficient way,
  * though it is likely to take too long to process large maps to be useful on those unless run before the player gets
  * to that map. (Large here means more than 10,000 total cells, or 100 width * 100 height, but this rough upper bound is
  * based on the capability of the machine running the calculations, and should be expected to be much lower on, for
@@ -76,6 +77,10 @@ import static squidpony.squidmath.CoordPacker.*;
  * 100x100 dungeon map takes approximately 19 ms while running Ripple FOV for the same set of cells takes over 700 ms.
  * Benchmarks are conducted using JMH, a tool developed by the OpenJDK team, in a Maven module called
  * squidlib-performance that is not distributed with SquidLib but is available if you download the SquidLib source code.
+ * However, because the benchmarks don't take the initial calculations into account, they can be somewhat misleading;
+ * there's also overhead and complexity involved with the background threads this uses. Newer benchmarks that test some
+ * more recent additions to FOV, like {@link FOV#reuseFOV(double[][], double[][], int, int, double)}, show those methods
+ * as faster than retrieving a compressed FOV map from FOVCache, largely because they can avoid creating garbage.
  *
  * @see squidpony.squidmath.CoordPacker has various utilities for operating on compressed data of this kind.
  * Created by Tommy Ettinger on 10/7/2015.

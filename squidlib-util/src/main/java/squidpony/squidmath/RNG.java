@@ -638,8 +638,8 @@ public class RNG implements Serializable {
         for (int i = 0; i < n; i++) {
             dest[i] = i;
         }
-        for (int i = n; i > 1; i--) {
-            final int r = nextIntHasty(i),
+        for (int i = n - 1; i > 0; i--) {
+            final int r = nextIntHasty(i+1),
                     t = dest[r];
             dest[r] = dest[i];
             dest[i] = t;
