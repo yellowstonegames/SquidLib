@@ -61,8 +61,8 @@ public class FontTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 170, 200, 220};
-        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  25,  25,  25};
+        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 90, 170, 200, 220};
+        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  25, 25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabItalicFont().width(ZOOM * 14).height(28).initBySize(),
@@ -85,7 +85,7 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getStretchableWideSlabLightFont().width(ZOOM * 15).height(21).initBySize(),
                 DefaultResources.getStretchableWideFont().width(ZOOM * 15).height(21).initBySize(),
                 DefaultResources.getStretchableWideLightFont().width(ZOOM * 15).height(21).initBySize(),
-
+                new TextCellFactory().fontDistanceField("SourceHanCodeJP-Regular-distance.fnt", "SourceHanCodeJP-Regular-distance.png").setSmoothingMultiplier(12f).width(ZOOM * 17).height(ZOOM * 18).initBySize(),
                 DefaultResources.getStretchableOrbitFont().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
                 DefaultResources.getStretchableCleanFont().initBySize(),
@@ -115,6 +115,7 @@ public class FontTest extends ApplicationAdapter {
                 new StretchViewport(factories[18].width() * widths[18], factories[18].height() * heights[18]),
                 new StretchViewport(factories[19].width() * widths[19], factories[19].height() * heights[19]),
                 new StretchViewport(factories[20].width() * widths[20], factories[20].height() * heights[20]),
+                new StretchViewport(factories[21].width() * widths[21], factories[21].height() * heights[21]),
         };
         displays = new SquidPanel[]{
                 new SquidPanel(widths[0], heights[0], factories[0]).setTextSize(factories[0].width() + 0.5f * ZOOM, factories[0].height() + 1f * ZOOM),
@@ -135,9 +136,10 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[15], heights[15], factories[15]).setTextSize(factories[15].width() + 2f * ZOOM, factories[15].height() + 2.75f * ZOOM),
                 new SquidPanel(widths[16], heights[16], factories[16]).setTextSize(factories[16].width() + 2f * ZOOM, factories[16].height() + 2.75f * ZOOM),
                 new SquidPanel(widths[17], heights[17], factories[17]).setTextSize(factories[17].width() + 2f * ZOOM, factories[17].height() + 2.75f * ZOOM),
-                new SquidPanel(widths[18], heights[18], factories[18]).setTextSize(factories[18].width() + 1f * ZOOM, factories[18].height() + 2f * ZOOM),
+                new SquidPanel(widths[18], heights[18], factories[18]).setTextSize(factories[18].width() + 0f * ZOOM, factories[18].height() + 0f * ZOOM),
                 new SquidPanel(widths[19], heights[19], factories[19]).setTextSize(factories[19].width() + 1f * ZOOM, factories[19].height() + 2f * ZOOM),
                 new SquidPanel(widths[20], heights[20], factories[20]).setTextSize(factories[20].width() + 1f * ZOOM, factories[20].height() + 2f * ZOOM),
+                new SquidPanel(widths[21], heights[21], factories[21]).setTextSize(factories[21].width() + 1f * ZOOM, factories[21].height() + 2f * ZOOM),
         };
         final String[] samples = {"The quick brown fox jumps over the lazy dog.",
                 "HAMBURGEVONS",

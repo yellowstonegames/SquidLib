@@ -24,7 +24,7 @@ import java.io.Serializable;
  */
 @Beta
 public final class JabRNG implements StatefulRandomness, Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     /**
      * Can be any odd-number long value.
      */
@@ -71,9 +71,9 @@ public final class JabRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public final int next(int bits) {
-        long z = (state += 0x6A5D39EAE12657BAL);
-        z *= (z ^ (z >>> 26));
-        return (int)(z ^ z >>> 22) >>> (32 - bits);
+        long z = (state += 0x3C6EF372FE94F82AL);
+        z *= (z ^ (z >>> 21));
+        return (int)(z ^ z >>> 28) >>> (32 - bits);
     }
 
     /**
@@ -86,26 +86,25 @@ public final class JabRNG implements StatefulRandomness, Serializable {
      */
     @Override
     public final long nextLong() {
-        long z = (state += 0x6A5D39EAE12657BAL);
-        z *= (z ^ (z >>> 26));
-        return z ^ z >>> 22;
+        long z = (state += 0x3C6EF372FE94F82AL);
+        z *= (z ^ (z >>> 21));
+        return z ^ z >>> 28;
     }
 
     /**
-     * Call with {@code nextLong(z += 0x6A5D39EAE12657BAL)}. Using -= is also OK. The value for z must be odd; you
+     * Call with {@code nextLong(z += 0x3C6EF372FE94F82AL)}. Using -= is also OK. The value for z must be odd; you
      * can ensure this initially with {@code z |= 1} if it is set from a random source or user input. Using the given
      * increment (or decrement) value for z will keep an odd-number value for z as an odd number; this is important to
      * the behavior of this algorithm.
-     * @param z an odd-number long that should change with {@code z += 0x6A5D39EAE12657BAL} each time this is called
+     * @param z an odd-number long that should change with {@code z += 0x3C6EF372FE94F82AL} each time this is called
      * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)
      */
     public static long randomize(long z) {
-        z *= (z ^ (z >>> 26));
-        return z ^ z >>> 22;
+        return (z *= (z ^ (z >>> 21))) ^ (z >>> 28);
     }
 
     /**
-     * Advances or rolls back the JabRNG's state without actually generating each number. Skips forward
+     * Advances or rolls back the Jab63RNG's state without actually generating each number. Skips forward
      * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
      * and returns the random number produced at that step (you can get the state with {@link #getState()}).
      *
@@ -113,10 +112,9 @@ public final class JabRNG implements StatefulRandomness, Serializable {
      * @return the random long generated after skipping forward or backwards by {@code advance} numbers
      */
     public final long skip(long advance) {
-        long z = (state += 0x6A5D39EAE12657BAL * advance);
-        z *= (z ^ (z >>> 26));
-        return z ^ z >>> 22;
-
+        long z = (state += 0x3C6EF372FE94F82AL * advance);
+        z *= (z ^ (z >>> 21));
+        return z ^ z >>> 28;
     }
 
 
@@ -141,9 +139,9 @@ public final class JabRNG implements StatefulRandomness, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        JabRNG JabRNG = (JabRNG) o;
+        JabRNG jabRNG = (JabRNG) o;
 
-        return state == JabRNG.state;
+        return state == jabRNG.state;
     }
 
     @Override
@@ -167,9 +165,9 @@ public final class JabRNG implements StatefulRandomness, Serializable {
      */
     public static long determine(long state)
     {
-        state = state * 0x6A5D39EAE12657BAL | 1L;
-        state *= (state ^ (state >>> 26));
-        return state ^ state >>> 22;
+        state = state * 0x3C6EF372FE94F82AL | 1L;
+        state *= (state ^ (state >>> 21));
+        return state ^ state >>> 28;
     }
 
     /**
@@ -186,8 +184,8 @@ public final class JabRNG implements StatefulRandomness, Serializable {
      */
     public static int determineBounded(long state, final int bound)
     {
-        state = state * 0x6A5D39EAE12657BAL | 1L;
-        state *= (state ^ (state >>> 26));
-        return (int)((bound * ((state ^ state >>> 22) & 0x7FFFFFFFL)) >> 31);
+        state = state * 0x3C6EF372FE94F82AL | 1L;
+        state *= (state ^ (state >>> 21));
+        return (int)((bound * ((state ^ state >>> 28) & 0x7FFFFFFFL)) >> 31);
     }
 }

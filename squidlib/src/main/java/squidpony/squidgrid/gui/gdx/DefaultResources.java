@@ -62,8 +62,8 @@ public class DefaultResources implements LifecycleListener {
             arial15 = null;
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
-            distancePrint = null, distanceClean = null, distanceCode = null, distanceDejaVu = null,
-            distanceOrbit = null, distanceHeavySquare = null,
+            distancePrint = null, distanceClean = null, distanceCode = null, distanceCodeJP = null,
+            distanceDejaVu = null, distanceOrbit = null, distanceHeavySquare = null,
             distanceSlab = null, distanceSlabLight = null, distanceWideSlab = null,  distanceWideSlabLight = null,
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
@@ -94,6 +94,8 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldTypewriterNarrowTexture = "CM-Custom-distance.png",
             distanceFieldCode = "SourceCodePro-Medium-distance.fnt",
             distanceFieldCodeTexture = "SourceCodePro-Medium-distance.png",
+            distanceFieldCodeJP = "SourceHanCodeJP-Regular-distance.fnt",
+            distanceFieldCodeJPTexture = "SourceHanCodeJP-Regular-distance.png",
             distanceFieldDejaVu = "DejaVuSansMono-distance.fnt",
             distanceFieldDejaVuTexture = "DejaVuSansMono-distance.png",
             distanceFieldOrbit = "Orbitron-distance.fnt",
@@ -657,6 +659,43 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.distanceCode != null)
             return instance.distanceCode.copy();
+        return null;
+    }
+    /**
+     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with strong CJK support (in
+     * particular, very good coverage for Japanese) that should scale cleanly to many sizes. Caches the result for later
+     * calls. The font used is Source Han Code JP, an open-source (SIL Open Font License) typeface by Adobe, and it has
+     * the best CJK char support among the fonts used by SquidLib. It is extremely wide if used only for English text,
+     * which may be desirable to make square cells. The very high glyph count means the part of the image for each glyph
+     * is smaller, though, so this may look slightly pixelated if it starts small and is resized to much larger. A cell
+     * width of 19 and cell height of 20 is ideal; this allows the font to resize fairly well to larger sizes.
+     * <br>
+     * Preview: https://i.imgur.com/g65jXxB.png
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/SourceHanCodeJP-Regular-distance.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/SourceHanCodeJP-Regular-distance.png</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font SourceHanCodeJP-Regular.otf
+     */
+    public static TextCellFactory getStretchableCodeJPFont()
+    {
+        initialize();
+        if(instance.distanceCodeJP == null)
+        {
+            try {
+                instance.distanceCodeJP = new TextCellFactory()
+                        .fontDistanceField(distanceFieldCodeJP, distanceFieldCodeJPTexture).setSmoothingMultiplier(12f);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.distanceCodeJP != null)
+            return instance.distanceCodeJP.copy();
         return null;
     }
     /**
