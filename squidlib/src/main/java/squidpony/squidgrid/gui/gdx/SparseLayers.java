@@ -18,7 +18,9 @@ import squidpony.panel.IColoredString;
 import squidpony.panel.ISquidPanel;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
+import squidpony.squidmath.Noise;
 import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.WhirlingNoise;
 
 import java.util.ArrayList;
 
@@ -731,6 +733,149 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
             return;
         backgrounds[x][y] = color;
+    }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, without putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a libGDX Color
+     * @param lightColor the color to mix with the background, as a libGDX Color
+     * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithLight(int x, int y, Color background, Color lightColor, float lightAmount) {
+        putWithLight(x, y, '\0', 0f, background == null ? 0f :  background.toFloatBits(),
+                lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount);
+    }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, while also putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to put in the foreground
+     * @param foreground the color to use for the foreground, as a libGDX Color; if null, this won't place a foreground char
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a libGDX Color
+     * @param lightColor the color to mix with the background, as a libGDX Color
+     * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithLight(int x, int y, char c, Color foreground, Color background, Color lightColor, float lightAmount) {
+        putWithLight(x, y, c, foreground == null ? 0f : foreground.toFloatBits(), background == null ? 0f :  background.toFloatBits(),
+                lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount);
+    }
+
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, without putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float
+     * @param lightColor the color to mix with the background, as a packed float
+     * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithLight(int x, int y, float background, float lightColor, float lightAmount) {
+        put(x, y, '\0', 0f,
+                SColor.lerpFloatColors(background, lightColor, MathUtils.clamp(0xAAp-9f + (0xC8p-9f * lightAmount), 0f, 1f)));
+    }
+
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, while also putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to put in the foreground
+     * @param foreground the color to use for the foreground, as a packed float; if 0f, this won't place a foreground char
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float
+     * @param lightColor the color to mix with the background, as a packed float
+     * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithLight(int x, int y, char c, float foreground, float background, float lightColor, float lightAmount) {
+        put(x, y, c, foreground,
+                SColor.lerpFloatColors(background, lightColor, MathUtils.clamp(0xAAp-9f + (0xC8p-9f * lightAmount), 0f, 1f)));
+    }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount that will be adjusted by the given {@link Noise.Noise3D} object, without putting a char on the screen;
+     * as a whole this affects one x,y position and will change what it puts as the time (in milliseconds) changes. If
+     * {@code flicker} is null, this will default to using {@link WhirlingNoise}. You can make the lighting dimmer by
+     * using a darker color for {@code lightColor} or by giving a lower value for {@code lightAmount}.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a libGDX Color
+     * @param lightColor the color to mix with the background, as a libGDX Color
+     * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     *@param flicker a Noise.Noise3D instance, such as {@link WhirlingNoise#instance}; may be null to use WhirlingNoise
+     */
+    public void putWithLight(int x, int y, Color background, Color lightColor, float lightAmount, Noise.Noise3D flicker) {
+        putWithLight(x, y, '\0', 0f, background == null ? 0f :  background.toFloatBits(),
+                lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount, flicker);
+    }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount that will be adjusted by the given {@link Noise.Noise3D} object, while also putting a char on the screen;
+     * as a whole this affects one x,y position and will change what it puts as the time (in milliseconds) changes. If
+     * {@code flicker} is null, this will default to using {@link WhirlingNoise}. You can make the lighting dimmer by
+     * using a darker color for {@code lightColor} or by giving a lower value for {@code lightAmount}.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to put in the foreground
+     * @param foreground the color to use for the foreground, as a libGDX Color; if null, this won't place a foreground char
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a libGDX Color
+     * @param lightColor the color to mix with the background, as a libGDX Color
+     * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     *@param flicker a Noise.Noise3D instance, such as {@link WhirlingNoise#instance}; may be null to use WhirlingNoise
+     */
+    public void putWithLight(int x, int y, char c, Color foreground, Color background, Color lightColor, float lightAmount, Noise.Noise3D flicker) {
+        putWithLight(x, y, c, foreground == null ? 0f : foreground.toFloatBits(), background == null ? 0f :  background.toFloatBits(),
+                lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount, flicker);
+    }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount that will be adjusted by the given {@link Noise.Noise3D} object, without putting a char on the screen;
+     * as a whole this affects one x,y position and will change what it puts as the time (in milliseconds) changes. If
+     * {@code flicker} is null, this will default to using {@link WhirlingNoise}. You can make the lighting dimmer by
+     * using a darker color for {@code lightColor} or by giving a lower value for {@code lightAmount}.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float
+     * @param lightColor the color to mix with the background, as a packed float
+     * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     *@param flicker a Noise.Noise3D instance, such as {@link WhirlingNoise#instance}; may be null to use WhirlingNoise
+     */
+    public void putWithLight(int x, int y, float background, float lightColor, float lightAmount, Noise.Noise3D flicker) {
+        putWithLight(x, y, '\0', 0f, background, lightColor, lightAmount, flicker);
+    }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount that will be adjusted by the given {@link Noise.Noise3D} object, while also putting a char on the screen;
+     * as a whole this affects one x,y position and will change what it puts as the time (in milliseconds) changes. If
+     * {@code flicker} is null, this will default to using {@link WhirlingNoise}. You can make the lighting dimmer by
+     * using a darker color for {@code lightColor} or by giving a lower value for {@code lightAmount}.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to put in the foreground
+     * @param foreground the color to use for the foreground, as a packed float; if 0f, this won't place a foreground char
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float
+     * @param lightColor the color to mix with the background, as a packed float
+     * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     *@param flicker a Noise.Noise3D instance, such as {@link WhirlingNoise#instance}; may be null to use WhirlingNoise
+     */
+    public void putWithLight(int x, int y, char c, float foreground, float background, float lightColor, float lightAmount, Noise.Noise3D flicker) {
+        if(flicker == null)
+            put(x, y, c, foreground,
+                    SColor.lerpFloatColors(background, lightColor,(0xAAp-9f + (0xC8p-9f * lightAmount *
+                            (1f + 0.35f * (float) WhirlingNoise.noise(x * 0.3, y * 0.3, (System.currentTimeMillis() & 0xffffffL) * 0.00125))))));
+        else
+            put(x, y, c, foreground,
+                SColor.lerpFloatColors(background, lightColor,(0xAAp-9f + (0xC8p-9f * lightAmount *
+                        (1f + 0.35f * (float) flicker.getNoise(x * 0.3, y * 0.3, (System.currentTimeMillis() & 0xffffffL) * 0.00125))))));
     }
 
     /**
