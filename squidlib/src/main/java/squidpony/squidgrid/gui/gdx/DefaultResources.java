@@ -689,7 +689,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.distanceCodeJP = new TextCellFactory()
-                        .fontDistanceField(distanceFieldCodeJP, distanceFieldCodeJPTexture).setSmoothingMultiplier(12f);
+                        .fontDistanceField(distanceFieldCodeJP, distanceFieldCodeJPTexture).setSmoothingMultiplier(1.125f);
             } catch (Exception e) {
                 e.printStackTrace();
             }

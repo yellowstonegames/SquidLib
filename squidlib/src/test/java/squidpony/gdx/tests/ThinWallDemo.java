@@ -673,7 +673,7 @@ public class ThinWallDemo extends ApplicationAdapter {
         //Gdx.gl.glEnable(GL20.GL_BLEND);
 
         // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        lights = MapUtility.generateLightnessModifiers(decoDungeon, (System.currentTimeMillis() & 0xFFFFFFFFL) * 0.013);
+        MapUtility.fillLightnessModifiers(lights, decoDungeon, (System.currentTimeMillis() & 0xFFFFFFFFL) * 0.013);
 
         // you done bad. you done real bad.
         if (health <= 0) {

@@ -54,15 +54,15 @@ public class FontTest extends ApplicationAdapter {
     private SquidPanel[] displays;
     private TextPanel<Color> text;
     private ArrayList<TextPanel<Color>> texts;
-    private int index = 5;
+    private int index = 17;// 5;
     private static final int ZOOM = 1;
     @Override
     public void create() {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 90, 170, 200, 220};
-        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  25, 25,  25,  25};
+        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
+        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabItalicFont().width(ZOOM * 14).height(28).initBySize(),
@@ -85,14 +85,11 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getStretchableWideSlabLightFont().width(ZOOM * 15).height(21).initBySize(),
                 DefaultResources.getStretchableWideFont().width(ZOOM * 15).height(21).initBySize(),
                 DefaultResources.getStretchableWideLightFont().width(ZOOM * 15).height(21).initBySize(),
-                new TextCellFactory().fontDistanceField("SourceHanCodeJP-Regular-distance.fnt", "SourceHanCodeJP-Regular-distance.png").setSmoothingMultiplier(12f).width(ZOOM * 17).height(ZOOM * 18).initBySize(),
+                DefaultResources.getStretchableCodeJPFont().width(ZOOM * 21).height(ZOOM * 22).initBySize(),
                 DefaultResources.getStretchableOrbitFont().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
                 DefaultResources.getStretchableCleanFont().initBySize(),
         };
-        for (int i = 0; i < factories.length; i++) {
-            factories[i].setSmoothingMultiplier(2f / (ZOOM + 1f));
-        }
         viewports = new Viewport[]{
                 new StretchViewport(factories[0].width() * widths[0], factories[0].height() * heights[0]),
                 new StretchViewport(factories[1].width() * widths[2], factories[1].height() * heights[1]),
@@ -158,11 +155,11 @@ public class FontTest extends ApplicationAdapter {
             tcf = factories[i];
             display = displays[i];
             BitmapFont.BitmapFontData data = tcf.font().getData();
-            int p = 0, x = 0, y = 0;
+            int dgl = data.glyphs.length, p = 0, x = 0, y = 0;
             BitmapFont.Glyph[] glyphs;
             BitmapFont.Glyph g;
             ALL_PAGES:
-            while (p < data.glyphs.length) {
+            while (p < dgl) {
                 glyphs = data.glyphs[p++];
                 if(glyphs == null) continue;
                 int gl = glyphs.length;
