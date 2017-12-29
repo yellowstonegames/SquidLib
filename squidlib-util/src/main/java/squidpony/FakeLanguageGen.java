@@ -26,7 +26,7 @@ public class FakeLanguageGen implements Serializable {
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final StatefulRNG srng = new StatefulRNG();
-    private static final OrderedSet<FakeLanguageGen> registry = new OrderedSet<>(32);
+    private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(32);
     protected String summary = null;
     /**
      * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
@@ -143,16 +143,20 @@ public class FakeLanguageGen implements Serializable {
     static final Replacer[]
             accentFinders = new Replacer[]
             {
-                    Pattern.compile("[àáâãäåæāăąǻǽ]").replacer("a"),
+                    Pattern.compile("[àáâãäåāăąǻ]").replacer("a"),
                     Pattern.compile("[èéêëēĕėęě]").replacer("e"),
                     Pattern.compile("[ìíîïĩīĭįı]").replacer("i"),
-                    Pattern.compile("[òóôõöøōŏőœǿ]").replacer("o"),
+                    Pattern.compile("[òóôõöøōŏőǿ]").replacer("o"),
                     Pattern.compile("[ùúûüũūŭůűų]").replacer("u"),
-                    Pattern.compile("[ÀÁÂÃÄÅÆĀĂĄǺǼ]").replacer("A"),
+                    Pattern.compile("[æǽ]").replacer("ae"),
+                    Pattern.compile("œ").replacer("oe"),
+                    Pattern.compile("[ÀÁÂÃÄÅĀĂĄǺ]").replacer("A"),
                     Pattern.compile("[ÈÉÊËĒĔĖĘĚ]").replacer("E"),
                     Pattern.compile("[ÌÍÎÏĨĪĬĮI]").replacer("I"),
-                    Pattern.compile("[ÒÓÔÕÖØŌŎŐŒǾ]").replacer("O"),
+                    Pattern.compile("[ÒÓÔÕÖØŌŎŐǾ]").replacer("O"),
                     Pattern.compile("[ÙÚÛÜŨŪŬŮŰŲ]").replacer("U"),
+                    Pattern.compile("[ÆǼ]").replacer("Ae"),
+                    Pattern.compile("Œ").replacer("Oe"),
                     Pattern.compile("Ё").replacer("Е"),
                     Pattern.compile("Й").replacer("И"),
                     Pattern.compile("[çćĉċč]").replacer("c"),
@@ -191,7 +195,7 @@ public class FakeLanguageGen implements Serializable {
 
     static final char[][] accentedVowels = new char[][]{
             new char[]{
-                    'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'æ', 'ą', 'ǻ', 'ǽ'
+                    'a', 'à', 'á', 'â', 'ä', 'ā', 'ă', 'ã', 'å', 'ą', 'ǻ'
             },
             new char[]{
                     'e', 'è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě'
@@ -200,7 +204,7 @@ public class FakeLanguageGen implements Serializable {
                     'i', 'ì', 'í', 'î', 'ï', 'ī', 'ĭ', 'ĩ', 'į', 'ı',
             },
             new char[]{
-                    'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'œ', 'ǿ'
+                    'o', 'ò', 'ó', 'ô', 'ö', 'ō', 'ŏ', 'õ', 'ø', 'ő', 'ǿ'
             },
             new char[]{
                     'u', 'ù', 'ú', 'û', 'ü', 'ū', 'ŭ', 'ũ', 'ů', 'ű', 'ų'
@@ -277,7 +281,7 @@ public class FakeLanguageGen implements Serializable {
 
     static {
 
-        registry.add(null);
+        registry.put("", null);
         
         openVowels = Maker.makeOM(
         "a", "a aa ae ai au ea ia oa ua",
@@ -416,9 +420,9 @@ public class FakeLanguageGen implements Serializable {
         return alteredString;
     }
 
-    private FakeLanguageGen register() {
+    private FakeLanguageGen register(String languageName) {
         summary = registry.size() + "@1";
-        registry.add(this);
+        registry.put(languageName,this);
         return copy();
     }
 
@@ -446,7 +450,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Zvrugg pialuk, ya'as irlemrugle'eith iposh hmo-es nyeighi, glikreirk shaivro'ei!
      */
-    public static final FakeLanguageGen LOVECRAFT = lovecraft().register();
+    public static final FakeLanguageGen LOVECRAFT = lovecraft().register("Lovecraft");
     private static FakeLanguageGen english() {
         return new FakeLanguageGen(
                 new String[]{
@@ -499,7 +503,7 @@ public class FakeLanguageGen implements Serializable {
      * Mont tiste frot; mousation hauddes?
      * Lily wrely stiebes; flarrousseal gapestist.
      */
-    public static final FakeLanguageGen ENGLISH = english().register();
+    public static final FakeLanguageGen ENGLISH = english().register("English");
 
     private static FakeLanguageGen greekRomanized(){
         return new FakeLanguageGen(
@@ -521,7 +525,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Psuilas alor; aipeomarta le liaspa...
      */
-    public static final FakeLanguageGen GREEK_ROMANIZED = greekRomanized().register();
+    public static final FakeLanguageGen GREEK_ROMANIZED = greekRomanized().register("Greek Romanized");
     private static FakeLanguageGen greekAuthentic(){
         return new FakeLanguageGen(
             new String[]{"α", "α", "α", "α", "α", "ο", "ο", "ε", "ε", "ε", "ι", "ι", "ι", "ι", "ι", "αυ", "αι", "αι", "οι", "οι",
@@ -543,7 +547,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Ψυιλασ αλορ; αιπεομαρτα λε λιασπα...
      */
-    public static final FakeLanguageGen GREEK_AUTHENTIC = greekAuthentic().register();
+    public static final FakeLanguageGen GREEK_AUTHENTIC = greekAuthentic().register("Greek Authentic");
 
     private static FakeLanguageGen french(){
         return new FakeLanguageGen(
@@ -593,7 +597,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Bœurter; ubi plaqua se saigui ef brafeur?
      */
-    public static final FakeLanguageGen FRENCH = french().register();
+    public static final FakeLanguageGen FRENCH = french().register("French");
 
     private static FakeLanguageGen russianRomanized(){
         return new FakeLanguageGen(
@@ -615,7 +619,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Zhydotuf ruts pitsas, gogutiar shyskuchebab - gichapofeglor giunuz ieskaziuzhin.
      */
-    public static final FakeLanguageGen RUSSIAN_ROMANIZED = russianRomanized().register();
+    public static final FakeLanguageGen RUSSIAN_ROMANIZED = russianRomanized().register("Russian Romanized");
 
     private static FakeLanguageGen russianAuthentic(){
         return new FakeLanguageGen(
@@ -639,7 +643,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Жыдотуф руц пйцас, гогутяр шыскучэбаб - гйчапофёглор гюнуз ъсказюжин.
      */
-    public static final FakeLanguageGen RUSSIAN_AUTHENTIC = russianAuthentic().register();
+    public static final FakeLanguageGen RUSSIAN_AUTHENTIC = russianAuthentic().register("Russian Authentic");
 
     private static FakeLanguageGen japaneseRomanized(){
         return new FakeLanguageGen(
@@ -667,7 +671,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Narurehyounan nikase keho...
      */
-    public static final FakeLanguageGen JAPANESE_ROMANIZED = japaneseRomanized().register();
+    public static final FakeLanguageGen JAPANESE_ROMANIZED = japaneseRomanized().register("Japanese Romanized");
 
     private static FakeLanguageGen swahili(){
         return new FakeLanguageGen(
@@ -789,7 +793,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Kondueyu; ma mpiyamdabota mise-mise nizakwaja alamsa amja, homa nkajupomba.
      */
-    public static final FakeLanguageGen SWAHILI = swahili().register();
+    public static final FakeLanguageGen SWAHILI = swahili().register("Swahili");
 
     private static FakeLanguageGen somali(){
         return new FakeLanguageGen(
@@ -843,7 +847,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Libor cat naqoxekh dhuugad gisiqir?
      */
-    public static final FakeLanguageGen SOMALI = somali().register();
+    public static final FakeLanguageGen SOMALI = somali().register("Somali");
     private static FakeLanguageGen hindi(){
         return new FakeLanguageGen(
                 new String[]{
@@ -1213,7 +1217,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Darvāga yar; ghađhinopŕauka āĕrdur, conśaigaijo śabhodhaĕđū jiviđaudu.
      */
-    public static final FakeLanguageGen HINDI_ROMANIZED = hindi().register();
+    public static final FakeLanguageGen HINDI_ROMANIZED = hindi().register("Hindi Romanized");
 
     private static FakeLanguageGen arabic(){
         return new FakeLanguageGen(
@@ -1276,7 +1280,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Hiijakki al-aafusiib rihit, ibn-ullukh aj shwisari!
      */
-    public static final FakeLanguageGen ARABIC_ROMANIZED = arabic().register();
+    public static final FakeLanguageGen ARABIC_ROMANIZED = arabic().register("Arabic Romanized");
     /*
     public static final FakeLanguageGen ARABIC_ROMANIZED = new FakeLanguageGen(
             new String[]{"a", "a", "a", "a", "a", "a", "ā", "ā", "ā", "ai", "au",
@@ -1343,7 +1347,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Ugkangungait ninaaq ipkutuilluuq um aitqiinnaitunniak tillingaat.
      */
-    public static final FakeLanguageGen INUKTITUT = inuktitut().register();
+    public static final FakeLanguageGen INUKTITUT = inuktitut().register("Inuktitut");
 
     private static FakeLanguageGen norse(){
         return new FakeLanguageGen(
@@ -1408,7 +1412,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Leyrk tjör stomri kna snó æd ðrépdápá, prygso?
      */
-    public static final FakeLanguageGen NORSE = norse().register();
+    public static final FakeLanguageGen NORSE = norse().register("Norse");
 
     private static FakeLanguageGen nahuatl(){
         return new FakeLanguageGen(
@@ -1437,7 +1441,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Olcoletl latl palitz ach; xatatli tzotloca amtitl, xatloatzoatl tealitozaztitli otamtax?
      */
-    public static final FakeLanguageGen NAHUATL = nahuatl().register();
+    public static final FakeLanguageGen NAHUATL = nahuatl().register("Nahuatl");
 
     private static FakeLanguageGen mongolian(){
         return new FakeLanguageGen(
@@ -1466,7 +1470,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Ghamgarg zilijuub lirgh arghar zunghichuh naboogh.
      */
-    public static final FakeLanguageGen MONGOLIAN = mongolian().register();
+    public static final FakeLanguageGen MONGOLIAN = mongolian().register("Mongolian");
 
     /**
      * A mix of four different languages, using only ASCII characters, that is meant for generating single words for
@@ -1477,7 +1481,7 @@ public class FakeLanguageGen implements Serializable {
     public static final FakeLanguageGen FANTASY_NAME = GREEK_ROMANIZED.mix(
             RUSSIAN_ROMANIZED.mix(
                     FRENCH.removeAccents().mix(
-                            JAPANESE_ROMANIZED, 0.5), 0.85), 0.925).register();
+                            JAPANESE_ROMANIZED, 0.5), 0.85), 0.925).register("Fantasy");
     /**
      * A mix of four different languages with some accented characters added onto an ASCII base, that can be good for
      * generating single words for creature or place names in fantasy settings that should have a "fancy" feeling from
@@ -1485,7 +1489,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Askieno, Blarcīnũn, Mēmida, Zizhounkô, Blęrinaf, Zemĭ, Mónazôr, Renerstă, Uskus, Toufounôr...
      */
-    public static final FakeLanguageGen FANCY_FANTASY_NAME = FANTASY_NAME.addAccents(0.47, 0.07).register();
+    public static final FakeLanguageGen FANCY_FANTASY_NAME = FANTASY_NAME.addAccents(0.47, 0.07).register("Fancy Fantasy");
 
     private static FakeLanguageGen goblin(){
         return new FakeLanguageGen(
@@ -1538,7 +1542,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Gwabdip dwupdagorg moglab yurufrub.
      */
-    public static final FakeLanguageGen GOBLIN = goblin().register();
+    public static final FakeLanguageGen GOBLIN = goblin().register("Goblin");
 
     private static FakeLanguageGen elf(){
         return new FakeLanguageGen(
@@ -1583,7 +1587,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Il ilthiê arel enya; meâlelail theasor arôreisa.
      */
-    public static final FakeLanguageGen ELF = elf().register();
+    public static final FakeLanguageGen ELF = elf().register("Elf");
 
     private static FakeLanguageGen demonic(){
         return new FakeLanguageGen(
@@ -1649,7 +1653,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Vrirvoks xatughat ogz; olds xu'oz xorgogh!
      */
-    public static final FakeLanguageGen DEMONIC = demonic().register();
+    public static final FakeLanguageGen DEMONIC = demonic().register("Demonic");
 
     private static FakeLanguageGen infernal(){
         return new FakeLanguageGen(
@@ -1692,7 +1696,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Zézîzûth eke'iez áhìphon; úhiah îbbëphéh haîtemheû esmez...
      */
-    public static final FakeLanguageGen INFERNAL = infernal().register();
+    public static final FakeLanguageGen INFERNAL = infernal().register("Infernal");
 
     private static FakeLanguageGen simplish(){
         return new FakeLanguageGen(
@@ -1748,7 +1752,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Fledan pranam, simig bag chaimer, drefar, woshash is sasik.
      */
-    public static final FakeLanguageGen SIMPLISH = simplish().register();
+    public static final FakeLanguageGen SIMPLISH = simplish().register("Simplish");
 
 
     private static FakeLanguageGen alien_a(){
@@ -1801,7 +1805,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Jlerno iypeyae; miojqaexli qraisojlea epefsaihj xlae...
      */
-    public static final FakeLanguageGen ALIEN_A = alien_a().register();
+    public static final FakeLanguageGen ALIEN_A = alien_a().register("Alien A");
 
     private static FakeLanguageGen korean()
     {
@@ -1868,7 +1872,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Hyeop euryam, sonyon muk tyeok aengyankeon, koelgwaelmwak.
      */
-    public static final FakeLanguageGen KOREAN_ROMANIZED = korean().register();
+    public static final FakeLanguageGen KOREAN_ROMANIZED = korean().register("Korean Romanized");
 
     private static FakeLanguageGen alien_e(){
         return new FakeLanguageGen(
@@ -1934,7 +1938,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Reds zasg izqekkek zagtsarg ukaard ac ots as!
      */
-    public static final FakeLanguageGen ALIEN_E = alien_e().register();
+    public static final FakeLanguageGen ALIEN_E = alien_e().register("Alien E");
 
     private static FakeLanguageGen alien_i(){
         return new FakeLanguageGen(
@@ -1975,7 +1979,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Asherzhäl zlómór ìsiv ázá nralthóshos, zlôbùsh.
      */
-    public static final FakeLanguageGen ALIEN_I = alien_i().register();
+    public static final FakeLanguageGen ALIEN_I = alien_i().register("Alien I");
 
     private static FakeLanguageGen alien_o(){
         return new FakeLanguageGen(
@@ -2049,7 +2053,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Foiuhoeorfeaorm novruol naionouffeu meuif; hmoieloreo naemriou.
      */
-    public static final FakeLanguageGen ALIEN_O = alien_o().register();
+    public static final FakeLanguageGen ALIEN_O = alien_o().register("Alien O");
 
     // àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳ
     // çðþñýćĉċčďđĝğġģĥħĵķĺļľŀłńņňŋŕŗřśŝşšţťŵŷÿźżžșțẁẃẅ
@@ -2097,7 +2101,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Üweħid vuŕeħid deẃul leŋul waloyeyür; äyovavü...
      */
-    public static final FakeLanguageGen ALIEN_U = alien_u().register();
+    public static final FakeLanguageGen ALIEN_U = alien_u().register("Alien U");
 
     private static FakeLanguageGen dragon(){
         return new FakeLanguageGen(
@@ -2184,7 +2188,7 @@ public class FakeLanguageGen implements Serializable {
      * <br>
      * Vokegodzaaz kigrofreth ariatarkioth etrokagik deantoznik hragriemitaaz gianehaadaz...
      */
-    public static final FakeLanguageGen DRAGON = dragon().register();
+    public static final FakeLanguageGen DRAGON = dragon().register("Dragon");
 
     /**
      * Fantasy language based closely on {@link #DRAGON}, but with much shorter words normally and closing syllables
@@ -2204,7 +2208,7 @@ public class FakeLanguageGen implements Serializable {
             DRAGON.openingVowels, DRAGON.midVowels, DRAGON.openingConsonants, DRAGON.midConsonants, DRAGON.closingConsonants,
             new String[]{"ik", "ak", "ek", "at", "it", "ik", "ak", "ek", "at", "it", "ik", "ak", "ek", "at", "it", "et", "ut", "ark", "irk", "erk"},
             DRAGON.vowelSplitters, new int[]{1, 2, 3}, new double[]{5, 11, 1},
-            0.1, 0.0, 0.0, 0.22, genericSanityChecks, true);
+            0.1, 0.0, 0.0, 0.22, genericSanityChecks, true).register("Kobold");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
@@ -2215,11 +2219,13 @@ public class FakeLanguageGen implements Serializable {
      * elements in its original state, so some code may rely on the items being usable and non-null.
      */
     public static final FakeLanguageGen[] registered;
-
+    public static final String[] registeredNames;
     static {
         // the first item in registry is null so it can be a placeholder for random languages; we want to skip it.
         registered = new FakeLanguageGen[registry.size()-1];
+        registeredNames = new String[registered.length];
         for (int i = 0; i < registered.length; i++) {
+            registeredNames[i] = registry.keyAt(i+1);
             registered[i] = registry.getAt(i+1);
         }
     }
@@ -3939,7 +3945,7 @@ public class FakeLanguageGen implements Serializable {
 
                 found = false;
                 while (true) {
-                    if (rng.nextDouble() < alt.chance) {
+                    if (alt.chance >= 1 || rng.nextDouble() < alt.chance) {
                         if (!Replacer.replaceStep(m, alt.replacer.getSubstitution(), tb))
                             break;
                         found = true;
