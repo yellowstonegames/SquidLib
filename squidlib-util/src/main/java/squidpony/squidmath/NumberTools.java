@@ -9,7 +9,7 @@ package squidpony.squidmath;
  * GWT thanks to JS typed arrays, which are well-supported now across all recent browsers and have fallbacks in GWT in
  * the unlikely event of a browser not supporting them.
  */
-public class NumberTools {
+public final class NumberTools {
     /**
      * Identical to {@link Double#doubleToLongBits(double)} on desktop; optimized on GWT. When compiling to JS via GWT,
      * there is no way to distinguish NaN values with different bits but that are still NaN, so this doesn't try to
@@ -230,11 +230,13 @@ public class NumberTools {
      * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
      * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
      * similar to {@link #bounce(double)} and {@link #zigzag(double)}, but unlike bounce() this will maintain its
-     * frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
-     * will smooth its path. An input of any even number should produce something very close to -1.0, any odd
-     * number should produce something very close to 1.0, and any number halfway between two incremental integers (like
-     * 8.5 or -10.5) should produce 0.0 or a very small fraction.
-     * @param value any double other than NaN or infinite values
+     * frequency of returning max or min values, regardless of the magnitude of its input (as long as there is enough
+     * floating-point precision to represent changes smaller than 1.0), and unlike zigzag() this will smooth its path.
+     * An input of any even number should produce something very close to -1.0, any odd number should produce something
+     * very close to 1.0, and any number halfway between two incremental integers (like 8.5 or -10.5) should produce 0.0
+     * or a very small fraction. In the (unlikely) event that this is given a double that is too large to represent
+     * many or any non-integer values, this will simply return -1.0 or 1.0.
+     * @param value any double other than NaN or infinite values; extremely large values can't work properly
      * @return a double from -1.0 (inclusive) to 1.0 (inclusive)
      */
     public static double sway(final double value)
@@ -252,11 +254,13 @@ public class NumberTools {
      * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
      * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
      * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain its
-     * frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
-     * will smooth its path. An input of any even number should produce something very close to -1f, any odd
-     * number should produce something very close to 1f, and any number halfway between two incremental integers (like
-     * 8.5f or -10.5f) should produce 0f or a very small fraction.
-     * @param value any float other than NaN or infinite values
+     * frequency of returning max or min values, regardless of the magnitude of its input (as long as there is enough
+     * floating-point precision to represent changes smaller than 1f), and unlike zigzag() this will smooth its path.
+     * An input of any even number should produce something very close to -1f, any odd number should produce something
+     * very close to 1f, and any number halfway between two incremental integers (like 8.5f or -10.5f) should produce 0f
+     * or a very small fraction. In the (unlikely) event that this is given a float that is too large to represent
+     * many or any non-integer values, this will simply return -1f or 1f.
+     * @param value any float other than NaN or infinite values; extremely large values can't work properly
      * @return a float from -1f (inclusive) to 1f (inclusive)
      */
     public static float sway(final float value)
@@ -272,13 +276,15 @@ public class NumberTools {
      * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
      * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
      * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
-     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will maintain not change
-     * its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
-     * will smooth its path. An input of any even number should produce something very close to 0f, any odd
-     * number should produce something very close to 1f, and any number halfway between two incremental integers (like
-     * 8.5f or -10.5f) should produce 0.5f. This version is called "Tight" because its range is tighter than
+     * similar to {@link #bounce(float)} and {@link #zigzag(float)}, but unlike bounce() this will not change its
+     * frequency of returning max or min values, regardless of the magnitude of its input (as long as there is enough
+     * floating-point precision to represent changes smaller than 1f), and unlike zigzag() this will smooth its path.
+     * An input of any even number should produce something very close to 0f, any odd number should produce something
+     * very close to 1f, and any number halfway between two incremental integers (like 8.5f or -10.5f) should produce
+     * 0.5f. In the (unlikely) event that this is given a float that is too large to represent many or any non-integer
+     * values, this will simply return 0f or 1f. This version is called "Tight" because its range is tighter than
      * {@link #sway(float)}.
-     * @param value any float other than NaN or infinite values
+     * @param value any float other than NaN or infinite values; extremely large values can't work properly
      * @return a float from 0f (inclusive) to 1f (inclusive)
      */
     public static float swayTight(final float value)
@@ -293,13 +299,15 @@ public class NumberTools {
      * input is halfway between two integers, smoothly curving at any points between those extremes. This is meant for
      * noise, where it may be useful to limit the amount of change between nearby points' noise values and prevent both
      * sudden "jumps" in noise value and "cracks" where a line takes a sudden jagged movement at an angle. It is very
-     * similar to {@link #bounce(double)} and {@link #zigzag(double)}, but unlike bounce() this will maintain not change
-     * its frequency of returning max or min values, regardless of the magnitude of its input, and unlike zigzag() this
-     * will smooth its path. An input of any even number should produce something very close to 0.0, any odd
-     * number should produce something very close to 1.0, and any number halfway between two incremental integers (like
-     * 8.5 or -10.5) should produce 0.5. This version is called "Tight" because its range is tighter than
+     * similar to {@link #bounce(double)} and {@link #zigzag(double)}, but unlike bounce() this will not change its
+     * frequency of returning max or min values, regardless of the magnitude of its input (as long as there is enough
+     * floating-point precision to represent changes smaller than 1.0), and unlike zigzag() this will smooth its path.
+     * An input of any even number should produce something very close to 0.0, any odd number should produce something
+     * very close to 1.0, and any number halfway between two incremental integers (like 8.5 or -10.5) should produce
+     * 0.5f. In the (unlikely) event that this is given a double that is too large to represent many or any non-integer
+     * values, this will simply return 0.0 or 1.0. This version is called "Tight" because its range is tighter than
      * {@link #sway(double)}.
-     * @param value any double other than NaN or infinite values
+     * @param value any double other than NaN or infinite values; extremely large values can't work properly
      * @return a double from 0.0 (inclusive) to 1.0 (inclusive)
      */
     public static double swayTight(final double value)
@@ -467,6 +475,27 @@ public class NumberTools {
     public static float formSignedFloat(final int seed)
     {
         return Float.intBitsToFloat((seed & 0x7FFFFF) | 0x40000000) - 3f;
+    }
+
+    /**
+     * Given a long as a seed, this uses its least-significant 52 bits to produce a double between 0 (inclusive) and 1
+     * (exclusive). This does not randomize the seed at all, and the upper 12 bits of the seed are ignored.
+     * @param seed a long; only the bottom 52 bits will be used
+     * @return a double between 0 (inclusive) and 1 (exclusive)
+     */
+    public static double formDouble(final long seed)
+    {
+        return Double.longBitsToDouble((seed & 0xfffffffffffffL) | 0x3ff0000000000000L) - 1f;
+    }
+    /**
+     * Given a long as a seed, this uses its least-significant 52 bits to produce a double between -1 (inclusive) and 1
+     * (exclusive). This does not randomize the seed at all, and the upper 12 bits of the seed are ignored.
+     * @param seed a long; only the bottom 52 bits will be used
+     * @return a double between -1 (inclusive) and 1 (exclusive)
+     */
+    public static double formSignedDouble(final long seed)
+    {
+        return Double.longBitsToDouble((seed & 0xfffffffffffffL) | 0x4000000000000000L) - 3f;
     }
 
     /**

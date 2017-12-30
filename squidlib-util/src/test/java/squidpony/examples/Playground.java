@@ -48,12 +48,12 @@ public class Playground {
         return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
     }
 
-    public static float sway(final float value)
-    {
-        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
-        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
-    }
+//    public static float sway(final float value)
+//    {
+//        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+//        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
+//        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
+//    }
 
     public static float swayOld(float a) { a = Math.abs(Math.abs(a - 1f) % 2f - 1f); return a * a * a * (a * (a * 6f - 15f) + 10f); }
 
@@ -85,16 +85,29 @@ public class Playground {
         */
     }
     private void go() {
-        for (float i = -3f; i <= 3f; i+=0.125f) {
-            System.out.printf("% 3.10f  % 3.10f\n", NumberTools.swayTight(i), swayOld(i));
+        for (double i = Math.PI / 9.0; i <= 0x1p30; i *= 2.0) {
+            System.out.printf("% 21.10f : % 3.10f  % 3.10f\n", i, NumberTools.sway((float)i), NumberTools.sway(i));
+            System.out.printf("% 21.10f : % 3.10f  % 3.10f\n", -i, NumberTools.sway((float)-i), NumberTools.sway(-i));
         }
-        System.out.print("  swayOld(Float.POSITIVE_INFINITY) :  " + swayOld(Float.POSITIVE_INFINITY));
-        System.out.print(", swayOld(Float.NEGATIVE_INFINITY) :  " + swayOld(Float.NEGATIVE_INFINITY));
-        System.out.print(", swayOld(Float.MIN_VALUE)         :  " + swayOld(Float.MIN_VALUE));
-        System.out.print(", swayOld(Float.MAX_VALUE)         :  " + swayOld(Float.MAX_VALUE));
-        System.out.print(", swayOld(Float.MIN_NORMAL)        :  " + swayOld(Float.MIN_NORMAL));
-        System.out.print(", swayOld(Float.NaN)               :  " + swayOld(Float.NaN));
+        System.out.println("NumberTools.sway(Float.POSITIVE_INFINITY)  :  " + NumberTools.sway(Float.POSITIVE_INFINITY));
+        System.out.println("NumberTools.sway(Float.NEGATIVE_INFINITY)  :  " + NumberTools.sway(Float.NEGATIVE_INFINITY));
+        System.out.println("NumberTools.sway(Float.MIN_VALUE)          :  " + NumberTools.sway(Float.MIN_VALUE));
+        System.out.println("NumberTools.sway(Float.MAX_VALUE)          :  " + NumberTools.sway(Float.MAX_VALUE));
+        System.out.println("NumberTools.sway(Float.MIN_NORMAL)         :  " + NumberTools.sway(Float.MIN_NORMAL));
+        System.out.println("NumberTools.sway(Float.NaN)                :  " + NumberTools.sway(Float.NaN));
+        System.out.println();
+        System.out.println("NumberTools.sway(Double.POSITIVE_INFINITY) :  " + NumberTools.sway(Double.POSITIVE_INFINITY));
+        System.out.println("NumberTools.sway(Double.NEGATIVE_INFINITY) :  " + NumberTools.sway(Double.NEGATIVE_INFINITY));
+        System.out.println("NumberTools.sway(Double.MIN_VALUE)         :  " + NumberTools.sway(Double.MIN_VALUE));
+        System.out.println("NumberTools.sway(Double.MAX_VALUE)         :  " + NumberTools.sway(Double.MAX_VALUE));
+        System.out.println("NumberTools.sway(Double.MIN_NORMAL)        :  " + NumberTools.sway(Double.MIN_NORMAL));
+        System.out.println("NumberTools.sway(Double.NaN)               :  " + NumberTools.sway(Double.NaN));
 
+        for (int n = 100; n < 120; n++) {
+            long i = ThrustAltRNG.determine(n);
+            System.out.printf("%016X : % 3.10f  % 3.10f\n", i, NumberTools.formFloat((int) (i >>> 32)), NumberTools.formDouble(i));
+            System.out.printf("%016X : % 3.10f  % 3.10f\n", ~i, NumberTools.formFloat((int)(~i >>> 32)), NumberTools.formDouble(~i));
+        }
 
 //        TabbyNoise tabby = TabbyNoise.instance;
 //        double v;

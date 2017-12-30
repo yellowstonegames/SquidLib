@@ -1827,13 +1827,13 @@ public class Noise {
                 || octaves <= 0 || octaves >= 63)
             return fill;
         final double i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height;
-        int s = 1<<(octaves-1);
-        total= 0.0;
+        int s = 1 << (octaves - 1);
+        total = 0.0;
         double p, q,
                 ps, pc,
                 qs, qc,
                 i_s = 0.5 / s;
-        for (int o = 0; o < octaves; o++, s>>=1) {
+        for (int o = 0; o < octaves; o++, s >>= 1) {
             seed += 0x9E3779B97F4A7C15L;
             i_s *= 2.0;
             for (int x = 0; x < width; x++) {
@@ -1848,14 +1848,12 @@ public class Noise {
                 }
             }
         }
-        //if(octaves > 1) {
-            i_s = 1.0 / ((1<<octaves) - 1.0);
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    total += (fill[x][y] *= i_s);
-                }
+        i_s = 1.0 / ((1 << octaves) - 1.0);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                total += (fill[x][y] *= i_s);
             }
-        //}
+        }
         return fill;
     }
 
@@ -1991,7 +1989,34 @@ public class Noise {
             }
         }
         return fill;
-
     }
 
+    /**
+     * A very simple 1D noise implementation, because a full-blown Perlin or Simplex noise implementation is probably
+     * overkill for 1D noise. This does produce smoothly sloping lines, like Simplex noise does for higher dimensions.
+     * The shape of the line varies over time, but <a href="https://i.imgur.com/83R3WLN.png">can look like this</a>.
+     * If you give this a seed with {@link #getNoiseWithSeed(double, long)} instead of using {@link #getNoise(double)},
+     * it will use a small extra step to adjust the spacing of peaks and valleys based on the seed, so getNoiseWithSeed
+     * is slower than getNoise. If you use any Noise classes like {@link Noise.Layered1D}, they should use a seed anyway
+     * because different octaves won't have different enough shapes otherwise.
+     */
+    public static class Basic1D implements Noise1D
+    {
+        public static final Basic1D instance = new Basic1D();
+        public Basic1D()
+        {
+        }
+        @Override
+        public double getNoise(double x) {
+            final long x0 = longFloor(x);
+            return cerp(NumberTools.randomFloatCurved(x0), NumberTools.randomFloatCurved(x0 + 1L), x - x0);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, long seed) {
+            x += NumberTools.bounce(seed + x);
+            final long x0 = longFloor(x);
+            return cerp(NumberTools.randomFloatCurved(x0 + seed), NumberTools.randomFloatCurved(x0 + 1L + seed), x - x0);
+        }
+    }
 }

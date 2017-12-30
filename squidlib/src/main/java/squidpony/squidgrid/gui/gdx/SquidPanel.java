@@ -204,10 +204,10 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         cellHeight = MathUtils.round(textFactory.actualCellHeight);
 
         if(actualMap == null || actualMap.length <= 0)
-            contents = ArrayTools.fill(' ', gridWidth, gridHeight);
+            contents = ArrayTools.fill('\0', gridWidth, gridHeight);
         else
             contents = actualMap;
-        colors = ArrayTools.fill(scc.filter(Color.CLEAR).toFloatBits(), contents.length, contents[0].length);
+        colors = ArrayTools.fill(-0x1.0p125F, contents.length, contents[0].length);
 
         int w = gridWidth * cellWidth;
         int h = gridHeight * cellHeight;

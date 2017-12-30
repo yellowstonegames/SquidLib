@@ -13,12 +13,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.ColorNoise;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
 import java.util.Random;
 
+import static squidpony.squidgrid.gui.gdx.SColor.FLOAT_WHITE;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGetI;
 
@@ -69,8 +73,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
-    private int hashMode = 64, rngMode = 26, noiseMode = 0;
+    private int testType = 4;
+    private int hashMode = 64, rngMode = 26, noiseMode = 103;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -139,6 +143,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
     private final Noise.Noise2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
+    private final Noise.Noise1D basic1D = new Noise.Basic1D();
+    private final Noise.Noise1D layered1D = new Noise.InverseLayered1D(new Noise.Basic1D(), 5);
 
     private final long
             seedX0 = thrust.nextLong(), seedX1 = thrust.nextLong(), seedX2 = thrust.nextLong(), seedX3 = thrust.nextLong(),
@@ -697,7 +703,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 104;
+                                    noiseMode %= 106;
                                 }
                                 switch (noiseMode)
                                 {
@@ -886,7 +892,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                             }
                                         }
                                         break;
-
                                 }
                                 break;
                             case 5:
@@ -3744,6 +3749,32 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
+                        break;
+                    case 104:
+                        Gdx.graphics.setTitle("Basic 1D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int i = 0; i < 511; i++)
+                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
+                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                        bright = SColor.floatGetHSV((ctr * 0x1.44cbc89p-8f) % 1f, 1, 1,1);
+                        iBright = (int)(basic1D.getNoise(ctr * 0.0075) * 254);
+                        display.put(511, 254 + iBright, bright);
+                        display.put(511, 255 + iBright, bright);
+                        display.put(511, 256 + iBright, bright);
+                        display.put(511, 257 + iBright, bright);
+                        display.put(511, 258 + iBright, bright);
+                        break;
+                    case 105:
+                        Gdx.graphics.setTitle("Basic 1D Noise, five inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int i = 0; i < 511; i++)
+                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
+                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                        bright = SColor.floatGetHSV((ctr * 0x1.44cbc89p-8f) % 1f, 1, 1,1);
+                        iBright = (int)(layered1D.getNoiseWithSeed(ctr * 0.0075, 0xBADBEEF0FFAL) * 254);
+                        display.put(511, 254 + iBright, bright);
+                        display.put(511, 255 + iBright, bright);
+                        display.put(511, 256 + iBright, bright);
+                        display.put(511, 257 + iBright, bright);
+                        display.put(511, 258 + iBright, bright);
                         break;
 
                 }

@@ -32,7 +32,7 @@ public class NumberTools {
 
     public static double longBitsToDouble(final long bits) {
         wia.set(1, (int)(bits >>> 32));
-        wia.set(0, (int)bits);
+        wia.set(0, (int)(bits & 0xFFFFFFFF));
         return wda.get(0);
     }
 
@@ -80,7 +80,7 @@ public class NumberTools {
     {
         final int s = (int)(value>>>32&0xfffff), flip = -((s & 0x80000)>>19);
         wia.set(1, ((s ^ flip) & 0xfffff) | 0x40100000);
-        wia.set(0, ((int)value) ^ flip);
+        wia.set(0, ((int)(value & 0xFFFFFFFF)) ^ flip);
         return wda.get(0) - 5.0;
     }
 
@@ -223,11 +223,26 @@ public class NumberTools {
         wia.set(0, (seed & 0x7FFFFF) | 0x40000000);
         return wfa.get(0) - 3f;
     }
+
+    public static double formDouble(final long seed)
+    {
+        wia.set(1, (int)(bits >>> 32 & 0xFFFFF) | 0x3ff00000);
+        wia.set(0, (int)(bits & 0xFFFFFFFF));
+        return wda.get(0) - 1.0;
+    }
+
+    public static double formSignedDouble(final long seed)
+    {
+        wia.set(1, (int)(bits >>> 32 & 0xFFFFF) | 0x40000000);
+        wia.set(0, (int)(bits & 0xFFFFFFFF));
+        return wda.get(0) - 3.0;
+    }
+
     public static float formCurvedFloat(final long start) {
-        return   (intBitsToFloat((int)start >>> 9 | 0x3F000000)
-                + intBitsToFloat(((int)~start & 0x007FFFFF) | 0x3F000000)
-                + intBitsToFloat((int) (start >>> 41) | 0x3F000000)
-                + intBitsToFloat(((int) (~start >>> 32) & 0x007FFFFF) | 0x3F000000)
+        return   (intBitsToFloat((int)(start  & 0xFFFFFFFF) >>> 9 | 0x3F000000)
+                + intBitsToFloat((int)(~start & 0x007FFFFF) | 0x3F000000)
+                + intBitsToFloat((int)(start >>> 41) | 0x3F000000)
+                + intBitsToFloat((int)(~start >>> 32 & 0x007FFFFF) | 0x3F000000)
                 - 3f);
     }
     public static float formCurvedFloat(final int start1, final int start2) {
