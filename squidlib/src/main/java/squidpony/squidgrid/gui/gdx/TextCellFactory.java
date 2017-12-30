@@ -77,7 +77,11 @@ public class TextCellFactory implements Disposable {
     protected boolean initialized = false, initializedByFont = false, initializedBySize = false;
     protected boolean distanceField = false;
     protected boolean msdf = false;
-    protected ShaderProgram shader;
+    /**
+     * For distance field and MSDF fonts, this is the ShaderProgram that will produce the intended effect.
+     * Usually should not be changed manually unless you know what you are doing.
+     */
+    public ShaderProgram shader;
     protected float smoothingMultiplier = 1.2f;
     protected float descent, lineHeight;
     protected Label.LabelStyle style;

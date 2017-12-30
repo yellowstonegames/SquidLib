@@ -207,6 +207,35 @@ public class DefaultResources implements LifecycleListener {
             //+ " if(alpha == 0) { discard; }\n"
             + "	gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
             + "}\n";
+    /**
+     * An alternate shader based on {@link DefaultResources#fragmentShader}, but this draws outlines around characters.
+     * Only works with distance field fonts. You probably need to create a new ShaderProgram to use this, which would
+     * look like {@code new ShaderProgram(DefaultResources.vertexShader, DefaultResources.outlineFragmentShader)}, and
+     * would assign this to your TextCellFactory's {@link TextCellFactory#shader} field after the TextCellFactory is
+     * fully initialized (calling {@link TextCellFactory#initBySize()}) will set the shader back to the default).
+     */
+    public static final String outlineFragmentShader = "#ifdef GL_ES\n"
+            + "precision mediump float;\n"
+            + "precision mediump int;\n"
+            + "#endif\n"
+            + "\n"
+            + "uniform sampler2D u_texture;\n"
+            + "uniform float u_smoothing;\n"
+            + "varying vec4 v_color;\n"
+            + "varying vec2 v_texCoords;\n"
+            + "\n"
+            + "void main() {\n"
+            + "  float distance = texture2D(u_texture, v_texCoords).a;\n"
+            + "		vec4 box = vec4(v_texCoords-0.0005, v_texCoords+0.0005);\n"
+            + "		float asum = 0.666 * (smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, distance) + \n"
+            + "                  smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.xy).a) +\n"
+            + "		             smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.zw).a) +\n"
+            + "		             smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.xw).a) +\n"
+            + "		             smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.zy).a)),\n" +
+            "             outline = clamp((distance - 0.45) * 6, 0, 1);\n" //float(distance >= 0.625)
+            + "		gl_FragColor = vec4(mix(vec3(0.0), v_color.rgb, outline), asum * v_color.a);\n"
+            + "}\n";
+
     private SquidColorCenter scc = null;
     private Texture tentacle = null;
     private TextureRegion tentacleRegion = null;

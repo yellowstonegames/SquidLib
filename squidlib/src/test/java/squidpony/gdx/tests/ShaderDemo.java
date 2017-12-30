@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
@@ -18,27 +19,24 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.RNG;
+import squidpony.squidmath.SeededNoise;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is a small, not-overly-simple demo that presents some important features of SquidLib and shows a faster,
- * cleaner, and more recently-introduced way of displaying the map and other text. Features include dungeon map
- * generation, field of view, pathfinding (to the mouse position), simplex noise (used for a flickering torch effect),
- * language generation/ciphering, a colorful glow effect, and ever-present random number generation (with a seed).
- * You can increase the size of the map on most target platforms (but GWT struggles with large... anything) by
- * changing gridHeight and gridWidth to affect the visible area or bigWidth and bigHeight to adjust the size of the
- * dungeon you can move through, with the camera following your '@' symbol.
+ * This is a small test/demo that shows an outline effect around all text.
  */
-public class SparseDemo extends ApplicationAdapter {
+public class ShaderDemo extends ApplicationAdapter {
     SpriteBatch batch;
 
     private RNG rng;
     private SparseLayers display, languageDisplay;
     private DungeonGenerator dungeonGen;
-    private char[][] decoDungeon, bareDungeon, lineDungeon;
+    private char[][] decoDungeon, bareDungeon;
     private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
@@ -66,7 +64,7 @@ public class SparseDemo extends ApplicationAdapter {
     /** In number of cells */
     private static final int bonusHeight = 7;
     /** The pixel width of a cell */
-    private static final int cellWidth = 10;
+    private static final int cellWidth = 11;
     /** The pixel height of a cell */
     private static final int cellHeight = 20;
     private SquidInput input;
@@ -145,16 +143,19 @@ public class SparseDemo extends ApplicationAdapter {
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
         stage = new Stage(mainViewport, batch);
         languageStage = new Stage(languageViewport, batch);
-        // the font will try to load Iosevka Slab as an embedded bitmap font with a distance field effect.
+        // the font will try to load Iosevka as an embedded bitmap font with a distance field effect.
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableSlabFont());
+                DefaultResources.getStretchableLeanFont());
 
-        // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
-        // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
-        // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.font.tweakWidth(cellWidth * 1.05f).tweakHeight(cellHeight * 1.1f).initBySize();
+        // The main thing this demo is meant to show!
+        // Here we assign a different ShaderProgram to the TextCellFactory we use, so that it draws outlines instead of
+        // only fading the colors for chars out at their edges.
+        display.font.shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.outlineFragmentShader);
+        if (!display.font.shader.isCompiled()) {
+            Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + display.font.shader.getLog());
+        }
 
         languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
@@ -177,43 +178,6 @@ public class SparseDemo extends ApplicationAdapter {
         decoDungeon = dungeonGen.generate();
         //getBareDungeon provides the simplest representation of the generated dungeon -- '#' for walls, '.' for floors.
         bareDungeon = dungeonGen.getBareDungeon();
-        //When we draw, we may want to use a nicer representation of walls. DungeonUtility has lots of useful methods
-        //for modifying char[][] dungeon grids, and this one takes each '#' and replaces it with a box-drawing char.
-        //The end result looks something like this, for a smaller 60x30 map:
-        //
-        // ┌───┐┌──────┬──────┐┌──┬─────┐   ┌──┐    ┌──────────┬─────┐
-        // │...││......│......└┘..│.....│   │..├───┐│..........│.....└┐
-        // │...││......│..........├──┐..├───┤..│...└┴────......├┐.....│
-        // │...││.................│┌─┘..│...│..│...............││.....│
-        // │...││...........┌─────┘│....│...│..│...........┌───┴┴───..│
-        // │...│└─┐....┌───┬┘      │........│..│......─────┤..........│
-        // │...└─┐│....│...│       │.......................│..........│
-        // │.....││........└─┐     │....│..................│.....┌────┘
-        // │.....││..........│     │....├─┬───────┬─┐......│.....│
-        // └┬──..└┼───┐......│   ┌─┴─..┌┘ │.......│ │.....┌┴──┐..│
-        //  │.....│  ┌┴─..───┴───┘.....└┐ │.......│┌┘.....└─┐ │..│
-        //  │.....└──┘..................└─┤.......││........│ │..│
-        //  │.............................│.......├┘........│ │..│
-        //  │.............┌──────┐........│.......│...─┐....│ │..│
-        //  │...........┌─┘      └──┐.....│..─────┘....│....│ │..│
-        // ┌┴─────......└─┐      ┌──┘..................│..──┴─┘..└─┐
-        // │..............└──────┘.....................│...........│
-        // │............................┌─┐.......│....│...........│
-        // │..│..│..┌┐..................│ │.......├────┤..──┬───┐..│
-        // │..│..│..│└┬──..─┬───┐......┌┘ └┐.....┌┘┌───┤....│   │..│
-        // │..├──┤..│ │.....│   │......├───┘.....│ │...│....│┌──┘..└──┐
-        // │..│┌─┘..└┐└┬─..─┤   │......│.........└─┘...│....││........│
-        // │..││.....│ │....│   │......│...............│....││........│
-        // │..││.....│ │....│   │......│..┌──┐.........├────┘│..│.....│
-        // ├──┴┤...│.└─┴─..┌┘   └┐....┌┤..│  │.....│...└─────┘..│.....│
-        // │...│...│.......└─────┴─..─┴┘..├──┘.....│............└─────┤
-        // │...│...│......................│........│..................│
-        // │.......├───┐..................│.......┌┤.......┌─┐........│
-        // │.......│   └──┐..┌────┐..┌────┤..┌────┘│.......│ │..┌──┐..│
-        // └───────┘      └──┘    └──┘    └──┘     └───────┘ └──┘  └──┘
-        //this is also good to compare against if the map looks incorrect, and you need an example of a correct map when
-        //no parameters are given to generate().
-        lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
 
         resistance = DungeonUtility.generateResistances(decoDungeon);
         visible = new double[bigWidth][bigHeight];
@@ -540,13 +504,13 @@ public class SparseDemo extends ApplicationAdapter {
                     // number between 0 and 1 to provide the amount for the lighting color to affect the background
                     // color, we effectively divide by 512 using multiplication by a rarely-seen hexadecimal float
                     // literal, 0x1p-9f.
-                    display.put(i, j, lineDungeon[i][j], colors[i][j],
+                    display.put(i, j, decoDungeon[i][j], colors[i][j],
                             SColor.lerpFloatColors(bgColors[i][j], FLOAT_LIGHTING,(200f + (
                                     200f * (float)(visible[i][j] * (1.0 + 0.25 * SeededNoise.noise(i * 0.3, j * 0.3, tm, 1)))))
                                     * 0x1p-9f) // as above, "* 0x1p-9f" is roughly equivalent to "/ 512.0"
                     );
                 } else if(seen.contains(i, j))
-                    display.put(i, j, lineDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], GRAY_FLOAT, 0.3f));
+                    display.put(i, j, decoDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], GRAY_FLOAT, 0.3f));
             }
         }
         Coord pt;
@@ -558,7 +522,7 @@ public class SparseDemo extends ApplicationAdapter {
         languageDisplay.clear(0);
         languageDisplay.fillBackground(languageDisplay.defaultPackedBackground);
         for (int i = 0; i < 6; i++) {
-            languageDisplay.put(1, i, lang.get(i), SColor.DB_LEAD);
+            languageDisplay.put(1, i, lang.get(i), SColor.FLOAT_WHITE, languageDisplay.defaultPackedBackground);
         }
     }
     @Override
@@ -646,7 +610,7 @@ public class SparseDemo extends ApplicationAdapter {
 	}
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib GDX Sparse Demo";
+        config.title = "SquidLib GDX Shader Demo";
         config.width = gridWidth * cellWidth;
         config.height = (gridHeight + bonusHeight) * cellHeight;
         config.vSyncEnabled = false;
@@ -655,7 +619,7 @@ public class SparseDemo extends ApplicationAdapter {
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
-        new LwjglApplication(new SparseDemo(), config);
+        new LwjglApplication(new ShaderDemo(), config);
     }
 
 }
