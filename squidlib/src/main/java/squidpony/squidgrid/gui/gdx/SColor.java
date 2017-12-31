@@ -12311,6 +12311,150 @@ public class SColor extends Color {
             }
         }
     }
+    /**
+     * Gets a variation on this SColor as a packed float that has its hue, saturation, and value adjusted by the
+     * specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these
+     * can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
+     * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
+     * <br>
+     * The parameters this takes all specify additive changes for a color component, clamping the final values so they
+     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be
+     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the
+     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still
+     * has saturation 0.7f, then resulting color will have 0.6f for saturation.
+     *
+     * @param hue        -1f to 1f, the hue change that can be applied to the new float color
+     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color
+     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color
+     * @return a float encoding a color with the given properties
+     */
+    public float toEditedFloat(float hue, float saturation, float value) {
+        return toEditedFloat(this, hue, saturation, value, 0f);
+    }
+
+    /**
+     * Gets a variation on the Color basis as a packed float that has its hue, saturation, and value adjusted by the
+     * specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these
+     * can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like
+     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
+     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
+     * saturation, and value are all 0. This won't modify the given SColor, nor will it allocate any objects.
+     * <br>
+     * The parameters this takes all specify additive changes for a color component, clamping the final values so they
+     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be
+     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the
+     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still
+     * has saturation 0.7f, then resulting color will have 0.6f for saturation.
+     *
+     * @param basis      a Color or SColor to use as the starting point; will not be modified itself
+     * @param hue        -1f to 1f, the hue change that can be applied to the new float color
+     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color
+     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color
+     * @return a float encoding a variation of basis with the given changes
+     */
+    public static float toEditedFloat(Color basis, float hue, float saturation, float value) {
+        return toEditedFloat(basis, hue, saturation, value, 0f);
+    }
+    /**
+     * Gets a variation on this SColor as a packed float that has its hue, saturation, value, and opacity adjusted by
+     * the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and
+     * opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with
+     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like
+     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless
+     * hue saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any
+     * objects.
+     * <br>
+     * The parameters this takes all specify additive changes for a color component, clamping the final values so they
+     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be
+     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the
+     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still
+     * has saturation 0.7f, then resulting color will have 0.6f for saturation.
+     *
+     * @param hue        -1f to 1f, the hue change that can be applied to the new float color
+     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color
+     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color
+     * @param opacity    -1f to 1f, the opacity/alpha change that can be applied to the new float color
+     * @return a float encoding a color with the given properties
+     */
+    public float toEditedFloat(float hue, float saturation, float value, float opacity) {
+        return toEditedFloat(this, hue, saturation, value, opacity);
+    }
+    /**
+     * Gets a variation on the Color basis as a packed float that has its hue, saturation, value, and opacity adjusted
+     * by the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and
+     * opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with
+     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like
+     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless
+     * hue saturation, value, and opacity are all 0. This won't modify the given SColor, nor will it allocate any
+     * objects.
+     * <br>
+     * The parameters this takes all specify additive changes for a color component, clamping the final values so they
+     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be
+     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the
+     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still
+     * has saturation 0.7f, then resulting color will have 0.6f for saturation.
+     *
+     * @param hue        -1f to 1f, the hue change that can be applied to the new float color
+     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color
+     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color
+     * @param opacity    -1f to 1f, the opacity/alpha change that can be applied to the new float color
+     * @return a float encoding a variation of basis with the given changes
+     */
+    public static float toEditedFloat(Color basis, float hue, float saturation, float value, float opacity) {
+        final float h, s, r = basis.r, g = basis.g, b = basis.b;
+        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value
+        final float delta = max - min;                   //Delta RGB value
+        if ( delta < 0.0039f )                           //This is a gray, no chroma...
+        {
+            s = 0f;
+            h = 0f;
+            hue = 1f;
+        }
+        else                                             //Chromatic data...
+        {
+            s = delta / max;
+            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;
+            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;
+            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;
+
+            if      (r == max) h = (bDelta - gDelta + 1f) % 1f;
+            else if (g == max) h = ((1f / 3f) + rDelta - bDelta + 1f) % 1f;
+            else               h = ((2f / 3f) + gDelta - rDelta + 1f) % 1f;
+        }
+        saturation = MathUtils.clamp(s + saturation, 0f, 1f);
+        value = MathUtils.clamp(max + value, 0f, 1f);
+        opacity = MathUtils.clamp(basis.a + opacity, 0f, 1f);
+
+        if (saturation <= 0.0039f) {
+            return floatGet(value, value, value, opacity);
+        } else if (value <= 0.0039f) {
+            return NumberTools.intBitsToFloat((int) (opacity * 254f) << 24 & 0xFE000000);
+        } else {
+            final float hu = ((h + hue + 6f) % 1f) * 6f;
+            final int i = (int) hu;
+            final float x = value * (1 - saturation);
+            final float y = value * (1 - saturation * (hu - i));
+            final float z = value * (1 - saturation * (1 - (hu - i)));
+
+            switch (i) {
+                case 0:
+                    return floatGet(value, z, x, opacity);
+                case 1:
+                    return floatGet(y, value, x, opacity);
+                case 2:
+                    return floatGet(x, value, z, opacity);
+                case 3:
+                    return floatGet(x, y, value, opacity);
+                case 4:
+                    return floatGet(z, x, value, opacity);
+                default:
+                    return floatGet(value, x, y, opacity);
+            }
+        }
+    }
 
     /**
      * Interpolates from the packed float color start towards end by change. Both start and end should be packed colors,

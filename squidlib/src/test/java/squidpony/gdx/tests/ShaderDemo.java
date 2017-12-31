@@ -22,7 +22,6 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.RNG;
-import squidpony.squidmath.SeededNoise;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +63,9 @@ public class ShaderDemo extends ApplicationAdapter {
     /** In number of cells */
     private static final int bonusHeight = 7;
     /** The pixel width of a cell */
-    private static final int cellWidth = 11;
+    private static final int cellWidth = 13;
     /** The pixel height of a cell */
-    private static final int cellHeight = 20;
+    private static final int cellHeight = 25;
     private SquidInput input;
     private Color bgColor;
     private Stage stage, languageStage;
@@ -160,9 +159,9 @@ public class ShaderDemo extends ApplicationAdapter {
         languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
         // set the background colors directly as floats with the SparseDisplay.backgrounds field, and it can be handy
-        // to hold onto the current color we want to fill that with in the defaultPackedBackground field.
-        // SparseLayers has fillBackground() and fillArea() methods for coloring all or part of the backgrounds.
-        languageDisplay.defaultPackedBackground = FLOAT_LIGHTING; // happens to be the same color used for lighting
+        // to hold onto the current color we want to fill that with in the defaultPackedBackground or defaultBackground
+        // fields. SparseLayers has fillBackground() and fillArea() methods for coloring all or part of the backgrounds.
+        languageDisplay.setDefaultBackground(SColor.COSMIC_LATTE);  // happens to be the same color used for lighting
 
         //This uses the seeded RNG we made earlier to build a procedural dungeon using a method that takes rectangular
         //sections of pre-drawn dungeon and drops them into place in a tiling pattern. It makes good winding dungeons
@@ -254,11 +253,11 @@ public class ShaderDemo extends ApplicationAdapter {
         //y. By changing an item in SColor.LIMITED_PALETTE, we also change the color assigned by MapUtility to floors.
         bgColor = SColor.DARK_SLATE_GRAY;
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
-        colors = MapUtility.generateDefaultColorsFloat(decoDungeon);
-        bgColors = MapUtility.generateDefaultBGColorsFloat(decoDungeon);
+        colors = MapUtility.generateDefaultColorsFloat(decoDungeon, 0f, -0.05f, 0.35f);
+        bgColors = MapUtility.generateDefaultBGColorsFloat(decoDungeon, 0f, 0f, -0.15f);
 
         //places the player as an '@' at his position in orange.
-        pg = display.glyph('@', SColor.SAFETY_ORANGE.toFloatBits(), player.x, player.y);
+        pg = display.glyph('@', SColor.SAFETY_ORANGE.toEditedFloat(0, -0.05f, 0.35f), player.x, player.y);
 
         lang = new ArrayList<>(16);
         StringKit.wrap(lang, artOfWar, gridWidth - 2);
@@ -504,25 +503,22 @@ public class ShaderDemo extends ApplicationAdapter {
                     // number between 0 and 1 to provide the amount for the lighting color to affect the background
                     // color, we effectively divide by 512 using multiplication by a rarely-seen hexadecimal float
                     // literal, 0x1p-9f.
-                    display.put(i, j, decoDungeon[i][j], colors[i][j],
-                            SColor.lerpFloatColors(bgColors[i][j], FLOAT_LIGHTING,(200f + (
-                                    200f * (float)(visible[i][j] * (1.0 + 0.25 * SeededNoise.noise(i * 0.3, j * 0.3, tm, 1)))))
-                                    * 0x1p-9f) // as above, "* 0x1p-9f" is roughly equivalent to "/ 512.0"
-                    );
+                    display.putWithLight(i, j, decoDungeon[i][j], colors[i][j], bgColors[i][j], FLOAT_LIGHTING,
+                            (float) visible[i][j], null);
                 } else if(seen.contains(i, j))
-                    display.put(i, j, decoDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], GRAY_FLOAT, 0.3f));
+                    display.putWithLight(i, j, decoDungeon[i][j], colors[i][j], bgColors[i][j], GRAY_FLOAT, 0.25f);
             }
         }
         Coord pt;
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, mixing the background color with mostly white.
-            display.put(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], SColor.FLOAT_WHITE, 0.85f));
+            display.putWithLight(pt.x, pt.y, bgColors[pt.x][pt.y], SColor.FLOAT_WHITE, 1.4f);
         }
         languageDisplay.clear(0);
         languageDisplay.fillBackground(languageDisplay.defaultPackedBackground);
         for (int i = 0; i < 6; i++) {
-            languageDisplay.put(1, i, lang.get(i), SColor.FLOAT_WHITE, languageDisplay.defaultPackedBackground);
+            languageDisplay.put(1, i, lang.get(i), SColor.DB_INK, languageDisplay.defaultBackground);
         }
     }
     @Override
@@ -570,12 +566,14 @@ public class ShaderDemo extends ApplicationAdapter {
         else if(input.hasNext()) {
             input.next();
         }
+        languageDisplay.font.setSmoothingMultiplier(-languageDisplay.font.getSmoothingMultiplier());
         // we need to do some work with viewports here so the language display (or game info messages in a real game)
         // will display in the same place even though the map view will move around. We have the language stuff set up
         // its viewport so it is in place and won't be altered by the map. Then we just tell the Stage for the language
         // texts to draw.
         languageStage.getViewport().apply(false);
         languageStage.draw();
+        display.font.setSmoothingMultiplier(-display.font.getSmoothingMultiplier());
         // certain classes that use scene2d.ui widgets need to be told to act() to process input.
         stage.act();
         // we have the main stage set itself up after the language stage has already drawn.

@@ -451,8 +451,11 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     @Override
     public void setDefaultForeground(Color color) {
         defaultForeground = color;
+        if(color != null)
+            defaultPackedForeground = color.toFloatBits();
+        else
+            defaultPackedForeground = 0f;
     }
-
     /**
      * @return The default foreground color (if none was set with
      * {@link #setDefaultForeground(Object)}), or the last color set
@@ -463,6 +466,30 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     @Override
     public Color getDefaultForegroundColor() {
         return defaultForeground;
+    }
+
+    /**
+     * Sets the default background color.
+     * Unlike most ISquidPanel implementations, color can be null, which will
+     * usually not be rendered unless a different color is specified.
+     * @param color a libGDX Color object or an extension of Color, such as SColor
+     */
+    public void setDefaultBackground(Color color) {
+        defaultBackground = color;
+        if(color != null)
+            defaultPackedBackground = color.toFloatBits();
+        else
+            defaultPackedBackground = 0f;
+    }
+    /**
+     * @return The default background color (if none was set with
+     * {@link #setDefaultBackground(Color)}), or the last color set
+     * with {@link #setDefaultBackground(Color)}. This can be null,
+     * which will usually not be rendered unless a different color
+     * is specified.
+     */
+    public Color getDefaultBackgroundColor() {
+        return defaultBackground;
     }
 
     /**
