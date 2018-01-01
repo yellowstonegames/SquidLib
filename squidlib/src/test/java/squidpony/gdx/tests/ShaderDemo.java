@@ -145,8 +145,11 @@ public class ShaderDemo extends ApplicationAdapter {
         // the font will try to load Iosevka as an embedded bitmap font with a distance field effect.
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
+
+        // You should try this with both DefaultResources.getLeanFamily() and DefaultResources.getStretchableLeanFont()
+        // if you intend to use both or are considering one over the other; the outline weights vary between fonts.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableLeanFont());
+                DefaultResources.getLeanFamily());
 
         // The main thing this demo is meant to show!
         // Here we assign a different ShaderProgram to the TextCellFactory we use, so that it draws outlines instead of
