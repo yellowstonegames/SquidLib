@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.WhirlingNoise;
 
+import static squidpony.squidmath.Noise.PointHash.hashAll;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**

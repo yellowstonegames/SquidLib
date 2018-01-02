@@ -65,7 +65,8 @@ public class Noise {
     /**
      * Cubic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
      * Will smoothly transition toward start or end as a approaches 0 or 1, respectively. Somewhat faster than
-     * quintic interpolation (querp), but slower (and smoother) than {@link  #lerp(double, double, double)}.
+     * quintic interpolation ({@link #querp(double, double, double)}), but slower (and smoother) than
+     * {@link  #lerp(double, double, double)}.
      * @param start a valid double
      * @param end a valid double
      * @param a a double between 0 and 1 inclusive
@@ -78,7 +79,8 @@ public class Noise {
     /**
      * Cubic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
      * Will smoothly transition toward start or end as a approaches 0 or 1, respectively. Somewhat faster than
-     * quintic interpolation (querp), but slower (and smoother) than {@link #lerp(double, double, double)}.
+     * quintic interpolation ({@link #querp(float, float, float)}), but slower (and smoother) than
+     * {@link #lerp(float, float, float)}.
      * @param start a valid float
      * @param end a valid float
      * @param a a float between 0 and 1 inclusive
@@ -92,8 +94,8 @@ public class Noise {
      * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
      * @param start a valid double, as in, not infinite or NaN
      * @param end a valid double, as in, not infinite or NaN
-     * @param a a float between 0 and 1 inclusive
-     * @return a float between x and y inclusive
+     * @param a a double between 0 and 1 inclusive
+     * @return a double between x and y inclusive
      */
     public static double querp(final double start, final double end, double a){
         return (1.0 - (a *= a * a * (a * (a * 6.0 - 15.0) + 10.0))) * start + a * end;
@@ -133,6 +135,218 @@ public class Noise {
         return (1f - a) * start + a * end;
     }
 
+    /**
+     * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
+     * a long for state. This is organized how it is so it can be statically imported without also importing the rest
+     * of Noise. Internally, all of the methods here are based on {@link ThrustAltRNG}, but some steps are altered to
+     * better mix the point coordinates, and for hash32() and hash256() methods, some small steps can be omitted because
+     * they would have no effect on the result.
+     */
+    public static final class PointHash
+    {
+        /**
+         *
+         * @param x
+         * @param y
+         * @param state
+         * @return 64-bit hash of the x,y point with the given state
+         */
+        public static long hashAll(final long x, final long y, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((x ^ state) | 0xA529L)) ^ (state >>> 22)));
+        }
+
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param state
+         * @return 64-bit hash of the x,y,z point with the given state
+         */
+        public static long hashAll(final long x, final long y, final long z, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
+        }
+
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param w
+         * @param state
+         * @return 64-bit hash of the x,y,z,w point with the given state
+         */
+        public static long hashAll(final long x, final long y, final long z, final long w, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
+        }
+
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param w
+         * @param u
+         * @param v
+         * @param state
+         * @return 64-bit hash of the x,y,z,w,u,v point with the given state
+         */
+        public static long hashAll(final long x, final long y, final long z, final long w, final long u, final long v, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ u) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state >>> 25)) * ((state ^ v) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ v) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)) ^ (state >>> 22)));
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param state
+         * @return 8-bit hash of the x,y point with the given state
+         */
+        public static int hash256(final long x, final long y, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((x ^ state) | 0xA529L))) >>> 56);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param state
+         * @return 8-bit hash of the x,y,z point with the given state
+         */
+        public static int hash256(final long x, final long y, final long z, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 56);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param w
+         * @param state
+         * @return 8-bit hash of the x,y,z,w point with the given state
+         */
+        public static int hash256(final long x, final long y, final long z, final long w, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 56);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param w
+         * @param u
+         * @param v
+         * @param state
+         * @return 8-bit hash of the x,y,z,w,u,v point with the given state
+         */
+        public static int hash256(final long x, final long y, final long z, final long w, final long u, final long v, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state >>> 25)) * ((state ^ v) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 56);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param state
+         * @return 5-bit hash of the x,y point with the given state
+         */
+        public static int hash32(final long x, final long y, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)))) >>> 59);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param state
+         * @return 5-bit hash of the x,y,z point with the given state
+         */
+        public static int hash32(final long x, final long y, final long z, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y - z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z - x) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ x - y) | 0xA529L))) >>> 59);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param w
+         * @param state
+         * @return 5-bit hash of the x,y,z,w point with the given state
+         */
+        public static int hash32(final long x, final long y, final long z, final long w, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 59);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param w
+         * @param u
+         * @param v
+         * @param state
+         * @return 5-bit hash of the x,y,z,w,u,v point with the given state
+         */
+        public static int hash32(final long x, final long y, final long z, final long w, final long u, final long v, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state >>> 25)) * ((state ^ v) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 59);
+        }
+
+    }
 
     public interface Noise1D {
         double getNoise(double x);

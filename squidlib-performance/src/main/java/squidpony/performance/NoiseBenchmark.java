@@ -132,7 +132,7 @@ public class NoiseBenchmark {
     {
         int a = 0;
         for (double x = 0.0; x < 64000000.0; x++) {
-            seed += MerlinNoise.noise2D(++a, a);
+            seed += MerlinNoise.noise2D(++a, a, 9000L, 16, 8);
         }
         return seed;
     }
@@ -149,7 +149,7 @@ public class NoiseBenchmark {
     {
         int a = 0;
         for (double x = 0.0; x < 64000000.0; x++) {
-            seed += MerlinNoise.noise3D(++a, a, a);
+            seed += MerlinNoise.noise3D(++a, a, a,9000L, 16, 8);
         }
         return seed;
     }
