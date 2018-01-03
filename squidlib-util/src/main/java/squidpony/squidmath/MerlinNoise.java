@@ -3,23 +3,41 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 /**
- * Simple somewhat-continuous noise functions that use long coordinates instead of the traditional double (this approach
- * works better on a grid). It's called this because it should be possible to replace PerlinNoise with MerlinNoise in
- * some cases, and because working with noise functions makes me feel like a wizard.
+ * Really strange noise functions that typically produce curving black and white shapes when rendered.
+ * This technique uses no floating-point math, surprisingly, which helps its performance but means it does not implement
+ * the {@link Noise} interface like other noise methods. It may get some form of compatibility methods for Noise later.
+ * The shapes this produces <a href="https://i.imgur.com/mp23254.png">look like this in 2D</a> and
+ * <a href="https://i.imgur.com/qPLZw0k.gifv">look like this in 3D</a>.
+ * <br>
+ * This is called Merlin noise because it has a roughly-similar implementation to "classic" Perlin Noise (with hashes
+ * per grid point used to blend values), and because working with noise functions makes me feel like a wizard.
+ * This was a completely unrelated noise algorithm that also avoided floating-point math, but was really pretty awful.
  */
 @Beta
 public class MerlinNoise {
 
     public long seed;
-    protected int bits = 56, resolution = 3;
+    protected int bits = 8, resolution = 3;
+
+    /**
+     * Constructor for a default MerlinNoise instance with 8-bit output and resolution 3 (yielding 8x8-cell zones that
+     * share their corners). The seed can be set at any point, but it will start at 1.
+     */
     public MerlinNoise() {
         seed = 1L;
     }
+
+    /**
+     * Constructor for a MerlinNoise instance that allows specification of all parameters.
+     * @param seed the seed to use to alter the generated noise in {@link #noise2D(long, long)} and {@link #noise3D(long, long, long)}
+     * @param bits the number of bits to output; typically 8 to produce byte-sized values
+     * @param resolution an exponent that determines the size of a "zone" of cells that blend between the values at the zone's corners; commonly 1-6
+     */
     public MerlinNoise(long seed, int bits, int resolution)
     {
         this.seed = seed;
-        this.bits = (-bits & 63);
-        this.resolution = resolution & 63;
+        this.bits = bits;
+        this.resolution = resolution & 31;
     }
 
     public long getSeed() {
@@ -31,38 +49,100 @@ public class MerlinNoise {
     }
 
     public int getBits() {
-        return 64 - bits;
+        return bits;
     }
 
+    /**
+     * Sets the number of bits this will output; 8 is common to produce byte-sized values between 0 and 255.
+     * This value can be between 1 and 64. If bits is 8, then this should produce values of 255 or 0, plus or minus 1.
+     * If bits is some other value, then it may produce more than two values, or only produce one.
+     * @param bits the number of bits of output each call should generate.
+     */
     public void setBits(int bits) {
-        this.bits = (-bits & 63);
+        this.bits = bits;
     }
 
     public int getResolution() {
         return resolution;
     }
 
+    /**
+     * Sets the resolution, which is an exponent that determines the width/height of each zone that shares the same four
+     * corners (where only the corners have their own hashed values). If resolution is 1, the size of a zone is 2x2, if
+     * it is 2, then the size of a zone is 4x4, if it is 3, then 8x8, and so on by powers of 2. The resolution can be as
+     * low as 0 (which won't blend corners' hashes at all) or as high as 31, but cannot easily be increased above that
+     * (10 is a really large size for a cell at 1024x1024, and 31 is over 2 billion by 2 billion). This doesn't slow
+     * down significantly (or at all) if resolution is particularly high or low, but this is often between 1 and 6.
+     * @param resolution an int between 0 and 31
+     */
     public void setResolution(int resolution) {
-        this.resolution = resolution & 63;
+        this.resolution = resolution & 31;
     }
 
-    private static long clorp(long start, long end, long a, long resolution) {
-        a = a * a * ((3L << resolution) - (a << 1));
-        end = ((1L << resolution * 3) - a) * start + a * end >> resolution * 3;
-        return end;
+//    private static long clorp(long start, long end, long a, long resolution) {
+//        a = a * a * ((3L << resolution) - (a << 1));
+//        end = ((1L << resolution * 3) - a) * start + a * end >> resolution * 3;
+//        return end;
+//    }
+
+    /**
+     * 2D Merlin noise; black and white much of the time but curving instead of angular.
+     *
+     * @param x x input
+     * @param y y input
+     */
+    public long noise2D(long x, long y)
+    {
+        return noise2D(x, y, seed, resolution, bits);
     }
 
+    /**
+     * 2D Merlin noise; black and white much of the time but curving instead of angular.
+     *
+     * @param x x input
+     * @param y y input
+     * @param seed the seed to use to alter the generated noise
+     */
+    public long noise2D(long x, long y, long seed)
+    {
+        return noise2D(x, y, seed, resolution, bits);
+    }
+
+    /**
+     * 3D Merlin noise; black and white much of the time but curving instead of angular.
+     *
+     * @param x x input
+     * @param y y input
+     * @param z z input
+     */
+    public long noise3D(long x, long y, long z)
+    {
+        return noise3D(x, y, z, seed, resolution, bits);
+    }
+
+    /**
+     * 3D Merlin noise; black and white much of the time but curving instead of angular.
+     *
+     * @param x x input
+     * @param y y input
+     * @param z z input
+     * @param seed the seed to use to alter the generated noise
+     */
+    public long noise3D(long x, long y, long z, long seed)
+    {
+        return noise3D(x, y, z, seed, resolution, bits);
+    }
     private static long lorp(long start, long end, long a, long resolution) {
         end = ((1L << resolution) - a) *  start + a * end >> resolution;
         return end;
     }
     /**
-     * 2D merlin noise.
+     * 2D Merlin noise; black and white much of the time but curving instead of angular.
      *
      * @param x x input
      * @param y y input
      * @param state state to adjust the output
-     * @param resolution the number of cells between "vertices" where one random number is used fully
+     * @param resolution the number of cells between "vertices" where one hashed value is used fully
      * @param bits how many bits should be used for each (signed long) output; often this is 8 to output a byte
      * @return noise from {@code -(1L << bits)} to {@code (1L << bits) - 1L}, both inclusive
      */
@@ -88,7 +168,7 @@ public class MerlinNoise {
      * @param y y input
      * @param z z input
      * @param state state to adjust the output
-     * @param resolution the number of cells between "vertices" where one random number is used fully
+     * @param resolution the number of cells between "vertices" where one hashed value is used fully
      * @param bits how many bits should be used for each (signed long) output; often this is 8 to output a byte
      * @return noise from {@code -(1L << bits)} to {@code (1L << bits) - 1L}, both inclusive
      */

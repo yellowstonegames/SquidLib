@@ -1,5 +1,5 @@
 SquidLib
-Copyright 2011-Forever Eben Howard
+Copyright 2011-2018 Eben Howard
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

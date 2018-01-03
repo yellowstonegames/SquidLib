@@ -189,7 +189,7 @@ sources, "squidlib/src/test/resources/icons-license.txt")
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2017 Eben Howard, Tommy Ettinger, and contributors
+   Copyright 2018 Eben Howard, Tommy Ettinger, and contributors
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

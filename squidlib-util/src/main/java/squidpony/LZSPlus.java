@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2017 Tommy Ettinger
+Copyright (c) 2018 Tommy Ettinger
 
 Based on lz-string4java, which is:
 Copyright (c) 2016 rufushuang
