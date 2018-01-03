@@ -4,21 +4,22 @@ import squidpony.annotation.Beta;
 
 /**
  * Really strange noise functions that typically produce curving black and white shapes when rendered.
- * This technique uses no floating-point math, surprisingly, which helps its performance but means it does not implement
- * the {@link Noise} interface like other noise methods. It may get some form of compatibility methods for Noise later.
+ * This technique uses no floating-point math, surprisingly, which helps its performance a little.
  * The shapes this produces <a href="https://i.imgur.com/mp23254.png">look like this in 2D</a> and
- * <a href="https://i.imgur.com/qPLZw0k.gifv">look like this in 3D</a>.
+ * <a href="https://i.imgur.com/qPLZw0k.gifv">look like this in 3D</a>. MerlinNoise implements 2D and 3D noise
+ * interfaces, allowing it to be used with the various support code in Noise like {@link Noise.Layered2D}.
  * <br>
  * This is called Merlin noise because it has a roughly-similar implementation to "classic" Perlin Noise (with hashes
  * per grid point used to blend values), and because working with noise functions makes me feel like a wizard.
  * This was a completely unrelated noise algorithm that also avoided floating-point math, but was really pretty awful.
  */
 @Beta
-public class MerlinNoise {
+public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
 
+    public static final MerlinNoise instance = new MerlinNoise();
     public long seed;
-    protected int bits = 8, resolution = 3;
-
+    protected int bits = 8, resolution = 4;
+    private long resSize = 1L << resolution;
     /**
      * Constructor for a default MerlinNoise instance with 8-bit output and resolution 3 (yielding 8x8-cell zones that
      * share their corners). The seed can be set at any point, but it will start at 1.
@@ -38,6 +39,7 @@ public class MerlinNoise {
         this.seed = seed;
         this.bits = bits;
         this.resolution = resolution & 31;
+        resSize = 1L << this.resolution;
     }
 
     public long getSeed() {
@@ -77,6 +79,7 @@ public class MerlinNoise {
      */
     public void setResolution(int resolution) {
         this.resolution = resolution & 31;
+        resSize = 1L << this.resolution;
     }
 
 //    private static long clorp(long start, long end, long a, long resolution) {
@@ -148,8 +151,14 @@ public class MerlinNoise {
      */
     public static long noise2D(long x, long y, long state, int resolution, int bits) {
         long xb = x >>> resolution, yb = y >>> resolution, xr = (x & ~(-1L << resolution)), yr = (y & ~(-1L << resolution)),
-                x0y0 = Noise.PointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.PointHash.hashAll(xb + 1, yb, state) >> resolution,
-                x0y1 = Noise.PointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.PointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
+                x0 = ThrustAltRNG.determine(xb), x1 = ThrustAltRNG.determine(xb + 1),
+                y0 = ThrustAltRNG.determine(yb), y1 = ThrustAltRNG.determine(yb + 1),
+                x0y0 = (x0 * y0 ^ x0 - y0) >> resolution, x1y0 = (x1 * y0 ^ x1 - y0) >> resolution,
+                x0y1 = (x0 * y1 ^ x0 - y1) >> resolution, x1y1 = (x1 * y1 ^ x1 - y1) >> resolution;
+
+//                x0y0 = Noise.PointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.PointHash.hashAll(xb + 1, yb, state) >> resolution,
+//                x0y1 = Noise.PointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.PointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
+
 //                x0y0 = (x0y0b >> 2) + (ThrustAltRNG.determine(x0y0b + 1) >> 2)
 //                        + (ThrustAltRNG.determine(x0y0b + 2) >> 2) + (ThrustAltRNG.determine(x0y0b + 3) >> 2),
 //                x1y0 = (x1y0b >> 2) + (ThrustAltRNG.determine(x1y0b + 1) >> 2)
@@ -175,10 +184,19 @@ public class MerlinNoise {
     public static long noise3D(long x, long y, long z, long state, int resolution, int bits) {
         long xb = x >> resolution, yb = y >> resolution, zb = z >> resolution,
                 xr = x & ~(-1L << resolution), yr = y & ~(-1L << resolution), zr = z & ~(-1L << resolution),
-                x0y0z0 = Noise.PointHash.hashAll(xb, yb, zb, state) >> resolution, x1y0z0 = Noise.PointHash.hashAll(xb + 1, yb, zb, state) >> resolution,
-                x0y1z0 = Noise.PointHash.hashAll(xb, yb + 1, zb, state) >> resolution, x1y1z0 = Noise.PointHash.hashAll(xb + 1, yb + 1, zb, state) >> resolution,
-                x0y0z1 = Noise.PointHash.hashAll(xb, yb, zb + 1, state) >> resolution, x1y0z1 = Noise.PointHash.hashAll(xb + 1, yb, zb + 1, state) >> resolution,
-                x0y1z1 = Noise.PointHash.hashAll(xb, yb + 1, zb + 1, state) >> resolution, x1y1z1 = Noise.PointHash.hashAll(xb + 1, yb + 1, zb + 1, state) >> resolution;
+                x0 = ThrustAltRNG.determine(xb), x1 = ThrustAltRNG.determine(xb + 1),
+                y0 = ThrustAltRNG.determine(yb), y1 = ThrustAltRNG.determine(yb + 1),
+                z0 = ThrustAltRNG.determine(zb), z1 = ThrustAltRNG.determine(zb + 1),
+                x0y0z0 = (x0 * y0 * z0 ^ x0 - y0 + (z0 - x0 << 32 | y0 - z0 >>> 32)) >> resolution, x1y0z0 = (x1 * y0 * z0 ^ x1 - y0 + (z0 - x1 << 32 | y0 - z0 >>> 32)) >> resolution,
+                x0y1z0 = (x0 * y1 * z0 ^ x0 - y1 + (z0 - x0 << 32 | y1 - z0 >>> 32)) >> resolution, x1y1z0 = (x1 * y1 * z0 ^ x1 - y1 + (z0 - x1 << 32 | y1 - z0 >>> 32)) >> resolution,
+                x0y0z1 = (x0 * y0 * z1 ^ x0 - y0 + (z1 - x0 << 32 | y0 - z1 >>> 32)) >> resolution, x1y0z1 = (x1 * y0 * z1 ^ x1 - y0 + (z1 - x1 << 32 | y0 - z1 >>> 32)) >> resolution,
+                x0y1z1 = (x0 * y1 * z1 ^ x0 - y1 + (z1 - x0 << 32 | y1 - z1 >>> 32)) >> resolution, x1y1z1 = (x1 * y1 * z1 ^ x1 - y1 + (z1 - x1 << 32 | y1 - z1 >>> 32)) >> resolution;
+
+//                x0y0z0 = Noise.PointHash.hashAll(xb, yb, zb, state) >> resolution, x1y0z0 = Noise.PointHash.hashAll(xb + 1, yb, zb, state) >> resolution,
+//                x0y1z0 = Noise.PointHash.hashAll(xb, yb + 1, zb, state) >> resolution, x1y1z0 = Noise.PointHash.hashAll(xb + 1, yb + 1, zb, state) >> resolution,
+//                x0y0z1 = Noise.PointHash.hashAll(xb, yb, zb + 1, state) >> resolution, x1y0z1 = Noise.PointHash.hashAll(xb + 1, yb, zb + 1, state) >> resolution,
+//                x0y1z1 = Noise.PointHash.hashAll(xb, yb + 1, zb + 1, state) >> resolution, x1y1z1 = Noise.PointHash.hashAll(xb + 1, yb + 1, zb + 1, state) >> resolution;
+
 //                x0y0z0 = (x0y0z0b >> 2) + (ThrustAltRNG.determine(x0y0z0b + 1) >> 2)
 //                        + (ThrustAltRNG.determine(x0y0z0b + 2) >> 2) + (ThrustAltRNG.determine(x0y0z0b + 3) >> 2),
 //                x1y0z0 = (x1y0z0b >> 2) + (ThrustAltRNG.determine(x1y0z0b + 1) >> 2)
@@ -196,7 +214,7 @@ public class MerlinNoise {
 //                x1y1z1 = (x1y1z1b >> 2) + (ThrustAltRNG.determine(x1y1z1b + 1) >> 2)
 //                        + (ThrustAltRNG.determine(x1y1z1b + 2) >> 2) + (ThrustAltRNG.determine(x1y1z1b + 3) >> 2);
         return lorp(lorp(lorp(x0y0z0, x1y0z0, xr, resolution), lorp(x0y1z0, x1y1z0, xr, resolution), yr, resolution),
-                lorp(lorp(x0y0z1, x1y0z1, xr, resolution), lorp(x0y1z1, x1y1z1, xr, resolution), yr, resolution), zr, resolution) >>> (-bits & 63);
+                lorp(lorp(x0y0z1, x1y0z1, xr, resolution), lorp(x0y1z1, x1y1z1, xr, resolution), yr, resolution), zr, resolution) >>> -bits;
     }
 
     /**
@@ -248,22 +266,40 @@ public class MerlinNoise {
         */
     }
 
-    public static void main(String[] args)
-    {
-        long state = 9999L, bits = 32;
-        for (int resolution = 0; resolution < 4; resolution++) {
-            for (int x = 0; x < 10; x++) {
-                for (int y = 0; y < 10; y++) {
-                    long xb = x >>> resolution, yb = y >>> resolution, xr = (x & ~(-1L << resolution)), yr = (y & ~(-1L << resolution)),
-//                            x0y0 = 10, x1y0 = 20,
-//                            x0y1 = 110, x1y1 = 120;
-                            x0y0 = Noise.PointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.PointHash.hashAll(xb + 1, yb, state) >> resolution,
-                            x0y1 = Noise.PointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.PointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
-                    long xly0 = lorp(x0y0, x1y0, xr, resolution), xly1 = lorp(x0y1, x1y1, xr, resolution),
-                            yl = lorp(xly0, xly1, yr, resolution);
-                    System.out.printf("x: %d, y: %d, r: %d = %08X\n", x, y, resolution, yl);// >> (- bits - resolution & 63));
-                }
-            }
-        }
+//    public static void main(String[] args)
+//    {
+//        long state = 9999L, bits = 32;
+//        for (int resolution = 0; resolution < 4; resolution++) {
+//            for (int x = 0; x < 10; x++) {
+//                for (int y = 0; y < 10; y++) {
+//                    long xb = x >>> resolution, yb = y >>> resolution, xr = (x & ~(-1L << resolution)), yr = (y & ~(-1L << resolution)),
+//                            x0y0 = Noise.PointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.PointHash.hashAll(xb + 1, yb, state) >> resolution,
+//                            x0y1 = Noise.PointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.PointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
+//                    long xly0 = lorp(x0y0, x1y0, xr, resolution), xly1 = lorp(x0y1, x1y1, xr, resolution),
+//                            yl = lorp(xly0, xly1, yr, resolution);
+//                    System.out.printf("x: %d, y: %d, r: %d = %08X\n", x, y, resolution, yl);// >> (- bits - resolution & 63));
+//                }
+//            }
+//        }
+//    }
+
+    @Override
+    public double getNoise(double x, double y) {
+        return 1 - (noise2D(Noise.longFloor(x * resSize), Noise.longFloor(y * resSize), seed, resolution << 1, 1) << 1);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, long seed) {
+        return 1 - (noise2D(Noise.longFloor(x * resSize), Noise.longFloor(y * resSize), seed, resolution << 1, 1) << 1);
+    }
+
+    @Override
+    public double getNoise(double x, double y, double z) {
+        return 1 - (noise3D(Noise.longFloor(x * resSize), Noise.longFloor(y * resSize), Noise.longFloor(z * resSize), seed, resolution << 1, 1) << 1);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, long seed) {
+        return 1 - (noise3D(Noise.longFloor(x * resSize), Noise.longFloor(y * resSize), Noise.longFloor(z * resSize), seed, resolution << 1, 1) << 1);
     }
 }

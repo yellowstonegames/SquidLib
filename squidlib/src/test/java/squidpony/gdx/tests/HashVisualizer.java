@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 64, rngMode = 26, noiseMode = 78;
+    private int hashMode = 64, rngMode = 26, noiseMode = 6;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -2470,7 +2470,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Merlin Noise 2D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)MerlinNoise.noise2D(x + ctr, y + ctr, 9000L, 4, 8);
+                                iBright = (int)MerlinNoise.noise2D(x + ctr, y + ctr, 9000L, 4, 1) * 255;
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
@@ -3434,16 +3434,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Merlin Noise 3D, x4 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 2, 8);
+                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 2, 1) * 255;
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
                         break;
                     case 79:
-                        Gdx.graphics.setTitle("Merlin Noise 3D, x32 smooth zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise 3D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 8);
+                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 4, 1) * 255;
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
