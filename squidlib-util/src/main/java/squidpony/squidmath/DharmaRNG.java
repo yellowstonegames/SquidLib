@@ -437,7 +437,7 @@ public class DharmaRNG extends RNG implements Serializable{
      * @return a copy of this DharmaRNG
      */
     @Override
-    public RNG copy() {
+    public DharmaRNG copy() {
         DharmaRNG next = new DharmaRNG(random.copy(), fairness);
         next.produced = produced;
         next.baseline = baseline;

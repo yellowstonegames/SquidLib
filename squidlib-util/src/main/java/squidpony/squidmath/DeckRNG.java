@@ -21,8 +21,8 @@ public class DeckRNG extends StatefulRNG implements Serializable {
     private int step;
     private long lastShuffledState;
     private static final double[] baseDeck = new double[]{0.0, 0.0625, 0.125, 0.1875, 0.25, 0.3125, 0.375, 0.4375,
-                                             0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375},
-            deck = new double[16];
+                                             0.5, 0.5625, 0.625, 0.6875, 0.75, 0.8125, 0.875, 0.9375};
+    private final double[] deck = new double[16];
 
     /**
      * Constructs a DeckRNG with a pseudo-random seed from Math.random().
@@ -445,7 +445,8 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      *
      * @return a copy of this DeckRNG
      */
-    public RNG copy()
+    @Override
+    public DeckRNG copy()
     {
         DeckRNG next = new DeckRNG(lastShuffledState);
         next.random = random.copy();
@@ -553,8 +554,7 @@ public class DeckRNG extends StatefulRNG implements Serializable {
 
         DeckRNG deckRNG = (DeckRNG) o;
 
-        if (step != deckRNG.step) return false;
-        return lastShuffledState == deckRNG.lastShuffledState;
+        return step == deckRNG.step && lastShuffledState == deckRNG.lastShuffledState;
     }
 
     @Override

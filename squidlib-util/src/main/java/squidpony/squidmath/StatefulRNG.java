@@ -54,7 +54,7 @@ public class StatefulRNG extends RNG {
      * @return a copy of this StatefulRNG
      */
     @Override
-    public RNG copy() {
+    public StatefulRNG copy() {
         return new StatefulRNG(random.copy());
     }
 
