@@ -226,15 +226,15 @@ public class NumberTools {
 
     public static double formDouble(final long seed)
     {
-        wia.set(1, (int)(bits >>> 32 & 0xFFFFF) | 0x3ff00000);
-        wia.set(0, (int)(bits & 0xFFFFFFFF));
+        wia.set(1, (int)(seed >>> 32 & 0xFFFFF) | 0x3ff00000);
+        wia.set(0, (int)(seed & 0xFFFFFFFF));
         return wda.get(0) - 1.0;
     }
 
     public static double formSignedDouble(final long seed)
     {
-        wia.set(1, (int)(bits >>> 32 & 0xFFFFF) | 0x40000000);
-        wia.set(0, (int)(bits & 0xFFFFFFFF));
+        wia.set(1, (int)(seed >>> 32 & 0xFFFFF) | 0x40000000);
+        wia.set(0, (int)(seed & 0xFFFFFFFF));
         return wda.get(0) - 3.0;
     }
 
