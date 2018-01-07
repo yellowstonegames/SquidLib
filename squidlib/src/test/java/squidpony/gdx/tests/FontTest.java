@@ -1,9 +1,6 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
@@ -17,6 +14,8 @@ import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidgrid.gui.gdx.TextPanel;
+import squidpony.squidgrid.mapping.LineKit;
+import squidpony.squidmath.ThrustAltRNG;
 
 import java.util.ArrayList;
 
@@ -121,10 +120,10 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[3], heights[3], factories[3]).setTextSize(factories[3].width() + 1f * ZOOM, factories[3].height() + 3f * ZOOM),
                 new SquidPanel(widths[4], heights[4], factories[4]).setTextSize(factories[4].width() + 0.5f * ZOOM, factories[4].height() + 1f * ZOOM),
                 new SquidPanel(widths[5], heights[5], factories[5]).setTextSize(factories[5].width() + 1f * ZOOM, factories[5].height() + 0f * ZOOM),
-                new SquidPanel(widths[6], heights[6], factories[6]).setTextSize(factories[6].width() + 0f * ZOOM, factories[6].height() + 0.75f * ZOOM),
+                new SquidPanel(widths[6], heights[6], factories[6]).setTextSize(factories[6].width() + 0.75f * ZOOM, factories[6].height() + 5.25f * ZOOM),
                 new SquidPanel(widths[7], heights[7], factories[7]).setTextSize(factories[7].width() + 1f * ZOOM, factories[7].height() + 0.5f * ZOOM),
                 new SquidPanel(widths[8], heights[8], factories[8]).setTextSize(factories[8].width() + 2.5f * ZOOM, factories[8].height() + 4f * ZOOM),
-                new SquidPanel(widths[9], heights[9], factories[9]).setTextSize(factories[9].width() + 1f * ZOOM, factories[9].height() + 2f * ZOOM),
+                new SquidPanel(widths[9], heights[9], factories[9]).setTextSize(factories[9].width() + 1f * ZOOM, factories[9].height() + 2.5f * ZOOM),
                 new SquidPanel(widths[10], heights[10], factories[10]).setTextSize(factories[10].width() + 2f * ZOOM, factories[10].height() + 2.25f * ZOOM),
                 new SquidPanel(widths[11], heights[11], factories[11]).setTextSize(factories[11].width() + 2f * ZOOM, factories[11].height() + 2.25f * ZOOM),
                 new SquidPanel(widths[12], heights[12], factories[12]).setTextSize(factories[12].width() + 2f * ZOOM, factories[12].height() + 2.75f * ZOOM),
@@ -199,21 +198,36 @@ public class FontTest extends ApplicationAdapter {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyUp(int keycode) {
-                index = ((index + 1) % factories.length);
-                viewport = viewports[index];
-                if(index < factories.length - 3) {
-                    tcf = factories[index];
-                    display = displays[index];
-                    stage.clear();
-                    stage.setViewport(viewport);
-                    stage.addActor(display);
-                }
-                else
+                if(keycode == Input.Keys.B)
                 {
-                    text = texts.get(index - factories.length + 3);
-                    stage.clear();
-                    stage.setViewport(viewport);
-                    stage.addActor(text.getScrollPane());
+                    display.erase();
+                    long r = ThrustAltRNG.determine(System.nanoTime()), h = LineKit.flipHorizontal4x4(r);
+                    display.put(4, 4, LineKit.decode4x4(r));
+                    display.put(8, 4, LineKit.decode4x4(h));
+                    display.put(4, 8, LineKit.decode4x4(LineKit.flipVertical4x4(r)));
+                    display.put(8, 8, LineKit.decode4x4(LineKit.flipVertical4x4(h)));
+                    r = ThrustAltRNG.determine(h) & (ThrustAltRNG.determine(h + 1) | ThrustAltRNG.determine(h + 2));
+                    h = ThrustAltRNG.determine(r + 1) & (ThrustAltRNG.determine(r + 2) | ThrustAltRNG.determine(r + 3));
+                    display.put(14, 4, LineKit.decode4x4(r));
+                    display.put(18, 4, LineKit.decode4x4(LineKit.flipHorizontal4x4(r)));
+                    display.put(14, 8, LineKit.decode4x4(h));
+                    display.put(18, 8, LineKit.decode4x4(LineKit.flipHorizontal4x4(h)));
+                }
+                else {
+                    index = ((index + 1) % factories.length);
+                    viewport = viewports[index];
+                    if (index < factories.length - 3) {
+                        tcf = factories[index];
+                        display = displays[index];
+                        stage.clear();
+                        stage.setViewport(viewport);
+                        stage.addActor(display);
+                    } else {
+                        text = texts.get(index - factories.length + 3);
+                        stage.clear();
+                        stage.setViewport(viewport);
+                        stage.addActor(text.getScrollPane());
+                    }
                 }
                 Gdx.graphics.setTitle("SquidLib Demo: Fonts, preview " + (index+1) + "/" + viewports.length + " (press any key)");
                 return true;
