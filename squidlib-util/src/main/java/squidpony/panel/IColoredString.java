@@ -1,5 +1,6 @@
 package squidpony.panel;
 
+import squidpony.StringKit;
 import squidpony.annotation.Beta;
 
 import java.util.*;
@@ -424,7 +425,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			if (isEmpty()) {
 				/*
 				 * Catch this case early on, as empty lines are eaten below (see
-				 * code after the while). Checking emptyness is cheap anyway.
+				 * code after the while). Checking emptiness is cheap anyway.
 				 */
 				result.add(this);
 				return result;
@@ -436,15 +437,17 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			while (it.hasNext()) {
 				final Bucket<T> next = it.next();
 				final String bucket = next.getText();
-				final String[] split = bucket.split(" ");
+				final String[] split = StringKit.split(bucket," ");
 				final T color = next.color;
 				for (int i = 0; i < split.length; i++) {
-					if (i == split.length - 1 && bucket.endsWith(" "))
-						/*
-						 * Do not loose trailing space that got eaten by
-						 * 'bucket.split'.
-						 */
-						split[i] = split[i] + " ";
+					// This section was needed when using String.split() above, but not for
+					// StringKit.split(), which keeps leading and trailing delimiters.
+//					if (i == split.length - 1 && bucket.endsWith(" "))
+//						/*
+//						 * Do not lose trailing space that got eaten by
+//						 * 'bucket.split'.
+//						 */
+//						split[i] = split[i] + " ";
 					final String chunk = split[i];
 					final int chunklen = chunk.length();
 					final boolean addLeadingSpace = 0 < curlen && 0 < i;
@@ -557,7 +560,8 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				assert 0 <= lastHopeIndex;
 			}
 
-			int toAddPerSpace = totalNbSpaces == 0 ? 0 : (totalDiff / totalNbSpaces);
+			// we know totalNbSpaces cannot be 0 from prior checks, so division is OK
+			int toAddPerSpace = (totalDiff / totalNbSpaces);
 			int totalRest = totalDiff - (toAddPerSpace * totalNbSpaces);
 			assert 0 <= totalRest;
 
@@ -658,10 +662,9 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		/* This implementation is resilient to empty buckets */
 		public boolean isEmpty() {
 			for (Bucket<?> bucket : fragments) {
-				if (bucket.text == null || bucket.text.isEmpty())
-					continue;
-				else
+				if (bucket.text != null && !bucket.text.isEmpty()) {
 					return false;
+				}
 			}
 			return true;
 		}
