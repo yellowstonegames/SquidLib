@@ -53,22 +53,22 @@ public class FontTest extends ApplicationAdapter {
     private SquidPanel[] displays;
     private TextPanel<Color> text;
     private ArrayList<TextPanel<Color>> texts;
-    private int index = 17;// 5;
+    private int index = 5;
     private static final int ZOOM = 1;
     @Override
     public void create() {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{90, 90, 90, 90, 90, 90, 100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
-        heights = new int[]{17, 17, 17, 17, 17, 17, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
+        widths =  new int[]{90, 90, 90, 90, 90, 70, 100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
+        heights = new int[]{17, 17, 17, 17, 17, 29, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabItalicFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispLeanFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispLeanItalicFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispDejaVuFont().width(ZOOM * 14).height(28).initBySize(),
-                DefaultResources.getCrispDejaVuItalicFont().width(ZOOM * 14).height(28).initBySize(),
+                DefaultResources.getStretchableHeavySquareFont().width(ZOOM * 24).height(24).initBySize(),
 
                 DefaultResources.getStretchableFont().width(ZOOM * 13).height(30).initBySize(),
                 DefaultResources.getStretchableTypewriterFont().width(ZOOM * 14).height(28).initBySize(),
@@ -119,7 +119,7 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[2], heights[2], factories[2]).setTextSize(factories[2].width() + 2f * ZOOM, factories[2].height() + 4f * ZOOM),
                 new SquidPanel(widths[3], heights[3], factories[3]).setTextSize(factories[3].width() + 1f * ZOOM, factories[3].height() + 3f * ZOOM),
                 new SquidPanel(widths[4], heights[4], factories[4]).setTextSize(factories[4].width() + 0.5f * ZOOM, factories[4].height() + 1f * ZOOM),
-                new SquidPanel(widths[5], heights[5], factories[5]).setTextSize(factories[5].width() + 1f * ZOOM, factories[5].height() + 0f * ZOOM),
+                new SquidPanel(widths[5], heights[5], factories[5]).setTextSize(factories[5].width() + 0.5f * ZOOM, factories[5].height() + 0.5f * ZOOM),
                 new SquidPanel(widths[6], heights[6], factories[6]).setTextSize(factories[6].width() + 0.75f * ZOOM, factories[6].height() + 5.25f * ZOOM),
                 new SquidPanel(widths[7], heights[7], factories[7]).setTextSize(factories[7].width() + 1f * ZOOM, factories[7].height() + 0.5f * ZOOM),
                 new SquidPanel(widths[8], heights[8], factories[8]).setTextSize(factories[8].width() + 2.5f * ZOOM, factories[8].height() + 4f * ZOOM),
@@ -201,17 +201,50 @@ public class FontTest extends ApplicationAdapter {
                 if(keycode == Input.Keys.B)
                 {
                     display.erase();
-                    long r = ThrustAltRNG.determine(System.nanoTime()), h = LineKit.flipHorizontal4x4(r);
-                    display.put(4, 4, LineKit.decode4x4(r));
-                    display.put(8, 4, LineKit.decode4x4(h));
-                    display.put(4, 8, LineKit.decode4x4(LineKit.flipVertical4x4(r)));
-                    display.put(8, 8, LineKit.decode4x4(LineKit.flipVertical4x4(h)));
+                    long r = System.nanoTime(), h;
+                    r = ThrustAltRNG.determine(r);
+                    h = LineKit.flipHorizontal4x4(r);
+                    display.put(4, 2, LineKit.decode4x4(r));
+                    display.put(8, 2, LineKit.decode4x4(h));
+                    display.put(4, 6, LineKit.decode4x4(LineKit.flipVertical4x4(r)));
+                    display.put(8, 6, LineKit.decode4x4(LineKit.flipVertical4x4(h)));
+
                     r = ThrustAltRNG.determine(h) & (ThrustAltRNG.determine(h + 1) | ThrustAltRNG.determine(h + 2));
                     h = ThrustAltRNG.determine(r + 1) & (ThrustAltRNG.determine(r + 2) | ThrustAltRNG.determine(r + 3));
-                    display.put(14, 4, LineKit.decode4x4(r));
-                    display.put(18, 4, LineKit.decode4x4(LineKit.flipHorizontal4x4(r)));
-                    display.put(14, 8, LineKit.decode4x4(h));
-                    display.put(18, 8, LineKit.decode4x4(LineKit.flipHorizontal4x4(h)));
+                    display.put(14,2, LineKit.decode4x4(r));
+                    display.put(18, 2, LineKit.decode4x4(LineKit.flipHorizontal4x4(r)));
+                    display.put(14, 6, LineKit.decode4x4(h));
+                    display.put(18, 6, LineKit.decode4x4(LineKit.flipHorizontal4x4(h)));
+
+                    r = (ThrustAltRNG.determine(r + 1) & ThrustAltRNG.determine(r + 2)) & LineKit.interiorCircleLarge;
+                    r ^= LineKit.transpose4x4(r);
+                    r |= LineKit.exteriorCircleLarge;
+                    h = LineKit.flipHorizontal4x4(r);
+                    display.put(24, 2, LineKit.decode4x4(r));
+                    display.put(28, 2, LineKit.decode4x4(h));
+                    display.put(24, 6, LineKit.decode4x4(LineKit.flipVertical4x4(r)));
+                    display.put(28, 6, LineKit.decode4x4(LineKit.flipVertical4x4(h)));
+
+                    r = ThrustAltRNG.determine(r+1) & ThrustAltRNG.determine(r + 2);
+                    r &= LineKit.flipHorizontal4x4(r);
+                    h = ThrustAltRNG.determine(h+1) & ThrustAltRNG.determine(h + 2);
+                    h &= LineKit.flipHorizontal4x4(h);
+                    display.put(4,  12, LineKit.decode4x4(r));
+                    display.put(4,  16, LineKit.decode4x4(h));
+
+                    r = ThrustAltRNG.determine(r+1) & ThrustAltRNG.determine(r + 2);
+                    r ^= LineKit.flipHorizontal4x4(r);
+                    h = ThrustAltRNG.determine(h+1) & ThrustAltRNG.determine(h + 2);
+                    h ^= LineKit.flipHorizontal4x4(h);
+                    display.put(11,  12, LineKit.decode4x4(r));
+                    display.put(11,  16, LineKit.decode4x4(h));
+
+                    r = ThrustAltRNG.determine(r+1) & ThrustAltRNG.determine(r + 2);
+                    r |= LineKit.flipHorizontal4x4(r);
+                    h = ThrustAltRNG.determine(h+1) & ThrustAltRNG.determine(h + 2);
+                    h |= LineKit.flipHorizontal4x4(h);
+                    display.put(18,  12, LineKit.decode4x4(r));
+                    display.put(18,  16, LineKit.decode4x4(h));
                 }
                 else {
                     index = ((index + 1) % factories.length);
@@ -257,7 +290,7 @@ public class FontTest extends ApplicationAdapter {
     }
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Demo: Fonts, preview 1/9 (press any key)";
+        config.title = "SquidLib Demo: Fonts, preview 1/22 (press any key)";
 //        config.width = totalWidth = LwjglApplicationConfiguration.getDesktopDisplayMode().width - 10;
 //        config.height = totalHeight = LwjglApplicationConfiguration.getDesktopDisplayMode().height - 128;
         config.width = totalWidth = 1000;
