@@ -62,10 +62,44 @@ public class LineKit {
      */
     exteriorSquareLarge = 0x000A000A000A555CL,
     /**
+     * A constant that represents the encoded pattern for the upper left 4x4 area of a 6x6 square centered in an 8x8
+     * space. A 3x3 square will be filled of the 4x4 area this represents. No lines will touch the upper or left
+     * borders, but they do extend into the lower and right borders. This is expected to be flipped using
+     * {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
+     * @see #interiorSquare The docs here cover how to use this as a mask with bitwise AND.
+     */
+    shallowInteriorSquareLarge = 0xFFE0FFE0DDC00000L,
+    /**
+     * A constant that represents the encoded pattern for the upper left 4x4 area of a 6x6 square border centered in an
+     * 8x8 space. This consists of a 3-cell-long vertical line and a 3-cell-long horizontal line. No lines will touch
+     * the upper or left borders, but they do extend into the lower and right borders. The entirety of this
+     * pattern is one right-angle. This is expected to be flipped using {@link #flipHorizontal4x4(long)} and/or
+     * {@link #flipVertical4x4(long)} to make the other corners.
+     * @see #exteriorSquare The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
+     */
+    shallowExteriorSquareLarge = 0x00A000A055C00000L,
+    /**
+     * A constant that represents the encoded pattern for the upper left 4x4 area of a 4x4 square centered in an 8x8
+     * space. A 2x2 square will be filled of the 4x4 area this represents. No lines will touch the upper or left
+     * borders, but they do extend into the lower and right borders. This is expected to be flipped using
+     * {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
+     * @see #interiorSquare The docs here cover how to use this as a mask with bitwise AND.
+     */
+    shallowerInteriorSquareLarge = 0xFE00DC0000000000L,
+    /**
+     * A constant that represents the encoded pattern for the upper left 4x4 area of a 4x4 square border centered in an
+     * 8x8 space. This consists of a 2-cell-long vertical line and a 2-cell-long horizontal line. No lines will touch
+     * the upper or left borders, but they do extend into the lower and right borders. The entirety of this
+     * pattern is one right-angle. This is expected to be flipped using {@link #flipHorizontal4x4(long)} and/or
+     * {@link #flipVertical4x4(long)} to make the other corners.
+     * @see #exteriorSquare The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
+     */
+    shallowerExteriorSquareLarge = 0x0A005C0000000000L,
+    /**
      * A constant that represents the encoded pattern for the upper left 4x4 area of an 8x8 plus shape. No lines will
-     * touch the upper or left borders, but they do extend into the lower and right borders.  This pattern leaves the
-     * upper left 2x2 area blank, as well as all but one each of the bottom and right border cells. This is expected to
-     * be flipped using {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
+     * touch the upper or left borders, but they do extend into the lower and right borders. This pattern leaves the
+     * upper left 2x2 area blank, and touches all of the lower and right borders. This is expected to be flipped using
+     * {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners.
      * @see #interiorPlus The docs here cover how to use this as a mask with bitwise AND.
      */
     interiorPlusLarge = 0xFFFEFFDCFE00DC00L,
@@ -91,7 +125,25 @@ public class LineKit {
      * {@link #flipVertical4x4(long)} to make other corners.
      * @see #exteriorPlus The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
      */
-    exteriorCircleLarge = 0x000A003C03C05C00L;
+    exteriorCircleLarge = 0x000A003C03C05C00L,
+    /**
+     * A constant that represents the encoded pattern for the upper left 4x4 area of an 8x8 diamond shape. No lines will
+     * touch the upper or left borders, but they do extend into the lower and right borders. This pattern leaves the
+     * upper left 2x2 area blank, and touches all of the lower and right borders. This is expected to be flipped using
+     * {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other corners. This has more of a
+     * fine angle than {@link #interiorPlusLarge}, which is otherwise similar.
+     * @see #interiorPlus The docs here cover how to use this as a mask with bitwise AND.
+     */
+    interiorDiamondLarge = 0xFFFCFFC0FC00C000L,
+    /**
+     * A constant that represents the encoded pattern for the upper left 4x4 area of an 8x8 diamond shape border. No
+     * lines will touch the upper or left borders, but they do extend into the lower and right borders. This pattern
+     * leaves the upper left 2x2 area blank, as well as all but one each of the bottom and right border cells. This is
+     * expected to be flipped using {@link #flipHorizontal4x4(long)} and/or {@link #flipVertical4x4(long)} to make other
+     * corners. This has more of a fine angle than {@link #exteriorPlusLarge}, which is otherwise similar.
+     * @see #exteriorPlus The docs here cover how to use this as a mask with bitwise AND or to insert it with OR.
+     */
+    exteriorDiamondLarge = 0x003C03C03C00C000L;
 
     /**
      * Produces a 4x4 2D char array by interpreting the bits of the given long as line information. Uses the box drawing
@@ -260,7 +312,41 @@ public class LineKit {
     {
         long v = 0L;
         for (int i4 = 0; i4 < 64; i4 += 4) {
-            v |= (((encoded >>> i4 & 5L) << 1) | ((encoded >>> i4 & 10L) >>> 1)) << ((i4 >>> 2 & -4L) | ((i4 & 12) << 2));
+            v |= (((encoded >>> i4 & 5L) << 1) | ((encoded >>> i4 & 10L) >>> 1)) << ((i4 >>> 2 & 12L) | ((i4 & 12L) << 2));
+        }
+        return v;
+    }
+    /**
+     * Makes a variant on the given encoded 4x4 pattern so the lines are rotated 90 degrees clockwise, changing their
+     * positions as well as what chars they will decode to. This can be called twice to get a 180 degree rotation, but
+     * {@link #rotateCounterclockwise(long)} should be used for a 270 degree rotation.
+     * @param encoded an encoded pattern long that represents a 4x4 area
+     * @return a different encoded pattern long that represents the argument rotated 90 degrees clockwise
+     */
+    public static long rotateClockwise(long encoded)
+    {
+        // this is functionally equivalent to, but faster than, the following:
+        // return flipHorizontal4x4(transpose4x4(encoded));
+        long v = 0L;
+        for (int i4 = 0; i4 < 64; i4 += 4) {
+            v |= (((encoded >>> i4 & 7L) << 1) | ((encoded >>> i4 & 8L) >>> 3)) << ((~i4 >>> 2 & 12L) | ((i4 & 12L) << 2));
+        }
+        return v;
+    }
+    /**
+     * Makes a variant on the given encoded 4x4 pattern so the lines are rotated 90 degrees counterclockwise, changing
+     * their positions as well as what chars they will decode to. This can be called twice to get a 180 degree rotation,
+     * but {@link #rotateClockwise(long)} should be used for a 270 degree rotation.
+     * @param encoded an encoded pattern long that represents a 4x4 area
+     * @return a different encoded pattern long that represents the argument rotated 90 degrees counterclockwise
+     */
+    public static long rotateCounterclockwise(long encoded)
+    {
+        // this is functionally equivalent to, but faster than, the following:
+        // return flipVertical4x4(transpose4x4(encoded));
+        long v = 0L;
+        for (int i4 = 0; i4 < 64; i4 += 4) {
+            v |= ((encoded >>> (i4 + 1) & 7L) | ((encoded >>> i4 & 1L) << 3)) << ((i4 >>> 2 & 12L) | ((~i4 & 12L) << 2));
         }
         return v;
     }
@@ -336,6 +422,48 @@ public class LineKit {
 //                        {' ', '┌', '┘', ' '},
 //                        {'┌', '┘', ' ', ' '},
 //                        {'│', ' ', ' ', ' '},
+//                })));
+//        System.out.printf("interiorDiamondLarge = 0x%016XL\n", LineKit.encode4x4(DungeonUtility.transposeLines(new char[][]
+//                {
+//                        {' ', ' ', ' ', '┌'},
+//                        {' ', ' ', '┌', '┼'},
+//                        {' ', '┌', '┼', '┼'},
+//                        {'┌', '┼', '┼', '┼'},
+//                })));
+//        System.out.printf("exteriorDiamondLarge = 0x%016XL\n", LineKit.encode4x4(DungeonUtility.transposeLines(new char[][]
+//                {
+//                        {' ', ' ', ' ', '┌'},
+//                        {' ', ' ', '┌', '┘'},
+//                        {' ', '┌', '┘', ' '},
+//                        {'┌', '┘', ' ', ' '},
+//                })));
+//        System.out.printf("shallowInteriorSquareLarge = 0x%016XL\n", LineKit.encode4x4(DungeonUtility.transposeLines(new char[][]
+//                {
+//                        {' ', ' ', ' ', ' '},
+//                        {' ', '┌', '┬', '┬'},
+//                        {' ', '├', '┼', '┼'},
+//                        {' ', '├', '┼', '┼'},
+//                })));
+//        System.out.printf("shallowExteriorSquareLarge = 0x%016XL\n", LineKit.encode4x4(DungeonUtility.transposeLines(new char[][]
+//                {
+//                        {' ', ' ', ' ', ' '},
+//                        {' ', '┌', '─', '─'},
+//                        {' ', '│', ' ', ' '},
+//                        {' ', '│', ' ', ' '},
+//                })));
+//        System.out.printf("shallowerInteriorSquareLarge = 0x%016XL\n", LineKit.encode4x4(DungeonUtility.transposeLines(new char[][]
+//                {
+//                        {' ', ' ', ' ', ' '},
+//                        {' ', ' ', ' ', ' '},
+//                        {' ', ' ', '┌', '┬'},
+//                        {' ', ' ', '├', '┼'},
+//                })));
+//        System.out.printf("shallowerExteriorSquareLarge = 0x%016XL\n", LineKit.encode4x4(DungeonUtility.transposeLines(new char[][]
+//                {
+//                        {' ', ' ', ' ', ' '},
+//                        {' ', ' ', ' ', ' '},
+//                        {' ', ' ', '┌', '─'},
+//                        {' ', ' ', '│', ' '},
 //                })));
 //    }
 }

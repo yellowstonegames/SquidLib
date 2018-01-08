@@ -225,6 +225,19 @@ public class FontTest extends ApplicationAdapter {
                     display.put(24, 6, LineKit.decode4x4(LineKit.flipVertical4x4(r)));
                     display.put(28, 6, LineKit.decode4x4(LineKit.flipVertical4x4(h)));
 
+
+                    r = ThrustAltRNG.determine(r + 1);
+                    h = (r & LineKit.shallowInteriorSquareLarge) | LineKit.exteriorSquareLarge;
+                    display.put(34, 2, LineKit.decode4x4(h));
+                    h = LineKit.flipHorizontal4x4(h);
+                    display.put(38, 2, LineKit.decode4x4(h));
+                    r = ThrustAltRNG.determine(r + 1);
+                    h = LineKit.flipVertical4x4(
+                            (r & LineKit.shallowerInteriorSquareLarge) | LineKit.exteriorDiamondLarge);
+                    display.put(34, 6, LineKit.decode4x4(h));
+                    h = LineKit.flipHorizontal4x4(h);
+                    display.put(38, 6, LineKit.decode4x4(h));
+
                     r = ThrustAltRNG.determine(r+1) & ThrustAltRNG.determine(r + 2);
                     r &= LineKit.flipHorizontal4x4(r);
                     h = ThrustAltRNG.determine(h+1) & ThrustAltRNG.determine(h + 2);
