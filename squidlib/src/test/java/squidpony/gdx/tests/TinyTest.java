@@ -17,8 +17,8 @@ import squidpony.squidgrid.gui.gdx.*;
 public class TinyTest extends ApplicationAdapter {
     private SpriteBatch batch;
     private SquidLayers layers;
-    SquidMessageBox smb;
-    TextCellFactory font;
+    private SquidMessageBox smb;
+    private TextCellFactory font;
     @Override
     public void create() {
         batch = new SpriteBatch();

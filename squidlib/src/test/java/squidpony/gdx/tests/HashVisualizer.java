@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 64, rngMode = 26, noiseMode = 6;
+    private int hashMode = 64, rngMode = 26, noiseMode = 5;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -126,10 +126,11 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise3D scaled3D = new Noise.Scaled3D(seeded, 1.43, 1.43, 1.43);
     private final Noise.Noise4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
     private final Noise.Noise6D scaled6D = new Noise.Scaled6D(seeded, 1.43, 1.43, 1.43, 1.43, 1.43, 1.43);
-    private final Noise.Noise2D ridged2D = new Noise.Ridged2D(SeededNoise.instance, 2, 1.45); // 1.45
-    private final Noise.Noise3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 2, 1.45); // 1.45
-    private final Noise.Noise4D ridged4D = new Noise.Ridged4D(SeededNoise.instance, 2, 1.45); // 1.45
-    private final Noise.Noise6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 2, 1.45); // 1.45
+
+    private final Noise.Noise2D ridged2D = new Noise.Ridged2D(SeededNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Noise3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Noise4D ridged4D = new Noise.Ridged4D(SeededNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Noise6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 1, 1.45); // 1.45
                                                                                    
     private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise3D slick3D = new Noise.Slick3D(SeededNoise.instance, Noise.alternate, 1);
@@ -144,7 +145,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
     private final Noise.Noise2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
     private final Noise.Noise1D basic1D = new Noise.Basic1D();
-    private final Noise.Noise1D layered1D = new Noise.InverseLayered1D(new Noise.Basic1D(), 5);
+    private final Noise.Noise1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 5, 5.0);
 
     private final long
             seedX0 = thrust.nextLong(), seedX1 = thrust.nextLong(), seedX2 = thrust.nextLong(), seedX3 = thrust.nextLong(),
@@ -595,32 +596,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return (1f - a) * start + a * end;
     }
 
-    public static float tabbyNoise(final float x, final float y, final float z, final int seed) {
-        final int sx = seed | 5, sy = sx + 22256, sz = sy + 55512;
-        final float
-                ax = NumberTools.randomFloat(sx) + 0.6f,
-                ay = NumberTools.randomFloat(sy) + 0.6f,
-                az = NumberTools.randomFloat(sz) + 0.6f,
-                mx = x + y * 0.89f * ax + z * 0.57f * ax,
-                my = y + z * 0.89f * ay + x * 0.57f * ay,
-                mz = z + x * 0.89f * az + y * 0.57f * az;
-        final long
-                xf = Noise.fastFloor(mx),
-                yf = Noise.fastFloor(my),
-                zf = Noise.fastFloor(mz);
-        return NumberTools.bounce(5f + 2.4f *
-                (
-                          querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(xf * sx + 100)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((xf+1) * sx + 100)),
-                                  mx - xf)
-                        + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(yf * sy + 200)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((yf+1) * sy + 200)),
-                                  my - yf)
-                        + querp(NumberTools.formCurvedFloat(NumberTools.splitMix64(zf * sz + 300)),
-                                NumberTools.formCurvedFloat(NumberTools.splitMix64((zf+1) * sz + 300)),
-                                  mz - zf)));
-    }
-
     public static float prepare(double n)
     {
         //return (float)n * 0.5f + 0.5f;
@@ -642,6 +617,67 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     {
         return n * 0.5f + 0.5f;
     }
+
+
+//    public static class Dunes implements Noise.Noise2D {
+//        private int octaves;
+//        private double xFrequency, yFrequency;
+//        private double correct;
+//        private Noise.Noise2D basis, other;
+//
+//        public Dunes() {
+//            this(WhirlingNoise.instance, new Noise.Layered2D(WhirlingNoise.instance, 1, 0.25), 1, 0.25, 0.5);
+//        }
+//
+//        public Dunes(Noise.Noise2D basis) {
+//            this(basis, new Noise.Layered2D(basis, 1, 0.25), 1,  0.25, 0.5);
+//        }
+//
+//        public Dunes(Noise.Noise2D basis, Noise.Noise2D other, int octaves, double xFrequency, double yFrequency) {
+//            this.basis = basis;
+//            this.other = other;
+//            this.xFrequency = xFrequency;
+//            this.yFrequency = yFrequency;
+//            setOctaves(octaves);
+//        }
+//
+//        public void setOctaves(int octaves)
+//        {
+//            this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
+//            for (int o = 0; o < octaves; o++) {
+//                correct += Math.pow(2.0, -o);
+//            }
+//            correct = 2.0 / correct;
+//        }
+//
+//
+//        @Override
+//        public double getNoise(double x, double y) {
+//            double sum = 0, amp = 1.0;
+//            x *= xFrequency;
+//            y *= yFrequency;
+//            for (int i = 0; i < octaves; ++i) {
+//                double n = basis.getNoise(x + (i << 6), y + (i << 7));
+//                n = 1.0 - Math.abs(n);
+//                sum += amp * n;
+//                amp *= 0.5;
+//                x *= 2.0;
+//                y *= 2.0;
+//            }
+//            return sum * correct - 1.0;
+//        }
+//
+//        @Override
+//        public double getNoiseWithSeed(double x, double y, long seed) {
+//            x *= xFrequency;
+//            y *= yFrequency;
+//            seed = ThrustAltRNG.determine(++seed);
+//            double back = (other.getNoiseWithSeed(x * 0.875, y * 0.25, ThrustAltRNG.determine(seed)) + 1.0);
+//            return (1.0 - Math.abs(
+//                    Noise.Basic1D.noise(y * 0.125 + (Noise.Basic1D.noise(x * 0.75 + (32.0 * back), seed) * 32.0), ThrustAltRNG.determine(seed + 1)))) * back * correct * 0.5 - 1.0;
+//        }
+//    }
+
 
     @Override
     public void create() {
@@ -3434,7 +3470,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Merlin Noise 3D, x4 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 2, 1) * 255;
+                                iBright = ((int)MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 1)) * 255;
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
@@ -3443,7 +3479,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Merlin Noise 3D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 4, 1) * 255;
+                                iBright = (int)(MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 4) * 31.875);
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
@@ -3720,28 +3756,103 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
                         Arrays.fill(display.colors[511], FLOAT_WHITE);
-                        bright = SColor.floatGetHSV((ctr * 0x1.44cbc89p-8f) % 1f, 1, 1,1);
-                        iBright = (int)(basic1D.getNoise(ctr * 0.0075) * 254);
+                        if((ctr & 3) == 0)
+                        {
+                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
+                            iBright = (int)(basic1D.getNoiseWithSeed(ctr * 0.015625, 0xBADBEEF0FFAL) * 240);
+                            display.put(511, 255 + iBright, bright);
+                            display.put(511, 256 + iBright, bright);
+                            display.put(511, 257 + iBright, bright);
+
+                            display.put(510, 255 + iBright, bright);
+                            display.put(510, 256 + iBright, bright);
+                            display.put(510, 257 + iBright, bright);
+
+                            display.put(509, 255 + iBright, bright);
+                            display.put(509, 256 + iBright, bright);
+                            display.put(509, 257 + iBright, bright);
+                        }
+
+                        /*
+                        display.put(511, 252 + iBright, bright);
+                        display.put(511, 253 + iBright, bright);
                         display.put(511, 254 + iBright, bright);
                         display.put(511, 255 + iBright, bright);
                         display.put(511, 256 + iBright, bright);
                         display.put(511, 257 + iBright, bright);
                         display.put(511, 258 + iBright, bright);
+                        display.put(511, 259 + iBright, bright);
+                        display.put(511, 260 + iBright, bright);
+
+                        display.put(510, 253 + iBright, bright);
+                        display.put(510, 254 + iBright, bright);
+                        display.put(510, 255 + iBright, bright);
+                        display.put(510, 256 + iBright, bright);
+                        display.put(510, 257 + iBright, bright);
+                        display.put(510, 258 + iBright, bright);
+                        display.put(510, 259 + iBright, bright);
+
+                        display.put(509, 254 + iBright, bright);
+                        display.put(509, 255 + iBright, bright);
+                        display.put(509, 256 + iBright, bright);
+                        display.put(509, 257 + iBright, bright);
+                        display.put(509, 258 + iBright, bright);
+
+                        display.put(508, 255 + iBright, bright);
+                        display.put(508, 256 + iBright, bright);
+                        display.put(508, 257 + iBright, bright);
+                        */
                         break;
                     case 105:
                         Gdx.graphics.setTitle("Basic 1D Noise, five inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
                         Arrays.fill(display.colors[511], FLOAT_WHITE);
-                        bright = SColor.floatGetHSV((ctr * 0x1.44cbc89p-8f) % 1f, 1, 1,1);
-                        iBright = (int)(layered1D.getNoiseWithSeed(ctr * 0.0075, 0xBADBEEF0FFAL) * 254);
+                        if((ctr & 3) == 0)
+                        {
+                            iBright = (int)(layered1D.getNoiseWithSeed(ctr * 0.015625, 0xBADBEEF0FFAL) * 240);
+                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
+                            display.put(511, 255 + iBright, bright);
+                            display.put(511, 256 + iBright, bright);
+                            display.put(511, 257 + iBright, bright);
+
+                            display.put(510, 255 + iBright, bright);
+                            display.put(510, 256 + iBright, bright);
+                            display.put(510, 257 + iBright, bright);
+
+                            display.put(509, 255 + iBright, bright);
+                            display.put(509, 256 + iBright, bright);
+                            display.put(509, 257 + iBright, bright);
+                        }
+
+                        /*
+                        display.put(511, 252 + iBright, bright);
+                        display.put(511, 253 + iBright, bright);
                         display.put(511, 254 + iBright, bright);
                         display.put(511, 255 + iBright, bright);
                         display.put(511, 256 + iBright, bright);
                         display.put(511, 257 + iBright, bright);
                         display.put(511, 258 + iBright, bright);
-                        break;
+                        display.put(511, 259 + iBright, bright);
+                        display.put(511, 260 + iBright, bright);
 
+                        display.put(510, 254 + iBright, bright);
+                        display.put(510, 255 + iBright, bright);
+                        display.put(510, 256 + iBright, bright);
+                        display.put(510, 257 + iBright, bright);
+                        display.put(510, 258 + iBright, bright);
+
+                        display.put(509, 254 + iBright, bright);
+                        display.put(509, 255 + iBright, bright);
+                        display.put(509, 256 + iBright, bright);
+                        display.put(509, 257 + iBright, bright);
+                        display.put(509, 258 + iBright, bright);
+
+                        display.put(508, 255 + iBright, bright);
+                        display.put(508, 256 + iBright, bright);
+                        display.put(508, 257 + iBright, bright);
+                        */
+                        break;
                 }
             }
             break;

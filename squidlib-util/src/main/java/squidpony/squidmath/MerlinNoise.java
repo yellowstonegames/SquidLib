@@ -136,7 +136,7 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
         return noise3D(x, y, z, seed, resolution, bits);
     }
     private static long lorp(long start, long end, long a, long resolution) {
-        end = ((1L << resolution) - a) *  start + a * end >> resolution;
+        end = ((1L << resolution) - a) * start + a * end >>> resolution;
         return end;
     }
     /**
@@ -150,11 +150,12 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
      * @return noise from {@code -(1L << bits)} to {@code (1L << bits) - 1L}, both inclusive
      */
     public static long noise2D(long x, long y, long state, int resolution, int bits) {
-        long xb = x >>> resolution, yb = y >>> resolution, xr = (x & ~(-1L << resolution)), yr = (y & ~(-1L << resolution)),
+        long xb = (x >> resolution) + 0x9E3779B97F4A7C15L, yb = (y >> resolution) + 0xE3779B97F4A7C159L,
+                xr = (x & ~(-1L << resolution)), yr = (y & ~(-1L << resolution)),
                 x0 = ThrustAltRNG.determine(xb), x1 = ThrustAltRNG.determine(xb + 1),
                 y0 = ThrustAltRNG.determine(yb), y1 = ThrustAltRNG.determine(yb + 1),
-                x0y0 = (x0 * y0 ^ x0 - y0) >> resolution, x1y0 = (x1 * y0 ^ x1 - y0) >> resolution,
-                x0y1 = (x0 * y1 ^ x0 - y1) >> resolution, x1y1 = (x1 * y1 ^ x1 - y1) >> resolution;
+                x0y0 = (x0 * y0 ^ x0 - y0) >>> resolution, x1y0 = (x1 * y0 ^ x1 - y0) >>> resolution,
+                x0y1 = (x0 * y1 ^ x0 - y1) >>> resolution, x1y1 = (x1 * y1 ^ x1 - y1) >>> resolution;
 
 //                x0y0 = Noise.PointHash.hashAll(xb, yb, state) >> resolution, x1y0 = Noise.PointHash.hashAll(xb + 1, yb, state) >> resolution,
 //                x0y1 = Noise.PointHash.hashAll(xb, yb + 1, state) >> resolution, x1y1 = Noise.PointHash.hashAll(xb + 1, yb + 1, state) >> resolution;
@@ -167,7 +168,8 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
 //                        + (ThrustAltRNG.determine(x0y1b + 2) >> 2) + (ThrustAltRNG.determine(x0y1b + 3) >> 2),
 //                x1y1 = (x1y1b >> 2) + (ThrustAltRNG.determine(x1y1b + 1) >> 2)
 //                        + (ThrustAltRNG.determine(x1y1b + 2) >> 2) + (ThrustAltRNG.determine(x1y1b + 3) >> 2)
-        return lorp(lorp(x0y0, x1y0, xr, resolution), lorp(x0y1, x1y1, xr, resolution), yr, resolution) >>> -bits; // >> (- bits - resolution & 63)
+        return lorp(lorp(x0y0, x1y0, xr, resolution), lorp(x0y1, x1y1, xr, resolution), yr, resolution)
+                >>> -resolution - bits; // >> (- bits - resolution & 63)
     }
 
     /**
@@ -182,15 +184,15 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
      * @return noise from {@code -(1L << bits)} to {@code (1L << bits) - 1L}, both inclusive
      */
     public static long noise3D(long x, long y, long z, long state, int resolution, int bits) {
-        long xb = x >> resolution, yb = y >> resolution, zb = z >> resolution,
+        long xb = (x >> resolution) + 0x9E3779B97F4A7C15L, yb = (y >> resolution) + 0xE3779B97F4A7C159L, zb = (z >> resolution) + 0x59E3779B97F4A7C1L,
                 xr = x & ~(-1L << resolution), yr = y & ~(-1L << resolution), zr = z & ~(-1L << resolution),
                 x0 = ThrustAltRNG.determine(xb), x1 = ThrustAltRNG.determine(xb + 1),
                 y0 = ThrustAltRNG.determine(yb), y1 = ThrustAltRNG.determine(yb + 1),
                 z0 = ThrustAltRNG.determine(zb), z1 = ThrustAltRNG.determine(zb + 1),
-                x0y0z0 = (x0 * y0 * z0 ^ x0 - y0 + (z0 - x0 << 32 | y0 - z0 >>> 32)) >> resolution, x1y0z0 = (x1 * y0 * z0 ^ x1 - y0 + (z0 - x1 << 32 | y0 - z0 >>> 32)) >> resolution,
-                x0y1z0 = (x0 * y1 * z0 ^ x0 - y1 + (z0 - x0 << 32 | y1 - z0 >>> 32)) >> resolution, x1y1z0 = (x1 * y1 * z0 ^ x1 - y1 + (z0 - x1 << 32 | y1 - z0 >>> 32)) >> resolution,
-                x0y0z1 = (x0 * y0 * z1 ^ x0 - y0 + (z1 - x0 << 32 | y0 - z1 >>> 32)) >> resolution, x1y0z1 = (x1 * y0 * z1 ^ x1 - y0 + (z1 - x1 << 32 | y0 - z1 >>> 32)) >> resolution,
-                x0y1z1 = (x0 * y1 * z1 ^ x0 - y1 + (z1 - x0 << 32 | y1 - z1 >>> 32)) >> resolution, x1y1z1 = (x1 * y1 * z1 ^ x1 - y1 + (z1 - x1 << 32 | y1 - z1 >>> 32)) >> resolution;
+                x0y0z0 = (x0 * y0 * z0 ^ x0 - y0 + (z0 - x0 << 32 | y0 - z0 >>> 32)) >>> resolution, x1y0z0 = (x1 * y0 * z0 ^ x1 - y0 + (z0 - x1 << 32 | y0 - z0 >>> 32)) >>> resolution,
+                x0y1z0 = (x0 * y1 * z0 ^ x0 - y1 + (z0 - x0 << 32 | y1 - z0 >>> 32)) >>> resolution, x1y1z0 = (x1 * y1 * z0 ^ x1 - y1 + (z0 - x1 << 32 | y1 - z0 >>> 32)) >>> resolution,
+                x0y0z1 = (x0 * y0 * z1 ^ x0 - y0 + (z1 - x0 << 32 | y0 - z1 >>> 32)) >>> resolution, x1y0z1 = (x1 * y0 * z1 ^ x1 - y0 + (z1 - x1 << 32 | y0 - z1 >>> 32)) >>> resolution,
+                x0y1z1 = (x0 * y1 * z1 ^ x0 - y1 + (z1 - x0 << 32 | y1 - z1 >>> 32)) >>> resolution, x1y1z1 = (x1 * y1 * z1 ^ x1 - y1 + (z1 - x1 << 32 | y1 - z1 >>> 32)) >>> resolution;
 
 //                x0y0z0 = Noise.PointHash.hashAll(xb, yb, zb, state) >> resolution, x1y0z0 = Noise.PointHash.hashAll(xb + 1, yb, zb, state) >> resolution,
 //                x0y1z0 = Noise.PointHash.hashAll(xb, yb + 1, zb, state) >> resolution, x1y1z0 = Noise.PointHash.hashAll(xb + 1, yb + 1, zb, state) >> resolution,
@@ -213,8 +215,18 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
 //                        + (ThrustAltRNG.determine(x0y1z1b + 2) >> 2) + (ThrustAltRNG.determine(x0y1z1b + 3) >> 2),
 //                x1y1z1 = (x1y1z1b >> 2) + (ThrustAltRNG.determine(x1y1z1b + 1) >> 2)
 //                        + (ThrustAltRNG.determine(x1y1z1b + 2) >> 2) + (ThrustAltRNG.determine(x1y1z1b + 3) >> 2);
+//        long xm = lorp(x0y0z0, x1y0z0, xr, resolution),
+//                xn = lorp(x0y1z0, x1y1z0, xr, resolution),
+//                xo = lorp(x0y0z1, x1y0z1, xr, resolution),
+//                xp = lorp(x0y1z1, x1y1z1, xr, resolution),
+//                ym = lorp(xm, xn, yr, resolution),
+//                yn = lorp(xo, xp, yr, resolution),
+//                zm = lorp(ym, yn, zr, resolution);
+//         zm >>>= -resolution-bits;
+//         return zm;
         return lorp(lorp(lorp(x0y0z0, x1y0z0, xr, resolution), lorp(x0y1z0, x1y1z0, xr, resolution), yr, resolution),
-                lorp(lorp(x0y0z1, x1y0z1, xr, resolution), lorp(x0y1z1, x1y1z1, xr, resolution), yr, resolution), zr, resolution) >>> -bits;
+                lorp(lorp(x0y0z1, x1y0z1, xr, resolution), lorp(x0y1z1, x1y1z1, xr, resolution), yr, resolution), zr, resolution)
+                >>> -resolution - bits;
     }
 
     /**

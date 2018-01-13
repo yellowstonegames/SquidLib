@@ -164,16 +164,6 @@
                 <artifactId>maven-source-plugin</artifactId>
                 <version>${maven.source.version}</version>
                 <executions>
-                    <!--<execution>
-                        <id>package-jars</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <includePom>true</includePom>
-                        </configuration>
-                    </execution>-->
                     <execution>
                         <id>attach-sources</id>
                         <goals>
@@ -190,15 +180,6 @@
                 <version>${maven.javadoc.version}</version>
                 <inherited>true</inherited>
                 <executions>
-                    <!--<execution>
-                        <id>package-jars</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                        </configuration>
-                    </execution>-->
                     <execution>
                         <id>attach-javadocs</id>
                         <goals>
@@ -215,9 +196,6 @@
                     <quiet>true</quiet>
                     <doctitle>${project.name} ${project.version}</doctitle>
                     <windowtitle>${project.name} ${project.version}</windowtitle>
-                    <!--
-                    <testDoctitle>${project.name} ${project.version} (TEST API)</testDoctitle>
-                    <testWindowtitle>${project.name} ${project.version} (TEST API)</testWindowtitle>-->
                     <splitindex>true</splitindex>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <javadocVersion>${jdk.version}</javadocVersion>
@@ -233,7 +211,6 @@
                     <linksource>true</linksource>
                     <detectOfflineLinks>true</detectOfflineLinks>
                     <excludePackageNames>*emu*</excludePackageNames>
-                    <!--<additionalparam>-Xdoclint:none</additionalparam>-->
                 </configuration>
             </plugin>
         </plugins>

@@ -2232,5 +2232,11 @@ public class Noise {
             final long x0 = longFloor(x);
             return cerp(NumberTools.randomFloatCurved(x0 + seed), NumberTools.randomFloatCurved(x0 + 1L + seed), x - x0);
         }
+
+        public static double noise(double x, long seed) {
+            //x += NumberTools.sway(seed * 0x1.61p-16 * x);
+            final long x0 = longFloor(x);
+            return cerp(NumberTools.randomFloatCurved(x0 + seed), NumberTools.randomFloatCurved(x0 + 1L + seed), x - x0);
+        }
     }
 }
