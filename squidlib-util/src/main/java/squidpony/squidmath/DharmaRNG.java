@@ -1,7 +1,6 @@
 package squidpony.squidmath;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -153,134 +152,6 @@ public class DharmaRNG extends RNG implements Serializable{
     }
 
     /**
-     * This returns a random double between 0.0 (inclusive) and max (exclusive).
-     *
-     * @return a value between 0 (inclusive) and max (exclusive)
-     */
-    @Override
-    public double nextDouble(double max) {
-        return super.nextDouble(max);
-    }
-
-    /**
-     * Returns a value from a even distribution from min (inclusive) to max
-     * (exclusive).
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @return the found value
-     */
-    @Override
-    public double between(double min, double max) {
-        return super.between(min, max);
-    }
-
-    /**
-     * Returns a value between min (inclusive) and max (exclusive).
-     *
-     * The inclusive and exclusive behavior is to match the behavior of the
-     * similar method that deals with floating point values.
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @return the found value
-     */
-    @Override
-    public int between(int min, int max)
-    {
-        return super.between(min, max);
-    }
-
-    /**
-     * Returns the average of a number of randomly selected numbers from the
-     * provided range, with min being inclusive and max being exclusive. It will
-     * sample the number of times passed in as the third parameter.
-     *
-     * The inclusive and exclusive behavior is to match the behavior of the
-     * similar method that deals with floating point values.
-     *
-     * This can be used to weight RNG calls to the average between min and max.
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @param samples the number of samples to take
-     * @return the found value
-     */
-    @Override
-    public int betweenWeighted(int min, int max, int samples) {
-        return super.betweenWeighted(min, max, samples);
-    }
-
-    /**
-     * Returns a random element from the provided array and maintains object
-     * type.
-     *
-     * @param <T> the type of the returned object
-     * @param array the array to get an element from
-     * @return the randomly selected element
-     */
-    @Override
-    public <T> T getRandomElement(T[] array) {
-        return super.getRandomElement(array);
-    }
-
-    /**
-     * Returns a random element from the provided list. If the list is empty
-     * then null is returned.
-     *
-     * @param <T> the type of the returned object
-     * @param list the list to get an element from
-     * @return the randomly selected element
-     */
-    @Override
-    public <T> T getRandomElement(List<T> list) {
-        return super.getRandomElement(list);
-    }
-
-    /**
-     * Returns a random element from the provided ShortSet. If the set is empty
-     * then an exception is thrown.
-     *
-     * <p>
-     * Requires iterating through a random amount of the elements in set, so performance depends on the size of set but
-     * is likely to be decent. This is mostly meant for internal use, the same as ShortSet.
-     * </p>
-     * @param set the ShortSet to get an element from
-     * @return the randomly selected element
-     */
-    public short getRandomElement(ShortSet set) {
-        return super.getRandomElement(set);
-    }
-
-    /**
-     * Returns a random element from the provided Collection, which should have predictable iteration order if you want
-     * predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
-     * (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted
-     * Set like TreeSet if you want predictable results. Any List or Queue should be fine. Map does not implement
-     * Collection, thank you very much Java library designers, so you can't actually pass a Map to this, though you can
-     * pass the keys or values. If coll is empty, returns null.
-     *
-     * <p>
-     * Requires iterating through a random amount of coll's elements, so performance depends on the size of coll but is
-     * likely to be decent, as long as iteration isn't unusually slow. This replaces {@code getRandomElement(Queue)},
-     * since Queue implements Collection and the older Queue-using implementation was probably less efficient.
-     * </p>
-     * @param <T> the type of the returned object
-     * @param coll the Collection to get an element from; remember, Map does not implement Collection
-     * @return the randomly selected element
-     */
-    public <T> T getRandomElement(Collection<T> coll) {
-        return super.getRandomElement(coll);
-    }
-
-    /**
-     * @return a value from the gaussian distribution
-     */
-    @Override
-    public synchronized double nextGaussian() {
-        return super.nextGaussian();
-    }
-    /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or
      * negative. Affects the current fortune.
      *
@@ -297,8 +168,8 @@ public class DharmaRNG extends RNG implements Serializable{
     }
 
     /**
-     * Returns a random integer, which may be positive or negative. Affects the current fortune.
-     * @return A random int
+     * Returns a random integer, which may be any positive or negative value. Affects the current fortune.
+     * @return A random int (can be any int, without restriction)
      */
     @Override
     public int nextInt() {
@@ -306,8 +177,8 @@ public class DharmaRNG extends RNG implements Serializable{
     }
 
     /**
-     * Returns a random long, which may be positive or negative. Affects the current fortune.
-     * @return A random long
+     * Returns a random long, which may be any positive or negative value. Affects the current fortune.
+     * @return A random long (can be any long, without restriction)
      */
     @Override
     public long nextLong() {

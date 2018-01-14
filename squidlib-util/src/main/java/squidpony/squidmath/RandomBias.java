@@ -90,8 +90,6 @@ public class RandomBias implements Serializable {
      */
     BATHTUB_TRUNCATED = 5;
 
-    private static final int softRange = 1 << 24;
-
     private static final long serialVersionUID = 4245874924013134958L;
 
     public RandomBias()
@@ -189,28 +187,26 @@ public class RandomBias implements Serializable {
     }
     private double bathtubQuantile(double expected)
     {
-        expected = Math.sin(expected * Math.PI * 0.5);
+        expected = Math.sin(expected * Math.PI * 0.4999999966); // can't be 0.5 because it becomes inclusive on 1.0
         return expected * expected;
     }
     private double bathtubTruncatedQuantile(double expected)
     {
         if(expected >= 0.5)
-            return bathtubQuantile(rng.nextDouble()) * (1.0 - expected) * 2 + expected - (1.0 - expected);
+            return bathtubQuantile(rng.nextDouble()) * (0.9999999999999999 - expected) * 2 + expected - (0.9999999999999999 - expected);
         return bathtubQuantile(rng.nextDouble()) * expected * 2;
     }
+
     private double exponentialQuantile(double expected)
     {
         return 0.9999999999999999 - Math.pow( rng.nextDouble(), 1.0 / (1.0 - expected) - 1.0);
     }
-    private static float longToFloat(long n)
-    {
-        return n * 1.0f / softRange;
-    }
+
     private double softQuantile(double expected)
     {
         expected = Math.max(0.001, Math.min(0.999, expected * 3.0 - 1.0));
         long pair = rng.nextLong();
-        float left = longToFloat(pair >>> 40), right = longToFloat((pair >>> 16) & 0xFFFFFFL);
+        float left = (pair >>> 40) * 0x1p-24f, right = (pair & 0xFFFFFFL) * 0x1p-24f;
         double v;
 
         if(left < expected)
@@ -229,7 +225,7 @@ public class RandomBias implements Serializable {
     {
         double d2 = Math.max(0.001, Math.min(0.999, expected * 3.0 - 1.0)), v;
         long pair = rng.nextLong();
-        float left = longToFloat(pair >>> 40), right = longToFloat((pair >>> 16) & 0xFFFFFFL);
+        float left = (pair >>> 40) * 0x1p-24f, right = (pair & 0xFFFFFFL) * 0x1p-24f;
 
         if(left < d2)
             v = Math.sqrt(d2 * left);

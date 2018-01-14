@@ -228,7 +228,7 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      * @return a value from the gaussian distribution
      */
     @Override
-    public synchronized double nextGaussian() {
+    public double nextGaussian() {
         if (haveNextNextGaussian) {
             haveNextNextGaussian = false;
             return nextNextGaussian;

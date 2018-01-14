@@ -22,12 +22,18 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 0;
-    private int modes = 8;
+    private int mode = 6;
+    private int modes = 10;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
     private int[] amounts = new int[512];
+    private double twist(double input) {
+        return (input = input * 0.5 + 1.0) - (int)input;
+    }
+    private float twist(float input) {
+        return (input = input * 0.5f + 1.0f) - (int)input;
+    }
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -61,7 +67,7 @@ public class MathVisualizer extends ApplicationAdapter {
             case 0: {
                 ThrustAltRNG random = new ThrustAltRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(NumberTools.formCurvedFloat(random.nextLong()) * 256) + 256]++;
+                    amounts[Noise.fastFloor(NumberTools.formCurvedFloat(random.nextLong()) * 256 + 256)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -79,7 +85,7 @@ public class MathVisualizer extends ApplicationAdapter {
             case 1: {
                 ThrustAltRNG random = new ThrustAltRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(NumberTools.formCurvedFloat(random.nextLong()) * 256) & 511]++;
+                    amounts[Noise.fastFloor(twist(NumberTools.formCurvedFloat(random.nextLong())) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -97,9 +103,9 @@ public class MathVisualizer extends ApplicationAdapter {
             case 2:  {
                 ThrustAltRNG random = new ThrustAltRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor((NumberTools.formDouble(random.nextLong()) *
+                    amounts[Noise.fastFloor(twist(NumberTools.formDouble(random.nextLong()) *
                             NumberTools.formDouble(random.nextLong()) - NumberTools.formDouble(random.nextLong()) *
-                            NumberTools.formDouble(random.nextLong())) * 256) + 256]++;
+                            NumberTools.formDouble(random.nextLong())) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -139,11 +145,12 @@ public class MathVisualizer extends ApplicationAdapter {
                 RandomBias random = new RandomBias();
                 random.distribution = RandomBias.EXP_TRI;
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(Math.nextAfter(random.biasedDouble(0.5, 512.0), 0.0))]++;
+                    amounts[Noise.fastFloor(random.biasedDouble(0.6, 512.0))]++;
+                    //amounts[Noise.fastFloor(Math.nextAfter(random.biasedDouble(0.5, 512.0), 0.0))]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
-                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
+                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
                         layers.put(i, j, color);
                     }
                 }
@@ -158,11 +165,12 @@ public class MathVisualizer extends ApplicationAdapter {
                 RandomBias random = new RandomBias();
                 random.distribution = RandomBias.BATHTUB_TRUNCATED;
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(Math.nextAfter(random.biasedDouble(0.5, 512.0), 0.0))]++;
+                    amounts[Noise.fastFloor(random.biasedDouble(0.6, 512.0))]++;
+                    //amounts[Noise.fastFloor(Math.nextAfter(random.biasedDouble(0.5, 512.0), 0.0))]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
-                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
+                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
                         layers.put(i, j, color);
                     }
                 }
@@ -175,7 +183,8 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 6: {
                 EditRNG random = new EditRNG();
-                random.setCentrality(50);
+                random.setCentrality(45);
+                random.setExpected(0.75);
                 for (int i = 0; i < 0x1000000; i++) {
                     amounts[Noise.fastFloor(random.nextDouble(512.0))]++;
                 }
@@ -194,9 +203,58 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 7: {
                 EditRNG random = new EditRNG();
-                random.setCentrality(-50);
+                random.setCentrality(-85);
+                random.setExpected(0.75);
                 for (int i = 0; i < 0x1000000; i++) {
                     amounts[Noise.fastFloor(random.nextDouble(512.0))]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
+                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                        layers.put(i, j, color);
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.put(i, j,  -0x1.7677e8p125F);
+                    }
+                }
+            }
+            break;
+            case 8: {
+                ThrustAltRNG random = new ThrustAltRNG();
+//                random.setCentrality(50);
+//                random.setExpected(0.6);
+                long centrality = NumberTools.doubleToLongBits(1.625) & 0xfffffffffffffL;
+                double offset = 0.15, range = 0.6;
+                for (int i = 0; i < 0x1000000; i++) {
+                    amounts[Noise.fastFloor(((random.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (random.nextLong() & 0xfffffffffffffL) ?
+                            ((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
+                            twist(((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
+                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                        layers.put(i, j, color);
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.put(i, j,  -0x1.7677e8p125F);
+                    }
+                }
+            }
+            break;
+            case 9: {
+                ThrustAltRNG random = new ThrustAltRNG();
+//                random.setCentrality(50);
+//                random.setExpected(0.6);
+                long centrality = NumberTools.doubleToLongBits(1.375) & 0xfffffffffffffL;
+                double offset = 0.15, range = 0.6;
+                for (int i = 0; i < 0x1000000; i++) {
+                    amounts[Noise.fastFloor(((random.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (random.nextLong() & 0xfffffffffffffL) ?
+                            ((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
+                            twist(((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;

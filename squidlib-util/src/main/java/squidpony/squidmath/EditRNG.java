@@ -1,8 +1,6 @@
 package squidpony.squidmath;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * A subclass of StatefulRNG (and thus RNG) that allows customizing many parts of the random number generation.
@@ -57,14 +55,21 @@ public class EditRNG extends StatefulRNG implements Serializable{
 	/** Used to tweak the generator toward high or low values. */
     private double expected = 0.5;
 
+    // These are tied to expected, and must change when it does.
+    private double offset = 0.0;
+    private double range = 1.0;
     /**
      * When positive, makes the generator more likely to generate values close to the average (bell curve).
      * When zero (the default), makes no changes to the centering of values.
      * When negative, makes the generator swing more toward extremes rather than gravitate toward the average.
-     * Values are typically between -100 and 100, but can have extreme weight and overshadow other parts of the RNG if
-     * they go much higher than 200.
+     * Values are typically between -100 and 100, but can go as low as -200 or as high as 200 (stopping there).
      */
     private double centrality = 0.0;
+
+
+    // This lets us avoid a conversion to double every time we generate a number.
+    private long centralityCalculated = 0x0008000000000000L;
+
     /**
      * The latest generated double, between 0.0 and 1.0, before changes for centrality and expected average.
      * Doubles are used to generate all random numbers this class produces, so be aware that calling getRandomElement()
@@ -108,7 +113,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     public EditRNG(final long seed, double expected) {
         super(seed);
-        this.expected = Math.max(0.1, Math.min(0.89999994, expected));
+        setExpected(expected);
     }
     /**
      * Construct a new EditRNG with the given seed.
@@ -118,7 +123,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     public EditRNG(final String seed, double expected) {
         super(seed);
-        this.expected = Math.max(0.1, Math.min(0.89999994, expected));
+        setExpected(expected);
     }
 
     /**
@@ -131,8 +136,8 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     public EditRNG(final long seed, double expected, double centrality) {
         super(seed);
-        this.expected = Math.max(0.1, Math.min(0.89999994, expected));
-        this.centrality = centrality;
+        setExpected(expected);
+        setCentrality(centrality);
     }
     /**
      * Construct a new EditRNG with the given seed.
@@ -144,8 +149,8 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     public EditRNG(final String seed, double expected, double centrality) {
         super(seed);
-        this.expected = Math.max(0.1, Math.min(0.89999994, expected));
-        this.centrality = centrality;
+        setExpected(expected);
+        setCentrality(centrality);
     }
 
     /**
@@ -164,7 +169,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     public EditRNG(final RandomnessSource rs, double expected) {
         super(rs);
-        this.expected = Math.max(0.1, Math.min(0.89999994, expected));
+        setExpected(expected);
     }
     /**
      * Construct a new EditRNG with the given seed.
@@ -176,8 +181,11 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     public EditRNG(final RandomnessSource rs, double expected, double centrality) {
         super(rs);
-        this.expected = Math.max(0.1, Math.min(0.89999994, expected));
-        this.centrality = centrality;
+        setExpected(expected);
+        setCentrality(centrality);
+    }
+    private double twist(double input) {
+        return (input = input * 0.5 + 1.0) - (int)input;
     }
 
     /**
@@ -186,27 +194,9 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     @Override
     public double nextDouble() {
-        long l = random.nextLong();
-        double gen = (l & 0x1fffffffffffffL) * DOUBLE_UNIT, scatter = (l & 0xffffffL) * FLOAT_UNIT;
-        rawLatest = 0.9999999999999999 - gen;
-        gen = 0.9999999999999999 - Math.pow(gen, 1.0 / (1.0 - expected) - 1.0);
-        if(centrality > 0) {
-            scatter = 0.9999999999999999 - Math.pow(scatter, 1.0 / (1.0 - expected) - 1.0);
-            gen = (gen * 100 + scatter * centrality) / (100 + centrality);
-        }
-        else if(centrality < 0)
-        {
-            scatter = Math.sin(scatter * Math.PI * 0.5);
-            scatter *= scatter;
-            if(expected >= 0.5)
-                scatter = scatter * (1.0 - expected) * 2 + expected - (1.0 - expected);
-            else
-                scatter *= expected * 2;
-            gen = (gen * 100 - scatter * centrality) / (100 - centrality);
-        }
-
-        return gen;
-
+        return offset + range * ((centralityCalculated > (random.nextLong() & 0xfffffffffffffL) ?
+                ((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
+                twist(((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-52)));
     }
 
     /**
@@ -219,129 +209,6 @@ public class EditRNG extends StatefulRNG implements Serializable{
         return nextDouble() * max;
     }
 
-    /**
-     * Returns a value from a even distribution from min (inclusive) to max
-     * (exclusive).
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @return the found value
-     */
-    @Override
-    public double between(double min, double max) {
-        return super.between(min, max);
-    }
-
-    /**
-     * Returns a value between min (inclusive) and max (exclusive).
-     *
-     * The inclusive and exclusive behavior is to match the behavior of the
-     * similar method that deals with floating point values.
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @return the found value
-     */
-    @Override
-    public int between(int min, int max)
-    {
-        return super.between(min, max);
-    }
-
-    @Override
-    public long between(long min, long max) {
-        return super.between(min, max);
-    }
-
-    /**
-     * Returns the average of a number of randomly selected numbers from the
-     * provided range, with min being inclusive and max being exclusive. It will
-     * sample the number of times passed in as the third parameter.
-     *
-     * The inclusive and exclusive behavior is to match the behavior of the
-     * similar method that deals with floating point values.
-     *
-     * This can be used to weight RNG calls to the average between min and max.
-     *
-     * @param min the minimum bound on the return value (inclusive)
-     * @param max the maximum bound on the return value (exclusive)
-     * @param samples the number of samples to take
-     * @return the found value
-     */
-    @Override
-    public int betweenWeighted(int min, int max, int samples) {
-        return super.betweenWeighted(min, max, samples);
-    }
-
-    /**
-     * Returns a random element from the provided array and maintains object
-     * type.
-     *
-     * @param <T> the type of the returned object
-     * @param array the array to get an element from
-     * @return the randomly selected element
-     */
-    @Override
-    public <T> T getRandomElement(T[] array) {
-        return super.getRandomElement(array);
-    }
-
-    /**
-     * Returns a random element from the provided list. If the list is empty
-     * then null is returned.
-     *
-     * @param <T> the type of the returned object
-     * @param list the list to get an element from
-     * @return the randomly selected element
-     */
-    @Override
-    public <T> T getRandomElement(List<T> list) {
-        return super.getRandomElement(list);
-    }
-
-    /**
-     * Returns a random element from the provided ShortSet. If the set is empty
-     * then an exception is thrown.
-     *
-     * <p>
-     * Requires iterating through a random amount of the elements in set, so performance depends on the size of set but
-     * is likely to be decent. This is mostly meant for internal use, the same as ShortSet.
-     * </p>
-     * @param set the ShortSet to get an element from
-     * @return the randomly selected element
-     */
-    public short getRandomElement(ShortSet set) {
-        return super.getRandomElement(set);
-    }
-
-    /**
-     * Returns a random element from the provided Collection, which should have predictable iteration order if you want
-     * predictable behavior for identical RNG seeds, though it will get a random element just fine for any Collection
-     * (just not predictably in all cases). If you give this a Set, it should be a LinkedHashSet or some form of sorted
-     * Set like TreeSet if you want predictable results. Any List or Queue should be fine. Map does not implement
-     * Collection, thank you very much Java library designers, so you can't actually pass a Map to this, though you can
-     * pass the keys or values. If coll is empty, returns null.
-     *
-     * <p>
-     * Requires iterating through a random amount of coll's elements, so performance depends on the size of coll but is
-     * likely to be decent, as long as iteration isn't unusually slow. This replaces {@code getRandomElement(Queue)},
-     * since Queue implements Collection and the older Queue-using implementation was probably less efficient.
-     * </p>
-     * @param <T> the type of the returned object
-     * @param coll the Collection to get an element from; remember, Map does not implement Collection
-     * @return the randomly selected element
-     */
-    public <T> T getRandomElement(Collection<T> coll) {
-        return super.getRandomElement(coll);
-    }
-
-    /**
-     * @return a value from the gaussian distribution
-     */
-    @Override
-    public synchronized double nextGaussian() {
-        return super.nextGaussian();
-    }
     /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or
      * negative.
@@ -404,10 +271,12 @@ public class EditRNG extends StatefulRNG implements Serializable{
      * @param expected the expected average to use, which should be 0.1 &lt;= fairness &lt; 0.9
      */
     public void setExpected(double expected) {
-        if(expected < 0.0 || expected >= 1.0)
+        if(expected < 0.1 || expected >= 0.9)
             this.expected = 0.5;
         else
             this.expected = expected;
+        offset = Math.max(0.0, this.expected - 0.5) * 2.0;
+        range = this.expected <= 0.5 ? this.expected * 2.0 : 1.0 - offset;
     }
 
     /**
@@ -437,7 +306,8 @@ public class EditRNG extends StatefulRNG implements Serializable{
      * @param centrality the new centrality measure to use
      */
     public void setCentrality(double centrality) {
-        this.centrality = centrality;
+        this.centrality = Math.max(-200, Math.min(200, centrality));
+        centralityCalculated = NumberTools.doubleToLongBits(this.centrality * 0.0025 + 1.5) & 0xfffffffffffffL;
     }
 
     /**
@@ -447,12 +317,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     @Override
     public int next(int bits) {
-        if(bits <= 0)
-            return 0;
-        if(bits > 32)
-            bits = 32;
         return (int)(nextDouble() * (1L << bits));
-
     }
 
     @Override
@@ -473,51 +338,6 @@ public class EditRNG extends StatefulRNG implements Serializable{
     @Override
     public void setRandomness(RandomnessSource random) {
         this.random = random;
-    }
-
-    /**
-     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
-     * it can, and then returns output. Will only use a given position in the given data at most once; does this by
-     * shuffling a copy of data and getting a section of it that matches the length of output.
-     *
-     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
-     * copying or creating a new generic array (a problem on GWT).
-     * @param data an array of T; will not be modified.
-     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
-     * @param <T> can be any non-primitive type.
-     * @return an array of T that has length equal to output's length and may contain null elements if output is shorter
-     * than data
-     */
-    @Override
-    public <T> T[] randomPortion(T[] data, T[] output) {
-        return super.randomPortion(data, output);
-    }
-
-    /**
-     * Gets a random portion of a List and returns it as a new List. Will only use a given position in the given
-     * List at most once; does this by shuffling a copy of the List and getting a section of it.
-     *
-     * @param data  a List of T; will not be modified.
-     * @param count the non-negative number of elements to randomly take from data
-     * @return a List of T that has length equal to the smaller of count or data.length
-     */
-    @Override
-    public <T> List<T> randomPortion(List<T> data, int count) {
-        return super.randomPortion(data, count);
-    }
-
-    /**
-     * Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.
-     * May return an empty array if the parameters are invalid (end is less than/equal to start, or start is negative).
-     *
-     * @param start the start of the range of numbers to potentially use (inclusive)
-     * @param end   the end of the range of numbers to potentially use (exclusive)
-     * @param count the total number of elements to use; will be less if the range is smaller than count
-     * @return an int array that contains at most one of each number in the range
-     */
-    @Override
-    public int[] randomRange(int start, int end, int count) {
-        return super.randomRange(start, end, count);
     }
 
     /**
