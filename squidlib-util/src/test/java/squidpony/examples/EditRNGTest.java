@@ -69,7 +69,7 @@ public class EditRNGTest {
 
         EditRNG lr = new EditRNG(0xDADA157, 0.5, 0.0),
                 lpr = new EditRNG(0xBEEFD00DBA77L, 0.5, 0.0);
-        RandomnessSource source = new PermutedRNG(0x1337CAFEBA77L);
+        RandomnessSource source = new ThrustAltRNG(0x1337CAFEBA77L);
         d20GraphCurved(source, "Curved");
         d20GraphCurved(source, "Curved");
         d20GraphCurved(source, "Curved");

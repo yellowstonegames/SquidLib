@@ -307,7 +307,7 @@ public class EditRNG extends StatefulRNG implements Serializable{
      */
     public void setCentrality(double centrality) {
         this.centrality = Math.max(-200, Math.min(200, centrality));
-        centralityCalculated = NumberTools.doubleToLongBits(this.centrality * 0.0025 + 1.5) & 0xfffffffffffffL;
+        centralityCalculated = NumberTools.doubleToLongBits(this.centrality * 0.0024999 + 1.5) & 0xfffffffffffffL;
     }
 
     /**

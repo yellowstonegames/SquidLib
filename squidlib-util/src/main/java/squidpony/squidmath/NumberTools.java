@@ -499,51 +499,82 @@ public final class NumberTools {
     }
 
     /**
+     * A different kind of determine-like method that expects to be given a random long and produces a random double
+     * with a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
+     * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1.0
+     * or 1.0. It cannot produce 1.0, -1.0, or any values further from 0 than those bounds.
+     * @param start a long, usually random, such as one produced by any RandomnessSource; all bits will be used
+     * @return a deterministic double between -1.0 (exclusive) and 1.0 (exclusive); very likely to be close to 0.0
+     */
+    public static double formCurvedDouble(long start) {
+        return    longBitsToDouble((start >>> 12) | 0x3fe0000000000000L)
+                + longBitsToDouble(((start *= 0x2545F4914F6CDD1DL) >>> 12) | 0x3fe0000000000000L)
+                - longBitsToDouble(((start *= 0x2545F4914F6CDD1DL) >>> 12) | 0x3fe0000000000000L)
+                - longBitsToDouble(((start *  0x2545F4914F6CDD1DL) >>> 12) | 0x3fe0000000000000L)
+                ;
+    }
+    /**
+     * A different kind of determine-like method that expects to be given a random long and produces a random double
+     * with a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach 0.0 and 1.0.
+     * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near 0.0 or
+     * 1.0. It cannot produce 0.0, 1.0, or any values further from 0.5 than those bounds.
+     * @param start a long, usually random, such as one produced by any RandomnessSource; all bits will be used
+     * @return a deterministic double between 0.0 (exclusive) and 1.0 (exclusive); very likely to be close to 0.5
+     */
+    public static double formCurvedDoubleTight(long start) {
+        return  0.5
+                + longBitsToDouble((start >>> 12) | 0x3fd0000000000000L)
+                + longBitsToDouble(((start *= 0x2545F4914F6CDD1DL) >>> 12) | 0x3fd0000000000000L)
+                - longBitsToDouble(((start *= 0x2545F4914F6CDD1DL) >>> 12) | 0x3fd0000000000000L)
+                - longBitsToDouble(((start *  0x2545F4914F6CDD1DL) >>> 12) | 0x3fd0000000000000L);
+    }
+
+    /**
      * A different kind of determine-like method that expects to be given a random long and produces a random float with
      * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
      * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
-     * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.
+     * 1f. It cannot produce 1f, -1f, or any values further from 0 than those bounds.
      * @param start a long, usually random, such as one produced by any RandomnessSource
-     * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f
+     * @return a deterministic float between -1f (exclusive) and 1f (exclusive), that is very likely to be close to 0f
      */
     public static float formCurvedFloat(final long start) {
-        return   (intBitsToFloat((int)start >>> 9 | 0x3F000000)
+        return    intBitsToFloat((int)start >>> 9 | 0x3F000000)
                 + intBitsToFloat((int) (start >>> 41) | 0x3F000000)
-                + intBitsToFloat(((int)(start ^ ~start >>> 20) & 0x007FFFFF) | 0x3F000000)
-                + intBitsToFloat(((int) (~start ^ start >>> 30) & 0x007FFFFF) | 0x3F000000)
-                - 3f);
+                - intBitsToFloat(((int)(start ^ ~start >>> 20) & 0x007FFFFF) | 0x3F000000)
+                - intBitsToFloat(((int) (~start ^ start >>> 30) & 0x007FFFFF) | 0x3F000000)
+                ;
     }
 
     /**
      * A different kind of determine-like method that expects to be given random ints and produces a random float with
      * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
      * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
-     * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.
+     * 1f. It cannot produce 1f, -1f, or any values further from 0 than those bounds.
      * @param start1 an int usually random, such as one produced by any RandomnessSource
      * @param start2 an int usually random, such as one produced by any RandomnessSource
-     * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f
+     * @return a deterministic float between -1f (exclusive) and 1f (exclusive), that is very likely to be close to 0f
      */
     public static float formCurvedFloat(final int start1, final int start2) {
-        return   (intBitsToFloat(start1 >>> 9 | 0x3F000000)
+        return    intBitsToFloat(start1 >>> 9 | 0x3F000000)
                 + intBitsToFloat((~start1 & 0x007FFFFF) | 0x3F000000)
-                + intBitsToFloat(start2 >>> 9 | 0x3F000000)
-                + intBitsToFloat((~start2 & 0x007FFFFF) | 0x3F000000)
-                - 3f);
+                - intBitsToFloat(start2 >>> 9 | 0x3F000000)
+                - intBitsToFloat((~start2 & 0x007FFFFF) | 0x3F000000)
+                ;
     }
     /**
      * A different kind of determine-like method that expects to be given a random int and produces a random float with
      * a curved distribution that centers on 0 (where it has a bias) and can (rarely) approach -1f and 1f.
      * The distribution for the values is similar to Irwin-Hall, and is frequently near 0 but not too-rarely near -1f or
-     * 1f. It cannot produce values greater than or equal to 1f, or less than -1f, but it can produce -1f.
+     * 1f. It cannot produce 1f, -1f, or any values further from 0 than those bounds.
      * @param start an int, usually random, such as one produced by any RandomnessSource
-     * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f
+     * @return a deterministic float between -1f (exclusive) and 1f (exclusive), that is very likely to be close to 0f
      */
     public static float formCurvedFloat(final int start) {
-        return   (intBitsToFloat(start >>> 9 | 0x3F000000)
+        return    intBitsToFloat(start >>> 9 | 0x3F000000)
                 + intBitsToFloat((start & 0x007FFFFF) | 0x3F000000)
-                + intBitsToFloat(((start << 18 & 0x007FFFFF) ^ ~start >>> 14) | 0x3F000000)
-                + intBitsToFloat(((start << 13 & 0x007FFFFF) ^ ~start >>> 19) | 0x3F000000)
-                - 3f);
+                - intBitsToFloat(((start << 18 & 0x007FFFFF) ^ ~start >>> 14) | 0x3F000000)
+                - intBitsToFloat(((start << 13 & 0x007FFFFF) ^ ~start >>> 19) | 0x3F000000)
+                ;
     }
 
     /**

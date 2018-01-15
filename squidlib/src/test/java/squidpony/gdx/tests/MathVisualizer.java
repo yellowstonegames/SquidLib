@@ -183,7 +183,7 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 6: {
                 EditRNG random = new EditRNG();
-                random.setCentrality(45);
+                random.setCentrality(200);
                 random.setExpected(0.75);
                 for (int i = 0; i < 0x1000000; i++) {
                     amounts[Noise.fastFloor(random.nextDouble(512.0))]++;
@@ -203,7 +203,7 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 7: {
                 EditRNG random = new EditRNG();
-                random.setCentrality(-85);
+                random.setCentrality(-200);
                 random.setExpected(0.75);
                 for (int i = 0; i < 0x1000000; i++) {
                     amounts[Noise.fastFloor(random.nextDouble(512.0))]++;

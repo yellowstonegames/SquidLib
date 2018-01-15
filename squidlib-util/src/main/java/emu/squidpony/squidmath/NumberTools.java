@@ -237,27 +237,39 @@ public class NumberTools {
         wia.set(0, (int)(seed & 0xFFFFFFFF));
         return wda.get(0) - 3.0;
     }
-
+    public static double formCurvedDouble(long start) {
+        return    longBitsToDouble((start >>> 12) | 0x3fe0000000000000L)
+                + longBitsToDouble(((start *= 0x2545F4914F6CDD1DL) >>> 12) | 0x3fe0000000000000L)
+                - longBitsToDouble(((start *= 0x2545F4914F6CDD1DL) >>> 12) | 0x3fe0000000000000L)
+                - longBitsToDouble(((start *  0x2545F4914F6CDD1DL) >>> 12) | 0x3fe0000000000000L);
+    }
+    public static double formCurvedDoubleTight(long start) {
+        return  0.5
+                + longBitsToDouble((start >>> 12) | 0x3fd0000000000000L)
+                + longBitsToDouble(((start *= 0x2545F4914F6CDD1DL) >>> 12) | 0x3fd0000000000000L)
+                - longBitsToDouble(((start *= 0x2545F4914F6CDD1DL) >>> 12) | 0x3fd0000000000000L)
+                - longBitsToDouble(((start *  0x2545F4914F6CDD1DL) >>> 12) | 0x3fd0000000000000L);
+    }
     public static float formCurvedFloat(final long start) {
-        return   (intBitsToFloat((int)(start  & 0xFFFFFFFF) >>> 9 | 0x3F000000)
-                + intBitsToFloat((int)(~start & 0x007FFFFF) | 0x3F000000)
-                + intBitsToFloat((int)(start >>> 41) | 0x3F000000)
-                + intBitsToFloat((int)(~start >>> 32 & 0x007FFFFF) | 0x3F000000)
-                - 3f);
+        return    intBitsToFloat((int)start >>> 9 | 0x3F000000)
+                + intBitsToFloat((int) (start >>> 41) | 0x3F000000)
+                - intBitsToFloat(((int)(start ^ ~start >>> 20) & 0x007FFFFF) | 0x3F000000)
+                - intBitsToFloat(((int) (~start ^ start >>> 30) & 0x007FFFFF) | 0x3F000000)
+                ;
     }
     public static float formCurvedFloat(final int start1, final int start2) {
-        return   (intBitsToFloat(start1 >>> 9 | 0x3F000000)
+        return    intBitsToFloat(start1 >>> 9 | 0x3F000000)
                 + intBitsToFloat((~start1 & 0x007FFFFF) | 0x3F000000)
-                + intBitsToFloat(start2 >>> 9 | 0x3F000000)
-                + intBitsToFloat((~start2 & 0x007FFFFF) | 0x3F000000)
-                - 3f);
+                - intBitsToFloat(start2 >>> 9 | 0x3F000000)
+                - intBitsToFloat((~start2 & 0x007FFFFF) | 0x3F000000)
+                ;
     }
     public static float formCurvedFloat(final int start) {
-        return   (intBitsToFloat(start >>> 9 | 0x3F000000)
+        return    intBitsToFloat(start >>> 9 | 0x3F000000)
                 + intBitsToFloat((start & 0x007FFFFF) | 0x3F000000)
-                + intBitsToFloat(((start << 18 & 0x007FFFFF) ^ ~start >>> 14) | 0x3F000000)
-                + intBitsToFloat(((start << 13 & 0x007FFFFF) ^ ~start >>> 19) | 0x3F000000)
-                - 3f);
+                - intBitsToFloat(((start << 18 & 0x007FFFFF) ^ ~start >>> 14) | 0x3F000000)
+                - intBitsToFloat(((start << 13 & 0x007FFFFF) ^ ~start >>> 19) | 0x3F000000)
+                ;
     }
     public static int lowestOneBit(int num)
     {
