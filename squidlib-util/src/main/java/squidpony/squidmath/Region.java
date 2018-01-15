@@ -42,7 +42,10 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(double[][] fovMap)
     {
-        this(pack(fovMap));
+        CoordPacker.init();
+        raw = pack(fovMap);
+        coords = allPacked(raw);
+        dirty = false;
     }
 
     /**
@@ -55,7 +58,10 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(double[][] dijkstraMap, double maximum)
     {
-        this(pack(dijkstraMap, maximum));
+        CoordPacker.init();
+        raw = pack(dijkstraMap, maximum);
+        coords = allPacked(raw);
+        dirty = false;
     }
 
     /**
@@ -68,7 +74,10 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(char[][] map, char... using)
     {
-        this(pack(map, using));
+        CoordPacker.init();
+        raw = pack(map, using);
+        coords = allPacked(raw);
+        dirty = false;
     }
 
     /**
@@ -77,7 +86,10 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(Coord... points)
     {
-        this(packSeveral(points));
+        CoordPacker.init();
+        raw = packSeveral(points);
+        coords = allPacked(raw);
+        dirty = false;
     }
     /**
      * A constructor for a Region that takes a Collection of Coord, such as a List or Set, and encodes all of them in
@@ -86,7 +98,10 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(Collection<Coord> points)
     {
-        this(packSeveral(points));
+        CoordPacker.init();
+        raw = packSeveral(points);
+        coords = allPacked(raw);
+        dirty = false;
     }
 
     /**
@@ -98,6 +113,7 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(Region other)
     {
+        CoordPacker.init();
         raw = new short[other.raw.length];
         System.arraycopy(other.raw, 0, raw, 0, raw.length);
         if(other.dirty)
@@ -123,7 +139,10 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(Coord center, int circleRadius, int mapWidth, int mapHeight)
     {
-        this(circle(center, circleRadius, mapWidth, mapHeight));
+        CoordPacker.init();
+        raw = circle(center, circleRadius, mapWidth, mapHeight);
+        coords = allPacked(raw);
+        dirty = false;
     }
 
     /**
@@ -139,7 +158,10 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(int minX, int minY, int width, int height)
     {
-        this(rectangle(minX, minY, width, height));
+        CoordPacker.init();
+        raw = rectangle(minX, minY, width, height);
+        coords = allPacked(raw);
+        dirty = false;
     }
     /**
      * A constructor for a Region that takes a specifically-formatted short array (packed data), as produced by
@@ -155,6 +177,7 @@ public class Region extends AbstractList<Coord> implements Serializable{
      */
     public Region(short[] packedData)
     {
+        CoordPacker.init();
         raw = new short[packedData.length];
         System.arraycopy(packedData, 0, raw, 0, packedData.length);
         coords = allPacked(raw);

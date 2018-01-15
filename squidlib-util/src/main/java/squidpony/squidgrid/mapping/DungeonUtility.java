@@ -87,6 +87,7 @@ public class DungeonUtility {
      * @return a Coord that corresponds to a '.' in map, or (-1, -1) if a '.' cannot be found or if map is too small
      */
     public Coord randomCell(short[] packed) {
+        CoordPacker.init();
         return CoordPacker.singleRandom(packed, rng);
     }
 
@@ -99,6 +100,7 @@ public class DungeonUtility {
      * @return all floors in map in packed data format (a special short array) that can be given to randomCell()
      */
     public static short[] packedFloors(char[][] map) {
+        CoordPacker.init();
         return CoordPacker.pack(map, '.');
     }
 

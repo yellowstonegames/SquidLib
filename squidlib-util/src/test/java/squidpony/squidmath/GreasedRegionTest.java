@@ -224,6 +224,8 @@ public class GreasedRegionTest {
 
     @Test
     public void testTranslate() {
+        CoordPacker.init();
+
         GreasedRegion crossZeroTranslated = new GreasedRegion(dataCross).translate(0, 0);
         GreasedRegion crossTranslated = new GreasedRegion(dataCross).translate(1, 1);
         GreasedRegion crossUnTranslated = new GreasedRegion(crossTranslated).translate(-1, -1);
@@ -245,6 +247,8 @@ public class GreasedRegionTest {
 
     @Test
     public void testUnion() {
+        CoordPacker.init();
+
         GreasedRegion box = new GreasedRegion(dataCross);
         //printRegion(box);
         box.translate(25, 25);

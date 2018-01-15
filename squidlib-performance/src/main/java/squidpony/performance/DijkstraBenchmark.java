@@ -44,8 +44,6 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import squidpony.performance.alternate.OldDijkstraMap;
-import squidpony.performance.alternate.OldCustomDijkstraMap;
 import squidpony.squidmath.AStarSearch;
 import squidpony.squidai.CustomDijkstraMap;
 import squidpony.squidai.DijkstraMap;
@@ -242,59 +240,6 @@ public class DijkstraBenchmark {
     public void measureScanCustomDijkstra() throws InterruptedException {
         System.out.println(doScanCustomDijkstra());
     }
-    public long doScanOldCustomDijkstra()
-    {
-        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(
-                map, adj, new StatefulRNG(0x1337BEEF));
-
-        long scanned = 0;
-        for (int x = 1; x < DIMENSION - 1; x++) {
-            for (int y = 1; y < DIMENSION - 1; y++) {
-                if (map[x][y] == '#')
-                    continue;
-                dijkstra.setGoal(adj.composite(x, y, 0, 0));
-                dijkstra.scan(null);
-                dijkstra.clearGoals();
-                dijkstra.resetMap();
-                scanned++;
-            }
-        }
-        return scanned;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureScanOldCustomDijkstra() throws InterruptedException {
-        System.out.println(doScanOldCustomDijkstra());
-    }
-    public long doScanOldDijkstra()
-    {
-        OldDijkstraMap dijkstra = new OldDijkstraMap(
-                map, new StatefulRNG(0x1337BEEF));
-        dijkstra.setBlockingRequirement(0);
-
-        long scanned = 0;
-        for (int x = 1; x < DIMENSION - 1; x++) {
-            for (int y = 1; y < DIMENSION - 1; y++) {
-                if (map[x][y] == '#')
-                    continue;
-                dijkstra.setGoal(x, y);
-                dijkstra.scan(null);
-                dijkstra.clearGoals();
-                dijkstra.resetMap();
-                scanned++;
-            }
-        }
-        return scanned;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureScanOldDijkstra() throws InterruptedException {
-        System.out.println(doScanOldDijkstra());
-    }
 
     public long doScanGreased()
     {
@@ -416,103 +361,6 @@ public class DijkstraBenchmark {
         System.out.println(doPathCustomDijkstra() / floorCount);
         doPathCustomDijkstra();
     }
-    public long doPathOldCustomDijkstra()
-    {
-        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(
-                map, adj, new StatefulRNG(0x1337BEEF));
-        Coord r;
-        int p;
-        long scanned = 0;
-        int[] tgts = new int[1];
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
-        for (int x = 1; x < DIMENSION - 1; x++) {
-            for (int y = 1; y < DIMENSION - 1; y++) {
-                if (map[x][y] == '#')
-                    continue;
-                // this should ensure no blatant correlation between R and W
-                utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                r = floors.singleRandom(utility.rng);
-                p = adj.composite(r.x, r.y, 0, 0);
-                tgts[0] = adj.composite(x, y, 0, 0);
-                dijkstra.findPath(PATH_LENGTH, null, null, p, tgts);
-                dijkstra.clearGoals();
-                dijkstra.resetMap();
-                scanned += dijkstra.path.size;
-            }
-        }
-        return scanned;
-    }
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePathOldCustomDijkstra() throws InterruptedException {
-        System.out.println(doPathOldCustomDijkstra() / floorCount);
-        doPathOldCustomDijkstra();
-    }
-
-    public long doPathOldDijkstra()
-    {
-        OldDijkstraMap dijkstra = new OldDijkstraMap(
-                map, new StatefulRNG(0x1337BEEF));
-        dijkstra.setBlockingRequirement(0);
-        Coord r;
-        long scanned = 0;
-        Coord[] tgts = new Coord[1];
-        DungeonUtility utility = new DungeonUtility(new StatefulRNG(0x1337BEEFDEAL));
-        for (int x = 1; x < DIMENSION - 1; x++) {
-            for (int y = 1; y < DIMENSION - 1; y++) {
-                if (map[x][y] == '#')
-                    continue;
-                // this should ensure no blatant correlation between R and W
-                utility.rng.setState((x << 22) | (y << 16) | (x * y));
-                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                r = floors.singleRandom(utility.rng);
-                tgts[0] = Coord.get(x, y);
-                dijkstra.findPath(PATH_LENGTH, null, null, r, tgts);
-                dijkstra.clearGoals();
-                scanned += dijkstra.path.size();
-            }
-        }
-        return scanned;
-    }
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePathOldDijkstra() throws InterruptedException {
-        System.out.println(doPathOldDijkstra() / floorCount);
-        doPathOldDijkstra();
-    }
-    public long doTinyPathOldDijkstra()
-    {
-        OldDijkstraMap dijkstra = new OldDijkstraMap(
-                map, OldDijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
-        dijkstra.setBlockingRequirement(0);
-        Coord r;
-        long scanned = 0;
-        Coord[] tgts = new Coord[1];
-        for (int x = 1; x < DIMENSION - 1; x++) {
-            for (int y = 1; y < DIMENSION - 1; y++) {
-                if (map[x][y] == '#')
-                    continue;
-                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                r = nearbyMap[x][y];
-                tgts[0] = Coord.get(x, y);
-                dijkstra.findPath(9, 9, null, null, r, tgts);
-                dijkstra.clearGoals();
-                dijkstra.resetMap();
-                scanned += dijkstra.path.size();
-            }
-        }
-        return scanned;
-    }
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureTinyPathOldDijkstra() throws InterruptedException {
-        System.out.println(doTinyPathOldDijkstra() / floorCount);
-        doTinyPathOldDijkstra();
-    }
 
     public long doTinyPathCustomDijkstra()
     {
@@ -545,39 +393,6 @@ public class DijkstraBenchmark {
         System.out.println(doTinyPathCustomDijkstra() / floorCount);
         doTinyPathCustomDijkstra();
     }
-
-    public long doTinyPathOldCustomDijkstra()
-    {
-        OldCustomDijkstraMap dijkstra = new OldCustomDijkstraMap(
-                map, adj, new StatefulRNG(0x1337BEEF));
-        Coord r;
-        int p;
-        long scanned = 0;
-        int[] tgts = new int[1];
-        for (int x = 1; x < DIMENSION - 1; x++) {
-            for (int y = 1; y < DIMENSION - 1; y++) {
-                if (map[x][y] == '#')
-                    continue;
-                ((StatefulRNG) dijkstra.rng).setState((x << 20) | (y << 14) | (x * y));
-                r = nearbyMap[x][y];
-                p = adj.composite(r.x, r.y, 0, 0);
-                tgts[0] = adj.composite(x, y, 0, 0);
-                dijkstra.findPath(9,  9,null, null, p, tgts);
-                dijkstra.clearGoals();
-                dijkstra.resetMap();
-                scanned += dijkstra.path.size;
-            }
-        }
-        return scanned;
-    }
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureTinyPathOldCustomDijkstra() throws InterruptedException {
-        System.out.println(doTinyPathOldCustomDijkstra() / floorCount);
-        doTinyPathOldCustomDijkstra();
-    }
-
 
     public long doScanBoxedDijkstra()
     {

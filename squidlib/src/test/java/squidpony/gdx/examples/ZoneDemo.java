@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ColoredStringList;
-import squidpony.GwtCompatibility;
 import squidpony.squidai.ZOI;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
@@ -18,7 +17,7 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.RNG;
 
 public class ZoneDemo extends ApplicationAdapter {
@@ -91,8 +90,9 @@ public class ZoneDemo extends ApplicationAdapter {
         //centers = temp.toArray(new Coord[temp.size()]);
         //shiftedCenters = temp.toArray(new Coord[temp.size()]);
 
-        centers = CoordPacker.apartPacked(CoordPacker.pack(bareDungeon, '.'), 8);
-        shiftedCenters = GwtCompatibility.cloneCoords(centers);
+        GreasedRegion g = new GreasedRegion(bareDungeon, '.').randomScatter(rng, 7);
+        centers = g.asCoords();
+        shiftedCenters = g.asCoords();
         colorCenter = DefaultResources.getSCC();
         influenceH = new float[centers.length];
         influenceS = new float[centers.length];

@@ -600,6 +600,7 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      */
     public ArrayList<Color> zigzagGradient(Color fromColor, Color toColor, int steps)
     {
+        CoordPacker.init();
         ArrayList<Color> colors = new ArrayList<>((steps > 1) ? steps : 1);
         colors.add(filter(fromColor));
         if(steps < 2)

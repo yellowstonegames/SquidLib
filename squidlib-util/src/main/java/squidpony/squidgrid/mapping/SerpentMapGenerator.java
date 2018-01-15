@@ -57,6 +57,7 @@ public class SerpentMapGenerator implements IDungeonGenerator {
     public SerpentMapGenerator(int width, int height, RNG rng, boolean symmetrical) {
         if (width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
+        CoordPacker.init();
         random = rng;
         long columnAlterations = random.nextLong(0x1000000000000L);
         float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
@@ -137,6 +138,7 @@ public class SerpentMapGenerator implements IDungeonGenerator {
     public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance, boolean symmetrical) {
         if (width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
+        CoordPacker.init();
         random = rng;
         long columnAlterations = random.nextLong(0x1000000000000L);
         float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
@@ -324,6 +326,7 @@ public class SerpentMapGenerator implements IDungeonGenerator {
     public static ArrayList<Coord> pointPath(int width, int height, RNG rng) {
         if (width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
+        CoordPacker.init();
         long columnAlterations = rng.nextLong(0x1000000000000L);
         float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
         long rowAlterations = rng.nextLong(0x1000000000000L);

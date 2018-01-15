@@ -19,10 +19,7 @@ import squidpony.squidgrid.gui.gdx.MapUtility;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
@@ -57,8 +54,8 @@ public class IconsTest extends ApplicationAdapter{
         cellWidth = 32;
         cellHeight = 32;
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableSquareFont());
-        layers.setTextSize(cellWidth, cellHeight+1);
+                DefaultResources.getStretchableSlabFont());
+        layers.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
         layers.setAnimationDuration(0.35f);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
         /*
@@ -75,8 +72,7 @@ public class IconsTest extends ApplicationAdapter{
         fgColors = MapUtility.generateDefaultColors(map);
         bgColors = MapUtility.generateDefaultBGColors(map);
         resMap = DungeonUtility.generateResistances(map);
-        short[] packed = CoordPacker.pack(gen.getBareDungeon(), '.');
-        Coord[] points = CoordPacker.fractionPacked(packed, 7);
+        Coord[] points = new GreasedRegion(gen.getBareDungeon(), '.').quasiRandomSeparated(0.14);
 
         seed = rng.getState();
         things = new OrderedMap<>(points.length);

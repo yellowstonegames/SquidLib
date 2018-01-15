@@ -46,6 +46,7 @@ public class LanesMapGenerator implements IDungeonGenerator {
     {
         if(width <= 8 || height <= 8)
             throw new IllegalArgumentException("width and height must be greater than 8");
+        CoordPacker.init();
         this.lanes = (lanes < 1 || lanes > 3) ? 1 : lanes;
         random = rng;
         /*

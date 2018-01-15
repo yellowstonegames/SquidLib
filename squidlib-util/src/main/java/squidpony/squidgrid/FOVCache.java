@@ -134,6 +134,7 @@ public class FOVCache extends FOV {
     {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
+        init();
         NUM_THREADS = 8;
         executor = Executors.newFixedThreadPool(NUM_THREADS);
         width = map.length;
@@ -201,6 +202,7 @@ public class FOVCache extends FOV {
     {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
+        init();
         NUM_THREADS = threadCount;
         executor = Executors.newFixedThreadPool(NUM_THREADS);
         width = map.length;
@@ -273,6 +275,7 @@ public class FOVCache extends FOV {
     {
         if(map == null || map.length == 0)
             throw new UnsupportedOperationException("The map used by FOVCache must not be null or empty");
+        init();
         NUM_THREADS = threadCount;
         executor = Executors.newFixedThreadPool(NUM_THREADS);
         width = map.length;

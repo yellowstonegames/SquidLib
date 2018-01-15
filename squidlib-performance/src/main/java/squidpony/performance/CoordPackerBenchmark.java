@@ -152,6 +152,7 @@ public class CoordPackerBenchmark {
     public static final short[][] floors, walls, visibleWalls;
     public static GreasedRegion[] floorsG, wallsG, visibleWallsG;
     static {
+        CoordPacker.init();
         serpent.putWalledBoxRoomCarvers(1);
         maps = new char[0x1000][][];
         floors = new short[0x1000][];

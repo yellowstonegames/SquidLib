@@ -2,11 +2,8 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.PoissonDisk;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.RNG;
-
-import java.util.ArrayList;
 
 /**
  * Map generator that constructs a large number of overlapping rectangular rooms.
@@ -53,16 +50,17 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
     {
         //ArrayList<short[]> regions = new ArrayList<>();
         short[] tempPacked;
-        int ctr = 0, nh, nw, nx, ny, hnw, hnh, maxw = 8 + width / 10, maxh = 8 + height / 10;
-        ArrayList<Coord> sampled = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 2, height - 2),
-                6.5f * width * height / 5000f, width, height, 35, rng);
-        sampled.addAll(PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 2, height - 2),
-                8.5f * width * height / 5000f, width, height, 40, rng));
-
+        int nh, nw, nx, ny, hnw, hnh;
+//        Collection<Coord> sampled = PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 2, height - 2),
+//                6f, width, height, 35, rng);
+//        sampled.addAll(PoissonDisk.sampleRectangle(Coord.get(1, 1), Coord.get(width - 2, height - 2),
+//                9, width, height, 40, rng));
+        GreasedRegion sampled = new GreasedRegion(width, height).allOn().removeEdges();
+        sampled.remake(sampled.copy().randomScatter(rng, 6).or(sampled.randomScatter(rng,8)));
 
         for(Coord center : sampled) {
-            nw = rng.between(4, maxw);
-            nh = rng.between(4, maxh);
+            nw = rng.between(4, 16);
+            nh = rng.between(4, 16);
             hnw = (nw + 1) / 2;
             hnh = (nh + 1) / 2;
             nx = Math.max(0, Math.min(width - 2 - hnw, center.x - hnw));
@@ -82,13 +80,12 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
                 environment[x][y] = (map[x][y] == '.') ? MixedGenerator.ROOM_FLOOR : MixedGenerator.ROOM_WALL;
             }
         }
-        tempPacked = CoordPacker.intersectPacked(
-                CoordPacker.rectangle(1, 1, width - 2, height - 2),
-                CoordPacker.pack(map, '#'));
-        Coord[] holes = CoordPacker.randomSeparated(tempPacked, 3, rng);
-        for(Coord hole : holes) {
-            if (hole.x > 0 && hole.y > 0 && hole.x < width - 1 && hole.y < height - 1 &&
-                    ((map[hole.x - 1][hole.y] == '.' && map[hole.x + 1][hole.y] == '.') ||
+//        tempPacked = CoordPacker.intersectPacked(
+//                CoordPacker.rectangle(1, 1, width - 2, height - 2),
+//                CoordPacker.pack(map, '#'));
+//        Coord[] holes = CoordPacker.randomSeparated(tempPacked, 3, rng);
+        for(Coord hole : new GreasedRegion(map, '.').fringe().removeEdges().randomSeparated(0.25, rng)) {
+            if (((map[hole.x - 1][hole.y] == '.' && map[hole.x + 1][hole.y] == '.') ||
                             (map[hole.x][hole.y - 1] == '.' && map[hole.x][hole.y + 1] == '.'))) {
                 map[hole.x][hole.y] = '.';
                 environment[hole.x][hole.y] = MixedGenerator.CORRIDOR_FLOOR;

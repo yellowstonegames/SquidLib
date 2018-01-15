@@ -14,8 +14,13 @@ import java.util.Collection;
 /**
  * Provides static methods to encode Coords as single primitive ints in various ways, hence the namesake, but also
  * provides advanced methods to encode 2D arrays of various sorts produced by SquidLib in extremely memory-efficient
- * representations, and decode those representations to various types of 2D array on-demand. There's a detailed
- * introduction on the SquidLib wiki, https://github.com/SquidPony/SquidLib/wiki/Handling-Map-Regions-with-CoordPacker ,
+ * representations, and decode those representations to various types of 2D array on-demand. IMPORTANT: you must call
+ * {@link #init()} before using this class if you do not already use a SquidLib class that does so. It is a good habit
+ * to call init() in your main() method or primary game entry point if you use CoordPacker. Failure to call init() will
+ * not result in exceptions, but will make results inaccurate.
+ *
+ * There's a detailed introduction
+ * <a href="https://github.com/SquidPony/SquidLib/wiki/Handling-Map-Regions-with-CoordPacker">on the SquidLib wiki</a>,
  * which is probably the best way to learn the techniques possible with this class. Most methods in this aren't useful
  * on their own, but can be mixed and matched to get specific regions from a map, such as all floors not adjacent to a
  * wall, or all grass within 3 squares of deep or shallow water, with walls blocking the distance measurement. You can
@@ -197,7 +202,9 @@ public class CoordPacker {
             mooreDistances = new short[0x100], hilbert3X = new short[0x200], hilbert3Y = new short[0x200],
             hilbert3Z = new short[0x200], hilbert3Distances = new short[0x200],
             ALL_WALL = new short[0], ALL_ON = new short[]{0, -1};
-    static {
+    private static boolean initialized = false;
+    public static void init() {
+        if(initialized) return;
         /*
         Coord c;
         for (int i = 0; i < 0x10000; i++) {
@@ -237,6 +244,7 @@ public class CoordPacker {
             mooreY[i + 128] = (short)(7 - hilbertY[i]);
             mooreDistances[mooreX[i + 128] + (mooreY[i + 128] << 4)] = (short)(i + 128);
         }
+        initialized = true;
     }
 
     private CoordPacker()

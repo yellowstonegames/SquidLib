@@ -46,7 +46,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
             doors = new char[]{'+', '/'};
     public MapModule()
     {
-        this(CoordPacker.unpackChar(CoordPacker.rectangle(1, 1, 6, 6), 8, 8, '.', '#'));
+        this(DungeonUtility.wallWrap(ArrayTools.fill('.', 8, 8)));
     }
 
     /**
@@ -61,6 +61,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
     {
         if(map == null || map.length <= 0)
             throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
+        CoordPacker.init();
         this.map = ArrayTools.copy(map);
         environment = ArrayTools.fill(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
@@ -97,7 +98,33 @@ public class MapModule implements Comparable<MapModule>, Serializable {
      */
     public MapModule(short[] packed, int width, int height)
     {
-        this(CoordPacker.unpackChar(packed, width, height, '.', '#'));
+        if(map == null || map.length <= 0)
+            throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
+        CoordPacker.init();
+        map = ArrayTools.copy(CoordPacker.unpackChar(packed, width, height, '.', '#'));
+        environment = ArrayTools.fill(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map[0].length; y++) {
+                if(map[x][y] == '#')
+                    environment[x][y] = MixedGenerator.ROOM_WALL;
+            }
+        }
+        short[] pk = CoordPacker.fringe(
+                CoordPacker.pack(map, validPacking),
+                1, map.length, map[0].length, false, true);
+        Coord[] tmp = CoordPacker.bounds(pk);
+        min = tmp[0];
+        max = tmp[1];
+        category = categorize(Math.max(max.x, max.y));
+        short[] drs = CoordPacker.pack(map, doors);
+        if(drs.length >= 2)
+            validDoors = CoordPacker.allPacked(drs);
+        else {
+            validDoors = CoordPacker.fractionPacked(pk, 5);//CoordPacker.allPacked(pk);
+            //for(Coord dr : validDoors)
+            //    this.map[dr.x][dr.y] = '+';
+        }
+        initSides();
     }
 
     /**
@@ -110,6 +137,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
      */
     public MapModule(char[][] map, Coord[] validDoors, Coord min, Coord max)
     {
+        CoordPacker.init();
         this.map = ArrayTools.copy(map);
         environment = ArrayTools.fill(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
@@ -254,7 +282,7 @@ public class MapModule implements Comparable<MapModule>, Serializable {
         return new MapModule(map2, doors2, min2, max2);
     }
 
-    static int categorize(int n)
+    private static int categorize(int n)
     {
         int highest = Integer.highestOneBit(n);
         return Math.max(4, (highest == NumberTools.lowestOneBit(n)) ? highest : highest << 1);

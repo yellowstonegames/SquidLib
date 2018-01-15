@@ -19,6 +19,7 @@ public class RegionMap<V> extends OrderedMap<short[], V> implements Serializable
     public RegionMap(final int expected, final float f) {
         super(expected, f);
         hasher = CrossHash.shortHasher;
+        CoordPacker.init();
     }
 
     /**

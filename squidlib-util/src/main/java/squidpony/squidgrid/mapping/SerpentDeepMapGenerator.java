@@ -60,6 +60,7 @@ public class SerpentDeepMapGenerator {
             throw new IllegalArgumentException("width and height must be greater than 2");
         if(depth < 1)
             throw new IllegalArgumentException("depth must be at least 1");
+        CoordPacker.init();
         random = rng;
         this.width = width;
         this.height = height;

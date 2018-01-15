@@ -117,6 +117,7 @@ public class ModularMapGenerator implements IDungeonGenerator {
      *               but if it is not a StatefulRNG, a new StatefulRNG will be used, randomly seeded by this parameter
      */
     public ModularMapGenerator(int width, int height, RNG rng) {
+        CoordPacker.init();
         this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
         utility = new DungeonUtility(this.rng);
         rebuildSeed = this.rng.getState();
@@ -136,6 +137,7 @@ public class ModularMapGenerator implements IDungeonGenerator {
      * @param copying the DungeonGenerator to copy
      */
     public ModularMapGenerator(ModularMapGenerator copying) {
+        CoordPacker.init();
         rng = new StatefulRNG(copying.rng.getState());
         utility = new DungeonUtility(rng);
         rebuildSeed = rng.getState();

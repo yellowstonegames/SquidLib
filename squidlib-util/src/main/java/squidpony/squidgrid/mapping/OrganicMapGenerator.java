@@ -29,6 +29,7 @@ public class OrganicMapGenerator implements IDungeonGenerator {
     }
     public OrganicMapGenerator(double noiseMin, double noiseMax, int width, int height, RNG rng)
     {
+        CoordPacker.init();
         this.rng = rng;
         this.width = Math.max(3, width);
         this.height = Math.max(3, height);

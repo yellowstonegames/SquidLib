@@ -84,6 +84,7 @@ public class DungeonGeneratorTest {
     public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
         StatefulRNG rng = new StatefulRNG(2252637788195L);
+        System.out.println("MixedGenerator");
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
         char[][] dungeon;
         dungeonGenerator.addDoors(15, true);
@@ -108,6 +109,7 @@ public class DungeonGeneratorTest {
         dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
+        System.out.println("SerpentMapGenerator\n");
 
 
         dungeonGenerator = new DungeonGenerator(width, height, rng);
@@ -131,6 +133,7 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
 
         System.out.println("------------------------------------------------------------");
+        System.out.println("SerpentMapGenerator with LAVA\n");
         rng.setState(2252637788195L);
         SectionDungeonGenerator sdg = new SectionDungeonGenerator(width, height, rng);
         sdg.addDoors(12, false);
@@ -156,21 +159,7 @@ public class DungeonGeneratorTest {
                 DungeonUtility.hashesToLines(sdungeon, true)));
         System.out.println(dungeonGenerator);
 
-        /*
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                switch (env[x][y])
-                {
-                    case MixedGenerator.ROOM_FLOOR: sdungeon[x][y] = '1';
-                        break;
-                    case MixedGenerator.CAVE_FLOOR: sdungeon[x][y] = '3';
-                        break;
-                    case MixedGenerator.CORRIDOR_FLOOR: sdungeon[x][y] = '5';
-                        break;
-                }
-            }
-        }
-        */
+        System.out.println("SerpentMapGenerator with LAVA and Placement info\n");
 
         for (OrderedSet<Coord> lhs : sdg.placement.getAlongStraightWalls()) {
             for (Coord c : lhs) {
@@ -219,6 +208,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("------------------------------------------------------------");
 */
+        System.out.println("OrganicMapGenerator\n");
 
         rng.setState(2252637788195L);
         sdg = new SectionDungeonGenerator(width, height, rng);
@@ -271,6 +261,7 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
         */
+        System.out.println("DenseRoomMapGenerator\n");
         rng.setState(0xFEEEEEEEEEL);
         DenseRoomMapGenerator dense = new DenseRoomMapGenerator(width, height, rng);
         map = dense.generate();
@@ -289,7 +280,7 @@ public class DungeonGeneratorTest {
         System.out.println(dungeonGenerator);
         System.out.println("------------------------------------------------------------");
 
-
+        System.out.println("ModularMapGenerator\n");
         rng.setState(2252637788195L);
         ModularMapGenerator mmg = new ModularMapGenerator(width, height, rng);
         sdg.clearEffects();
@@ -302,6 +293,7 @@ public class DungeonGeneratorTest {
         System.out.println(sdg);
         System.out.println("------------------------------------------------------------");
 
+        System.out.println("FlowingCaveGenerator\n");
         rng.setState(2252637788195L);
         FlowingCaveGenerator flow = new FlowingCaveGenerator(width, height, TilesetType.DEFAULT_DUNGEON, rng);
         dungeonGenerator.addWater(10);

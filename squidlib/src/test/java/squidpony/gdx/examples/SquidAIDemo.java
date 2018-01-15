@@ -10,14 +10,17 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import squidpony.squidai.*;
-import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -54,7 +57,6 @@ public class SquidAIDemo extends ApplicationAdapter {
     private int redIdx = 0, blueIdx = 0;
     private boolean blueTurn = false;
 
-    private FOVCache cache;
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -74,11 +76,10 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         // change the TilesetType to lots of different choices to see what dungeon works best.
         bareDungeon = dungeonGen.generate(TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS);
-        cache = new FOVCache(bareDungeon, 9, Radius.CIRCLE);
         bareDungeon = DungeonUtility.closeDoors(bareDungeon);
         lineDungeon = DungeonUtility.doubleWidth(DungeonUtility.hashesToLines(bareDungeon));
         // it's more efficient to get random floors from a packed set containing only (compressed) floor positions.
-        short[] placement = CoordPacker.pack(bareDungeon, '.');
+        GreasedRegion placement = new GreasedRegion(bareDungeon, '.');
 
 
         teamRed = new Array<>(numMonsters);
@@ -91,15 +92,15 @@ public class SquidAIDemo extends ApplicationAdapter {
         bluePlaces = new OrderedSet<>(numMonsters);
         for(int i = 0; i < numMonsters; i++)
         {
-            Coord monPos = dungeonGen.utility.randomCell(placement);
-            placement = CoordPacker.removePacked(placement, monPos.x, monPos.y);
+            Coord monPos = placement.singleRandom(rng);
+            placement.remove(monPos);
 
             teamRed.add(display.animateActor(monPos.x, monPos.y, "50", SColor.RED, true));
             redHealth.add(50);
             redPlaces.add(monPos);
 
-            Coord monPosBlue = dungeonGen.utility.randomCell(placement);
-            placement = CoordPacker.removePacked(placement, monPosBlue.x, monPosBlue.y);
+            Coord monPosBlue = placement.singleRandom(rng);
+            placement.remove(monPosBlue);
 
             teamBlue.add(display.animateActor(monPosBlue.x, monPosBlue.y, "50", SColor.COLUMBIA_BLUE, true));
             blueHealth.add(50);
@@ -172,9 +173,6 @@ public class SquidAIDemo extends ApplicationAdapter {
         // and then add display, our one visual component, to the list of things that act in Stage.
         display.setPosition(0, 0);
         stage.addActor(display);
-        cache.awaitCache();
-        blast.setCache(cache);
-        cone.setCache(cache);
         Gdx.input.setInputProcessor(input);
 
 

@@ -17,6 +17,7 @@ public class FOVCacheTest {
     @Test
     public void testCache()
     {
+        CoordPacker.init();
         int width = 30;
         int height = 30;
         int maxRadius = 15;
