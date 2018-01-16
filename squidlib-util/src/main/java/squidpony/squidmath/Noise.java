@@ -377,8 +377,9 @@ public class Noise {
         protected int octaves;
         protected Noise1D basis;
         public double frequency;
+        public double lacunarity = 0.5;
         public Layered1D() {
-            this(ValueNoise.instance);
+            this(Basic1D.instance);
         }
 
         public Layered1D(Noise1D basis) {
@@ -389,9 +390,13 @@ public class Noise {
             this(basis, octaves, 1.0);
         }
         public Layered1D(Noise1D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Layered1D(Noise1D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
         }
 
 
@@ -401,7 +406,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6)) * s;
+                n += basis.getNoise(x * (i_s *= lacunarity) + (o << 6)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -412,7 +417,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoiseWithSeed(x * (i_s *= 0.5), (seed += 0x9E3779B97F4A7C15L)) * s;
+                n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), (seed += 0x9E3779B97F4A7C15L)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -422,8 +427,9 @@ public class Noise {
         protected int octaves;
         protected Noise2D basis;
         public double frequency;
+        public double lacunarity = 0.5;
         public Layered2D() {
-            this(SeededNoise.instance, 2);
+            this(SeededNoise.instance);
         }
 
         public Layered2D(Noise2D basis) {
@@ -434,9 +440,13 @@ public class Noise {
             this(basis, octaves, 1.0);
         }
         public Layered2D(Noise2D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Layered2D(Noise2D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
         }
 
         @Override
@@ -446,7 +456,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7)) * s;
+                n += basis.getNoise(x * (i_s *= lacunarity) + (o << 6), y * i_s + (o << 7)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -458,7 +468,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoiseWithSeed(x * (i_s *= 0.5), y * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
+                n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), y * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -467,8 +477,9 @@ public class Noise {
         protected int octaves;
         protected Noise3D basis;
         public double frequency;
+        public double lacunarity = 0.5;
         public Layered3D() {
-            this(SeededNoise.instance, 2);
+            this(SeededNoise.instance);
         }
 
         public Layered3D(Noise3D basis) {
@@ -479,9 +490,13 @@ public class Noise {
             this(basis, octaves, 1.0);
         }
         public Layered3D(Noise3D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Layered3D(Noise3D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
         }
 
         @Override
@@ -492,7 +507,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)) * s;
+                n += basis.getNoise(x * (i_s *= lacunarity) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -505,7 +520,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoiseWithSeed(x * (i_s *= 0.5), y * i_s, z * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
+                n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), y * i_s, z * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -514,8 +529,9 @@ public class Noise {
         protected int octaves;
         protected Noise4D basis;
         public double frequency;
+        public double lacunarity = 0.5;
         public Layered4D() {
-            this(SeededNoise.instance, 2);
+            this(SeededNoise.instance);
         }
 
         public Layered4D(Noise4D basis) {
@@ -526,9 +542,13 @@ public class Noise {
             this(basis, octaves, 1.0);
         }
         public Layered4D(Noise4D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Layered4D(Noise4D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
         }
 
         @Override
@@ -540,7 +560,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9)) * s;
+                n += basis.getNoise(x * (i_s *= lacunarity) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8), w * i_s + (o << 9)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -554,7 +574,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoiseWithSeed(x * (i_s *= 0.5), y * i_s, z * i_s, w * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
+                n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), y * i_s, z * i_s, w * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
             }
             return n / ((1 << octaves) - 1.0);
         }
@@ -563,8 +583,9 @@ public class Noise {
         protected int octaves;
         protected Noise6D basis;
         public double frequency;
+        public double lacunarity = 0.5;
         public Layered6D() {
-            this(SeededNoise.instance, 2);
+            this(SeededNoise.instance);
         }
 
         public Layered6D(Noise6D basis) {
@@ -575,9 +596,13 @@ public class Noise {
             this(basis, octaves, 1.0);
         }
         public Layered6D(Noise6D basis, final int octaves, double frequency) {
+            this(basis, octaves, frequency, 0.5);
+        }
+        public Layered6D(Noise6D basis, final int octaves, double frequency, double lacunarity) {
             this.basis = basis;
             this.frequency = frequency;
             this.octaves = Math.max(1, Math.min(63, octaves));
+            this.lacunarity = lacunarity;
         }
 
         @Override
@@ -591,7 +616,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoise(x * (i_s *= 0.5) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
+                n += basis.getNoise(x * (i_s *= lacunarity) + (o << 6), y * i_s + (o << 7), z * i_s + (o << 8)
                         , w * i_s + (o << 9), u * i_s + (o << 10), v * i_s + (o << 11)) * s;
             }
             return n / ((1 << octaves) - 1.0);
@@ -608,7 +633,7 @@ public class Noise {
             int s = 1;
             double n = 0.0, i_s = 2.0;
             for (int o = 0; o < octaves; o++, s <<= 1) {
-                n += basis.getNoiseWithSeed(x * (i_s *= 0.5), y * i_s, z * i_s
+                n += basis.getNoiseWithSeed(x * (i_s *= lacunarity), y * i_s, z * i_s
                         , w * i_s, u * i_s, v * i_s, (seed += 0x9E3779B97F4A7C15L)) * s;
             }
             return n / ((1 << octaves) - 1.0);
@@ -623,7 +648,7 @@ public class Noise {
          */
         public double lacunarity = 0.5;
         public InverseLayered1D() {
-            this(ValueNoise.instance);
+            this(Basic1D.instance);
         }
 
         public InverseLayered1D(Noise1D basis) {
@@ -901,7 +926,7 @@ public class Noise {
         protected Noise1D basis;
 
         public Scaled1D() {
-            this(ValueNoise.instance);
+            this(Basic1D.instance);
         }
 
         public Scaled1D(Noise1D basis) {

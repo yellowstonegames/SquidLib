@@ -48,7 +48,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private WorldMapGenerator.SphereMap world;
+    private WorldMapGenerator.SphereMapAlt world;
     private final double[][] shadingData = new double[width][height];
     private final int[][]
             heatCodeData = new int[width][height],
@@ -315,7 +315,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
-        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.7);
+        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, 0.7);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
@@ -340,34 +340,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 'C':
                     case 'c':
                         cloudy = !cloudy;
-                        break;
-                    case 'T':
-                    case 't':
-                        world = new WorldMapGenerator.SphereMap(seed, width, height, TabbyNoise.instance, 1.1);
-                        seed = rng.nextLong();
-                        generate(seed);
-                        rng.setState(seed);
-                        break;
-                    case 'M':
-                    case 'm':
-                        world = new WorldMapGenerator.SphereMap(seed, width, height, MummyNoise.instance, 1.1);
-                        seed = rng.nextLong();
-                        generate(seed);
-                        rng.setState(seed);
-                        break;
-                    case 'W':
-                    case 'w':
-                        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
-                        seed = rng.nextLong();
-                        generate(seed);
-                        rng.setState(seed);
-                        break;
-                    case 'S':
-                    case 's':
-                        world = new WorldMapGenerator.SphereMap(seed, width, height, SeededNoise.instance, 1.0);
-                        seed = rng.nextLong();
-                        generate(seed);
-                        rng.setState(seed);
                         break;
                     case 'Q':
                     case 'q':
