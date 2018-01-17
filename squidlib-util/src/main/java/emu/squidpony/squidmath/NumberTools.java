@@ -281,4 +281,24 @@ public class NumberTools {
         return num & ~(num - 1L);
     }
 
+    public static double sin(final double radians)
+    {
+        wda.set(0, radians * 0.3183098861837907 + (radians < -1.5707963267948966 ? -1.5 : 2.5));
+        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
+        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
+        wia.set(0, wia.get(0) ^ flip);
+        final double a = wda.get(0) - 2.0;
+        return a * a * (3.0 - 2.0 * a) * 2.0 - 1.0;
+    }
+
+    public static double cos(final double radians)
+    {
+        wda.set(0, radians * 0.3183098861837907 + (radians < 0.0 ? -2.0 : 2.0));
+        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
+        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
+        wia.set(0, wia.get(0) ^ flip);
+        final double a = wda.get(0) - 2.0;
+        return a * a * (3.0 - 2.0 * a) * -2.0 + 1.0;
+    }
+
 }

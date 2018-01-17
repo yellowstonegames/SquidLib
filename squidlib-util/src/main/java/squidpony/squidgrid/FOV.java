@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.ArrayTools;
 import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.NumberTools;
 
 import java.io.Serializable;
 import java.util.*;
@@ -432,8 +433,8 @@ public class FOV implements Serializable {
         light[startX][startY] = 1;//make the starting space full power
         angle = Math.toRadians((angle > 360.0 || angle < 0.0)
                 ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
-        float s = (float) Math.sin(angle),
-                c = (float) Math.cos(angle);
+        float s = (float) NumberTools.sin(angle),
+                c = (float) NumberTools.cos(angle);
         double deteriorate = 1.0;
         int dx, dy, width = resistanceMap.length, height = resistanceMap[0].length;
         for (int d = 1; d <= rad; ) {

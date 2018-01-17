@@ -1132,16 +1132,16 @@ public abstract class WorldMapGenerator {
             double[] trigTable = new double[width << 1];
             for (int x = 0; x < width; x++, xPos += i_uw) {
                 p = xPos * i_w;
-                trigTable[x<<1]   = Math.sin(p);
-                trigTable[x<<1|1] = Math.cos(p);
+                trigTable[x<<1]   = NumberTools.sin(p);
+                trigTable[x<<1|1] = NumberTools.cos(p);
             }
             for (int y = 0; y < height; y++, yPos += i_uh) {
                 q = yPos * i_h;
-                qs = Math.sin(q);
-                qc = Math.cos(q);
+                qs = NumberTools.sin(q);
+                qc = NumberTools.cos(q);
                 for (int x = 0, xt = 0; x < width; x++) {
-                    ps = trigTable[xt++];//Math.sin(p);
-                    pc = trigTable[xt++];//Math.cos(p);
+                    ps = trigTable[xt++];//NumberTools.sin(p);
+                    pc = trigTable[xt++];//NumberTools.cos(p);
                     h = terrain.getNoiseWithSeed(pc +
                                     terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),
                             ps, qc, qs, seedA);
@@ -1456,18 +1456,18 @@ public abstract class WorldMapGenerator {
             final double[] trigTable = new double[width << 1];
             for (int x = 0; x < width; x++, xPos += i_uw) {
                 p = xPos * i_w;
-                trigTable[x<<1]   = Math.sin(p);
-                trigTable[x<<1|1] = Math.cos(p);
+                trigTable[x<<1]   = NumberTools.sin(p);
+                trigTable[x<<1|1] = NumberTools.cos(p);
             }
             yPos = startY + i_uh;
             for (int y = 0; y < height; y++, yPos += i_uh) {
                 qs = -1.5707963267948966 + yPos * i_h;
-                qc = Math.cos(qs);
-                qs = Math.sin(qs);
-                //qs = Math.sin(qs);
+                qc = NumberTools.cos(qs);
+                qs = NumberTools.sin(qs);
+                //qs = NumberTools.sin(qs);
                 for (int x = 0, xt = 0; x < width; x++) {
-                    ps = trigTable[xt++] * qc;//Math.sin(p);
-                    pc = trigTable[xt++] * qc;//Math.cos(p);
+                    ps = trigTable[xt++] * qc;//NumberTools.sin(p);
+                    pc = trigTable[xt++] * qc;//NumberTools.cos(p);
                     xPositions[x][y] = pc;
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;
@@ -1812,18 +1812,18 @@ public abstract class WorldMapGenerator {
             final double[] trigTable = new double[width << 1];
             for (int x = 0; x < width; x++, xPos += i_uw) {
                 p = xPos * i_w;
-                trigTable[x<<1]   = Math.sin(p);
-                trigTable[x<<1|1] = Math.cos(p);
+                trigTable[x<<1]   = NumberTools.sin(p);
+                trigTable[x<<1|1] = NumberTools.cos(p);
             }
             yPos = startY + i_uh;
             for (int y = 0; y < height; y++, yPos += i_uh) {
                 qs = -1.5707963267948966 + yPos * i_h;
-                qc = Math.cos(qs);
-                qs = Math.sin(qs);
-                //qs = Math.sin(qs);
+                qc = NumberTools.cos(qs);
+                qs = NumberTools.sin(qs);
+                //qs = NumberTools.sin(qs);
                 for (int x = 0, xt = 0; x < width; x++) {
-                    ps = trigTable[xt++] * qc;//Math.sin(p);
-                    pc = trigTable[xt++] * qc;//Math.cos(p);
+                    ps = trigTable[xt++] * qc;//NumberTools.sin(p);
+                    pc = trigTable[xt++] * qc;//NumberTools.cos(p);
                     xPositions[x][y] = pc;
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;

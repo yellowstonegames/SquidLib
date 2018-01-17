@@ -11,7 +11,9 @@ import squidpony.squidmath.OrderedSet;
 
 import java.util.*;
 
-import static java.lang.Math.*;
+import static java.lang.Math.round;
+import static squidpony.squidmath.NumberTools.sin;
+import static squidpony.squidmath.NumberTools.cos;
 
 /**
  * Beam Area of Effect that affects an slightly expanded (Elias) line from a given origin Coord out to a given length,
@@ -54,7 +56,7 @@ public class BeamAOE implements AOE {
         rt = Radius.SQUARE;
         this.origin = origin;
         this.end = end;
-        length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
+        length =(int) round(rt.radius(origin.x, origin.y, end.x, end.y));
         reach.maxDistance = length;
         radius = 0;
         los = new LOS(LOS.THICK);
@@ -67,7 +69,7 @@ public class BeamAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
+        length =(int) round(rt.radius(origin.x, origin.y, end.x, end.y));
         reach.maxDistance = length;
         los = new LOS(LOS.THICK);
     }
@@ -92,7 +94,7 @@ public class BeamAOE implements AOE {
         this.origin = origin;
         this.end = end;
         this.radius = radius;
-        length =(int)Math.round(rt.radius(origin.x, origin.y, end.x, end.y));
+        length =(int) round(rt.radius(origin.x, origin.y, end.x, end.y));
         reach.maxDistance = length;
         los = new LOS(LOS.THICK);
     }

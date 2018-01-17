@@ -84,10 +84,24 @@ public class Playground {
         ))) | 0x3f800000) - 1f;
         */
     }
+    public static double swayRandomized(final long seed, final double value)
+    {
+        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)),
+                m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m, flippy = ((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL);
+        return  (Double.longBitsToDouble(flippy | 0x4000000000000000L) - 3.0 + NumberTools.randomDouble(m + seed));
+        //return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * 2.0 - 1.0;
+    }
+
     private void go() {
-        for (double i = Math.PI / 9.0; i <= 0x1p30; i *= 2.0) {
-            System.out.printf("% 21.10f : % 3.10f  % 3.10f\n", i, NumberTools.sway((float)i), NumberTools.sway(i));
-            System.out.printf("% 21.10f : % 3.10f  % 3.10f\n", -i, NumberTools.sway((float)-i), NumberTools.sway(-i));
+//        for (double i = Math.PI / 9.0; i <= 0x1p30; i *= Math.E) {
+//            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", i, NumberTools.sway((float)i), NumberTools.sway(i), swayRandomized(seed, i));
+//            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", -i, NumberTools.sway((float)-i), NumberTools.sway(-i), swayRandomized(seed,-i));
+//        }
+        long seed = 0x1337DEADBEEFCAFEL;
+        System.out.println(0.5 + NumberTools.randomDouble(seed));
+        for (double i = 0.0; i <= 17.0; i += 0x1p-4) {
+            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", i, NumberTools.sway((float)i), NumberTools.sway(i), swayRandomized(seed, i));
+            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", -i, NumberTools.sway((float)-i), NumberTools.sway(-i), swayRandomized(seed,-i));
         }
         System.out.println("NumberTools.sway(Float.POSITIVE_INFINITY)  :  " + NumberTools.sway(Float.POSITIVE_INFINITY));
         System.out.println("NumberTools.sway(Float.NEGATIVE_INFINITY)  :  " + NumberTools.sway(Float.NEGATIVE_INFINITY));
@@ -102,12 +116,19 @@ public class Playground {
         System.out.println("NumberTools.sway(Double.MAX_VALUE)         :  " + NumberTools.sway(Double.MAX_VALUE));
         System.out.println("NumberTools.sway(Double.MIN_NORMAL)        :  " + NumberTools.sway(Double.MIN_NORMAL));
         System.out.println("NumberTools.sway(Double.NaN)               :  " + NumberTools.sway(Double.NaN));
+        System.out.println();
+        System.out.println("swayRandomized(Double.POSITIVE_INFINITY)   :  " + swayRandomized(seed, Double.POSITIVE_INFINITY));
+        System.out.println("swayRandomized(Double.NEGATIVE_INFINITY)   :  " + swayRandomized(seed, Double.NEGATIVE_INFINITY));
+        System.out.println("swayRandomized(Double.MIN_VALUE)           :  " + swayRandomized(seed, Double.MIN_VALUE));
+        System.out.println("swayRandomized(Double.MAX_VALUE)           :  " + swayRandomized(seed, Double.MAX_VALUE));
+        System.out.println("swayRandomized(Double.MIN_NORMAL)          :  " + swayRandomized(seed, Double.MIN_NORMAL));
+        System.out.println("swayRandomized(Double.NaN)                 :  " + swayRandomized(seed, Double.NaN));
 
-        for (int n = 100; n < 120; n++) {
-            long i = ThrustAltRNG.determine(n);
-            System.out.printf("%016X : % 3.10f  % 3.10f\n", i, NumberTools.formFloat((int) (i >>> 32)), NumberTools.formDouble(i));
-            System.out.printf("%016X : % 3.10f  % 3.10f\n", ~i, NumberTools.formFloat((int)(~i >>> 32)), NumberTools.formDouble(~i));
-        }
+//        for (int n = 100; n < 120; n++) {
+//            long i = ThrustAltRNG.determine(n);
+//            System.out.printf("%016X : % 3.10f  % 3.10f\n", i, NumberTools.formFloat((int) (i >>> 32)), NumberTools.formDouble(i));
+//            System.out.printf("%016X : % 3.10f  % 3.10f\n", ~i, NumberTools.formFloat((int)(~i >>> 32)), NumberTools.formDouble(~i));
+//        }
 
 //        TabbyNoise tabby = TabbyNoise.instance;
 //        double v;

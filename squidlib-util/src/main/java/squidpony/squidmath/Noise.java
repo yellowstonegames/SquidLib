@@ -2077,12 +2077,12 @@ public class Noise {
             i_s *= 2.0;
             for (int x = 0; x < width; x++) {
                 p = x * i_w;
-                ps = Math.sin(p) * i_s;
-                pc = Math.cos(p) * i_s;
+                ps = NumberTools.sin(p) * i_s;
+                pc = NumberTools.cos(p) * i_s;
                 for (int y = 0; y < height; y++) {
                     q = y * i_h;
-                    qs = Math.sin(q) * i_s;
-                    qc = Math.cos(q) * i_s;
+                    qs = NumberTools.sin(q) * i_s;
+                    qc = NumberTools.cos(q) * i_s;
                     fill[x][y] += generator.getNoiseWithSeed(pc, ps, qc, qs, seed) * s;
                 }
             }
@@ -2153,16 +2153,16 @@ public class Noise {
             i_s *= 2.0;
             for (int x = 0; x < width; x++) {
                 p = x * i_w;
-                ps = Math.sin(p) * i_s;
-                pc = Math.cos(p) * i_s;
+                ps = NumberTools.sin(p) * i_s;
+                pc = NumberTools.cos(p) * i_s;
                 for (int y = 0; y < height; y++) {
                     q = y * i_h;
-                    qs = Math.sin(q) * i_s;
-                    qc = Math.cos(q) * i_s;
+                    qs = NumberTools.sin(q) * i_s;
+                    qc = NumberTools.cos(q) * i_s;
                     for (int z = 0; z < depth; z++) {
                         r = z * i_d;
-                        rs = Math.sin(r) * i_s;
-                        rc = Math.cos(r) * i_s;
+                        rs = NumberTools.sin(r) * i_s;
+                        rc = NumberTools.cos(r) * i_s;
                         fill[z][x][y] += generator.getNoiseWithSeed(pc, ps, qc, qs, rc, rs, seed) * s;
                     }
                 }
@@ -2204,16 +2204,16 @@ public class Noise {
             i_s *= 2.0;
             for (int x = 0; x < width; x++) {
                 p = x * i_w;
-                ps = Math.sin(p) * i_s;
-                pc = Math.cos(p) * i_s;
+                ps = NumberTools.sin(p) * i_s;
+                pc = NumberTools.cos(p) * i_s;
                 for (int y = 0; y < height; y++) {
                     q = y * i_h;
-                    qs = Math.sin(q) * i_s;
-                    qc = Math.cos(q) * i_s;
+                    qs = NumberTools.sin(q) * i_s;
+                    qc = NumberTools.cos(q) * i_s;
                     for (int z = 0; z < depth; z++) {
                         r = z * i_d;
-                        rs = Math.sin(r) * i_s;
-                        rc = Math.cos(r) * i_s;
+                        rs = NumberTools.sin(r) * i_s;
+                        rc = NumberTools.cos(r) * i_s;
                         fill[z][x][y] += SeededNoise.noise(pc, ps, qc, qs, rc, rs, seed) * s;
                     }
                 }

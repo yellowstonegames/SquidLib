@@ -1,9 +1,6 @@
 package squidpony.squidgrid;
 
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.Coord3D;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,8 +155,8 @@ public enum Radius {
             case SPHERE:
                 double radius = distance * Math.sqrt(rng.between(0.0, 1.0));
                 double theta = rng.between(0, PI2);
-                x = (int) Math.round(Math.cos(theta) * radius);
-                y = (int) Math.round(Math.sin(theta) * radius);
+                x = (int) Math.round(NumberTools.cos(theta) * radius);
+                y = (int) Math.round(NumberTools.sin(theta) * radius);
         }
 
         return Coord.get(x, y);
@@ -296,8 +293,8 @@ public enum Radius {
                     for (int i = 1; i <= denom; i+=2)
                     {
                         theta = i * (PI2 / denom);
-                        x = (int) (Math.cos(theta) * (radiusLength + 0.25)) + center.x;
-                        y = (int) (Math.sin(theta) * (radiusLength + 0.25)) + center.y;
+                        x = (int) (NumberTools.cos(theta) * (radiusLength + 0.25)) + center.x;
+                        y = (int) (NumberTools.sin(theta) * (radiusLength + 0.25)) + center.y;
                         
                         if (!surpassEdges) {
                             x = clamp(x, 0, width);
@@ -327,7 +324,7 @@ public enum Radius {
             return center;
         }
         double theta = Math.atan2(middle.y - center.y, middle.x - center.x),
-                cosTheta = Math.cos(theta), sinTheta = Math.sin(theta);
+                cosTheta = NumberTools.cos(theta), sinTheta = NumberTools.sin(theta);
 
         Coord end = Coord.get(middle.x, middle.y);
         switch (this) {

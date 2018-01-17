@@ -315,11 +315,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
-        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, 0.7);
+        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, 1.0);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.9);
+        world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {

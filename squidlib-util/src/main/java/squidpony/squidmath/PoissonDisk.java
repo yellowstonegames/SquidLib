@@ -161,8 +161,8 @@ public class PoissonDisk {
                 d = rng.nextFloat();
                 float angle = pi2 * d;
 
-                float newX = radius * (float)Math.sin(angle);
-                float newY = radius * (float)Math.cos(angle);
+                float newX = radius * (float)NumberTools.sin(angle);
+                float newY = radius * (float)NumberTools.cos(angle);
                 Coord q = point.translateCapped(Math.round(newX), Math.round(newY), maxX, maxY);
                 //end get random point around
 
@@ -254,16 +254,16 @@ public class PoissonDisk {
                 d = rng.nextFloat();
                 float angle = pi2 * d;
 
-                float newX = radius * (float) Math.sin(angle);
-                float newY = radius * (float) Math.cos(angle);
+                float newX = radius * (float) NumberTools.sin(angle);
+                float newY = radius * (float) NumberTools.cos(angle);
                 Coord q = point.translateCapped(Math.round(newX), Math.round(newY), width, height);
                 int frustration = 0;
                 while(blocked.contains(map[q.x][q.y]) && frustration < 8)
                 {
                     d = rng.nextFloat();
                     angle = pi2 * d;
-                    newX = radius * (float) Math.sin(angle);
-                    newY = radius * (float) Math.cos(angle);
+                    newX = radius * (float) NumberTools.sin(angle);
+                    newY = radius * (float) NumberTools.cos(angle);
                     q = point.translateCapped(Math.round(newX), Math.round(newY), width, height);
                     frustration++;
                 }
