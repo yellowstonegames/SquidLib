@@ -124,7 +124,8 @@ public class ShaderDemo extends ApplicationAdapter {
     // of that SColor as a background and foreground when used with other colors, plus more info like the hue,
     // saturation, and value of the color. Here we just use the packed floats directly from the SColor docs, but we also
     // mention what color it is in a line comment, which is a good habit so you can see a preview if needed.
-    private static final float FLOAT_LIGHTING = -0x1.cff1fep126F, // same result as SColor.COSMIC_LATTE.toFloatBits()
+    private static final float FLOAT_LIGHTING = -0x1.fff1ep126F, // same result as SColor.ALICE_BLUE.toFloatBits()
+            //-0x1.cff1fep126F, // same result as SColor.COSMIC_LATTE.toFloatBits()
             GRAY_FLOAT = -0x1.7e7e7ep125F; // same result as SColor.CW_GRAY_BLACK.toFloatBits()
 
     @Override
@@ -506,8 +507,8 @@ public class ShaderDemo extends ApplicationAdapter {
                     // number between 0 and 1 to provide the amount for the lighting color to affect the background
                     // color, we effectively divide by 512 using multiplication by a rarely-seen hexadecimal float
                     // literal, 0x1p-9f.
-                    display.putWithLight(i, j, decoDungeon[i][j], colors[i][j], bgColors[i][j], FLOAT_LIGHTING,
-                            (float) visible[i][j], null);
+                    display.putWithConsistentLight(i, j, decoDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], -0x1.5a86d4p125F, 1f - 0.4f * (float)visible[i][j]), FLOAT_LIGHTING,
+                            (float) visible[i][j], 0.00125f);
                 } else if(seen.contains(i, j))
                     display.putWithLight(i, j, decoDungeon[i][j], colors[i][j], bgColors[i][j], GRAY_FLOAT, 0.25f);
             }
