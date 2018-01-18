@@ -290,6 +290,14 @@ public class NumberTools {
         final double a = wda.get(0) - 2.0;
         return a * a * (3.0 - 2.0 * a) * 2.0 - 1.0;
     }
+    public static float sin(final float radians)
+    {
+        wfa.set(0, radians * 0.3183098861837907f + (radians < -1.5707963267948966f ? -1.5f : 2.5f));
+        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000);
+        final float a = wfa.get(0) - 2f;
+        return a * a * (3f - 2f * a) * 2f - 1f;
+    }
 
     public static double cos(final double radians)
     {
@@ -300,5 +308,12 @@ public class NumberTools {
         final double a = wda.get(0) - 2.0;
         return a * a * (3.0 - 2.0 * a) * -2.0 + 1.0;
     }
-
+    public static float cos(final float radians)
+    {
+        wfa.set(0, radians * 0.3183098861837907f + (radians < 0f ? -2f : 2f));
+        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000);
+        final float a = wfa.get(0) - 2f;
+        return a * a * (3f - 2f * a) * -2f + 1f;
+    }
 }

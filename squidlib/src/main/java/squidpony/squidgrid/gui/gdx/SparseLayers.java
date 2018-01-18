@@ -1794,6 +1794,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                 continue;
             glyph.act(Gdx.graphics.getDeltaTime());
             if(
+                    !glyph.isVisible() ||
                     (x = Math.round((glyph.getX() - xo) / font.actualCellWidth)) < 0 || x >= gridWidth ||
                     (y = Math.round((glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) < 0 || y >= gridHeight ||
                     backgrounds[x][y] == 0f)

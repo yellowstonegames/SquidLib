@@ -623,13 +623,29 @@ public final class NumberTools {
      * long value). This is closely related to {@link #sway(float)}, but the shape of the output when graphed is almost
      * identical to sin().
      * @param radians an angle in radians, often from -pi to pi, though not required to be.
-     * @return the sine of the given angle, as a double between -1.0 and 1.0 (probably exclusive on 1.0, but not -1.0)
+     * @return the sine of the given angle, as a double between -1.0 and 1.0 (probably exclusive on -1.0, but not 1.0)
      */
     public static double sin(final double radians)
     {
         final long s = Double.doubleToLongBits(radians * 0.3183098861837907f + (radians < -1.5707963267948966 ? -1.5 : 2.5)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
         final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L) >> 51)) & 0xfffffffffffffL) | 0x4000000000000000L) - 2.0);
         return a * a * (3.0 - 2.0 * a) * 2.0 - 1.0;
+    }
+
+    /**
+     * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (40x faster sin() calls
+     * in benchmarking), and both takes and returns floats. Takes the same arguments Math.sin() does, so one angle in
+     * radians, which may technically be any float (but this will lose accuracy on extremely large floats, such as those
+     * that are larger than the largest int value). This is closely related to {@link #sway(float)}, but the shape of
+     * the output when graphed is almost identical to sin().
+     * @param radians an angle in radians as a float, often from -pi to pi, though not required to be.
+     * @return the sine of the given angle, as a float between -1f and 1f (probably exclusive on -1f, but not 1f)
+     */
+    public static float sin(final float radians)
+    {
+        final int s = Float.floatToIntBits(radians * 0.3183098861837907f + (radians < -1.5707963267948966f ? -1.5f : 2.5f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
+        return a * a * (3f - 2f * a) * 2f - 1f;
     }
 
     /**
@@ -647,4 +663,21 @@ public final class NumberTools {
         final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L) >> 51)) & 0xfffffffffffffL) | 0x4000000000000000L) - 2.0);
         return a * a * (3.0 - 2.0 * a) * -2.0 + 1.0;
     }
+
+    /**
+     * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (40x faster cos() calls
+     * in benchmarking), and both takes and returns floats. Takes the same arguments Math.cos() does, so one angle in
+     * radians, which may technically be any float (but this will lose accuracy on extremely large floats, such as those
+     * that are larger than the largest int value). This is closely related to {@link #sway(float)}, but the shape of
+     * the output when graphed is almost identical to cos().
+     * @param radians an angle in radians as a float, often from -pi to pi, though not required to be.
+     * @return the cosine of the given angle, as a float between -1f and 1f (probably exclusive on 1f, but not -1f)
+     */
+    public static float cos(final float radians)
+    {
+        final int s = Float.floatToIntBits(radians * 0.3183098861837907f + (radians < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
+        return a * a * (3f - 2f * a) * -2f + 1f;
+    }
+
 }

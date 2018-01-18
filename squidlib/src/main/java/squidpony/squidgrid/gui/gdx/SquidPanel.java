@@ -823,7 +823,6 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         super.draw(batch, parentAlpha);
         int len = animatedEntities.size();
         for (int i = 0; i < len; i++) {
-
             animatedEntities.getAt(i).actor.act(Gdx.graphics.getDeltaTime());
         }
         len = autoActors.size();
@@ -831,7 +830,8 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         for (int i = 0; i < len; i++) {
             a = autoActors.getAt(i);
             if(a == null) continue;
-            drawActor(batch, parentAlpha, a);
+            if(a.isVisible())
+                drawActor(batch, parentAlpha, a);
             a.act(Gdx.graphics.getDeltaTime());
         }
     }
