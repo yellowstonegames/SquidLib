@@ -3,6 +3,19 @@ SquidLib is a Java library that provides a full featured toolbox for working wit
 
 SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, [Dungeon Mercenary](http://www.schplaf.org/hgames/), and other projects.
 
+You can see [a small example](http://tommyettinger.github.io/SquidLib-Demos/tsar/index.html) online; it is part of the
+[SquidLib-Demos](https://github.com/tommyettinger/SquidLib-Demos) collection. It uses `squidlib-util` to generate
+dungeon maps, handle pathfinding for enemies (who chase you after they see you) and the player (if you click, it
+uses pathfinding to move the player to the clicked spot), calculate field of vision, and produce gibberish text that
+looks like Russian (but isn't); it uses `squidlib` (the display module for text-based games) to show the generated maps
+in a traditional roguelike style with `@` for the player and `Я` for enemy guards, blend colors for torchlight effects,
+and smoothly slide the player and enemies around when they move. A much more polished use of SquidLib is
+[Dungeon Mercenary](http://www.schplaf.org/hgames/), by smelC; it is a full-fledged game, not just a demo.
+
+You don't need to use a text-based display to use many features of this library; there's a demo of this (not yet a game)
+in [ColorGuard](https://github.com/tommyettinger/ColorGuard), which uses `squidlib-util` to handle random numbers, world
+map generation, and text generation in fictional languages.
+
 [![Join the slow-paced chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib)
 
 Documentation:

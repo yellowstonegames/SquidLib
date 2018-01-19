@@ -42,6 +42,7 @@ public class DijkstraMap implements Serializable {
     private static final long serialVersionUID = -2456306898212944441L;
 
     private static final double root2 = Math.sqrt(2.0);
+
     /**
      * The type of heuristic to use.
      */
@@ -211,7 +212,7 @@ public class DijkstraMap implements Serializable {
     private int frustration = 0;
     public Coord[][] targetMap;
 
-    private Direction[] reuse = new Direction[9];
+    private Direction[] dirs = new Direction[9];
 
     private boolean initialized = false;
 
@@ -551,12 +552,12 @@ public class DijkstraMap implements Serializable {
         {
             case CUBE:
             case SQUARE:
-                return DijkstraMap.Measurement.CHEBYSHEV;
+                return Measurement.CHEBYSHEV;
             case DIAMOND:
             case OCTAHEDRON:
-                return DijkstraMap.Measurement.MANHATTAN;
+                return Measurement.MANHATTAN;
             default:
-                return DijkstraMap.Measurement.EUCLIDEAN;
+                return Measurement.EUCLIDEAN;
         }
     }
 
@@ -585,9 +586,7 @@ public class DijkstraMap implements Serializable {
     public void resetMap() {
         if (!initialized) return;
         for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                gradientMap[x][y] = physicalMap[x][y];
-            }
+            System.arraycopy(physicalMap[x], 0, gradientMap[x], 0, height);
         }
     }
 
@@ -871,8 +870,8 @@ public class DijkstraMap implements Serializable {
         }
         double currentLowest = 999000, cs, dist;
         fresh.clear();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (gradientMap[x][y] <= FLOOR) {
                     if (gradientMap[x][y] < currentLowest) {
                         currentLowest = gradientMap[x][y];
@@ -886,7 +885,7 @@ public class DijkstraMap implements Serializable {
         }
         int fsz, numAssigned = fresh.size;
         mappedCount = goals.size;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (numAssigned > 0) {
             numAssigned = 0;
@@ -897,11 +896,11 @@ public class DijkstraMap implements Serializable {
                 cenY = decodeY(cen);
                 dist = gradientMap[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -912,7 +911,7 @@ public class DijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
                     if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
@@ -1028,22 +1027,40 @@ public class DijkstraMap implements Serializable {
         }
         double currentLowest = 999000, cs, dist;
         fresh.clear();
-        for (int y = 0; y < height; y++) {
+        if(start == null) {
             for (int x = 0; x < width; x++) {
-                if (gradientMap[x][y] <= FLOOR) {
-                    if (gradientMap[x][y] < currentLowest) {
-                        currentLowest = gradientMap[x][y];
-                        fresh.clear();
-                        fresh.add(encode(x, y));
-                    } else if (gradientMap[x][y] == currentLowest) {
-                        fresh.add(encode(x, y));
+                for (int y = 0; y < height; y++) {
+                    if (gradientMap[x][y] <= FLOOR) {
+                        if (gradientMap[x][y] < currentLowest) {
+                            currentLowest = gradientMap[x][y];
+                            fresh.clear();
+                            fresh.add(encode(x, y));
+                        } else if (gradientMap[x][y] == currentLowest) {
+                            fresh.add(encode(x, y));
+                        }
+                    }
+                }
+            }
+        } else{
+            final int x0 = Math.max(0, start.x - limit), x1 = Math.min(start.x + limit + 1, width),
+                    y0 = Math.max(0, start.y - limit), y1 = Math.min(start.y + limit + 1, height);
+            for (int x = x0; x < x1; x++) {
+                for (int y = y0; y < y1; y++) {
+                    if (gradientMap[x][y] <= FLOOR) {
+                        if (gradientMap[x][y] < currentLowest) {
+                            currentLowest = gradientMap[x][y];
+                            fresh.clear();
+                            fresh.add(encode(x, y));
+                        } else if (gradientMap[x][y] == currentLowest) {
+                            fresh.add(encode(x, y));
+                        }
                     }
                 }
             }
         }
         int fsz, numAssigned = fresh.size;
         mappedCount = goals.size;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         int iter = 0;
         while (numAssigned > 0 && iter++ < limit) {
@@ -1055,11 +1072,11 @@ public class DijkstraMap implements Serializable {
                 cenY = decodeY(cen);
                 dist = gradientMap[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -1070,7 +1087,7 @@ public class DijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
                     if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
@@ -1127,7 +1144,7 @@ public class DijkstraMap implements Serializable {
         fresh.add(encode(start2));
         int fsz, numAssigned = 1;
         mappedCount = 1;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (numAssigned > 0) {
             numAssigned = 0;
@@ -1138,11 +1155,11 @@ public class DijkstraMap implements Serializable {
                 cenY = decodeY(cen);
                 dist = gradientMap[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -1153,7 +1170,7 @@ public class DijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
                     if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         ++mappedCount;
@@ -1205,8 +1222,8 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d < measurement.directionCount() + 1; d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1270,7 +1287,7 @@ public class DijkstraMap implements Serializable {
         fresh.add(encode(start2));
         int fsz, numAssigned = 1;
         mappedCount = 1;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (numAssigned > 0) {
             numAssigned = 0;
@@ -1281,11 +1298,11 @@ public class DijkstraMap implements Serializable {
                 cenY = decodeY(cen);
                 dist = gradientMap[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -1296,7 +1313,7 @@ public class DijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
                     if (gradientMap[adjX][adjY] <= FLOOR && cs < gradientMap[adjX][adjY]) {
                         ++mappedCount;
@@ -1415,8 +1432,8 @@ public class DijkstraMap implements Serializable {
         }
         double currentLowest = 999000, cs, dist;
         fresh.clear();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (gradientClone[x][y] <= FLOOR) {
                     if (gradientClone[x][y] < currentLowest) {
                         currentLowest = gradientClone[x][y];
@@ -1430,7 +1447,7 @@ public class DijkstraMap implements Serializable {
         }
         int fsz, numAssigned = fresh.size;
         mappedCount = goals.size;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         while (numAssigned > 0) {
             numAssigned = 0;
@@ -1441,11 +1458,11 @@ public class DijkstraMap implements Serializable {
                 cenY = decodeY(cen);
                 dist = gradientClone[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -1456,7 +1473,7 @@ public class DijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
                     if (gradientClone[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
@@ -1518,7 +1535,7 @@ public class DijkstraMap implements Serializable {
      * @return A 2D double[width][height] using the width and height of what this knows about the physical map.
      */
     public double[][] partialScan(final int limit, final Collection<Coord> impassable, final int size) {
-        scan(null, impassable, size);
+        partialScan(limit,null, impassable, size);
         double[][] gradientClone = new double[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -1596,8 +1613,8 @@ public class DijkstraMap implements Serializable {
         }
         double currentLowest = 999000, cs, dist;
         fresh.clear();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if (gradientClone[x][y] <= FLOOR) {
                     if (gradientClone[x][y] < currentLowest) {
                         currentLowest = gradientClone[x][y];
@@ -1611,7 +1628,7 @@ public class DijkstraMap implements Serializable {
         }
         int fsz, numAssigned = fresh.size;
         mappedCount = goals.size;
-        Direction[] dirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
+        Direction[] moveDirs = (measurement == Measurement.MANHATTAN) ? Direction.CARDINALS : Direction.OUTWARDS;
 
         int iter = 0;
         while (numAssigned > 0 && iter++ < limit) {
@@ -1623,11 +1640,11 @@ public class DijkstraMap implements Serializable {
                 cenY = decodeY(cen);
                 dist = gradientClone[cenX][cenY];
 
-                for (int d = 0; d < dirs.length; d++) {
-                    adjX = cenX + dirs[d].deltaX;
-                    adjY = cenY + dirs[d].deltaY;
+                for (int d = 0; d < moveDirs.length; d++) {
+                    adjX = cenX + moveDirs[d].deltaX;
+                    adjY = cenY + moveDirs[d].deltaY;
                     if (adjX < 0 || adjY < 0 || width <= adjX || height <= adjY)
-                    	/* Outside the map */
+                        /* Outside the map */
                         continue;
                     if(d >= 4 && blockingRequirement > 0) // diagonal
                     {
@@ -1638,7 +1655,7 @@ public class DijkstraMap implements Serializable {
                             continue;
                         }
                     }
-                    double h = measurement.heuristic(dirs[d]);
+                    double h = measurement.heuristic(moveDirs[d]);
                     cs = dist + h * costMap[adjX][adjY];
                     if (gradientClone[adjX][adjY] <= FLOOR && cs < gradientClone[adjX][adjY]) {
                         setFresh(adjX, adjY, cs);
@@ -1733,7 +1750,7 @@ public class DijkstraMap implements Serializable {
         if (!initialized) return null;
         path.clear();
         if(length <= 0)
-            return path;
+            return new ArrayList<>(path);
         Collection<Coord> impassable2;
         if (impassable == null)
             impassable2 = new GreasedRegion(width, height);
@@ -1741,7 +1758,7 @@ public class DijkstraMap implements Serializable {
             impassable2 = new GreasedRegion(width, height, impassable);
         if (onlyPassable == null)
             onlyPassable = new GreasedRegion(width, height);
-        if(length == 1)
+        else if(length == 1)
         {
             impassable2.addAll(onlyPassable);
         }
@@ -1752,8 +1769,6 @@ public class DijkstraMap implements Serializable {
             cutShort = true;
             return new ArrayList<>(path);
         }
-        if(length < 0)
-            length = 0;
         if(scanLimit <= 0 || scanLimit < length)
             scan(start, impassable2);
         else
@@ -1766,8 +1781,8 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1930,8 +1945,8 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2148,8 +2163,8 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2326,8 +2341,8 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2436,8 +2451,8 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2577,8 +2592,8 @@ public class DijkstraMap implements Serializable {
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2721,8 +2736,8 @@ public class DijkstraMap implements Serializable {
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2844,8 +2859,8 @@ public class DijkstraMap implements Serializable {
             }
 
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng);
-            int choice = rng.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2906,15 +2921,14 @@ public class DijkstraMap implements Serializable {
             path.add(currentPos);
         else
             return new ArrayList<>();
-        RNG rng2 = new StatefulRNG(0xf00d);
         while (true) {
             if (frustration > 2000) {
                 path.clear();
                 break;
             }
             double best = gradientMap[currentPos.x][currentPos.y];
-            final Direction[] dirs = appendDirToShuffle(rng2);
-            int choice = rng2.nextIntHasty(measurement.directionCount() + 1);
+            appendDirToShuffle(rng);
+            int choice = 0;//rng2.nextIntHasty(measurement.directionCount() + 1);
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -3024,18 +3038,17 @@ public class DijkstraMap implements Serializable {
         this.blockingRequirement = blockingRequirement > 2 ? 2 : blockingRequirement < 0 ? 0 : blockingRequirement;
     }
 
-    /* For Gwt compatibility */
-    private Direction[] shuffleDirs(RNG rng) {
+    private void appendDirToShuffle(RNG rng) {
         final Direction[] src = measurement == Measurement.MANHATTAN
                 ? Direction.CARDINALS : Direction.OUTWARDS;
-        return rng.randomPortion(src, reuse);
-    }
-
-    /* For Gwt compatibility */
-    private Direction[] appendDirToShuffle(RNG rng) {
-        //appendDir(shuffleDirs(rng),  Direction.NONE)
-        shuffleDirs(rng);
-        reuse[measurement.directionCount()] = Direction.NONE;
-        return reuse;
+        final int n = measurement.directionCount();
+        System.arraycopy(src, 0, dirs, 0, n);
+        for (int i = n - 1; i > 0; i--) {
+            final int r = rng.nextIntHasty(i+1);
+            Direction t = dirs[r];
+            dirs[r] = dirs[i];
+            dirs[i] = t;
+        }
+        dirs[n] = Direction.NONE;
     }
 }
