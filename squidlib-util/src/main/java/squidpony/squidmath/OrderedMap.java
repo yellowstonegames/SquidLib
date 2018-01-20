@@ -572,7 +572,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
     @SuppressWarnings("unchecked")
     public V remove(final Object k) {
-        if ((K) k == null) {
+        if (k == null) {
             if (containsNullKey)
                 return removeNullEntry();
             return defRetValue;

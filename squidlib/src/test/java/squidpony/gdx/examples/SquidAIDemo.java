@@ -258,7 +258,7 @@ public class SquidAIDemo extends ApplicationAdapter {
                 visibleTargets.add(p);
             }
         }*/
-        ArrayList<Coord> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, (LOS)null, whichFoes, whichAllies, user, whichFoes);
+        ArrayList<Coord> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, null, whichFoes, whichAllies, user, whichFoes);
         if(path.isEmpty())
             path = whichDijkstra.findPath(moveLength, whichFoes, whichAllies, user, whichFoes.toArray(new Coord[whichFoes.size()]));
         /*

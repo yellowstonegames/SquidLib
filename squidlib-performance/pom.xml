@@ -63,12 +63,12 @@ THE POSSIBILITY OF SUCH DAMAGE.
         <javac.target>1.7</javac.target>
         <uberjar.name>benchmarks</uberjar.name>
     </properties>
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>jitpack.io</id>-->
+            <!--<url>https://jitpack.io</url>-->
+        <!--</repository>-->
+    <!--</repositories>-->
     <dependencies>
         <dependency>
             <groupId>org.openjdk.jmh</groupId>

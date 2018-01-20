@@ -50,7 +50,7 @@ public static double gauss(long state) {
     @Override
     public double getNoiseWithSeed(final double x, final double y, final long seed) {
         final long
-                rs  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rs  = ThrustRNG.determine(seed ^ ~seed << 32),
                 rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = (rx >>> 23 ^ rx << 23) * (rx | 1L);
         return getNoiseWithSeeds(x, y, rx, ry, gauss(rx) + 0.625, gauss(ry) + 0.625);
@@ -90,7 +90,7 @@ public static double gauss(long state) {
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         final long
-                rs  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rs  = ThrustRNG.determine(seed ^ ~seed << 32),
                 rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
                 rz = (ry >>> 23 ^ ry << 23) * (ry | 1L);
@@ -137,7 +137,7 @@ public static double gauss(long state) {
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         final long
-                rs  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rs  = ThrustRNG.determine(seed ^ ~seed << 32),
                 rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
                 rz = (ry >>> 23 ^ ry << 23) * (ry | 1L),
@@ -193,7 +193,7 @@ public static double gauss(long state) {
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {
         final long
-                rs  = ThrustRNG.determine(seed ^ (long)~seed << 32),
+                rs  = ThrustRNG.determine(seed ^ ~seed << 32),
                 rx = (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = (rx >>> 23 ^ rx << 23) * (rx | 1L),
                 rz = (ry >>> 23 ^ ry << 23) * (ry | 1L),

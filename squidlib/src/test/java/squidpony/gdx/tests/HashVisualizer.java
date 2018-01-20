@@ -74,7 +74,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 64, rngMode = 26, noiseMode = 5;
+    private int hashMode = 64, rngMode = 26, noiseMode = 106;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -739,7 +739,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 106;
+                                    noiseMode %= 108;
                                 }
                                 switch (noiseMode)
                                 {
@@ -3772,36 +3772,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             display.put(509, 256 + iBright, bright);
                             display.put(509, 257 + iBright, bright);
                         }
-
-                        /*
-                        display.put(511, 252 + iBright, bright);
-                        display.put(511, 253 + iBright, bright);
-                        display.put(511, 254 + iBright, bright);
-                        display.put(511, 255 + iBright, bright);
-                        display.put(511, 256 + iBright, bright);
-                        display.put(511, 257 + iBright, bright);
-                        display.put(511, 258 + iBright, bright);
-                        display.put(511, 259 + iBright, bright);
-                        display.put(511, 260 + iBright, bright);
-
-                        display.put(510, 253 + iBright, bright);
-                        display.put(510, 254 + iBright, bright);
-                        display.put(510, 255 + iBright, bright);
-                        display.put(510, 256 + iBright, bright);
-                        display.put(510, 257 + iBright, bright);
-                        display.put(510, 258 + iBright, bright);
-                        display.put(510, 259 + iBright, bright);
-
-                        display.put(509, 254 + iBright, bright);
-                        display.put(509, 255 + iBright, bright);
-                        display.put(509, 256 + iBright, bright);
-                        display.put(509, 257 + iBright, bright);
-                        display.put(509, 258 + iBright, bright);
-
-                        display.put(508, 255 + iBright, bright);
-                        display.put(508, 256 + iBright, bright);
-                        display.put(508, 257 + iBright, bright);
-                        */
                         break;
                     case 105:
                         Gdx.graphics.setTitle("Basic 1D Noise, five inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -3824,35 +3794,51 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             display.put(509, 256 + iBright, bright);
                             display.put(509, 257 + iBright, bright);
                         }
-
-                        /*
-                        display.put(511, 252 + iBright, bright);
-                        display.put(511, 253 + iBright, bright);
-                        display.put(511, 254 + iBright, bright);
+                        break;
+                    case 106:
+                        Gdx.graphics.setTitle("NumberTools.sin() approximation at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int i = 0; i < 511; i++)
+                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
+                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                        //if((ctr & 3) == 0)
+                    {
+                        bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
+                        iBright = (int)(NumberTools.sin(ctr * 0.03125) * 64.0);
                         display.put(511, 255 + iBright, bright);
                         display.put(511, 256 + iBright, bright);
                         display.put(511, 257 + iBright, bright);
-                        display.put(511, 258 + iBright, bright);
-                        display.put(511, 259 + iBright, bright);
-                        display.put(511, 260 + iBright, bright);
 
-                        display.put(510, 254 + iBright, bright);
                         display.put(510, 255 + iBright, bright);
                         display.put(510, 256 + iBright, bright);
                         display.put(510, 257 + iBright, bright);
-                        display.put(510, 258 + iBright, bright);
 
-                        display.put(509, 254 + iBright, bright);
                         display.put(509, 255 + iBright, bright);
                         display.put(509, 256 + iBright, bright);
                         display.put(509, 257 + iBright, bright);
-                        display.put(509, 258 + iBright, bright);
+                    }
+                    break;
+                    case 107:
+                        Gdx.graphics.setTitle("Math.sin() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int i = 0; i < 511; i++)
+                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
+                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                        //if((ctr & 3) == 0)
+                    {
+                        bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
+                        iBright = (int)(Math.sin(ctr * 0.03125) * 64.0);
+                        display.put(511, 255 + iBright, bright);
+                        display.put(511, 256 + iBright, bright);
+                        display.put(511, 257 + iBright, bright);
 
-                        display.put(508, 255 + iBright, bright);
-                        display.put(508, 256 + iBright, bright);
-                        display.put(508, 257 + iBright, bright);
-                        */
-                        break;
+                        display.put(510, 255 + iBright, bright);
+                        display.put(510, 256 + iBright, bright);
+                        display.put(510, 257 + iBright, bright);
+
+                        display.put(509, 255 + iBright, bright);
+                        display.put(509, 256 + iBright, bright);
+                        display.put(509, 257 + iBright, bright);
+                    }
+                    break;
                 }
             }
             break;

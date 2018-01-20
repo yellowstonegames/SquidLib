@@ -283,37 +283,74 @@ public class NumberTools {
 
     public static double sin(final double radians)
     {
-        wda.set(0, radians * 0.3183098861837907 + (radians < -1.5707963267948966 ? -1.5 : 2.5));
-        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
-        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
-        wia.set(0, wia.get(0) ^ flip);
-        final double a = wda.get(0) - 2.0;
-        return a * a * (3.0 - 2.0 * a) * 2.0 - 1.0;
+        int sign;
+        if(radians < 0.0) {
+            wda.set(0, radians * 0.3183098861837907 - 2.0);
+            sign = 1;
+        }
+        else {
+            wda.set(0, radians * 0.3183098861837907 + 2.0);
+            sign = -1;
+        }
+        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, sn = -((sm & 0x80000)>>19);
+        wia.set(1, ((sm ^ sn) & 0xFFFFF) | 0x40100000);
+        wia.set(0, wia.get(0) ^ sn);
+        double n = wda.get(0) - 4.0;
+        n *= 2.0 - n;
+        return n * (-0.775 - 0.225 * n) * ((sn ^ sign) | 1);
     }
     public static float sin(final float radians)
     {
-        wfa.set(0, radians * 0.3183098861837907f + (radians < -1.5707963267948966f ? -1.5f : 2.5f));
-        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000);
-        final float a = wfa.get(0) - 2f;
-        return a * a * (3f - 2f * a) * 2f - 1f;
+        int sign;
+        if(radians < 0f) {
+            wfa.set(0, radians * 0.3183098861837907f - 2f);
+            sign = 1;
+        }
+        else {
+            wfa.set(0, radians * 0.3183098861837907f + 2f);
+            sign = -1;
+        }
+        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m, sn = -((sm & 0x00400000)>>22);
+        wia.set(0, ((sm ^ sn) & 0x007fffff) | 0x40100000);
+        float n = wfa.get(0) - 4f;
+        n *= 2f - n;
+        return n * (-0.775f - 0.225f * n) * ((sn ^ sign) | 1);
     }
 
     public static double cos(final double radians)
     {
-        wda.set(0, radians * 0.3183098861837907 + (radians < 0.0 ? -2.0 : 2.0));
-        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
-        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
-        wia.set(0, wia.get(0) ^ flip);
-        final double a = wda.get(0) - 2.0;
-        return a * a * (3.0 - 2.0 * a) * -2.0 + 1.0;
+        int sign;
+        if(radians < -1.5707963267948966) {
+            wda.set(0, radians * 0.3183098861837907 - 1.5);
+            sign = 1;
+        }
+        else {
+            wda.set(0, radians * 0.3183098861837907 + 2.5);
+            sign = -1;
+        }
+        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, sn = -((sm & 0x80000)>>19);
+        wia.set(1, ((sm ^ sn) & 0xFFFFF) | 0x40100000);
+        wia.set(0, wia.get(0) ^ sn);
+        double n = wda.get(0) - 4.0;
+        n *= 2.0 - n;
+        return n * (-0.775 - 0.225 * n) * ((sn ^ sign) | 1);
     }
     public static float cos(final float radians)
     {
-        wfa.set(0, radians * 0.3183098861837907f + (radians < 0f ? -2f : 2f));
-        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000);
-        final float a = wfa.get(0) - 2f;
-        return a * a * (3f - 2f * a) * -2f + 1f;
+        int sign;
+        if(radians < -1.5707963267948966f) {
+            wfa.set(0, radians * 0.3183098861837907f - 1.5f);
+            sign = 1;
+        }
+        else {
+            wfa.set(0, radians * 0.3183098861837907f + 2.5f);
+            sign = -1;
+        }
+        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m, sn = -((sm & 0x00400000)>>22);
+        wia.set(0, ((sm ^ sn) & 0x007fffff) | 0x40100000);
+        float n = wfa.get(0) - 4f;
+        n *= 2f - n;
+        return n * (-0.775f - 0.225f * n) * ((sn ^ sign) | 1);
     }
+
 }

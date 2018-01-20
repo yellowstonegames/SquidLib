@@ -540,7 +540,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
 
     @SuppressWarnings("unchecked")
     protected int rem(final Object k) {
-        if ((K) k == null) {
+        if (k == null) {
             if (containsNullKey)
                 return removeNullEntry();
             return defRetValue;
@@ -566,7 +566,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
     }
     @SuppressWarnings("unchecked")
     public int removeInt(final Object k) {
-        if ((K) k == null) {
+        if (k == null) {
             if (containsNullKey)
                 return removeNullEntry();
             return defRetValue;

@@ -106,7 +106,7 @@ public class IntVLA implements Serializable, Cloneable {
         if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
         for(int r = start, i = size; r < end; r++, i++)
         {
-            items[i] = (int)r;
+            items[i] = r;
         }
         size += end - start;
     }

@@ -1688,7 +1688,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * Delegates to the type-specific <code>rem()</code> method.
          */
         public boolean remove(Object ok) {
-            return rem((Integer) ok);
+            return rem(ok);
         }
 
         /**
@@ -1702,7 +1702,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * Delegates to the corresponding type-specific method.
          */
         public boolean rem(final Object o) {
-            return rem((Integer) o);
+            return rem(o);
         }
 
         /**
