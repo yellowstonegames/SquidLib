@@ -1048,28 +1048,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * A no-op for backward compatibility.
-     *
-     * @param growthFactor unused.
-     * @deprecated Since <code>fastutil</code> 6.1.0, hash tables are doubled when they are too full.
-     */
-    @Deprecated
-    public void growthFactor(int growthFactor) {
-    }
-
-    /**
-     * Gets the growth factor (2).
-     *
-     * @return the growth factor of this set, which is fixed (2).
-     * @see #growthFactor(int)
-     * @deprecated Since <code>fastutil</code> 6.1.0, hash tables are doubled when they are too full.
-     */
-    @Deprecated
-    public int growthFactor() {
-        return 16;
-    }
-
-    /**
      * The entry class for a OrderedMap does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
      * {@link Entry#setValue(Object)} are reflected in the map
      */
@@ -2000,20 +1978,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * A no-op for backward compatibility. The kind of tables implemented by this class never need rehashing.
-     * <p>
-     * <P>If you need to reduce the table size to fit exactly this set, use {@link #trim()}.
-     *
-     * @return true.
-     * @see #trim()
-     * @deprecated A no-op.
-     */
-    @Deprecated
-    public boolean rehash() {
-        return true;
-    }
-
-    /**
      * Rehashes the map, making the table as small as possible.
      * <p>
      * <P>This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.
@@ -2075,8 +2039,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     protected void rehash(final int newN) {
         final K key[] = this.key;
         final V value[] = this.value;
-        final int mask = newN - 1; // Note that this is used by the hashing
-        // macro
+        final int mask = newN - 1; // Note that this is used by the hashing macro
         final K newKey[] = (K[]) new Object[newN + 1];
         final V newValue[] = (V[]) new Object[newN + 1];
         int i, pos, sz = order.size, originalFirst = first, originalLast = last;
@@ -2221,20 +2184,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     public static int maxFill(final int n, final float f) {
         /* We must guarantee that there is always at least
 		 * one free entry (even with pathological load factors). */
-        return Math.min((int) Math.ceil(n * f), n - 1);
-    }
-
-    /**
-     * Returns the maximum number of entries that can be filled before rehashing.
-     *
-     * @param n the size of the backing array.
-     * @param f the load factor.
-     * @return the maximum number of entries before rehashing.
-     */
-    public static long maxFill(final long n, final float f) {
-		/* We must guarantee that there is always at least
-		 * one free entry (even with pathological load factors). */
-        return Math.min((long) Math.ceil(n * f), n - 1);
+        return Math.min((int)(n * f + 99999994f), n - 1);
     }
 
     /**

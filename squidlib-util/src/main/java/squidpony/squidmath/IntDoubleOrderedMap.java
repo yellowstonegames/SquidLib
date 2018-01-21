@@ -830,28 +830,6 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     }
 
     /**
-     * A no-op for backward compatibility.
-     *
-     * @param growthFactor unused.
-     * @deprecated Since <code>fastutil</code> 6.1.0, hash tables are doubled when they are too full.
-     */
-    @Deprecated
-    public void growthFactor(int growthFactor) {
-    }
-
-    /**
-     * Gets the growth factor (2).
-     *
-     * @return the growth factor of this set, which is fixed (2).
-     * @see #growthFactor(int)
-     * @deprecated Since <code>fastutil</code> 6.1.0, hash tables are doubled when they are too full.
-     */
-    @Deprecated
-    public int growthFactor() {
-        return 16;
-    }
-
-    /**
      * The entry class for a hash map does not record key and value, but rather the position in the hash table of the
      * corresponding entry. This is necessary so that calls to {@link java.util.Map.Entry#setValue(Object)} are reflected in the map
      */
@@ -1907,20 +1885,6 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     public DoubleCollection values() {
         if (values == null) values = new DoubleCollection();
         return values;
-    }
-
-    /**
-     * A no-op for backward compatibility. The kind of tables implemented by this class never need rehashing.
-     * <p>
-     * <P>If you need to reduce the table size to fit exactly this set, use {@link #trim()}.
-     *
-     * @return true.
-     * @see #trim()
-     * @deprecated A no-op.
-     */
-    @Deprecated
-    public boolean rehash() {
-        return true;
     }
 
     /**

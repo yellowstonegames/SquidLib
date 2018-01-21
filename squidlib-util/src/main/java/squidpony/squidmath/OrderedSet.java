@@ -1355,20 +1355,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     /**
-     * A no-op for backward compatibility. The kind of tables implemented by this class never need rehashing.
-     * <p>
-     * <P>If you need to reduce the table size to fit exactly this set, use {@link #trim()}.
-     *
-     * @return true.
-     * @see #trim()
-     * @deprecated A no-op.
-     */
-    @Deprecated
-    public boolean rehash() {
-        return true;
-    }
-
-    /**
      * Rehashes the map, making the table as small as possible.
      * <p>
      * <P>This method rehashes the table to the smallest size satisfying the load factor. It can be used when the set will not be changed anymore, so to optimize access speed and size.

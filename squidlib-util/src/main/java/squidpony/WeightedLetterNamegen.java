@@ -8,7 +8,6 @@ import squidpony.squidmath.RNG;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * Based on work by Nolithius available at the following two sites
@@ -279,7 +278,7 @@ public class WeightedLetterNamegen {
     private int consonantLimit;
     private ArrayList<Integer> sizes;
 
-    private TreeMap<Character, HashMap<Character, ProbabilityTable<Character>>> letters;
+    private HashMap<Character, HashMap<Character, ProbabilityTable<Character>>> letters;
     private ArrayList<Character> firstLetterSamples;
     private ArrayList<Character> lastLetterSamples;
     private DamerauLevenshteinAlgorithm dla = new DamerauLevenshteinAlgorithm(1, 1, 1, 1);
@@ -324,7 +323,7 @@ public class WeightedLetterNamegen {
      */
     private void init() {
         sizes = new ArrayList<>();
-        letters = new TreeMap<>();
+        letters = new HashMap<>();
         firstLetterSamples = new ArrayList<>();
         lastLetterSamples = new ArrayList<>();
 
@@ -492,7 +491,7 @@ public class WeightedLetterNamegen {
     /**
      * Checks that no three letters happen in succession.
      *
-     * @param	name	The name array (easier to iterate)
+     * @param	name	The name CharSequence
      * @return	True if no triple letter sequence is found.
      */
     private boolean validateGrouping(CharSequence name) {
@@ -506,11 +505,9 @@ public class WeightedLetterNamegen {
             if (isVowel(name.charAt(i))) {
                 consonants = 0;
             } else {
-                consonants++;
-            }
-
-            if (consonants > consonantLimit) {
-                return false;
+                if (++consonants > consonantLimit) {
+                    return false;
+                }
             }
         }
         return true;
