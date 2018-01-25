@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import squidpony.Mnemonic;
 import squidpony.squidmath.*;
 
 /**
@@ -97,32 +98,38 @@ public class Playground {
 //            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", i, NumberTools.sway((float)i), NumberTools.sway(i), swayRandomized(seed, i));
 //            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", -i, NumberTools.sway((float)-i), NumberTools.sway(-i), swayRandomized(seed,-i));
 //        }
-        long seed = 0x1337DEADBEEFCAFEL;
-        System.out.println(0.5 + NumberTools.randomDouble(seed));
-        for (double i = 0.0; i <= 17.0; i += 0x1p-4) {
-            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", i, NumberTools.sway((float)i), NumberTools.sway(i), swayRandomized(seed, i));
-            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", -i, NumberTools.sway((float)-i), NumberTools.sway(-i), swayRandomized(seed,-i));
-        }
-        System.out.println("NumberTools.sway(Float.POSITIVE_INFINITY)  :  " + NumberTools.sway(Float.POSITIVE_INFINITY));
-        System.out.println("NumberTools.sway(Float.NEGATIVE_INFINITY)  :  " + NumberTools.sway(Float.NEGATIVE_INFINITY));
-        System.out.println("NumberTools.sway(Float.MIN_VALUE)          :  " + NumberTools.sway(Float.MIN_VALUE));
-        System.out.println("NumberTools.sway(Float.MAX_VALUE)          :  " + NumberTools.sway(Float.MAX_VALUE));
-        System.out.println("NumberTools.sway(Float.MIN_NORMAL)         :  " + NumberTools.sway(Float.MIN_NORMAL));
-        System.out.println("NumberTools.sway(Float.NaN)                :  " + NumberTools.sway(Float.NaN));
-        System.out.println();
-        System.out.println("NumberTools.sway(Double.POSITIVE_INFINITY) :  " + NumberTools.sway(Double.POSITIVE_INFINITY));
-        System.out.println("NumberTools.sway(Double.NEGATIVE_INFINITY) :  " + NumberTools.sway(Double.NEGATIVE_INFINITY));
-        System.out.println("NumberTools.sway(Double.MIN_VALUE)         :  " + NumberTools.sway(Double.MIN_VALUE));
-        System.out.println("NumberTools.sway(Double.MAX_VALUE)         :  " + NumberTools.sway(Double.MAX_VALUE));
-        System.out.println("NumberTools.sway(Double.MIN_NORMAL)        :  " + NumberTools.sway(Double.MIN_NORMAL));
-        System.out.println("NumberTools.sway(Double.NaN)               :  " + NumberTools.sway(Double.NaN));
-        System.out.println();
-        System.out.println("swayRandomized(Double.POSITIVE_INFINITY)   :  " + swayRandomized(seed, Double.POSITIVE_INFINITY));
-        System.out.println("swayRandomized(Double.NEGATIVE_INFINITY)   :  " + swayRandomized(seed, Double.NEGATIVE_INFINITY));
-        System.out.println("swayRandomized(Double.MIN_VALUE)           :  " + swayRandomized(seed, Double.MIN_VALUE));
-        System.out.println("swayRandomized(Double.MAX_VALUE)           :  " + swayRandomized(seed, Double.MAX_VALUE));
-        System.out.println("swayRandomized(Double.MIN_NORMAL)          :  " + swayRandomized(seed, Double.MIN_NORMAL));
-        System.out.println("swayRandomized(Double.NaN)                 :  " + swayRandomized(seed, Double.NaN));
+
+
+
+//        long seed = 0x1337DEADBEEFCAFEL;
+//        System.out.println(0.5 + NumberTools.randomDouble(seed));
+//        for (double i = 0.0; i <= 17.0; i += 0x1p-4) {
+//            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", i, NumberTools.sway((float)i), NumberTools.sway(i), swayRandomized(seed, i));
+//            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", -i, NumberTools.sway((float)-i), NumberTools.sway(-i), swayRandomized(seed,-i));
+//        }
+//        System.out.println("NumberTools.sway(Float.POSITIVE_INFINITY)  :  " + NumberTools.sway(Float.POSITIVE_INFINITY));
+//        System.out.println("NumberTools.sway(Float.NEGATIVE_INFINITY)  :  " + NumberTools.sway(Float.NEGATIVE_INFINITY));
+//        System.out.println("NumberTools.sway(Float.MIN_VALUE)          :  " + NumberTools.sway(Float.MIN_VALUE));
+//        System.out.println("NumberTools.sway(Float.MAX_VALUE)          :  " + NumberTools.sway(Float.MAX_VALUE));
+//        System.out.println("NumberTools.sway(Float.MIN_NORMAL)         :  " + NumberTools.sway(Float.MIN_NORMAL));
+//        System.out.println("NumberTools.sway(Float.NaN)                :  " + NumberTools.sway(Float.NaN));
+//        System.out.println();
+//        System.out.println("NumberTools.sway(Double.POSITIVE_INFINITY) :  " + NumberTools.sway(Double.POSITIVE_INFINITY));
+//        System.out.println("NumberTools.sway(Double.NEGATIVE_INFINITY) :  " + NumberTools.sway(Double.NEGATIVE_INFINITY));
+//        System.out.println("NumberTools.sway(Double.MIN_VALUE)         :  " + NumberTools.sway(Double.MIN_VALUE));
+//        System.out.println("NumberTools.sway(Double.MAX_VALUE)         :  " + NumberTools.sway(Double.MAX_VALUE));
+//        System.out.println("NumberTools.sway(Double.MIN_NORMAL)        :  " + NumberTools.sway(Double.MIN_NORMAL));
+//        System.out.println("NumberTools.sway(Double.NaN)               :  " + NumberTools.sway(Double.NaN));
+//        System.out.println();
+//        System.out.println("swayRandomized(Double.POSITIVE_INFINITY)   :  " + swayRandomized(seed, Double.POSITIVE_INFINITY));
+//        System.out.println("swayRandomized(Double.NEGATIVE_INFINITY)   :  " + swayRandomized(seed, Double.NEGATIVE_INFINITY));
+//        System.out.println("swayRandomized(Double.MIN_VALUE)           :  " + swayRandomized(seed, Double.MIN_VALUE));
+//        System.out.println("swayRandomized(Double.MAX_VALUE)           :  " + swayRandomized(seed, Double.MAX_VALUE));
+//        System.out.println("swayRandomized(Double.MIN_NORMAL)          :  " + swayRandomized(seed, Double.MIN_NORMAL));
+//        System.out.println("swayRandomized(Double.NaN)                 :  " + swayRandomized(seed, Double.NaN));
+
+
+
 
 //        for (int n = 100; n < 120; n++) {
 //            long i = ThrustAltRNG.determine(n);
@@ -146,36 +153,13 @@ public class Playground {
 //            System.out.printf("%f: querp: %f, carp2: %f, cerp: %f\n", f, querp(-100, 100, f), carp2(f), cerp(f));
 //        }
 
-
-//        int n;
-//        ShortSet s = new ShortSet(1 << 16);
-//        IntDoubleOrderedMap intMap = new IntDoubleOrderedMap(1 << 20);
-//        SaltyQRNG qrng = new SaltyQRNG(0x9E3795);
-//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X,\n", qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-//        System.out.printf("%08X, %08X, %08X, %08X, %08X, %08X, %08X, %08X\n",  qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt(), qrng.nextInt());
-//        for (int i = 0; i < (1 << 16); i++) {
-//            s.add((short) (qrng.nextFloat() * (1 << 16)));
-//        }
-//        System.out.println("\n" + s.size + "/" + (1 << 16));
-//        s.clear(1 << 16);
-//        qrng.setState(0);
-//        for (int i = 0; i < (1 << 16); i++) {
-//            s.add(qrng.nextShort());
-//        }
-//        System.out.println("\n" + s.size + "/" + (1 << 16));
-//        qrng.setState(0);
-//        for (int i = 0; i < 1 << 20; i++) {
-//            intMap.put(n = qrng.nextInt(), 1.0);
-//            intMap.put(n, 2.0);
-//        }
-//        System.out.println("\n" + intMap.size() + "/" + (1 << 20));
-
+        Mnemonic mn = new Mnemonic(1L);
+        String text;
+        long r;
+        for (long i = 1L; i <= 50; i++) {
+            r = ThrustAltRNG.determine(i);
+            System.out.println(r + ": " + (text = mn.toMnemonic(r, true)) + " decodes to " + mn.fromMnemonic(text));
+        }
     }
 
     private static long rand(final long z, final long mod, final long n2)

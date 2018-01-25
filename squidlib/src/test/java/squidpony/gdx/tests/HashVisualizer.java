@@ -73,8 +73,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
-    private int hashMode = 64, rngMode = 26, noiseMode = 106;
+    private int testType = 1;
+    private int hashMode = 0, rngMode = 26, noiseMode = 104;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -194,6 +194,71 @@ public class HashVisualizer extends ApplicationAdapter {
 
     public static float toFloat(int n) {
         return (NumberTools.intBitsToFloat(0x3F800000 | n >>> 9) - 1.0f);
+    }
+
+    // not much different from Wisp
+    public static int ion32(int[] a)
+    {
+        if (a == null)
+            return 0;
+        long result = 0x9E3779B97F4A7C15L, counter = 0x2545F4914F6CDD1DL;
+        final int len = a.length;
+        for (int i = 0; i < len; i++)
+            result ^= (counter += 0x6C8E9CF570932BD5L * a[i]);
+        return (int)(counter - (result ^ (result >>> 25)) * (result | 0xA529L));
+//        return (int)((result ^ (result >>> 25)) * (result | 0xA529L));
+        //return (int)(counter ^ counter >>> 22);
+    }
+    // not much different from Wisp
+    public static long ion64(int[] a)
+    {
+        if (a == null)
+            return 0;
+        long result = 0x9E3779B97F4A7C15L, counter = 0x2545F4914F6CDD1DL;
+        final int len = a.length;
+        for (int i = 0; i < len; i++)
+            result ^= (counter += 0x6C8E9CF570932BD5L * a[i]);
+        return counter - (result ^ (result >>> 25)) * (result | 0xA529L);
+//        return (result ^ (result >>> 25)) * (result | 0xA529L);
+        //return counter ^ counter >>> 22;
+    }
+
+    public static int ion32(long a, long b) {
+        long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
+        result ^= (counter += 0x6C8E9CF570932BD5L * b);
+        return (int)(counter - (result ^ (result >>> 25)) * (result | 0xA529L));
+//        counter -= (result ^ (result >>> 25)) * (result | 0xA529L);
+//        return (int)(counter ^ counter >>> 22);
+    }
+    public static int ion32(long a, long b, long c)
+    {
+        long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
+        result ^= (counter += 0x6C8E9CF570932BD5L * b);
+        result ^= (counter += 0x6C8E9CF570932BD5L * c);
+        return (int)(counter - (result ^ (result >>> 25)) * (result | 0xA529L));
+//        counter -= (result ^ (result >>> 25)) * (result | 0xA529L);
+//        return (int)(counter ^ counter >>> 22);
+        //return (int)((result ^ (result >>> 25)) * (result | 0xA529L));
+    }
+
+    public static long ion64(long a, long b)
+    {
+        long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
+        result ^= (counter += 0x6C8E9CF570932BD5L * b);
+        return counter - (result ^ (result >>> 25)) * (result | 0xA529L);
+//        counter -= (result ^ (result >>> 25)) * (result | 0xA529L);
+//        return counter ^ counter >>> 22;
+    }
+
+    public static long ion64(long a, long b, long c)
+    {
+        long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
+        result ^= (counter += 0x6C8E9CF570932BD5L * b);
+        result ^= (counter += 0x6C8E9CF570932BD5L * c);
+        return counter - (result ^ (result >>> 25)) * (result | 0xA529L);
+//        counter -= (result ^ (result >>> 25)) * (result | 0xA529L);
+//        return counter ^ counter >>> 22;
+        //return (result ^ (result >>> 25)) * (result | 0xA529L);
     }
 
     public static int mixHash(final int x, final int y)
@@ -941,7 +1006,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 break;
                             case 1:
                                 hashMode++;
-                                hashMode %= 70;
+                                hashMode %= 73;
                                 break;
                             case 2:
                                 hashMode++;
@@ -1046,15 +1111,25 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("Storm (alpha) on length 2, low bits");
+                        Gdx.graphics.setTitle("Ion 32 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormA.hash(coordinates) << 8 | 255L;
+                                code = ion32(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+
+//                        Gdx.graphics.setTitle("Storm (alpha) on length 2, low bits");
+//                        for (int x = 0; x < width; x++) {
+//                            coordinates[0] = x;
+//                            for (int y = 0; y < height; y++) {
+//                                coordinates[1] = y;
+//                                code = stormA.hash(coordinates) << 8 | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
                         break;
                     case 2:
                         Gdx.graphics.setTitle("Storm (beta) on length 2, low bits");
@@ -1089,14 +1164,23 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 5:
-                        Gdx.graphics.setTitle("Storm (alpha) on length 1, low bits");
+                        Gdx.graphics.setTitle("Ion 32 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormA.hash(coordinate) << 8 | 255L;
+                                code = ion32(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+
+//                        Gdx.graphics.setTitle("Storm (alpha) on length 1, low bits");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                coordinate[0] = (x << 9) | y;
+//                                code = stormA.hash(coordinate) << 8 | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
                         break;
                     case 6:
                         Gdx.graphics.setTitle("Storm (beta) on length 1, low bits");
@@ -1119,15 +1203,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 8:
-                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 2, low bits");
+                        Gdx.graphics.setTitle("Ion 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormA.hash64(coordinates) << 8 | 255L;
+                                code = ion64(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+//                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 2, low bits");
+//                        for (int x = 0; x < width; x++) {
+//                            coordinates[0] = x;
+//                            for (int y = 0; y < height; y++) {
+//                                coordinates[1] = y;
+//                                code = stormA.hash64(coordinates) << 8 | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
                         break;
                     case 9:
                         Gdx.graphics.setTitle("Storm (beta) 64 on length 2, low bits");
@@ -1152,14 +1245,22 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 11:
-                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 1, low bits");
+                        Gdx.graphics.setTitle("Ion 64 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormA.hash64(coordinate) << 8 | 255L;
+                                code = ion64(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+//                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 1, low bits");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                coordinate[0] = (x << 9) | y;
+//                                code = stormA.hash64(coordinate) << 8 | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
                         break;
                     case 12:
                         Gdx.graphics.setTitle("Storm (beta) 64 on length 1, low bits");
@@ -1193,15 +1294,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("Storm (alpha) on length 2, high bits");
+                        Gdx.graphics.setTitle("Ion 32 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormA.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = ion32(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+//                        Gdx.graphics.setTitle("Storm (alpha) on length 2, high bits");
+//                        for (int x = 0; x < width; x++) {
+//                            coordinates[0] = x;
+//                            for (int y = 0; y < height; y++) {
+//                                coordinates[1] = y;
+//                                code = stormA.hash(coordinates) & 0xFFFFFF00L | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
                         break;
                     case 16:
                         Gdx.graphics.setTitle("Storm (beta) on length 2, high bits");
@@ -1236,14 +1346,22 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 19:
-                        Gdx.graphics.setTitle("Storm (alpha) on length 1, high bits");
+                        Gdx.graphics.setTitle("Ion 32 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormA.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = ion32(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+//                        Gdx.graphics.setTitle("Storm (alpha) on length 1, high bits");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                coordinate[0] = (x << 9) | y;
+//                                code = stormA.hash(coordinate) & 0xFFFFFF00L | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
                         break;
                     case 20:
                         Gdx.graphics.setTitle("Storm (beta) on length 1, high bits");
@@ -1266,15 +1384,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 22:
-                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 2, high bits");
+                        Gdx.graphics.setTitle("Ion 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormA.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = ion64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+//                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 2, high bits");
+//                        for (int x = 0; x < width; x++) {
+//                            coordinates[0] = x;
+//                            for (int y = 0; y < height; y++) {
+//                                coordinates[1] = y;
+//                                code = stormA.hash64(coordinates) & 0xFFFFFF00L | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
                         break;
                     case 23:
                         Gdx.graphics.setTitle("Storm (beta) 64 on length 2, high bits");
@@ -1299,14 +1426,22 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 25:
-                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 1, high bits");
+                        Gdx.graphics.setTitle("Ion 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormA.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = ion64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
+//                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 1, high bits");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                coordinate[0] = (x << 9) | y;
+//                                code = stormA.hash64(coordinate) & 0xFFFFFF00L | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
                         break;
                     case 26:
                         Gdx.graphics.setTitle("Storm (beta) 64 on length 1, high bits");
@@ -1774,6 +1909,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
+                    case 70:
+                        Gdx.graphics.setTitle("Ion 64 on length 3 (with time), low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = ion64(x, y, ctr) << 8 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 71:
+                        Gdx.graphics.setTitle("Ion 64 on length 3 (with time), mid bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = ion64(x, y, ctr) | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+                    case 72:
+                        Gdx.graphics.setTitle("Ion 32 on length 3 (with time), high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = ion64(x, y, ctr) >>> 32 | 255L;
+                                display.put(x, y, floatGet(code));
+                            }
+                        }
+                        break;
+
 
                 }
             }
