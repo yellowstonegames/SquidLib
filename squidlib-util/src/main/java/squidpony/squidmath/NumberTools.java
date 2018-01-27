@@ -319,6 +319,25 @@ public final class NumberTools {
     }
 
     /**
+     * A mix of the smooth transitions of {@link #sway(double)} with (seeded) random peaks and valleys between -1.0
+     * (inclusive) and 1.0 (exclusive). The pattern this will produces will be completely different if the seed changes,
+     * and it may be suitable for 1D noise.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes
+     * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs.
+     * @return a pseudo-random double between -1.0 (inclusive) and 1.0 (exclusive), smoothly changing with value
+     */
+    public static double swayRandomized(final long seed, final double value)
+    {
+        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m,
+                flip = -((sm & 0x8000000000000L)>>51), floor = Noise.longFloor(value) + seed, sb = (s >> 63) ^ flip;
+        double a = (Double.longBitsToDouble(((sm ^ flip) & 0xfffffffffffffL)
+                | 0x4000000000000000L) - 2.0);
+        final double start = NumberTools.randomSignedDouble(floor), end = NumberTools.randomSignedDouble(floor + 1L);
+        a = a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * (sb | 1L) - sb;
+        return (1.0 - a) * start + a * end;
+    }
+
+    /**
      * Identical to {@link Float#floatToIntBits(float)} on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
      * are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser
      * not supporting them.
@@ -407,6 +426,21 @@ public final class NumberTools {
     public static double randomDouble(long seed)
     {
         return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+    }
+
+    /**
+     * Generates a pseudo-random double between -1.0 (inclusive) and 1.0 (exclusive) using the given long seed, passing
+     * it once through the (high-quality and very fast) {@link ThrustAltRNG} algorithm.
+     * <br>
+     * Consider calling this with {@code NumberTools.randomSignedDouble(++seed)} for an optimal period of 2 to the 64
+     * when repeatedly called, but {@code NumberTools.randomSignedDouble(seed += ODD_LONG)} will also work just fine if
+     * ODD_LONG is any odd-number long, positive or negative.
+     * @param seed any long to be used as a seed
+     * @return a pseudo-random double from 0.0 (inclusive) to 1.0 (exclusive)
+     */
+    public static double randomSignedDouble(long seed)
+    {
+        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) >> 10) * 0x1p-53;
     }
     /**
      * Generates a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given long seed, passing it

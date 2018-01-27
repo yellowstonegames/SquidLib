@@ -73,8 +73,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
-    private int hashMode = 0, rngMode = 26, noiseMode = 104;
+    private int testType = 4;
+    private int hashMode = 0, rngMode = 26, noiseMode = 107;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -804,7 +804,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 108;
+                                    noiseMode %= 110;
                                 }
                                 switch (noiseMode)
                                 {
@@ -3981,14 +3981,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     }
                     break;
                     case 107:
-                        Gdx.graphics.setTitle("Math.sin() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("NumberTools.swayRandomized() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
                         Arrays.fill(display.colors[511], FLOAT_WHITE);
                         //if((ctr & 3) == 0)
                     {
                         bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
-                        iBright = (int)(Math.sin(ctr * 0.03125) * 64.0);
+                        iBright = (int)(NumberTools.swayRandomized(9001L, ctr * 0.0125) * 64.0);
                         display.put(511, 255 + iBright, bright);
                         display.put(511, 256 + iBright, bright);
                         display.put(511, 257 + iBright, bright);
@@ -4002,6 +4002,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         display.put(509, 257 + iBright, bright);
                     }
                     break;
+                    case 108:
+                        Gdx.graphics.setTitle("Merlin Rivers 2D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = (int)MerlinNoise.noise2D(x + ctr, y + ctr, 9000L, 5, 32);
+                                iBright &= ~((int)MerlinNoise.noise2D(x + ctr + 5, y + ctr, 9000L, 5, 32) - 0x1C00000);
+                                iBright = (iBright >> 8) >>> 24;
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+                    case 109:
+                        Gdx.graphics.setTitle("Merlin Rivers 3D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 32);
+                                iBright ^= iBright - 0x8000000;
+                                iBright = (iBright >> 8) >>> 24;
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+
                 }
             }
             break;

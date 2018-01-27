@@ -150,7 +150,7 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
      * @return noise from {@code -(1L << bits)} to {@code (1L << bits) - 1L}, both inclusive
      */
     public static long noise2D(long x, long y, long state, int resolution, int bits) {
-        long xb = (x >> resolution) + 0x9E3779B97F4A7C15L, yb = (y >> resolution) + 0xE3779B97F4A7C159L,
+        long xb = (x >> resolution) + state, yb = (y >> resolution) - state,
                 xr = (x & ~(-1L << resolution)), yr = (y & ~(-1L << resolution)),
                 x0 = ThrustAltRNG.determine(xb), x1 = ThrustAltRNG.determine(xb + 1),
                 y0 = ThrustAltRNG.determine(yb), y1 = ThrustAltRNG.determine(yb + 1),
@@ -184,7 +184,7 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
      * @return noise from {@code -(1L << bits)} to {@code (1L << bits) - 1L}, both inclusive
      */
     public static long noise3D(long x, long y, long z, long state, int resolution, int bits) {
-        long xb = (x >> resolution) + 0x9E3779B97F4A7C15L, yb = (y >> resolution) + 0xE3779B97F4A7C159L, zb = (z >> resolution) + 0x59E3779B97F4A7C1L,
+        long xb = (x >> resolution) + state, yb = (y >> resolution) - state, zb = (z >> resolution) + (0x9E3779B97F4A7C15L ^ state),
                 xr = x & ~(-1L << resolution), yr = y & ~(-1L << resolution), zr = z & ~(-1L << resolution),
                 x0 = ThrustAltRNG.determine(xb), x1 = ThrustAltRNG.determine(xb + 1),
                 y0 = ThrustAltRNG.determine(yb), y1 = ThrustAltRNG.determine(yb + 1),
