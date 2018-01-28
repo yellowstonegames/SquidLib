@@ -2,6 +2,8 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
+
 import static squidpony.squidmath.Noise.PointHash.*;
 import static squidpony.squidmath.Noise.fastFloor;
 
@@ -17,7 +19,9 @@ import static squidpony.squidmath.Noise.fastFloor;
  * Created by Tommy Ettinger on 12/14/2016.
  */
 @Beta
-public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
+public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Serializable {
+
+    private static final long serialVersionUID = 5L;
     public long seed;
     public static final WhirlingNoise instance = new WhirlingNoise();
     public WhirlingNoise()

@@ -47,7 +47,7 @@ public class BeamAOE implements AOE {
     private Radius rt;
     private LOS los;
 
-    private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
+    private Reach reach = new Reach(1, 1, Radius.SQUARE, AimLimit.FREE);
 
     public BeamAOE(Coord origin, Coord end)
     {

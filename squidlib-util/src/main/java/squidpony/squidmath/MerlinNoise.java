@@ -2,6 +2,8 @@ package squidpony.squidmath;
 
 import squidpony.annotation.Beta;
 
+import java.io.Serializable;
+
 /**
  * Really strange noise functions that typically produce curving black and white shapes when rendered.
  * This technique uses no floating-point math, surprisingly, which helps its performance a little.
@@ -14,8 +16,9 @@ import squidpony.annotation.Beta;
  * This was a completely unrelated noise algorithm that also avoided floating-point math, but was really pretty awful.
  */
 @Beta
-public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D {
+public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
 
+    private static final long serialVersionUID = 2L;
     public static final MerlinNoise instance = new MerlinNoise();
     public long seed;
     protected int bits = 8, resolution = 4;

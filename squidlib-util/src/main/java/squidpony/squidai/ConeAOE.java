@@ -31,7 +31,7 @@ public class ConeAOE implements AOE {
     private double[][] map;
     private char[][] dungeon;
     private Radius radiusType;
-    private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
+    private Reach reach = new Reach(1, 1, Radius.SQUARE, AimLimit.FREE);
 
     public ConeAOE(Coord origin, Coord endCenter, double span, Radius radiusType)
     {
@@ -214,7 +214,7 @@ public class ConeAOE implements AOE {
 
         Coord[] ts = targets.toArray(new Coord[targets.size()]);
         Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
-        Coord t = exs[0];
+        Coord t;
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
         double tAngle; //, tStartAngle, tEndAngle;
@@ -345,7 +345,7 @@ public class ConeAOE implements AOE {
         Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
         Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
         Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
-        Coord t = exs[0];
+        Coord t;
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
         double tAngle; //, tStartAngle, tEndAngle;

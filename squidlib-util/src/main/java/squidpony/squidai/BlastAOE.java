@@ -30,7 +30,7 @@ public class BlastAOE implements AOE {
     private char[][] dungeon;
     private Radius radiusType;
     
-    private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
+    private Reach reach = new Reach(1, 1, Radius.SQUARE, AimLimit.FREE);
 
     public BlastAOE(Coord center, int radius, Radius radiusType)
     {
@@ -118,7 +118,7 @@ public class BlastAOE implements AOE {
         }
         Coord[] ts = targets.toArray(new Coord[targets.size()]);
         Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
-        Coord t = exs[0];
+        Coord t;
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
 
@@ -127,7 +127,7 @@ public class BlastAOE implements AOE {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         double[][] tmpfov;
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
@@ -261,7 +261,7 @@ public class BlastAOE implements AOE {
         Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
         Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
         Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
-        Coord t = exs[0];
+        Coord t;
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
 

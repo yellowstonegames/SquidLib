@@ -804,7 +804,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 110;
+                                    noiseMode %= 112;
                                 }
                                 switch (noiseMode)
                                 {
@@ -1093,7 +1093,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         //overlay.erase();
         long code, extra;
         float bright, s0 = 0, c0 = 0, s1 = 0, c1 = 0, s2 = 0, c2 = 0;
-        double dBright;
+        double dBright, dBright2;
         int iBright;
         int xx, yy;
         switch (testType) {
@@ -3985,22 +3985,21 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
                         Arrays.fill(display.colors[511], FLOAT_WHITE);
-                        //if((ctr & 3) == 0)
-                    {
-                        bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
-                        iBright = (int)(NumberTools.swayRandomized(9001L, ctr * 0.0125) * 64.0);
-                        display.put(511, 255 + iBright, bright);
-                        display.put(511, 256 + iBright, bright);
-                        display.put(511, 257 + iBright, bright);
+                        if((ctr & 3) == 0) {
+                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
+                            iBright = (int) (NumberTools.swayRandomized(9001L, ctr * 0.0125) * 240.0);
+                            display.put(511, 255 + iBright, bright);
+                            display.put(511, 256 + iBright, bright);
+                            display.put(511, 257 + iBright, bright);
 
-                        display.put(510, 255 + iBright, bright);
-                        display.put(510, 256 + iBright, bright);
-                        display.put(510, 257 + iBright, bright);
+                            display.put(510, 255 + iBright, bright);
+                            display.put(510, 256 + iBright, bright);
+                            display.put(510, 257 + iBright, bright);
 
-                        display.put(509, 255 + iBright, bright);
-                        display.put(509, 256 + iBright, bright);
-                        display.put(509, 257 + iBright, bright);
-                    }
+                            display.put(509, 255 + iBright, bright);
+                            display.put(509, 256 + iBright, bright);
+                            display.put(509, 257 + iBright, bright);
+                        }
                     break;
                     case 108:
                         Gdx.graphics.setTitle("Merlin Rivers 2D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4021,6 +4020,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 iBright ^= iBright - 0x8000000;
                                 iBright = (iBright >> 8) >>> 24;
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        break;
+                    case 110:
+                        Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            dBright = NumberTools.swayRandomized(900001L, (x + ctr) * 0.03125) * 7.0;
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)NumberTools.swayRandomized(12345L,
+                                        NumberTools.swayRandomized(-123456789L, (y + ctr) * 0.03125) * 7.0 + dBright) * 0.5f + 0.5f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 111:
+                        Gdx.graphics.setTitle("Experimental Noise 3D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        dBright = NumberTools.swayRandomized(900001L, ctr * 0.0625) * 5.0;
+                        for (int x = 0; x < width; x++) {
+                            dBright2 = NumberTools.swayRandomized(900001L, x * 0.0625) * 5.0 + dBright;
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)NumberTools.swayRandomized(12345L,
+                                        NumberTools.swayRandomized(-123456789L, y * 0.0625) * 5.0 + dBright2) * 0.5f + 0.5f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;

@@ -22,7 +22,7 @@ import java.util.Collection;
 public class PointAOE implements AOE {
     private Coord center, origin = null;
     private int mapWidth, mapHeight;
-    private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
+    private Reach reach = new Reach(1, 1, Radius.SQUARE, AimLimit.FREE);
 
     public PointAOE(Coord center)
     {

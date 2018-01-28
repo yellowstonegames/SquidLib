@@ -3,6 +3,7 @@ package squidpony.squidai;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedMap;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -45,7 +46,9 @@ import java.util.Set;
  *
  * Created by Tommy Ettinger on 7/27/2015.
  */
-public class Technique {
+public class Technique implements Serializable {
+    private static final long serialVersionUID = 2L;
+
     public String name;
     public String id;
     public AOE aoe;
@@ -117,7 +120,7 @@ public class Technique {
 
     /**
      * Get a mapping of Coord keys representing locations to apply this Technique to, to ArrayList of Coord values
-     * representing which targets (by their location) are effected by choosing that Coord. All targets with this method
+     * representing which targets (by their location) are affected by choosing that Coord. All targets with this method
      * are valued equally, and the ideal location affects as many as possible without hitting any requiredExclusions.
      *
      * YOU MUST CALL setMap() with the current map status at some point before using this method, and call it again if

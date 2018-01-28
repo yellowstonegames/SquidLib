@@ -30,7 +30,7 @@ public class CloudAOE implements AOE {
     private long seed;
     private boolean expanding;
     private Radius rt;
-    private Reach reach = new Reach(1, 1, Radius.SQUARE, null);
+    private Reach reach = new Reach(1, 1, Radius.SQUARE, AimLimit.FREE);
     private char[][] dungeon;
 
     public CloudAOE(Coord center, int volume, Radius radiusType)
@@ -213,7 +213,7 @@ public class CloudAOE implements AOE {
         }
         Coord[] ts = targets.toArray(new Coord[targets.size()]);
         Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
-        Coord t = exs[0];
+        Coord t;
 
         double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
 
@@ -358,7 +358,7 @@ public class CloudAOE implements AOE {
         Coord[] pts = priorityTargets.toArray(new Coord[priorityTargets.size()]);
         Coord[] lts = lesserTargets.toArray(new Coord[lesserTargets.size()]);
         Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
-        Coord t = exs[0];
+        Coord t;
 
         double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
         Spill sp;

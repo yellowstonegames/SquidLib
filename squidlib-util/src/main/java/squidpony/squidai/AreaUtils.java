@@ -148,9 +148,9 @@ public class AreaUtils {
     /**
      * Checks that the given end Coord can be targeted from the given origin Coord given the complete targeting rules
      * specified by reach. If any of the arguments are null, returns true (it assumes that any limits are not
-     * valid and don't restrict anything). If reach.limit is null, it also returns true. Otherwise, it uses the metric,
-     * minDistance, and maxDistance from reach to calculate if end is target-able from origin assuming an unobstructed
-     * playing field.
+     * valid and don't restrict anything). If reach.limit is null, it treats it as equivalent to {@link AimLimit#FREE}.
+     * Otherwise, it uses the metric, minDistance, and maxDistance from reach to calculate if end is target-able from
+     * origin assuming an unobstructed playing field.
      *
      * @param reach a Reach object that, if non-null, gives limits for how targeting can proceed.
      * @param origin where the user is
@@ -159,8 +159,12 @@ public class AreaUtils {
      */
     public static boolean verifyReach(Reach reach, Coord origin, Coord end)
     {
-        if (reach != null && reach.limit != null && origin != null && end != null) {
-            switch (reach.limit) {
+        if(reach == null)
+            return true;
+        AimLimit limit = reach.limit;
+        if(limit == null) limit = AimLimit.FREE;
+        if (origin != null && end != null) {
+            switch (limit) {
                 case EIGHT_WAY:
                     if(Math.abs(end.x - origin.x) == Math.abs(end.y - origin.y) ||
                             end.x == origin.x || end.y == origin.y)
