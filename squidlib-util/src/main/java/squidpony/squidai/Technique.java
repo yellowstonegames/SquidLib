@@ -1,8 +1,11 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.OrderedMap;
 
 import java.io.Serializable;
@@ -18,23 +21,28 @@ import java.util.Set;
  * <ul>
  * <li>Construct any AOE implementation the Technique would use (if the Technique affects multiple grid cells).</li>
  * <li>Construct the Technique (passing the AOE as a parameter if needed).</li>
- * <li>Call setMap() before considering the Technique if it has not been called yet, if the physical map (including
- * doors and destructible objects) has changed since setMap() was last called, or simply on every Technique every time
- * the map changes if there are few enemies with few Techniques. PERFORMING ANY SUBSEQUENT STEPS WITHOUT SETTING THE
- * MAP TO THE CURRENT ACTUAL PHYSICAL MAP WILL HAVE BAD CONSEQUENCES FOR LOGIC AND MAY CAUSE CRASHING BUGS DUE TO
+ * <li>Call {@link #setMap(char[][])} before considering the Technique if it has not been called yet, if the physical
+ * map (including doors and obstacles) has changed since setMap() was last called, or simply on every Technique every
+ * time the map changes if there are few enemies with few Techniques. PERFORMING ANY SUBSEQUENT STEPS WITHOUT SETTING
+ * THE MAP TO THE CURRENT ACTUAL PHYSICAL MAP WILL HAVE BAD CONSEQUENCES FOR LOGIC AND MAY CAUSE CRASHING BUGS DUE TO
  * ARRAY BOUNDS VIOLATIONS IF YOU HAVEN'T SET THE MAP ARRAY IN THE FIRST PLACE. The map should be bounded by wall chars
  * ('#'), which is done automatically by {@link squidpony.squidgrid.mapping.DungeonGenerator} and similar classes, and
  * can be done with {@link squidpony.squidgrid.mapping.DungeonUtility#wallWrap(char[][])} as well.</li>
- * <li>When the Technique is being considered by an AI, call idealLocations() with the values of targets,
- * lesserTargets, and/or priorityTargets set to beings that the AI can see (likely using FOV) and wants to affect with
- * this Technique (enemies for offensive Techniques, allies for supporting ones), and requiredExclusions typically set
- * to allies for offensive Techniques that can cause friendly-fire damage, or to null for supporting ones or Techniques
- * that don't affect allies.</li>
- * <li>When an ideal location has been determined from the previous step, and the AI decides (possibly randomly, by an
- * aggression ("aggro") level tracked per-enemy, or by weights on Techniques for different situations) to use this
+ * <li>When the Technique is being considered by an AI, call {@link #idealLocations(Coord, Set, Set, Set)} with the
+ * values of targets, lesserTargets, and/or priorityTargets set to beings that the AI can see (likely using FOV) and
+ * wants to affect with this Technique (enemies for offensive Techniques, allies for supporting ones), and
+ * requiredExclusions typically set to allies for offensive Techniques that can cause friendly-fire damage, or to null
+ * for supporting ones or Techniques that don't affect allies.</li>
+ * <li>If the Technique is being used for a player action, you can show the player what cells are valid targets with
+ * {@link #possibleTargets(Coord)} or its other overload, or can validate choices without telling the player beforehand
+ * using {@link #canTarget(Coord, Coord)} (this may be useful for cases where the player is activating an unknown magic
+ * item like a scroll, and the actual range hasn't been revealed).</li>
+ * <li>When an ideal location has been determined from the previous step, and the player or AI decides to use this
  * Technique on a specific target point, call {@link #apply(Coord, Coord)} with the user position as a Coord and the
  * chosen Coord, and proceed to process the effects of the Technique as fitting for your game on the returned Map of
- * Coord keys to Double values denoting how affected (from 0.0 for unaffected to 1.0 for full power) that Coord is.</li>
+ * Coord keys to Double values denoting how affected (from 0.0 for unaffected to 1.0 for full power) that Coord is.
+ * An AI might decide which Technique to use by an aggression ("aggro" or "hatred") level tracked per-enemy, by weights
+ * on Techniques for different situations, by choosing at random, or some combination of factors.</li>
  * </ul>
  * <br>
  * A Technique always has an AOE implementation that it uses to determine which cells it actually affects, and
@@ -213,11 +221,90 @@ public class Technique implements Serializable {
             if (p.x == possibleTarget.x && p.y == possibleTarget.y) {
                 return true;//reached the end
             }
-            if ((p.x != user.x || p.y != user.y) && dungeon[p.x][p.y] == '#') {//don't discount the start location even if on resistant cell
+            if ((p.x != user.x || p.y != user.y) && dungeon[p.x][p.y] == '#') {
+                // if this isn't the starting cell and the map has a wall here, then stop and return false
                 return false;
             }
         }
         return false;//never got to the target point
+    }
+    /**
+     * Gets all possible target-able Coords when using this technique from the given Coord {@code user}, returning them
+     * in a GreasedRegion. Note that a GreasedRegion can be used as a Collection of Coord with a fairly fast
+     * {@link GreasedRegion#contains(Coord)} method, or at least faster than an ArrayList of Coord. GreasedRegion values
+     * are mutable, like arrays, so if you want to edit the returned value you can do so without constructing additional
+     * objects. This works by getting a FOV map (using shadowcasting and the same metric/radius type as the {@link #aoe}
+     * field on this Technique) to figure out what cells are visible, then eliminating cells that don't match the
+     * minimum range on the AOE or aren't legal targets because of its AimLimit.
+     * <br>
+     * This method isn't especially efficient because it needs to construct a temporary 2D array for the FOV to use as
+     * well as an additional temporary 2D array for resistances. This generates its resistance map with
+     * {@link DungeonUtility#generateSimpleResistances(char[][])} every time; if you want other resistances, you should
+     * use {@link #possibleTargets(Coord, double[][])} instead.
+     * @param user the position of the user of this Technique
+     * @return all possible Coord values that can be used as targets for this Technique from the given starting Coord, as a GreasedRegion
+     */
+    public GreasedRegion possibleTargets(Coord user)
+    {
+        return possibleTargets(user, DungeonUtility.generateSimpleResistances(dungeon));
+    }
+    /**
+     * Gets all possible target-able Coords when using this technique from the given Coord {@code user}, returning them
+     * in a GreasedRegion. This takes a 2D double array as a resistance map, the same kind used by {@link FOV}, which
+     * can be obtained with {@link DungeonUtility#generateResistances(char[][])} or
+     * {@link DungeonUtility#generateSimpleResistances(char[][])}. Note that a GreasedRegion can be used as a Collection
+     * of Coord with a fairly fast {@link GreasedRegion#contains(Coord)} method, or at least faster than an ArrayList of
+     * Coord. GreasedRegion values are mutable, like arrays, so if you want to edit the returned value you can do so
+     * without constructing additional objects. This works by getting a FOV map (using shadowcasting and the same
+     * metric/radius type as the {@link #aoe} field on this Technique) to figure out what cells are visible, then
+     * eliminating cells that don't match the minimum range on the AOE or aren't legal targets because of its AimLimit.
+     * <br>
+     * This method isn't especially efficient because it needs to construct a temporary 2D array for the FOV to use, but
+     * it is more efficient than {@link #possibleTargets(Coord)}, which needs to construct an additional temporary 2D
+     * array. You may also want to reuse an existing resistance map, and you can with this method.
+     * @param user the position of the user of this Technique
+     * @param resistanceMap a 2D double array where walls are 1.0 and other values are less; often produced by {@link DungeonUtility#generateSimpleResistances(char[][])}
+     * @return all possible Coord values that can be used as targets for this Technique from the given starting Coord, as a GreasedRegion
+     */
+    public GreasedRegion possibleTargets(Coord user, double[][] resistanceMap)
+    {
+        if(aoe.getMaxRange() <= 0) return new GreasedRegion(user, dungeon.length, dungeon[0].length);
+        double[][] fovmap = new double[dungeon.length][dungeon[0].length];
+        FOV.reuseFOV(resistanceMap, fovmap, user.x, user.y, aoe.getMaxRange(), aoe.getMetric());
+        double rangeBound = 1.0001 - ((double) aoe.getMinRange() / aoe.getMaxRange());
+        AimLimit limit = aoe.getLimitType();
+        if(limit == null) limit = AimLimit.FREE;
+        switch (limit)
+        {
+            case ORTHOGONAL:
+                return new GreasedRegion(fovmap, 0.0001, rangeBound)
+                        .removeRectangle(0, 0, user.x - 1, user.y - 1)
+                        .removeRectangle(0, user.y + 1, user.x - 1, dungeon[0].length - user.y - 1)
+                        .removeRectangle(user.x + 1, 0, dungeon.length - user.x - 1, user.y - 1)
+                        .removeRectangle(user.x + 1, user.y + 1, dungeon.length - user.x - 1, dungeon[0].length - user.y - 1);
+            case DIAGONAL:
+            {
+                GreasedRegion all = new GreasedRegion(fovmap, 0.0001, rangeBound), used = new GreasedRegion(dungeon.length, dungeon[0].length);
+                for(Coord c : all)
+                {
+                    if(Math.abs(c.x - user.x) == Math.abs(c.y - user.y))
+                        used.insert(c);
+                }
+                return used;
+            }
+            case EIGHT_WAY:
+            {
+                GreasedRegion all = new GreasedRegion(fovmap, 0.0001, rangeBound), used = new GreasedRegion(dungeon.length, dungeon[0].length);
+                for(Coord c : all)
+                {
+                    if(Math.abs(c.x - user.x) == Math.abs(c.y - user.y) || c.x == user.x || c.y == user.y)
+                        used.insert(c);
+                }
+                return used;
+            }
+            default:
+                return new GreasedRegion(fovmap, 0.0001, rangeBound);
+        }
 
     }
 }
