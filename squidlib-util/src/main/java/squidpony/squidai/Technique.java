@@ -1,5 +1,7 @@
 package squidpony.squidai;
 
+import squidpony.squidgrid.Radius;
+import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.OrderedMap;
 
@@ -11,7 +13,7 @@ import java.util.Set;
 /**
  * A simple struct-like class that stores various public fields which describe the targeting properties of a skill,
  * spell, tech, or any other game-specific term for a targeted (typically offensive) ability we call a Technique.
- *
+ * <br>
  * The typical usage of a Technique is:
  * <ul>
  * <li>Construct any AOE implementation the Technique would use (if the Technique affects multiple grid cells).</li>
@@ -21,7 +23,8 @@ import java.util.Set;
  * the map changes if there are few enemies with few Techniques. PERFORMING ANY SUBSEQUENT STEPS WITHOUT SETTING THE
  * MAP TO THE CURRENT ACTUAL PHYSICAL MAP WILL HAVE BAD CONSEQUENCES FOR LOGIC AND MAY CAUSE CRASHING BUGS DUE TO
  * ARRAY BOUNDS VIOLATIONS IF YOU HAVEN'T SET THE MAP ARRAY IN THE FIRST PLACE. The map should be bounded by wall chars
- * ('#'), which is done automatically by squidpony.squidgrid.mapping.DungeonGenerator .</li>
+ * ('#'), which is done automatically by {@link squidpony.squidgrid.mapping.DungeonGenerator} and similar classes, and
+ * can be done with {@link squidpony.squidgrid.mapping.DungeonUtility#wallWrap(char[][])} as well.</li>
  * <li>When the Technique is being considered by an AI, call idealLocations() with the values of targets,
  * lesserTargets, and/or priorityTargets set to beings that the AI can see (likely using FOV) and wants to affect with
  * this Technique (enemies for offensive Techniques, allies for supporting ones), and requiredExclusions typically set
@@ -29,17 +32,17 @@ import java.util.Set;
  * that don't affect allies.</li>
  * <li>When an ideal location has been determined from the previous step, and the AI decides (possibly randomly, by an
  * aggression ("aggro") level tracked per-enemy, or by weights on Techniques for different situations) to use this
- * Technique on a specific target point, call apply() with the user position as a Coord and the chosen Coord, and
- * proceed to process the effects of the Technique as fitting for your game on the returned Map of Coord keys to Double
- * values that describe the amount of effect (from 0.0 for none to 1.0 for full) that Coord receives.</li>
+ * Technique on a specific target point, call {@link #apply(Coord, Coord)} with the user position as a Coord and the
+ * chosen Coord, and proceed to process the effects of the Technique as fitting for your game on the returned Map of
+ * Coord keys to Double values denoting how affected (from 0.0 for unaffected to 1.0 for full power) that Coord is.</li>
  * </ul>
- *
+ * <br>
  * A Technique always has an AOE implementation that it uses to determine which cells it actually affects, and
  * Techniques that do not actually affect an area use the default single-cell "Area of Effect" implementation, PointAOE.
  * You typically will need to construct the implementing class of the AOE interface in a different way for each
  * implementation; BeamAOE, LineAOE, and ConeAOE depend on the user's position, BurstAOE and BlastAOE treat radii
  * differently from BeamAOE and LineAOE, and CloudAOE has a random component that can be given a seed.
- *
+ * <br>
  * A Technique has a String  name, which typically should be in a form that can be presented to a user, and a
  * String id, which defaults to the same value as name but can be given some value not meant for users that records
  * any additional identifying characteristics the game needs for things like comparisons.
@@ -53,7 +56,8 @@ public class Technique implements Serializable {
     public String id;
     public AOE aoe;
     protected char[][] dungeon;
-    protected static final Coord DEFAULT_POINT = Coord.get(0, 0);
+
+    private static final Coord DEFAULT_POINT = Coord.get(0, 0);
 
     /**
      * Creates a Technique that can target any adjacent single Coord, using
@@ -182,5 +186,38 @@ public class Technique implements Serializable {
         aoe.setOrigin(user);
         aoe.shift(aimAt);
         return aoe.findArea();
+    }
+
+    /**
+     * A quick yes-or-no check for whether a {@code user} at a given Coord can use this Technique to target the given
+     * Coord of a {@code possibleTarget}. There doesn't need to be a creature in the possibleTarget cell, since area of
+     * effect Techniques could still affect nearby creatures. Returns true if possibleTarget is a viable target cell for
+     * the given user Coord with this Technique, or false otherwise.
+     * @param user the Coord of the starting cell of this Technique, usually the position of the Technique's user
+     * @param possibleTarget a Coord that could maybe be a viable target
+     * @return true if this Technique can be used to target {@code possibleTarget} from the position {@code user}, or false otherwise
+     */
+    public boolean canTarget(Coord user, Coord possibleTarget)
+    {
+        if(aoe == null || user == null || possibleTarget == null ||
+                !AreaUtils.verifyReach(aoe.getReach(), user, possibleTarget)) return false;
+        Radius radiusStrategy = aoe.getMetric();
+        Coord[] path = Bresenham.line2D_(user.x, user.y, possibleTarget.x, possibleTarget.y);
+        double rad = radiusStrategy.radius(user.x, user.y, possibleTarget.x, possibleTarget.y);
+        if(rad < aoe.getMinRange() || rad > aoe.getMaxRange()) {
+            return false;
+        }
+        Coord p;
+        for (int i = 0; i < path.length; i++) {
+            p = path[i];
+            if (p.x == possibleTarget.x && p.y == possibleTarget.y) {
+                return true;//reached the end
+            }
+            if ((p.x != user.x || p.y != user.y) && dungeon[p.x][p.y] == '#') {//don't discount the start location even if on resistant cell
+                return false;
+            }
+        }
+        return false;//never got to the target point
+
     }
 }
