@@ -1,39 +1,42 @@
 package squidpony.squidai;
 
-import squidpony.annotation.GwtIncompatible;
-import squidpony.squidgrid.FOVCache;
+import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
-
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Queue;
 
 /**
- * Line Area of Effect that affects an slightly expanded (Elias) line from a given origin Coord to a given end Coord,
+ * Line Area of Effect that affects an slightly expanded (DDA) line from a given origin Coord to a given end Coord,
  * plus an optional radius of cells around the path of the line, while respecting obstacles in its path and possibly
  * stopping if obstructed. You can specify the RadiusType to Radius.DIAMOND for Manhattan distance, RADIUS.SQUARE for
  * Chebyshev, or RADIUS.CIRCLE for Euclidean.
- *
+ * <br>
  * You may want the BeamAOE class instead of this. LineAOE travels point-to-point and does not restrict length, while
  * BeamAOE travels a specific length (and may have a radius, like LineAOE) but then stops only after the travel down the
  * length and radius has reached its end. This difference is relevant if a game has effects that have a definite
  * area measured in a rectangle or elongated pillbox shape, such as a "20-foot-wide bolt of lightning, 100 feet long."
  * BeamAOE is more suitable for that effect, while LineAOE may be more suitable for things like focused lasers that
  * pass through small (likely fleshy) obstacles but stop after hitting the aimed-at target.
- *
+ * <br>
  * LineAOE will strike a small area behind the user and in the opposite direction of the target if the radius is
  * greater than 0. This behavior may be altered in a future version.
- *
- * This will produce doubles for its findArea() method which are equal to 1.0.
- *
- * This class uses squidpony.squidmath.Elias and squidpony.squidai.DijkstraMap to create its area of effect.
+ * <br>
+ * This will produce doubles for its {@link #findArea()} method which are equal to 1.0.
+ * <br>
+ * This class uses {@link LOS} and {@link DijkstraMap} to create its area of effect.
  * Created by Tommy Ettinger on 7/14/2015.
  */
-public class LineAOE implements AOE {
+public class LineAOE implements AOE, Serializable {
+    private static final long serialVersionUID = 2L;
     private Coord origin, end;
     private int radius;
     private char[][] dungeon;
@@ -706,18 +709,14 @@ public class LineAOE implements AOE {
     }
 
     /**
-     * If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with
-     * some AOE implementations that rely on FOV. Not all implementations need to actually make use of the cache, but
-     * those that use FOV for calculations should benefit. The cache parameter this receives should have completed its
-     * calculations, which can be confirmed by calling awaitCache(). Ideally, the FOVCache will have done its initial
-     * calculations in another thread while the previous level or menu was being displayed, and awaitCache() will only
-     * be a formality.
-     *
-     * @param cache The FOVCache for the current level; can be null to stop using the cache
+     * Unused because FOVCache rarely provides a speed boost and usually does the opposite. The implementation for this
+     * method should be a no-op.
+     * @param cache an FOV that could be an FOVCache for the current level; can be null to stop using the cache
+     * @deprecated AOE doesn't really benefit from using an FOVCache
      */
-    @GwtIncompatible
     @Override
-    public void setCache(FOVCache cache) {
+    @Deprecated
+    public void setCache(FOV cache) {
 
     }
 }

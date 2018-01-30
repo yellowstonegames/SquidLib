@@ -2,6 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.squidmath.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 /**
@@ -11,7 +12,9 @@ import java.util.Set;
  * 
  * @see Splash An alternative implementation with a lighter API
  */
-public class Spill {
+public class Spill implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The type of heuristic to use.
      */

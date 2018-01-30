@@ -1,28 +1,29 @@
 package squidpony.squidai;
 
-import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.FOV;
-import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
-
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * An AOE type that has a center and a radius, and will blast outward and somewhat around corners/obstacles, out to
  * the distance specified by radius. You can specify the radiusType to Radius.DIAMOND for Manhattan distance,
  * RADIUS.SQUARE for Chebyshev, or RADIUS.CIRCLE for Euclidean.
  *
- * This will produce doubles for its findArea() method which are greater than 0.0 and less than or equal to 1.0.
+ * This will produce doubles for its {@link #findArea()} method that are greater than 0.0 and less than or equal to 1.0.
  *
- * This class uses squidpony.squidgrid.FOV to create its area of effect.
+ * This class uses {@link FOV} to create its area of effect.
  * Created by Tommy Ettinger on 7/13/2015.
  */
-public class BlastAOE implements AOE {
+public class BlastAOE implements AOE, Serializable {
+    private static final long serialVersionUID = 2L;
     private FOV fov;
     private Coord center, origin = null;
     private int radius;
@@ -593,18 +594,14 @@ public class BlastAOE implements AOE {
     }
 
     /**
-     * If you use FOVCache to pre-compute FOV maps for a level, you can share the speedup from using the cache with
-     * some AOE implementations that rely on FOV. Not all implementations need to actually make use of the cache, but
-     * those that use FOV for calculations should benefit. The cache parameter this receives should have completed its
-     * calculations, which can be confirmed by calling awaitCache(). Ideally, the FOVCache will have done its initial
-     * calculations in another thread while the previous level or menu was being displayed, and awaitCache() will only
-     * be a formality.
-     *
-     * @param cache The FOVCache for the current level; can be null to stop using the cache
+     * Unused because FOVCache rarely provides a speed boost and usually does the opposite. The implementation for this
+     * method should be a no-op.
+     * @param cache an FOV that could be an FOVCache for the current level; can be null to stop using the cache
+     * @deprecated AOE doesn't really benefit from using an FOVCache
      */
-    @GwtIncompatible
     @Override
-    public void setCache(FOVCache cache) {
+    @Deprecated
+    public void setCache(FOV cache) {
         fov = cache;
     }
 

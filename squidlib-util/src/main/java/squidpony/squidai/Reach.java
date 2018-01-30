@@ -2,14 +2,17 @@ package squidpony.squidai;
 
 import squidpony.squidgrid.Radius;
 
+import java.io.Serializable;
+
 /**
  * A struct-like class that holds information about targeting rules for actions or other effects that reach from one
  * square into another one, with certain potential restrictions.
  *
- * @see squidpony.squidai.AreaUtils and its verifyReach method
+ * @see squidpony.squidai.AreaUtils AreaUtils and its verifyReach method may be useful with this
  * Created by Tommy Ettinger on 12/17/2015.
  */
-public class Reach {
+public class Reach implements Serializable  {
+    private static final long serialVersionUID = 1L;
 
     /**
      * The minimum distance in cells that this Reach can target.

@@ -7,6 +7,8 @@ import squidpony.squidmath.CoordPacker;
 import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.ShortVLA;
 
+import java.io.Serializable;
+
 /**
  * Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.
  * Uses CoordPacker for more memory-efficient storage and manipulation of zones; it's recommended if you use this class
@@ -20,7 +22,8 @@ import squidpony.squidmath.ShortVLA;
  * <br>
  * Created by Tommy Ettinger on 10/27/2015.
  */
-public class ZOI {
+public class ZOI implements Serializable {
+    private static final long serialVersionUID = 1L;
     private char[][] map;
     private DijkstraMap dijkstra;
     private Coord[][] influences;

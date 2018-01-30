@@ -4,6 +4,8 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
+import java.io.Serializable;
+
 /**
  * Calculates the Zone of Influence, also known as Zone of Control, for different points on a map.
  * Uses GreasedRegion for faster storage and manipulation of zones; it's suggested if you use this class to be
@@ -18,7 +20,8 @@ import squidpony.squidmath.*;
  * <br>
  * Created by Tommy Ettinger on 1/14/2018.
  */
-public class GreasedZOI {
+public class GreasedZOI implements Serializable {
+    private static final long serialVersionUID = 1L;
     private DijkstraMap dijkstra;
     private Coord[][] influences;
     private GreasedRegion[] packedGroups;

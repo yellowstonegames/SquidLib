@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.*;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -30,8 +31,8 @@ import java.util.*;
  * @author Tommy Ettinger Added DDA, ORTHO, and the thick lines; some cleanup
  * @author smelC optimized several methods
  */
-public class LOS {
-
+public class LOS implements Serializable {
+    private static final long serialVersionUID = 1L;
     //constants to indicate desired type of solving algorithm to use
     /**
      * A Bresenham-based line-of-sight algorithm.

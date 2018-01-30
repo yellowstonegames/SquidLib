@@ -3,12 +3,14 @@ package squidpony.squidai;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
 
+import java.io.Serializable;
+
 /**
  * A small class to store the area that a creature is perceived by other creatures to threaten.
  * Created by Tommy Ettinger on 11/8/2015.
  */
-public class Threat {
-
+public class Threat implements Serializable {
+    private static final long serialVersionUID = 1L;
     public Coord position;
     public Reach reach;
 

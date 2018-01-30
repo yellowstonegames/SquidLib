@@ -10,6 +10,8 @@ import squidpony.squidmath.GapShuffler;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.RNG;
 
+import java.io.Serializable;
+
 /**
  * Allows for the use of custom colors with custom names.
  * <p>
@@ -21,8 +23,8 @@ import squidpony.squidmath.RNG;
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @see SquidColorCenter Another way to manage colors if you don't want to use preallocated instances.
  */
-public class SColor extends Color {
-
+public class SColor extends Color implements Serializable {
+    private static final long serialVersionUID = 1L;
     public final String name;
 
     /**
@@ -11011,7 +11013,9 @@ public class SColor extends Color {
             CW_PALE_VIOLET,
             CW_PALE_PURPLE,
             CW_PALE_MAGENTA
-    }, /** 16 high-brightness, mid-saturation colors. */ COLOR_WHEEL_PALETTE_LIGHT =  {
+    };
+    /** 16 high-brightness, mid-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_LIGHT =  {
             CW_LIGHT_RED,
             CW_LIGHT_ORANGE,
             CW_LIGHT_BROWN,
@@ -11028,7 +11032,9 @@ public class SColor extends Color {
             CW_LIGHT_VIOLET,
             CW_LIGHT_PURPLE,
             CW_LIGHT_MAGENTA
-    }, /** 16 high-brightness, high-saturation colors. */ COLOR_WHEEL_PALETTE_BRIGHT =  {
+    };
+    /** 16 high-brightness, high-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_BRIGHT =  {
             CW_BRIGHT_RED,
             CW_BRIGHT_ORANGE,
             CW_BRIGHT_BROWN,
@@ -11045,7 +11051,9 @@ public class SColor extends Color {
             CW_BRIGHT_VIOLET,
             CW_BRIGHT_PURPLE,
             CW_BRIGHT_MAGENTA
-    }, /** 16 mid-brightness, low-saturation colors. */ COLOR_WHEEL_PALETTE_FADED =  {
+    };
+    /** 16 mid-brightness, low-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_FADED =  {
             CW_FADED_RED,
             CW_FADED_ORANGE,
             CW_FADED_BROWN,
@@ -11062,7 +11070,9 @@ public class SColor extends Color {
             CW_FADED_VIOLET,
             CW_FADED_PURPLE,
             CW_FADED_MAGENTA
-    }, /** 16 mid-brightness, mid-saturation colors. */ COLOR_WHEEL_PALETTE_MID =  {
+    };
+    /** 16 mid-brightness, mid-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_MID =  {
             CW_RED,
             CW_ORANGE,
             CW_BROWN,
@@ -11079,7 +11089,9 @@ public class SColor extends Color {
             CW_VIOLET,
             CW_PURPLE,
             CW_MAGENTA
-    }, /** 16 mid-brightness, high-saturation colors. */ COLOR_WHEEL_PALETTE_FLUSH =  {
+    };
+    /** 16 mid-brightness, high-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_FLUSH =  {
             CW_FLUSH_RED,
             CW_FLUSH_ORANGE,
             CW_FLUSH_BROWN,
@@ -11096,7 +11108,9 @@ public class SColor extends Color {
             CW_FLUSH_VIOLET,
             CW_FLUSH_PURPLE,
             CW_FLUSH_MAGENTA
-    }, /** 16 low-brightness, low-saturation colors. */ COLOR_WHEEL_PALETTE_DRAB =  {
+    };
+    /** 16 low-brightness, low-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_DRAB =  {
             CW_DRAB_RED,
             CW_DRAB_ORANGE,
             CW_DRAB_BROWN,
@@ -11113,7 +11127,9 @@ public class SColor extends Color {
             CW_DRAB_VIOLET,
             CW_DRAB_PURPLE,
             CW_DRAB_MAGENTA
-    }, /** 16 low-brightness, mid-saturation colors. */ COLOR_WHEEL_PALETTE_DARK =  {
+    };
+    /** 16 low-brightness, mid-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_DARK =  {
             CW_DARK_RED,
             CW_DARK_ORANGE,
             CW_DARK_BROWN,
@@ -11130,7 +11146,9 @@ public class SColor extends Color {
             CW_DARK_VIOLET,
             CW_DARK_PURPLE,
             CW_DARK_MAGENTA
-    }, /** 16 low-brightness, high-saturation colors. */ COLOR_WHEEL_PALETTE_RICH =  {
+    };
+    /** 16 low-brightness, high-saturation colors. */
+    public static final SColor[] COLOR_WHEEL_PALETTE_RICH =  {
             CW_RICH_RED,
             CW_RICH_ORANGE,
             CW_RICH_BROWN,
