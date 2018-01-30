@@ -88,23 +88,27 @@ public class ProbabilityTableTest {
         OrderedMap<String, Integer> woodCounts = new OrderedMap<>(
                 new String[]{"splinter", "twig", "plank", "branch"}, new Integer[]{0, 0, 0, 0});
         String current;
-        long state = (long) (System.nanoTime() / (Math.random() * Math.random() + 0.01));
-        for (int l = 0; l < 100; l++) {
-            for (int i = 0; i < 28; i++) {
+        // this is the RNG state; it is fixed currently for replicable testing, but change it to the commented line
+        // below to get a different seed every time
+        long state = -1000000L;
+        //long state = (long) (System.nanoTime() / (Math.random() * Math.random() + 0.01));
+        int inner = 256, outer = 256, total = inner * outer;
+        for (int l = 0; l < outer; l++) {
+            for (int i = 0; i < inner; i++) {
                 current = woodStrings[wood.random(++state)];
                 woodCounts.put(current, woodCounts.get(current) + 1);
-                if (PRINTING) {
-                    System.out.print(current);
-                    System.out.print(' ');
-                }
+//                if (PRINTING) {
+//                    System.out.print(current);
+//                    System.out.print(' ');
+//                }
             }
-            if (PRINTING) System.out.println();
+            //if (PRINTING) System.out.println();
         }
         if (PRINTING) {
             System.out.println();
             for (int i = 0; i < 4; i++) {
-                System.out.println("There should be about " + (2800 * weights[i] / sum) + " " + woodStrings[i] +
-                        " and there are " + woodCounts.get(woodStrings[i]));
+                System.out.println("There should be about " + (total * weights[i] / sum) + " " + woodStrings[i] +
+                        " and there are " + woodCounts.get(woodStrings[i]) + ", a percentage difference of " + ((woodCounts.get(woodStrings[i]) - (total * weights[i] / sum)) / (0.01 * total * weights[i] / sum)));
             }
             System.out.println('\n');
         }

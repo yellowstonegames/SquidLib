@@ -13,16 +13,17 @@ import java.io.Serializable;
  * don't need all the features of ProbabilityTable or if you want deeper control over the random aspects of it.
  * <br>
  * Internally, this uses ThrustAltRNG's algorithm as found in {@link ThrustAltRNG#determineBounded(long, int)} and
- * {@link ThrustAltRNG#determineDouble(long)} to generate both an int and mid-precision double (roughly 32 of the 52
- * bits of the double's significand are random, more than a float has) from one randomized 64-bit value, allowing the
- * state to be just one long.
+ * {@link ThrustAltRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer
+ * and the other used to determine the chosen column, which is bounded to an arbitrary positive int. It does thsi with
+ * just one randomized 64-bit value, allowing the state given to {@link #random(long)} to be just one long.
  * <br>
  * Created by Tommy Ettinger on 1/5/2018.
  */
 public class WeightedTable implements Serializable {
-    private static final long serialVersionUID = 100L;
-    protected final int[] alias;
-    protected final double[] probability;
+    private static final long serialVersionUID = 101L;
+//    protected final int[] alias;
+//    protected final int[] probability;
+    protected final int[] mixed;
     public final int size;
 
     /**
@@ -48,8 +49,9 @@ public class WeightedTable implements Serializable {
             throw new IllegalArgumentException("Array 'probabilities' given to WeightedTable must be nonempty.");
 
         /* Allocate space for the probability and alias tables. */
-        probability = new double[size];
-        alias = new int[size];
+//        probability = new int[size];
+//        alias = new int[size];
+        mixed = new int[size<<1];
 
         /* Compute the average probability and cache it for later use. */
         double sum = 0.0;
@@ -89,14 +91,14 @@ public class WeightedTable implements Serializable {
          */
         while (!small.isEmpty() && !large.isEmpty()) {
             /* Get the index of the small and the large probabilities. */
-            int less = small.pop();
+            int less = small.pop(), less2 = less << 1;
             int more = large.pop();
 
             /* These probabilities have not yet been scaled up to be such that
              * sum/n is given weight 1.0.  We do this here instead.
              */
-            probability[less] = probabilities[less] / average;
-            alias[less] = more;
+            mixed[less2] = (int)(0x7FFFFFFF * (probabilities[less] / average));
+            mixed[less2|1] = more;
 
             probabilities[more] += probabilities[less] - average;
 
@@ -107,9 +109,9 @@ public class WeightedTable implements Serializable {
         }
 
         while (!small.isEmpty())
-            probability[small.pop()] = 1.0;
+            mixed[small.pop()<<1] = 0x7FFFFFFF;
         while (!large.isEmpty())
-            probability[large.pop()] = 1.0;
+            mixed[large.pop()<<1] = 0x7FFFFFFF;
     }
 
     /**
@@ -125,9 +127,13 @@ public class WeightedTable implements Serializable {
      */
     public int random(long state)
     {
+        // This is ThrustAltRNG's algorithm to generate a random long given sequential states
         state = ((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22));
+        // get a random int (using half the bits of our previously-calculated state) that is less than size
         int column = (int)((size * (state & 0xFFFFFFFFL)) >> 32);
-        return ((state >>> 32) * 0x1p-32 < probability[column]) ? column : alias[column];
+        // use the other half of the bits of state to get a double, compare to probability and choose either the
+        // current column or the alias for that column based on that probability
+        return ((state >>> 33) <= mixed[column << 1]) ? column : mixed[column << 1 | 1];
     }
 
 }
