@@ -127,7 +127,7 @@ public class BurstAOE implements AOE, Serializable {
             System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
         }
         double[][] tmpfov;
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
@@ -265,7 +265,7 @@ public class BurstAOE implements AOE, Serializable {
             Arrays.fill(dungeonPriorities[i], '#');
         }
         double[][] tmpfov;
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
@@ -277,8 +277,6 @@ public class BurstAOE implements AOE, Serializable {
             }
         }
 
-        t = pts[0];
-
         DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
@@ -289,7 +287,7 @@ public class BurstAOE implements AOE, Serializable {
 
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0){
@@ -325,15 +323,13 @@ public class BurstAOE implements AOE, Serializable {
             dm.clearGoals();
         }
 
-        t = lts[0];
-
         for (int i = pts.length; i < totalTargets; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = lts[i - pts.length];
 
             tmpfov = fov.calculateFOV(map, t.x, t.y, radius, radiusType);
 
-            double dist = 0.0;
+            double dist;
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0){
@@ -514,9 +510,8 @@ public class BurstAOE implements AOE, Serializable {
 
     @Override
     public OrderedMap<Coord, Double> findArea() {
-        return AreaUtils.arrayToHashMap(fov.calculateFOV(null, center.x, center.y, radius, radiusType));
+        return AreaUtils.arrayToHashMap(fov.calculateFOV(map, center.x, center.y, radius, radiusType));
     }
-
 
     @Override
     public Coord getOrigin() {
@@ -526,7 +521,6 @@ public class BurstAOE implements AOE, Serializable {
     @Override
     public void setOrigin(Coord origin) {
         this.origin = origin;
-
     }
 
     @Override
