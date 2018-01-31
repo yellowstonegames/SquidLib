@@ -585,6 +585,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 + Math.sin(z * r0 + y * r1 - x * r2 + seed)
                 );
     }
+
+    public static double swayRandomized(final long seed, final double value)
+    {
+        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m,
+                flip = -((sm & 0x8000000000000L)>>51), floor = Noise.longFloor(value) + seed, sb = (s >> 63) ^ flip;
+        double a = (Double.longBitsToDouble(((sm ^ flip) & 0xfffffffffffffL)
+                | 0x4000000000000000L) - 2.0);
+        final double start = NumberTools.randomSignedDouble(floor), end = NumberTools.randomSignedDouble(floor + 1L);
+        //(a *= a * (3.0 - 2.0 * a))
+        a = a * a * (3.0 - 2.0 * a) * (sb | 1L) - sb;
+        return (1.0 - a) * start + a * end;
+    }
+
+
     public static int prepareSeed(final int seed)
     {
         return ((seed >>> 19 | seed << 13) ^ 0x13A5BA1D);
@@ -4025,23 +4039,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 110:
                         Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        code = 1000000L - ctr;
+                        extra = 200000L + ctr;
                         for (int x = 0; x < width; x++) {
-                            dBright = NumberTools.swayRandomized(900001L, (x + ctr) * 0.03125) * 7.0;
                             for (int y = 0; y < height; y++) {
-                                bright = (float)NumberTools.swayRandomized(12345L,
-                                        NumberTools.swayRandomized(-123456789L, (y + ctr) * 0.03125) * 7.0 + dBright) * 0.5f + 0.5f;
+                                bright = (float) (Noise.cerp(NumberTools.swayRandomized(20000L * (y + extra >> 5), (x + extra) * 0.03125),
+                                        NumberTools.swayRandomized(20000L * (y + extra + 32 >> 5), (x + extra) * 0.03125), (y + extra & 31) * 0.03125)
+                                + Noise.cerp(NumberTools.swayRandomized(30000L * (x + code >> 5), (y + code) * 0.03125),
+                                        NumberTools.swayRandomized(30000L * (x + code + 32 >> 5), (y + code) * 0.03125), (x + code & 31) * 0.03125)) * 0.25f + 0.5f;
+
+//                                bright = (float)swayRandomized(12345L,
+//                                        swayRandomized(-123456789L, (y + ctr) * 0.03125) * 7.0 + dBright) * 0.5f + 0.5f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
                     case 111:
                         Gdx.graphics.setTitle("Experimental Noise 3D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        dBright = NumberTools.swayRandomized(900001L, ctr * 0.0625) * 5.0;
+                        dBright = swayRandomized(900001L, ctr * 0.0625) * 5.0;
                         for (int x = 0; x < width; x++) {
-                            dBright2 = NumberTools.swayRandomized(900001L, x * 0.0625) * 5.0 + dBright;
+                            dBright2 = swayRandomized(900001L, x * 0.0625) * 5.0 + dBright;
                             for (int y = 0; y < height; y++) {
-                                bright = (float)NumberTools.swayRandomized(12345L,
-                                        NumberTools.swayRandomized(-123456789L, y * 0.0625) * 5.0 + dBright2) * 0.5f + 0.5f;
+                                bright = (float)swayRandomized(12345L,
+                                        swayRandomized(-123456789L, y * 0.0625) * 5.0 + dBright2) * 0.5f + 0.5f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }

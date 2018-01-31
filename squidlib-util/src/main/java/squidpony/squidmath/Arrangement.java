@@ -426,7 +426,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             add(it.next());
     }
 
-    private int insert(final K k, final int v) {
+    private int insert(final K k) {
         int pos;
         if (k == null) {
             if (containsNullKey)
@@ -509,7 +509,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      */
     @Deprecated
     public Integer put(final K k, final Integer v) {
-        final int pos = insert(k, v);
+        final int pos = insert(k);
         if (pos < 0)
             return defRetValue;
         final Integer oldValue = value[pos];
@@ -518,7 +518,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     public int put(final K k, final int v) {
-        final int pos = insert(k, v);
+        final int pos = insert(k);
         if (pos < 0)
             return defRetValue;
         final int oldValue = value[pos];
@@ -527,7 +527,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     public int add(final K k) {
-        final int pos = insert(k, size);
+        final int pos = insert(k);
         if (pos < 0)
             return defRetValue;
         final int oldValue = value[pos];
@@ -541,6 +541,23 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         int kPos;
         if((kPos = getInt(k)) < 0)
             return add(k);
+        return kPos;
+    }
+
+    /**
+     * If the given key {@code k} is present, this returns its index without modifying the Arrangement; otherwise, it
+     * adds k to the end of the collection and returns the index for it there.
+     * @param k a key to get the index of, adding it if not present
+     * @return the index of {@code k} in this Arrangement
+     */
+    public int addOrIndex(final K k)
+    {
+        int kPos;
+        if((kPos = getInt(k)) < 0)
+        {
+            insert(k);
+            return size - 1;
+        }
         return kPos;
     }
 
