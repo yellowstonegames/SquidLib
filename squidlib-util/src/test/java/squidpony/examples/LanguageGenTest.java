@@ -392,7 +392,7 @@ public class LanguageGenTest {
     @Test
     public void testMarkov() {
         if (!PRINTING) return;
-        long seed = 10000L;
+        long seed = 10040L;
         String ozzes = "Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a " +
                 "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the " +
                 "lumber to build it had to be carried by wagon many miles. There were four walls, " +
@@ -403,11 +403,26 @@ public class LanguageGenTest {
                 "in the ground, called a cyclone cellar, where the family could go in case one of " +
                 "those great whirlwinds arose, mighty enough to crush any building in its path. It " +
                 "was reached by a trap door in the middle of the floor, from which a ladder led " +
-                "down into the small, dark hole.";
+                "down into the small, dark hole. When Dorothy stood in the doorway and looked around, " +
+                "she could see nothing but the great gray prairie on every side. Not a tree nor a house " +
+                "broke the broad sweep of flat country that reached to the edge of the sky in all directions. " +
+                "The sun had baked the plowed land into a gray mass, with little cracks running through it. " +
+                "Even the grass was not green, for the sun had burned the tops of the long blades until they " +
+                "were the same gray color to be seen everywhere. Once the house had been painted, but the sun " +
+                "blistered the paint and the rains washed it away, and now the house was as dull and gray as " +
+                "everything else.";
         Markov markov = new Markov();
         markov.analyze(ozzes);
         for (int i = 0; i < 40; i++) {
-            System.out.println(markov.chain(++seed, 50 + (i * 5)));
+            System.out.println(markov.chain(++seed, 100 + (i * 2)));
         }
+        seed = 10040L;
+        System.out.println();
+        NaturalLanguageCipher cipher = new NaturalLanguageCipher(FakeLanguageGen.JAPANESE_ROMANIZED);
+        markov.changeNames(cipher);
+        for (int i = 0; i < 40; i++) {
+            System.out.println(markov.chain(++seed, 100 + (i * 2)));
+        }
+
     }
 }

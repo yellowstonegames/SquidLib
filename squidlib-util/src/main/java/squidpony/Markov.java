@@ -1,8 +1,8 @@
 package squidpony;
 
+import regexodus.Category;
 import regexodus.Matcher;
 import regexodus.Pattern;
-import regexodus.REFlags;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.Arrangement;
 import squidpony.squidmath.IntVLA;
@@ -21,32 +21,50 @@ import java.util.ArrayList;
 @Beta
 public class Markov implements Serializable {
     private static final long serialVersionUID = 0L;
-    private Arrangement<String> body;
-    private ArrayList<IntVLA> working;
 
+    /**
+     * All words (case-sensitive and counting some punctuation as part of words) that this encountered during the latest
+     * call to {@link #analyze(CharSequence)}. Will be null if analyze() was never called.
+     */
     public String[] words;
+    /**
+     * Complicated data that mixes probabilities and the indices of words in {@link #words}, generated during the latest
+     * call to {@link #analyze(CharSequence)}. Will be null if analyze() was never called.
+     */
     public int[][] processed;
 
     private static final String INITIAL = "", FULL_STOP = ".", EXCLAMATION = "!", QUESTION = "?", ELLIPSIS = "...";
-    private static final Matcher matcher = Pattern.compile("\\.\\.\\.|[\\.!\\?]|[^\\.!\\?\"\\(\\)\\[\\]\\{\\}\\s]+", REFlags.IGNORE_CASE | REFlags.UNICODE).matcher();
+    private static final Matcher matcher = Pattern.compile("\\.\\.\\.|[\\.!\\?]|[^\\.!\\?\"\\(\\)\\[\\]\\{\\}\\s]+").matcher();
     public Markov()
     {
-        body = new Arrangement<>(1024);
+    }
+
+    /**
+     * This is the main necessary step before using a Markov; you must call this method at some point before you can
+     * call any other methods. You can serialize this Markov after calling to avoid needing to call this again on later
+     * runs, or even include serialized Markov objects with a game to only need to call this during pre-processing.
+     * This method analyzes the pairings of words in a (typically large) corpus text, including some punctuation as part
+     * of words and some kinds as their own "words." It only uses one preceding word to determine the subsequent word.
+     * When it finishes processing, it stores the results in {@link #words} and {@link #processed}, which allows other
+     * methods to be called (they will throw a {@link NullPointerException} if analyze() hasn't been called).
+     * @param corpus a typically-large sample text in the style that should be mimicked
+     */
+    public void analyze(CharSequence corpus)
+    {
+        Arrangement<String> body = new Arrangement<>(corpus.length() / 5);
         body.add(INITIAL);
         body.add(FULL_STOP);
         body.add(EXCLAMATION);
         body.add(QUESTION);
         body.add(ELLIPSIS);
-        working = new ArrayList<>(1024);
+        ArrayList<IntVLA> working = new ArrayList<>(corpus.length() / 5);
         working.add(new IntVLA(128));
         int[] links = {0};
         working.add(new IntVLA(links));
         working.add(new IntVLA(links));
         working.add(new IntVLA(links));
         working.add(new IntVLA(links));
-    }
-    public void analyze(CharSequence corpus)
-    {
+
         matcher.setTarget(corpus);
         int previous = 0, current;
         while (matcher.find())
@@ -146,18 +164,69 @@ public class Markov implements Serializable {
                 processed[iv][t * 3 + 1] = processed[iv][t * 3 + 2] = w.get(t);
             }
         }
-        working.clear();
-        body.clear();
     }
+
+    /**
+     * After calling {@link #analyze(CharSequence)}, you can optionally call this to alter any words in this Markov that
+     * were used as a proper noun (determined by whether they were capitalized in the middle of a sentence), changing
+     * them to a ciphered version using the given {@link NaturalLanguageCipher}. Normally you would initialize a
+     * NaturalLanguageCipher with a {@link FakeLanguageGen} that matches the style you want for all names in this text,
+     * then pass that to this method during pre-processing (not necessarily at runtime, since this method isn't
+     * especially fast if the corpus was large). This method modifies this Markov in-place.
+     * @param translator a NaturalLanguageCipher that will be used to translate proper nouns in this Markov's word array
+     */
+    public void changeNames(NaturalLanguageCipher translator)
+    {
+        String name;
+        PER_WORD:
+        for (int i = 5; i < words.length; i++) {
+            if(Category.Lu.contains((name = words[i]).charAt(0)))
+            {
+                for (int w = 5; w < words.length; w++) {
+                    for (int p = 0; p < processed[w].length; p++) {
+                        if (i == processed[w][++p] || i == processed[w][++p])
+                        {
+                            words[i] = translator.cipher(name);
+                            continue PER_WORD;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using
+     * {@link #analyze(CharSequence)}) that terminates when stop punctuation is used (".", "!", "?", or "..."), or once
+     * the length would be greater than 200 characters without encountering stop punctuation(it terminates such a
+     * sentence with "." or "...").
+     * @param seed the seed for the random decisions this makes, as a long; any long can be used
+     * @return a String generated from the analyzed corpus text's word placement, usually a small sentence
+     */
     public String chain(long seed) {
         return chain(seed, 200);
     }
+
+    /**
+     * Generate a roughly-sentence-sized piece of text based on the previously analyzed corpus text (using
+     * {@link #analyze(CharSequence)}) that terminates when stop punctuation is used (".", "!", "?", or "...") or once
+     * the maxLength would be exceeded by any other words (it terminates such a sentence with "." or "...").
+     * @param seed the seed for the random decisions this makes, as a long; any long can be used
+     * @param maxLength the maximum length for the generated String, in number of characters
+     * @return a String generated from the analyzed corpus text's word placement, usually a small sentence
+     */
     public String chain(long seed, int maxLength) {
         int before = 0;
+        boolean later = false;
         long state;
         StringBuilder sb = new StringBuilder(1000);
         int[] rf;
         while (sb.length() < maxLength) {
+            if(sb.length() >= maxLength - 3)
+            {
+                sb.append('.');
+                break;
+            }
+            later = (before != 0);
             rf = processed[before];
             // This is ThrustAltRNG's algorithm to generate a random long given sequential states
             state = ((state = ((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (state >>> 22));
@@ -166,17 +235,17 @@ public class Markov implements Serializable {
             // use the other half of the bits of state to get a double, compare to probability and choose either the
             // current column or the alias for that column based on that probability
             before = ((state >>> 33) <= rf[column]) ? rf[column + 1] : rf[column + 2];
-            if(sb.length() >= maxLength - 3)
-            {
-                sb.append('.');
-                break;
-            }
             if(before >= 5)
             {
                 if(sb.length() + words[before].length() + 1 < maxLength)
-                    sb.append(' ').append(words[before]);
+                {
+                    if(later)
+                        sb.append(' ');
+                    sb.append(words[before]);
+                }
                 else
                 {
+                    sb.setLength(sb.length() - 1);
                     if(sb.length() + 3 <= maxLength)
                         sb.append("...");
                     else
